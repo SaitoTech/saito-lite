@@ -35,6 +35,7 @@ module.exports = ChatManager = {
       }
       if (data.chat.active_groups == 0 && data.chat.groups.length > 0) { 
 	data.chat.active_groups = [data.chat.groups[0]];
+      } else {
       }
 
       data.chat.active_groups.forEach(group => this.addChatBox(app, data, group));

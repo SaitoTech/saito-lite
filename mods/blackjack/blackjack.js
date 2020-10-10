@@ -63,21 +63,27 @@ class Blackjack extends GameTemplate {
 
 
 
-  initializeQueue() {
+  startRound() {
+
+    this.game.queue.push("startplay");
 
     //
-    // dealer
     //
-    for (let i = this.game.players.length - 1; i >= 0; i--) {
-      this.game.queue.push("FLIPCARD\t1\t1\t1\t" + (i + 1));
+    //
+    for (let i = 0; i < this.game.players.length; i++) {
+      if ( (i+1) != this.game.state.dealer) {
+        this.game.queue.push("selectwager\t"+(i+1));
+      }
     }
-    this.game.queue.push("FLIPRESET\t1");
+
+
 
     //
-    // playes
+    // players
     //
     if (this.game.players.length == 2) {
-      this.game.queue.push("POOL\t1"); // pool for dealer cards
+      this.game.queue.push("revealhand\t2");
+      this.game.queue.push("revealhand\t1");
       this.game.queue.push("DEAL\t1\t2\t2");
       this.game.queue.push("DEAL\t1\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t2");
@@ -86,6 +92,9 @@ class Blackjack extends GameTemplate {
       this.game.queue.push("DECKXOR\t1\t1");
     }
     if (this.game.players.length == 3) {
+      this.game.queue.push("revealhand\t3");
+      this.game.queue.push("revealhand\t2");
+      this.game.queue.push("revealhand\t1");
       this.game.queue.push("DEAL\t1\t3\t2");
       this.game.queue.push("DEAL\t1\t2\t2");
       this.game.queue.push("DEAL\t1\t1\t2");
@@ -97,6 +106,10 @@ class Blackjack extends GameTemplate {
       this.game.queue.push("DECKXOR\t1\t1");
     }
     if (this.game.players.length == 4) {
+      this.game.queue.push("revealhand\t4");
+      this.game.queue.push("revealhand\t3");
+      this.game.queue.push("revealhand\t2");
+      this.game.queue.push("revealhand\t1");
       this.game.queue.push("DEAL\t1\t4\t2");
       this.game.queue.push("DEAL\t1\t3\t2");
       this.game.queue.push("DEAL\t1\t2\t2");
@@ -113,6 +126,11 @@ class Blackjack extends GameTemplate {
       this.game.queue.push("DECKXOR\t1\t1");
     }
     if (this.game.players.length == 5) {
+      this.game.queue.push("revealhand\t5");
+      this.game.queue.push("revealhand\t4");
+      this.game.queue.push("revealhand\t3");
+      this.game.queue.push("revealhand\t2");
+      this.game.queue.push("revealhand\t1");
       this.game.queue.push("DEAL\t1\t5\t2");
       this.game.queue.push("DEAL\t1\t4\t2");
       this.game.queue.push("DEAL\t1\t3\t2");
@@ -130,6 +148,12 @@ class Blackjack extends GameTemplate {
       this.game.queue.push("DECKXOR\t1\t1");
     }
     if (this.game.players.length == 6) {
+      this.game.queue.push("revealhand\t6");
+      this.game.queue.push("revealhand\t5");
+      this.game.queue.push("revealhand\t4");
+      this.game.queue.push("revealhand\t3");
+      this.game.queue.push("revealhand\t2");
+      this.game.queue.push("revealhand\t1");
       this.game.queue.push("DEAL\t1\t6\t2");
       this.game.queue.push("DEAL\t1\t5\t2");
       this.game.queue.push("DEAL\t1\t4\t2");
@@ -150,7 +174,7 @@ class Blackjack extends GameTemplate {
       this.game.queue.push("DECKXOR\t1\t1");
     }
     this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
-    this.game.queue.push("BALANCE\t0\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
+    //this.game.queue.push("BALANCE\t0\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
 
   }
 
@@ -163,6 +187,7 @@ class Blackjack extends GameTemplate {
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
   }
+
 
 
 
@@ -199,15 +224,23 @@ class Blackjack extends GameTemplate {
 
 
 
-  startNextRound() {
+  newRound() {
 
+    //
+    // advance and reset variables
+    //
     this.game.state.turn = 0;
     this.game.state.round++;
     this.game.state.dealer++;
+
     if (this.game.state.dealer > this.game.players.length) { this.game.state.dealer = 1; }
 
-    console.log("Round: "+ this.game.state.round);
+    for (let i = 0; i < this.game.players.length; i++) {
+      this.game.state.player_wager[i] = 0;
+      this.game.state.player_payout[i] = 1;;
+    }
 
+    console.log("Round: "+ this.game.state.round);
 
     this.updateLog("New Round...");
     this.updateLog("Round: "+(this.game.state.round));
@@ -215,7 +248,7 @@ class Blackjack extends GameTemplate {
        el.innerHTML = "";
     });
 
-    this.initializeQueue();
+    this.startRound();
     this.displayBoard();
 
   }
@@ -234,27 +267,26 @@ class Blackjack extends GameTemplate {
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log(JSON.stringify(mv));
-
       if (mv[0] === "start") {
-	this.startNextRound();
+	this.newRound();
         return 1;
       }
 
+      if (mv[0] === "newround") {
+        this.game.queue.splice(qe, 1);
+	this.newRound(); 
+	return 1;
+      }
 
-
-
-
-
+      if (mv[0] === "startround") {
+        this.game.queue.splice(qe, 1);
+	this.startRound(); 
+	return 1;
+      }
 
       if (mv[0] === "play") {
-
         let player_to_go = parseInt(mv[1]);
         this.displayBoard();
-
-        //
-        // if this is the first turn
-        //
         if (parseInt(mv[1]) == this.game.player) {
           this.playerTurn();
           return 0;
@@ -264,20 +296,92 @@ console.log(JSON.stringify(mv));
         }
       }
 
+      if (mv[0] === "hit") {
+	let player = parseInt(mv[1]);
+        this.game.queue.splice(qe, 1);
+	if (player == this.game.state.dealer) {
+          this.game.queue.push("revealhand\t"+player+"\t1");
+	} else {
+          this.game.queue.push("revealhand\t"+player);
+	}
+        this.game.queue.push("DEAL\t1\t"+player+"\t1");
+	return 1;
+      }
 
-      if (mv[0] === "round") {
+      if (mv[0] === "selectwager") {
+
+	let blackjack_self = this;
+	let player = parseInt(mv[1]);
+        this.game.queue.splice(qe, 1);
+
+	if (this.game.player != player) {
+	  this.updateStatus('<div class="status-message">Player '+player+' is picking wager</div>');
+	  return 0;
+	}
+
+        let html = '<div class="status-message">How much would you like to wager?';
+            html += '</div>';
+            html += '<ul>';
+            html += '<li class="menu_option" id="25">25</li>';
+            html += '<li class="menu_option" id="50">50</li>';
+            html += '<li class="menu_option" id="75">75</li>';
+            html += '<li class="menu_option" id="100">100</li>';
+        html += '</ul>';
+    
+        this.updateStatus(html, 1);
+
+        this.lockInterface();
+
+        $('.menu_option').off();
+        $('.menu_option').on('click', function () {
+
+          $('.menu_option').off();
+          blackjack_self.unlockInterface();
+          let choice = $(this).attr("id");
+
+          blackjack_self.addMove("setwager\t" + choice + "\t" + blackjack_self.game.player);
+          blackjack_self.endTurn();
+          return 0;
+        });
+
+	return 0;
+      }
+
+
+      if (mv[0] === "setwager") {
+        this.game.queue.splice(qe, 1);
+	let player = parseInt(mv[1]);
+	let wager = parseInt(mv[2]);
+	this.game.state.player_wager[player-1] = wager;
+	return 1;
+      }
+
+
+
+      if (mv[0] === "stand") {
+        this.game.queue.splice(qe, 1);
+        return 1;
+      }
+
+      if (mv[0] === "bust") {
+        this.game.queue.splice(qe, 1);
+        return 1;
+      }
+
+
+      if (mv[0] === "startplay") {
+
+        this.game.queue.splice(qe, 1);
 
         this.displayBoard();
-
-        //
-        // update game state
-        //
-        this.game.state.round++;
-
         this.game.queue.push("pickwinner");
-        this.game.queue.push("dealer");
-        this.game.queue.push("score");
-        this.game.queue.push("endround");
+
+        for (let i = 0; i < this.game.players.length; i++) {
+	  if ((i+1) == this.game.state.dealer) {
+            this.game.queue.push("PLAY\t"+(i+1));
+	  }
+	}
+
 	let players_to_go = [];
 	let players_to_reveal = [];
         for (let i = 0; i < this.game.players.length; i++) {
@@ -286,9 +390,10 @@ console.log(JSON.stringify(mv));
 	    players_to_reveal.push((i+1));
 	  }
 	}
-        this.game.queue.push("PLAY\t"+JSON.stringify(players_to_go));	
+
+        this.game.queue.push("PLAY\t"+JSON.stringify(players_to_go));
         for (let i = 0; i < players_to_reveal.length; i++) {
-	  this.game.queue.push("revealhand\t"+players_to_reveal[i]);
+          this.game.queue.push("revealhand\t"+players_to_reveal[i]);
         }
 
 	if (this.game.player == this.game.state.dealer) {
@@ -300,147 +405,92 @@ console.log(JSON.stringify(mv));
 
 
       if (mv[0] === "revealhand") {
-	this.pickWinner();
+
         this.game.queue.splice(qe, 1);
+
 	let player = parseInt(mv[1]);
+	let force_reveal = 0;
+        if (mv[2] == 1) { force_reveal = 1; }
+
         if (this.game.player == parseInt(mv[1])) {
-console.log("DECK: " + JSON.stringify(this.game.deck[0]));
-	  if (this.game.deck[0].hand.length > 0) {
-	    this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
+	  if (this.game.state.dealer == this.game.player && force_reveal == 0) {
+	    if (this.game.deck[0].hand.length > 0) {
+	      let cardarray = [this.game.deck[0].hand[0]];
+	      this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(cardarray));
+	    }
+	    this.endTurn();
+	  } else {
+	    if (this.game.deck[0].hand.length > 0) {
+	      this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
+	    }
+	    this.endTurn();
 	  }
-	  this.endTurn();
 	}
 	return 0;
       }
 
-
       if (mv[0] === "hand") {
-	this.pickWinner();
 	let player = parseInt(mv[1]);
-console.log("hand is player; " + player + " -- " + mv[2])
 	let hand = JSON.parse(mv[2]);
         this.game.state.player_hands[player-1] = hand;
         this.game.queue.splice(qe, 1);
 	return 1;
       }
 
-      if (mv[0] === "hit") {
-	this.pickWinner();
-	let player = parseInt(mv[1]);
-        this.game.queue.splice(qe, 1);
-        this.game.queue.push("DEAL\t1\t"+player+"\t1");
-	return 1;
-      }
-
-      if (mv[0] === "stand") {
-	this.pickWinner();
-        this.game.queue.splice(qe, 1);
-        return 1;
-      }
-
-      if (mv[0] === "bust") {
-        this.game.queue.splice(qe, 1);
-        return 1;
-      }
-
 
       if (mv[0] === "pickwinner") {
 
-console.log("PICK WINNER: " +JSON.stringify(this.game.state));
+        this.game.queue.splice(qe, 1);
+        this.pickWinner();
 
-        if (this.game.state.dealer_wins == 1) {
 
-	  //
-	  // all players lose their bets
-	  //
-	  for (let i = 0; i < this.game.players.length; i++) {
-	    if (this.game.state.dealer != (i+1)) {
-	      this.game.state.player_credit[i] -= 100;
-	      this.game.queue.push("PAY"+"\t"+"100"+"\t"+this.game.players[i]+"\t"+this.game.players[this.game.state.dealer-1]+"\t"+(new Date().getTime())+"\t"+"SAITO");
-	      this.game.state.player_credit[this.game.state.dealer-1] += 100;
-	    }
-	  }
+console.log("WINNER: " + JSON.stringify(this.game.state.player_winner));
+console.log("TOTAL: " + JSON.stringify(this.game.state.player_total));
 
-	  console.log("dealer wins");
+	//
+	// move to next round when done
+	//
+	this.game.queue.push("newround");
 
-	} else {
-	  for (let i = 0; i < this.game.state.player_winner.length; i++) {
-	    if (this.game.state.player_winner[i] == 1) {
+	//
+        // decide who wins
+        //
+        let number_of_winners = 0;
+        let dealer_wins = 0;
 
-  	      //
-	      // dealer loses this one...
-	      //
-	      for (let i = 0; i < this.game.players.length; i++) {
-	        if (this.game.state.dealer != (i+1)) {
-	          this.game.state.player_credit[i] += 100;
-	          this.game.queue.push("PAY\t"+"100"+"\t"+this.game.players[this.game.state.dealer-1]+"\t"+this.game.players[i]+"\t"+(new Date().getTime())+"\t"+"SAITO");
-	          this.game.state.player_credit[this.game.state.dealer-1] -= 100;
-	        }
-	      }
-
-	      console.log("Player "+(i+1)+" wins");
+        for (let i = 0; i < this.game.state.player_winner.length; i++) {
+	  if (this.game.state.player_winner[i] == 1) {
+	    number_of_winners++;
+	    if ((i+1) == this.game.state.dealer) {
+	      dealer_wins = 1;
 	    }
 	  }
 	}
-        this.game.queue.splice(qe, 1);
 
-        this.displayTable();
+	//
+	// manage payout
+	//
+	if (number_of_winners == 0) {
 
-console.log(JSON.stringify(this.game.state));
+	  this.game.queue.push("ACKNOWLEDGE\teveryone loses");
 
-	this.game.queue.push("nextround");
-	if (this.game.state.dealer_wins == 1) {
-	  this.game.queue.push("ACKNOWLEDGE\tdealer wins");
 	} else {
-	  if (this.game.state.dealer == this.game.player) {
-	    if (this.game.state.dealer_tie == 1) {
-	      this.game.queue.push("ACKNOWLEDGE\tyou tie");
-	    } else {
-	      this.game.queue.push("ACKNOWLEDGE\tyou lose");
-	    }
+
+	  if (this.game.state.player_winner[this.game.player-1] == 1) {
+
+	    this.game.queue.push("ACKNOWLEDGE\tyou win");
+
 	  } else {
-  	    if (this.game.state.player_winner[this.game.player-1] == 1) {
-	      this.game.queue.push("ACKNOWLEDGE\tyou win");
-	    } else {
-	      if (this.game.state.dealer_tie == 1) {
-console.log("HERE 3");
-	        this.game.queue.push("ACKNOWLEDGE\teveryone loses");
-	      } else {
-console.log("HERE 3");
-	        this.game.queue.push("ACKNOWLEDGE\tyou lose");
-	      }
-	    }
+
+	    this.game.queue.push("ACKNOWLEDGE\tyou lose");
+
 	  }
+
 	}
 
         return 1;
       }
 
-      if (mv[0] === "nextround") {
-        this.game.queue.splice(qe, 1);
-	this.initializeQueue(); 
-	return 1;
-      }
-
-      if (mv[0] === "dealer") {
-	this.dealerFlips();
-        return 1;
-      }
-
-      if (mv[0] === "score") {
-	this.pickWinner();
-        this.game.queue.splice(qe, 1);
-	return 1;
-      }
-
-
-      if (mv[0] === "endround") {
-        this.game.queue.splice(qe, 1);
-	for (let i = 0; i < this.game.state.player_hands.length; i++) {
-	  this.game.queue.push("revealhand\t"+(i+1));
-	}
-        return 1;
-      }
 
       //
       // avoid infinite loops
@@ -486,7 +536,11 @@ console.log("HERE 3");
     } else {
 
       let html = "";
+      if (blackjack_self.game.player == blackjack_self.game.dealer) {
+        html += '<div class="menu-player">You are the dealer. Casino rules suggest hitting until 17:';
+      } else {
       html += '<div class="menu-player">Your move ';
+      }
       html += '</div>';
       html += '<ul>';
 
@@ -539,7 +593,6 @@ console.log("HERE 3");
     try {
       this.displayPlayers();
       this.displayHand();
-      this.displayTable();
     } catch (err) {
       console.log("err: " + err);
     }
@@ -556,13 +609,11 @@ console.log("HERE 3");
     state.turn = 0;
     state.player_names = [];
     state.player_credit = [];
-    state.player_payoff = [];
+    state.player_wager = [];
+    state.player_payout = [];
     state.player_hands = [];
     state.player_total = [];
     state.player_winner = [];
-    state.dealer_total = 0;
-    state.dealer_wins = 0;
-    state.dealer_tie = 0;
     state.dealer = 1;		// player 1 starts as the dealer
 
 
@@ -721,8 +772,6 @@ console.log("HERE 3");
 
     for (let i = 0; i < this.game.players.length; i++) {
 
-      if (this.game.state.dealer != (i+1)) {
-
         let seat = i - prank;
         if (seat < 0) { seat += this.game.players.length }
 
@@ -732,21 +781,27 @@ console.log("HERE 3");
 	let newhtml = '';
 	let player_hand_shown = 0;
 
-console.log("HERE: " + JSON.stringify(this.game.state));	
 	if (this.game.state.player_hands.length > 0) {
+console.log("displaying 1: " + (i+1));
 	  if (this.game.state.player_hands[i] != null) {
+console.log("displaying 2: " + (i+1));
 	    if (this.game.state.player_hands[i].length > 0) {
+console.log("displaying 3: " + (i+1));
 	      player_hand_shown = 1;
               newhtml = `
 	        <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
              `;
-console.log("PH: " + JSON.stringify(this.game.state.player_hands));
 	      if (this.game.state.player_hands[i] != null) {
 	        for (let z = 0; z < this.game.state.player_hands[i].length; z++) {
 	          let card = this.game.deck[0].cards[this.game.state.player_hands[i][z]];
                   newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
-    	        //newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
 	        }
+	        if (this.game.state.player_hands[i].length == 1 && this.game.state.dealer == ([i+1])) {
+    	          newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
+	        }
+	      }
+              if (this.game.state.dealer == (i+1)) {
+		newhtml += `<div class="dealer-notice">DEALER</div>`;
 	      }
 	      newhtml += `
                 </div>
@@ -756,6 +811,7 @@ console.log("PH: " + JSON.stringify(this.game.state.player_hands));
 	    }
           }
         }
+console.log("here: " + player_hand_shown);
 	if (player_hand_shown == 0) {
             newhtml = `
 	      <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
@@ -766,89 +822,21 @@ console.log("PH: " + JSON.stringify(this.game.state.player_hands));
               <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
            `;
 	}
+
+console.log("here: " + player_hand_shown);
         boxobj.querySelector(".info").innerHTML = newhtml;
 
         if (boxobj.querySelector(".plog").innerHTML == "") {
           boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
         }
 
-      } else {
-
-        let seat = i - prank;
-        if (seat < 0) { seat += this.game.players.length }
-
-        let player_box_num = player_box[seat];
-        let divname = "#player-info-" + player_box_num;
-        let boxobj = document.querySelector(divname);
-	let player_hand_shown = 0;
-	let newhtml = '';
-
-console.log("HERE: " + JSON.stringify(this.game.state));	
-	if (this.game.state.player_hands.length > 0) {
-	  if (this.game.state.player_hands[i] != null) {
-	    if (this.game.state.player_hands[i].length > 0) {
-	      player_hand_shown = 1;
-              newhtml = `
-	        <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
-             `;
-
-console.log("PH: " + JSON.stringify(this.game.state.player_hands));
-	      if (this.game.state.player_hands[i] != null) {
-	        for (let z = 0; z < this.game.state.player_hands[i].length; z++) {
-	          let card = this.game.deck[0].cards[this.game.state.player_hands[i][z]];
-                  newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
-    	        //newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
-	        }
-	      }
-	      newhtml += `
-                </div>
-                <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-                <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
-             `;
-	    }
-          }
-        }
-	if (player_hand_shown == 1) {
-          newhtml = `
-	    <div class="player-info-hand" id="player-info-hand-${i + 1}">
-              <div class="dealer-notice">DEALER</div>
-	    </div>
-            <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-            <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
-          `;
-	}
-
-        boxobj.querySelector(".info").innerHTML = newhtml;
-
-        if (boxobj.querySelector(".plog").innerHTML == "") {
-          boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
-        }
       }
-    }
   }
 
 
   displayHand() {
     this.cardfan.render(this.app, this);
     this.cardfan.attachEvents(this.app, this);
-  }
-
-
-  displayTable() {
-
-    //
-    // display flip pool (dealer cards)
-    //
-    document.querySelector('#deal').innerHTML = "";
-    for (let i = 0; i < 5 || i < this.game.pool[0].hand.length; i++) {
-      let card = {};
-      let html = "";
-      if (i < this.game.pool[0].hand.length) { 
-	card = this.game.pool[0].cards[this.game.pool[0].hand[i]];
-        html = `<img class="card" src="${this.card_img_dir}/${card.name}">`;
-      }
-      document.querySelector('#deal').innerHTML += html;
-    }
   }
 
 
@@ -877,98 +865,8 @@ console.log("PH: " + JSON.stringify(this.game.state.player_hands));
   }
 
 
-  dealerFlips() {
-
-    let dealer_total = 0;
-    let array_of_cards = [];
-
-    for (let i = 0; i < this.game.pool[0].hand.length; i++) {
-      let tmpr = this.game.pool[0].cards[this.game.pool[0].hand[i]].name;
-      let tmpr2 = tmpr.split(".");
-      array_of_cards.push(tmpr2[0]);
-    }
-    dealer_total = this.scoreArrayOfCards(array_of_cards);
-
-console.log("dealer total calculated at: " + dealer_total);
-
-    //
-    // the dealer either wins / loses / or pulls a new card
-    //
-    if (dealer_total >= 17) {
-
-      this.game.queue.splice(this.game.queue.length-1, 1);
-
-      if (dealer_total > 21) { 
-	this.game.state.dealer_wins = 0;
-	this.game.state.dealer_tie = 1;
- 	for (let i = 0; i < this.game.state.player_winner.length; i++) {
-	  if (this.game.state.player_winner[i] == 1) { 
-	    this.game.state.dealer_tie = 0;
-	    return 1;
-	  }
-	}
-        return 1;
-      }
-
-      this.game.state.dealer_wins = 1;
-      this.game.state.dealer_tie = 1;
-      for (let i = 0; i < this.game.state.player_winner.length; i++) {
-	if (this.game.state.player_winner[i] == 1) { 
-
-	  if (this.game.state.player_total[i] < this.game.state.dealer_total) {
-	    this.game.state.player_winner[i] = 0;
-	  }
-
-	  if (this.game.state.player_total[i] > this.game.state.dealer_total) {
-	    this.game.state.dealer_wins = 0;
-	    this.game.state.dealer_tie = 0;
-	  }
-
-	  if (this.game.state.player_total[i] == this.game.state.dealer_total) {
-	  }
-	}
-      }
 
 
-      //
-      // if the dealer lost
-      //
-      if (this.game.state.dealer_wins == 0) {
-	this.game.state.dealer_tie = 0;
-	return 1;
-      }
-
-
-      //
-      // otherwise,, maybe they tied
-      //
-      for (let i = 0; i < this.game.state.player_winner.length; i++) {
-	if (this.game.state.player_winner[i] == 1) { 
-	  if (this.game.state.player_total[i] == this.game.state.dealer_total) {
-	    this.game.state.dealer_tie = 1;
-	    this.game.state.dealer_wins = 0;
-	  } else {
-	    this.game.state.dealer_tie = 0;
-	    this.game.state.dealer_wins = 0;
-	  }
-	}
-      }
-
-    } else {
-
-      //
-      // don't remove dealer, but get extra card
-      //
-      for (let i = this.game.players.length - 1; i >= 0; i--) {
-        this.game.queue.push("FLIPCARD\t1\t1\t1\t" + (i + 1));
-      }
-      this.game.queue.push("FLIPRESET\t1");
-
-    }
-
-    return 1;
-
-  }
 
   scoreArrayOfCards(array_of_cards) {
 
@@ -1009,7 +907,11 @@ console.log("CARD: " + card);
       let array_of_cards = [];
       if (this.game.state.player_hands[i] != null) {
         for (let ii = 0; ii < this.game.state.player_hands[i].length; ii++) {
-          array_of_cards.push(this.game.state.player_hands[i][ii]);
+         // array_of_cards.push(this.game.state.player_hands[i][ii]);
+          let tmpr = this.game.deck[0].cards[this.game.state.player_hands[i][ii]].name;
+          let tmpr2 = tmpr.split(".");
+          array_of_cards.push(tmpr2[0]);
+
         };
       }
       let handscore = this.scoreArrayOfCards(array_of_cards);
@@ -1023,7 +925,7 @@ console.log("CARD: " + card);
       }
     }
     for (let i = 0; i < this.game.state.player_total.length; i++) {
-      if (this.game.state.player_total[i] == max_score && (i+1) != this.game.state.dealer) {
+      if (this.game.state.player_total[i] == max_score) {
 	this.game.state.player_winner[i] = 1;
       } else {
 	this.game.state.player_winner[i] = 0;

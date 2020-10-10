@@ -65,6 +65,9 @@ class ChatCore extends ModTemplate {
     //
     // we only want to process our first group server
     //
+    // console.log("PEER: " + peer.peer.host);
+    // console.log("OPTIONS: " + JSON.stringify(app.options.peers));
+    //
     if (!peer.peer.host == app.options.peers[0].host) { return; }
 
     // if (this.groups.length == 0) {

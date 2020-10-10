@@ -5666,33 +5666,33 @@ this.startClock();
     // Latin American Death Squads
     //
     if (this.game.state.events.deathsquads != 0) {
-      if (this.game.state.events.deathsquads == 1) {
+      if (this.game.state.events.deathsquads <= -1) {
+	let roll_modifier = this.game.state.events.deathsquads * -1;
         if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
           if (player == "ussr") {
-            this.updateLog("USSR gets +1 coup bonus");
-            this.updateLog("Latin American Death Squads trigger");
-            roll++;
+            this.updateLog("Latin American Death Squads triggers: USSR "+roll_modifier+" modifier");
+            roll += roll_modifier;
           }
-        }
-        if (player == "us")   {
-          if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
-            this.updateLog("US gets -1 coup penalty");
-            this.updateLog("Latin American Death Squads trigger");
-            roll--;
+          if (player == "us")   {
+            if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
+              this.updateLog("Latin American Death Squads triggers: US -"+roll_modifier+" modifier");
+              roll -= roll_modifier;
+            }
           }
         }
       }
       if (this.game.state.events.deathsquads == 2) {
-        if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
-          if (player == "ussr") {
-            this.updateLog("USSR gets -1 coup penalty");
-            this.updateLog("Latin American Death Squads trigger");
-            roll--;
-          }
-          if (player == "us")   {
-            this.updateLog("US gets +1 coup bonus");
-            this.updateLog("Latin American Death Squads trigger");
-            roll++;
+        if (this.game.state.events.deathsquads >= 1) {
+	  let roll_modifier = this.game.state.events.deathsquads;
+          if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
+            if (player == "ussr") {
+              this.updateLog("Latin American Death Squads triggers: USSR -"+roll_modifier+" modifier");
+              roll -= roll_modifier;
+            }
+            if (player == "us")   {
+              this.updateLog("Latin American Death Squads triggers: US "+roll_modifier+" modifier");
+              roll += roll_modifier;
+            }
           }
         }
       }
@@ -7080,29 +7080,36 @@ console.log("CONTROL IS: " + control);
 
 
     let vp_adjustment = 0;
+    let total_vp = 0;
 
     vp_adjustment = this.calculateScoring("europe");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Europe:</span> " + vp_adjustment + " <span>VP</span>");
  
     vp_adjustment = this.calculateScoring("asia");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Asia:</span> " + vp_adjustment + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("mideast");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Middle East:</span> " + vp_adjustment + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("africa");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Africa:</span> " + vp_adjustment + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("southamerica");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>South America:</span> " + vp_adjustment + " <span>VP</span>");
 
-    vp_adjustment = this.calculateScoring("scentralamerica");
-    this.game.state.vp += vp_adjustment;
+    vp_adjustment = this.calculateScoring("centralamerica");
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Central America:</span> " + vp_adjustment + " <span>VP</span>");
 
     this.updateVictoryPoints();
@@ -7344,9 +7351,9 @@ console.log("CONTROL IS: " + control);
 	for (let i in this.countries) {
 	  if (this.countries[i].region === "samerica") {
 	    if (this.countries[i].bg === 1) {
-	      as_bg_countries.push(i);
+	      sa_bg_countries.push(i);
 	    } else {
-	      as_countries.push(i);
+	      sa_countries.push(i);
 	    }
 	  }
         }
@@ -9415,7 +9422,11 @@ console.log("CONTROL IS: " + control);
 
 
     if (card == "africa") {
-      this.scoreRegion("africa");
+      let vp_adjustment = this.calculateScoring("africa");
+      let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+      this.game.state.vp += total_vp;
+      this.updateLog("<span>Africa:</span> " + total_vp + " <span>VP</span>");
+      this.updateVictoryPoints();
       return 1;
     }
 
@@ -9593,7 +9604,11 @@ console.log("CONTROL IS: " + control);
 
 
     if (card == "asia") {
-      this.scoreRegion("asia");
+      let vp_adjustment = this.calculateScoring("asia");
+      let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+      this.game.state.vp += total_vp;
+      this.updateLog("<span>Asia:</span> " + total_vp + " <span>VP</span>");
+      this.updateVictoryPoints();
       return 1;
     }
 
@@ -10009,7 +10024,11 @@ console.log("CONTROL IS: " + control);
 
 
     if (card == "centralamerica") {
-      this.scoreRegion("centralamerica");
+      let vp_adjustment = this.calculateScoring("centralamerica");
+      let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+      this.game.state.vp += total_vp;
+      this.updateLog("<span>Central America:</span> " + total_vp + " <span>VP</span>");
+      this.updateVictoryPoints();
       return 1
     }
 
@@ -10408,8 +10427,8 @@ console.log("CONTROL IS: " + control);
     // Latin American Death Squads
     //
     if (card == "deathsquads") {
-      if (player == "ussr") { this.game.state.events.deathsquads = 1; }
-      if (player == "us") { this.game.state.events.deathsquads = 2; }
+      if (player == "ussr") { this.game.state.events.deathsquads--; }
+      if (player == "us") { this.game.state.events.deathsquads++; }
       return 1;
     }
 
@@ -10765,7 +10784,11 @@ console.log("CONTROL IS: " + control);
 
 
     if (card == "europe") {
-      this.scoreRegion("europe");
+      let vp_adjustment = this.calculateScoring("europe");
+      let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+      this.game.state.vp += total_vp;
+      this.updateLog("<span>Europe:</span> " + total_vp + " <span>VP</span>");
+      this.updateVictoryPoints();
       return 1;
     }
 
@@ -11924,7 +11947,11 @@ console.log("card: " + card);
 
 
     if (card == "mideast") {
-      this.scoreRegion("mideast");
+      let vp_adjustment = this.calculateScoring("mideast");
+      let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+      this.game.state.vp += total_vp;
+      this.updateLog("<span>Middle East:</span> " + total_vp + " <span>VP</span>");
+      this.updateVictoryPoints();
       return 1;
     }
 
@@ -12952,7 +12979,11 @@ console.log("card: " + card);
 
 
     if (card == "seasia") {
-      this.scoreRegion("seasia");
+      let vp_adjustment = this.calculateScoring("seasia");
+      let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+      this.game.state.vp += total_vp;
+      this.updateLog("<span>Southeast Asia:</span> " + total_vp + " <span>VP</span>");
+      this.updateVictoryPoints();
       return 1;
     }
 
@@ -13132,7 +13163,11 @@ console.log("card: " + card);
 
 
     if (card == "southamerica") {
-      this.scoreRegion("southamerica");
+      let vp_adjustment = this.calculateScoring("southamerica");
+      let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+      this.game.state.vp += total_vp;
+      this.updateLog("<span>South America:</span> " + total_vp + " <span>VP</span>");
+      this.updateVictoryPoints();
       return 1;
     }
 
@@ -15305,10 +15340,10 @@ console.log("ROUND: " + this.game.state.round);
 	if (action2 == "samerica") { selreg = "South America"; }
 	if (action2 == "mideast") { selreg = "Middle East"; }
 
-        twilight_self.addMove("resolve\tdomino");
+        twilight_self.addMove("resolve\tkissingerisawarcriminal");
 
 	for (let i in twilight_self.countries) {
-	  if (twilight_self.countries[i].region.indexOf(i) != -1) {
+	  if (twilight_self.countries[i].region.indexOf(action2) != -1 && twilight_self.countries[i].control == 1) {
             twilight_self.addMove("SETVAR\tcountries\t"+i+"\tbg\t"+1);
             twilight_self.addMove("notify\t"+twilight_self.countries[i].name + " is now a battleground country");
 	  }
