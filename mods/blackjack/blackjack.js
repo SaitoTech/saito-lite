@@ -315,7 +315,7 @@ class Blackjack extends GameTemplate {
         this.game.queue.splice(qe, 1);
 
 	if (this.game.player != player) {
-	  this.updateStatus('<div class="status-message">Player '+player+' is picking wager</div>');
+	  this.updateStatus('<div class="">Player '+player+' is picking wager</div>');
 	  return 0;
 	}
 
@@ -443,10 +443,6 @@ class Blackjack extends GameTemplate {
         this.game.queue.splice(qe, 1);
         this.pickWinner();
 
-
-console.log("WINNER: " + JSON.stringify(this.game.state.player_winner));
-console.log("TOTAL: " + JSON.stringify(this.game.state.player_total));
-
 	//
 	// move to next round when done
 	//
@@ -466,6 +462,17 @@ console.log("TOTAL: " + JSON.stringify(this.game.state.player_total));
 	    }
 	  }
 	}
+
+	//
+	// calculate losses
+	//
+	let total_losses = 0;
+	for (let i = 0; i < this.game.state.player_winner.length; i++) {
+	  if (this.game.state.player_winner[i] == 0) {
+	    total_
+	  }
+	}
+
 
 	//
 	// manage payout
@@ -911,11 +918,13 @@ console.log("CARD: " + card);
           let tmpr = this.game.deck[0].cards[this.game.state.player_hands[i][ii]].name;
           let tmpr2 = tmpr.split(".");
           array_of_cards.push(tmpr2[0]);
-
         };
       }
       let handscore = this.scoreArrayOfCards(array_of_cards);
       this.game.state.player_total.push(handscore);
+      if (this.game.state.player_total[i] == 21 && this.game.state.player_total.length == 2) {
+	this.game.state.player_payout[i] = 1.5;
+      }
     }
 
     let max_score = 0;

@@ -360,8 +360,6 @@ class Twilight extends GameTemplate {
 
     try {
 
-//      $('#hud').draggable();
-
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
         GameHammerMobile.render(this.app, this);
@@ -369,12 +367,23 @@ class Twilight extends GameTemplate {
 
       } else {
 
+	let twilight_self = this;
+
         GameBoardSizer.render(this.app, this);
         GameBoardSizer.attachEvents(this.app, this, '.gameboard');
 
-        $('#gameboard').draggable();
+console.log("done attach events");
+
+        $('#gameboard').draggable({
+	  stop : function(event, ui) {
+console.log("mouseup on gameboard");
+console.log(JSON.stringify(ui.offset));
+	    twilight_self.saveGamePreference((twilight_self.returnSlug()+"-board-offset"), ui.offset);
+	  }
+	});
 
       }
+
     } catch (err) {}
 
   }

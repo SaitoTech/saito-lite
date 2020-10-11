@@ -18,8 +18,6 @@ module.exports = ChatManager = {
 
   render(app, data) {
 
-console.log("render email chat");
-
     if( typeof window != "undefined") {
       if (!document.querySelector('.chat-manager')) {
         let {el_parser} = data.chat.helpers;
@@ -35,9 +33,6 @@ console.log("render email chat");
         if (!parent_elem) return;
         parent_elem.append(el_parser('<div class="chat-manager"></div>'));
       }
-
-console.log("AG: " + data.chat.active_groups);
-//console.log("G: " + JSON.stringify(data.chat.groups[0].members));
 
       if (data.chat.active_groups == 0 && data.chat.groups.length > 0) { 
 	data.chat.active_groups = [data.chat.groups[0]];

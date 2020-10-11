@@ -62,8 +62,6 @@ class ChatCore extends ModTemplate {
 
   async onPeerHandshakeComplete(app, peer) {
 
-console.log("ON PEER HANDSHAKE COMPLETE!");
-
     //
     // we only want to process our first group server
     //
@@ -114,8 +112,6 @@ console.log("ON PEER HANDSHAKE COMPLETE!");
         return group;
       });
     }
-
-console.log("ON PEER HANDSHAKE COMPLETE!");
 
     this.sendEvent('chat-render-request', {});
     this.sendEvent('chat-render-box-request', {});
@@ -185,10 +181,8 @@ console.log("ON PEER HANDSHAKE COMPLETE!");
     }
 
     if (prepend_group == 0) {
-console.log("chat pushing: " + cg.members[0]);
       this.groups.push(cg);
     } else {
-console.log("chat prepending: " + cg.members[0]);
       this.groups.unshift(cg);
     }
 
