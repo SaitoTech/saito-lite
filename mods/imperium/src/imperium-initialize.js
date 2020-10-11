@@ -23,7 +23,7 @@
       } else {
 
         GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+        GameBoardSizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexGrid
 
       }
     } catch (err) {}

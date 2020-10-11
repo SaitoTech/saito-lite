@@ -2357,10 +2357,9 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
   	      imperium_self.endTurn();
             });
 	  } else {
-	    console.log("No Indoctrination Possible");
-	  }
+          }
+          return 0;
         }
-        return 0;
       },
     });
 
@@ -8832,7 +8831,7 @@ ACTION CARD - types
       } else {
 
         GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+        GameBoardSizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexGrid
 
       }
     } catch (err) {}
@@ -25297,17 +25296,7 @@ addUIEvents() {
 
   if (this.browser_active == 0) { return; }
 
-  //GameBoardSizer.render(this.app, this.data);
-  //GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
-
-
-
-  $('#hexGrid').draggable();
-
-  //log-lock - game engine template does now
-  //document.querySelector('.log').addEventListener('click', (e) => {
-  //  document.querySelector('.log').toggleClass('log-lock');
-  //});
+//  $('#hexGrid').draggable();
 
   document.querySelector('.leaderboardbox').addEventListener('click', (e) => {
     document.querySelector('.leaderboardbox').toggleClass('leaderboardbox-lock');

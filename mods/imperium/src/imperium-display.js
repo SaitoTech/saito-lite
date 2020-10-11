@@ -579,17 +579,7 @@ addUIEvents() {
 
   if (this.browser_active == 0) { return; }
 
-  //GameBoardSizer.render(this.app, this.data);
-  //GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
-
-
-
-  $('#hexGrid').draggable();
-
-  //log-lock - game engine template does now
-  //document.querySelector('.log').addEventListener('click', (e) => {
-  //  document.querySelector('.log').toggleClass('log-lock');
-  //});
+//  $('#hexGrid').draggable();
 
   document.querySelector('.leaderboardbox').addEventListener('click', (e) => {
     document.querySelector('.leaderboardbox').toggleClass('leaderboardbox-lock');
