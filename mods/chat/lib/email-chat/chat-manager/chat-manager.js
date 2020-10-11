@@ -18,6 +18,8 @@ module.exports = ChatManager = {
 
   render(app, data) {
 
+console.log("render email chat");
+
     if( typeof window != "undefined") {
       if (!document.querySelector('.chat-manager')) {
         let {el_parser} = data.chat.helpers;
@@ -33,12 +35,18 @@ module.exports = ChatManager = {
         if (!parent_elem) return;
         parent_elem.append(el_parser('<div class="chat-manager"></div>'));
       }
+
+console.log("AG: " + data.chat.active_groups);
+//console.log("G: " + JSON.stringify(data.chat.groups[0].members));
+
       if (data.chat.active_groups == 0 && data.chat.groups.length > 0) { 
 	data.chat.active_groups = [data.chat.groups[0]];
       } else {
       }
 
-      data.chat.active_groups.forEach(group => this.addChatBox(app, data, group));
+      for (let i = 0; i < data.chat.active_groups.length; i++) {
+        this.addChatBox(app, data, data.chat.active_groups[i]);
+      }
 
     }
   },

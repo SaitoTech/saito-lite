@@ -149,6 +149,7 @@ class ChatCore extends ModTemplate {
   }
 
   addNewGroup(chatgroup) {
+
     let cg = new ChatGroup(this.app, chatgroup);
 
     if (this.app.options.chat) {
@@ -170,7 +171,7 @@ class ChatCore extends ModTemplate {
     // main server mastadon is always #1 
     //
     if (cg.members) {
-      if (cg.members.length == 1) {
+      if (cg.members.length >= 1) {
 	if (cg.members[0] === this.app.network.peers[0].peer.publickey) {
 	  prepend_group = 1;
 	}
@@ -178,8 +179,10 @@ class ChatCore extends ModTemplate {
     }
 
     if (prepend_group == 0) {
+console.log("chat pushing: " + cg.members[0]);
       this.groups.push(cg);
     } else {
+console.log("chat prepending: " + cg.members[0]);
       this.groups.unshift(cg);
     }
 

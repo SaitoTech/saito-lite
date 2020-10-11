@@ -12,6 +12,8 @@ module.exports = EmailChat = {
 
     render(app, data) {
 
+console.log("main email email chat");
+
       let email_chat = document.querySelector(".email-chat")
       email_chat.innerHTML = EmailChatTemplate();
 
