@@ -127,16 +127,12 @@ class Scotland extends GameTemplate {
     this.hud.render(app, this);
 
     try {
-
-      $('#hud').draggable();
-
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
         GameHammerMobile.render(this.app, this);
         GameHammerMobile.attachEvents(this.app, this, '.gameboard');
       } else {
         GameBoardSizer.render(this.app, this);
         GameBoardSizer.attachEvents(this.app, this, '.gameboard');
-	$('.gameboard').draggable();
       }
     } catch (err) {}
 
