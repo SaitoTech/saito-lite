@@ -62,13 +62,17 @@ class ChatCore extends ModTemplate {
 
   async onPeerHandshakeComplete(app, peer) {
 
+console.log("ON PEER HANDSHAKE COMPLETE!");
+
     //
     // we only want to process our first group server
     //
     // console.log("PEER: " + peer.peer.host);
     // console.log("OPTIONS: " + JSON.stringify(app.options.peers));
     //
-    if (!peer.peer.host == app.options.peers[0].host) { return; }
+    if (peer.peer.endpoint) {
+      if (peer.peer.endpoint.host != app.options.peers[0].host) { return; }
+    }
 
     // if (this.groups.length == 0) {
     let { publickey, name } = peer.peer;
@@ -110,6 +114,8 @@ class ChatCore extends ModTemplate {
         return group;
       });
     }
+
+console.log("ON PEER HANDSHAKE COMPLETE!");
 
     this.sendEvent('chat-render-request', {});
     this.sendEvent('chat-render-box-request', {});
