@@ -26,6 +26,7 @@ class Blackjack extends GameTemplate {
     this.minPlayers = 2;
     this.maxPlayers = 6;
     this.interface = 1;
+
     this.boardgameWidth = 5100;
 
     this.updateHTML = "";
@@ -261,7 +262,7 @@ class Blackjack extends GameTemplate {
     });
 
     this.startRound();
-    this.displayBoard();
+    this.displayPlayers();
 
   }
 
@@ -329,8 +330,13 @@ class Blackjack extends GameTemplate {
 	this.displayPlayers();
 
 	if (this.game.player != player) {
-	  this.updateStatus('<div class="">Player '+player+' is picking wager</div>');
-	  return 0;
+	  if (this.game.player == this.game.state.dealer) {
+	    this.updateStatus('<div class="">You are the dealer. Waiting for players to set their wager</div>');
+	    return 0;
+	  } else {
+	    this.updateStatus('<div class="">Player '+player+' is picking wager</div>');
+	    return 0;
+	  }
 	}
 
         let html = '<div class="">How much would you like to wager?';
@@ -837,62 +843,73 @@ console.log("PLAYER "+(i+1)+" gains "+gains);
       }
     }
 
+console.log("YES");
+
     for (let i = 0; i < this.game.players.length; i++) {
 
-        let seat = i - prank;
-        if (seat < 0) { seat += this.game.players.length }
+console.log(i);
 
-        let player_box_num = player_box[seat];
-        let divname = "#player-info-" + player_box_num;
-        let boxobj = document.querySelector(divname);
-	let newhtml = '';
-	let player_hand_shown = 0;
+      let seat = i - prank;
+      if (seat < 0) { seat += this.game.players.length }
 
-	if (this.game.state.player_hands.length > 0) {
-	  if (this.game.state.player_hands[i] != null) {
-	    if (this.game.state.player_hands[i].length > 0) {
-	      player_hand_shown = 1;
-              newhtml = `
-	        <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
-             `;
-	      if (this.game.state.player_hands[i] != null) {
-	        for (let z = 0; z < this.game.state.player_hands[i].length; z++) {
-	          let card = this.game.deck[0].cards[this.game.state.player_hands[i][z]];
-                  newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
-	        }
-	        if (this.game.state.player_hands[i].length == 1 && this.game.state.dealer == ([i+1])) {
-    	          newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
-	        }
+      let player_box_num = player_box[seat];
+      let divname = "#player-info-" + player_box_num;
+      let boxobj = document.querySelector(divname);
+      let newhtml = '';
+      let player_hand_shown = 0;
+
+      if (this.game.state.player_hands.length > 0) {
+	if (this.game.state.player_hands[i] != null) {
+	  if (this.game.state.player_hands[i].length > 0) {
+	    player_hand_shown = 1;
+            newhtml = `<div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">`;
+	    if (this.game.state.player_hands[i] != null) {
+	      for (let z = 0; z < this.game.state.player_hands[i].length; z++) {
+	        let card = this.game.deck[0].cards[this.game.state.player_hands[i][z]];
+                newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
 	      }
-              if (this.game.state.dealer == (i+1)) {
-		newhtml += `<div class="dealer-notice">DEALER</div>`;
+	      if (this.game.state.player_hands[i].length == 1 && this.game.state.dealer == ([i+1])) {
+    	        newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
 	      }
-	      newhtml += `
-                </div>
-                <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-                <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
-             `;
 	    }
-          }
-        }
-	if (player_hand_shown == 0) {
-            newhtml = `
-	      <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
-                <img class="card" src="${this.card_img_dir}/red_back.png">
-                <img class="card" src="${this.card_img_dir}/red_back.png">
+            if (this.game.state.dealer == (i+1)) {
+	      newhtml += `<div class="dealer-notice">DEALER</div>`;
+	    }
+	    newhtml += `
               </div>
               <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
               <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
            `;
-	}
-
-        boxobj.querySelector(".info").innerHTML = newhtml;
-
-        if (boxobj.querySelector(".plog").innerHTML == "") {
-          boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
+	  }
         }
+      }
+      if (player_hand_shown == 0) {
+console.log("is the player hand shown?");
+        newhtml = `
+	  <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
+            <img class="card" src="${this.card_img_dir}/red_back.png">
+            <img class="card" src="${this.card_img_dir}/red_back.png">
+          </div>
+          <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
+          <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+        `;
+console.log("this is my hand");
+	  let cardfan_backs = `
+	      <img class="card" src="${this.card_img_dir}/red_back.png">
+              <img class="card" src="${this.card_img_dir}/red_back.png">
+	  `;
+          this.cardfan.render(this.app, this, cardfan_backs);
+          this.cardfan.attachEvents(this.app, this);
 
       }
+
+      boxobj.querySelector(".info").innerHTML = newhtml;
+
+      if (boxobj.querySelector(".plog").innerHTML == "") {
+        boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
+      }
+
+    }
   }
 
 
