@@ -75,7 +75,7 @@ class Blackjack extends GameTemplate {
     this.game.state.player_total = [];
     for (let i = 0; i < this.game.players.length; i++) {
       this.game.state.player_wager[i] = 0;
-      this.game.state.player_payout[i] = 1;
+      this.game.state.player_payout[i] = 0;
       this.game.state.player_hands[i] = [];
       this.game.state.player_total[i] = 0;
     }
@@ -351,10 +351,9 @@ class Blackjack extends GameTemplate {
 
           $('.menu_option').off();
           blackjack_self.unlockInterface();
-	  blackjack_self.updateStatus("dealing cards");
           let choice = $(this).attr("id");
 
-          blackjack_self.addMove("setwager\t" + blackjack_self.game.player + "\t" + choice);
+          blackjack_self.addMove("setwager\t" + choice + "\t" + blackjack_self.game.player);
           blackjack_self.endTurn();
           return 0;
         });
@@ -491,11 +490,6 @@ console.log(this.game.state.player_wager[i] + " --- " + this.game.state.player_p
 console.log("PLAYER "+(i+1)+" loses "+my_losses);
 	    this.game.state.player_credit[i] -= Math.floor(losses);
 	  } else {
-
-//
-//
-// HACK CHECK TIES DEALER, ETC.
-//
 	    let gains = this.game.state.player_wager[i] * this.game.state.player_payout[i];
 console.log("PLAYER "+(i+1)+" gains "+gains);
 	    this.game.state.player_credit[i] += Math.floor(gains);
@@ -508,24 +502,12 @@ console.log("PLAYER "+(i+1)+" gains "+gains);
 	// manage payout
 	//
 	if (number_of_winners == 0) {
+
 	  this.game.queue.push("ACKNOWLEDGE\teveryone loses");
+
 	} else {
 	  if (this.game.state.player_winner[this.game.player-1] == 1) {
-	    if (this.game.player == this.game.state.dealer) {
-	      if (this.game.state.player_winner[this.game.player-1] == 1) {
-	        if (number_of_winners > 1) {
-		  this.game.queue.push("ACKNOWLEDGE\tyou tie");
-	        }
-	      } else {
-		this.game.queue.push("ACKNOWLEDGE\tyou win");
-	      }
-	    } else {
-	      if (this.game.state.player_winner[this.game.player-1] == 1 && this.game.state.player_winner[this.game.state.dealer-1] == 1) {
-	        this.game.queue.push("ACKNOWLEDGE\tyou tie");
-	      } else {
-	        this.game.queue.push("ACKNOWLEDGE\tyou win");
-	      }
-	    }
+	    this.game.queue.push("ACKNOWLEDGE\tyou win");
 	  } else {
 	    this.game.queue.push("ACKNOWLEDGE\tyou lose");
 	    //
