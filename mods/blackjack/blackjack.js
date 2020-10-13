@@ -400,6 +400,7 @@ class Blackjack extends GameTemplate {
         for (let i = 0; i < this.game.players.length; i++) {
 	  if ((i+1) == this.game.state.dealer) {
             this.game.queue.push("PLAY\t"+(i+1));
+            this.game.queue.push("STATUS\tThe dealer is taking his turn");
 	  }
 	}
 
@@ -521,9 +522,15 @@ console.log("PLAYER "+(i+1)+" gains "+gains);
 	      if (this.game.state.player_winner[this.game.player-1] == 1) {
 	        if (number_of_winners > 1) {
 		  this.game.queue.push("ACKNOWLEDGE\tyou tie");
+	        } else {
+		  this.game.queue.push("ACKNOWLEDGE\tyou win");
 	        }
 	      } else {
-		this.game.queue.push("ACKNOWLEDGE\tyou win");
+	        if (number_of_winners > 1) {
+		  this.game.queue.push("ACKNOWLEDGE\tyou lose, badly");
+	        } else {
+		  this.game.queue.push("ACKNOWLEDGE\tyou lose");
+	        }
 	      }
 	    } else {
 	      if (this.game.state.player_winner[this.game.player-1] == 1 && this.game.state.player_winner[this.game.state.dealer-1] == 1) {
@@ -598,10 +605,10 @@ console.log("PLAYER "+(i+1)+" gains "+gains);
     } else {
 
       let html = "";
-      if (blackjack_self.game.player == blackjack_self.game.dealer) {
+      if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
         html += '<div class="menu-player">You are the dealer. Casino rules suggest hitting until 17:';
       } else {
-      html += '<div class="menu-player">Your move ';
+        html += '<div class="menu-player">Your move ';
       }
       html += '</div>';
       html += '<ul>';
