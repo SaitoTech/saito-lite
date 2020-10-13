@@ -793,6 +793,9 @@ div#message-wrapper {
   font-size: 1.7em;
 }
 
+.header-icon-disabled {
+  color: #606060;
+}
 .header-dropdown {
   position: absolute;
   right: 0;
