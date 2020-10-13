@@ -67,15 +67,18 @@ class Blackjack extends GameTemplate {
 
     this.game.queue.push("startplay");
 
-    //
-    //
-    //
-    for (let i = 0; i < this.game.players.length; i++) {
-      if ( (i+1) != this.game.state.dealer) {
-        this.game.queue.push("selectwager\t"+(i+1));
-      }
-    }
 
+
+    this.game.state.player_wager = [];
+    this.game.state.player_payout = [];
+    this.game.state.player_hands = [];
+    this.game.state.player_total = [];
+    for (let i = 0; i < this.game.players.length; i++) {
+      this.game.state.player_wager[i] = 0;
+      this.game.state.player_payout[i] = 1;
+      this.game.state.player_hands[i] = [];
+      this.game.state.player_total[i] = 0;
+    }
 
 
     //
@@ -175,6 +178,15 @@ class Blackjack extends GameTemplate {
     }
     this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
     //this.game.queue.push("BALANCE\t0\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
+
+    //
+    // set your wager before cards dealt
+    //
+    for (let i = 0; i < this.game.players.length; i++) {
+      if ( (i+1) != this.game.state.dealer) {
+        this.game.queue.push("selectwager\t"+(i+1));
+      }
+    }
 
   }
 
@@ -314,12 +326,14 @@ class Blackjack extends GameTemplate {
 	let player = parseInt(mv[1]);
         this.game.queue.splice(qe, 1);
 
+	this.displayPlayers();
+
 	if (this.game.player != player) {
 	  this.updateStatus('<div class="">Player '+player+' is picking wager</div>');
 	  return 0;
 	}
 
-        let html = '<div class="status-message">How much would you like to wager?';
+        let html = '<div class="">How much would you like to wager?';
             html += '</div>';
             html += '<ul>';
             html += '<li class="menu_option" id="25">25</li>';
@@ -337,9 +351,10 @@ class Blackjack extends GameTemplate {
 
           $('.menu_option').off();
           blackjack_self.unlockInterface();
+	  blackjack_self.updateStatus("dealing cards");
           let choice = $(this).attr("id");
 
-          blackjack_self.addMove("setwager\t" + choice + "\t" + blackjack_self.game.player);
+          blackjack_self.addMove("setwager\t" + blackjack_self.game.player + "\t" + choice);
           blackjack_self.endTurn();
           return 0;
         });
@@ -467,32 +482,66 @@ class Blackjack extends GameTemplate {
 	// calculate losses
 	//
 	let total_losses = 0;
+        let my_losses = 0;
 	for (let i = 0; i < this.game.state.player_winner.length; i++) {
+console.log(this.game.state.player_wager[i] + " --- " + this.game.state.player_payout[i]);
 	  if (this.game.state.player_winner[i] == 0) {
-	    total_
+	    let losses = this.game.state.player_wager[i] * this.game.state.player_payout[i];
+	    my_losses = losses;
+console.log("PLAYER "+(i+1)+" loses "+my_losses);
+	    this.game.state.player_credit[i] -= Math.floor(losses);
+	  } else {
+
+//
+//
+// HACK CHECK TIES DEALER, ETC.
+//
+	    let gains = this.game.state.player_wager[i] * this.game.state.player_payout[i];
+console.log("PLAYER "+(i+1)+" gains "+gains);
+	    this.game.state.player_credit[i] += Math.floor(gains);
 	  }
 	}
+
 
 
 	//
 	// manage payout
 	//
 	if (number_of_winners == 0) {
-
 	  this.game.queue.push("ACKNOWLEDGE\teveryone loses");
-
 	} else {
-
 	  if (this.game.state.player_winner[this.game.player-1] == 1) {
-
-	    this.game.queue.push("ACKNOWLEDGE\tyou win");
-
+	    if (this.game.player == this.game.state.dealer) {
+	      if (this.game.state.player_winner[this.game.player-1] == 1) {
+	        if (number_of_winners > 1) {
+		  this.game.queue.push("ACKNOWLEDGE\tyou tie");
+	        }
+	      } else {
+		this.game.queue.push("ACKNOWLEDGE\tyou win");
+	      }
+	    } else {
+	      if (this.game.state.player_winner[this.game.player-1] == 1 && this.game.state.player_winner[this.game.state.dealer-1] == 1) {
+	        this.game.queue.push("ACKNOWLEDGE\tyou tie");
+	      } else {
+	        this.game.queue.push("ACKNOWLEDGE\tyou win");
+	      }
+	    }
 	  } else {
-
 	    this.game.queue.push("ACKNOWLEDGE\tyou lose");
-
+	    //
+	    // send tokens to others
+	    //
+	    if (this.game.player != this.game.state.dealer) {
+              this.game.queue.push("PAY" + "\t" + my_losses + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[this.game.state.dealer] + "\t" + (new Date().getTime()) + "\t" + "SAITO");	    
+	    } else {
+	      for (let i = 0; i < this.game.state.player_winner.length; i++) {
+	  	if (this.game.state.player_winner[i] == 1) {
+	    	  let gains = this.game.state.player_wager[i] * this.game.state.player_payout[i];
+                  this.game.queue.push("PAY" + "\t" + my_losses + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[i] + "\t" + (new Date().getTime()) + "\t" + "SAITO");	    
+	  	}
+	      }
+	    }
 	  }
-
 	}
 
         return 1;
@@ -570,6 +619,9 @@ class Blackjack extends GameTemplate {
 
       if (choice === "hit") {
         blackjack_self.addMove("hit\t" + blackjack_self.game.player);
+	if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
+	  blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
+	} 
         blackjack_self.endTurn();
 	return 0;
       }
@@ -577,6 +629,9 @@ class Blackjack extends GameTemplate {
       if (choice === "bust") {
         blackjack_self.addMove("RESOLVE\t"+blackjack_self.app.wallet.returnPublicKey());
         blackjack_self.addMove("bust\t" + blackjack_self.game.player);
+	if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
+	  blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
+	} 
         blackjack_self.endTurn();
 	return 0;
       }
@@ -584,6 +639,9 @@ class Blackjack extends GameTemplate {
       if (choice === "stand") {
         blackjack_self.addMove("RESOLVE\t"+blackjack_self.app.wallet.returnPublicKey());
         blackjack_self.addMove("stand\t" + blackjack_self.game.player);
+	if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
+	  blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
+	} 
         blackjack_self.endTurn();
 	return 0;
       }
@@ -756,6 +814,8 @@ class Blackjack extends GameTemplate {
 
   displayPlayers() {
 
+    if (this.browser_active == 0) { return; }
+
     let player_box = "";
 
     var prank = "";
@@ -789,11 +849,8 @@ class Blackjack extends GameTemplate {
 	let player_hand_shown = 0;
 
 	if (this.game.state.player_hands.length > 0) {
-console.log("displaying 1: " + (i+1));
 	  if (this.game.state.player_hands[i] != null) {
-console.log("displaying 2: " + (i+1));
 	    if (this.game.state.player_hands[i].length > 0) {
-console.log("displaying 3: " + (i+1));
 	      player_hand_shown = 1;
               newhtml = `
 	        <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
@@ -818,7 +875,6 @@ console.log("displaying 3: " + (i+1));
 	    }
           }
         }
-console.log("here: " + player_hand_shown);
 	if (player_hand_shown == 0) {
             newhtml = `
 	      <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
@@ -830,7 +886,6 @@ console.log("here: " + player_hand_shown);
            `;
 	}
 
-console.log("here: " + player_hand_shown);
         boxobj.querySelector(".info").innerHTML = newhtml;
 
         if (boxobj.querySelector(".plog").innerHTML == "") {
@@ -880,15 +935,17 @@ console.log("here: " + player_hand_shown);
     let total = 0;
     let aces = 0;
 
+console.log("starting");
     for (let i = 0; i < array_of_cards.length; i++) {
       let card = array_of_cards[i];
 console.log("CARD: " + card);
-      if (card[0] === 'A') {
+      if (card[1] === '1' && card.length == 2) {
 	  total += parseInt(1);
 	  aces++;
       } else {
         let card_total = parseInt(card.substring(1));
 	if ((card_total+total) == 11 && aces == 1) {
+console.log("score is: " + 21);
 	  return 21;
 	}
 	if (card_total > 10) { card_total = 10; }
@@ -899,6 +956,8 @@ console.log("CARD: " + card);
     for (let z = 0; z < aces; z++) {
       if ((total+10) <= 21) { total += 10; }
     }
+
+console.log("score is: " + total);
 
     return total;
   }
