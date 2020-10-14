@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS suppliers (
+  id INTEGER,
+  PRIMARY KEY (id ASC)
+);

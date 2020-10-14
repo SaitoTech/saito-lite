@@ -28,7 +28,7 @@ module.exports = SplashPageAppspace = {
     select 
       categories.name as 'product', 
       categories.id as 'category_id',
-      sum(products.production_daily_capacity) as 'capacity', 
+      ifnull((select capacity from categories_prices WHERE categories_prices.category_id = categories.id order by ts desc limit 1),0) as 'capacity', 
       count(products.id) as 'product_count', 
       (select group_concat( distinct (" " || certifications.name)) from certifications, products_certifications, products as p where products_certifications.certification_id = certifications.id AND products_certifications.deleted <> 1 AND products_certifications.product_id = p.id AND p.category_id = categories.id) as 'certs',
       ifnull((select price from categories_prices WHERE categories_prices.category_id = categories.id order by ts desc limit 1),0) as 'cost' 
@@ -40,6 +40,7 @@ module.exports = SplashPageAppspace = {
       categories ON products.category_id = categories.id
     where 
       products.deleted <> 1 AND 
+      products.published = 1 AND
       suppliers.deleted <> 1 
     group by 
       categories.id;

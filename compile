@@ -13,19 +13,31 @@ function post_compile {
 
 function reset_bundler {
 
+echo "Resetting Saito to Default Modules!"
+echo ""
+
   rm -rf ./bundler
   if [ ! -d "./bundler" ]; then
+
     mkdir -p bundler/default/mods
+    mkdir -p data/blocks
     cp -rf ./lib bundler/default/lib
     cp -rf ./config bundler/default/config
-    cp -rf ./mods/* bundler/default/mods/
+
+    copy_lite_mods_to_bundler_directory
+
+echo ""
+echo "Compiling Lite-Client JS..." 
+
     for md in bundler/default/mods/* ; do
       rm -rf "$md/web"
       rm -rf "$md/sql"
       rm -rf "$md/www"
+      rm -rf "$md/docs"
       rm -rf "$md/DESCRIPTION.txt"
       rm -rf "$md/BUGS.txt"
       rm -rf "$md/README.txt"
+      rm -rf "$md/*.md"
       rm -rf "$md/README.md"
       rm -rf "$md/install.sh"
       rm -rf "$md/license"
@@ -35,6 +47,8 @@ function reset_bundler {
 }
 
 function reset_nonpersistent {
+
+  mkdir -p data/blocks
 
   # ensure deleted
   rm -f ./web/saito/saito.js
@@ -76,8 +90,10 @@ function reset_nonpersistent {
   rm -f ./logs/*
 
   #let the system know that users pre-existed a reset.
+  if [ -f ./data/rewards.sq3 ]; then
   echo "update users set latest_tx = -1;" | sqlite3 ./data/rewards.sq3
-  
+  fi
+
   if [ ! -f ./config/modules.config.js ]; then
     cp ./config/modules.default.js ./config/modules.config.js
   fi
@@ -94,9 +110,44 @@ function reset_persistent {
   rm -f ./data/rewards.sq3
   rm -f ./data/forum.sq3
   rm -f ./data/tutorial.sq3
+  rm -f ./web/client.options
+  mkdir -p data/blocks
 
 }
 
+function copy_lite_mods_to_bundler_directory {
+
+  PMOD=0
+  declare -a ARRAY_OF_MODS
+
+  input="./config/modules.config.js"
+  while IFS= read -r line
+  do
+    if [[ $PMOD == 1 ]]; then
+      if ! [[ $line == *"//"* ]]; then
+        SUBSTRING=$(echo $line| cut -d"'" -f 2)
+        SUBSTRING2=$(echo $SUBSTRING| cut -d"/" -f 1)
+        if ! [[ $SUBSTRING2 == *"]"* ]]; then
+          if ! [[ $SUBSTRING2 == *"}"* ]]; then
+            ARRAY_OF_MODS+=($SUBSTRING2)
+          fi
+        fi
+      fi
+    fi
+    if [[ $line == *"lite"* ]]; then
+      PMOD=1
+    fi
+  done < $input
+
+  for i in "${ARRAY_OF_MODS[@]}"; do
+    echo "installing mod for lite-client bundling: $i";
+    cp -rf ./mods/$i bundler/default/mods/$i
+  done
+
+
+  rm -f ./bundler/default/mods/appstore/mods/*
+
+}
 
 
 
@@ -172,6 +223,12 @@ if [ "$1" == "recompile" ]; then
   echo "  (resetting configuration)  "
   echo ""
   echo ""
+
+
+  # making sure we have some modules defined.
+  if [ ! -f ./config/modules.config.js ]; then
+    cp ./config/modules.default.js ./config/modules.config.js
+  fi
 
   reset_bundler
 

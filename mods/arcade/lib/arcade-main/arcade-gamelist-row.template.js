@@ -1,6 +1,7 @@
 module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
 
-  let { sig, from, to, msg } = tx.transaction;
+  let { sig, from, to } = tx.transaction;
+  let msg = tx.msg;
   let { players_array, options_html, game } = msg;
   let txmsg = tx.returnMessage();
 

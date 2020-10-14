@@ -18,31 +18,31 @@ module.exports = ArcadeMain = {
     let arcade_main = document.querySelector(".arcade-main");
     if (!arcade_main) { return; }
     arcade_main.innerHTML = ArcadeMainTemplate();
-    console.log("Arcade Render");
 
-    console.log("Arcade Games to Process: " + data.arcade.games.length);
     data.arcade.games.forEach(tx => {
 
-      let game_id = tx.transaction.msg.game_id;
-      let game = tx.transaction.msg.game;
-      let players = tx.transaction.msg.players;
-      let players_sigs = tx.transaction.msg.players_sigs;
+      let game_id = tx.msg.game_id;
+      let game = tx.msg.game;
+      let players = tx.msg.players;
+      let players_sigs = tx.msg.players_sigs;
 
-      //console.log("\n\n\nSHOWING GAMES: ");
-      //console.log("PLAYERS: " + JSON.stringify(tx.transaction.msg.players));
-      //console.log("TX: " + JSON.stringify(tx));
-      //console.log("PLAYERS: " + players);
-      //console.log("PLAYER SIGS: " + players_sigs);
+//      console.log("\n\n\nSHOWING GAMES: ");
+//      console.log("PLAYERS: " + JSON.stringify(tx.msg.players));
+//      console.log("TX: " + JSON.stringify(tx));
+//      console.log("PLAYERS: " + players);
+//      console.log("PLAYER SIGS: " + players_sigs);
+
+
+
+
+
 
       if (game == '') { return; }
 
       let button_text = {};
       button_text.join = "JOIN";
 
-      //
-      // eliminate "JOIN" button if I am in the game already
-      //
-      if (tx.transaction.msg.over == 1) {
+      if (tx.msg.over == 1) {
         delete button_text.join;
       }
 
@@ -50,11 +50,11 @@ module.exports = ArcadeMain = {
         if (players.includes(app.wallet.returnPublicKey())) {
           delete button_text.join;
         }
-
         if (players.includes(app.wallet.returnPublicKey())) {
           button_text.cancel = "CANCEL";
         }
       }
+
 
       if (app.options.games) {
 
@@ -63,16 +63,18 @@ module.exports = ArcadeMain = {
         games.forEach(game => {
 
           if (game.initializing == 0 && game.id == game_id) {
+
             button_text.continue = "CONTINUE";
             delete button_text.join;
 
-            if (tx.transaction.msg.over == 1) {
+            if (tx.msg.over == 1) {
               delete button_text.continue;
             }
 
           }
         });
       }
+
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
     });
 
@@ -156,8 +158,8 @@ module.exports = ArcadeMain = {
   //
   // if there are not enough players, we will join not accept
   //
-        let players_needed = parseInt(accepted_game.transaction.msg.players_needed);
-        let players_available = accepted_game.transaction.msg.players.length;
+        let players_needed = parseInt(accepted_game.msg.players_needed);
+        let players_available = accepted_game.msg.players.length;
         if ( players_needed > (players_available+1) ) {
           let newtx = data.arcade.createJoinTransaction(app, data, accepted_game);
           data.arcade.app.network.propagateTransaction(newtx);
@@ -218,12 +220,20 @@ module.exports = ArcadeMain = {
           //
           // check with server to see if this game is taken yet
           //
-          data.arcade.sendPeerDatabaseRequest(
-            "arcade",
-            "games",
-            "is_game_already_accepted",
-            game_id,
-            null,
+          data.arcade.sendPeerRequestWithFilter(
+            () => {
+
+              let msg = {};
+                  msg.request = 'rawSQL';
+                  msg.data = {};
+                  msg.data.module = "Arcade";
+                  msg.data.sql = `SELECT is_game_already_accepted FROM games WHERE game_id = "${game_id}"`;
+                  msg.data.game_id = game_id;
+
+              return msg;
+
+            },
+
             (res) => {
 
               if (res.rows == undefined) {
@@ -231,9 +241,6 @@ module.exports = ArcadeMain = {
                 return;
               }
 
-        //
-        // n > 2 player or game not accepted
-        //
               if (res.rows.length > 0) {
                 if (res.rows[0].game_still_open == 1 || (res.rows[0].game_still_open == 0 && players_needed > 2)) {
 
@@ -259,7 +266,8 @@ module.exports = ArcadeMain = {
               } else {
                 salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
               }
-            });
+            }
+          );
         }
       };
     });
@@ -363,7 +371,7 @@ module.exports = ArcadeMain = {
           module: 'Arcade'
         }
 
-        newtx.transaction.msg = msg;
+        newtx.msg = msg;
         newtx = app.wallet.signTransaction(newtx);
         app.network.propagateTransaction(newtx);
 

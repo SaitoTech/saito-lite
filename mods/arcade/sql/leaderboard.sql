@@ -5,15 +5,15 @@
 -- output, but for now we'll let gametemplate calculate score for people to wins
 
 CREATE TABLE IF NOT EXISTS leaderboard (
-  id 		INTEGER,
-  module	TEXT,
-  game_id	TEXT,
-  tx		TEXT,
+  id INTEGER,
+  module TEXT,
+  game_id TEXT,
+  tx TEXT,
   bid	INTEGER,
   bsh TEXT,
   timestamp INTEGER,
   sig TEXT,
-  winner 	TEXT,
+  winner TEXT,
   score INT,
   UNIQUE (game_id),
   PRIMARY KEY (id ASC)

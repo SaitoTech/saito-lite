@@ -25,7 +25,7 @@ module.exports = EmailList = {
                 });
 
                 data.email.selected_email = selected_email[0];
-                data.email.header_title = data.email.selected_email.transaction.msg.title;
+                data.email.header_title = data.email.selected_email.msg.title;
 
                 data.email.active = "email_detail";
 

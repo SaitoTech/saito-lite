@@ -1,5 +1,8 @@
 module.exports = ForumRightSidebarTemplate = () => {
   return `
-    <button class="create-post-btn">Create New Post</button>
+  <div class="forum-right-nav">
+    <i class="forum-back fas fa-arrow-circle-left"></i>
+    <button class="create-post-btn"><i class="fas fa-plus-circle"></i> New Post</button>
+  </div>
   `;
 }

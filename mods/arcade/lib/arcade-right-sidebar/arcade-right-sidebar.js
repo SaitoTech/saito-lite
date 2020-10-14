@@ -17,7 +17,7 @@ module.exports = ArcadeRightSidebar = {
 
     if (document.querySelector('.arcade-sidebar-balance')) {
       let balance = app.wallet.returnBalance();
-      document.querySelector('.arcade-sidebar-balance').innerHTML = balance + " SAITO";
+      document.querySelector('.arcade-sidebar-balance').innerHTML = s2Number(Math.floor(balance)) + " SAITO";
     }
     
     for (let i = 0; i < data.arcade.observer.length; i++) {
@@ -28,8 +28,7 @@ module.exports = ArcadeRightSidebar = {
         players.push({ identicon: app.keys.returnIdenticon(app.crypto.hash(players_array[z])), publickey: players_array[z] });
       }
 
-      document.querySelector(".arcade-sidebar-active-games-body").innerHTML
-        += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
+      //document.querySelector(".arcade-sidebar-active-games-body").innerHTML += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
     }
 
 

@@ -1,52 +1,50 @@
 # Description of Network
 
-This document is divided into four parts. The first discusses the Saito mechanism for pruning old data at market prices. The second explains how blocks are produced. The third explains how the block reward is issued. The fourth explains how to ensure attackers always lose money attacking the network.
+This document is divided into four parts. The first discusses the Saito mechanism for rebroadcasting transactions to eliminate blockchain bloat. The second explains how blocks are produced. The third explains how the block reward is issued. The fourth explains how to increase the cost-of-attack far beyond 100 percent of network transaction fees.
 
-## 1. PRUNING THE BLOCKCHAIN
+## 1. TRANSACTION REBROADCASTING
 
 Saito divides the blockchain into "epochs" of roughly 100,000 blocks. If the latest block is 500,000, the current epoch streches from block 400,001 onwards.
 
-Once a block falls out of the current epoch, its unspent transaction outputs (UTXO) are no longer spendable. Any UTXO from that block which contains enough tokens to pay a rebroadcasting fee must be re-included in the very next block. The rebroadcasting fee is twice the average fee per byte paid by new transactions over a smoothing period.
+Once a block falls out of the current epoch, its unspent transaction outputs (UTXO) are no longer spendable. Any UTXO which contains enough tokens to pay a rebroadcasting fee must be re-included in the very next block however. The rebroadcasting fee is twice the average fee per byte paid by new transactions over a smoothing period.
 
-Block producers rebroadcast UTXO by creating special "automatic transaction rebroadcasting" (ATR) transactions. These ATR transactions include the original transaction in an associated message field, but have new UTXO. The rebroadcasting fee is deducted from each UTXO and added to the block reward. Any blocks not containing all necessary ATR transactions are invalid by consensus rules. After two epochs block producers may delete all block data, although the 32-byte header hash may be retained to prove the connection with the genesis block.
+Block producers rebroadcast UTXO by creating special "automatic transaction rebroadcasting" (ATR) transactions. These ATR transactions include the original transaction within an associated data field but have new UTXO. The rebroadcasting fee is deducted from these new UTXO and added to the block reward. Any blocks not containing all necessary ATR transactions are invalid by consensus rules. After two epochs block producers may delete old transactions, keeping only the 32-byte header hash to prove the connection with the genesis block.
 
 
 ## 2. PRODUCING BLOCKS
 
-Saito adds cryptographic signatures to the network layer. Each transaction contains an unforgeable record of the path it takes into the network. This allows us to measure the "routing work" provided by any transaction. This is the value of the transaction fee halved with each additional hop beyond the first that the transaction has taken into the network.
+Saito adds cryptographic signatures to the network layer. These create an unforgeable record of the path each transaction has taken into the network and permit nodes to measure the "routing work" contained in any transaction. At every point in its journey the routing work in a transaction is the value of the transaction fee halved with each additional hop beyond the first that the transaction has taken into the network.
 
-The blockchain sets a "difficulty" for block production. This difficulty is met by incl;uding transactions containing adequate "routing work" in the block. Consensus rules specify that nodes cannot use "routing work" from transactions if they are not included in their routing path. Any surplus of "routing work" over amount required may be taken by the block producer in immediate payment for block production and deducted from the block reward.
+The blockchain sets a "difficulty" for block production. This difficulty is met by including transactions containing adequate "routing work" into blocks. Consensus rules specify that nodes cannot use "routing work" from transactions if they are not included in the routing path. A bonus payment may be issued to block producers if there is more "routing work" in their blocks than required by consensus. All other fees are collected into the network treasury (i.e. not paid out to the block producer)
 
 
 ## 3. THE PAYMENT LOTTERY
 
-Each block contains a proof-of-work challenge in the form of its block hash. Miners solve these challenges and broadcast their solutions in the form of normal fee-paying transactions.
-`
-If a solution is not found, the funds fall off the chain and are eventually passed into a future block reward. But if exactly one solution is included in the very next block the network splits the block reward between the lucky miner and a routing node selected randomly from the previous block. Each routing node has a chance of winning proportional to the amount of work it contributed to that block. 
+Each block contains a proof-of-work challenge in its block hash. This proof-of-work puzzle is not used to produce blocks since (section 2) Saito does not using hashing to regulate block production. Instead, miners solve these challenges in order to hold a payment lottery. Miners begin hashing on receipt of a block and once a solution is found broadcast it into the network in the form of a normal, fee-paying transaction.
+
+If a solution is not found by the time the next block is produced, the block reward is not paid out. Uncollected funds will eventually fall off the chain (when the block containing them passes out of the current epoch) whereupon they are collected by the consensus layer for eventual re-inclusion in a future block reward. If exactly one solution is found and included in the next block, the block reward for its predecessor is split between the lucky miner and a routing node selected randomly from the previous block. Each routing node has a chance of winning proportional to the amount of routing work it contributed to that block.
 
 Mining difficulty auto-adjusts until the network produces one golden ticket on average per block. 
 
 
 
-## 4. THE DEADWEIGHT LOSS MECHANISM
+## 4. ADVANCED SAITO
 
-The system above eliminates the fifty-one percent attack: attackers must match 100 percent of all routing work to produce the longest-chain. This can only be done by spending their own money. Unless they also match one hundred percent of mining they are unable to get any funds back. This provides a quantifiable cost-of-attack that does not disappear under majoritarian conditions.
+Saito eliminates the fifty-one percent attack: attackers must lock-up/burn 100 percent of all transaction fees to produce blocks. This can only be done by spending their own money. Unless they also match one hundred percent of mining they will not get that money back. This provides a quantifiable cost-of-attack that does not disappear under majoritarian conditions.
 
-It is possible to increase attack costs beyond 100 percent by modifying the POWSPLIT mechanism. This can be done by increasing mining difficulty so that one solution is found every N blocks on average. When issuing payments, if the previous block did not contain a golden ticket solution, hash the random variable used to select the winning routing node and use it to select a winner from a table of stakers. Repeat this process until all unsolved blocks have been processed. An upper limit to backwards recusion may be applied for practical purposes. Mining difficulty adjust upwards if N blocks containing golden tickets are found in a row and downwards if N blocks without golden tickets are found in a row. 
+It is possible to increase attack costs beyond 100 percent by increasing mining difficulty so that one solution is found every N blocks on average. When issuing payments, if the previous block did not contain a golden ticket solution, we hash the random variable used to select the winning routing node to select a winner from a table of stakers. Repeat until all unsolved blocks have been processed. An upper limit to backwards recusion may be applied for practical purposes. Mining difficulty adjust upwards if N blocks containing golden tickets are found in a row and downwards if N blocks without golden tickets are found in a row. 
 
-Users stake by broadcasting a specially-formatted transaction that adds their UTXO to a list of "pending stakers". Once the current staking table has been fully paid-out, all pending UTXO are moved into the "current stakers" table. Stakers may not withdraw or spend their UTXO until they have received payment. The payment to stakers is the average of the average of the amount not paid out in staking blocks during the *previous* genesis period, normalized to the winner UTXO's percentage of staking work. Limits may be put on the size of the staking pool to induce competition between stakers if desirable.
+Users stake by broadcasting specially-formatted transactiona that add their UTXO to a list of "pending stakers". Once the current staking table has been fully paid-out, all pending UTXO are moved into the "current stakers" table. Stakers may not withdraw or spend their UTXO until they have received payment. The payout to stakers is the average of routing share during the *previous* genesis period, normalized to the winning UTXO's percentage of the staking table. Limits may be put on the size of the staking pool to induce competition between stakers if desirable.
 
 This system requires modifications to Automatic Transaction Rebroadcasting. Block producers who rebroadcast UTXO must now indicate whether specific outputs are in the current or pending pool. This modification permits all nodes to reconstruct the state of both staking pools within one genesis period at most.
 
 
 
-## 5. NETWORK CONSENSUS
+## 5. FINAL NOTES ON BLOCK ROUTING
 
-Bitcoin avoids some data-flooding attacks by leveraging the difficulty of block production. In Saito this problem should be addressed as attackers can produce a unlimited number of potentially blocks at any particular block depth - the guarantee of cost-paid only happens on the production of the second block, which makes the transaction fee uncollectable. We refer to these attacks as "block-flooding" attacks, as they are primarily a form of DOS on network throughput.
+There are many data-flooding attacks in POW / POS networks. The anti-sybil properties of Saito makes many of these impossible in our network. Nonetheless, we note that attackers masquarading as good citizens can hypothetically produce a unlimited number of potentially blocks at any particular block depth - the guaranteed cost of block production only applies upon the production of the second block.
 
-Saito solves these issues by addingg "consensus rules" to routing behavior. The network specifies that nodes only forward blocks if they contain more "work" than previous blocks at any block depth. The exception to this is if the nodes become convinced that the block is part of the longest chain, a development which requires attackers to produce multiple blocks. This ensures that attackers pay a cost for block propagation similar to the role the hashing costs plays in Bitcoin.
-
-In the event the network adopts a small-world network in which all nodes connect to all nodes, attackers can theoretically induce data-threshing attacks by targeting different peers with custom blocks using variations of the same transaction set. It is not clear if this is a practical vulnerabvility. If the network wishes to avoid it, it can be solved by adding cryptographic signatures to block propagation. This permits peers to identify nodes which are not following network policy - peers can simply avoid propagation of blocks by default.
+In the event the network adopts a small-world form in which all nodes connect to all nodes, attackers can theoretically induce data-threshing attacks by creating custom blocks and trying to get other nodes to forward / flood the network with their data. It is not clear if this is a practical vulnerabvility, but it is possible to solve by adding cryptographic signatures to block propagation. This permits peers to identify nodes which are not following network policy - peers can not propagate subsequent blocks produced by the same creator at the same block depth.
 
 
 ### APPENDIX I: SAITO TERMINOLOGY

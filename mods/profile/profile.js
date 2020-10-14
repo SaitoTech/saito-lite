@@ -28,6 +28,8 @@ class Profile extends ModTemplate {
   initialize(app) {
   }
 
+ 
+
   respondTo(type) {
 
     if (type == 'settings-appspace') {
@@ -91,7 +93,7 @@ class Profile extends ModTemplate {
   updatePublicIdenticon(app, identicon) {
 
     let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey());
-    newtx.transaction.msg = {
+    newtx.msg = {
       module: "Profile",
       request: "update identicon",
       identicon : identicon ,

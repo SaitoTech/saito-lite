@@ -1,0 +1,112 @@
+
+rm ../../web/saito/saito.js
+
+
+#
+# class constructor
+#
+cat ./src/imperium-start.js > ./imperium.js
+
+for file in ./src/tech/*
+do
+  cat $file >> ./imperium.js
+done
+for file in ./src/units/*
+do
+  cat $file >> ./imperium.js
+done
+for file in ./src/promissary/*
+do
+  cat $file >> ./imperium.js
+done
+for file in ./src/factions/*
+do
+  cat $file >> ./imperium.js
+done
+for file in ./src/strategy/*
+do
+  cat $file >> ./imperium.js
+done
+for file in ./src/objectives/*
+do
+  cat $file >> ./imperium.js
+done
+for file in ./src/agendas/*
+do
+  cat $file >> ./imperium.js
+done
+for file in ./src/actions/*
+do
+  cat $file >> ./imperium.js
+done
+
+
+#
+# and inirtialize
+#
+cat ./src/imperium-initialize.js >> ./imperium.js
+
+
+
+#
+# HUD menus and Arcade response
+#
+cat ./src/imperium-ui.js >> ./imperium.js
+
+#
+# functions that manipulate / move units
+#
+cat ./src/imperium-tech.js >> ./imperium.js
+cat ./src/imperium-unit.js >> ./imperium.js
+cat ./src/imperium-objectives.js >> ./imperium.js
+cat ./src/imperium-promissary.js >> ./imperium.js
+cat ./src/imperium-factions.js >> ./imperium.js
+cat ./src/imperium-agenda-cards.js >> ./imperium.js
+cat ./src/imperium-action-cards.js >> ./imperium.js
+
+#
+# CORE EXECUTION - GAME QUEUE - handleGameLoop()
+#
+cat ./src/imperium-gameloop.js >> ./imperium.js
+cat ./src/imperium-helpers.js >> ./imperium.js
+
+#
+# playerPerformMove functions (asking for input)
+#
+cat ./src/imperium-player.js >> ./imperium.js
+
+#
+# data objects universal to all games (cards, tiles, systems, planet definitions, that form game state etc.)
+#
+cat ./src/imperium-universe.js >> ./imperium.js
+cat ./src/imperium-state.js >> ./imperium.js
+cat ./src/imperium-events.js >> ./imperium.js
+
+#
+# functions that return information about board/game state (canPlayerX, doesUnitY, returnStateOfSector, etc.)
+#
+cat ./src/imperium-state-checks.js >> ./imperium.js
+
+#
+# functions that update game state without human intervention (ground / space combat round execution, ownership transfers, etc.)
+#
+cat ./src/imperium-state-updates.js >> ./imperium.js
+
+#
+# non-HUD functions that display board
+#
+cat ./src/imperium-display.js >> ./imperium.js
+
+
+#
+# strategy card execution logic
+#
+cat ./src/imperium-strategy-cards.js >> ./imperium.js
+#
+# end of class
+#
+cat ./src/imperium-end.js >> ./imperium.js
+
+
+npm run compile $1
+

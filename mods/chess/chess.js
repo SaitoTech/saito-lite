@@ -19,6 +19,12 @@ class Chessgame extends GameTemplate {
     this.engine = null;
     this_chess = this;
 
+    //
+    // USE THE TOURNAMENT CLOCK -- testing
+    //
+    this.useHUD = 0;
+    this.useClock = 1;
+
     this.minPlayers = 2;
     this.maxPlayers = 2;
     this.type       = "Classic Boardgame";
@@ -50,6 +56,9 @@ class Chessgame extends GameTemplate {
   }
 
   initializeHTML(app) {
+
+    super.initializeHTML(app);
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(this_chess.app, this_chess);
     });
@@ -102,6 +111,7 @@ class Chessgame extends GameTemplate {
 
       if (this.game.target == this.game.player) {
         this.setBoard(this.engine.fen());
+	if (this.useClock) { this.startClock(); }
       } else {
         this.lockBoard(this.engine.fen());
       }
@@ -138,7 +148,7 @@ class Chessgame extends GameTemplate {
   handleGameLoop(msg={}) {
 
     msg = {};
-console.log("QUEUE: " + this.game.queue);
+    console.log("QUEUE 123123: " + this.game.queue);
     if (this.game.queue.length > 0) {
       msg.extra = JSON.parse(this.app.crypto.base64ToString(this.game.queue[this.game.queue.length-1]));
     } else {
@@ -165,9 +175,12 @@ console.log("QUEUE: " + this.game.queue);
     this.game.position = data.position;
     this.game.target = msg.extra.target;
 
+
     if (msg.extra.target == this.game.player) {
+
       if (this.browser_active == 1) {
         this.setBoard(this.game.position);
+        if (this.useClock) { this.startClock(); }
         this.updateLog(data.move, 999);
         this.updateStatusMessage();
         if (this.engine.in_checkmate() === true) {
@@ -183,7 +196,7 @@ console.log("QUEUE: " + this.game.queue);
     this.saveGame(this.game.id);
 
     return 0;
-
+   
   }
 
   endTurn(data) {
@@ -204,9 +217,20 @@ console.log("QUEUE: " + this.game.queue);
 
   attachEvents() {
 
+    let resign_icon = document.getElementById('resign_icon');
     let move_accept = document.getElementById('move_accept');
     let move_reject = document.getElementById('move_reject');
     if (!move_accept) return;
+
+    resign_icon.onclick = () => {
+      let c = confirm("Do you really want to resign?");
+      if (c) {
+	this.resignGame(this.game.id);
+	alert("You have resigned the game...");
+	window.location.href = '/arcade';
+	return;
+      }
+    }
 
     move_accept.onclick = () => {
       console.log('send move transaction and wait for reply.');
@@ -555,14 +579,21 @@ console.log("QUEUE: " + this.game.queue);
 
   returnGameOptionsHTML() {
     return `
-      <h3>Chess: </h3>
-      <form id="options" class="options">
+
         <label for="color">Pick Your Color:</label>
         <select name="color">
           <option value="black" default>Black</option>
           <option value="white">White</option>
         </select>
-      </form>
+
+        <label for="clock">Time Limit:</label>
+        <select name="clock">
+          <option value="0" default>no limit</option>
+          <option value="30">30 minutes</option>
+          <option value="60">60 minutes</option>
+          <option value="90">90 minutes</option>
+        </select>
+
     `;
   }
 }

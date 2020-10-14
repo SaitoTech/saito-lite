@@ -13,7 +13,7 @@ class Balance extends ModTemplate {
     this.description = "Ensures token persistance";
     this.categories = "Utilities Dev";
     this.maxbid = -1;
-    this.trigger_bid = 4;
+    this.trigger_bid = 2;
     this.fully_paid_out = 0;
     this.was_the_chain_reset = 0;
   }
@@ -22,7 +22,7 @@ class Balance extends ModTemplate {
   async onNewBlock(blk, lc) {
 
     if (blk.block.id == 1) {
-      if (this.app.blockchain.index.blocks.length == 1) { 
+      if (this.app.blockchain.index.blocks.length == 1) {
         this.was_the_chain_reset = 1;
       }
     }
@@ -61,7 +61,7 @@ class Balance extends ModTemplate {
       if (this.maxbid <= 0) { this.maxbid = 1; }
 
       //if (blk.block.id > this.maxbid) {
-        await this.updateSlips(blk, tx);
+      await this.updateSlips(blk, tx);
       //}
 
     }
@@ -69,30 +69,30 @@ class Balance extends ModTemplate {
 
   async onChainReorganization(bid, bsh, lc) {
     let sql = "UPDATE slips SET lc = $lc WHERE bsh = $bsh AND bid = $bid";
-    let params = { 
-      $lc  : lc,
-      $bsh : bsh,
-      $bid : bid,
+    let params = {
+      $lc: lc,
+      $bsh: bsh,
+      $bid: bid,
     }
     await this.app.storage.executeDatabase(sql, params, "balance");
     return;
   }
 
-
+  /*
   async onChainReorganization(bid, bsh, lc) {
     let sql = "UPDATE slips SET lc = $lc WHERE bsh = $bsh AND bid = $bid";
-    let params = { 
-      $lc  : lc,
-      $bsh : bsh,
-      $bid : bid,
+    let params = {
+      $lc: lc,
+      $bsh: bsh,
+      $bid: bid,
     }
     await this.app.storage.executeDatabase(sql, params, "balance");
     return;
   }
 
+  */
 
-
-  async initialize(app) { 
+  async initialize(app) {
     await super.initialize(app);
     await this.resetDatabase(app);
     return;
@@ -116,7 +116,7 @@ class Balance extends ModTemplate {
     if (rows) {
       if (rows.length) {
         this.maxbid = rows[0].maxbid;
-      } 
+      }
     }
 
     //
@@ -130,25 +130,26 @@ class Balance extends ModTemplate {
         if (rows[0].maxbid > this.maxbid) {
           this.maxbid = rows[0].maxbid;
         }
-      } 
+      }
     }
 
     //
     // handle normal transactions (bid of 3 allows a bit of time)
     //
-    sql = "SELECT SUM(amt) as sum, address FROM slips WHERE type = 0 AND bid > "+this.trigger_bid+" GROUP BY address";
+    sql = "SELECT SUM(CAST(amt AS FLOAT)) as sum, address FROM slips WHERE type = 0 AND (paid <> 1 OR paid is null) AND bid >= " + this.trigger_bid + " GROUP BY address";
     params = {}
     rows = await this.app.storage.queryDatabase(sql, params, "balance");
 
     if (rows) {
-    for (let i = 0; i < rows.length; i++) {
+      for (let i = 0; i < rows.length; i++) {
 
-      let sum = rows[i].sum;
-      let address = rows[i].address;
+        let sum = rows[i].sum;
+        let address = rows[i].address;
 
-      let sql2_1 = "BEGIN";
-      let sql2_2 = "DELETE FROM slips WHERE address = '"+address+"' AND type != 4";
-      let sql2_3 = `INSERT INTO slips (
+        let sql2_1 = "BEGIN";
+        //ignore block 1 again
+        let sql2_2 = "DELETE FROM slips WHERE address = '" + address + "' AND bid > 1 AND type != 4;";
+        let sql2_3 = `INSERT INTO slips (
         address,
         bid,
         tid,
@@ -172,46 +173,44 @@ class Balance extends ModTemplate {
         $spent,
         $paid,
         $shash);`
-      let params2 = {
-        $address: address,
-        $bid:   this.maxbid,
-        $tid:   0,
-        $sid:   0,
-        $bsh:   "",
-        $amt:   sum,
-        $type:  0,
-        $lc:    1,
-        $spent: this.maxbid,
-        $paid:  0,
-        $shash: "",
+        let params2 = {
+          $address: address,
+          $bid: this.maxbid,
+          $tid: 0,
+          $sid: 0,
+          $bsh: "",
+          $amt: sum,
+          $type: 0,
+          $lc: 1,
+          $spent: this.maxbid,
+          $paid: 0,
+          $shash: "",
+        }
+        let sql2_4 = "COMMIT";
+
+        await db.run(sql2_1, {});
+        await db.run(sql2_2, {});
+        await db.run(sql2_3, params2);
+        await db.run(sql2_4, {});
+
       }
-      let sql2_4 = "COMMIT";
-
-      await db.run(sql2_1, {});
-      await db.run(sql2_2, {});
-      await db.run(sql2_3, params2);
-      await db.run(sql2_4, {});
-
-      console.log("UPDATED RECORDS FOR: " + address);
-
-    } 
     }
 
     //
     // handle staking transactions
     //
-    sql = "SELECT SUM(amt) as sum, address FROM slips WHERE type = 4 AND bid > 3 GROUP BY address";
+    sql = "SELECT SUM(CAST(amt AS FLOAT)) as sum, address FROM slips WHERE type = 4 AND bid > 3 GROUP BY address";
     params = {}
     rows = await this.app.storage.queryDatabase(sql, params, "balance");
     if (rows) {
-    for (let i = 0; i < rows.length; i++) {
+      for (let i = 0; i < rows.length; i++) {
 
-      let sum = rows[i].sum;
-      let address = rows[i].address;
+        let sum = rows[i].sum;
+        let address = rows[i].address;
 
-      let sql2_1 = "BEGIN";
-      let sql2_2 = "DELETE FROM slips WHERE address = '"+address+"' AND type = 4";
-      let sql2_3 = `INSERT INTO slips (
+        let sql2_1 = "BEGIN";
+        let sql2_2 = "DELETE FROM slips WHERE address = '" + address + "' AND type = 4";
+        let sql2_3 = `INSERT INTO slips (
         address,
         bid,
         tid,
@@ -235,29 +234,31 @@ class Balance extends ModTemplate {
         $spent,
         $paid,
         $shash);`
-      let params2 = {
-        $address: address,
-        $bid:   this.maxbid,
-        $tid:   0,
-        $sid:   0,
-        $bsh:   "",
-        $amt:   sum,
-        $type:  4,
-        $lc:    1,
-        $spent: 0,
-        $paid:  this.maxbid,
-        $shash: "",
+        let params2 = {
+          $address: address,
+          $bid: this.maxbid,
+          $tid: 0,
+          $sid: 0,
+          $bsh: "",
+          $amt: sum,
+          $type: 4,
+          $lc: 1,
+          $spent: 0,
+          $paid: this.maxbid,
+          $shash: "",
+        }
+        let sql2_4 = "COMMIT";
+
+        await db.run(sql2_1, {});
+        await db.run(sql2_2, {});
+        await db.run(sql2_3, params2);
+        await db.run(sql2_4, {});
+
+        console.log("Updating balance for :" + address + " to: " + sum);
+
+        //console.log("UPDATED STAKING RECORDS FOR: " + address);
+
       }
-      let sql2_4 = "COMMIT";
-
-      await db.run(sql2_1, {});
-      await db.run(sql2_2, {});
-      await db.run(sql2_3, params2);
-      await db.run(sql2_4, {});
-
-      console.log("UPDATED STAKING RECORDS FOR: " + address);
-
-    } 
     }
 
     return;
@@ -267,73 +268,69 @@ class Balance extends ModTemplate {
 
   async issuePayments(app) {
 
-    let sql = "SELECT sum(amt) AS sum, address FROM slips WHERE spent > 0 GROUP BY address";
+    console.log('issuing balance payments');
+
+    // ignore first block payments - lest we just keep making them.
+    let sql = "SELECT SUM(CAST(amt AS FLOAT)) AS sum, address FROM slips WHERE spent > 1 and paid = 0 and bid >= " + this.trigger_bid + " GROUP BY address";
     let params = {}
     let rows = await this.app.storage.queryDatabase(sql, params, "balance");
-console.log("rows: " + JSON.stringify(rows));
     if (rows) {
-    if (rows.length) {
-      for (let i = 0; i < rows.length; i++) {
-
-        //
-        // issue payment
-        //
-        let faucet_payment = rows[i].sum;
-	let address = rows[i].address;
-
-console.log("we need to pay: " + faucet_payment + " -- " + address);
-
-        //
-        // do we have enough tokens to issue this payment
-        //
-        app.wallet.calculateBalance();
-console.log("our wallet balance is: " + app.wallet.returnBalance());
-        if (Big(faucet_payment).lte(app.wallet.returnBalance()) && Big(faucet_payment).gt(0)) {
-
-console.log("Sending our " + i + "th payment...");
-
-          let newtx = this.app.wallet.createUnsignedTransaction(address, faucet_payment, 0.0);
-          newtx.transaction.ts                = new Date().getTime();
-          newtx.transaction.msg.module        = "Balance";
-          newtx = this.app.wallet.signTransaction(newtx);
+      if (rows.length) {
+        for (let i = 0; i < rows.length; i++) {
 
           //
           // issue payment
           //
-          let sql2 = "UPDATE slips SET spent = 0 WHERE address = $address";
-          let params2 = { $address : address }
-          await this.app.storage.executeDatabase(sql2, params2, "balance");
+          let faucet_payment = rows[i].sum;
+          let address = rows[i].address;
 
-console.log("AND SENDING PAYMENT: " + newtx);
+          //
+          // do we have enough tokens to issue this payment
+          //
+          app.wallet.calculateBalance();
+          if (Big(faucet_payment).lte(app.wallet.returnBalance()) && Big(faucet_payment).gt(0)) {
 
-	  //
-	  // propagate transaction 
-	  //
-          this.app.network.propagateTransaction(newtx);
-
-	} else {
-
-	  if (Big(faucet_payment).lte(0)) {
-
-console.log("telling this address to fuck off, it should send us cash if anything...");
+            let newtx = this.app.wallet.createUnsignedTransaction(address, faucet_payment, 0.0);
+            newtx.transaction.ts = new Date().getTime();
+            newtx.msg.module = "Balance";
+            newtx = this.app.wallet.signTransaction(newtx);
 
             //
             // issue payment
             //
-            let sql2 = "UPDATE slips SET spent = 0 WHERE address = $address";
-            let params2 = { $address : address }
+            let sql2 = "UPDATE slips SET spent = 0, paid = 1 WHERE address = $address";
+            let params2 = { $address: address }
             await this.app.storage.executeDatabase(sql2, params2, "balance");
 
-	  }
-	}
-      } 
-    } else {
+            //
+            // propagate transaction 
+            //
+            this.app.network.propagateTransaction(newtx);
+            console.log("Paying :" + address + " - " + faucet_payment);
 
-console.log("remembering we are fully paid out...");
-      this.fully_paid = 1;
-    }
+          } else {
+
+            //
+            // telling this address to fuck off, it should send us cash if anything...
+            //
+            if (Big(faucet_payment).lte(0)) {
+
+              //
+              // issue payment
+              //
+              let sql2 = "UPDATE slips SET spent = 0 WHERE address = $address";
+              let params2 = { $address: address }
+              await this.app.storage.executeDatabase(sql2, params2, "balance");
+
+            }
+          }
+        }
+      } else {
+
+        this.fully_paid_out = 1;
+      }
     } else {
-      this.fully_paid = 1;
+      this.fully_paid_out = 1;
     }
   }
 
@@ -347,7 +344,7 @@ console.log("remembering we are fully paid out...");
 
     for (let i = 0; i < tx.transaction.to.length; i++) {
 
-      let clone = Object. assign({}, tx.transaction.to[i]);
+      let clone = Object.assign({}, tx.transaction.to[i]);
 
       clone.bsh = bsh;
       clone.tid = tx.transaction.id;
@@ -365,7 +362,7 @@ console.log("remembering we are fully paid out...");
 
     for (let i = 0; i < tx.transaction.from.length; i++) {
 
-      let clone = Object. assign({}, tx.transaction.from[i]);
+      let clone = Object.assign({}, tx.transaction.from[i]);
 
       clone.bsh = bsh;
       clone.tid = tx.transaction.id;
@@ -384,7 +381,6 @@ console.log("remembering we are fully paid out...");
   }
 
 
-
   //
   // slip object must be CLONE of actual slip, as otherwise adjusting values 
   // breaks SPV mode
@@ -392,7 +388,7 @@ console.log("remembering we are fully paid out...");
   async addCloneSlipToDatabase(slip, p) {
     slip.spent = 0;
     if (p == -1) {
-      slip.amt = "-"+slip.amt; 
+      slip.amt = "-" + slip.amt;
       slip.spent = 1;
     }
 
@@ -431,6 +427,7 @@ console.log("remembering we are fully paid out...");
       $type: slip.type,
       $lc: slip.lc,
       $spent: slip.spent,
+      $paid: slip.paid,
       $shash: this.app.crypto.hash(JSON.stringify(slip))
     }
 
@@ -447,7 +444,7 @@ console.log("remembering we are fully paid out...");
     ///////////////////
     // web resources //
     ///////////////////
-  
+
     expressapp.get('/balance/', async function (req, res) {
 
       res.setHeader('Content-type', 'text/html');
@@ -457,18 +454,31 @@ console.log("remembering we are fully paid out...");
       var params = "";
       var html = "";
 
-      var address = req.query.address;
-      var lim = req.query.lim;
-      if (typeof parseInt(lim) != 'number') { lim = '10'; }
-      if (typeof address == 'undefined') {
+      var addresses = req.query.address;
 
-        sql = "SELECT address, SUM(amt) as 'balance' from slips group by address order by SUM(amt) desc limit $lim;";
+      var lim = req.query.lim;
+      if (!parseInt(lim) > 0) { lim = '10'; }
+      if (typeof addresses == 'undefined') {
+
+        sql = "SELECT address, SUM(CAST(amt AS FLOAT)) as 'balance' from slips where substr(address, 14, 29) <> 'yMTVpvuKNEHt2fZQUxDebpiBaqwkW' AND (paid <> 1 OR paid is null) group by address order by SUM(CAST(amt AS FLOAT)) desc limit $lim;";
         params = { $lim: lim };
 
       } else {
 
-        sql = "SELECT address, SUM(amt) as 'balance' from slips WHERE address = $address order by SUM(amt);";
-        params = { $address: address };
+        var address = "";
+
+        addresses.split('-').forEach(a => {
+          address += "'" + a + "'" + ", ";
+        });
+        address = address.slice(0, -2);
+
+        //sql = "SELECT address, SUM(CAST(amt AS FLOAT)) as 'balance' from slips WHERE address in ($address) group by address order by SUM(CAST(amt AS FLOAT));";
+        //params = { $address: address };
+
+        sql = "SELECT address, SUM(CAST(amt AS FLOAT)) as 'balance' from slips WHERE address in (" + address + ") AND (paid <> 1 OR paid is null) group by address order by SUM(CAST(amt AS FLOAT));";
+        params = {};
+        //console.log(sql);
+        //console.log(address);
 
       }
 
@@ -487,10 +497,12 @@ console.log("remembering we are fully paid out...");
         html = balance_self.header();
         html += "<body>";
         html += "<div style='margin: 100px 2em; font-family: monospace; display:grid; grid-gap: 1em; grid-template-columns: auto auto'>";
-        html += "<div>Address</div><div>Balance</div>"
+        html += "<div><h3>Address</h3></div><div><h3>Balance</h3></div>"
         rows.forEach(row => {
-          html += "<div>" + row.address + "</div>";
-          html += "<div>" + row.balance + "</div>";
+          if (row.address != balance_self.app.wallet.returnPublicKey()) {
+            html += "<div>" + row.address + "</div>";
+            html += "<div>" + row.balance + "</div>";
+          }
         })
         html += "</div>"
         html += "</body>";

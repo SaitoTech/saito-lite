@@ -48,8 +48,8 @@ class Relay extends ModTemplate {
       tx3.transaction.to.push(new saito.slip(recipients[i]));
     }
     tx3.transaction.ts   = new Date().getTime();
-    tx3.transaction.msg.request 	= message_request;
-    tx3.transaction.msg.data 	= message_data;
+    tx3.msg.request 	= message_request;
+    tx3.msg.data 	= message_data;
     tx3 = this.app.wallet.signTransaction(tx3);
 
     //
@@ -61,6 +61,9 @@ class Relay extends ModTemplate {
     // ... wrapped in transaction to relaying peer
     //
     for (let i = 0; i < this.app.network.peers.length; i++) {
+      if (this.app.network.peers[i].peer) {
+      if (this.app.network.peers[i].peer.modules) {
+      if (this.app.network.peers[i].peer.modules.length > 0) {
       if (this.app.network.peers[i].peer.modules.includes(this.name)) {
         let peer = this.app.network.peers[i];
 
@@ -72,14 +75,14 @@ class Relay extends ModTemplate {
             tx.transaction.to.push(new saito.slip(recipients[i]));
           }
           tx.transaction.ts   = new Date().getTime();
-          tx.transaction.msg = tx3.transaction;
+          tx.msg = tx3.transaction;
           tx = this.app.wallet.signTransaction(tx);
 
           tx2 = new saito.transaction();
           tx2.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
           tx2.transaction.to.push(new saito.slip(peer.peer.publickey));
           tx2.transaction.ts   	= new Date().getTime();
-          tx2.transaction.msg 	= tx.transaction;
+          tx2.msg 	= tx.transaction;
           tx2 = this.app.wallet.signTransaction(tx2);
 
         }
@@ -90,6 +93,9 @@ class Relay extends ModTemplate {
         peer.sendRequestWithCallback("relay peer message", tx2.transaction, function(res) {
         });
 
+      }
+      }
+      }
       }
     }
 
@@ -127,7 +133,6 @@ class Relay extends ModTemplate {
         //
         // is original tx addressed to me
         //
-
         if (tx.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
 
           app.modules.handlePeerRequest(txmsg, peer, mycallback);
@@ -140,7 +145,8 @@ class Relay extends ModTemplate {
           for (let i = 0; i < app.network.peers.length; i++) {
             if (tx2.isTo(app.network.peers[i].peer.publickey)) {
               peer_found = 1;
-              app.network.peers[i].sendRequest("relay peer message", tx2.transaction.msg, function() {
+
+              app.network.peers[i].sendRequest("relay peer message", tx2.msg, function() {
 	        if (mycallback != null) {
                   mycallback({ err : "" , success : 1 });
 		}

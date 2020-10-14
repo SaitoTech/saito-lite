@@ -8,7 +8,7 @@ const ChatMessageContainerTemplate = require('./chat-message-container.template'
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
 const linkifyHtml = require('markdown-linkify');
-const emoji = require('node-emoji');
+//const emoji = require('node-emoji');
 
 module.exports = ChatRoom = {
     group: {},
@@ -79,13 +79,15 @@ module.exports = ChatRoom = {
         if (app.browser.isMobileBrowser(navigator.userAgent)) {
             chat_room_input.addEventListener('focusin', () => {
                 let chat_room_content = document.querySelector('.chat-room-content')
-                chat_room_content.style.height = "52vh";
+                //chat_room_content.style.height = "52vh";
+		// july 24, 2020
                 setTimeout(() => this.scrollToBottom(), 100);
             });
 
             chat_room_input.addEventListener('focusout', () => {
                 let chat_room_content = document.querySelector('.chat-room-content')
-                chat_room_content.style.height = "76vh";
+                //chat_room_content.style.height = "76vh";
+		// july 24, 2020
                 setTimeout(() => this.scrollToBottom(), 100);
             });
         }
@@ -107,7 +109,7 @@ module.exports = ChatRoom = {
         msg = this.formatMessage(msg);
         // encode to base64
         msg = app.crypto.stringToBase64(msg);
-        newtx.transaction.msg = {
+        newtx.msg = {
             module: "Chat",
             request: "chat message",
             publickey: app.wallet.returnPublicKey(),
@@ -117,8 +119,7 @@ module.exports = ChatRoom = {
             timestamp: new Date().getTime(),
         };
 
-        // newtx.transaction.msg = this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), newtx.transaction.msg);
-        newtx.transaction.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.transaction.msg));
+        newtx.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.msg));
         newtx = app.wallet.signTransaction(newtx);
         return newtx;
     },
@@ -140,6 +141,7 @@ module.exports = ChatRoom = {
     },
 
     addMessageToDOM(app, msg, data) {
+
         let message = Object.assign({}, msg, {
             keyHTML: data.chat.addrController.returnAddressHTML(msg.publickey),
             identicon : app.keys.returnIdenticon(msg.publickey),
@@ -264,7 +266,7 @@ module.exports = ChatRoom = {
           'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
         }
       });
-      msg = emoji.emojify(msg);
+      //msg = emoji.emojify(msg);
       
       return msg;
     }

@@ -89,7 +89,7 @@ input {
   width: 100%;
   height: calc(100vh - 80px);
   background-size: cover;
-  z-index: 1;
+  z-index: 999;
 }
 
 .background-shim-cover {
@@ -101,6 +101,7 @@ input {
 .main {
   height: calc(100vh - 5em);
   width: 100vw;
+  overflow-x: hidden;
   /* 90.5vh; */
 }
 
@@ -309,7 +310,9 @@ button.add-games {
   max-width: 900px;
   max-height: 67vh;
   top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
 }
 
 .escrow-game-wizard div {
@@ -865,7 +868,7 @@ option {
 }
 
 .chat-room-submit-button {
-  background: #426;
+  color: #fff;
 }
 
 .chat-message-header {
@@ -890,6 +893,10 @@ option {
   display: grid;
   grid-gap: 5px;
   grid-template-columns: auto auto auto;
+}
+
+.share-link {
+  color: #ddd;
 }
 
 .arcade-sidebar-notices {

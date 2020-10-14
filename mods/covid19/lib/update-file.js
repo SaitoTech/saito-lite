@@ -16,7 +16,7 @@ module.exports = UpdateFile = {
       });
     } else {
       data.covid19.sendPeerDatabaseRequest("covid19", "files", "*", "deleted <> 1 AND files.id = " + data.file_id, null, function (res) {
-        html = data.covid19.returnForm("covid19", "files", data.bunlde_id, res.rows[0]);
+        html = data.covid19.returnForm("covid19", "files", data.file_id, res.rows[0]);
         document.querySelector('.modal-form').innerHTML += html;
         let fileel = document.getElementById('file_data');
         let typeel = document.getElementById('file_type');

@@ -22,3 +22,13 @@ https://store.steampowered.com/app/406290/Twilight_Struggle
 
 
 
+
+CARDS ERRATA AND IMPLEMENTATION DETAILS:
+
+1. Wargames:
+  Significant misinformation about this card resulting from the unstandard Playdek implementation. If the eventing of this card results in VP being at the 0 mark, then the game is ended on a tie (the eventing player does not lose).
+
+2. Red Purge:
+  It is possible to event this card multiple times. The card does not stay out of the discard pile untilshould be possible to event this card multipletime
+
+

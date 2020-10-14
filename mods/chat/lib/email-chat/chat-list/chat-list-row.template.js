@@ -7,6 +7,9 @@ module.exports = ChatListRowTemplate = (app,{name, id, messages=[], identicon}, 
   if (message) {
     ts = message.timestamp;
     msg = app.crypto.base64ToString(message.message);
+    let tmp = document.createElement("DIV");
+    tmp.innerHTML = msg;
+    msg = tmp.innerText;
     msg = msg.substring(0, 48);
   }
 

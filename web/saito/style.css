@@ -81,15 +81,15 @@ a:hover {
   color: var(--saito-cyber-black);
 }
 
-.rightj {
+.rightj, .right {
   text-align: right;
 }
 
-.centerj {
+.centerj, .center {
   text-align: center;
 }
 
-.justifyj {
+.justifyj, .justify {
   text-align: justify;
 }
 
@@ -101,6 +101,7 @@ body {
   font-family: visuelt-light;
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+  overflow: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -399,6 +400,13 @@ fieldset {
   margin: 0 0 1em 0;
 }
 
+.grid-2-1-columns {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 2fr 1fr;
+  margin: 0 0 1em 0;
+}
+
 .grid-2-columns {
   display: grid;
   grid-gap: 1em;
@@ -410,6 +418,13 @@ fieldset {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: 1fr 1fr 1fr;
+  margin: 0 0 1em 0;
+}
+
+.grid-4-columns {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: auto auto auto auto;
   margin: 0 0 1em 0;
 }
 
@@ -483,6 +498,62 @@ input[type=text].green-bottom-border {
 input[type=text].red-bottom-border {
   border-bottom: 2px solid red;
 }
+
+/* way too much stuff to clean up range sliders */
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+  border: 1px solid var(--saito-red);
+  padding: 3px;
+  border-radius: 5px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: var(--saito-red);
+  height: 16px;
+  width: 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  border: 1px solid var(--saito-red);
+  margin: 0;
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  background-color: var(--saito-red);
+  height: 16px;
+  width: 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid var(--saito-red);
+
+}
+
+
+
+
 
 select {
   -webkit-appearance: none;
@@ -634,6 +705,26 @@ div#message-wrapper {
 
 .promptval {
   margin: 0 0 1em 0;
+}
+
+.imgpop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  border: 3px solid var(--saito-red);
+  border-radius: 2px;
+  padding: 1em;
+  background-color: #eee;
+  max-width: 90%;
+    max-height: 90%;
+}
+
+.img-prev {
+  max-width: 90%;
+  max-height: 80vh;
+  box-shadow: 0 0 3px 1px #8888;
+
 }
 
 
@@ -965,7 +1056,7 @@ div#message-wrapper {
   /* Hidden by default */
   position: fixed;
   /* Stay in place */
-  z-index: 1;
+  z-index: 100;
   /* Sit on top */
   left: 0;
   top: 0;
@@ -1321,7 +1412,7 @@ i.fas.fa-times-circle {
 
 .tip .tiptext {
   visibility: hidden;
-  color: #fff !important;
+  color: #444 !important;
   position: absolute;
   z-index: 1;
 }
@@ -1330,7 +1421,7 @@ i.fas.fa-times-circle {
   width: unset;
   min-width: unset;
   white-space: nowrap;
-  top: 3em;
+  top: 1em;
   right: 1em;
 }
 
@@ -1347,11 +1438,10 @@ i.fas.fa-times-circle {
   min-width: 400px;
   max-width: 750px;
   padding: 1em;
-  border-radius: 1em;
-  background-color: #444D;
+  background-color: #fefefebb;
   border: 1px solid var(--saito-red);
   line-height: 1.5em;
-  font-size: 0.8em;
+  font-size: 1em;
   font-style: italic;
 }
 

@@ -15,16 +15,6 @@ body {
   scrollbar-shadow-color: #868686;
 }
 
-.connection_monitor {
-  position: fixed;
-  display: none;
-  min-height: 30px;
-  z-index: 90000;
-  background: #ef6666;
-  font-size: 1.8em;
-  padding: 15px;
-}
-
 .link {
   border-bottom: 1px dashed;
   cursor: pointer;

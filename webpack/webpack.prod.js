@@ -100,8 +100,9 @@ webpack({
 
   mode: 'production',
   //devtool: "cheap-module-eval-source-map",
-  //devtool: false,
-  devtool: "eval",
+  //devtool: "eval",
+  devtool: false,
+
 
 
   }, (err, stats) => {

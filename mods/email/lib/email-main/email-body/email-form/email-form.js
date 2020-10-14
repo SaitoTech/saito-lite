@@ -92,9 +92,9 @@ module.exports = EmailForm = {
 	      return;
         }
 
-        newtx.transaction.msg.module   = "Email";
-        newtx.transaction.msg.title    = email_title;
-        newtx.transaction.msg.message  = email_text;
+        newtx.msg.module   = "Email";
+        newtx.msg.title    = email_title;
+        newtx.msg.message  = email_text;
         newtx = app.wallet.signTransaction(newtx);
 
         app.network.propagateTransaction(newtx);

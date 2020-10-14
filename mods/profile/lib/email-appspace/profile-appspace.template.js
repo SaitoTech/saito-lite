@@ -10,6 +10,10 @@ module.exports = ProfileAppspaceTemplate = (app) => {
 
     <div class="">
 
+      <div class="darkmode">
+        <i class="fas"></i>
+      </div>
+
       <div class="grid-2">
         <div class="saito-address">Saito Address:</div>
         <div>${app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())}</div>

@@ -26,7 +26,7 @@ class Archive extends ModTemplate {
     // by default we just save everything that is an application
     //
     if (conf == 0) {
-      if (tx.transaction.msg.module != "") {
+      if (tx.msg.module != "") {
         this.saveTransaction(tx);
       }
     }
@@ -82,7 +82,7 @@ class Archive extends ModTemplate {
     if (tx == null) { return; }
 
     let msgtype = "";
-    if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; }
+    if (tx.msg.module != "") { msgtype = tx.msg.module; }
 
     let sql = "";
     let params = {};
@@ -159,7 +159,7 @@ class Archive extends ModTemplate {
     // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
     //
     let msgtype = "";
-    if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; }
+    if (tx.msg.module != "") { msgtype = tx.msg.module; }
 
     let sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
     let params = {

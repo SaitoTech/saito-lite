@@ -1,0 +1,836 @@
+.noncard {
+  color: black;
+  padding: 10px;
+}
+
+.china_card_status_us_faceup {
+  background-color: #3277de;
+}
+.china_card_status_us_facedown {
+  background-color: #063b8a;
+}
+.china_card_status_ussr_faceup {
+  background-color: #8a0612;
+}
+.china_card_status_ussr_facedown {
+  background-color: #ea3041;
+}
+.china_card_status {
+  position: absolute;
+  width: 130px;
+  height: 100px;
+  left: 2040px;
+  top: 570px;
+  color: white;
+  font-weight: heavy;
+  font-size: 2em;
+}
+
+.formosan_resolution {
+  display: none;
+  position: absolute;
+  z-index: 0;
+  background-image: url("img/Formosan.png");
+  background-size: cover;
+}
+.removecards li {
+  float: left;
+  min-width: 300px;
+  font-size: 15px;
+  list-style-type: none;
+}
+.game_details_select {
+  max-width: 300px;
+}
+.game_details {
+  max-width: 100%;
+}
+
+.zoom_button {
+ border: 1px solid #707070;
+ background-color: #646464;
+ -webkit-border-radius: 4px;
+ -moz-border-radius: 4px;
+ border-radius: 4px;
+ font-size:2em;
+ color: #FFFFFF;
+ height: 40px;
+ width: 40px;
+ text-align: center;
+ vertical-align: middle;
+ line-height: 20px;
+}
+.action_round_cover {
+  position: absolute;
+  background-color: black;
+}
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.main {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+
+  margin-top: unset;
+}
+
+/** STATUS **/
+.status {
+  padding: 5px;
+  text-align: center;
+}
+
+.status-header {
+  display: grid;
+  grid-template-columns: 1em auto;
+  padding: 10px 5px;
+}
+
+.log {
+  padding: 2px;
+}
+
+/** Modal **/
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal Header */
+.modal_header {
+  padding: 2px 16px;
+  color: white;
+}
+
+/* Modal Body */
+.modal_body {padding: 2px 16px; color: white;}
+
+#modal_header_text {
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+  text-decoration: center;
+}
+
+#modal_body_text { margin: 1em 0 1em 0; }
+
+/* Modal Footer */
+.modal_footer {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 16px;
+  color: white;
+}
+
+/* Button for closing the modal */
+.modal_ok_button {
+  float: right;
+  padding: 12px;
+  border-radius: 7px;
+  margin: 10px;
+  font-size: 1em;
+  color: white;
+  border: unset;
+  color:white;
+  width: 125px;
+  background-color: rgb(0, 190, 10);
+}
+
+/* Modal Content */
+.modal_content {
+  position: absolute;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 33%;
+  min-width: 250px;
+  max-width: 600px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+  background: #4e4e4e;
+  border-radius: 5px;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+/** **/
+
+.connection_monitor {
+  position: fixed;
+  display: none;
+  min-height: 30px;
+  z-index: 90000;
+  background: #ef6666;
+  font-size: 1.8em;
+  padding: 15px;
+}
+
+.link {
+  border-bottom: 1px dashed;
+}
+
+.dashed {
+  border-bottom: 1px dashed;
+}
+
+.logcard {
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: 1px dashed;
+}
+
+.gameboard {
+  position: relative;
+  /*background-image: url("img/TS Map-11.jpg");*/
+  background-image: url("img/TS Map-11-medium.jpg");
+  /*background-image: url("img/TS Map-11-small.jpg");*/
+  background-size: cover;
+  width: 2550px;
+  height: 1650px;
+
+
+/*   3D Perspective
+  -webkit-transform: perspective(200px) rotateX(5deg);
+  -moz-transform: perspective(200px) rotateX(5deg);
+  -ms-transform: perspective(200px) rotateX(5deg);
+  -o-transform: perspective(200px) rotateX(5deg);
+  transform: perspective(200px) rotateX(5deg); */
+
+}
+
+#back_button {
+  font-size: 1.2em;
+  /* position: absolute; */
+  cursor:pointer;
+  width:30px;
+  height:30px;
+}
+
+/* .status > span > ul {
+  list-style-type: none;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 0.3em;
+  text-align: center;
+}
+
+.status > span > ul > li {
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+  margin: 0;
+  transition: .3s background-color;
+  transition: .1s color;
+}
+
+.status > span > ul > li:hover {
+  background-color: #005f5f;
+  color: #fff
+} */
+
+/* .hud_menu_overlay > div > ul {
+  list-style-type: none;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 0.3em;
+  text-align: center;
+}
+
+.hud_menu_overlay > div > ul > li {
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+  margin: 0;
+  transition: .3s background-color;
+  transition: .1s color;
+}
+
+.hud_menu_overlay > div > ul > li:hover {
+  background-color: #005f5f;
+  color: #fff
+} */
+
+.hud-body {
+  height: 380px;
+}
+
+/* #menu-container {}
+
+#menu-container > div {
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+#menu-container > ul {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  list-style: none;
+}
+
+#menu-container > ul > li {
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+  margin: 0;
+  transition: .3s background-color;
+  transition: .1s color;
+}
+
+#menu-container > ul > li:hover {
+  background-color: #005f5f;
+  color: #fff
+}
+
+#menu-container > ul > li:first-child {
+  border-top: 1px solid #ccc;
+} */
+
+.display-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  overflow-x: scroll;
+  height: 100%;
+  width: 100%;
+  padding: 0.25em;
+  margin-top: 5px;
+}
+
+.display-cards-status {
+  padding: 0;
+  padding-top: 0.5em;
+  overflow: unset;
+}
+
+.round {
+  position: absolute;
+  background-image: url("img/Turn.svg");
+  background-size: cover;
+}
+
+.action_round_us {
+  position: absolute;
+  background-image: url("img/AmericanActionRound.svg");
+  background-size: cover;
+  display: all;
+}
+
+.action_round_ussr {
+  position: absolute;
+  background-image: url("img/SovietActionRound.svg");
+  background-size: cover;
+  display: all;
+}
+
+.defcon {
+  position: absolute;
+  background-image: url("img/Radiation_warning_symbol.svg");
+  background-size: cover;
+}
+
+.vp {
+  position: absolute;
+  background-image: url("img/VPs.svg");
+  background-size: cover;
+}
+
+.space_race_us {
+  position: absolute;
+  background-image: url("img/AmericanSpaceRace.svg");
+  background-size: cover;
+}
+
+.space_race_ussr {
+  position: absolute;
+  background-image: url("img/SovietSpaceRace.svg");
+  background-size: cover;
+}
+
+.milops_us {
+  position: absolute;
+  background-image: url("img/AmericanMilitaryOperations.svg");
+  background-size: cover;
+}
+
+.milops_ussr {
+  position: absolute;
+  background-image: url("img/SovietMilitaryOperations.svg");
+  background-size: cover;
+}
+
+.inline {
+  display: inline;
+}
+
+.card {
+  cursor: pointer;
+}
+
+.link {
+  display: inline;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.country {
+  position: absolute;
+  cursor: pointer;
+}
+
+.showcard {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+.cardimg-hud {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 110px;
+  width: 85px;
+}
+
+.cardimg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.cardbox_event_blocker {
+ position:absolute;
+ width:0px;
+ height:0px;
+ background-color: black;
+ z-index: 89999;
+ display:none;
+ opacity: 0.4;
+}
+
+.cardbox {
+  position: absolute;
+  /* left: 413; */
+  /* height: 81vh; */
+  height: 48vh;
+  max-height: 520px;
+  /* width: 100vw; */
+  width: calc(48vh * 0.72110);
+  max-width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: none;
+  /* top: 30%; */
+  top: 27%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.cardbox-hud {
+  display: block;
+
+/* PREVIOUS - works but too small? */
+/*  width: calc(8.7em * 0.7211); */
+/*  height: 8.7em; */
+  width: calc(9em * 0.811);
+  height: 10em;
+
+  background-image: url(/twilight/img/Base.svg);
+  background-size: cover;
+  z-index: 2;
+  transform: translate(0%, 0%);
+
+  justify-self: center;
+}
+
+.cardbox-hud-status {
+  margin-top: 0;
+}
+
+.cardbox-status-container {
+  display: grid;
+  grid-template-rows: auto auto;
+  height: 100%;
+}
+
+.cardbox_menu {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  width: 10%;
+  height: 10%;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+}
+
+.cardbox-exit {
+  text-align: center;
+  font-size: 2.9em;
+  color: white;
+  z-index: 9999999999;
+}
+
+#cardbox-exit-background {
+  position: absolute;
+  left: 85%;
+  width: 5vh;
+  height: 5vh;
+  border: 3px black solid;
+  border-radius: 100px;
+  top: -1%;
+  background: #eb2d2d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardbox_menu_btn {
+  text-align: center;
+  width: 72%;
+  font-size: 2em;
+  font-weight: bold;
+  background-color: #eb2d2d;
+  border: 2px solid #111311;
+  cursor: pointer;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: white;
+  border-radius: 10px;
+  position: fixed;
+  left: 0%;
+  top: 100%;
+  z-index: 900009;
+}
+.us {
+  display: inline;
+  float: left;
+}
+
+.ussr {
+  display: inline;
+  float: left;
+}
+
+.us_control {
+  color: #FFFFFF;
+  background-image: url("img/AmericanInfluenceControlledBackground.png");
+  background-size: cover;
+  text-align: center;
+  line-height: 48px;
+}
+
+.us_uncontrol {
+  color: #008fd5;
+  background-image: url("img/AmericanInfluenceUnControlledBackground.png");
+  background-size: cover;
+  text-align: center;
+  line-height: 48px;
+}
+
+.ussr_control {
+  color: #FFFFFF;
+  background-image: url("img/SovietInfluenceControlledBackground.png");
+  background-size: cover;
+  text-align: center;
+  line-height: 48px;
+}
+
+.ussr_uncontrol {
+  color: #d2232a;
+  background-size: cover;
+  background-image: url("img/SovietInfluenceUnControlledBackground.png");
+  text-align: center;
+  line-height: 48px;
+}
+
+.loader {
+  width: 100%;
+  max-width: 600px;
+}
+
+.event_tile {
+  display:none;
+  float:right;
+}
+
+.card-exit {
+  z-index: 99999999999999;
+  height: 55px;
+  width: 55px;
+  left: 86%;
+  font-size: 4em;
+  position: absolute;
+}
+
+@media only screen and (min-width: 750px) {
+  .status {
+    /* float: none;
+    z-index: 40000; */
+  }
+  .cardbox {
+    position: fixed;
+    float: none;
+    z-index: 2;
+  }
+}
+
+@media only screen and (orientation: portrait) and (max-width: 750px) {
+  .status {
+    font-size: 0.8em;
+  }
+
+  .status > ul {
+    margin: 0;
+  }
+
+  .status {
+    padding-bottom: unset;
+  }
+
+  .hud-body {
+    height: unset;
+  }
+
+  .hud_menu_overlay {
+    display: grid;
+    grid-template-rows: auto 1em;
+    font-size: 0.8em;
+  }
+
+  .status > ul > li {
+    padding: 20px;
+  }
+
+  .status > span > ul > li {
+    padding: 3vh;
+  }
+
+  .hud_menu_overlay > div > ul > li {
+    padding: 20px;
+  }
+
+  /* .log {
+    height: 1em;
+    bottom: 0;
+    padding: 0.2rem;
+    position: fixed;
+    background: black;
+    overflow: hidden;
+    margin-bottom: 0px;
+    width: 100%;
+  } */
+
+  .cardbox {
+    position: fixed;
+    z-index: 90000;
+    top: 21vh;
+    left: 53vw;
+    display: block;
+    /* zoom: 0.66; */
+    height: 40vh;
+    width: calc(40vh * 0.7211);
+  }
+
+  .cardbox_menu_btn {
+    width: 97%;
+  }
+
+  .display-cards {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5em;
+    height: 74%;
+    height: unset;
+    width: unset;
+  }
+
+  .display-cards-status {
+    padding: 0;
+    margin: 0;
+    overflow: scroll;
+  }
+
+  .cardbox-hud {
+    display: block;
+    min-width: calc(36vh * 0.7211);
+    min-height: 100%;
+    z-index: 2;
+    width: calc(37vh * 0.7211);
+    transform: translate(0%, 0%);
+    margin-right: 0.5em;
+    margin-top: 0em;
+  }
+
+  .cardbox-status-container {
+    display: grid;
+    grid-template-rows: 5vh auto;
+    grid-gap: 0.5em;
+    /* height: 75%; */
+  }
+
+  .cardbox-hud-status {
+    width: calc(32vh * 0.7211);
+    min-width: calc(32vh * 0.7211);
+    margin-right: 0.75em;
+  }
+
+  #sizer {
+    padding: 20px 15px;
+  }
+
+  .hud-header li {
+    width: 20%;
+    font-size: 0.8em;
+  }
+}
+
+
+
+@media only screen and (orientation: portrait) and (max-height: 700px) {
+  /* .cardbox {
+    zoom: 0.5;
+    top: 23%;
+  } */
+}
+
+@media only screen and (orientation: landscape) and (max-height: 700px) {
+  .status > ul {
+    margin: 0;
+  }
+
+  .status > ul > li {
+    padding: 20px;
+  }
+
+  .status > span > ul > li {
+    padding: 3vh;
+  }
+
+  .hud_menu_overlay > div > ul > li {
+    padding: 20px;
+  }
+
+  /*
+  .log {
+    height: 15px;
+    bottom: 0;
+    padding: 0.2rem;
+    position: fixed;
+    background: black;
+    overflow: hidden;
+    margin-bottom: 0px;
+    width: 100%;
+  }
+   */
+
+  .cardbox {
+    /* position: fixed;
+    height: 95vh;
+    width: calc(95vh * 0.7211);
+    left: 33vw;
+    transform: translate(0%, -30%); */
+
+    position: fixed;
+    height: 50vh;
+    width: calc(50vh * 0.7211);
+    left: 20vw;
+    transform: translate(0%, -5%);
+  }
+
+  .display-cards {
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    overflow-y: scroll;
+    height: 97%;
+    width: 100%;
+    /* height: 90%; */
+    padding-top: 0.5em;
+  }
+
+  .cardbox-hud {
+    /* width: 10em;
+    min-height: 14em; */
+    width: calc(22vw * 0.7211);
+    min-height: 22vw;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+  }
+
+  .cardbox_menu_btn {
+    width: 97%;
+  }
+
+  .cardbox-exit {
+    left: 88.9%;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 850px) and (max-height: 500px) {
+  .cardbox {
+    /* position: fixed;
+    height: 95vh;
+    width: calc(95vh * 0.7211);
+    left: calc(45vw - 17.8em);
+    transform: translate(0%, -67%); */
+
+    position: fixed;
+    height: 75vh;
+    width: calc(75vh * 0.7211);
+    left: calc(40vw - 25vw);
+    transform: translate(0%, -29%);
+  }
+
+  #cardbox-exit-background {
+    width: 5vw;
+    height: 5vw;
+  }
+}
+
+input#game_board_sizer {
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  width: 300px;
+  background: #0004;
+}

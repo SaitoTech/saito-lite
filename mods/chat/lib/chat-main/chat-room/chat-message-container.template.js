@@ -1,4 +1,5 @@
 const ChatRoomMessageBubbleTemplate = require('./chat-room-message-bubble.template');
+const emoji = require('node-emoji');
 
 module.exports = ChatMessageContainerTemplate = (message_block, data) => {
   let { identicon, messages, publickey, keyHTML, last_message_timestamp, type } = message_block;
@@ -16,7 +17,7 @@ module.exports = ChatMessageContainerTemplate = (message_block, data) => {
           </div>
         </div>
         <div class="chat-message-container-column">
-          ${messages_html}
+          ${emoji.emojify(messages_html)}
         </div>
         <div class="chat-message-container-timestamp">
           ${datetime.hours}:${datetime.minutes}

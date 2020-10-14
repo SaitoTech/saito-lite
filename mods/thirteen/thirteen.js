@@ -1,8 +1,5 @@
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const helpers = require('../../lib/helpers/index');
-
-
 
 
 
@@ -48,10 +45,24 @@ class Thirteen extends GameTemplate {
     this.menuItems = ['lang'];
     //this.hud = new gamehud(this.app, this.menuItems());
 
+    this.hud.mode = 0; // transparent
+
     //
     //
     //
     this.opponent_cards_in_hand = 0;
+
+    //
+    // instead of associating a different function with each card css we are
+    // associating a single one, and changing the reference function inside
+    // to get different actions executed on click. Basically we swap out the
+    // changeable function before attachingCardEvents and everything just works
+    //
+    this.chengeable_callback = function(card) {}
+    let thirteen_self = this;
+    this.cardbox_callback = function(card) { thirteen_self.changeable_callback(card); };
+
+
 
   }
 
@@ -78,91 +89,19 @@ class Thirteen extends GameTemplate {
   }
 
 
-/***
-  menuItems() {
-    return {
-      'game-cards': {
-        name: 'cards',
-        callback: this.handleCardsMenuItem.bind(this)
-      },
-    }
-  }
-
-  handleCardsMenuItem() {
-    let thirteen_self = this;
-    let html =
-    `
-      <div id="menu-container">
-        <div>select your deck:</div>
-       <ul>
-          <li class="menu-item" id="hand">hand</li>
-          <li class="menu-item" id="discards">discard</li>
-          <li class="menu-item" id="removed">removed</li>
-        </ul>
-      </div>
-    `;
-
-    $('.hud-menu-overlay').html(html);
-    $('.status').hide();
-    $('.hud-menu-overlay').show();
-
-
-    $('.menu-item').on('click', function() {
-
-      let player_action = $(this).attr("id");
-      var deck = thirteen_self.game.deck[0];
-      var cards_img_html = [];
-      var cards;
-
-      switch (player_action) {
-        case "hand":
-          cards = deck.hand
-          break;
-        case "discards":
-          cards = Object.keys(deck.discards)
-          break;
-        case "removed":
-          cards = Object.keys(deck.removed)
-          break;
-        default:
-          break;
-      }
-
-      let cards_in_pile = 0;
-
-      cards_img_html = cards.map(card =>  {
-        if (card != undefined) {
-          return `<div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">${thirteen_self.returncardimage(card)}</div>`;
-        } else {
-  	  return '';
-        }
-      });
-
-      let display_message = `<div class="display-cards">${cards_img_html.join('')}</div>`;
-
-      if (cards_img_html.length == 0) {
-        display_message = `
-          <div style="text-align:center; margin: auto;">
-            there are no cards in ${player_action}
-          </div>
-        `;
-      }
-
-      $('.hud-menu-overlay').html(display_message);
-    });
-
-  }
-****/
-
-
-
-
   initializeHTML(app) {
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+    this.hud.addCardType("logcard", "", null);
+    this.hud.addCardType("showcard", "select", this.cardbox_callback);
+    if (!app.browser.isMobileBrowser(navigator.userAgent)) {
+      this.hud.cardbox.skip_card_prompt = 1;
+    }
+    this.hud.card_width = 160; // cards 160: pixels wide
   }
 
 
@@ -209,7 +148,7 @@ class Thirteen extends GameTemplate {
       console.log("---------------------------");
       console.log("\n\n\n\n");
 
-      this.updateStatus("generating the game");
+      this.updateStatus("<div class='status-message' id='status-message'>generating the game</div>");
 
       this.game.queue.push("round");
       this.game.queue.push("READY");
@@ -353,7 +292,7 @@ class Thirteen extends GameTemplate {
     // make board draggable
     //
     var element = document.getElementById('gameboard');
-    if (element !== null) { helpers.hammer(element); }
+    if (element !== null) { helpers.hammer(this, element); }
 
   }
 
@@ -379,7 +318,7 @@ class Thirteen extends GameTemplate {
       if (this.game.winner == 2) { winner = "us"; }
       let gid = $('#sage_game_id').attr("class");
       if (gid === this.game.id) {
-        this.updateStatus("<span>game over:</span> "+winner.touppercase() + "</span> <span>wins</span>");
+        this.updateStatus("<div class='status-message' id='status-message'><span>game over:</span> "+winner.touppercase() + "</span> <span>wins</span></div>");
       }
       return 0;
     }
@@ -662,7 +601,7 @@ class Thirteen extends GameTemplate {
 	if (this.game.state.defcon1_ussr > 3 && this.game.state.defcon2_ussr > 3 && this.game.state.defcon3_ussr > 3) { ussr_loses = 1; }
 
 	if (us_loses == 1 && ussr_loses == 1) {
-	  this.updateStatus("US and USSR both lose from DEFCON");
+	  this.updateStatus("<div class='status-message' id='status-message'>US and USSR both lose from DEFCON</div>");
 	  return 0;
 	}
 	if (us_loses == 1) {
@@ -765,15 +704,15 @@ console.log("tallying alliances before scoring");
 	  }
 
 	  if (this.game.player == television_bonus) {
-	    if (this.game.player == 1) { this.updateStatus("USSR receives Television Battleground bonus: adjust one DEFCON track one level."); }
-	    if (this.game.player == 2) { this.updateStatus("USSR receives Television Battleground bonus: adjust one DEFCON track one level."); }
+	    if (this.game.player == 1) { this.updateStatus("<div class='status-message' id='status-message'>USSR receives Television Battleground bonus: adjust one DEFCON track one level.</div>"); }
+	    if (this.game.player == 2) { this.updateStatus("<div class='status-message' id='status-message'>USSR receives Television Battleground bonus: adjust one DEFCON track one level.</div>"); }
             this.eventShiftDefcon(this.game.player, this.game.player, [1,2,3], 1, 1, function() {
 	      thirteen_self.endTurn();
 	    });
 	    return 0;
 	  } else {
-	    if (this.game.player == 1) { this.updateStatus("US is taking Television Battleground bonus"); }
-	    if (this.game.player == 2) { this.updateStatus("USSR is taking Television Battleground bonus"); }
+	    if (this.game.player == 1) { this.updateStatus("<div class='status-message' id='status-message'>US is taking Television Battleground bonus</div>"); }
+	    if (this.game.player == 2) { this.updateStatus("<div class='status-message' id='status-message'>USSR is taking Television Battleground bonus</div>"); }
 	    return 0;
 	  }
 	}
@@ -802,15 +741,16 @@ console.log("tallying alliances before scoring");
 	  }
 
 	  if (this.game.player == alliances_bonus) {
-	    if (this.game.player == 1) { this.updateStatus("You are pulling the Alliances Battleground Bonus: pulling strategy card"); }
-	    if (this.game.player == 2) { this.updateStatus("You are pulling the Alliances Battleground Bonus: pulling strategy card"); }
+	    if (this.game.player == 1) { this.updateStatus("<div class='status-message' id='status-message'>You are pulling the Alliances Battleground Bonus: pulling strategy card</div>"); }
+	    if (this.game.player == 2) { this.updateStatus("<div class='status-message' id='status-message'>You are pulling the Alliances Battleground Bonus: pulling strategy card</div>"); }
             this.addMove("aftermath_or_discard\t"+this.game.player);
+
             this.addMove("DEAL\t2\t1\t1"); // deck 2, player 1, 1 card
             this.endTurn();
 	    return 0;
 	  } else {
-	    if (this.game.player == 1) { this.updateStatus("Alliances Battleground Bonus: US is pulling strategy card"); }
-	    if (this.game.player == 2) { this.updateStatus("Alliances Battleground Bonus: USSR is pulling strategy card"); }
+	    if (this.game.player == 1) { this.updateStatus("<div class='status-message' id='status-message'>Alliances Battleground Bonus: US is pulling strategy card</div>"); }
+	    if (this.game.player == 2) { this.updateStatus("<div class='status-message' id='status-message'>Alliances Battleground Bonus: USSR is pulling strategy card</div>"); }
 	    return 0;
 	  }
 	}
@@ -827,9 +767,9 @@ console.log("tallying alliances before scoring");
 	
 	  let card = this.game.deck[1].hand[0];
 
-          let html = 'You have pulled <span class="showcard" id="'+card+'">' + sc[card].name + '</span> as Aftermath bonus card:<ul>';
+          let html = '<div class="status-message" id="status-message">You have pulled <span class="showcard" id="'+card+'">' + sc[card].name + '</span> as Aftermath bonus card:<ul>';
               html += '<li class="card" id="discard">discard card</li>';
-              html += '<li class="card" id="'+card+'">put in aftermath</li>';
+              html += '<li class="card" id="'+card+'">put in aftermath</li></ul></div>';
           thirteen_self.updateStatus(html);
           thirteen_self.addShowCardEvents(function(card) {
 
@@ -905,9 +845,10 @@ console.log("tallying alliances before scoring");
 	  //
 	  // play or discard
 	  //
-          let html = 'you have pulled <span class="showcard" id="'+card+'">' + sc[card].name + '</span><ul>';
+          let html = '<div class="status-message" id="status-message">you have pulled <span class="showcard" id="'+card+'">' + sc[card].name + '</span><ul>';
               html += '<li class="card" id="discard">discard card</li>';
               html += '<li class="card" id="'+card+'">play card</li>';
+	      html += '</div>';
           thirteen_self.updateStatus(html);
           thirteen_self.addShowCardEvents(function(card) {
 
@@ -1223,7 +1164,7 @@ console.log("SHOULD PLACE: " + player);
 	this.updateLog(log_update);
 
 	if (this.game.player == player) {
-	  let status_update = sc[card].title + ": "+sc[card].text+' <p></p><ul><li class="card" id="done">finish turn</li>'
+	  let status_update = "<div class='status-message' id='status-message'>" + sc[card].name + ": "+sc[card].text+' <p></p><ul><li class="card" id="done">finish turn</li></ul></div>'
 	  this.updateStatus(status_update);
 	  sc[card].event(player);
 	}
@@ -1447,10 +1388,10 @@ console.log("SHOULD PLACE: " + player);
 	//
 	if (this.game.player == 2) {
 
-          let html = "you must either remove two influence from alliance battleground or choose not to use events to lower defcon for this round: <p></p><ul>";
+          let html = "<div class='status-message' id='status-message'>you must either remove two influence from alliance battleground or choose not to use events to lower defcon for this round: <p></p><ul>";
               html += '<li class="card" id="remove">remove influence</li>';
               html += '<li class="card" id="restrict">defcon restriction</li>';
-              html += '</ul>';
+              html += '</ul></div>';
           thirteen_self.updateStatus(html);
 
           $('.card').off();
@@ -1588,22 +1529,21 @@ console.log("SHOULD PLACE: " + player);
     //
     if (this_card.side == "neutral" || this_card.side == me) {
 
-      html = 'how would you like to play this card: <p></p><ul>';
+      html = '<div class="status-message" id="status-message">how would you like to play this card: <p></p><ul>';
       html += '<li class="card" id="playevent">play for event</li>';
       html += '<li class="card" id="playcommand">play for command</li>';
-      html += '</ul>';
+      html += '</ul></div>';
 
     //
     // opponent card
     //
     } else {
 
-      html = 'how would you like to play this card: <p></p><ul>';
+      html = "<div class='status-message' id='status-message'>how would you like to play this card: <p></p><ul>";
       html += '<li class="card" id="playcommand">play for command</li>';
-      html += '</ul>';
+      html += '</ul></div>';
 
     }
-
     thirteen_self.updateStatus(html);
 
     $('.card').off();
@@ -1752,7 +1692,7 @@ console.log("SHOULD PLACE: " + player);
       action = $(this).attr("id");
       if (action == "done") { mycallback(); }
 
-      let html2 = 'Adjust which DEFCON track: <p></p><ul>';
+      let html2 = "<div class='status-message' id='status-message'>" + 'Adjust which DEFCON track: <p></p><ul>';
       if (only_one_defcon_track == 1) {
 	if (selected_defcon_track == 0) {
           html2 += '<li class="card" id="1">political</li>';
@@ -1792,8 +1732,9 @@ console.log("SHOULD PLACE: " + player);
           html2 += '<li class="card" id="3">world opinion</li>';
         }
       }
-        html2 += '<li class="card" id="done">finish move</li>';
-          html2 += '</ul>';
+      html2 += '<li class="card" id="done">finish move</li>';
+      html2 += '</ul>';
+      html2 += '</div>';
 
       thirteen_self.updateStatus(html2);
 
@@ -1818,7 +1759,7 @@ console.log("SHOULD PLACE: " + player);
 
       thirteen_self.removeEventsFromBoard();
 
-      let html = "escalate or de-escalate defcon track? <p></p><ul>";
+      let html = "<div class='status-message' id='status-message'>escalate or de-escalate defcon track? <p></p><ul>";
 	if (directions != "decrease") {
           html += '<li class="card" id="increase">escalate defcon</li>';
 	}
@@ -1826,7 +1767,7 @@ console.log("SHOULD PLACE: " + player);
           html += '<li class="card" id="decrease">de-escalate defcon</li>';
 	}
           html += '<li class="card" id="done">done</li>';
-          html += '</ul>';
+          html += '</ul></div>';
       thirteen_self.updateStatus(html);
 
 
@@ -1906,7 +1847,7 @@ console.log("SHOULD PLACE: " + player);
     if (!testdone) {
        let num_to_announce = number;
        if (number == 100) { num_to_announce = max_per_arena; }
-	this.updateStatus('Add ' + num_to_announce + ' Influence: <p></p><ul><li class="card" id="done">finish turn</li>');
+	this.updateStatus("<div class='status-message' id='status-message'>"+ 'Add ' + num_to_announce + ' Influence: <p></p><ul><li class="card" id="done">finish turn</li></ul></div>');
     }
 
     let thirteen_self = this;
@@ -2043,7 +1984,7 @@ console.log("SHOULD PLACE: " + player);
     if (!testdone) {
        let num_to_announced = number;
        if (number == 100) { num_to_announce = max_per_arena; }
-	this.updateStatus('Remove ' + num_to_announce + ' Influence: <p></p><ul><li class="card" id="done">finish turn</li>');
+	this.updateStatus("<div class='status-message' id='status-message'>"+'Remove ' + num_to_announce + ' Influence: <p></p><ul><li class="card" id="done">finish turn</li></ul></div>');
     }
 
     let thirteen_self = this;
@@ -2208,12 +2149,11 @@ console.log("SHOULD PLACE: " + player);
     if (player == 2) { tokens += this.game.state.us_command_token_bonus; }
     if (tokens < 1) { tokens = 1; }
 
-    let html = '';
+    let html = "<div class='status-message' id='status-message'>";
     if (player == 1) { html += 'USSR '; }
     if (player == 2) { html += 'US '; }
-        html += 'pick an area to add/remove up to '+tokens+' cubes:';
-
-
+    html += 'pick an area to add/remove up to '+tokens+' cubes:</div>';
+        
     this.updateStatus(html);
 
     $('.country').off();
@@ -2221,10 +2161,10 @@ console.log("SHOULD PLACE: " + player);
 
       let arena_id = $(this).attr('id');
 
-      html = 'do you wish to add or remove command tokens? <p></p><ul>';
+      html = "<div class='status-message' id='status-message'>" + 'do you wish to add or remove command tokens? <p></p><ul>';
       html += '<li class="card" id="addtokens">add command tokens</li>';
       html += '<li class="card" id="removetokens">remove command tokens</li>';
-      html += '</ul>';
+      html += '</ul></div>';
 
       thirteen_self.updateStatus(html);
 
@@ -2235,7 +2175,7 @@ console.log("SHOULD PLACE: " + player);
 
         if (action == "addtokens") {
 
-          html = 'how many command tokens do you wish to add? <p></p><ul>';
+          html = "<div class='status-message' id='status-message'>" + 'how many command tokens do you wish to add? <p></p><ul>';
 	  if (tokens >= 1) {
             html += '<li class="card" id="1">one</li>';
 	  }
@@ -2252,6 +2192,7 @@ console.log("SHOULD PLACE: " + player);
             html += '<li class="card" id="5">five</li>';
 	  }
           html += '</ul>';
+	  html += '</div>';
 
           thirteen_self.updateStatus(html);
 
@@ -2302,7 +2243,7 @@ console.log("SHOULD PLACE: " + player);
 
         if (action == "removetokens") {
 
-          html = 'how many command tokens do you wish to remove? <p></p><ul>';
+          html = "<div class='status-message' id='status-message'>" + 'how many command tokens do you wish to remove? <p></p><ul>';
 	  if (tokens >= 1) {
             html += '<li class="card" id="1">one</li>';
 	  }
@@ -2318,7 +2259,7 @@ console.log("SHOULD PLACE: " + player);
 	  if (tokens >= 5) {
             html += '<li class="card" id="5">five</li>';
 	  }
-          html += '</ul>';
+          html += '</ul></div>';
 
           thirteen_self.updateStatus(html);
 
@@ -3476,7 +3417,7 @@ console.log("SHOULD PLACE: " + player);
 	event : function(player) {
 
 	  // place up to three on one or more world opinion battlegrounds
-	  thirteen_self.updateStatus('Place up to three influence cubes in total on one or more world opinion battlegrounds. max 2 per battleground: <p></p><ul><li class="card" id="done">finish</li>');
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>" + 'Place up to three influence cubes in total on one or more world opinion battlegrounds. max 2 per battleground: <p></p><ul><li class="card" id="done">finish</li></ul></div>');
 	  thirteen_self.eventAddInfluence(player, player, ['un','television','alliances'], 3, 2, 0, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -3494,7 +3435,7 @@ console.log("SHOULD PLACE: " + player);
 
 	  // escalate / de-escalate DEFCON tracks by up to 2 steps
 	  thirteen_self.eventShiftDefcon(player, player, [1, 2, 3], 100, 2, function(args) {
-	    thirteen_self.updateStatus("Place up to one influence one or more battlegrounds: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	    thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place up to one influence one or more battlegrounds: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	    thirteen_self.playerPlaceCommandTokens(player, 's02b');
 	  });
 
@@ -3521,7 +3462,7 @@ console.log("SHOULD PLACE: " + player);
 	    if (thirteen_self.game.player == who_goes) {
 
 	      // escalate / de-escalate up to 2 DEFCON tracks by up to 1 steps
-	      thirteen_self.updateStatus("You may escalate or de-escalate up to 2 DEFCON tracks by up to 1 step each");
+	      thirteen_self.updateStatus("<div class='status-message' id='status-message'>You may escalate or de-escalate up to 2 DEFCON tracks by up to 1 step each</div>");
 	      thirteen_self.eventShiftDefcon(player, player, [1, 2, 3], 1, 1, function(args) {
 	        thirteen_self.eventShiftDefcon(player, player, [1, 2, 3], 1, 1, function(args) {
 	          thirteen_self.endTurn();
@@ -3577,7 +3518,7 @@ console.log("SHOULD PLACE: " + player);
 	event : function(player) {
 
 	  // place up to 2 influence cubes in total on one or more political battlegrounds
-	  thirteen_self.updateStatus("Place up to two influence cubes in total on one or more political battlegrounds: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place up to two influence cubes in total on one or more political battlegrounds: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	  thirteen_self.eventAddInfluence(player, player, ['cuba_pol','italy','turkey'], 2, 2, 0, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -3612,11 +3553,11 @@ console.log("SHOULD PLACE: " + player);
 	event : function(player) {
 
 	  let cards_discarded = 0;
-          let html = "Select cards to discard:<ul>";
+          let html = "<div class='status-message' id='status-message'>Select cards to discard:<ul>";
           for (let i = 0; i < thirteen_self.game.deck[1].hand.length; i++) {
             html += '<li class="card showcard '+thirteen_self.game.deck[1].hand[i]+'" id="'+thirteen_self.game.deck[1].hand[i]+'">'+thirteen_self.game.deck[1].cards[thirteen_self.game.deck[1].hand[i]].name+'</li>';
           }
-          html += '</ul> When you are done discarding <span class="card dashed" id="finished">click here</span>.';
+          html += '</ul> When you are done discarding <span class="card dashed" id="finished">click here</span>.</div>';
           thirteen_self.updateStatus(html);
           thirteen_self.addShowCardEvents(function(card) {
 
@@ -3695,7 +3636,7 @@ console.log("SHOULD PLACE: " + player);
 	event : function(player) {
 
 	    // place up to 2 influence cubes in total on one or more military battlegrounds
-	    thirteen_self.updateStatus("Place up to two influence cubes in total on one or more military battlegrounds: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	    thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place up to two influence cubes in total on one or more military battlegrounds: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	    thirteen_self.eventAddInfluence(player, player, ['cuba_mil','atlantic','berlin'], 2, 2, 0, function(args) {
 	      thirteen_self.endTurn();
 	    }); 
@@ -3751,7 +3692,7 @@ console.log("SHOULD PLACE: " + player);
 
 	  // command three influence, then opponent may command 1 influence
 	  thirteen_self.addMove("event_command_influence" + "\t" + opponent + "\t" + "s12b" + "\t" + "1");
-	  thirteen_self.updateStatus('Command 3 Influence cubes, then opponent may command 1 Influence cube: <p></p><ul><li class="card" id="done" id="done">finish turn</li>');
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>"+'Command 3 Influence cubes, then opponent may command 1 Influence cube: <p></p><ul><li class="card" id="done" id="done">finish turn</li></ul></div>');
           thirteen_self.playerPlaceCommandTokens(thirteen_self.game.player, 's12b', 3);
 
 	}
@@ -3764,7 +3705,7 @@ console.log("SHOULD PLACE: " + player);
 	tokens : 3 ,
 	defcon : 0 ,
 	event : function(player) {
-	  thirteen_self.updateStatus("Place up to three influence cubes on up to three battlegrounds (1 each): <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place up to three influence cubes on up to three battlegrounds (1 each): <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	  thirteen_self.eventAddInfluence(player, player, thirteen_self.all_battlegrounds, 3, 1, 0, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -3781,11 +3722,12 @@ console.log("SHOULD PLACE: " + player);
 	event : function(player) {
 
 	  thirteen_self.eventShiftDefcon(player, player, [2], 2, 2, function(args) {
-	    thirteen_self.updateStatus("Place one influence cubes on one battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	    thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place one influence cubes on one battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	    thirteen_self.eventAddInfluence(player, player, ['cuba_pol', 'cuba_mil', 'atlantic', 'turkey', 'berlin', 'italy', 'un','television','alliances'], 1, 1, 1, function(args) {
 	      thirteen_self.endTurn();
 	    });
 	  }); 
+
 
 	},
     }
@@ -3804,7 +3746,7 @@ console.log("SHOULD PLACE: " + player);
 	      options.push(i);
 	    }
 	  }
-	  thirteen_self.updateStatus("Place up to 4 Influence in battlegrounds where the US currently has no influence. Max 2 per battleround: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place up to 4 Influence in battlegrounds where the US currently has no influence. Max 2 per battleround: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	  thirteen_self.eventAddInfluence(player, player, options, 4, 2, 1, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -3833,7 +3775,7 @@ console.log("SHOULD PLACE: " + player);
 	    return;
 	  }
 
-	  thirteen_self.updateStatus('Select a battleground from which to remove US influence: <p></p><ul><li class="card" id="done">done</li></ul>');
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>"+'Select a battleground from which to remove US influence: <p></p><ul><li class="card" id="done">done</li></ul></div>');
 	  thirteen_self.removeEventsFromBoard();
 
 	  $('.done').off();
@@ -3891,10 +3833,10 @@ console.log("SHOULD PLACE: " + player);
 	defcon : 0 ,
 	event : function(player) {
 
-          let html  = "Which would you like to do, remove half of USSR influence from one Cuban battleground (rounded up) or place up to 2 Influence on the Alliances battleground? <p></p><ul>";
+          let html  = "<div class='status-message' id='status-message'>Which would you like to do, remove half of USSR influence from one Cuban battleground (rounded up) or place up to 2 Influence on the Alliances battleground? <p></p><ul>";
               html += '<li class="card" id="remove_from_cuba">remove from cuba</li>';
               html += '<li class="card" id="add_alliances">place in alliances</li>';
-          html += '</ul>';
+          html += '</ul></div>';
           thirteen_self.updateStatus(html);
 
           $('.card').off();
@@ -3903,13 +3845,13 @@ console.log("SHOULD PLACE: " + player);
 	    let action = $(this).attr("id");
 
 	    if (action == "remove_from_cuba") {
-	      thirteen_self.updateStatus("Click on a Cuban battleground to remove half of the USSR influence: ");
+	      thirteen_self.updateStatus("<div class='status-message' id='status-message'>Click on a Cuban battleground to remove half of the USSR influence:</div>");
 	      thirteen_self.eventRemoveInfluence(2, 1, ['cuba_pol', 'cuba_mil'], 101, 1, 0, function() {
 	        thirteen_self.endTurn();
 	      });
 	    }
 	    if (action == "add_alliances") {
-	      thirteen_self.updateStatus("Add two influence to the Alliances battleground");
+	      thirteen_self.updateStatus("<div class='status-message' id='status-message'>Add two influence to the Alliances battleground</div>");
 	      thirteen_self.eventAddInfluence(2, 2, ['alliances'], 2, 2, 0, function() {
 	        thirteen_self.endTurn();
 	      }); 
@@ -3946,7 +3888,7 @@ console.log("SHOULD PLACE: " + player);
 	  let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify(['cuba_pol', 'italy', 'turkey']));
 
 	  if (thirteen_self.game.state.defcon2_us < 4) {
-	    thirteen_self.updateStatus("Place up to 3 Influence in Cuba (pol), Italy and Turkey: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	    thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place up to 3 Influence in Cuba (pol), Italy and Turkey: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	    thirteen_self.eventAddInfluence(2, 2, ['cuba_pol','italy','turkey'], 3, 1, 0, function() {
 	      thirteen_self.addMove("notify\tUS installs offensive missiles in political chokepoints");
 	      thirteen_self.endTurn();
@@ -3983,7 +3925,7 @@ console.log("SHOULD PLACE: " + player);
 	tokens : 1 ,
 	defcon : 0 ,
 	event : function(player) {
-	  thirteen_self.updateStatus("Place up to 2 Influence on the Atlantic battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place up to 2 Influence on the Atlantic battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	  thirteen_self.eventAddInfluence(player, player, ['atlantic'], 2, 2, 0, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -4015,7 +3957,7 @@ console.log("SHOULD PLACE: " + player);
 
 	  let options2 = thirteen_self.app.crypto.stringToBase64(JSON.stringify(thirteen_self.all_battlegrounds));
 	  thirteen_self.addMove("event_add_influence\t2\t2\t"+options2+"\t2\t2\t0");
-	  thirteen_self.updateStatus('Remove up to 2 US influence cubes in total from one or more battlegrounds. Place them on other battlegrounds: <p></p><li class="card" id="done">click here when done</li></ul>');
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>"+'Remove up to 2 US influence cubes in total from one or more battlegrounds. Place them on other battlegrounds: <p></p><li class="card" id="done">click here when done</li></ul></div>');
 	  thirteen_self.eventRemoveInfluence(player, player, thirteen_self.all_battlegrounds, 2, 2, 0, function() {
 	    thirteen_self.endTurn();
 	  });
@@ -4067,7 +4009,7 @@ console.log("SHOULD PLACE: " + player);
 	defcon : 1 ,
 	event : function(player) {
 
-	  thirteen_self.updateStatus('Place up to 4 Influence cubes in total on battlegrounds where the USSR player currently has Influence cubes. Max 2 per battleground: <p></p><ul><li class="card" id="done">done</li></ul>');
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>"+'Place up to 4 Influence cubes in total on battlegrounds where the USSR player currently has Influence cubes. Max 2 per battleground: <p></p><ul><li class="card" id="done">done</li></ul></div>');
 	  let options = [];
 
 	  for (var i in thirteen_self.game.arenas) {
@@ -4089,7 +4031,7 @@ console.log("SHOULD PLACE: " + player);
 	tokens : 3 ,
 	defcon : 1 ,
 	event : function(player) {
-	  thirteen_self.updateStatus('Remove up to 3 USSR Influence cubes in total from one or more battlegrounds: <p></p><ul><li class="card" id="done">done</li></ul>');
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>"+'Remove up to 3 USSR Influence cubes in total from one or more battlegrounds: <p></p><ul><li class="card" id="done">done</li></ul></div>');
 	  thirteen_self.eventRemoveInfluence(1, 1, thirteen_self.all_battlegrounds, 3, 3, 1, function(args) {
 	    thirteen_self.endTurn();
 	  });
@@ -4215,7 +4157,7 @@ console.log("SHOULD PLACE: " + player);
 	tokens : 1 ,
 	defcon : 1 ,
 	event : function(player) {
-	  thirteen_self.updateStatus("Place up to 3 Influence on the Atlantic battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>Place up to 3 Influence on the Atlantic battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	  thirteen_self.eventAddInfluence(player, player, ['atlantic'], 3, 3, 1, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -4230,7 +4172,7 @@ console.log("SHOULD PLACE: " + player);
 	tokens : 1 ,
 	defcon : 1 ,
 	event : function(player) {
-	  thirteen_self.updateStatus("Command 3 Influence cubes on to one political battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>Command 3 Influence cubes on to one political battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	  thirteen_self.eventAddInfluence(player, player, ['cuba_pol','italy','turkey'], 3, 3, 1, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -4244,9 +4186,9 @@ console.log("SHOULD PLACE: " + player);
 	tokens : 2 ,
 	defcon : 0 ,
 	event : function(player) {
-	  thirteen_self.updateStatus("Add up to 2 influence cubes in Turkey: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	  thirteen_self.updateStatus("<div class='status-message' id='status-message'>Add up to 2 influence cubes in Turkey: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	  thirteen_self.eventAddInfluence(player, player, ['turkey'], 2, 2, 0, function(args) {
-	    thirteen_self.updateStatus("Remove half of US influence from one Cuban battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul>");
+	    thirteen_self.updateStatus("<div class='status-message' id='status-message'>Remove half of US influence from one Cuban battleground: <p></p><ul><li class='card' id='done'>click here when done</li></ul></div>");
 	    thirteen_self.eventRemoveInfluence(player, 2, ['cuba_pol', 'cuba_mil'], 101, 2, 0, function(args) {
   	      thirteen_self.endTurn();
 	    }); 
@@ -4322,9 +4264,6 @@ console.log("SHOULD PLACE: " + player);
   returnGameOptionsHTML() {
 
     return `
-          <h3>Thirteen Struggle: </h3>
-
-          <form id="options" class="options">
 
             <label for="player1">Play as:</label>
             <select name="player1">
@@ -4409,7 +4348,7 @@ console.log("SHOULD PLACE: " + player);
 
     if (this.browser_active == 1) {
       this.displayModal("<span>The Game is Over</span> - <span>" + winner.toUpperCase() + "</span> <span>wins by</span> <span>" + method + "<span>");
-      this.updateStatus("<span>The Game is Over</span> - <span>" + winner.toUpperCase() + "</span> <span>wins by</span> <span>" + method + "<span>");
+      this.updateStatus("<div class='status-message' id='status-message'><span>The Game is Over</span> - <span>" + winner.toUpperCase() + "</span> <span>wins by</span> <span>" + method + "<span></div>");
     }
   }
 

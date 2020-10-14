@@ -18,7 +18,7 @@ module.exports = ArcadeGameDreate = {
 
   render(app, data) {
 
-    document.querySelector('.arcade-main').innerHTML = ArcadeGameCreateTemplate();
+    document.querySelector('.wizard-holder').innerHTML += ArcadeGameCreateTemplate();
     let game_id = data.active_game;
 
     for (let i = 0; i < data.arcade.mods.length; i++) {
@@ -32,7 +32,10 @@ module.exports = ArcadeGameDreate = {
         document.querySelector('.game-title').innerHTML = gamemod.name;
         document.querySelector('.game-description').innerHTML = gamemod.description;
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
-        document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
+        let x = gamemod.returnGameOptionsHTML();
+        if (x != "") {
+          document.querySelector('.game-details').innerHTML = '<h3>' + gamemod.name + ': </h3><form id="options" class="options">' + x + '</form>'
+        }
 
         setTimeout(() => {
 
@@ -51,7 +54,6 @@ module.exports = ArcadeGameDreate = {
         }, 100);
 
         //game-invite-btn
-
         document.getElementById('game-invite-btn')
           .addEventListener('click', (e) => {
 
@@ -101,10 +103,14 @@ module.exports = ArcadeGameDreate = {
 
             let newtx = data.arcade.createOpenTransaction(gamedata);
             data.arcade.app.network.propagateTransaction(newtx);
-            document.querySelector('.arcade-main').innerHTML = '';
-            data.arcade.render(app, data);
+            //document.querySelector('.arcade-main').innerHTML = '';
+            document.querySelector('.background-shim').destroy();
+            document.querySelector('.create-game-wizard').destroy();
+            data.arcade.renderMain(app, data);
 
           });
+
+
 
         document.getElementById('friend-invite-btn')
           .addEventListener('click', (e) => {
@@ -123,7 +129,7 @@ module.exports = ArcadeGameDreate = {
               options['players_invited'] = players_invited;
 
               let gamedata = {
-	        ts: new Date().getTime(),
+                ts: new Date().getTime(),
                 name: gamemod.name,
                 slug: gamemod.returnSlug(),
                 options: gamemod.returnFormattedGameOptions(options),
@@ -134,22 +140,67 @@ module.exports = ArcadeGameDreate = {
 
               let newtx = data.arcade.createOpenTransaction(gamedata);
               data.arcade.app.network.propagateTransaction(newtx);
-              document.querySelector('.arcade-main').innerHTML = '';
-              data.arcade.render(app, data);
+              //document.querySelector('.arcade-main').innerHTML = '';
+              //make more specific
+              document.querySelector('.background-shim').destroy();
+              document.querySelector('.create-game-wizard').destroy();
+              data.arcade.renderMain(app, data);
             } else {
-
               salert('More players needed. Add a comma separated list of their names or addresses.');
               document.querySelector('#game-invitees').focus();
-
             }
 
           });
 
-          //link-invite-btn
-          document.getElementById('link-invite-btn')
+        //
+        //link-invite-btn
+        //
+        
+        document.getElementById('link-invite-btn')
           .addEventListener('click', (e) => {
+
             document.querySelector('.game-players-select').value = 2;
-            // and then SP's amazing code.
+
+            let { active_game } = data;
+            let game_module = app.modules.returnModule(active_game);
+            let options = game_module.returnFormattedGameOptions(getOptions());
+
+            let payload = {
+              ts: new Date().getTime(),
+              name: active_game,
+              slug: game_module.returnSlug(),
+              publickey: app.wallet.returnPublicKey(),
+              options,
+              players_needed: 2,
+            };
+
+            let newtx = data.arcade.createOpenTransaction(payload);
+            let base64str = app.crypto.stringToBase64(JSON.stringify({
+              tx: newtx.transaction
+            }));
+
+            //
+            // TODO: include additional html for copy to clipboard functionality
+            console.log(base64str);
+
+
+            var inviteInput = document.getElementById("link-invite-input");
+            //inviteInput.innerText = `${window.location}invite/${base64str}`;
+
+
+            var link = `${window.location}invite/${base64str}`;
+            const el = document.createElement('textarea');
+            el.value = link;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+	    salert("invite link copied to clipboard and added to your list of open games...");
+            //siteMessage('Invite Link Copied', 5000);
+
+
+            data.arcade.addGameToOpenList(newtx);
+
           });
 
         return;
@@ -161,30 +212,41 @@ module.exports = ArcadeGameDreate = {
 
     document.querySelector('#return-to-arcade')
       .onclick = (e) => {
-        document.querySelector('.arcade-main').innerHTML = '';
-        data.arcade.render(app, data);
+        //document.querySelector('.arcade-main').innerHTML = '';
+        // make more specific
+        document.querySelector('.background-shim').destroy();
+        document.querySelector('.create-game-wizard').destroy();
+        data.arcade.renderMain(app, data);
       }
 
     document.querySelector('.background-shim-cover')
       .onclick = (e) => {
-        document.querySelector('.arcade-main').innerHTML = '';
-        data.arcade.render(app, data);
+        //document.querySelector('.arcade-main').innerHTML = '';
+        // make more specific
+        document.querySelector('.background-shim').destroy();
+        document.querySelector('.create-game-wizard').destroy();
+        data.arcade.renderMain(app, data);
       }
 
 
     document.getElementById('link-invite-btn')
       .onclick = () => {
+
         let { active_game } = data;
         let game_module = app.modules.returnModule(active_game);
         let options = game_module.returnFormattedGameOptions(getOptions());
 
+	let gpselect = document.querySelector('.game-player-select');
+	let plnum    = gpselect.options[gpselect.selectedIndex].value;
+
+
         let payload = {
           ts: new Date().getTime(),
           name: active_game,
-	  slug: game_module.returnSlug(),
+          slug: game_module.returnSlug(),
           publickey: app.wallet.returnPublicKey(),
           options,
-          players_needed: document.querySelector('.game-players-select').value,
+          players_needed: plnum,
         };
 
         let newtx = data.arcade.createOpenTransaction(payload);

@@ -14,7 +14,7 @@ module.exports = InquirePage = {
 
     var html = `
     <tr>
-    <td class="inq-product-name" style="width:15%">Category</td>
+    <td class="inq-product-name" style="width:15%">Product</td>
     <td class="inq-product-name" style="width:20%">Budget/item</td>
     <td class="inq-product-name" style="width:20%">Quantity</td>
     <td class="inq-product-name" style="width:43%">Requirements</td>
@@ -99,7 +99,7 @@ module.exports = InquirePage = {
   returnPrintHTML() {
     var pdfHTML = `
     <div style="padding: 15px; background: linear-gradient(-45deg, #369 50%, #036 100%);">
-      <img class="logo major-logo" style="width: 150px" src="https://staging.saito.io/covid19/dhbgloballogo.png">
+      <img class="logo major-logo" src="/covid19/dhbgloballogo.png">
     </div>
     <p><h2>Request for Proposal</h2></p>
     <hr />
@@ -170,19 +170,6 @@ module.exports = InquirePage = {
 
     document.getElementById('send-email').addEventListener('click', () => {
 
-      //todo - send saito mail
-      /*
-      let tx = app.wallet.createUnsignedTransaction();
-      tx.transaction.msg.module = "Email";
-      tx.transaction.msg.title = "Customer Enquiry";
-      tx.transaction.msg.message = this_page.returnPrintHTML();
-      
-      tx = app.wallet.signTransaction(tx);
-      let emailmod = app.modules.returnModule("Email");
-      emailmod.addEmail(tx);
-      app.storage.saveTransaction(tx);
-      */  
-      
       /* send legacy email */
       let message = {};
       message.to = 'richard@saito.tech';

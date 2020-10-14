@@ -127,10 +127,10 @@ class Hospital extends ModTemplate {
     // create transaction
     //
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-        newtx.transaction.msg.module = this.name;
-        newtx.transaction.msg.request = "Booking Request";
-        newtx.transaction.msg.hid = hid;
-        newtx.transaction.msg.slot = appointment.slot_selected;
+        newtx.msg.module = this.name;
+        newtx.msg.request = "Booking Request";
+        newtx.msg.hid = hid;
+        newtx.msg.slot = appointment.slot_selected;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -139,9 +139,9 @@ class Hospital extends ModTemplate {
     // create email
     //
         newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-        newtx.transaction.msg.module = "Email";
-        newtx.transaction.msg.title = "Hospital Booking Request";
-        newtx.transaction.msg.message = "You have requested an appointment at a certain hospital at a certain time. The hospital has received your request and will notify you shortly if the booking is successful.";
+        newtx.msg.module = "Email";
+        newtx.msg.title = "Hospital Booking Request";
+        newtx.msg.message = "You have requested an appointment at a certain hospital at a certain time. The hospital has received your request and will notify you shortly if the booking is successful.";
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -154,9 +154,9 @@ class Hospital extends ModTemplate {
     // create email
     //
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-        newtx.transaction.msg.module = "Email";
-        newtx.transaction.msg.title = "ACTION REQUIRED: Hospital Booking Requested";
-        newtx.transaction.msg.message = "<a href='/email?decision=approve&booking_id=512&tx='"+encodeURI(JSON.stringify(tx))+"'>click here to approve</a>";
+        newtx.msg.module = "Email";
+        newtx.msg.title = "ACTION REQUIRED: Hospital Booking Requested";
+        newtx.msg.message = "<a href='/email?decision=approve&booking_id=512&tx='"+encodeURI(JSON.stringify(tx))+"'>click here to approve</a>";
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -168,10 +168,10 @@ class Hospital extends ModTemplate {
     // create transaction
     //
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-        newtx.transaction.msg.module = this.name;
-        newtx.transaction.msg.request = "Booking Confirmation";
-        newtx.transaction.msg.hid = 31423;
-        newtx.transaction.msg.slot = 123123;
+        newtx.msg.module = this.name;
+        newtx.msg.request = "Booking Confirmation";
+        newtx.msg.hid = 31423;
+        newtx.msg.slot = 123123;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -180,9 +180,9 @@ alert("Propagating Booking COnfirmation!");
     // create email
     //
         newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-        newtx.transaction.msg.module = "Email";
-        newtx.transaction.msg.title = "You have confirmed an appointment as administrator";
-        newtx.transaction.msg.message = "You have requested an appointment at a certain hospital at a certain time. The hospital has received your request and will notify you shortly if the booking is successful.";
+        newtx.msg.module = "Email";
+        newtx.msg.title = "You have confirmed an appointment as administrator";
+        newtx.msg.message = "You have requested an appointment at a certain hospital at a certain time. The hospital has received your request and will notify you shortly if the booking is successful.";
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 alert("And emailed myself!");
@@ -195,9 +195,9 @@ alert("And emailed myself!");
     // create email
     //
         newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-        newtx.transaction.msg.module = "Email";
-        newtx.transaction.msg.title = "YOUR APPOINTMENT IS CONFIRMED!";
-        newtx.transaction.msg.message = "The hospital administrator has approved your booking. Please bring this application to the hospital.";
+        newtx.msg.module = "Email";
+        newtx.msg.title = "YOUR APPOINTMENT IS CONFIRMED!";
+        newtx.msg.message = "The hospital administrator has approved your booking. Please bring this application to the hospital.";
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 

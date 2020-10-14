@@ -14,7 +14,7 @@ module.exports = UpdateBundle = {
       });
     } else {
       data.covid19.sendPeerDatabaseRequest("covid19", "bundles", "*", "deleted <> 1 AND bundles.id = " + data.bundle_id, null, function (res) {
-        html = data.covid19.returnForm("covid19", "bundles", data.bunlde_id, res.rows[0]);
+        html = data.covid19.returnForm("covid19", "bundles", data.bundle_id, res.rows[0]);
         document.querySelector('.modal-form').innerHTML += html;
       });
     }

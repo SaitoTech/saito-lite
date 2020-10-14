@@ -6,7 +6,10 @@ module.exports = ForumSidebar = {
 
   render(app, data) {
     if (this.loaded == 0) {
-      document.querySelector(".arcade-right-sidebar").innerHTML += ForumSidebarTemplate(app);
+      try {
+        document.querySelector(".arcade-left-sidebar-apps").innerHTML += ForumSidebarTemplate(app);
+      } catch (err) {
+      }
     }
     this.loaded = 1;
   },
@@ -17,9 +20,7 @@ module.exports = ForumSidebar = {
 
   addPost(app, title, author, address, date, forum, link, votes, comments) {
 
-    let html = `
-    
-    <div class="arcade-forum-post">
+    let html = `<div class="arcade-forum-post">
       <div class="poster-id">
         <div class="tip">
           <img class="sidebar-forum-identicon" src="${app.keys.returnIdenticon(author)}" alt="${address}">
@@ -36,8 +37,7 @@ module.exports = ForumSidebar = {
           <div class="sub-forum"> in <a href="${forum}">${forum}</a></div>
         </div>
       </div>
-    </div>
-        `;
+    </div>`;
 
     document.querySelector('.arcade-forum-posts').innerHTML += html;
 
