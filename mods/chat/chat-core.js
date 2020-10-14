@@ -170,7 +170,7 @@ class ChatCore extends ModTemplate {
     let prepend_group = 0;
 
     //
-    // main server mastadon is always #1 
+    // main server mastadon is always #1
     //
     if (cg.members) {
       if (cg.members.length >= 1) {
@@ -207,7 +207,7 @@ class ChatCore extends ModTemplate {
   //
   // messages received peer-to-peer arrive here
   //
-  handlePeerRequest(app, req, peer, mycallback) {
+  async handlePeerRequest(app, req, peer, mycallback) {
 
     if (req.request == null) { return; }
     if (req.data == null) { return; }
@@ -323,4 +323,3 @@ class ChatCore extends ModTemplate {
 
 
 module.exports = ChatCore;
-
