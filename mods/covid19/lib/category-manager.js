@@ -17,7 +17,7 @@ module.exports = CategoryManager = {
       SELECT 
         categories.id as 'category_id',
         categories.name as 'category',
-        (SELECT categories_prices.price || ',' || categories_prices.ts FROM categories_prices where categories_prices.category_id = categories.id order by ts desc limit 1) as  'pricets'        
+        (SELECT categories_prices.price || ',' || categories_prices.capacity || ',' || categories_prices.ts FROM categories_prices where categories_prices.category_id = categories.id order by ts desc limit 1) as  'pricets'        
       FROM 
         categories
       WHERE
@@ -26,6 +26,7 @@ module.exports = CategoryManager = {
     var html = `
           <div class="table-head">Category</div>
           <div class="table-head">Price</div>
+          <div class="table-head">Capacity</div>
           <div class="table-head">Last Updated</div>
           <div class="table-head"></div>
         `;
@@ -37,14 +38,16 @@ module.exports = CategoryManager = {
         var date = "";
         var price = "";
         if(row.pricets != null) {
-          date =  new Date(row.pricets.split(',')[1]*1).toISOString().split('T')[0];
+          date =  new Date(row.pricets.split(',')[2]*1).toISOString().split('T')[0];
           price = row.pricets.split(',')[0];
+          capacity = row.pricets.split(',')[1];
         }
 
         if (row.category_data != "") {
 
             html += `<div>${row.category}</div>`;
             html += `<div>${price}</div>`;
+            html += `<div>${s2Number(capacity)}</div>`;
             html += `<div>${date}</div>`;
             html += `
             <div class="grid-buttons ${row.category_id}">

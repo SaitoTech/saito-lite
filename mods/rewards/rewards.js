@@ -19,12 +19,15 @@ class Rewards extends ModTemplate {
 
     this.initial = 10;
     this.payoutRatio = 0.75;
+    this.rewards_publickey = "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
+
 
     this.backupPayout = 50;
     this.registryPayout = 50;
     this.surveyPayout = 50;
     this.suggestPayout = 25;
     this.newsletterPayout = 50;
+    this.referralPayout = 50;
 
     this.referralBonus = 0.1;
 
@@ -38,6 +41,12 @@ class Rewards extends ModTemplate {
       this.browser_active = 1;
     }
 
+  }
+
+  returnServices() {
+    let services = [];
+    services.push({ service: "rewards", domain: "saito" });
+    return services;
   }
 
 
@@ -61,19 +70,43 @@ class Rewards extends ModTemplate {
 
   async onPeerHandshakeComplete(app, peer) {
 
-    let rewards_self = app.modules.returnModule("Rewards");
-
     if (app.BROWSER == 1) {
-      let active_mod = app.modules.returnActiveModule();
+      if (typeof data == 'undefined') { var data = {} };
+
+      this.renderBadges();
+    }
+  }
+
+  renderBadges() {
+    let rewards_self = this.app.modules.returnModule("Rewards");
+
+    if (this.app.BROWSER == 1) {
+      let active_mod = this.app.modules.returnActiveModule();
       if (active_mod != null) {
         if (active_mod.name == "Arcade") {
-          console.log('drawing achievements');
           try {
             if (document.querySelector(".arcade-sidebar-done")) {
-              document.querySelector(".arcade-sidebar-done").innerHTML = "";
-              app.network.sendRequestWithCallback("get achievements", app.wallet.returnPublicKey(), (rows) => {
-                rows.forEach(row => rewards_self.renderAchievmentRow(row));
-              });
+
+              rewards_self.sendPeerRequestWithFilter(
+                () => {
+                  let msg = {};
+                  msg.request = "get achievements";
+                  msg.data = this.app.wallet.returnPublicKey();
+                  return msg;
+                },
+                (rows) => {
+                  document.querySelector(".arcade-sidebar-done").innerHTML = "";
+                  rows.forEach(row => rewards_self.renderAchievmentRow(row));
+                },
+                (peer) => {
+                  if (peer.peer.services) {
+                    for (let z = 0; z < peer.peer.services.length; z++) {
+                      if (peer.peer.services[z].service === "rewards") {
+                        return 1;
+                      }
+                    }
+                  }
+                });
             }
           } catch (err) {
             console.error(err);
@@ -82,6 +115,9 @@ class Rewards extends ModTemplate {
       }
     }
   }
+
+  //              app.network.sendRequestWithCallback("get achievements", app.wallet.returnPublicKey(), 
+
 
   renderAchievmentRow(row) {
     if (typeof (row.label) != "undefined" || typeof (row.icon) != "undefined") {
@@ -113,8 +149,18 @@ class Rewards extends ModTemplate {
     }
 
     if (message.request == "update activities") {
-      var completed = await this.returnEvents(message.data)
+      var completed = await this.returnEvents(message.data);
       mycallback(completed);
+    }
+
+    if (message.request == "user status") {
+      var status = await this.returnUserStatus(message.data);
+      mycallback(status);
+    }
+
+    if (message.request == "user referrals") {
+      var referrals = await this.returnUserreferrals(message.data);
+      mycallback(referrals);
     }
   }
 
@@ -123,12 +169,11 @@ class Rewards extends ModTemplate {
     obj.count = "";
     if (event != "") {
       activities.forEach((activity) => {
-        if (event == activity.event) { 
-          obj.label = activity.title ;
+        if (event == activity.event) {
+          obj.label = activity.title;
           obj.icon = activity.icon;
         }
       });
-      console.info('Event not identified.')
     }
     return obj;
   }
@@ -168,7 +213,7 @@ class Rewards extends ModTemplate {
     }
     if (x > 1000) {
       obj.label = "Master";
-      obj.count = (Math.floor(x / 100)/10).toString() + "k";
+      obj.count = (Math.floor(x / 100) / 10).toString() + "k";
       obj.icon = "<i class='master badge'><span>" + obj.count + "</span></i>";
     }
     return obj;
@@ -211,24 +256,50 @@ class Rewards extends ModTemplate {
   async payoutFirstInstance(address, event, payout) {
     if (await this.checkEvent(address, event) == false) {
       this.makePayout(address, payout, event);
+      let params = {
+        $address: address,
+        $payout_ts: new Date().getTime(),
+        $payout_amt: payout,
+      }
+      let sql = `UPDATE users SET last_payout_ts = $payout_ts, total_payout = total_payout + $payout_amt WHERE address = $address`;
+  
+      await this.app.storage.executeDatabase(sql, params, "rewards");
     }
     this.recordEvent(address, event);
+ 
   }
 
   async onConfirmation(blk, tx, conf, app) {
-    if (app.BROWSER == 1) { return }
+    if (app.BROWSER == 1) {
+      //
+      // only handle our stuff
+      //
+      let txmsg = tx.returnMessage();
+      let rewards_self = app.modules.returnModule("Rewards");
+
+      if (txmsg.module != rewards_self.name) { return; }
+
+      this.renderBadges();
+    }
+
+    if (app.wallet.returnPublicKey() != this.rewards_publickey) { return; } 
 
     if (conf == 0) {
       if (tx.transaction.type == 0) {
         if (this.app.BROWSER == 1) { return; }
         this.updateUsers(tx);
       }
-      if (tx.transaction.msg.origin == "Registry") {
+
+      if (tx.returnMessage().origin == "Registry") {
         this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registryPayout);
       }
     }
   }
 
+  onNewBlock(blk, lc) {
+  //  if (this.app.BROWSER != 1) { return }
+  //  this.renderBadges();
+  }
 
   async updateUsers(tx) {
     try {
@@ -265,7 +336,7 @@ class Rewards extends ModTemplate {
     var payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.payoutRatio);
     var newPayout = Math.ceil(row.last_payout_amt / this.payoutRatio);
     var isGame = 0;
-    if (typeof tx.transaction.msg.game_id != "undefined") { isGame = 1 };
+    if (typeof tx.msg.game_id != "undefined") { isGame = 1 };
     var gameOver = 0;
     if (tx.name == "game over") { gameOver = 1 };
     //welcome folks back if they have been reset - and give me a little somethin.
@@ -282,7 +353,7 @@ class Rewards extends ModTemplate {
         $games_finished: row.games_finished + gameOver,
         $game_tx_count: row.game_tx_count + isGame,
         $latest_tx: tx.transaction.ts,
-        $total_spend: row.total_spend + Number(tx.fees_total)
+        $total_spend: row.total_spend + Number(tx.returnFees())
       }
       sql = `UPDATE users SET last_payout_ts = $last_payout_ts, last_payout_amt = $last_payout_amt, total_payout = $total_payout, tx_count = $tx_count, games_finished = $games_finished, game_tx_count = $game_tx_count, latest_tx = $latest_tx, total_spend = $total_spend WHERE address = $address`
 
@@ -293,7 +364,7 @@ class Rewards extends ModTemplate {
         $games_finished: row.games_finished + gameOver,
         $game_tx_count: row.game_tx_count + isGame,
         $latest_tx: tx.transaction.ts,
-        $total_spend: row.total_spend + Number(tx.fees_total)
+        $total_spend: row.total_spend + Number(tx.returnFees())
       }
       sql = `UPDATE users SET last_payout_ts = $last_payout_ts, tx_count = $tx_count, games_finished = $games_finished, game_tx_count = $game_tx_count, latest_tx = $latest_tx, total_spend = $total_spend WHERE address = $address`
     }
@@ -313,9 +384,9 @@ class Rewards extends ModTemplate {
       //if()
       //let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ($address, $tx_count, $games_finished, $game_tx_count, $first_tx, $latest_tx, $last_payout_ts, $last_payout_amt, $total_payout, $total_spend, $referer);"
       var isGame = 0;
-      if (typeof tx.transaction.msg.game_id != undefined) { isGame = 1 };
+      if (typeof tx.msg.game_id != undefined) { isGame = 1 };
       var referer = ''
-      if (tx.transaction.msg.module == "Encrypt") {
+      if (tx.msg.module == "Encrypt") {
         referer = tx.transaction.to[ii].add;
         this.recordEvent(referer, "user add contact");
       }
@@ -338,7 +409,8 @@ class Rewards extends ModTemplate {
       await this.app.storage.executeDatabase(sql, params, "rewards");
 
       //initial funds sent
-      //this.makePayout(tx.transaction.from[ii].add, this.initial);
+      this.makePayout(tx.transaction.from[ii].add, this.initial);
+      this.makePayout(referer, this.referralPayout, "New Referral User");
 
       return;
     } catch (err) {
@@ -399,6 +471,39 @@ class Rewards extends ModTemplate {
     }
   }
 
+  async returnUserStatus(address) {
+    let sql = "SELECT * from users where address = $address";
+    let params = {
+      $address: address
+    }
+
+    try {
+      let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
+      rows.forEach(row => {
+        row.next_payout_amount = Math.ceil(row.last_payout_amt / this.payoutRatio);
+        row.next_payout_after = Math.ceil((row.total_payout * this.payoutRatio) - row.total_spend);
+      });
+
+      return rows;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async returnUserreferrals(address) {
+    let sql = "SELECT * from users where referer = $address order by total_payout desc";
+    let params = {
+      $address: address
+    }
+
+    try {
+      let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
+      return rows;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  
   async checkEvent(address, event) {
     let sql = "SELECT * FROM events where address = $address and $event = event";
     let params = {
@@ -436,6 +541,9 @@ class Rewards extends ModTemplate {
   }
 
   makePayout(address, amount, event = "") {
+
+    if (this.app.wallet.returnPublicKey() != this.rewards_publickey) { return; }
+
     //send the user a little something.
 
     //work out what for:
@@ -470,13 +578,13 @@ class Rewards extends ModTemplate {
       var change_amount = total_from_amt.minus(total_fees);
       newtx.transaction.to = this.app.wallet.createToSlips(10, address, amount, change_amount);
 
-      newtx.transaction.msg.module = "Email";
+      newtx.msg.module = "Email";
       if (event == "") {
-        newtx.transaction.msg.title = "Saito Rewards - You have been Rewarded";
+        newtx.msg.title = "Saito Rewards - You have been Rewarded";
       } else {
-        newtx.transaction.msg.title = "Saito Rewards: " + event;
+        newtx.msg.title = "Saito Rewards: " + event;
       }
-      newtx.transaction.msg.message = `
+      newtx.msg.message = `
         <p>You have received <span class="boldred">${amount} tokens</span> from the Saito rewards system.</p>
         `;
       newtx = this.app.wallet.signTransaction(newtx);

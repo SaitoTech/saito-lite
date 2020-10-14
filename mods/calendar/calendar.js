@@ -104,12 +104,12 @@ console.log("ADDING APPOINTMENT: " + JSON.stringify(this.appointments));
     //
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.app.wallet.returnPublicKey());
     newtx.transaction.ts   		= new Date().getTime();
-    newtx.transaction.msg.module       	= "Calendar";
-    newtx.transaction.msg.type       	= event_type;
-    newtx.transaction.msg.event_start   = event_start;
-    newtx.transaction.msg.event_end     = event_end;
-    newtx.transaction.msg.event_title   = title;
-    newtx.transaction.msg.event_text    = text;
+    newtx.msg.module       	= "Calendar";
+    newtx.msg.type       	= event_type;
+    newtx.msg.event_start   = event_start;
+    newtx.msg.event_end     = event_end;
+    newtx.msg.event_title   = title;
+    newtx.msg.event_text    = text;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -128,10 +128,10 @@ console.log("ADDING APPOINTMENT: " + JSON.stringify(this.appointments));
   convertTransactionToEvent(tx) {
 
     let eventobj = {};
-        eventobj.title = tx.transaction.msg.event_title;
-        eventobj.start = tx.transaction.msg.event_start;
-        eventobj.end   = tx.transaction.msg.event_end;
-        eventobj.title = tx.transaction.msg.event_title;
+        eventobj.title = tx.msg.event_title;
+        eventobj.start = tx.msg.event_start;
+        eventobj.end   = tx.msg.event_end;
+        eventobj.title = tx.msg.event_title;
         eventobj.backgroundColor = 'green',
         eventobj.borderColor = 'green'
 

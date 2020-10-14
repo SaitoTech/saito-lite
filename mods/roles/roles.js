@@ -54,9 +54,9 @@ Click on this link and we'll see what happens:
       return;
     }
 
-    newtx.transaction.msg.module   = "Email";
-    newtx.transaction.msg.title    = email_title;
-    newtx.transaction.msg.message  = email_text;
+    newtx.msg.module   = "Email";
+    newtx.msg.title    = email_title;
+    newtx.msg.message  = email_text;
     newtx = app.wallet.signTransaction(newtx);
 
     let emailmod = app.modules.returnModule("Email");

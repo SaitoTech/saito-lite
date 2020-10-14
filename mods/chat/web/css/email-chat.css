@@ -111,7 +111,6 @@ p {
   font-weight: bolder;
 }
 
-
 /* chat CSS proper */
 
 .chat-row {
@@ -187,11 +186,10 @@ p {
 
 .chat-room-submit-button {
   justify-self: center;
-  background: var(--saito-cyber-black);
-  padding: 7px 10px;
-  color: white;
-  border-radius: 100px;
+  color: var(--saito-red);
   cursor: pointer;
+  font-size: 2em;
+  margin: 0.1em 0 0 0;
 }
 
 .chat-message-header {
@@ -337,12 +335,12 @@ p {
 }
 
 .chat-box-main {
-  display: flex;
+  display: block;
   flex-direction: column;
   height: 32em;
   grid-area: chat_main;
   overflow-y: scroll;
-overflow-x: hidden;
+  overflow-x: hidden;
   background: linear-gradient(135deg, #ffffff, #eaeaea);
 }
 
@@ -371,7 +369,6 @@ overflow-x: hidden;
   width: 60px;
   height: 60px;
 }
-
 
 .chat-message-text img {
   max-width: 100%;
@@ -475,7 +472,45 @@ overflow-x: hidden;
 }
 
 @media only screen and (max-width: 600px) {
-  .chat-box {
+  .header {
+    width: 100vw;
+  }
+  .chat-box-header-title::after {
+    font-family: sans-serif, 'Courier New', Courier, monospace;
+    content: "\25BC";
+    margin: 0px 10px;
+  }
+  .chat-box-hide .chat-box-header::before {
+    content: "\25B2";
+    margin: 0px 10px;
+  }
+  .chat-box-hide .chat-box-input, .chat-box-hide .chat-box-header-title {
     display: none;
+  }
+  .chat-box {
+        display: none; 
+    height: calc(100vh - 5em);
+    
+    width: calc(100vw -1px);
+    max-height: 50vh;
+  }
+  .chat-manager.min-chat {
+    left: -14px;
+    width: 5em;
+  }
+  .chat-box.chat-box-hide {
+    width: 5em;
+  }
+  .chat-manager {
+    bottom: 1px;
+    right: 1px;
+  }
+}
+
+/*** Hide in Landscape Mode Small Screens ***/
+
+@media screen and (orientation:landscape) and (max-height: 700px) {
+  .chat-manager {
+      display: none;
   }
 }

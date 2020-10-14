@@ -1,7 +1,7 @@
 module.exports = EmailListRowTemplate = (tx, addr_html, helpers) => {
 
-  let message 	= tx.transaction.msg.message;
-  let title   	= tx.transaction.msg.title;
+  let message 	= tx.msg.message;
+  let title   	= tx.msg.title;
   let from      = tx.transaction.from;
   let ts        = tx.transaction.ts;
   let sig 	= tx.transaction.sig;

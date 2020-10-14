@@ -23,7 +23,7 @@ module.exports = [
         id: "addcontact",
         icon: "<i class='fas fa-qrcode'></i>",
         reward: 50,
-        title: "Add Contacts",
+        title: "Refer Friend",
         event: "user add contact",
         description:"Sharing is great. Don't keep Saito to your self - tell your friends.",
         completed: false,

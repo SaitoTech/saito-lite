@@ -42,7 +42,6 @@ class ChatCore extends ModTemplate {
     let keys = this.app.keys.returnKeys();
     for (let i = 0; i < keys.length; i++) {
       if (keys[i].aes_publickey == "") { return; }
-
       let members = [keys[i].publickey, this.app.wallet.returnPublicKey()];
       let newgroup = this.createChatGroup(members);
       this.addNewGroup(newgroup);
@@ -60,7 +59,22 @@ class ChatCore extends ModTemplate {
     this.sendEvent('chat-render-request', {});
   }
 
+
   async onPeerHandshakeComplete(app, peer) {
+
+    //
+    // we only want to process our first group server
+    //
+    // console.log("PEER: " + peer.peer.host);
+    // console.log("OPTIONS: " + JSON.stringify(app.options.peers));
+    //
+    if (peer.peer.endpoint) {
+      if (app.options.peers) {
+        if (app.options.peers.length) {
+          if (peer.peer.endpoint.host != app.options.peers[0].host) { return; }
+        }
+      }
+    }
 
     // if (this.groups.length == 0) {
     let { publickey, name } = peer.peer;
@@ -79,7 +93,7 @@ class ChatCore extends ModTemplate {
     let group_ids = this.groups.map(group => group.id);
 
     let txs = new Promise((resolve, reject) => {
-      app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
+      app.storage.loadTransactionsByKeys(group_ids, "Chat", 25, (txs) => {
         resolve(txs);
       });
     });
@@ -90,7 +104,7 @@ class ChatCore extends ModTemplate {
 
     if (txs.length > 0) {
       txs.forEach(tx => {
-        let { group_id } = tx.transaction.msg;
+        let { group_id } = tx.msg;
         let txmsg = tx.returnMessage();
         let msg_type = tx.transaction.from[0].add == app.wallet.returnPublicKey() ? 'myself' : 'others';
         let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
@@ -141,6 +155,7 @@ class ChatCore extends ModTemplate {
   }
 
   addNewGroup(chatgroup) {
+
     let cg = new ChatGroup(this.app, chatgroup);
 
     if (this.app.options.chat) {
@@ -155,7 +170,26 @@ class ChatCore extends ModTemplate {
 
     cg.is_encrypted = 0;
     cg.initialize(this.app);
-    this.groups.push(cg);
+
+    let prepend_group = 0;
+
+    //
+    // main server mastadon is always #1 
+    //
+    if (cg.members) {
+      if (cg.members.length >= 1) {
+	if (cg.members[0] === this.app.network.peers[0].peer.publickey) {
+	  prepend_group = 1;
+	}
+      }
+    }
+
+    if (prepend_group == 0) {
+      this.groups.push(cg);
+    } else {
+      this.groups.unshift(cg);
+    }
+
   }
 
   //
@@ -179,8 +213,6 @@ class ChatCore extends ModTemplate {
   //
   handlePeerRequest(app, req, peer, mycallback) {
 
-//console.log("REQUEST DETAILS: " + JSON.stringify(req));
-
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 
@@ -191,7 +223,6 @@ class ChatCore extends ModTemplate {
       switch (req.request) {
 
         case "chat message":
-//console.log("RECEIVED A CHAT MESSAGE!");
           this.receiveMessage(app, new saito.transaction(tx.transaction));
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
@@ -200,7 +231,7 @@ class ChatCore extends ModTemplate {
 
           // save state of message
           let archive = this.app.modules.returnModule("Archive");
-          archive.saveTransactionByKey(tx.transaction.msg.group_id, tx);
+          archive.saveTransactionByKey(tx.msg.group_id, tx);
 
           this.app.network.peers.forEach(p => {
             if (p.peer.publickey !== peer.peer.publickey) {
@@ -221,7 +252,6 @@ class ChatCore extends ModTemplate {
     let relay_mod = app.modules.returnModule('Relay');
 
     if (this.relay_moves_onchain_if_possible == 1) {
-console.log("ONCHAIN SEND THIS TX: " + JSON.stringify(tx.transaction));
       tx = this.app.wallet.signTransaction(tx);
       this.app.network.propagateTransaction(tx);
     }
@@ -245,32 +275,38 @@ console.log("ONCHAIN SEND THIS TX: " + JSON.stringify(tx.transaction));
 
     this.groups.forEach(group => {
 
-      if (group.id == txmsg.group_id) {
+      try {
 
-        let from_add = tx.transaction.from[0].add;
-        let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+        if (group.id == txmsg.group_id) {
 
-        this.addrController.fetchIdentifiers([from_add]);
-        let message = Object.assign(txmsg, {
-          sig: tx.transaction.sig,
-          type: msg_type,
-          identicon: this.app.keys.returnIdenticon()
-        });
+          let from_add = tx.transaction.from[0].add;
+          let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
 
-        group.messages.push(message);
+          this.addrController.fetchIdentifiers([from_add]);
+          let message = Object.assign(txmsg, {
+            sig: tx.transaction.sig,
+            type: msg_type,
+            identicon: this.app.keys.returnIdenticon()
+          });
 
-        if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
-          let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
-          let title =  identifier ? identifier : message.publickey;
-          let tmp = document.createElement("DIV");
-          tmp.innerHTML = this.app.crypto.base64ToString(message.message);
-          let clean_message = tmp.innerText;
-          app.browser.sendNotification(title, clean_message, 'chat-message-notification');
-          this.sendEvent('chat_receive_message', message);
+          group.messages.push(message);
+
+          if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
+            let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
+            let title =  identifier ? identifier : message.publickey;
+	    let clean_message = "";
+	    clean_message = this.app.crypto.base64ToString(message.message);
+	    clean_message = clean_message.replace(/<[^>]*>?/gm, '');
+            app.browser.sendNotification(title, clean_message, 'chat-message-notification');
+            this.sendEvent('chat_receive_message', message);
+          }
+
+          this.sendEvent('chat-render-request', {});
         }
 
-        this.sendEvent('chat-render-request', {});
+      } catch (err) {
       }
+
     });
   }
 

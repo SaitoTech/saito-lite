@@ -2,10 +2,9 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
 const clip = require('text-clipper');
-const request = require('request');
-//const http = require('http');
 
 const ForumMain = require('./lib/forum-main/forum-main');
+const ForumMod = require('./lib/forum-main/forum-mod');
 const ForumRightSidebar = require('./lib/forum-right-sidebar/forum-right-sidebar');
 const ForumLeftSidebar = require('./lib/forum-left-sidebar/forum-left-sidebar');
 const ForumTeaser = require('./lib/forum-main/forum-teaser');
@@ -19,7 +18,6 @@ const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
 const fs = require('fs');
-//const request = require('request');
 
 
 
@@ -108,16 +106,16 @@ class Forum extends ModTemplate {
     //
     // arcade will listen, but we need game engine to receive to start initialization
     //
-    tx.transaction.msg.module = "Forum";
-    tx.transaction.msg.type = "post";
+    tx.msg.module = "Forum";
+    tx.msg.type = "post";
 
-    tx.transaction.msg.post_id = post_id;
-    tx.transaction.msg.comment_id = comment_id;
-    tx.transaction.msg.parent_id = parent_id;
-    tx.transaction.msg.forum = forum;
-    tx.transaction.msg.title = title;
-    tx.transaction.msg.content = content;
-    tx.transaction.msg.link = link;
+    tx.msg.post_id = post_id;
+    tx.msg.comment_id = comment_id;
+    tx.msg.parent_id = parent_id;
+    tx.msg.forum = forum;
+    tx.msg.title = title;
+    tx.msg.content = content;
+    tx.msg.link = link;
 
     tx = this.app.wallet.signTransaction(tx);
 
@@ -131,7 +129,7 @@ class Forum extends ModTemplate {
 
     let txmsg = tx.returnMessage();
     let post_id = tx.transaction.sig;
-    if (tx.transaction.msg.post_id != "") { post_id = tx.transaction.msg.post_id; }
+    if (tx.msg.post_id != "") { post_id = tx.msg.post_id; }
 
     let check_sql = "SELECT id FROM posts where post_id = $post_id";
     let check_params = { $post_id: tx.transaction.sig }
@@ -181,7 +179,6 @@ class Forum extends ModTemplate {
 
     resolver.resolve(link, (result) => {
       if (result) {
-        console.log(result.image);
         let sql = "UPDATE posts SET img = '" + result.image + "' WHERE post_id = '" + post_id + "';"
         this.app.storage.executeDatabase(sql, {}, "forum");
       } else {
@@ -190,63 +187,6 @@ class Forum extends ModTemplate {
     });
   }
 
-  /*
-  downloadThumbnailImage(filename, link) {
-
-    if (this.app.BROWSER == 1) { return; }
-
-    let snapshot_width = 100;
-    let snapshot_height = 100;
-    let snapshot_target = link;
-    let snapshot_localfile = filename + ".png";
-    let snapshot_dir = __dirname + "/web/img/thumbnails/";
-    let snapshot_filepath = snapshot_dir + "/" + snapshot_localfile;
-
-    const ImageResolver = require('image-resolver');
-    const Jimp = require('jimp');
-
-    var resolver = new ImageResolver();
-    resolver.register(new ImageResolver.FileExtension());
-    resolver.register(new ImageResolver.MimeType());
-    resolver.register(new ImageResolver.Opengraph());
-    resolver.register(new ImageResolver.Webpage());
-
-    try {
-
-
-      /*
-            resolver.resolve(snapshot_target, (result) => {
-              if ( result ) {
-                snapshot_target = result.image;
-                request.head(snapshot_target, (err, res, body) => {
-                  if (!err) {
-                    request(snapshot_target).pipe(fs.createWriteStream(snapshot_filepath)).on('close', async () => {
-                      let image;
-                      try {
-                        image = await Jimp.read(snapshot_filepath);
-                      } catch(error1) {
-                        let temp = await new Promise(resolve => setTimeout(resolve, 600));
-                        try {
-                          image = await Jimp.read(snapshot_filepath);
-                          debug('Success reading file on second attempt!');
-                        } catch (error2) {
-                          console.log(error2)
-                          return;
-                        }
-                      }
-                      image.resize(snapshot_width, snapshot_height).quality(60).write(snapshot_filepath); 
-                    });
-                  } else {
-                  }
-                });
-              } else {
-              }
-            });
-      
-    } catch (err) {
-    }
-  }
-  */
 
 
 
@@ -258,9 +198,9 @@ class Forum extends ModTemplate {
     //
     // arcade will listen, but we need game engine to receive to start initialization
     //
-    tx.transaction.msg.module = "Forum";
-    tx.transaction.msg.type = vote;
-    tx.transaction.msg.post_id = post_id;
+    tx.msg.module = "Forum";
+    tx.msg.type = vote;
+    tx.msg.post_id = post_id;
 
     tx = this.app.wallet.signTransaction(tx);
 
@@ -280,7 +220,7 @@ class Forum extends ModTemplate {
 
     let check_sql = "SELECT type FROM votes where post_id = $post_id AND publickey = $publickey";
     let check_params = {
-      $post_id: tx.transaction.msg.post_id,
+      $post_id: tx.msg.post_id,
       $publickey: tx.transaction.from[0].add
     }
     let rows = await this.app.storage.queryDatabase(check_sql, check_params, "forum");
@@ -291,13 +231,13 @@ class Forum extends ModTemplate {
     //
     if (already_voted == 1) {
 
-      if (tx.transaction.msg.type == vote_type) { return; }
-      vote_type = tx.transaction.msg.type;
+      if (tx.msg.type == vote_type) { return; }
+      vote_type = tx.msg.type;
       sql = "UPDATE votes SET type = $type WHERE publickey = $publickey AND post_id = $post_id";
       params = {
-        $type: tx.transaction.msg.type,
+        $type: tx.msg.type,
         $publickey: tx.transaction.from[0].add,
-        $post_id: tx.transaction.msg.post_id
+        $post_id: tx.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
 
@@ -306,17 +246,17 @@ class Forum extends ModTemplate {
         sql = "UPDATE posts SET votes = votes-1 WHERE post_id = $post_id";
       }
       params = {
-        $post_id: tx.transaction.msg.post_id
+        $post_id: tx.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
 
     } else {
-      vote_type = tx.transaction.msg.type;
+      vote_type = tx.msg.type;
       sql = "INSERT INTO votes (type, publickey, post_id) VALUES ($type, $publickey, $post_id)";
       params = {
-        $type: tx.transaction.msg.type,
+        $type: tx.msg.type,
         $publickey: tx.transaction.from[0].add,
-        $post_id: tx.transaction.msg.post_id
+        $post_id: tx.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
 
@@ -325,7 +265,7 @@ class Forum extends ModTemplate {
         sql = "UPDATE posts SET votes = votes-1 WHERE post_id = $post_id";
       }
       params = {
-        $post_id: tx.transaction.msg.post_id
+        $post_id: tx.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
 
@@ -335,27 +275,82 @@ class Forum extends ModTemplate {
     let current_time = new Date().getTime();
     let vote_bonus = 1000000;
     let sql_rank = "UPDATE posts SET rank = cast((rank + ($vote_bonus * (2000000/($current_time-unixtime)))) as INTEGER) WHERE post_id = $pid";
-    let params_rank = { $pid: tx.transaction.msg.post_id, $vote_bonus: vote_bonus, $current_time: current_time };
+    let params_rank = { $pid: tx.msg.post_id, $vote_bonus: vote_bonus, $current_time: current_time };
 
     if (vote_type == "downvote") {
       sql_rank = "UPDATE posts SET rank = cast((rank - ($vote_bonus * (2000000/($current_time-unixtime)))) as INTEGER) WHERE post_id = $pid";
     }
-    console.log("UPDATING RANK: " + sql_rank);
     await this.app.storage.executeDatabase(sql_rank, params_rank, "forum");
 
+  }
+
+  createReportTransaction(post_id) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    newtx.msg.module = "Forum";
+    newtx.msg.type = "report";
+    newtx.msg.post_id = post_id;
+    newtx = this.app.wallet.signTransaction(newtx);
+
+    return newtx;
+  }
+
+  createModApproveTransaction(post_id) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    newtx.msg.module = "Forum";
+    newtx.msg.type = "modapprove";
+    newtx.msg.post_id = post_id;
+    newtx = this.app.wallet.signTransaction(newtx);
+
+    return newtx;
+  }
+
+  createModDeleteTransaction(post_id) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    newtx.msg.module = "Forum";
+    newtx.msg.type = "moddelete";
+    newtx.msg.post_id = post_id;
+    newtx = this.app.wallet.signTransaction(newtx);
+
+    return newtx;
   }
 
   createDeleteTransaction(post_id) {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
 
-    newtx.transaction.msg.module = "Forum";
-    newtx.transaction.msg.type = "delete";
-    newtx.transaction.msg.post_id = post_id;
+    newtx.msg.module = "Forum";
+    newtx.msg.type = "delete";
+    newtx.msg.post_id = post_id;
     newtx = this.app.wallet.signTransaction(newtx);
 
     return newtx;
   }
+
+  async receiveReportTransaction(tx) {
+
+    try {
+
+      let txmsg = tx.returnMessage();
+      let post_id = txmsg.post_id;
+
+      let sql = "UPDATE posts SET reported = 1 WHERE post_id = $post_id";
+      let params = { $post_id: post_id }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+    } catch (err) {
+
+    }
+
+    return;
+
+  }
+
 
   async receiveDeleteTransaction(tx) {
 
@@ -392,6 +387,42 @@ class Forum extends ModTemplate {
   }
 
 
+  async receiveModDeleteTransaction(tx) {
+
+    try {
+
+      let txmsg = tx.returnMessage();
+      let post_id = txmsg.post_id;
+
+      let sql = "DELETE FROM posts WHERE post_id = $post_id";
+      let params = { $post_id: post_id }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+    } catch (e) {
+      console.log('ERROR - receiveModDeleteTransaction: ' + e);
+    }
+
+  }
+
+
+  async receiveModApproveTransaction(tx) {
+
+    try {
+
+      let txmsg = tx.returnMessage();
+      let post_id = txmsg.post_id;
+
+      let sql = "UPDATE posts SET reported = 0 WHERE post_id = $post_id";
+      let params = { $post_id: post_id }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+    } catch (e) {
+      console.log('ERROR - receiveDeleteTransaction: ' + e);
+    }
+
+  }
+
+
 
 
   onPeerHandshakeComplete(app, peer) {
@@ -406,41 +437,90 @@ class Forum extends ModTemplate {
       let forum_self = app.modules.returnModule('Forum');
       let where = "1 = 1 AND parent_id = \"\" ORDER BY rank DESC LIMIT 10";
 
-      forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
-        res.rows.forEach(row => {
+      forum_self.sendPeerDatabaseRequestWithFilter(
 
-          let tx = new saito.transaction(JSON.parse(row.tx));
+	"Forum" , 
 
-          let txmsg = tx.returnMessage();
+	`SELECT * FROM posts WHERE ${where}` ,
 
-          let title = txmsg.title;
-          let address = tx.transaction.from[0].add;
-          let author = forum_self.formatAuthor(tx.transaction.from[0].add);
-          let date = forum_self.formatDate(tx.transaction.ts);
-          let votes = row.votes;
-          let comments = row.comments;
-          let forum = "/forum/" + txmsg.forum;
-          let link = "/forum/" + txmsg.forum + "/" + tx.transaction.sig;
+        (res) => {
 
-          identifiers_to_fetch.push(tx.transaction.from[0].add);
+console.log("1 HERE: " + JSON.stringify(res));
 
-          ArcadeSidebar.addPost(app, title, author, address, date, forum, link, votes, comments);
+          if (res.rows) {
+	  if (res.rows.length) {
+          res.rows.forEach(row => {
 
-        });
-        //forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
-      });
 
+            let tx = new saito.transaction(JSON.parse(row.tx));
+            let txmsg = tx.returnMessage();
+	    let subforum = txmsg.forum;
+	    if (subforum == "") { subforum = "main"; }
+
+            let title = txmsg.title;
+            let address = tx.transaction.from[0].add;
+            let author = forum_self.formatAuthor(tx.transaction.from[0].add);
+            let date = forum_self.formatDate(tx.transaction.ts);
+            let votes = row.votes;
+            let comments = row.comments;
+            let forum = "/forum/" + subforum;
+            let link = "/forum/" + subforum + "/" + tx.transaction.sig;
+
+            identifiers_to_fetch.push(tx.transaction.from[0].add);
+
+            ArcadeSidebar.addPost(app, title, author, address, date, forum, link, votes, comments);
+
+          });
+          }
+	  }
+        }
+      )
       return;
     }
 
     if (this.browser_active == 0) { return; }
 
-    let forum_self = this;
+    //
+    // moderation
+    //
+    if (this.view_post_id == "mod") {
+      where_clause = "reported = 1";
 
+      this.sendPeerDatabaseRequestWithFilter(
+
+	"Forum" ,
+
+	`SELECT * FROM posts WHERE ${where_clause}` ,
+
+	(res) => {
+
+	  let forum_self = this;
+	  forum_self.forum.mods = [];
+
+          if (res.rows) {
+
+            res.rows.forEach(row => {
+              let tx = new saito.transaction(row.tx);
+              forum_self.forum.mods.push(tx);
+            });
+
+	    let data = {};
+	    data.forum = forum_self;
+            ForumMod.render(this.app, data);
+            ForumMod.attachEvents(this.app, data);
+
+          }
+        }
+      );
+
+      return;
+    }
+
+    let forum_self = this;
     let loading = "main";
 
     //
-    // load teasers from server
+    // load posts
     //
     where_clause = "";
     if (this.view_forum != 'main') {
@@ -456,106 +536,109 @@ class Forum extends ModTemplate {
       loading = "post";
     }
 
-    this.sendPeerDatabaseRequest("forum", "teasers", "*", where_clause, null, (res, data) => {
-      if (res.rows) {
+    this.sendPeerDatabaseRequestWithFilter(
 
-        let post_ids = [];
+	"Forum" ,
 
-        res.rows.forEach(row => {
+	`SELECT * FROM posts WHERE ${where_clause} ` ,
 
-          let tx = new saito.transaction(row.tx);
-          post_ids.push(tx.transaction.sig);
-          identifiers_to_fetch.push(tx.transaction.from[0].add);
+        (res) => {
 
-          if (loading == "main" || loading == "forum") {
-            try {
-              forum_self.forum.teasers.push(tx);
-            } catch (err) {
-              console.log("Error fetching posts!: " + err);
-            }
-          }
-
-
-          if (loading == "post") {
-            try {
-              if (tx.transaction.msg.parent_id == "") {
-                forum_self.forum.post = tx;
-              } else {
-                forum_self.forum.comments.push(tx);
-              }
-            } catch (err) {
-              console.log("Error fetching posts!: " + err);
-            }
-          }
-
-        });
-
-        data = {};
-        data.forum = forum_self;
-
-        ForumMain.render(this.app, data);
-        ForumMain.attachEvents(this.app, data);
-
-
-        //
-        // fetch upvotes
-        //
-        where_clause = "publickey = '" + app.wallet.returnPublicKey() + "' AND post_id IN (";
-        for (let i = 0; i < post_ids.length; i++) {
-          where_clause += '"' + post_ids[i] + '"';
-          if (i < post_ids.length - 1) { where_clause += ","; } else { where_clause += ") "; }
-        }
-        this.sendPeerDatabaseRequest("forum", "votes", "*", where_clause, null, (res, data) => {
           if (res.rows) {
+            let post_ids = [];
+            res.rows.forEach(row => {
 
-            for (let i = 0; i < res.rows.length; i++) {
+              let tx = new saito.transaction(JSON.parse(row.tx));
+	      tx.transaction.votes = row.votes;
+              post_ids.push(tx.transaction.sig);
+              identifiers_to_fetch.push(tx.transaction.from[0].add);
 
-              let this_post_id = res.rows[i].post_id;
-              let this_vote_type = res.rows[i].type;
-
-              console.log(this_post_id + " -- " + this_vote_type);
-
-              //
-              // upvotes
-              //
-              if (this_vote_type == "upvote") {
-                Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
-                  let post_id = upvote.getAttribute("id");
-                  if (post_id == this_post_id) {
-                    console.log("A");
-                    upvote.getElementsByClassName("post_upvote_arrow")[0].style.color = "#ff8235";
-                  }
-                });
+              if (loading == "main" || loading == "forum") {
+                try {
+                  forum_self.forum.teasers.push(tx);
+                } catch (err) {
+                  console.log("Error fetching posts!: " + err);
+                }
               }
 
-              //
-              // downvotes
-              //
-              if (this_vote_type == "downvote") {
-                Array.from(document.getElementsByClassName('post_downvote')).forEach(upvote => {
-                  let post_id = upvote.getAttribute("id");
-                  if (post_id == this_post_id) {
-                    console.log("B");
-                    upvote.getElementsByClassName("post_downvote_arrow")[0].style.color = "#ff8235";
+              if (loading == "post") {
+                try {
+                  if (tx.msg.parent_id == "") {
+                    forum_self.forum.post = tx;
+                  } else {
+                    forum_self.forum.comments.push(tx);
                   }
-                });
+                } catch (err) {
+                  console.log("Error fetching posts!: " + err);
+                }
               }
 
+            });
 
+            data = {};
+            data.forum = forum_self;
+
+            ForumMain.render(this.app, data);
+            ForumMain.attachEvents(this.app, data);
+
+if (post_ids.length > 0) {
+            //
+            // fetch upvotes
+            //
+            where_clause = "publickey = '" + app.wallet.returnPublicKey() + "' AND post_id IN (";
+            for (let i = 0; i < post_ids.length; i++) {
+              where_clause += '"' + post_ids[i] + '"';
+              if (i < post_ids.length - 1) { where_clause += ","; } else { where_clause += ") "; }
             }
-          }
-        });
+            this.sendPeerDatabaseRequestWithFilter(
 
-        //
-        // fetch identifiers
-        //
-        forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+	      "Forum" ,
 
+	      `SELECT * FROM votes WHERE ${where_clause}` ,
 
+	      (res) => {
+                if (res.rows) {
 
+                for (let i = 0; i < res.rows.length; i++) {
 
+                  let this_post_id = res.rows[i].post_id;
+                  let this_vote_type = res.rows[i].type;
+
+                  if (this_vote_type == "upvote") {
+                    Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
+                      let post_id = upvote.getAttribute("id");
+                      if (post_id == this_post_id) {
+                        upvote.getElementsByClassName("post_upvote_arrow")[0].style.color = "#ff8235";
+                      }
+                    });
+                  }
+
+                  //
+                  // downvotes
+                  //
+                  if (this_vote_type == "downvote") {
+                    Array.from(document.getElementsByClassName('post_downvote')).forEach(upvote => {
+                      let post_id = upvote.getAttribute("id");
+                      if (post_id == this_post_id) {
+                        upvote.getElementsByClassName("post_downvote_arrow")[0].style.color = "#ff8235";
+                      }
+                    });
+                  }
+
+                }
+              }
+            }
+          );
+}
+
+          //
+          // fetch identifiers
+          //
+          forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+
+        }
       }
-    });
+    );
   }
 
 
@@ -599,7 +682,7 @@ class Forum extends ModTemplate {
     Header.attachEvents(app, data);
 
     if(getPreference('darkmode')) {
-      addStyleSheet("/forum/dark.css")
+      addStyleSheet("/forum/dark.css");
     }
 
     let data = {};
@@ -630,13 +713,31 @@ class Forum extends ModTemplate {
 
     let forum_self = this;
 
+
+    expressapp.get('/forum/mod', async (req, res) => {
+
+      let image = req.protocol + '://' + req.get('host') + "/forum/img/forum-logo.png";
+      let title = "Saito Forum";
+      let description = "The Saito forum is an open place to share ideas, information and links.";
+
+      let data = fs.readFileSync(__dirname + '/web/pages.html', 'utf8', (err, data) => { });
+      data = data.replace('POST_ID', "mod");
+      res.setHeader('Content-type', 'text/html');
+      res.charset = 'UTF-8';
+      res.write(data);
+      res.end();
+      return;
+
+    });
+
+
+
     expressapp.get('/forum/:subforum', async (req, res) => {
 
       let image = req.protocol + '://' + req.get('host') + "/forum/img/forum-logo.png";
       let title = "Saito Forum";
       let description = "The Saito forum is an open place to share ideas, information and links.";
       let url = req.protocol + '://' + req.get('host') + "/forum/";
-
       let subforum = "";
 
       if (req.params.subforum) { subforum = req.params.subforum; }
@@ -668,11 +769,7 @@ class Forum extends ModTemplate {
       if (req.params.subforum) { subforum = req.params.subforum; }
       if (req.params.post_id) { post_id = req.params.post_id; }
 
-
       let sql = "SELECT img, title, content FROM posts WHERE post_id = '" + post_id + "' LIMIT 1";
-
-      console.log(sql);
-
       let rows = await this.app.storage.queryDatabase(sql, {}, 'forum');
 
       if (rows) {
@@ -684,7 +781,6 @@ class Forum extends ModTemplate {
           description = clip(row.content, 300)
         });
       }
-
 
       let data = fs.readFileSync(__dirname + '/web/pages.html', 'utf8', (err, data) => { });
       if (post_id != "") { data = data.replace('POST_ID', post_id); }
@@ -700,6 +796,7 @@ class Forum extends ModTemplate {
       res.end();
       return;
     });
+
 
   }
 
@@ -745,8 +842,7 @@ class Forum extends ModTemplate {
 
 
 
-
-    if (msg.request === "forum load teasers") {
+    if (msg.request === "forum load posts") {
 
       let res = {};
       res.err = "";
@@ -772,8 +868,6 @@ class Forum extends ModTemplate {
 
       let sql = "SELECT tx, votes, comments, img FROM posts WHERE " + where_clause + " ORDER BY rank DESC LIMIT 100";
 
-      console.log(sql);
-
       let rows2 = await this.app.storage.queryDatabase(sql, {}, 'forum');
 
       if (rows2) {
@@ -781,7 +875,7 @@ class Forum extends ModTemplate {
 
           let txobj = JSON.parse(rows2[i].tx);
           let newtx = new saito.transaction(txobj);
-          let thisurl = newtx.transaction.msg.link;
+          let thisurl = newtx.msg.link;
           if (thisurl.indexOf("ttp") == -1) { thisurl = "http://" + thisurl; }
           try {
             let linkurl = new URL(thisurl);
@@ -818,20 +912,32 @@ class Forum extends ModTemplate {
 
         let forum_self = app.modules.returnModule("Forum");
 
-        if (tx.transaction.msg.type == "post") {
+        if (tx.msg.type == "post") {
           forum_self.receivePostTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "upvote") {
+        if (tx.msg.type == "upvote") {
           forum_self.receiveVoteTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "downvote") {
+        if (tx.msg.type == "downvote") {
           forum_self.receiveVoteTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "delete") {
+        if (tx.msg.type == "delete") {
           forum_self.receiveDeleteTransaction(tx);
+        }
+
+        if (tx.msg.type == "moddelete") {
+          forum_self.receiveModDeleteTransaction(tx);
+        }
+
+        if (tx.msg.type == "modapprove") {
+          forum_self.receiveModApproveTransaction(tx);
+        }
+
+        if (tx.msg.type == "report") {
+          forum_self.receiveReportTransaction(tx);
         }
       }
     }
@@ -925,16 +1031,6 @@ class Forum extends ModTemplate {
 
 }
 module.exports = Forum;
-
-
-
-
-
-
-
-
-
-
 
 
 

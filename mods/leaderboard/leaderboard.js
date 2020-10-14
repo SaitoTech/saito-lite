@@ -39,10 +39,12 @@ class Leaderboard extends ModTemplate {
     //
     // main-panel games
     //
-    this.app.modules.respondTo("arcade-games").forEach(mod => {
-      this.mods.push(mod);
-      this.affix_callbacks_to.push(mod.name);
-    });
+    if (this.app.modules.respondTo("arcade-games")) {
+      this.app.modules.respondTo("arcade-games").forEach(mod => {
+        this.mods.push(mod);
+        this.affix_callbacks_to.push(mod.name);
+      });
+    }
 
   }
 
@@ -55,14 +57,16 @@ class Leaderboard extends ModTemplate {
 
   }
 
+
+
+
   onPeerHandshakeComplete(app, peer) {
 
     let leaderboard_self = app.modules.returnModule("Leaderboard");
+    let arcade_self = app.modules.returnModule("Arcade");
 
-    
-
-
-    if (app.modules.returnModule('Arcade').browser_active == 1) {
+    if (arcade_self == null) { return ; }
+    if (arcade_self.browser_active == 1) {
 
       let installed_games = "(";
       let identifiers_to_fetch = [];
@@ -72,58 +76,70 @@ class Leaderboard extends ModTemplate {
         if (i < this.mods.length - 1) { installed_games += ","; }
       }
       installed_games += ")";
-      var where = "module IN " + installed_games + " ORDER BY ranking desc, games desc LIMIT 100"
 
-      app.modules.returnModule("Leaderboard").sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
+      app.modules.returnModule("Leaderboard").sendPeerDatabaseRequestWithFilter(
 
-        res.rows.forEach(row => {
-          var player = "other";
-          if (row.publickey == app.wallet.returnPublicKey()) {
-            player = "me";
-          }
+	"Leaderboard" ,
 
-	  let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
-	  if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
+	`SELECT * FROM leaderboard WHERE module IN ${installed_games} ORDER BY ranking desc, games desc LIMIT 100` ,
 
-          leaderboard_self.rankings[row.module].push({
-            "address": row.publickey ,
-            "publickey": app.keys.returnIdentifierByPublicKey(row.publickey, true),
-            "player": player,
-            "games": row.games,
-            "ranking": row.ranking,
+	(res) => {
+
+	  if (res.rows) {
+          res.rows.forEach(row => {
+
+            let player = "other";
+            if (row.publickey == app.wallet.returnPublicKey()) { player = "me"; }
+            let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
+            if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
+
+            leaderboard_self.rankings[row.module].push({
+              "address": row.publickey ,
+              "publickey": app.keys.returnIdentifierByPublicKey(row.publickey, true),
+              "player": player,
+              "games": row.games,
+              "ranking": row.ranking,
+            });
+
           });
-        });
-
-        let html = '';
-        let shown = 0;
-        let loop = 0;
-        let styledata = "display:grid";
-        for (var z in leaderboard_self.rankings) {
-          if (leaderboard_self.rankings[z].length > 0) {
-            html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
-            for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
-              let entry = leaderboard_self.rankings[z][i];
-              html += `<div class="${entry.player} playername saito-address saito-address-${entry.address}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
-            }
-            if (shown == 0) {
-              document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
-            }
-            shown = 1;
-            this.carousel_idx = loop;
-            styledata = "display:none";
-            html += '</div>';
           }
-          loop++;
+
+          let html = '';
+          let shown = 0;
+          let loop = 0;
+          let styledata = "display:grid";
+          for (var z in leaderboard_self.rankings) {
+            if (leaderboard_self.rankings[z].length > 0) {
+              html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
+              for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
+                let entry = leaderboard_self.rankings[z][i];
+                html += `<div class="${entry.player} playername saito-address saito-address-${entry.address}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
+              }
+              if (shown == 0) {
+                document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
+              }
+              shown = 1;
+              this.carousel_idx = loop;
+              styledata = "display:none";
+              html += '</div>';
+            }
+            loop++;
+          }
+
+          leaderboard_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+
+          try {
+            document.querySelector(".leaderboard-container").innerHTML = html;
+            document.querySelectorAll('.me.playername').forEach(el => {
+              el.scrollIntoView();
+            });
+            leaderboard_self.startCarousel(leaderboard_self.mods);
+          } catch (err) {
+            console.log(err);
+          }
         }
 
-        leaderboard_self.addrController.fetchIdentifiers(identifiers_to_fetch);
-
-        document.querySelector(".leaderboard-container").innerHTML = html;
-        document.querySelectorAll('.me.playername').forEach(el => {
-          el.scrollIntoView();
-        });
-        leaderboard_self.startCarousel(leaderboard_self.mods);
-      });
+      );
     }
   }
 
@@ -146,8 +162,13 @@ class Leaderboard extends ModTemplate {
       if (txmsg.request == "gameover") {
 
         console.log('+++++++++++++++++++++++++++++++++++++++');
-        console.log('++++++' + tx.transaction.sig);
+        console.log('+++ LEADRBRD +++' + tx.transaction.sig);
         console.log('+++++++++++++++++++++++++++++++++++++++');
+
+        if (txmsg.winner === "") { 
+console.log("NO WINNER PROVIDED -- OUT!");
+	  return; 
+	} // tie game
 
         winner.publickey = txmsg.winner;
         module = txmsg.module;
@@ -175,7 +196,8 @@ console.log(" ... update ranking");
 
     if (this.app.BROWSER == 1) { return; }
 
-    if (winner.publickey == loser.publickey) { console.log("Winner and Loser are the Same Player"); return; }
+    if (winner.publickey === "") {              console.log("Leaderboard: winner is undefined"); return; }
+    if (winner.publickey === loser.publickey) { console.log("Leaderboard: inner and Loser are the Same Player"); return; }
 
     //
     // magic ranking system

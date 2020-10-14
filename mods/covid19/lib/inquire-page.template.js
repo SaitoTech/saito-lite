@@ -22,6 +22,9 @@ module.exports = ProductPageTemplate = () => {
  
 
   <table class="inq-grid" id="inq-grid"></table>
+  <div class="contact-grid grid-2-columns">
+    <button id="keep-shopping"><i class="fas fa-cart-plus"></i> Add Items</button>
+  </div>
   <hr />
   <div class="contact-grid grid-4-columns">
     <button id="copy-product-list"><i class="fas fa-print"></i> Download as PDF</button>
@@ -39,10 +42,7 @@ module.exports = ProductPageTemplate = () => {
     <!--div><i class="fas fa-phone-alt"></i> Phone:</div><div>+123 4567 8910</div-->
   </div>
 
-  <div class="contact-grid grid-2-columns">
-  <button id="keep-shopping"><i class="fas fa-cart-plus"></i> Add Items</button>
-  </div>
-
+ 
   <p>
 
   This form will auto-save as you change it. To add new items just click on "Add Items". Your existing list will be available here the next time you return to this page.

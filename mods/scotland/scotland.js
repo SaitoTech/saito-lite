@@ -1,5 +1,6 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 const GameTemplate = require('../../lib/templates/gametemplate');
+//const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -41,9 +42,10 @@ class Scotland extends GameTemplate {
 
 
     //
-    //
+    // custom menu items? manually instantiate
     //
     this.hud = new GameHud(this.app, this.menuItems());
+    this.hud.mode = 0;
 
   }
 
@@ -104,12 +106,38 @@ class Scotland extends GameTemplate {
 
 
   initializeHTML(app) {
+
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
-    $('.gameboard').css('zoom',this.gameboardZoom);
+//    $('.gameboard').css('zoom',this.gameboardZoom);
+
+
+    //
+    // add card events -- text shown and callback run if there
+    //
+    this.hud.mode = 0;
+    //this.hud.addCardType("logcard", "", null);
+    //if (!app.browser.isMobileBrowser(navigator.userAgent)) {
+    //  this.hud.cardbox.skip_card_prompt = 1;
+    //}
+
+    this.hud.render(app, this);
+
+    try {
+      if (app.browser.isMobileBrowser(navigator.userAgent)) {
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+      } else {
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+      }
+    } catch (err) {}
+
+
+
   }
 
 
@@ -177,12 +205,6 @@ class Scotland extends GameTemplate {
       $(divname).css('height', this.scale(75)+"px");
 
     }
-
-    //
-    // make board draggable
-    //
-    var element = document.getElementById('gameboard');
-    if (element !== null) { helpers.hammer(element); }
 
   }
 
@@ -1109,7 +1131,7 @@ console.log("move player 3");
     locations['39'] = { top : 660 , left : 3325 , taxi : ['25','26','51','52'] , underground : [] , bus : [] , ferry : [] }
 
     locations['40'] = { top : 825 , left : 3723 , taxi : ['27','41','52','53'] , underground : [] , bus : [] , ferry : [] }
-    locations['41'] = { top : 750 , left : 3895 , taxi : ['28','29','40','54'] , underground : [] , bus : [] , ferry : [] }
+    locations['41'] = { top : 750 , left : 3895 , taxi : ['28','29','40','54'] , underground : [] , bus : ['15','29','52','87'] , ferry : [] }
     locations['42'] = { top : 750 , left : 4810 , taxi : ['29','30','56','72'] , underground : [] , bus : ['72','7','29'] , ferry : [] }
     locations['43'] = { top : 855 , left : 75 , taxi : ['18','31','57'] , underground : [] , bus : [] , ferry : [] }
     locations['44'] = { top : 955 , left : 585 , taxi : ['31','32','58'] , underground : [] , bus : [] , ferry : [] }
@@ -1120,7 +1142,7 @@ console.log("move player 3");
     locations['49'] = { top : 1034 , left : 2501 , taxi : ['36','50','66'] , underground : [] , bus : [] , ferry : [] }
 
     locations['50'] = { top : 877 , left : 2740 , taxi : ['49','37','38'] , underground : [] , bus : [] , ferry : [] }
-    locations['51'] = { top : 923 , left : 3237 , taxi : ['67','38','39','52','66'] , underground : [] , bus : [] , ferry : [] }
+    locations['51'] = { top : 923 , left : 3237 , taxi : ['67','38','39','52','68'] , underground : [] , bus : [] , ferry : [] }
     locations['52'] = { top : 855 , left : 3488 , taxi : ['51','39','40','69'] , underground : [] , bus : ['41','13','86','67'] , ferry : [] }
     locations['53'] = { top : 1011 , left : 3765 , taxi : ['69','40','54'] , underground : [] , bus : [] , ferry : [] }
     locations['54'] = { top : 948 , left : 3958 , taxi : ['53','41','55','70'] , underground : [] , bus : [] , ferry : [] }

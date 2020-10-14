@@ -1,12 +1,24 @@
 
+.main {
+  display: block;
+  width: 0px;
+  height: 0px;
+  margin: 0px;
+  padding: 0px;
+}
+
 .gameboard {
-  position: relative;
   background-image: url("/scotland/img/gameboard-large.jpg");
-  background-size: cover;
   width: 5135px;
   height: 3829px;
 }
 
+.hud-menu {
+  width: 300px;
+}
+.hud-controls {
+ display: none;
+}
 
 .pawn {
   width: 75px;
@@ -14,22 +26,6 @@
   position: relative;
   background-color: yellow;
 }
-
-.cardbox {
-  position: absolute;
-  height: 48vh;
-  max-height: 520px;
-  width: calc(48vh * 0.72110);
-  max-width: 375px;
-  background-size: cover;
-  z-index: 20;
-  display: none;
-  top: 27%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-
 
 .location {
  position: absolute;

@@ -43,12 +43,12 @@ class Tutorial02 extends ModTemplate {
       // create transaction with chat message
       //
       let newtx = app.wallet.createUnsignedTransaction(app.wallet.returnPublicKey(), 0.0, 0.0);
-          newtx.transaction.msg.module = "Chat";
-          newtx.transaction.msg.request = "chat message";
-          newtx.transaction.msg.group_id = newgroup.id;
-          newtx.transaction.msg.message = "Hey, you just received an email";
-          newtx.transaction.msg.publickey = app.wallet.returnPublicKey();
-  	  newtx.transaction.msg.timestamp = new Date().getTime();
+          newtx.msg.module = "Chat";
+          newtx.msg.request = "chat message";
+          newtx.msg.group_id = newgroup.id;
+          newtx.msg.message = "Hey, you just received an email";
+          newtx.msg.publickey = app.wallet.returnPublicKey();
+  	  newtx.msg.timestamp = new Date().getTime();
       newtx = app.wallet.signTransaction(newtx);
 
       // 

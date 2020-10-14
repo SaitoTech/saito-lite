@@ -1,0 +1,285 @@
+* {
+  --card-width: 110px;
+  --card-spacing: calc(var(--card-width) * 0.25);
+}
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.played_cards {
+  position: absolute;
+  top: calc(50% - var(--card-width));
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.card {
+  width: var(--card-width);
+}
+
+.mini-cardfan-holder {
+  position: relative;
+  z-index: -9;
+}
+.mini-cardfan div {
+  transform: rotate(6deg);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.mini-cardfan div img {
+  margin-bottom: 10em;
+}
+
+/*
+.p3 .mini-cardfan-holder, .p4 .mini-cardfan-holder, .p5 .mini-cardfan-holder {
+  transform: rotate(180deg);
+}
+*/
+
+.hud-cardbox {
+  top: 40%;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.status-cardbox {
+  width: 80vw;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 calc(var(--card-width) * 0.75);
+}
+
+.hud-long .hud-body .status .status-cardbox {
+  grid-template-columns: repeat( auto-fit, minmax(calc(var(--card-width) * 0.25), 1fr));
+}
+
+.hud-body {
+  overflow-y: hidden;
+}
+
+.player-info-hand-cards {
+  position: absolute;
+  font-size: 4em;
+  z-index: 99;
+  top: 60px;
+  left: 60px;
+  font-weight: bold;
+  border: 1px solid #fff;
+  padding: 20px;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  line-height: 1.5em;
+  text-align: center;
+  background: #444a;
+}
+
+.main {
+  margin-top: unset;
+  padding: unset;
+}
+
+.gameboard {
+  position: absolute;
+  background-image: url("img/gameboard.jpg");
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.player-info {
+  width: 25vh;
+  height: 20vh;
+  background-color: #4448;
+  color: #fff;
+  padding: 1em;
+  position: absolute;
+}
+
+.player-info.p1 {
+  min-width: 30vh;
+  height: 32vh;
+  bottom: 1vh;
+  left: 43vw;
+  transform: translateX(-50%);
+  width: 16vw;
+}
+
+.player-info-name {
+  font-size: 3vh;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-info-chips {
+  padding: 0.5em;
+  text-align: center;
+  font-size: 3vh;
+}
+
+.player-info.p6 {
+  left: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.player-info.p5 {
+  left: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.player-info.p4 {
+  left: 50vw;
+  top: 1em;
+  transform: translateX(-50%);
+}
+
+.player-info.p3 {
+  right: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.player-info.p2 {
+  right: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.p1 .hand {
+  display: none;
+}
+
+.p4 .hand, .p3 .hand, .p2 .hand {
+  right: 15vh;
+  top: 2vh;
+}
+
+.p5 .hand, .p6 .hand {
+  left: 24vh;
+  top: 2vh;
+}
+
+.chat-box {
+  height: unset !important;
+}
+
+.chat-box-main {
+  max-height: 20vh !important;
+}
+
+.menu-player {
+  font-size: 2vh;
+  font-weight: bolder;
+}
+
+.smallblind::before {
+  content: "◉";
+  margin-right: 0.5em;
+  color: aqua;
+  -webkit-text-stroke: 1px #444;
+}
+
+.bigblind::before {
+  content: "◉";
+  margin-right: 0.5em;
+  color: yellow;
+  -webkit-text-stroke: 1px #444;
+}
+
+.dealerbutton::before {
+  content: "⬤";
+  margin-right: 0.5em;
+  color: #fff;
+  ;
+  -webkit-text-stroke: 1px #444;
+}
+
+@media all and (max-aspect-ratio:13/9) {
+  .player-info-hand .card {
+    width: 110px;
+    1G
+  }
+  .p4 .hand, .p5 .hand, .p3 .hand {
+    right: -3vh;
+    left: unset;
+    top: 9vh;
+  }
+  .p6 .hand {
+    right: -3vw;
+    left: unset;
+    top: -9vh;
+  }
+  .p2 .hand {
+    right: -3vw;
+    top: -9vh;
+  }
+  .player-info {
+    width: 25vw;
+    height: 12vh;
+    background-color: #4448;
+    color: #fff;
+    padding: 1em;
+    position: absolute;
+  }
+  .player-info.p1 {
+    width: 24vw;
+    height: 43vh;
+    bottom: 0;
+    left: unset;
+    right: 25vw;
+    transform: none;
+    min-width: unset;
+  }
+  .player-info.p4 {
+    left: 50vw;
+    top: 1em;
+    transform: translateX(-50%);
+  }
+  .player-info.p5 {
+    left: 1em;
+    top: 1em;
+    transform: none;
+  }
+  .player-info.p3 {
+    right: 1em;
+    top: 1em;
+    transform: none;
+  }
+  .player-info.p6 {
+    left: 1em;
+    top: 42vh;
+    transform: translateY(-50%);
+  }
+  .player-info.p2 {
+    right: 1em;
+    top: 42vh;
+    transform: translateY(-50%);
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  * {
+    --card-width: 10vw;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .player-info.p1 {
+    width: 50vw;
+    right: 0;
+    left: unset;
+    transform: unset;
+  }
+}

@@ -111,9 +111,9 @@ class Encrypt extends ModTemplate {
     if (recipient == "") { return; }
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (parties_to_exchange * this.app.wallet.wallet.default_fee));
-    tx.transaction.msg.module = this.name;
-    tx.transaction.msg.request = "key exchange request";
-    tx.transaction.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
+    tx.msg.module = this.name;
+    tx.msg.request = "key exchange request";
+    tx.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
 
     //
     // does not currently support n > 2
@@ -146,10 +146,10 @@ class Encrypt extends ModTemplate {
 
     var newtx = this.app.wallet.createUnsignedTransaction(remote_address, 0, fee);
     if (newtx == null) { return; }
-    newtx.transaction.msg.module = "Encrypt";
-    newtx.transaction.msg.request = "key exchange confirm";
-    newtx.transaction.msg.tx_id = tx.transaction.id;		// reference id for parent tx
-    newtx.transaction.msg.bob = bob_publickey;
+    newtx.msg.module = "Encrypt";
+    newtx.msg.request = "key exchange confirm";
+    newtx.msg.tx_id = tx.transaction.id;		// reference id for parent tx
+    newtx.msg.bob = bob_publickey;
     newtx = this.app.wallet.signTransaction(newtx);
 
     this.app.network.propagateTransaction(newtx);

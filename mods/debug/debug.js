@@ -55,10 +55,10 @@ class Debug extends ModTemplate {
       }
 
       newtx.transaction.from[0].add  = app.wallet.returnPublicKey();
-      newtx.transaction.msg.module   = "Email";
-      newtx.transaction.msg.title    = "Wallet debug from " + app.wallet.returnPublicKey();
-      newtx.transaction.msg.message  = "<div>" + document.querySelector(".debug-message").innerHTML + "</div></hr>"
-      newtx.transaction.msg.message += "<pre id='message-json'>" + JSON.stringify(app.options, null, 2) + "</pre>";
+      newtx.msg.module   = "Email";
+      newtx.msg.title    = "Wallet debug from " + app.wallet.returnPublicKey();
+      newtx.msg.message  = "<div>" + document.querySelector(".debug-message").innerHTML + "</div></hr>"
+      newtx.msg.message += "<pre id='message-json'>" + JSON.stringify(app.options, null, 2) + "</pre>";
 
       newtx = app.wallet.signTransaction(newtx);
       app.network.propagateTransaction(newtx);

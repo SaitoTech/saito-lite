@@ -1,7 +1,7 @@
 module.exports = ForumCommentTemplate = (app, data, tx) => {
 
   let cauthor = data.forum.formatAuthor(tx.transaction.from[0].add);
-  let post_id = tx.transaction.msg.post_id || tx.transaction.sig;
+  let post_id = tx.msg.post_id || tx.transaction.sig;
 
   return `
     <div class="comment" style="margin-left: ${data.forum.forum.comment_indent}px">
@@ -19,7 +19,7 @@ module.exports = ForumCommentTemplate = (app, data, tx) => {
 
 
       <div class="comment-author">posted by <span class="comment-author">${cauthor}</span></div>
-      <div class="comment-text">${tx.transaction.msg.content}</div>
+      <div class="comment-text">${tx.msg.content}</div>
 
       <div class="comment-add-comment comment-add-comment-${tx.transaction.sig}" id="comment-add-comment">
         <textarea class="comment-add-comment-textarea-${tx.transaction.sig}" id="comment-add-comment-textarea"></textarea>

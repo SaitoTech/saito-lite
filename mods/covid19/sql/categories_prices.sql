@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS categories_prices (
 
   category_id INTEGER ,
   price FLOAT ,
+  capactity INTEGER,
   ts INTEGER ,
 
   deleted INTEGER default 0,

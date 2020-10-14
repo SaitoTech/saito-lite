@@ -6,13 +6,19 @@ const SupplierPortal = require('./lib/supplier-portal');
 const FileManager = require('./lib/file-manager');
 const BundleManager = require('./lib/bundle-manager');
 const CategoryManager = require('./lib/category-manager')
-
+const OrderManager = require('./lib/order-manager')
+const OrderTracker = require('./lib/orders/order-tracker');
+const RequestPhoto = require('./lib/orders/request-photo');
 const InquirePage = require('./lib/inquire-page');
 
 const Certification = require('./lib/certification');
 
 const Header = require('./lib/header/covid_header');
 const AddressController = require('../../lib/ui/menu/address-controller');
+
+const utils = require('./lib/utils/utils');
+
+
 
 
 
@@ -43,6 +49,8 @@ class Covid19 extends DBModTemplate {
     this.definitions = {};
 
     this.active_category_id = 0;  // for back button
+
+    Object.assign(Covid19.prototype, utils)
 
 
     return this;
@@ -156,33 +164,8 @@ class Covid19 extends DBModTemplate {
       var urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('mode')) {
         var mode = urlParams.get('mode');
-        switch (mode) {
-          case 'home':
-            data.covid19.renderPage("home", app, data);
-            break;
-          case 'customer':
-            data.covid19.renderPage("customer", app, data);
-            break;
-          case 'supplier':
-            data.covid19.renderPage("supplier", app, data);
-            break;
-          case 'supplier-profile':
-            data.covid19.renderPage("supplier-profile", app, data);
-            break;
-          case 'file-manager':
-            data.covid19.renderPage("file-manager", app, data);
-            break;
-          case 'bundle-manager':
-            data.covid19.renderPage("bundle-manager", app, data);
-            break;
-          case 'category-manager':
-            data.covid19.renderPage("category-manager", app, data);
-            break;
-          case 'default':
-            SplashPage.render(app, data);
-            SplashPage.postrender(app, data);
-            SplashPage.attachEvents(app, data);
-        }
+        data.covid19.renderPage(mode, app, data);
+       
       } else {
         SplashPage.render(app, data);
         SplashPage.postrender(app, data);
@@ -195,6 +178,7 @@ class Covid19 extends DBModTemplate {
   renderPage(page = "home", app, data) {
 
     data.covid19 = this;
+    var urlParams = new URLSearchParams(window.location.search);
 
     if (page == "home") {
       data.covid19.active_category_id = 0;
@@ -232,6 +216,33 @@ class Covid19 extends DBModTemplate {
     if (page == "category-manager") {
       CategoryManager.render(app, data);
       CategoryManager.attachEvents(app, data);
+    };
+
+    if (page == "order-tracker") {
+      OrderTracker.render(app, data);
+      OrderTracker.attachEvents(app, data);
+    }
+
+    if (page == "order-photo") {
+      RequestPhoto.render(app, data);
+      RequestPhoto.attachEvents(app, data);
+    }
+
+    if (page == "order-manager") {
+      if (urlParams.get('order')) {
+        if (urlParams.get('order') == 'new') {
+          data.order_id = "";
+          UpdateOrder.render(app, data);
+          UpdateOrder.attachEvents(app, data);
+        } else {
+          data.order_id = urlParams.get('order');
+          UpdateOrder.render(app, data);
+          UpdateOrder.attachEvents(app, data);
+        }
+      } else {
+        OrderManager.render(app, data);
+        OrderManager.attachEvents(app, data);
+      }
     };
 
   }
@@ -336,7 +347,41 @@ class Covid19 extends DBModTemplate {
 
       html += "";
       document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
-      this.returnCerts(rows[i].product_id, "certsfor-");
+      //utils.returnCerts(rows[i].product_id, "certsfor-");
+      //returnCerts(id, prefix) {
+        var id = rows[i].product_id;
+
+        // should this be generalised to module wide?
+        var module_self = this;
+    
+        var sql = `
+          select 
+            pc.product_id as 'product_id', 
+            c.name as 'Name', 
+            note, 
+            pc.id as 'id',
+            'certifications' as 'source'
+          from 
+            certifications as 'c' 
+          JOIN 
+            products_certifications as 'pc'
+        where 
+          c.id = pc.certification_id and pc.product_id = ${id};
+         `;
+        /*
+        var fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
+        var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+        var where = "c.id = pc.certification_id and pc.product_id = " + id;
+        this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
+        */
+        this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+    
+          if (res.rows.length > 0) {
+            var el = document.getElementById("certsfor-" + res.rows[0].product_id);
+            module_self.renderCerts(res.rows, el);
+          }
+        });
+      //},
 
     }
     document.querySelector(".products-table").style.display = "grid";
@@ -443,45 +488,13 @@ class Covid19 extends DBModTemplate {
   }
 
 
-  //
-  // array of objects with { database, column, value }
-  //
-  /****
-    deleteProduct(product_id, publickey) {
-  
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-      newtx.transaction.msg.module = this.name;
-      newtx.transaction.msg.request = "Product Delete";
-      newtx.transaction.msg.product_id = product_id;
-      newtx.transaction.msg.publickey = publickey;
-      newtx = this.app.wallet.signTransaction(newtx);
-      this.app.network.propagateTransaction(newtx);
-  
-      //console.log("SENT TO SERVER");
-  
-    }
-  
-    deleteItem(id, dbtable) {
-  
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-      newtx.transaction.msg.module = this.name;
-      newtx.transaction.msg.request = "Delete Item";
-      newtx.transaction.msg.item_id = item_id;
-      newtx = this.app.wallet.signTransaction(newtx);
-      this.app.network.propagateTransaction(newtx);
-  
-      //console.log("SENT TO SERVER");
-  
-    }
-  ***/
-
   updateServerDatabase(data_array, publickey, type = "Supplier Update") {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-    newtx.transaction.msg.module = this.name;
-    newtx.transaction.msg.request = type;
-    newtx.transaction.msg.fields = data_array;
-    newtx.transaction.msg.publickey = publickey;
+    newtx.msg.module = this.name;
+    newtx.msg.request = type;
+    newtx.msg.fields = data_array;
+    newtx.msg.publickey = publickey;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -618,362 +631,7 @@ class Covid19 extends DBModTemplate {
   }
 
 
-  returnCerts(id, prefix) {
-    // should this be generalised to module wide?
-    var module_self = this;
-
-    var sql = `
-      select 
-        pc.product_id as 'product_id', 
-        c.name as 'Name', 
-        note, 
-        pc.id as 'id',
-        'certifications' as 'source'
-      from 
-        certifications as 'c' 
-      JOIN 
-        products_certifications as 'pc'
-    where 
-      c.id = pc.certification_id and pc.product_id = ${id};
-     `;
-    /*
-    var fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
-    var from = "certifications as 'c' JOIN products_certifications as 'pc'";
-    var where = "c.id = pc.certification_id and pc.product_id = " + id;
-    this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
-    */
-    this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
-
-      if (res.rows.length > 0) {
-        var el = document.getElementById(prefix + res.rows[0].product_id);
-        module_self.renderCerts(res.rows, el);
-      }
-    });
-  }
-
-
-  renderCerts(rows, el) {
-    // should this be generalised to module wide?
-    var module_self = this;
-
-    rows.forEach(row => {
-
-      var html = "";
-
-      //
-      // certifications
-      //
-      if (row["source"] == "certifications") {
-
-        var note = "";
-        if (row["note"]) { note = "<div class='tiptext'>" + row["note"] + "</div>"; }
-        if (row["id"] != null && module_self.isAdmin()) {
-          html += "<div class='cert tip'><a class='attach-cert-" + row["id"] + "'>" + row["Name"] + "</a>" + note;
-          html += " <i data-id='" + row["id"] + "' id='delete-cert-" + row["id"] + "' class='fright far fa-times-circle'></i></div>";
-        } else {
-          //html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
-          html += "<div class='cert tip'>" + row["Name"] + "<div class='tiptext'> Certification available on recipet of formal purchase order. </div></div>";
-        }
-
-        el.append(elParser(html));
-
-      }
-
-
-      //
-      // bundles
-      // this may not work right now.
-      if (row["source"] == "files") {
-
-        console.log("FILE: " + JSON.stringify(row));
-
-        var note = "";
-        if (row["note"]) { note = "<div class='tiptext'>supplementary file</div>"; }
-        if (row["product_id"] != null) {
-          html += "<div class='cert tip'><a class='attach-file-" + row["id"] + "'>" + row["Name"] + "</a></div>";
-        } else {
-          html += "<div class='cert tip'>" + row["Name"] + "</div>";
-        }
-        el.append(elParser(html));
-      }
-
-
-    });
-
-    //add actions - limited to admins right now
-    if (module_self.isAdmin()) {
-      rows.forEach(row => {
-        if (row["source"] == "certifications") {
-          el.querySelector('.attach-cert-' + row["id"]).addEventListener('click', (e) => {
-            module_self.returnCertFile(row["id"]);
-          });
-          if (module_self.isAdmin()) {
-            el.querySelector('#delete-cert-' + row["id"]).addEventListener('click', (e) => {
-              module_self.returnCertFile(row["id"]);
-            });
-          }
-        }
-        if (row["source"] == "files") {
-          el.querySelector('.attach-file-' + row["id"]).addEventListener('click', (e) => {
-            module_self.returnFile(row["id"]);
-          });
-        }
-      });
-    }
-  }
-
-  returnCertFile(id) {
-    this.sendPeerDatabaseRequest("covid19", "products_certifications", "*", "id = " + id, null, function (res) {
-      if (res.rows.length > 0) {
-        var a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style.display = "none";
-        a.href = [res.rows[0]["file"]];
-        a.download = res.rows[0]["file_filename"];
-        a.click();
-        //window.URL.revokeObjectURL(url);
-        a.destroy();
-        //salert("Download certificate attachment: " + res.rows[0]["file_filename"]);
-      }
-    });
-  }
-
-  returnFile(id) {
-    this.sendPeerDatabaseRequest("covid19", "files", "*", "id= " + id, null, function (res) {
-      if (res.rows.length > 0) {
-        //var blob = new Blob([res.rows[0]["file_data"]], { type: res.rows[0]["file_type"] });
-        //var url = window.URL.createObjectURL(blob);
-
-        var a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style.display = "none";
-        a.href = res.rows[0]["file_data"];
-        a.download = res.rows[0]["file_filename"];
-        a.click();
-        //window.URL.revokeObjectURL(url);
-        a.destroy();
-        //salert("Download file attachment: " + res.rows[0]["file_filename"]);
-      }
-    });
-  }
-
-
-  returnAttachment(id) {
-    this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
-      if (res.rows.length > 0) {
-        var blob = new Blob([res.rows[0]["attachment_data"]], { type: res.rows[0]["attachment_type"] });
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style.display = "none";
-        a.href = url;
-        a.download = res.rows[0]["attachment_filename"];
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.destroy();
-        salert("Download attachment: " + res.rows[0]["attachment_filename"]);
-      }
-    });
-  }
-
-  treatBoolean(el) {
-    let cell = el.id;
-    let html = `
-          <input class="check-${cell}" id="check-${cell}" type="checkbox">
-          `;
-    el.parentNode.innerHTML += html;
-    //when rewriting the partent innerhtml - the element reference is lost.
-    el = document.getElementById(el.id);
-    el.classList.add('hidden');
-
-    if (el.value == 1) {
-      document.getElementById(`check-${cell}`).checked = true;
-    }
-
-    document.getElementById(`check-${cell}`).addEventListener('change', (e) => {
-      if (e.target.checked) {
-        el.value = 1;
-      } else {
-        el.value = 0;
-      }
-    });
-
-  }
-
-  treatPhoto(el) {
-
-    let cell = el.id;
-    let html = `
-          <div class="product-image-holder" id="img-holder-${cell}">
-            <img class="product-image" id="img-${cell}" src="${el.value}" />
-          </div>
-          <input class="products-${cell}" id="file-${cell}" type="file">
-          `;
-    el.parentNode.innerHTML += html;
-    //when rewriting the partent innerhtml - the element reference is lost.
-    el = document.getElementById(el.id);
-    el.classList.add('hidden');
-
-    document.getElementById(`file-${cell}`).addEventListener('change', (e) => {
-      var img = document.getElementById(`img-${cell}`);
-      var reader = new FileReader();
-      var file = e.target.files[0];
-      var original = new Image();
-      original.onload = function () {
-        var w = 0;
-        var h = 0;
-        var r = 1;
-
-        var canvas = document.createElement('canvas');
-
-        if (original.width > 450) {
-          r = 450 / original.width;
-        } if (r * original.height > 300) {
-          r = 300 / original.height;
-        }
-        w = original.width * r;
-        h = original.height * r;
-
-        canvas.width = w;
-        canvas.height = h;
-        canvas.getContext('2d').drawImage(original, 0, 0, w, h);
-        var result = canvas.toDataURL(file.type);
-        img.src = result;
-        el.value = result;
-      }
-      reader.addEventListener("load", function () {
-
-        original.src = reader.result;
-
-      }, false);
-      reader.readAsDataURL(file);
-    });
-
-    document.getElementById(`img-holder-${cell}`).addEventListener('click', e => {
-      document.getElementById(`file-${cell}`).click();
-    });
-
-  }
-
-  treatACDropDown(el, dbtable, idcol, valuecol) {
-
-    let cell = el.id;
-    let html = "";
-    var options = "";
-    this.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
-      res.rows.forEach(opt => {
-        options += `<option data-value="${opt.id}" value="${opt.value}"></option>`
-      });
-      html += `
-          <input type="text" id="${dbtable}-display" list="${dbtable}-options" placeholder="Click or type...">
-          <datalist id="${dbtable}-options">${options}</datalist>
-        `;
-      el.parentNode.innerHTML += html;
-      el = document.getElementById(el.id);
-      el.classList.add('hidden');
-
-      if (el.value.length > 0) {
-        document.getElementById(`${dbtable}-display`).value = document.querySelector(`#${dbtable}-options [data-value='${el.value}']`).value;
-      }
-
-      document.getElementById(`${dbtable}-display`).addEventListener("change", (e) => {
-        el.value = document.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
-      });
-
-      document.getElementById(`${dbtable}-display`).addEventListener("focus", (e) => {
-        e.target.value = "";
-        e.target.click();
-        e.target.click();
-      });
-
-    });
-
-  }
-
-  treatHide(el) {
-    el.parentNode.previousSibling.classList.add('hidden');
-    el.parentNode.classList.add('hidden');
-  }
-
-  treatFile(el, typeel = null, nameel = null) {
-    let cell = el.id;
-    let html = `
-         <div id="certification_display" class="file-display">No file Selected</div>
-         <input class="file-${cell}" id="file-${cell}" type="file">
-          `;
-    el.parentNode.innerHTML += html;
-    //when rewriting the partent innerhtml - the element reference is lost.
-    el = document.getElementById(el.id);
-    el.classList.add('hidden');
-    var displayEl = document.querySelector("#certification_display");
-    if (el.value != "") {
-      if (typeel.value.split("/")[0] == "image") {
-        displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + el.value + "'/></div>";
-      } else {
-        displayEl.innerHTML = typeel.split("/")[1].toUpperCase();
-      }
-    }
-
-    var input = document.getElementById(`file-${cell}`);
-    input.addEventListener('change', (e) => {
-      var reader = new FileReader();
-      var file = e.target.files[0];
-      reader.addEventListener("load", function () {
-
-        if (file.type.split("/")[0] == "image") {
-          displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + reader.result + "'/></div>";
-        } else {
-          displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
-        }
-        el.value = reader.result;
-        if (nameel) { nameel.value = file.name };
-        if (typeel) { typeel.value = file.type };
-      }, false);
-      reader.readAsDataURL(file);
-    });
-    document.querySelector("#certification_display").addEventListener('click', e => {
-      input.click();
-    });
-
-  };
-
-
-  pdfCap(inputHTML, filename) {
-    var shim = document.createElement('div');
-    shim.style.width = "1120px";
-    shim.style.height = "1475px";
-    shim.style.padding = "100px"
-    shim.style.position = "absolute";
-    shim.style.top = "-2000px;"
-    //shim.appendChild(targetel.cloneNode(true));
-    shim.classList.add('toprint');
-    shim.innerHTML = inputHTML;
-    document.querySelector('.footer').appendChild(shim);
-    const html2canvas = require('html2canvas');
-    const jsPDF = require('jspdf');
-    const domElement = shim;
-    html2canvas(domElement, {
-      onclone: (document) => {
-        //document.getElementById('print-button').style.visibility = 'hidden';
-      }
-    })
-      .then((canvas) => {
-        console.log(canvas.width + " " + canvas.height);
-        var imgData = canvas.toDataURL('image/jpeg', 1);
-
-        // console.log('Report Image URL: ' + imgData);
-        var doc = new jsPDF('p', 'mm', "a4");
-        const imgProps = doc.getImageProperties(imgData);
-        const pdfWidth = doc.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-        doc.addImage(imgData, 'jpeg', 0, 0, pdfWidth, pdfHeight);
-
-        doc.save(filename);
-        shim.destroy();
-      });
-  }
-
+ 
   isAdmin() {
     //return 1;
     if (this.app.wallet.returnPublicKey() == this.admin_pkey) { return true; }

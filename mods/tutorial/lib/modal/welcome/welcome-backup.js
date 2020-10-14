@@ -15,9 +15,9 @@ module.exports = WelcomeBackup = {
       data.modal.destroy();
 
       let tx = app.wallet.createUnsignedTransaction();
-      tx.transaction.msg.module = "Email";
-      tx.transaction.msg.title = "Anonymous Mode Enabled";
-      tx.transaction.msg.message = `
+      tx.msg.module = "Email";
+      tx.msg.title = "Anonymous Mode Enabled";
+      tx.msg.message = `
 
           <p>You have started using Saito without backing up your wallet or registering a username.</p>
           <blockquote>Please note: to prevent spammers from abusing the network, Saito does not give tokens to anonymous accounts by default.
@@ -100,9 +100,9 @@ module.exports = WelcomeBackup = {
         data.modal.destroy();
 
         let tx = app.wallet.createUnsignedTransaction();
-        tx.transaction.msg.module = "Email";
-        tx.transaction.msg.title = "Wallet Backup Successful";
-        tx.transaction.msg.message = `
+        tx.msg.module = "Email";
+        tx.msg.title = "Wallet Backup Successful";
+        tx.msg.message = `
 
             <p>Our server will email you your encrypted wallet backup shortly.</p>
             <blockquote>

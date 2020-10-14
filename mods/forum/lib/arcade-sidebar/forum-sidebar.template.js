@@ -16,6 +16,7 @@ module.exports = ForumSidebarTemplate = (app, data) => {
   overflow-x: hidden;
   padding-left: 0.5em;
   padding-top: 0.5em;
+  height: 20vh;
 }
 
 .forum-title {

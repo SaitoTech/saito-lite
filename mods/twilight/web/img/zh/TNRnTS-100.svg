@@ -1,421 +1,1060 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="use39" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 388 538" style="enable-background:new 0 0 388 538;" xml:space="preserve">
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="svg2" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 388 538"
+	 style="enable-background:new 0 0 388 538;" xml:space="preserve">
 <style type="text/css">
-	.st0{font-family:'STKaiti';}
-	.st1{font-size:20px;}
-	.st2{font-family:'STBaoliSC-Regular';}
-	.st3{font-size:36px;}
-	.st4{font-family:'AdobeSongStd-Light-GBpc-EUC-H';}
-	.st5{font-size:18px;}
-	.st6{fill:#FFFFFF;}
-	.st7{fill:#BB133E;}
-	.st8{fill:#002664;}
-	.st9{opacity:0.8374;fill:none;stroke:#000000;enable-background:new    ;}
-	.st10{fill:#CC0000;}
-	.st11{fill:#FFD700;}
-	.st12{fill:#211F20;stroke:#211F20;}
+	.st0{enable-background:new    ;}
+	.st1{font-family:'STKaiti';}
+	.st2{font-size:20px;}
+	.st3{font-family:'STBaoliTC-Regular';}
+	.st4{font-size:36px;}
+	.st5{fill:#FFFFFF;}
+	.st6{fill:#BB133E;}
+	.st7{fill:#002664;}
+	.st8{opacity:0.8374;fill:none;stroke:#000000;enable-background:new    ;}
+	.st9{fill:#CC0000;}
+	.st10{fill:#FFD700;}
+	.st11{fill:#211F20;stroke:#211F20;}
 </style>
-<g id="图层_2">
-</g>
-<g id="svg2" xmlns:svg="http://www.w3.org/2000/svg">
-	<text transform="matrix(1 0 0 1 79.38 298.7951)" class="st0 st1">如果核危机状态在等级2，</text>
-	<text transform="matrix(1 0 0 1 106.8299 322.7951)" class="st0 st1">你可以给对手6VP后</text>
-	<text transform="matrix(1 0 0 1 134.0001 346.7951)" class="st0 st1">立即结束游戏</text>
-	<text transform="matrix(1 0 0 1 73.9998 370.7951)" class="st0 st1">（不经过结局计分阶段）。</text>
-	<text transform="matrix(0.94 0 0 1 117.8591 262.1147)" class="st2 st3">战争游戏*</text>
-	<text transform="matrix(1 0 0 1 94.9998 407.3315)" class="st4 st5">来一场精彩对弈怎么样？</text>
-	<g>
-		<g>
-			<rect id="rect51" x="0" y="0" class="st6" width="1098.9" height="650"/>
-			<g id="use53" transform="scale(0.86130867,1)">
-				<rect id="stripe" y="0" class="st7" width="1063.7" height="50"/>
-			</g>
-			<g id="use55">
-				<rect id="stripe_1_" x="0" y="100" class="st7" width="1235" height="50"/>
-			</g>
-			<g id="use57">
-				<rect id="stripe_2_" x="0" y="200" class="st7" width="1235" height="50"/>
-			</g>
-			<g id="use59">
-				<rect id="stripe_3_" x="0" y="300" class="st7" width="1235" height="50"/>
-			</g>
-			<g id="use61">
-				<rect id="stripe_4_" x="0" y="400" class="st7" width="1235" height="50"/>
-			</g>
-			<g id="use63">
-				<rect id="stripe_5_" x="0" y="500" class="st7" width="1235" height="50"/>
-			</g>
-			<g id="use65">
-				<rect id="stripe_6_" x="0" y="600" class="st7" width="1235" height="50"/>
-			</g>
-			<rect id="rect67" x="0" y="0" class="st8" width="494" height="350"/>
-			<g>
-				<g>
-					<g>
-						<g>
-							<g>
-								<g>
-									<g>
-										<g>
-											<g>
-												<g id="star">
-													<g id="use8" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-														<polygon id="abpt" class="st6" points="47.5,38.4 30.5,50.8 37,30.8 														"/>
-													</g>
-													<g id="use10" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-														<polygon id="abpt_1_" class="st6" points="40.2,40.8 23.2,28.4 44.3,28.4 														"/>
-													</g>
-													<g id="use12">
-														<polygon id="abpt_2_" class="st6" points="35.7,34.6 42.3,14.6 48.8,34.6 														"/>
-													</g>
-													<g id="use14" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-														<polygon id="abpt_3_" class="st6" points="40.2,28.4 61.3,28.4 44.3,40.8 														"/>
-													</g>
-													<g id="use19" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-														<polygon id="abpt_4_" class="st6" points="47.5,30.8 54,50.8 37,38.4 														"/>
-													</g>
+<text transform="matrix(1 0 0 1 103.1908 299.2777)" class="st0"><tspan x="0" y="0" class="st1 st2">如果核危机等级为2，</tspan><tspan x="0" y="24" class="st1 st2">你可以送给对方6分，</tspan><tspan x="4.7" y="48" class="st1 st2">然后立即结束游戏。</tspan></text>
+<text transform="matrix(0.94 0 0 1 119.4111 259.5026)" class="st3 st4">战争游戏</text>
+<g id="g6618">
+	<g id="g5713" transform="matrix(0.11384615,0,0,0.11384615,41,125)">
+		<rect id="rect51" x="0" y="0" class="st5" width="1098.9" height="650"/>
+		<g id="use53" transform="scale(0.86130867,1)">
+			<rect id="stripe" y="0" class="st6" width="1063.7" height="50"/>
+		</g>
+		<g id="use55">
+			<rect id="stripe_1_" x="0" y="100" class="st6" width="1235" height="50"/>
+		</g>
+		<g id="use57">
+			<rect id="stripe_2_" x="0" y="200" class="st6" width="1235" height="50"/>
+		</g>
+		<g id="use59">
+			<rect id="stripe_3_" x="0" y="300" class="st6" width="1235" height="50"/>
+		</g>
+		<g id="use61">
+			<rect id="stripe_4_" x="0" y="400" class="st6" width="1235" height="50"/>
+		</g>
+		<g id="use63">
+			<rect id="stripe_5_" x="0" y="500" class="st6" width="1235" height="50"/>
+		</g>
+		<g id="use65">
+			<rect id="stripe_6_" x="0" y="600" class="st6" width="1235" height="50"/>
+		</g>
+		<rect id="rect67" x="0" y="0" class="st7" width="494" height="350"/>
+		<g id="use69" transform="matrix(650,0,0,650,247,175)">
+			<g id="abcu">
+				<g id="use44">
+					<g id="abx4">
+						<g id="use35">
+							<g id="abs6">
+								<g id="use30">
+									<g id="abs5">
+										<g id="use19">
+											<g id="star">
+												<g id="use8" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt" class="st5" points="47.5,38.4 30.5,50.8 37,30.8 													"/>
 												</g>
-												<g>
-													<g id="star_1_">
-														<g id="use8_1_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-															<polygon id="abpt_5_" class="st6" points="129.4,38.4 112.4,50.8 118.9,30.8 															"/>
-														</g>
-														<g id="use10_1_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-															<polygon id="abpt_6_" class="st6" points="122.1,40.8 105.1,28.4 126.2,28.4 															"/>
-														</g>
-														<g id="use12_1_">
-															<polygon id="abpt_7_" class="st6" points="117.6,34.6 124.2,14.6 130.7,34.6 															"/>
-														</g>
-														<g id="use14_1_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-															<polygon id="abpt_8_" class="st6" points="122.1,28.4 143.2,28.4 126.2,40.8 															"/>
-														</g>
-														<g id="use21" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-															<polygon id="abpt_9_" class="st6" points="129.4,30.8 135.9,50.8 118.9,38.4 															"/>
-														</g>
-													</g>
-													<g>
-														<g id="star_2_">
-															<g id="use8_2_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																<polygon id="abpt_10_" class="st6" points="211.3,38.4 194.3,50.8 200.8,30.8 																"/>
-															</g>
-															<g id="use10_2_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																<polygon id="abpt_11_" class="st6" points="204,40.8 187,28.4 208.1,28.4 																"/>
-															</g>
-															<g id="use12_2_">
-																<polygon id="abpt_12_" class="st6" points="199.5,34.6 206.1,14.6 212.6,34.6 																"/>
-															</g>
-															<g id="use14_2_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																<polygon id="abpt_13_" class="st6" points="204,28.4 225.1,28.4 208.1,40.8 																"/>
-															</g>
-															<g id="use23" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																<polygon id="abpt_14_" class="st6" points="211.3,30.8 217.8,50.8 200.8,38.4 																"/>
-															</g>
-														</g>
-														<g>
-															<g id="star_3_">
-																<g id="use8_3_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																	<polygon id="abpt_15_" class="st6" points="293.2,38.4 276.2,50.8 282.7,30.8 																	"/>
-																</g>
-																<g id="use10_3_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																	<polygon id="abpt_16_" class="st6" points="285.9,40.8 268.9,28.4 290,28.4 																	"/>
-																</g>
-																<g id="use12_3_">
-																	<polygon id="abpt_17_" class="st6" points="281.4,34.6 288,14.6 294.5,34.6 																	"/>
-																</g>
-																<g id="use14_3_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																	<polygon id="abpt_18_" class="st6" points="285.9,28.4 307,28.4 290,40.8 																	"/>
-																</g>
-																<g id="use25" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																	<polygon id="abpt_19_" class="st6" points="293.2,30.8 299.7,50.8 282.7,38.4 																	"/>
-																</g>
-															</g>
-															<g id="abs5">
-																<g id="star_4_">
-																	<g id="use8_4_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																		<polygon id="abpt_20_" class="st6" points="375.1,38.4 358.1,50.8 364.6,30.8 																		"/>
-																	</g>
-																	<g id="use10_4_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																		<polygon id="abpt_21_" class="st6" points="367.8,40.8 350.8,28.4 371.9,28.4 																		"/>
-																	</g>
-																	<g id="use12_4_">
-																		<polygon id="abpt_22_" class="st6" points="363.3,34.6 369.9,14.6 376.4,34.6 																		"/>
-																	</g>
-																	<g id="use14_4_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																		<polygon id="abpt_23_" class="st6" points="367.8,28.4 388.9,28.4 371.9,40.8 																		"/>
-																	</g>
-																	<g id="use30" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																		<polygon id="abpt_24_" class="st6" points="375.1,30.8 381.6,50.8 364.6,38.4 																		"/>
-																	</g>
-																</g>
-															</g>
-															<g id="abs6">
-																<g id="star_5_">
-																	<g id="use8_5_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																		<polygon id="abpt_25_" class="st6" points="457,38.4 440,50.8 446.5,30.8 																		"/>
-																	</g>
-																	<g id="use10_5_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																		<polygon id="abpt_26_" class="st6" points="449.7,40.8 432.7,28.4 453.8,28.4 																		"/>
-																	</g>
-																	<g id="use12_5_">
-																		<polygon id="abpt_27_" class="st6" points="445.2,34.6 451.8,14.6 458.3,34.6 																		"/>
-																	</g>
-																	<g id="use14_5_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																		<polygon id="abpt_28_" class="st6" points="449.7,28.4 470.8,28.4 453.8,40.8 																		"/>
-																	</g>
-																	<g id="use35" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																		<polygon id="abpt_29_" class="st6" points="457,30.8 463.5,50.8 446.5,38.4 																		"/>
-																	</g>
-																</g>
-															</g>
-															<g>
-																<g>
-																	<g>
-																		<g id="star_6_">
-																			<g id="use8_6_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																				<polygon id="abpt_30_" class="st6" points="88.5,73.5 71.4,85.9 77.9,65.9 																				"/>
-																			</g>
-																			<g id="use10_6_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																				<polygon id="abpt_31_" class="st6" points="81.2,75.9 64.2,63.5 85.2,63.5 																				"/>
-																			</g>
-																			<g id="use12_6_">
-																				<polygon id="abpt_32_" class="st6" points="76.7,69.7 83.2,49.7 89.7,69.7 																				"/>
-																			</g>
-																			<g id="use14_6_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																				<polygon id="abpt_33_" class="st6" points="81.2,63.5 102.2,63.5 85.2,75.9 																				"/>
-																			</g>
-																			<g id="use19_1_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																				<polygon id="abpt_34_" class="st6" points="88.5,65.9 95,85.9 77.9,73.5 																				"/>
-																			</g>
-																		</g>
-																		<g>
-																			<g id="star_7_">
-																				<g id="use8_7_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																					<polygon id="abpt_35_" class="st6" points="170.4,73.5 153.3,85.9 159.8,65.9 																					"/>
-																				</g>
-																				<g id="use10_7_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																					<polygon id="abpt_36_" class="st6" points="163.1,75.9 146.1,63.5 167.1,63.5 																					"/>
-																				</g>
-																				<g id="use12_7_">
-																					<polygon id="abpt_37_" class="st6" points="158.6,69.7 165.1,49.7 171.6,69.7 																					"/>
-																				</g>
-																				<g id="use14_7_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																					<polygon id="abpt_38_" class="st6" points="163.1,63.5 184.1,63.5 167.1,75.9 																					"/>
-																				</g>
-																				<g id="use21_1_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																					<polygon id="abpt_39_" class="st6" points="170.4,65.9 176.9,85.9 159.8,73.5 																					"/>
-																				</g>
-																			</g>
-																			<g>
-																				<g id="star_8_">
-																					<g id="use8_8_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																						<polygon id="abpt_40_" class="st6" points="252.3,73.5 235.2,85.9 241.7,65.9 																						"/>
-																					</g>
-																					<g id="use10_8_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																						<polygon id="abpt_41_" class="st6" points="245,75.9 228,63.5 249,63.5 																						"/>
-																					</g>
-																					<g id="use12_8_">
-																						<polygon id="abpt_42_" class="st6" points="240.5,69.7 247,49.7 253.5,69.7 																						"/>
-																					</g>
-																					<g id="use14_8_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																						<polygon id="abpt_43_" class="st6" points="245,63.5 266,63.5 249,75.9 																						"/>
-																					</g>
-																					<g id="use23_1_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																						<polygon id="abpt_44_" class="st6" points="252.3,65.9 258.8,85.9 241.7,73.5 																						"/>
-																					</g>
-																				</g>
-																				<g>
-																					<g id="star_9_">
-																						<g id="use8_9_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																							<polygon id="abpt_45_" class="st6" points="334.2,73.5 317.1,85.9 323.6,65.9 																							"/>
-																						</g>
-																						<g id="use10_9_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																							<polygon id="abpt_46_" class="st6" points="326.9,75.9 309.9,63.5 330.9,63.5 																							"/>
-																						</g>
-																						<g id="use12_9_">
-																							<polygon id="abpt_47_" class="st6" points="322.4,69.7 328.9,49.7 335.4,69.7 																							"/>
-																						</g>
-																						<g id="use14_9_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																							<polygon id="abpt_48_" class="st6" points="326.9,63.5 347.9,63.5 330.9,75.9 																							"/>
-																						</g>
-																						<g id="use25_1_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																							<polygon id="abpt_49_" class="st6" points="334.2,65.9 340.7,85.9 323.6,73.5 																							"/>
-																						</g>
-																					</g>
-																					<g id="abs5_1_">
-																						<g id="star_10_">
-																							<g id="use8_10_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																								<polygon id="abpt_50_" class="st6" points="416.1,73.5 399,85.9 405.5,65.9 																								"/>
-																							</g>
-																							<g id="use10_10_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																								<polygon id="abpt_51_" class="st6" points="408.8,75.9 391.8,63.5 412.8,63.5 																								"/>
-																							</g>
-																							<g id="use12_10_">
-																								<polygon id="abpt_52_" class="st6" points="404.3,69.7 410.8,49.7 417.3,69.7 																								"/>
-																							</g>
-																							<g id="use14_10_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																								<polygon id="abpt_53_" class="st6" points="408.8,63.5 429.8,63.5 412.8,75.9 																								"/>
-																							</g>
-																							<g id="use37" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																								<polygon id="abpt_54_" class="st6" points="416.1,65.9 422.6,85.9 405.5,73.5 																								"/>
-																							</g>
-																						</g>
-																					</g>
-																					<g>
-																						<g>
-																							<g>
-																								<g>
-																									<g>
-																										<g id="star_11_">
-																											<g id="use8_11_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																												<polygon id="abpt_55_" class="st6" points="47.5,108.6 30.5,121 37,101 																												
-																													"/>
-																											</g>
-																											<g id="use10_11_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																												<polygon id="abpt_56_" class="st6" points="40.2,111 23.2,98.6 44.3,98.6 																												
-																													"/>
-																											</g>
-																											<g id="use12_11_">
-																												<polygon id="abpt_57_" class="st6" points="35.7,104.8 42.3,84.8 48.8,104.8 
-																																																									"/>
-																											</g>
-																											<g id="use14_11_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																												<polygon id="abpt_58_" class="st6" points="40.2,98.6 61.3,98.6 44.3,111 																												
-																													"/>
-																											</g>
-																											<g id="use19_2_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																												<polygon id="abpt_59_" class="st6" points="47.5,101 54,121 37,108.6 																												"/>
-																											</g>
-																										</g>
-																										<g id="abx4">
-																											<g id="star_12_">
-																												<g id="use8_12_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																													<polygon id="abpt_60_" class="st6" points="129.4,108.6 112.4,121 118.9,101 
-																																																											"/>
-																												</g>
-																												<g id="use10_12_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																													<polygon id="abpt_61_" class="st6" points="122.1,111 105.1,98.6 126.2,98.6 
-																																																											"/>
-																												</g>
-																												<g id="use12_12_">
-																													<polygon id="abpt_62_" class="st6" points="117.6,104.8 124.2,84.8 130.7,104.8 
-																																																											"/>
-																												</g>
-																												<g id="use14_12_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																													<polygon id="abpt_63_" class="st6" points="122.1,98.6 143.2,98.6 126.2,111 
-																																																											"/>
-																												</g>
-																												<g id="use21_2_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																													<polygon id="abpt_64_" class="st6" points="129.4,101 135.9,121 118.9,108.6 
-																																																											"/>
-																												</g>
-																											</g>
-																											<g id="use35_1_">
-																												<g id="star_13_">
-																													<g id="use8_13_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
-																														<polygon id="abpt_65_" class="st6" points="211.3,108.6 194.3,121 200.8,101 
-																																																													"/>
-																													</g>
-																													<g id="use10_13_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
-																														<polygon id="abpt_66_" class="st6" points="204,111 187,98.6 208.1,98.6 
-																																																													"/>
-																													</g>
-																													<g id="use12_13_">
-																														<polygon id="abpt_67_" class="st6" points="199.5,104.8 206.1,84.8 212.6,104.8 
-																																																													"/>
-																													</g>
-																													<g id="use14_13_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
-																														<polygon id="abpt_68_" class="st6" points="204,98.6 225.1,98.6 208.1,111 
-																																																													"/>
-																													</g>
-																													<g id="use23_2_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
-																														<polygon id="abpt_69_" class="st6" points="211.3,101 217.8,121 200.8,108.6 
-																																																													"/>
-																													</g>
-																												</g>
-																												<g id="use27">
-																													<g id="star_14_">
-																														<polygon id="abpt_70_" class="st6" points="293.2,108.6 276.2,121 282.7,101 
-																																																													"/>
-																														<polygon id="abpt_71_" class="st6" points="285.9,111 268.9,98.6 290,98.6 
-																																																													"/>
-																														<polygon id="abpt_72_" class="st6" points="281.4,104.8 288,84.8 294.5,104.8 
-																																																													"/>
-																														<polygon id="abpt_73_" class="st6" points="285.9,98.6 307,98.6 290,111 
-																																																													"/>
-																														<polygon id="abpt_74_" class="st6" points="293.2,101 299.7,121 282.7,108.6 
-																																																													"/>
-																													</g>
-																													<g id="abs5_2_">
-																													</g>
-																												</g>
-																												<g id="use30_1_">
-																													<g id="star_15_">
-																														<polygon id="abpt_75_" class="st6" points="457,108.6 440,121 446.5,101 
-																																																													"/>
-																														<polygon id="abpt_76_" class="st6" points="449.7,111 432.7,98.6 453.8,98.6 
-																																																													"/>
-																														<polygon id="abpt_77_" class="st6" points="445.2,104.8 451.8,84.8 458.3,104.8 
-																																																													"/>
-																														<polygon id="abpt_78_" class="st6" points="449.7,98.6 470.8,98.6 453.8,111 
-																																																													"/>
-																														<polygon id="abpt_79_" class="st6" points="457,101 463.5,121 446.5,108.6 
-																																																													"/>
-																													</g>
-																												</g>
-																												<g id="use23_3_">
-																													<g id="use27_1_">
-																													</g>
-																												</g>
-																												<g id="use48">
-																													<g id="use41">
-																													</g>
-																													<g id="use37_1_">
-																													</g>
-																												</g>
-																											</g>
-																											<rect id="rect5795" x="27222" y="81750.1" class="st9" width="80600.1" height="47450.1"/>
-																										</g>
-																										<g id="g6610">
-																											<g id="g5789" transform="matrix(0.24666667,0,0,0.24666667,208.5,124.5)">
-																												<rect id="rect4" x="548264.2" y="329596.6" class="st10" width="329391.9" height="195000"/>
-																												<path id="hammer" class="st11" d="M593651.8,380214.1l5655,5655l4615-4745
-																													c10270,10595,20540,21255,30810,31850c2275-520,3510-1430,4225-4030l-31655-31135l6370-5720l-9295-2535
-																													L593651.8,380214.1L593651.8,380214.1z"/>
-																												<path id="star-9" class="st11" d="M611851.8,348234.1h-8775l7085,5200l-2665,8320l7085-5135l7085,5135
-																													l-2665-8385l7085-5135h-8775l-2730-8384.5v-0.5L611851.8,348234.1L611851.8,348234.1z
-																													 M614581.8,345049.1l1560,4810h5005l-4030,2925l1534.8,4781l-4069.8-2959.8l-4069.8,2988.8l1534.8-4810
-																													l-4030-2944.5h5018L614581.8,345049.1L614581.8,345049.1L614581.8,345049.1z"/>
-																												<path id="sichel" class="st11" d="M614646.8,364224.1c13650,5005,22230,16445,22282,24895
-																													c143,18655-20202,27625-33332,12610l-910,650l195,1625c-3965-390-7540,11765-11830,8385
-																													c-3900-4940,6890-7215,7995-12220l1560,130l1300-1365l1235,195l1560-1625
-																													c12805,13520,28990,3055,26715-10400c-1625-10335-8125-16250-16835-22880H614646.8L614646.8,364224.1
-																													L614646.8,364224.1L614646.8,364224.1L614646.8,364224.1L614646.8,364224.1L614646.8,364224.1z"/>
-																											</g>
-																											<rect id="rect6608" x="135772.2" y="81750.1" class="st9" width="80600.1" height="47450.1"/>
-																										</g>
-																										<path id="path6654" class="st12" d="M98840,131150.2h46357.2v-4387.5l-4387.5-3737.5v-2925
-																											l-4240.2-3473.3V91500.1l5045.1-5045.1v-6004.9l-6929.5-2506.8v5106.8h-8337.9v-6012.5h-8612.5v6012.5
-																											h-9100v-5106.8l-6333.8,2506.8V86455l5360.7,5045.1v25126.7c0,0-4570,3787.8-4388.4,3473.3
-																											c181.5-314.4,0,2925,0,2925l-4433.1,3737.5V131150.2z"/>
-																									</g>
-																								</g>
-																							</g>
-																						</g>
-																					</g>
-																				</g>
-																			</g>
-																		</g>
-																	</g>
-																</g>
-															</g>
-														</g>
-													</g>
+												<g id="use10" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_1_" class="st5" points="40.2,40.8 23.2,28.4 44.3,28.4 													"/>
+												</g>
+												<g id="use12">
+													<polygon id="abpt_2_" class="st5" points="35.7,34.6 42.3,14.6 48.8,34.6 													"/>
+												</g>
+												<g id="use14" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_3_" class="st5" points="40.2,28.4 61.3,28.4 44.3,40.8 													"/>
+												</g>
+												<g id="use16" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_4_" class="st5" points="47.5,30.8 54,50.8 37,38.4 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use21">
+											<g id="star_1_">
+												<g id="use8_1_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_5_" class="st5" points="129.4,38.4 112.4,50.8 118.9,30.8 													"/>
+												</g>
+												<g id="use10_1_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_6_" class="st5" points="122.1,40.8 105.1,28.4 126.2,28.4 													"/>
+												</g>
+												<g id="use12_1_">
+													<polygon id="abpt_7_" class="st5" points="117.6,34.6 124.2,14.6 130.7,34.6 													"/>
+												</g>
+												<g id="use14_1_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_8_" class="st5" points="122.1,28.4 143.2,28.4 126.2,40.8 													"/>
+												</g>
+												<g id="use16_1_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_9_" class="st5" points="129.4,30.8 135.9,50.8 118.9,38.4 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use23">
+											<g id="star_2_">
+												<g id="use8_2_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_10_" class="st5" points="211.3,38.4 194.3,50.8 200.8,30.8 													"/>
+												</g>
+												<g id="use10_2_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_11_" class="st5" points="204,40.8 187,28.4 208.1,28.4 													"/>
+												</g>
+												<g id="use12_2_">
+													<polygon id="abpt_12_" class="st5" points="199.5,34.6 206.1,14.6 212.6,34.6 													"/>
+												</g>
+												<g id="use14_2_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_13_" class="st5" points="204,28.4 225.1,28.4 208.1,40.8 													"/>
+												</g>
+												<g id="use16_2_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_14_" class="st5" points="211.3,30.8 217.8,50.8 200.8,38.4 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use25">
+											<g id="star_3_">
+												<g id="use8_3_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_15_" class="st5" points="293.2,38.4 276.2,50.8 282.7,30.8 													"/>
+												</g>
+												<g id="use10_3_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_16_" class="st5" points="285.9,40.8 268.9,28.4 290,28.4 													"/>
+												</g>
+												<g id="use12_3_">
+													<polygon id="abpt_17_" class="st5" points="281.4,34.6 288,14.6 294.5,34.6 													"/>
+												</g>
+												<g id="use14_3_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_18_" class="st5" points="285.9,28.4 307,28.4 290,40.8 													"/>
+												</g>
+												<g id="use16_3_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_19_" class="st5" points="293.2,30.8 299.7,50.8 282.7,38.4 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use27">
+											<g id="star_4_">
+												<g id="use8_4_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_20_" class="st5" points="375.1,38.4 358.1,50.8 364.6,30.8 													"/>
+												</g>
+												<g id="use10_4_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_21_" class="st5" points="367.8,40.8 350.8,28.4 371.9,28.4 													"/>
+												</g>
+												<g id="use12_4_">
+													<polygon id="abpt_22_" class="st5" points="363.3,34.6 369.9,14.6 376.4,34.6 													"/>
+												</g>
+												<g id="use14_4_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_23_" class="st5" points="367.8,28.4 388.9,28.4 371.9,40.8 													"/>
+												</g>
+												<g id="use16_4_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_24_" class="st5" points="375.1,30.8 381.6,50.8 364.6,38.4 													"/>
 												</g>
 											</g>
 										</g>
 									</g>
+								</g>
+								<g id="use32">
+									<g id="star_5_">
+										<g id="use8_5_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_25_" class="st5" points="457,38.4 440,50.8 446.5,30.8 											"/>
+										</g>
+										<g id="use10_5_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_26_" class="st5" points="449.7,40.8 432.7,28.4 453.8,28.4 											"/>
+										</g>
+										<g id="use12_5_">
+											<polygon id="abpt_27_" class="st5" points="445.2,34.6 451.8,14.6 458.3,34.6 											"/>
+										</g>
+										<g id="use14_5_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_28_" class="st5" points="449.7,28.4 470.8,28.4 453.8,40.8 											"/>
+										</g>
+										<g id="use16_5_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_29_" class="st5" points="457,30.8 463.5,50.8 446.5,38.4 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+						<g id="use37">
+							<g id="abs5_1_">
+								<g id="use19_1_">
+									<g id="star_6_">
+										<g id="use8_6_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_30_" class="st5" points="88.5,73.5 71.4,85.9 77.9,65.9 											"/>
+										</g>
+										<g id="use10_6_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_31_" class="st5" points="81.2,75.9 64.2,63.5 85.2,63.5 											"/>
+										</g>
+										<g id="use12_6_">
+											<polygon id="abpt_32_" class="st5" points="76.7,69.7 83.2,49.7 89.7,69.7 											"/>
+										</g>
+										<g id="use14_6_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_33_" class="st5" points="81.2,63.5 102.2,63.5 85.2,75.9 											"/>
+										</g>
+										<g id="use16_6_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_34_" class="st5" points="88.5,65.9 95,85.9 77.9,73.5 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use21_1_">
+									<g id="star_7_">
+										<g id="use8_7_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_35_" class="st5" points="170.4,73.5 153.3,85.9 159.8,65.9 											"/>
+										</g>
+										<g id="use10_7_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_36_" class="st5" points="163.1,75.9 146.1,63.5 167.1,63.5 											"/>
+										</g>
+										<g id="use12_7_">
+											<polygon id="abpt_37_" class="st5" points="158.6,69.7 165.1,49.7 171.6,69.7 											"/>
+										</g>
+										<g id="use14_7_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_38_" class="st5" points="163.1,63.5 184.1,63.5 167.1,75.9 											"/>
+										</g>
+										<g id="use16_7_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_39_" class="st5" points="170.4,65.9 176.9,85.9 159.8,73.5 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use23_1_">
+									<g id="star_8_">
+										<g id="use8_8_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_40_" class="st5" points="252.3,73.5 235.2,85.9 241.7,65.9 											"/>
+										</g>
+										<g id="use10_8_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_41_" class="st5" points="245,75.9 228,63.5 249,63.5 											"/>
+										</g>
+										<g id="use12_8_">
+											<polygon id="abpt_42_" class="st5" points="240.5,69.7 247,49.7 253.5,69.7 											"/>
+										</g>
+										<g id="use14_8_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_43_" class="st5" points="245,63.5 266,63.5 249,75.9 											"/>
+										</g>
+										<g id="use16_8_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_44_" class="st5" points="252.3,65.9 258.8,85.9 241.7,73.5 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use25_1_">
+									<g id="star_9_">
+										<g id="use8_9_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_45_" class="st5" points="334.2,73.5 317.1,85.9 323.6,65.9 											"/>
+										</g>
+										<g id="use10_9_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_46_" class="st5" points="326.9,75.9 309.9,63.5 330.9,63.5 											"/>
+										</g>
+										<g id="use12_9_">
+											<polygon id="abpt_47_" class="st5" points="322.4,69.7 328.9,49.7 335.4,69.7 											"/>
+										</g>
+										<g id="use14_9_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_48_" class="st5" points="326.9,63.5 347.9,63.5 330.9,75.9 											"/>
+										</g>
+										<g id="use16_9_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_49_" class="st5" points="334.2,65.9 340.7,85.9 323.6,73.5 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use27_1_">
+									<g id="star_10_">
+										<g id="use8_10_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_50_" class="st5" points="416.1,73.5 399,85.9 405.5,65.9 											"/>
+										</g>
+										<g id="use10_10_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_51_" class="st5" points="408.8,75.9 391.8,63.5 412.8,63.5 											"/>
+										</g>
+										<g id="use12_10_">
+											<polygon id="abpt_52_" class="st5" points="404.3,69.7 410.8,49.7 417.3,69.7 											"/>
+										</g>
+										<g id="use14_10_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_53_" class="st5" points="408.8,63.5 429.8,63.5 412.8,75.9 											"/>
+										</g>
+										<g id="use16_10_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_54_" class="st5" points="416.1,65.9 422.6,85.9 405.5,73.5 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+						<g id="use39">
+							<g id="abs6_1_">
+								<g id="use30_1_">
+									<g id="abs5_2_">
+										<g id="use19_2_">
+											<g id="star_11_">
+												<g id="use8_11_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_55_" class="st5" points="47.5,108.6 30.5,121 37,101 													"/>
+												</g>
+												<g id="use10_11_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_56_" class="st5" points="40.2,111 23.2,98.6 44.3,98.6 													"/>
+												</g>
+												<g id="use12_11_">
+													<polygon id="abpt_57_" class="st5" points="35.7,104.8 42.3,84.8 48.8,104.8 													"/>
+												</g>
+												<g id="use14_11_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_58_" class="st5" points="40.2,98.6 61.3,98.6 44.3,111 													"/>
+												</g>
+												<g id="use16_11_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_59_" class="st5" points="47.5,101 54,121 37,108.6 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use21_2_">
+											<g id="star_12_">
+												<g id="use8_12_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_60_" class="st5" points="129.4,108.6 112.4,121 118.9,101 													"/>
+												</g>
+												<g id="use10_12_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_61_" class="st5" points="122.1,111 105.1,98.6 126.2,98.6 													"/>
+												</g>
+												<g id="use12_12_">
+													<polygon id="abpt_62_" class="st5" points="117.6,104.8 124.2,84.8 130.7,104.8 													"/>
+												</g>
+												<g id="use14_12_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_63_" class="st5" points="122.1,98.6 143.2,98.6 126.2,111 													"/>
+												</g>
+												<g id="use16_12_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_64_" class="st5" points="129.4,101 135.9,121 118.9,108.6 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use23_2_">
+											<g id="star_13_">
+												<g id="use8_13_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_65_" class="st5" points="211.3,108.6 194.3,121 200.8,101 													"/>
+												</g>
+												<g id="use10_13_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_66_" class="st5" points="204,111 187,98.6 208.1,98.6 													"/>
+												</g>
+												<g id="use12_13_">
+													<polygon id="abpt_67_" class="st5" points="199.5,104.8 206.1,84.8 212.6,104.8 													"/>
+												</g>
+												<g id="use14_13_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_68_" class="st5" points="204,98.6 225.1,98.6 208.1,111 													"/>
+												</g>
+												<g id="use16_13_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_69_" class="st5" points="211.3,101 217.8,121 200.8,108.6 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use25_2_">
+											<g id="star_14_">
+												<g id="use8_14_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_70_" class="st5" points="293.2,108.6 276.2,121 282.7,101 													"/>
+												</g>
+												<g id="use10_14_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_71_" class="st5" points="285.9,111 268.9,98.6 290,98.6 													"/>
+												</g>
+												<g id="use12_14_">
+													<polygon id="abpt_72_" class="st5" points="281.4,104.8 288,84.8 294.5,104.8 													"/>
+												</g>
+												<g id="use14_14_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_73_" class="st5" points="285.9,98.6 307,98.6 290,111 													"/>
+												</g>
+												<g id="use16_14_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_74_" class="st5" points="293.2,101 299.7,121 282.7,108.6 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use27_2_">
+											<g id="star_15_">
+												<g id="use8_15_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_75_" class="st5" points="375.1,108.6 358.1,121 364.6,101 													"/>
+												</g>
+												<g id="use10_15_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_76_" class="st5" points="367.8,111 350.8,98.6 371.9,98.6 													"/>
+												</g>
+												<g id="use12_15_">
+													<polygon id="abpt_77_" class="st5" points="363.3,104.8 369.9,84.8 376.4,104.8 													"/>
+												</g>
+												<g id="use14_15_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_78_" class="st5" points="367.8,98.6 388.9,98.6 371.9,111 													"/>
+												</g>
+												<g id="use16_15_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_79_" class="st5" points="375.1,101 381.6,121 364.6,108.6 													"/>
+												</g>
+											</g>
+										</g>
+									</g>
+								</g>
+								<g id="use32_1_">
+									<g id="star_16_">
+										<g id="use8_16_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_80_" class="st5" points="457,108.6 440,121 446.5,101 											"/>
+										</g>
+										<g id="use10_16_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_81_" class="st5" points="449.7,111 432.7,98.6 453.8,98.6 											"/>
+										</g>
+										<g id="use12_16_">
+											<polygon id="abpt_82_" class="st5" points="445.2,104.8 451.8,84.8 458.3,104.8 											"/>
+										</g>
+										<g id="use14_16_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_83_" class="st5" points="449.7,98.6 470.8,98.6 453.8,111 											"/>
+										</g>
+										<g id="use16_16_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_84_" class="st5" points="457,101 463.5,121 446.5,108.6 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+						<g id="use41">
+							<g id="abs5_3_">
+								<g id="use19_3_">
+									<g id="star_17_">
+										<g id="use8_17_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_85_" class="st5" points="88.5,143.7 71.4,156.1 77.9,136.1 											"/>
+										</g>
+										<g id="use10_17_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_86_" class="st5" points="81.2,146.1 64.2,133.7 85.2,133.7 											"/>
+										</g>
+										<g id="use12_17_">
+											<polygon id="abpt_87_" class="st5" points="76.7,139.9 83.2,119.9 89.7,139.9 											"/>
+										</g>
+										<g id="use14_17_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_88_" class="st5" points="81.2,133.7 102.2,133.7 85.2,146.1 											"/>
+										</g>
+										<g id="use16_17_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_89_" class="st5" points="88.5,136.1 95,156.1 77.9,143.7 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use21_3_">
+									<g id="star_18_">
+										<g id="use8_18_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_90_" class="st5" points="170.4,143.7 153.3,156.1 159.8,136.1 											"/>
+										</g>
+										<g id="use10_18_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_91_" class="st5" points="163.1,146.1 146.1,133.7 167.1,133.7 											"/>
+										</g>
+										<g id="use12_18_">
+											<polygon id="abpt_92_" class="st5" points="158.6,139.9 165.1,119.9 171.6,139.9 											"/>
+										</g>
+										<g id="use14_18_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_93_" class="st5" points="163.1,133.7 184.1,133.7 167.1,146.1 											"/>
+										</g>
+										<g id="use16_18_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_94_" class="st5" points="170.4,136.1 176.9,156.1 159.8,143.7 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use23_3_">
+									<g id="star_19_">
+										<g id="use8_19_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_95_" class="st5" points="252.3,143.7 235.2,156.1 241.7,136.1 											"/>
+										</g>
+										<g id="use10_19_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_96_" class="st5" points="245,146.1 228,133.7 249,133.7 											"/>
+										</g>
+										<g id="use12_19_">
+											<polygon id="abpt_97_" class="st5" points="240.5,139.9 247,119.9 253.5,139.9 											"/>
+										</g>
+										<g id="use14_19_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_98_" class="st5" points="245,133.7 266,133.7 249,146.1 											"/>
+										</g>
+										<g id="use16_19_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_99_" class="st5" points="252.3,136.1 258.8,156.1 241.7,143.7 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use25_3_">
+									<g id="star_20_">
+										<g id="use8_20_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_100_" class="st5" points="334.2,143.7 317.1,156.1 323.6,136.1 											"/>
+										</g>
+										<g id="use10_20_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_101_" class="st5" points="326.9,146.1 309.9,133.7 330.9,133.7 											"/>
+										</g>
+										<g id="use12_20_">
+											<polygon id="abpt_102_" class="st5" points="322.4,139.9 328.9,119.9 335.4,139.9 											"/>
+										</g>
+										<g id="use14_20_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_103_" class="st5" points="326.9,133.7 347.9,133.7 330.9,146.1 											"/>
+										</g>
+										<g id="use16_20_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_104_" class="st5" points="334.2,136.1 340.7,156.1 323.6,143.7 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use27_3_">
+									<g id="star_21_">
+										<g id="use8_21_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_105_" class="st5" points="416.1,143.7 399,156.1 405.5,136.1 											"/>
+										</g>
+										<g id="use10_21_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_106_" class="st5" points="408.8,146.1 391.8,133.7 412.8,133.7 											"/>
+										</g>
+										<g id="use12_21_">
+											<polygon id="abpt_107_" class="st5" points="404.3,139.9 410.8,119.9 417.3,139.9 											"/>
+										</g>
+										<g id="use14_21_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_108_" class="st5" points="408.8,133.7 429.8,133.7 412.8,146.1 											"/>
+										</g>
+										<g id="use16_21_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_109_" class="st5" points="416.1,136.1 422.6,156.1 405.5,143.7 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+					</g>
+				</g>
+				<g id="use46">
+					<g id="abx4_1_">
+						<g id="use35_1_">
+							<g id="abs6_2_">
+								<g id="use30_2_">
+									<g id="abs5_4_">
+										<g id="use19_4_">
+											<g id="star_22_">
+												<g id="use8_22_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_110_" class="st5" points="47.5,178.8 30.5,191.2 37,171.2 													"/>
+												</g>
+												<g id="use10_22_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_111_" class="st5" points="40.2,181.2 23.2,168.8 44.3,168.8 													"/>
+												</g>
+												<g id="use12_22_">
+													<polygon id="abpt_112_" class="st5" points="35.7,175 42.3,155 48.8,175 													"/>
+												</g>
+												<g id="use14_22_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_113_" class="st5" points="40.2,168.8 61.3,168.8 44.3,181.2 													"/>
+												</g>
+												<g id="use16_22_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_114_" class="st5" points="47.5,171.2 54,191.2 37,178.8 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use21_4_">
+											<g id="star_23_">
+												<g id="use8_23_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_115_" class="st5" points="129.4,178.8 112.4,191.2 118.9,171.2 													"/>
+												</g>
+												<g id="use10_23_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_116_" class="st5" points="122.1,181.2 105.1,168.8 126.2,168.8 													"/>
+												</g>
+												<g id="use12_23_">
+													<polygon id="abpt_117_" class="st5" points="117.6,175 124.2,155 130.7,175 													"/>
+												</g>
+												<g id="use14_23_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_118_" class="st5" points="122.1,168.8 143.2,168.8 126.2,181.2 													"/>
+												</g>
+												<g id="use16_23_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_119_" class="st5" points="129.4,171.2 135.9,191.2 118.9,178.8 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use23_4_">
+											<g id="star_24_">
+												<g id="use8_24_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_120_" class="st5" points="211.3,178.8 194.3,191.2 200.8,171.2 													"/>
+												</g>
+												<g id="use10_24_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_121_" class="st5" points="204,181.2 187,168.8 208.1,168.8 													"/>
+												</g>
+												<g id="use12_24_">
+													<polygon id="abpt_122_" class="st5" points="199.5,175 206.1,155 212.6,175 													"/>
+												</g>
+												<g id="use14_24_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_123_" class="st5" points="204,168.8 225.1,168.8 208.1,181.2 													"/>
+												</g>
+												<g id="use16_24_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_124_" class="st5" points="211.3,171.2 217.8,191.2 200.8,178.8 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use25_4_">
+											<g id="star_25_">
+												<g id="use8_25_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_125_" class="st5" points="293.2,178.8 276.2,191.2 282.7,171.2 													"/>
+												</g>
+												<g id="use10_25_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_126_" class="st5" points="285.9,181.2 268.9,168.8 290,168.8 													"/>
+												</g>
+												<g id="use12_25_">
+													<polygon id="abpt_127_" class="st5" points="281.4,175 288,155 294.5,175 													"/>
+												</g>
+												<g id="use14_25_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_128_" class="st5" points="285.9,168.8 307,168.8 290,181.2 													"/>
+												</g>
+												<g id="use16_25_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_129_" class="st5" points="293.2,171.2 299.7,191.2 282.7,178.8 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use27_4_">
+											<g id="star_26_">
+												<g id="use8_26_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_130_" class="st5" points="375.1,178.8 358.1,191.2 364.6,171.2 													"/>
+												</g>
+												<g id="use10_26_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_131_" class="st5" points="367.8,181.2 350.8,168.8 371.9,168.8 													"/>
+												</g>
+												<g id="use12_26_">
+													<polygon id="abpt_132_" class="st5" points="363.3,175 369.9,155 376.4,175 													"/>
+												</g>
+												<g id="use14_26_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_133_" class="st5" points="367.8,168.8 388.9,168.8 371.9,181.2 													"/>
+												</g>
+												<g id="use16_26_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_134_" class="st5" points="375.1,171.2 381.6,191.2 364.6,178.8 													"/>
+												</g>
+											</g>
+										</g>
+									</g>
+								</g>
+								<g id="use32_2_">
+									<g id="star_27_">
+										<g id="use8_27_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_135_" class="st5" points="457,178.8 440,191.2 446.5,171.2 											"/>
+										</g>
+										<g id="use10_27_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_136_" class="st5" points="449.7,181.2 432.7,168.8 453.8,168.8 											"/>
+										</g>
+										<g id="use12_27_">
+											<polygon id="abpt_137_" class="st5" points="445.2,175 451.8,155 458.3,175 											"/>
+										</g>
+										<g id="use14_27_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_138_" class="st5" points="449.7,168.8 470.8,168.8 453.8,181.2 											"/>
+										</g>
+										<g id="use16_27_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_139_" class="st5" points="457,171.2 463.5,191.2 446.5,178.8 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+						<g id="use37_1_">
+							<g id="abs5_5_">
+								<g id="use19_5_">
+									<g id="star_28_">
+										<g id="use8_28_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_140_" class="st5" points="88.5,213.9 71.4,226.3 77.9,206.3 											"/>
+										</g>
+										<g id="use10_28_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_141_" class="st5" points="81.2,216.3 64.2,203.9 85.2,203.9 											"/>
+										</g>
+										<g id="use12_28_">
+											<polygon id="abpt_142_" class="st5" points="76.7,210.1 83.2,190.1 89.7,210.1 											"/>
+										</g>
+										<g id="use14_28_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_143_" class="st5" points="81.2,203.9 102.2,203.9 85.2,216.3 											"/>
+										</g>
+										<g id="use16_28_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_144_" class="st5" points="88.5,206.3 95,226.3 77.9,213.9 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use21_5_">
+									<g id="star_29_">
+										<g id="use8_29_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_145_" class="st5" points="170.4,213.9 153.3,226.3 159.8,206.3 											"/>
+										</g>
+										<g id="use10_29_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_146_" class="st5" points="163.1,216.3 146.1,203.9 167.1,203.9 											"/>
+										</g>
+										<g id="use12_29_">
+											<polygon id="abpt_147_" class="st5" points="158.6,210.1 165.1,190.1 171.6,210.1 											"/>
+										</g>
+										<g id="use14_29_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_148_" class="st5" points="163.1,203.9 184.1,203.9 167.1,216.3 											"/>
+										</g>
+										<g id="use16_29_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_149_" class="st5" points="170.4,206.3 176.9,226.3 159.8,213.9 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use23_5_">
+									<g id="star_30_">
+										<g id="use8_30_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_150_" class="st5" points="252.3,213.9 235.2,226.3 241.7,206.3 											"/>
+										</g>
+										<g id="use10_30_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_151_" class="st5" points="245,216.3 228,203.9 249,203.9 											"/>
+										</g>
+										<g id="use12_30_">
+											<polygon id="abpt_152_" class="st5" points="240.5,210.1 247,190.1 253.5,210.1 											"/>
+										</g>
+										<g id="use14_30_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_153_" class="st5" points="245,203.9 266,203.9 249,216.3 											"/>
+										</g>
+										<g id="use16_30_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_154_" class="st5" points="252.3,206.3 258.8,226.3 241.7,213.9 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use25_5_">
+									<g id="star_31_">
+										<g id="use8_31_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_155_" class="st5" points="334.2,213.9 317.1,226.3 323.6,206.3 											"/>
+										</g>
+										<g id="use10_31_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_156_" class="st5" points="326.9,216.3 309.9,203.9 330.9,203.9 											"/>
+										</g>
+										<g id="use12_31_">
+											<polygon id="abpt_157_" class="st5" points="322.4,210.1 328.9,190.1 335.4,210.1 											"/>
+										</g>
+										<g id="use14_31_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_158_" class="st5" points="326.9,203.9 347.9,203.9 330.9,216.3 											"/>
+										</g>
+										<g id="use16_31_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_159_" class="st5" points="334.2,206.3 340.7,226.3 323.6,213.9 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use27_5_">
+									<g id="star_32_">
+										<g id="use8_32_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_160_" class="st5" points="416.1,213.9 399,226.3 405.5,206.3 											"/>
+										</g>
+										<g id="use10_32_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_161_" class="st5" points="408.8,216.3 391.8,203.9 412.8,203.9 											"/>
+										</g>
+										<g id="use12_32_">
+											<polygon id="abpt_162_" class="st5" points="404.3,210.1 410.8,190.1 417.3,210.1 											"/>
+										</g>
+										<g id="use14_32_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_163_" class="st5" points="408.8,203.9 429.8,203.9 412.8,216.3 											"/>
+										</g>
+										<g id="use16_32_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_164_" class="st5" points="416.1,206.3 422.6,226.3 405.5,213.9 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+						<g id="use39_1_">
+							<g id="abs6_3_">
+								<g id="use30_3_">
+									<g id="abs5_6_">
+										<g id="use19_6_">
+											<g id="star_33_">
+												<g id="use8_33_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_165_" class="st5" points="47.5,249 30.5,261.4 37,241.4 													"/>
+												</g>
+												<g id="use10_33_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_166_" class="st5" points="40.2,251.4 23.2,239 44.3,239 													"/>
+												</g>
+												<g id="use12_33_">
+													<polygon id="abpt_167_" class="st5" points="35.7,245.2 42.3,225.2 48.8,245.2 													"/>
+												</g>
+												<g id="use14_33_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_168_" class="st5" points="40.2,239 61.3,239 44.3,251.4 													"/>
+												</g>
+												<g id="use16_33_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_169_" class="st5" points="47.5,241.4 54,261.4 37,249 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use21_6_">
+											<g id="star_34_">
+												<g id="use8_34_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_170_" class="st5" points="129.4,249 112.4,261.4 118.9,241.4 													"/>
+												</g>
+												<g id="use10_34_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_171_" class="st5" points="122.1,251.4 105.1,239 126.2,239 													"/>
+												</g>
+												<g id="use12_34_">
+													<polygon id="abpt_172_" class="st5" points="117.6,245.2 124.2,225.2 130.7,245.2 													"/>
+												</g>
+												<g id="use14_34_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_173_" class="st5" points="122.1,239 143.2,239 126.2,251.4 													"/>
+												</g>
+												<g id="use16_34_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_174_" class="st5" points="129.4,241.4 135.9,261.4 118.9,249 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use23_6_">
+											<g id="star_35_">
+												<g id="use8_35_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_175_" class="st5" points="211.3,249 194.3,261.4 200.8,241.4 													"/>
+												</g>
+												<g id="use10_35_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_176_" class="st5" points="204,251.4 187,239 208.1,239 													"/>
+												</g>
+												<g id="use12_35_">
+													<polygon id="abpt_177_" class="st5" points="199.5,245.2 206.1,225.2 212.6,245.2 													"/>
+												</g>
+												<g id="use14_35_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_178_" class="st5" points="204,239 225.1,239 208.1,251.4 													"/>
+												</g>
+												<g id="use16_35_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_179_" class="st5" points="211.3,241.4 217.8,261.4 200.8,249 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use25_6_">
+											<g id="star_36_">
+												<g id="use8_36_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_180_" class="st5" points="293.2,249 276.2,261.4 282.7,241.4 													"/>
+												</g>
+												<g id="use10_36_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_181_" class="st5" points="285.9,251.4 268.9,239 290,239 													"/>
+												</g>
+												<g id="use12_36_">
+													<polygon id="abpt_182_" class="st5" points="281.4,245.2 288,225.2 294.5,245.2 													"/>
+												</g>
+												<g id="use14_36_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_183_" class="st5" points="285.9,239 307,239 290,251.4 													"/>
+												</g>
+												<g id="use16_36_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_184_" class="st5" points="293.2,241.4 299.7,261.4 282.7,249 													"/>
+												</g>
+											</g>
+										</g>
+										<g id="use27_6_">
+											<g id="star_37_">
+												<g id="use8_37_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_185_" class="st5" points="375.1,249 358.1,261.4 364.6,241.4 													"/>
+												</g>
+												<g id="use10_37_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_186_" class="st5" points="367.8,251.4 350.8,239 371.9,239 													"/>
+												</g>
+												<g id="use12_37_">
+													<polygon id="abpt_187_" class="st5" points="363.3,245.2 369.9,225.2 376.4,245.2 													"/>
+												</g>
+												<g id="use14_37_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+													<polygon id="abpt_188_" class="st5" points="367.8,239 388.9,239 371.9,251.4 													"/>
+												</g>
+												<g id="use16_37_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+													<polygon id="abpt_189_" class="st5" points="375.1,241.4 381.6,261.4 364.6,249 													"/>
+												</g>
+											</g>
+										</g>
+									</g>
+								</g>
+								<g id="use32_3_">
+									<g id="star_38_">
+										<g id="use8_38_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_190_" class="st5" points="457,249 440,261.4 446.5,241.4 											"/>
+										</g>
+										<g id="use10_38_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_191_" class="st5" points="449.7,251.4 432.7,239 453.8,239 											"/>
+										</g>
+										<g id="use12_38_">
+											<polygon id="abpt_192_" class="st5" points="445.2,245.2 451.8,225.2 458.3,245.2 											"/>
+										</g>
+										<g id="use14_38_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_193_" class="st5" points="449.7,239 470.8,239 453.8,251.4 											"/>
+										</g>
+										<g id="use16_38_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_194_" class="st5" points="457,241.4 463.5,261.4 446.5,249 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+						<g id="use41_1_">
+							<g id="abs5_7_">
+								<g id="use19_7_">
+									<g id="star_39_">
+										<g id="use8_39_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_195_" class="st5" points="88.5,284.1 71.4,296.5 77.9,276.5 											"/>
+										</g>
+										<g id="use10_39_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_196_" class="st5" points="81.2,286.5 64.2,274.1 85.2,274.1 											"/>
+										</g>
+										<g id="use12_39_">
+											<polygon id="abpt_197_" class="st5" points="76.7,280.3 83.2,260.3 89.7,280.3 											"/>
+										</g>
+										<g id="use14_39_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_198_" class="st5" points="81.2,274.1 102.2,274.1 85.2,286.5 											"/>
+										</g>
+										<g id="use16_39_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_199_" class="st5" points="88.5,276.5 95,296.5 77.9,284.1 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use21_7_">
+									<g id="star_40_">
+										<g id="use8_40_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_200_" class="st5" points="170.4,284.1 153.3,296.5 159.8,276.5 											"/>
+										</g>
+										<g id="use10_40_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_201_" class="st5" points="163.1,286.5 146.1,274.1 167.1,274.1 											"/>
+										</g>
+										<g id="use12_40_">
+											<polygon id="abpt_202_" class="st5" points="158.6,280.3 165.1,260.3 171.6,280.3 											"/>
+										</g>
+										<g id="use14_40_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_203_" class="st5" points="163.1,274.1 184.1,274.1 167.1,286.5 											"/>
+										</g>
+										<g id="use16_40_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_204_" class="st5" points="170.4,276.5 176.9,296.5 159.8,284.1 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use23_7_">
+									<g id="star_41_">
+										<g id="use8_41_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_205_" class="st5" points="252.3,284.1 235.2,296.5 241.7,276.5 											"/>
+										</g>
+										<g id="use10_41_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_206_" class="st5" points="245,286.5 228,274.1 249,274.1 											"/>
+										</g>
+										<g id="use12_41_">
+											<polygon id="abpt_207_" class="st5" points="240.5,280.3 247,260.3 253.5,280.3 											"/>
+										</g>
+										<g id="use14_41_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_208_" class="st5" points="245,274.1 266,274.1 249,286.5 											"/>
+										</g>
+										<g id="use16_41_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_209_" class="st5" points="252.3,276.5 258.8,296.5 241.7,284.1 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use25_7_">
+									<g id="star_42_">
+										<g id="use8_42_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_210_" class="st5" points="334.2,284.1 317.1,296.5 323.6,276.5 											"/>
+										</g>
+										<g id="use10_42_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_211_" class="st5" points="326.9,286.5 309.9,274.1 330.9,274.1 											"/>
+										</g>
+										<g id="use12_42_">
+											<polygon id="abpt_212_" class="st5" points="322.4,280.3 328.9,260.3 335.4,280.3 											"/>
+										</g>
+										<g id="use14_42_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_213_" class="st5" points="326.9,274.1 347.9,274.1 330.9,286.5 											"/>
+										</g>
+										<g id="use16_42_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_214_" class="st5" points="334.2,276.5 340.7,296.5 323.6,284.1 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use27_7_">
+									<g id="star_43_">
+										<g id="use8_43_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_215_" class="st5" points="416.1,284.1 399,296.5 405.5,276.5 											"/>
+										</g>
+										<g id="use10_43_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_216_" class="st5" points="408.8,286.5 391.8,274.1 412.8,274.1 											"/>
+										</g>
+										<g id="use12_43_">
+											<polygon id="abpt_217_" class="st5" points="404.3,280.3 410.8,260.3 417.3,280.3 											"/>
+										</g>
+										<g id="use14_43_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_218_" class="st5" points="408.8,274.1 429.8,274.1 412.8,286.5 											"/>
+										</g>
+										<g id="use16_43_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_219_" class="st5" points="416.1,276.5 422.6,296.5 405.5,284.1 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+					</g>
+				</g>
+				<g id="use48">
+					<g id="abs6_4_">
+						<g id="use30_4_">
+							<g id="abs5_8_">
+								<g id="use19_8_">
+									<g id="star_44_">
+										<g id="use8_44_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_220_" class="st5" points="47.5,319.2 30.5,331.6 37,311.6 											"/>
+										</g>
+										<g id="use10_44_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_221_" class="st5" points="40.2,321.6 23.2,309.2 44.3,309.2 											"/>
+										</g>
+										<g id="use12_44_">
+											<polygon id="abpt_222_" class="st5" points="35.7,315.4 42.3,295.4 48.8,315.4 											"/>
+										</g>
+										<g id="use14_44_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_223_" class="st5" points="40.2,309.2 61.3,309.2 44.3,321.6 											"/>
+										</g>
+										<g id="use16_44_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_224_" class="st5" points="47.5,311.6 54,331.6 37,319.2 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use21_8_">
+									<g id="star_45_">
+										<g id="use8_45_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_225_" class="st5" points="129.4,319.2 112.4,331.6 118.9,311.6 											"/>
+										</g>
+										<g id="use10_45_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_226_" class="st5" points="122.1,321.6 105.1,309.2 126.2,309.2 											"/>
+										</g>
+										<g id="use12_45_">
+											<polygon id="abpt_227_" class="st5" points="117.6,315.4 124.2,295.4 130.7,315.4 											"/>
+										</g>
+										<g id="use14_45_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_228_" class="st5" points="122.1,309.2 143.2,309.2 126.2,321.6 											"/>
+										</g>
+										<g id="use16_45_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_229_" class="st5" points="129.4,311.6 135.9,331.6 118.9,319.2 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use23_8_">
+									<g id="star_46_">
+										<g id="use8_46_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_230_" class="st5" points="211.3,319.2 194.3,331.6 200.8,311.6 											"/>
+										</g>
+										<g id="use10_46_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_231_" class="st5" points="204,321.6 187,309.2 208.1,309.2 											"/>
+										</g>
+										<g id="use12_46_">
+											<polygon id="abpt_232_" class="st5" points="199.5,315.4 206.1,295.4 212.6,315.4 											"/>
+										</g>
+										<g id="use14_46_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_233_" class="st5" points="204,309.2 225.1,309.2 208.1,321.6 											"/>
+										</g>
+										<g id="use16_46_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_234_" class="st5" points="211.3,311.6 217.8,331.6 200.8,319.2 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use25_8_">
+									<g id="star_47_">
+										<g id="use8_47_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_235_" class="st5" points="293.2,319.2 276.2,331.6 282.7,311.6 											"/>
+										</g>
+										<g id="use10_47_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_236_" class="st5" points="285.9,321.6 268.9,309.2 290,309.2 											"/>
+										</g>
+										<g id="use12_47_">
+											<polygon id="abpt_237_" class="st5" points="281.4,315.4 288,295.4 294.5,315.4 											"/>
+										</g>
+										<g id="use14_47_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_238_" class="st5" points="285.9,309.2 307,309.2 290,321.6 											"/>
+										</g>
+										<g id="use16_47_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_239_" class="st5" points="293.2,311.6 299.7,331.6 282.7,319.2 											"/>
+										</g>
+									</g>
+								</g>
+								<g id="use27_8_">
+									<g id="star_48_">
+										<g id="use8_48_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_240_" class="st5" points="375.1,319.2 358.1,331.6 364.6,311.6 											"/>
+										</g>
+										<g id="use10_48_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_241_" class="st5" points="367.8,321.6 350.8,309.2 371.9,309.2 											"/>
+										</g>
+										<g id="use12_48_">
+											<polygon id="abpt_242_" class="st5" points="363.3,315.4 369.9,295.4 376.4,315.4 											"/>
+										</g>
+										<g id="use14_48_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+											<polygon id="abpt_243_" class="st5" points="367.8,309.2 388.9,309.2 371.9,321.6 											"/>
+										</g>
+										<g id="use16_48_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+											<polygon id="abpt_244_" class="st5" points="375.1,311.6 381.6,331.6 364.6,319.2 											"/>
+										</g>
+									</g>
+								</g>
+							</g>
+						</g>
+						<g id="use32_4_">
+							<g id="star_49_">
+								<g id="use8_49_" transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,0,0)">
+									<polygon id="abpt_245_" class="st5" points="457,319.2 440,331.6 446.5,311.6 									"/>
+								</g>
+								<g id="use10_49_" transform="matrix(0.30901699,-0.95105652,0.95105652,0.30901699,0,0)">
+									<polygon id="abpt_246_" class="st5" points="449.7,321.6 432.7,309.2 453.8,309.2 									"/>
+								</g>
+								<g id="use12_49_">
+									<polygon id="abpt_247_" class="st5" points="445.2,315.4 451.8,295.4 458.3,315.4 									"/>
+								</g>
+								<g id="use14_49_" transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)">
+									<polygon id="abpt_248_" class="st5" points="449.7,309.2 470.8,309.2 453.8,321.6 									"/>
+								</g>
+								<g id="use16_49_" transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)">
+									<polygon id="abpt_249_" class="st5" points="457,311.6 463.5,331.6 446.5,319.2 									"/>
 								</g>
 							</g>
 						</g>
@@ -424,5 +1063,22 @@
 			</g>
 		</g>
 	</g>
+	<rect id="rect5795" x="41.5" y="125.5" class="st8" width="124" height="73"/>
 </g>
+<g id="g6610">
+	<g id="g5789" transform="matrix(0.24666667,0,0,0.24666667,208.5,124.5)">
+		<rect id="rect4" x="-2" y="2" class="st9" width="506.8" height="300"/>
+		<path id="hammer" class="st10" d="M67.8,79.9l8.7,8.7l7.1-7.3c15.8,16.3,31.6,32.7,47.4,49c3.5-0.8,5.4-2.2,6.5-6.2L88.8,76.2
+			l9.8-8.8l-14.3-3.9L67.8,79.9L67.8,79.9z"/>
+		<path id="star-9" class="st10" d="M95.8,30.7H82.3l10.9,8l-4.1,12.8l10.9-7.9l10.9,7.9l-4.1-12.9l10.9-7.9h-13.5L100,17.8v0
+			C100,17.8,95.8,30.7,95.8,30.7z M100,25.8l2.4,7.4h7.7l-6.2,4.5l2.4,7.4l-6.3-4.6l-6.3,4.6l2.4-7.4l-6.2-4.5h7.7L100,25.8
+			C100,25.8,100,25.8,100,25.8z"/>
+		<path id="sichel" class="st10" d="M100.1,55.3c21,7.7,34.2,25.3,34.3,38.3c0.2,28.7-31.1,42.5-51.3,19.4l-1.4,1l0.3,2.5
+			c-6.1-0.6-11.6,18.1-18.2,12.9c-6-7.6,10.6-11.1,12.3-18.8l2.4,0.2l2-2.1l1.9,0.3l2.4-2.5c19.7,20.8,44.6,4.7,41.1-16
+			C123.4,74.6,113.4,65.5,100.1,55.3L100.1,55.3L100.1,55.3L100.1,55.3L100.1,55.3L100.1,55.3C100.1,55.3,100.1,55.3,100.1,55.3z"/>
+	</g>
+	<rect id="rect6608" x="208.5" y="125.5" class="st8" width="124" height="73"/>
+</g>
+<path id="path6654" class="st11" d="M151.7,201.5H223v-6.8l-6.8-5.8v-4.5l-6.5-5.3v-38.7l7.8-7.8v-9.2l-10.7-3.9v7.9H194v-9.2h-13.2
+	v9.2h-14v-7.9l-9.7,3.9v9.2l8.2,7.8v38.7c0,0-7,5.8-6.8,5.3s0,4.5,0,4.5l-6.8,5.8V201.5z"/>
 </svg>

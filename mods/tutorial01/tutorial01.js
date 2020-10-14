@@ -47,9 +47,9 @@ class Tutorial01 extends ModTemplate {
       document.querySelector('.tutorial01-email-btn').addEventListener('click', function(e) {
 
 	let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
-            newtx.transaction.msg.module  = "Email";
-            newtx.transaction.msg.title   = "Tutorial button clicked!";
-            newtx.transaction.msg.message = "Your computer attached this email to a transaction and sent it to the blockchain. If this arrived, your message is now on the blockchain.";
+            newtx.msg.module  = "Email";
+            newtx.msg.title   = "Tutorial button clicked!";
+            newtx.msg.message = "Your computer attached this email to a transaction and sent it to the blockchain. If this arrived, your message is now on the blockchain.";
 	newtx = app.wallet.signTransaction(newtx);
         app.network.propagateTransaction(newtx);
 

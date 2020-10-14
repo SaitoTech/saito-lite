@@ -12,8 +12,8 @@ module.exports = TransferManager = {
     // create a transaction the other person can broadcast
     //
     let newtx = app.wallet.createUnsignedTransaction(app.wallet.returnPublicKey(), 0.0, 0.0); 
-        newtx.transaction.msg.module   = "Contact";
-        newtx.transaction.msg.data     = "additional data";
+        newtx.msg.module   = "Contact";
+        newtx.msg.data     = "additional data";
     newtx = app.wallet.signTransaction(newtx); 
   
     this.generateQRCode("QRCode data");

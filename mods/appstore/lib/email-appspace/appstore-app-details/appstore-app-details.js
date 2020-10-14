@@ -97,9 +97,9 @@ return;
         if (app.options.appstore.default != "") {
           var newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.options.appstore.default, 0);
           if (newtx == null) { return; }
-          newtx.transaction.msg.module = "AppStore";
-          newtx.transaction.msg.request = "request bundle";
-          newtx.transaction.msg.list = module_list;
+          newtx.msg.module = "AppStore";
+          newtx.msg.request = "request bundle";
+          newtx.msg.list = module_list;
           newtx = app.wallet.signTransaction(newtx);
           app.network.propagateTransaction(newtx);
 

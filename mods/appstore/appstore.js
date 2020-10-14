@@ -116,6 +116,11 @@ class AppStore extends ModTemplate {
       //
       dirs.forEach(dir => {
 
+console.log("##########################");
+console.log("##########################");
+console.log("##########################");
+console.log("processing: " + dir);
+
         let mod_path = path.resolve(__dirname, `mods/${dir}.zip`);
         let output = fs.createWriteStream(mod_path);
 
@@ -152,12 +157,17 @@ class AppStore extends ModTemplate {
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
-          newtx.transaction.msg = {
+
+
+          newtx.msg = {
             module: "AppStore",
             request: "submit module",
             module_zip: zip,
             name: dir,
           };
+
+console.log("About to Fail: " + newtx.msg.name);
+console.log("ZIP LEN: " + zip.length);
 
           newtx = app.wallet.signTransaction(newtx);
 
@@ -338,9 +348,9 @@ class AppStore extends ModTemplate {
       if (tx.isFrom(this.app.wallet.returnPublicKey())) {
 
         let newtx = this.app.wallet.createUnsignedTransaction();
-            newtx.transaction.msg.module       = "Email";
-            newtx.transaction.msg.title        = "Saito Application Published";
-            newtx.transaction.msg.message      = `
+            newtx.msg.module       = "Email";
+            newtx.msg.title        = "Saito Application Published";
+            newtx.msg.message      = `
 
 	    Your application is now available at the following link:
 
@@ -544,7 +554,7 @@ class AppStore extends ModTemplate {
       request: "receive bundle",
       bundle: online_version
     };
-    newtx.transaction.msg = msg;
+    newtx.msg = msg;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -691,7 +701,7 @@ class AppStore extends ModTemplate {
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     let bundle_bin = "";
     if (fs) { bundle_bin = fs.readFileSync(path.resolve(__dirname, `./bundler/dist/${bundle_filename}`), { encoding: 'binary' }); }
-    newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin };
+    newtx.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin };
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 

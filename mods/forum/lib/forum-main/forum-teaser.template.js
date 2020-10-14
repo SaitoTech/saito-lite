@@ -1,7 +1,7 @@
 module.exports = ForumTeaserTemplate = (app, data, tx) => {
 
   let author = data.forum.formatAuthor(tx.transaction.from[0].add);
-  let link = tx.transaction.msg.link;
+  let link = tx.msg.link;
   let domain = tx.transaction.domain || "";
   let subforum = "/forum/main";
   let comments_text = "read comments";
@@ -19,7 +19,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
     if(tx.transaction.img.length > 0) {thumbnail = tx.transaction.img}
   }
 
-  if (tx.transaction.msg.forum) { subforum = "/forum/"+tx.transaction.msg.forum; }
+  if (tx.msg.forum) { subforum = "/forum/"+tx.msg.forum; }
   if (link == "") { link = subforum+"/"+tx.transaction.sig; }
   let discussion_link = subforum + "/" + tx.transaction.sig;
 
@@ -41,7 +41,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
         <div class="teaser-thumbnail"  style="background-image: url('${thumbnail}');"></div>
         <div class="teaser-head-details">
             <div class="teaser-content">
-              <div class="teaser-content-title"><a href="${discussion_link}">${tx.transaction.msg.title}</a></div>
+              <div class="teaser-content-title"><a href="${discussion_link}">${tx.msg.title}</a></div>
   `;
    if (domain != "") {
      html += `<div class="teaser-site" alt="${subforum}"><a href="${link}"><i class="fas fa-external-link-square-alt"></i> ${domain}</a></div>`;
@@ -60,7 +60,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
     html += `<div class="teaser-content-links-delete" id="${tx.transaction.sig}">delete</div>`;
   }
   html += `
-            <div class="teaser-content-links-report">report</div>
+            <div class="teaser-content-links-report" id="${tx.transaction.sig}">report</div>
           
           </div>
         </div>

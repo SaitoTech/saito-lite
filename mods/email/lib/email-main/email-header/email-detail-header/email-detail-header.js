@@ -41,8 +41,8 @@ module.exports = EmailDetailHeader = {
               data.email.main.render(app, data);
               data.email.main.attachEvents(app, data);
 
-              let original = data.email.selected_email.transaction;
-              document.getElementById('email-to-address').value = original.from[0].add;
+              let original = data.email.selected_email;
+              document.getElementById('email-to-address').value = original.transaction.from[0].add;
               document.querySelector('.email-title').value = "Re: " + original.msg.title;
               let body = "<br /><hr /><i>Quoted Text: </i> <br />" + original.msg.message;
               document.getElementById('email-text').innerHTML = body;
@@ -51,7 +51,7 @@ module.exports = EmailDetailHeader = {
 
     document.getElementById('email-detail-forward')
             .onclick = (e) => {
-              let original = data.email.selected_email.transaction;
+              let original = data.email.selected_email;
               data.email.previous_state = data.email.active;
               data.email.active = "email_form";
               data.email.main.render(app, data);
@@ -60,7 +60,7 @@ module.exports = EmailDetailHeader = {
               document.querySelector('.email-title').value = `Fwd: ${original.msg.title}`;
               document.querySelector('.email-text').value = original.msg.message;
               let body = "<br/><hr/><i>Forwarded Text: </i><br/>\n";
-              body += `Forwarded from: ${original.from[0].add}\n\n${original.msg.message}`;
+              body += `Forwarded from: ${original.transaction.from[0].add}\n\n${original.msg.message}`;
               document.getElementById('email-text').innerHTML = body;
               document.getElementById('email-to-address').focus();
             };

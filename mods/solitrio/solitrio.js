@@ -22,12 +22,14 @@ class Solitrio extends GameTemplate {
     this.description = "Solitaire card game made famous by the good folks at Cathay Pacific Information Technology Services.";
     this.categories  = "Cardgame Game Solitaire";
 
-
     //
     // this sets the ratio used for determining
     // the size of the original pieces
     //
     this.boardgameWidth  = 5100;
+
+    this.hud.mode = 1; // classic
+    this.hud.use_log = 0;
 
   }
 
@@ -77,6 +79,12 @@ class Solitrio extends GameTemplate {
     this.saveGame(game_id);
     $('.slot').css('min-height', $('.card').css('min-height'));
 
+  }
+
+
+  initializeHTML(app) {
+    super.initializeHTML(app);
+    document.getElementById("hud-menu").style.display = "none";
   }
 
 
@@ -260,6 +268,8 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
+console.log("MOVE: " + mv[0]);
+
       //
       // round
       // play
@@ -273,7 +283,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
           this.playerTurn();
         }
         shd_continue = 0;
-console.log("HERE WE ARE!");
       }
       if (mv[0] === "round") {
 
@@ -323,7 +332,7 @@ console.log("HERE WE ARE!");
         this.game.board['row4_slot9'] = this.game.deck[0].cards[this.game.deck[0].hand[38]];
         this.game.board['row4_slot10'] = this.game.deck[0].cards[this.game.deck[0].hand[39]];
 
-  this.displayBoard();
+        this.displayBoard();
   
         shd_continue = 0;
       }
@@ -348,6 +357,8 @@ console.log("HERE WE ARE!");
         console.log("NOT CONTINUING");
         return 0; 
       }
+console.log("... continuing loop");
+
     } // if cards in queue
     return 1;
   }

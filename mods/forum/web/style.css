@@ -137,7 +137,6 @@
   font-size: 1.15em;
   text-overflow: ellipsis;
   width: 100%;
-  max-width: 300px;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -152,6 +151,13 @@
   color: #474747;
   font-size: 0.8em;
   text-decoration: none;
+}
+
+.hud-token-count {
+    transform: scale(0.35);
+    display: flex;
+    position: absolute;
+    top: -5em;
 }
 
 .teaser-content {}
@@ -223,7 +229,8 @@
   padding: 0px;
   max-height: 50vh;
   overflow: auto;
-  margin-top: 15px;
+  /* margin-top: 15px; */
+  margin-top: 7px;
 }
 
 .comment-links {
