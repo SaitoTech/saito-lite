@@ -13,7 +13,7 @@ module.exports = ChatBoxMessageContainerTemplate = ({
   let { datetime_formatter } = data.chat.helpers;
   let datetime = datetime_formatter(timestamp);
 
-  if (document.getElementById(message.sig)) { return ""; } 
+  if (document.getElementById(sig)) { return ""; } 
 
   return `
     <div class="chat-message-set chat-message-set-${type}">
