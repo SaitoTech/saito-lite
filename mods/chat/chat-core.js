@@ -69,7 +69,7 @@ class ChatCore extends ModTemplate {
     // console.log("OPTIONS: " + JSON.stringify(app.options.peers));
     //
     if (peer.peer.endpoint) {
-      if (peer.peer.endpoint.host != app.options.peers[0].host) { return; }
+      if (!app.options.peers || app.options.peers.length === 0 || peer.peer.endpoint.host != app.options.peers[0].host) { return; }
     }
 
     // if (this.groups.length == 0) {
