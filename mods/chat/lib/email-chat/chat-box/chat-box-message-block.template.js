@@ -1,4 +1,3 @@
-//const ChatRoomMessageBubbleTemplate = require('./chat-room-message-bubble.template');
 const ChatRoomMessageTemplate = require('../../chat-main/chat-room/chat-room-message.template');
 const emoji = require('node-emoji');
 
