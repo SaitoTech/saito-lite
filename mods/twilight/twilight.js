@@ -1,7 +1,8 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
+const GameHud = require('../../lib/saito/ui/game-hud/game-hud');
+const GameMenu = require('../../lib/saito/ui/game-menu/game-menu');
+const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
+const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -63,7 +64,8 @@ class Twilight extends GameTemplate {
     this.type       	 = "Strategy Boardgame";
     this.categories 	 = "Bordgame Game"
 
-    this.hud = new GameHud(this.app, this.menuItems());
+    this.menu = new GameMenu(this.app);
+    this.hud = new GameHud(this.app);
     this.hud.mode = 0;
 
   }
@@ -93,7 +95,7 @@ class Twilight extends GameTemplate {
 
 
 
-
+/*****
   menuItems() {
     return {
       'game-cards': {
@@ -332,9 +334,14 @@ class Twilight extends GameTemplate {
     $('.status-overlay').html(`<div style="padding: 0.5em">${$('.log').html()}</div>`);
     this.addLogCardEvents();
   }
+*****/
+
+
 
 
   initializeHTML(app) {
+
+    if (this.browser_active == 0) { return; }
 
     super.initializeHTML(app);
 
@@ -342,6 +349,42 @@ class Twilight extends GameTemplate {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+
+    this.menu.addMenuOption({
+      text : "Cards",
+      id : "game-cards",
+      class : "game-cards",
+      callback : function(e) {
+        alert("callback in Cards Menu Option!");
+      }
+    });
+    this.menu.addMenuOption({
+      text : "Display",
+      id : "game-display",
+      class : "game-display",
+      callback : function(e) {
+        alert("callback in Display Menu Option!");
+      }
+    });
+    this.menu.addMenuOption({
+      text : "Players",
+      id : "game-players",
+      class : "game-players",
+      callback : function(e) {
+        alert("callback in Players Menu Option!");
+      }
+    });
+    this.menu.addMenuIcon({
+      text : '<i id="hud-toggle-fullscreen" class="hud-button hud-toggle-fullscreen hud-toggle-fullscreen-inhud fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "hud-toggle-fullscreen",
+      class : "hud-toggle-fullscreen",
+      callback : function(e) {
+        alert("callback in Fullscreen Icon");
+      }
+    });
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
 
 
     //
@@ -372,12 +415,8 @@ class Twilight extends GameTemplate {
         GameBoardSizer.render(this.app, this);
         GameBoardSizer.attachEvents(this.app, this, '.gameboard');
 
-console.log("done attach events");
-
         $('#gameboard').draggable({
 	  stop : function(event, ui) {
-console.log("mouseup on gameboard");
-console.log(JSON.stringify(ui.offset));
 	    twilight_self.saveGamePreference((twilight_self.returnSlug()+"-board-offset"), ui.offset);
 	  }
 	});
@@ -2041,7 +2080,6 @@ console.log("CARD: " + card);
               this.game.deck[0].hand = ["sinoindian", "philadelphia", "brezhnev", "kissingerisawarcriminal", "brexit", "opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
-
 
           //
           // add china card
@@ -7404,6 +7442,7 @@ console.log("CONTROL IS: " + control);
         scoring.ussr.total = scoring.ussr.bg;
 
         scoring = this.calculateControlledCountries(scoring, as_countries);
+        scoring = this.determineRegionVictor(scoring, as_scoring_range, as_bg_countries.length);
 
 
         if (this.game.state.events.formosan == 0) {
