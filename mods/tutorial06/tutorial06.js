@@ -52,15 +52,15 @@ class Tutorial06 extends GameTemplate {
 
     let deck = {};
 
-        deck['1'] = { name : "Card 1" , value : 1 }
-        deck['2'] = { name : "Card 2" , value : 2 }
-        deck['3'] = { name : "Card 3" , value : 3 }
-        deck['4'] = { name : "Card 4" , value : 4 }
-        deck['5'] = { name : "Card 5" , value : 5 }
-        deck['6'] = { name : "Card 6" , value : 6 }
-        deck['7'] = { name : "Card 7" , value : 7 }
-        deck['8'] = { name : "Card 8" , value : 8 }
-        deck['9'] = { name : "Card 9" , value : 9 }
+    deck['1'] = { name : "Card 1" , value : 1 }
+    deck['2'] = { name : "Card 2" , value : 2 }
+    deck['3'] = { name : "Card 3" , value : 3 }
+    deck['4'] = { name : "Card 4" , value : 4 }
+    deck['5'] = { name : "Card 5" , value : 5 }
+    deck['6'] = { name : "Card 6" , value : 6 }
+    deck['7'] = { name : "Card 7" , value : 7 }
+    deck['8'] = { name : "Card 8" , value : 8 }
+    deck['9'] = { name : "Card 9" , value : 9 }
 
     return deck;
 
@@ -165,14 +165,14 @@ class Tutorial06 extends GameTemplate {
       //
       if (mv[0] === "place") {
 
-	this.game.queue.splice(qe, 1);
+        this.game.queue.splice(qe, 1);
 
-	let player = mv[1];
-	let slot = mv[2];
+        let player = mv[1];
+        let slot = mv[2];
 
-	this.game.state.boardslot[parseInt(slot)-1] = player;
-	this.displayBoard();
-	return 1;
+        this.game.state.boardslot[parseInt(slot)-1] = player;
+        this.displayBoard();
+        return 1;
       }
 
 
@@ -181,26 +181,26 @@ class Tutorial06 extends GameTemplate {
       //
       if (mv[0] === "turn") {
 
-	//
-	// remove from queue
-	//
-	this.game.queue.splice(qe, 1);
+      //
+      // remove from queue
+      //
+      this.game.queue.splice(qe, 1);
 
 
-	//
-	// if it is our turn, take our move
-	//
-	let player_to_go = parseInt(mv[1]);
-	if (this.game.player == player_to_go) {
-	  this.playerTurn();
-	} else {
-	  this.updateStatus("Waiting for other player to go!");
-	}
+      //
+      // if it is our turn, take our move
+      //
+      let player_to_go = parseInt(mv[1]);
+      if (this.game.player == player_to_go) {
+        this.playerTurn();
+      } else {
+        this.updateStatus("Waiting for other player to go!");
+      }
 
-	//
-	// or wait
-	//
-	return 0;
+      //
+      // or wait
+      //
+      return 0;
 
       }
 
@@ -260,27 +260,27 @@ class Tutorial06 extends GameTemplate {
     for (let i = 0; i < 9; i++) {
       if (this.game.state.boardslot[i] != 0) {
 
-	let slotclass = ".slot"+(i+1);
-	let slotimg = "";
+      let slotclass = ".slot"+(i+1);
+      let slotimg = "";
 
-	if (this.game.state.boardslot[i] == 1) { slotimg = "url('/tutorial06/img/x.png')"; } 
-	if (this.game.state.boardslot[i] == 2) { slotimg = "url('/tutorial06/img/o.png')"; } 
+      if (this.game.state.boardslot[i] == 1) { slotimg = "url('/tutorial06/img/x.png')"; } 
+      if (this.game.state.boardslot[i] == 2) { slotimg = "url('/tutorial06/img/o.png')"; } 
 
-	// display the piece on the board
-	let obj = $(slotclass);	
+      // display the piece on the board
+      let obj = $(slotclass);	
 
-	if (this.game.state.boardslot[i] == 0) {
-	  obj.css('display', 'none');
-	} else {
-	  obj.css('position', 'absolute');
-	  obj.css('background-image', slotimg);
-	  obj.css('background-size', 'cover');
-	  obj.css('left', slot_positions[i].left + "px");
-	  obj.css('top', slot_positions[i].top + "px");
-	  obj.css('width', "200px"); // pixels if board is fullsize
-	  obj.css('height', "200px"); // pixels if board is fullsize
-	  obj.css('display','block');	
-	}
+      if (this.game.state.boardslot[i] == 0) {
+        obj.css('display', 'none');
+      } else {
+        obj.css('position', 'absolute');
+        obj.css('background-image', slotimg);
+        obj.css('background-size', 'cover');
+        obj.css('left', slot_positions[i].left + "px");
+        obj.css('top', slot_positions[i].top + "px");
+        obj.css('width', "200px"); // pixels if board is fullsize
+        obj.css('height', "200px"); // pixels if board is fullsize
+        obj.css('display','block');	
+      }
 
       }
     }
