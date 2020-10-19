@@ -118,7 +118,7 @@ class Twilight extends GameTemplate {
 
       let player_action = $(this).attr("id");
       var deck = twilight_self.game.deck[0];
-      var cards_img_html = [];
+      var html = "";
       var cards;
 
       switch (player_action) {
@@ -135,30 +135,23 @@ class Twilight extends GameTemplate {
           break;
       }
 
-      let cards_in_pile = 0;
+      for (let i = 0; i < cards.length; i++) {
+        html += '<div class="cardlist-card">';
+        if (cards[i] != undefined) {
+	  html += twilight_self.returnCardImage(cards[i], 1);
+	}
+        html += '</div>';
+      }
 
-      cards_img_html = cards.map(card =>  {
-        if (card != undefined) {
-          return twilight_self.returnCardImage(card, 1);
-        } else {
-  	  return '';
-        }
-      });
-
-
-      let display_message = `<div class="" id="" style="width:80%">${cards_img_html.join('')}</div>`;
-
-console.log("X: " + display_message);
-
-      if (cards_img_html.length == 0) {
-        display_message = `
+      if (cards.length == 0) { 
+        html = `
           <div style="text-align:center; margin: auto;">
             There are no cards in ${player_action}
           </div>
         `;
       }
 
-      twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, display_message);
+      twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
     });
 
   }

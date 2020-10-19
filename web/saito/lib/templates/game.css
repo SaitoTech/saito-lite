@@ -61,8 +61,8 @@ body {
   position: absolute;
   display: inlie-block;
   left: 50%;
-  top: 25%;
-  transform: translate(-50%, -25%);
+  top: 50%;
+  transform: translate(-50%, -50%);
   margin-left: auto;
   margin-right: auto;
   background-color: whitesmoke;
@@ -83,6 +83,7 @@ body {
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
   border-bottom: 1px solid var(--saito-skyline-grey);
   margin: 3px;
+  z-index: 50;
 }
 .game-menu ul li {
   color: black;
