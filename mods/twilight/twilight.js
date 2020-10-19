@@ -1,6 +1,7 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
 const GameHud = require('../../lib/saito/ui/game-hud/game-hud');
 const GameMenu = require('../../lib/saito/ui/game-menu/game-menu');
+const GameOverlay = require('../../lib/saito/ui/game-overlay/game-overlay');
 const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
 const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
 const helpers = require('../../lib/helpers/index');
@@ -67,6 +68,7 @@ class Twilight extends GameTemplate {
     this.menu = new GameMenu(this.app);
     this.hud = new GameHud(this.app);
     this.hud.mode = 0;
+    this.overlay = new GameOverlay(this.app);
 
   }
 
@@ -95,29 +97,12 @@ class Twilight extends GameTemplate {
 
 
 
-/*****
-  menuItems() {
-    return {
-      'game-cards': {
-        name: 'Cards',
-        callback: this.handleCardsMenuItem.bind(this)
-      },
-      'game-lang': {
-        name: 'Display',
-        callback: this.handleLangMenuItem.bind(this)
-      },
-      'game-player': {
-        name: 'Players',
-        callback: this.handlePlayerMenuItem.bind(this)
-      },
-    }
-  }
+  handleCardsMenu() {
 
-  handleCardsMenuItem() {
     let twilight_self = this;
     let html =
     `
-      <div class="status-message" id="status-message">
+      <div class="card-overlay status-message" id="status-message">
         <div>Select your deck:</div>
        <ul>
           <li class="menu-item" id="hand">Hand</li>
@@ -127,9 +112,7 @@ class Twilight extends GameTemplate {
       </div>
     `;
 
-    $('.status-overlay').html(html);
-    $('.status').hide();
-    $('.status-overlay').show();
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
 
     $('.menu-item').on('click', function() {
 
@@ -156,13 +139,16 @@ class Twilight extends GameTemplate {
 
       cards_img_html = cards.map(card =>  {
         if (card != undefined) {
-          return `<div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">${twilight_self.returnCardImage(card, 1)}</div>`;
+          return twilight_self.returnCardImage(card, 1);
         } else {
   	  return '';
         }
       });
 
-      let display_message = `<div class="status-cardbox" id="status-cardbox">${cards_img_html.join('')}</div>`;
+
+      let display_message = `<div class="" id="" style="width:80%">${cards_img_html.join('')}</div>`;
+
+console.log("X: " + display_message);
 
       if (cards_img_html.length == 0) {
         display_message = `
@@ -172,13 +158,13 @@ class Twilight extends GameTemplate {
         `;
       }
 
-      $('.status-overlay').html(display_message);
+      twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, display_message);
     });
 
   }
 
 
-  handleLangMenuItem() {
+  handleDisplayMenu() {
 
     let twilight_self = this;
     let user_message = `
@@ -205,15 +191,11 @@ class Twilight extends GameTemplate {
         </ul>
       </div>`;
 
-    $('.status-overlay').html(user_message);
-    $('.status').hide();
-    $('.status-overlay').show();
-
-    // leave action enabled on other panels
-    //$('.card').off();
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, user_message);
 
     $('.menu-item').on('click', function() {
       let action2 = $(this).attr("id");
+
 
       if (action2 === "enable_observer_mode") {
         twilight_self.game.saveGameState = 1;
@@ -230,7 +212,8 @@ class Twilight extends GameTemplate {
 	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (if you do not reload your browser before you make it). Your friends can observe the game from your perspective at the following link:';
 	html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">'+oblink+'/arcade/?i=watch&msg='+msg+'</div>';
 	html += '</div>';
-	$('.status-overlay').html(html);
+	twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+
       }
 
       if (action2 === "text") {
@@ -285,6 +268,7 @@ class Twilight extends GameTemplate {
         twilight_self.hud.render(twilight_self.app, twilight_self);
         twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
         twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+	twilight_self.overlay.hideOverlay();
         return;
       }
       if (action2 == "enable_hud_horizontal") {
@@ -294,38 +278,37 @@ class Twilight extends GameTemplate {
         twilight_self.hud.render(twilight_self.app, twilight_self);
         twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
         twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+	twilight_self.overlay.hideOverlay();
         return;
       }
 
     });
   }
 
-  async handlePlayerMenuItem() {
-    // let opponent = await this.app.dns.fetchIdentifierPromise(this.game.opponents[0]);
+
+  async handlePlayerMenu() {
 
     try {
 
-    $('.status').hide();
-    $('.status-overlay').show();
-    // let's use the address controller for this in the future;
-    let opponent = this.game.opponents[0];
+      let opponent = this.game.opponents[0];
+      if (this.app.crypto.isPublicKey(opponent)) {
+        opponent = opponent.substring(0, 16);
+      }
 
-    if (this.app.crypto.isPublicKey(opponent)) {
-      opponent = opponent.substring(0, 16);
+      let user_message = `
+        <div class="status-message" id="status-message">
+          <div>Opponent: ${opponent}</div>
+        </div>
+      `;
+
+      this.overlay.showOverlay(this.app, this, user_message);
+
+    } catch (err) {
+console.log(err);
     }
 
-    let user_message = `
-      <div class="status-message" id="status-message">
-        <div>Opponent: ${opponent}</div>
-      </div>
-    `;
-
-    $('.status-overlay').html(user_message);
-    $('.status-overlay').show();
-    $('.status').hide();
-
-    } catch (err) {}
   }
+
 
   handleLogMenuItem() {
     //
@@ -334,7 +317,6 @@ class Twilight extends GameTemplate {
     $('.status-overlay').html(`<div style="padding: 0.5em">${$('.log').html()}</div>`);
     this.addLogCardEvents();
   }
-*****/
 
 
 
@@ -352,35 +334,61 @@ class Twilight extends GameTemplate {
 
 
     this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+	game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Save",
+      id : "game-save",
+      class : "game-save",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+	game_mod.overlay.showOverlay(app, game_mod, "This is our overlay text");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Stats",
+      id : "game-stats",
+      class : "game-stats",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+        alert("callback in Stats Menu Option!");
+      }
+    });
+
+    this.menu.addMenuOption({
       text : "Cards",
       id : "game-cards",
       class : "game-cards",
-      callback : function(e) {
-        alert("callback in Cards Menu Option!");
+      callback : function(app, game_mod) {
+        game_mod.handleCardsMenu();
       }
     });
     this.menu.addMenuOption({
       text : "Display",
       id : "game-display",
       class : "game-display",
-      callback : function(e) {
-        alert("callback in Display Menu Option!");
+      callback : function(app, game_mod) {
+        game_mod.handleDisplayMenu();
       }
     });
     this.menu.addMenuOption({
       text : "Players",
       id : "game-players",
       class : "game-players",
-      callback : function(e) {
-        alert("callback in Players Menu Option!");
+      callback : function(app, game_mod) {
+        game_mod.handlePlayerMenu();
       }
     });
     this.menu.addMenuIcon({
-      text : '<i id="hud-toggle-fullscreen" class="hud-button hud-toggle-fullscreen hud-toggle-fullscreen-inhud fa fa-window-maximize" aria-hidden="true"></i>',
-      id : "hud-toggle-fullscreen",
-      class : "hud-toggle-fullscreen",
-      callback : function(e) {
-        alert("callback in Fullscreen Icon");
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        app.browser.requestFullscreen();
       }
     });
     this.menu.render(app, this);
