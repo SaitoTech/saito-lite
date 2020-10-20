@@ -1,7 +1,9 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
+const GameHud = require('../../lib/saito/ui/game-hud/game-hud');
+const GameMenu = require('../../lib/saito/ui/game-menu/game-menu');
+const GameOverlay = require('../../lib/saito/ui/game-overlay/game-overlay');
+const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
+const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -63,8 +65,10 @@ class Twilight extends GameTemplate {
     this.type       	 = "Strategy Boardgame";
     this.categories 	 = "Bordgame Game"
 
-    this.hud = new GameHud(this.app, this.menuItems());
+    this.menu = new GameMenu(this.app);
+    this.hud = new GameHud(this.app);
     this.hud.mode = 0;
+    this.overlay = new GameOverlay(this.app);
 
   }
 
@@ -93,29 +97,12 @@ class Twilight extends GameTemplate {
 
 
 
+  handleCardsMenu() {
 
-  menuItems() {
-    return {
-      'game-cards': {
-        name: 'Cards',
-        callback: this.handleCardsMenuItem.bind(this)
-      },
-      'game-lang': {
-        name: 'Display',
-        callback: this.handleLangMenuItem.bind(this)
-      },
-      'game-player': {
-        name: 'Players',
-        callback: this.handlePlayerMenuItem.bind(this)
-      },
-    }
-  }
-
-  handleCardsMenuItem() {
     let twilight_self = this;
     let html =
     `
-      <div class="status-message" id="status-message">
+      <div class="card-overlay status-message" id="status-message">
         <div>Select your deck:</div>
        <ul>
           <li class="menu-item" id="hand">Hand</li>
@@ -125,15 +112,13 @@ class Twilight extends GameTemplate {
       </div>
     `;
 
-    $('.status-overlay').html(html);
-    $('.status').hide();
-    $('.status-overlay').show();
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
 
     $('.menu-item').on('click', function() {
 
       let player_action = $(this).attr("id");
       var deck = twilight_self.game.deck[0];
-      var cards_img_html = [];
+      var html = "";
       var cards;
 
       switch (player_action) {
@@ -150,33 +135,29 @@ class Twilight extends GameTemplate {
           break;
       }
 
-      let cards_in_pile = 0;
+      for (let i = 0; i < cards.length; i++) {
+        html += '<div class="cardlist-card">';
+        if (cards[i] != undefined) {
+	  html += twilight_self.returnCardImage(cards[i], 1);
+	}
+        html += '</div>';
+      }
 
-      cards_img_html = cards.map(card =>  {
-        if (card != undefined) {
-          return `<div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">${twilight_self.returnCardImage(card, 1)}</div>`;
-        } else {
-  	  return '';
-        }
-      });
-
-      let display_message = `<div class="status-cardbox" id="status-cardbox">${cards_img_html.join('')}</div>`;
-
-      if (cards_img_html.length == 0) {
-        display_message = `
+      if (cards.length == 0) { 
+        html = `
           <div style="text-align:center; margin: auto;">
             There are no cards in ${player_action}
           </div>
         `;
       }
 
-      $('.status-overlay').html(display_message);
+      twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
     });
 
   }
 
 
-  handleLangMenuItem() {
+  handleDisplayMenu() {
 
     let twilight_self = this;
     let user_message = `
@@ -203,15 +184,11 @@ class Twilight extends GameTemplate {
         </ul>
       </div>`;
 
-    $('.status-overlay').html(user_message);
-    $('.status').hide();
-    $('.status-overlay').show();
-
-    // leave action enabled on other panels
-    //$('.card').off();
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, user_message);
 
     $('.menu-item').on('click', function() {
       let action2 = $(this).attr("id");
+
 
       if (action2 === "enable_observer_mode") {
         twilight_self.game.saveGameState = 1;
@@ -228,7 +205,8 @@ class Twilight extends GameTemplate {
 	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (if you do not reload your browser before you make it). Your friends can observe the game from your perspective at the following link:';
 	html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">'+oblink+'/arcade/?i=watch&msg='+msg+'</div>';
 	html += '</div>';
-	$('.status-overlay').html(html);
+	twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+
       }
 
       if (action2 === "text") {
@@ -283,6 +261,7 @@ class Twilight extends GameTemplate {
         twilight_self.hud.render(twilight_self.app, twilight_self);
         twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
         twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+	twilight_self.overlay.hideOverlay();
         return;
       }
       if (action2 == "enable_hud_horizontal") {
@@ -292,38 +271,37 @@ class Twilight extends GameTemplate {
         twilight_self.hud.render(twilight_self.app, twilight_self);
         twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
         twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+	twilight_self.overlay.hideOverlay();
         return;
       }
 
     });
   }
 
-  async handlePlayerMenuItem() {
-    // let opponent = await this.app.dns.fetchIdentifierPromise(this.game.opponents[0]);
+
+  async handlePlayerMenu() {
 
     try {
 
-    $('.status').hide();
-    $('.status-overlay').show();
-    // let's use the address controller for this in the future;
-    let opponent = this.game.opponents[0];
+      let opponent = this.game.opponents[0];
+      if (this.app.crypto.isPublicKey(opponent)) {
+        opponent = opponent.substring(0, 16);
+      }
 
-    if (this.app.crypto.isPublicKey(opponent)) {
-      opponent = opponent.substring(0, 16);
+      let user_message = `
+        <div class="status-message" id="status-message">
+          <div>Opponent: ${opponent}</div>
+        </div>
+      `;
+
+      this.overlay.showOverlay(this.app, this, user_message);
+
+    } catch (err) {
+console.log(err);
     }
 
-    let user_message = `
-      <div class="status-message" id="status-message">
-        <div>Opponent: ${opponent}</div>
-      </div>
-    `;
-
-    $('.status-overlay').html(user_message);
-    $('.status-overlay').show();
-    $('.status').hide();
-
-    } catch (err) {}
   }
+
 
   handleLogMenuItem() {
     //
@@ -334,7 +312,11 @@ class Twilight extends GameTemplate {
   }
 
 
+
+
   initializeHTML(app) {
+
+    if (this.browser_active == 0) { return; }
 
     super.initializeHTML(app);
 
@@ -342,6 +324,68 @@ class Twilight extends GameTemplate {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+	game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Save",
+      id : "game-save",
+      class : "game-save",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+	game_mod.overlay.showOverlay(app, game_mod, "This is our overlay text");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Stats",
+      id : "game-stats",
+      class : "game-stats",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+        alert("callback in Stats Menu Option!");
+      }
+    });
+
+    this.menu.addMenuOption({
+      text : "Cards",
+      id : "game-cards",
+      class : "game-cards",
+      callback : function(app, game_mod) {
+        game_mod.handleCardsMenu();
+      }
+    });
+    this.menu.addMenuOption({
+      text : "Display",
+      id : "game-display",
+      class : "game-display",
+      callback : function(app, game_mod) {
+        game_mod.handleDisplayMenu();
+      }
+    });
+    this.menu.addMenuOption({
+      text : "Players",
+      id : "game-players",
+      class : "game-players",
+      callback : function(app, game_mod) {
+        game_mod.handlePlayerMenu();
+      }
+    });
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        app.browser.requestFullscreen();
+      }
+    });
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
 
 
     //
@@ -372,12 +416,8 @@ class Twilight extends GameTemplate {
         GameBoardSizer.render(this.app, this);
         GameBoardSizer.attachEvents(this.app, this, '.gameboard');
 
-console.log("done attach events");
-
         $('#gameboard').draggable({
 	  stop : function(event, ui) {
-console.log("mouseup on gameboard");
-console.log(JSON.stringify(ui.offset));
 	    twilight_self.saveGamePreference((twilight_self.returnSlug()+"-board-offset"), ui.offset);
 	  }
 	});
@@ -2041,7 +2081,6 @@ console.log("CARD: " + card);
               this.game.deck[0].hand = ["sinoindian", "philadelphia", "brezhnev", "kissingerisawarcriminal", "brexit", "opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
-
 
           //
           // add china card
@@ -7404,15 +7443,16 @@ console.log("CONTROL IS: " + control);
         scoring.ussr.total = scoring.ussr.bg;
 
         scoring = this.calculateControlledCountries(scoring, as_countries);
+        scoring = this.determineRegionVictor(scoring, as_scoring_range, as_bg_countries.length);
 
-/*
+
         if (this.game.state.events.formosan == 0) {
           if (this.isControlled("us", "taiwan") == 1) { scoring.us.total++; }
           if (this.isControlled("ussr", "taiwan") == 1) { scoring.ussr.total++; }
         } else {
           if (this.isControlled("ussr", "taiwan") == 1) { scoring.ussr.total++; }
         }
-*/
+
         //
         // Shuttle Diplomacy
         //
@@ -7435,11 +7475,13 @@ console.log("CONTROL IS: " + control);
         if (this.game.state.events.formosan == 1) {
           if (scoring.us.bg == 7 && scoring.us.total > scoring.ussr.total) { scoring.us.vp = 9; }
           if (scoring.us.bg == 6 && scoring.us.total > scoring.ussr.total && this.isControlled("us", "taiwan") == 0) { scoring.us.vp = 9; }
-          if (scoring.ussr.bg == 6 && scoring.ussr.total > scoring.us.total && this.isControlled("us","taiwan") == 0) { vp_ussr = 9; }
-        } 
+          if (scoring.ussr.bg == 6 && scoring.ussr.total > scoring.us.total) { vp_ussr = 9; }
+        } else {
+          if (scoring.us.bg == 6 && scoring.us.total > scoring.ussr.total) { scoring.us.vp = 9; }
+          if (scoring.ussr.bg == 6 && scoring.ussr.total > scoring.us.total) { vp_ussr = 9; }
+        }
 
-        scoring = this.determineRegionVictor(scoring, as_scoring_range, as_bg_countries.length);
-/***	
+	
         if (scoring.us.vp >= 9 && scoring.us.total > scoring.ussr.total) {}
         else if (scoring.us.bg > scoring.ussr.bg && scoring.us.total > scoring.us.bg && scoring.us.total > scoring.ussr.total) { scoring.us.vp = as_scoring_range.domination; }
         else if (scoring.us.total > 0) { scoring.us.vp = as_scoring_range.presence; }
@@ -7450,7 +7492,6 @@ console.log("CONTROL IS: " + control);
 
         scoring.us.vp = scoring.us.vp + scoring.us.bg;
         scoring.ussr.vp = scoring.ussr.vp + scoring.ussr.bg;
-***/
 
         //
         // neighbouring countries
@@ -9396,5 +9437,6 @@ console.log("CONTROL IS: " + control);
       console.log("sync loading error -- playEvent");
       return 1;
     }
+
 
 
