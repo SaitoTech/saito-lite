@@ -196,11 +196,6 @@ class QRScanner extends ModTemplate {
   }
 
   render() {
-//    document.querySelector('body').innerHTML = QRScannerTemplate();
-//    let header = document.getElementsById('qr-hud-header');
-//    header.append(
-//        elParser(HeaderDropdownTemplate())
-//    );
   }
 
 

@@ -2,7 +2,6 @@ var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
 const Data = require('./lib/data');
-const elParser = require('../../lib/helpers/el_parser');
 
 
 class Website extends ModTemplate {
@@ -54,7 +53,7 @@ class Website extends ModTemplate {
     </a>
     `;
     var iconlist = document.querySelector('.header-icon-links');
-    iconlist.insertBefore(elParser(html), iconlist.firstChild);
+    iconlist.insertBefore(app.browser.htmlToElement(html), iconlist.firstChild);
     
   }
 

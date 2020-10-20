@@ -12,7 +12,7 @@ module.exports = ChatList = {
 
         if (!chat_main) { return; }
         chat_main.innerHTML = ChatListTemplate();
-        chat_main.append(elParser(ChatNavTemplate()));
+        chat_main.append(app.browser.htmlToElement(ChatNavTemplate()));
 
 	for (let i = 0; i < data.chat.mods.length; i++) {
 	  let cmod = data.chat.mods[i].respondTo("chat-navbar");
