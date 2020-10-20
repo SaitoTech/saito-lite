@@ -446,7 +446,9 @@ console.log(err);
       }
     });
 
+
     let main_menu_added = 0;
+    let community_menu_added = 0;
     for (let i = 0; i < this.app.modules.mods.length; i++) {
       if (this.app.modules.mods[i].slug === "chat") {
 	for (let ii = 0; ii < this.game.players.length; ii++) {
@@ -465,9 +467,35 @@ console.log(err);
 	      main_menu_added = 1;
 	    }
 
+	    if (community_menu_added == 0) {
+    	      this.menu.addSubMenuOption("game-chat", {
+    	        text : "Community",
+      	        id : "game-chat-community",
+      	        class : "game-chat-community",
+      	        callback : function(app, game_mod) {
+	  	  game_mod.menu.hideSubMenus();
+
+          	  // load the chat window
+	          let newgroup = chatmod.returnDefaultChat();
+
+console.log("LOADING CHAT: " + newgroup.id);
+
+	          if (newgroup) {
+        	    chatmod.addNewGroup(newgroup);
+        	    chatmod.sendEvent('chat-render-request', {});
+		    chatmod.openChatBox(newgroup.id);
+    	          } else {
+        	    chatmod.sendEvent('chat-render-request', {});
+		    chatmod.openChatBox(newgroup.id);
+	          }
+    	        }
+              });
+	      community_menu_added = 1;
+	    }
+
 	    // add peer chat
   	    let data = {};
-	    let members = [this.game.players[ii], this.app.wallet.returnPublicKey()];
+	    let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
 	    let gid = this.app.crypto.hash(members.join('_'));
 	    let name = "Player "+(ii+1);
 	    let chatmod = this.app.modules.mods[i];
@@ -490,7 +518,7 @@ console.log("MEMBERS: " + members);
 		  chatmod.openChatBox(newgroup.id);
     	        } else {
         	  chatmod.sendEvent('chat-render-request', {});
-		  chatmod.openChatBox(newgroup.id);
+		  chatmod.openChatBox(gid);
 	        }
     	      }
             });

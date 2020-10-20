@@ -281,6 +281,31 @@ class ChatCore extends ModTemplate {
       }
     }
 
+    //
+    // notify group chat if not-on-page
+    //
+    let chat_on_page = 1;
+    try {
+      let chat_box_id = "#chat-box-"+txmsg.group_id;
+console.log("CBI: " + chat_box_id);
+      if (!document.querySelector(chat_box_id)) {
+	chat_on_page = 0;
+      }
+    } catch (err) {
+console.log("eror trying to find chat on page");
+    }
+    if (chat_on_page == 0 && this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
+      let default_chat = this.returnDefaultChat();
+      let message2 = JSON.parse(JSON.stringify(txmsg));
+      message2.group_id = default_chat.id;
+      message2.sig = this.app.crypto.hash(tx.transaction.sig);
+      message2.identicon = this.app.keys.returnIdenticon();
+      message2.type = "others";
+      message2.message = this.app.crypto.stringToBase64("<i>you have received a private message</i>");
+      default_chat.messages.push(message2);
+      this.sendEvent('chat_receive_message', message2);
+    }
+
 
     this.groups.forEach(group => {
 
@@ -350,10 +375,34 @@ class ChatCore extends ModTemplate {
       return;
     }
 
-    let selected_group = this.groups.filter(group => group.id == group_id);
-    ChatManager.openChatBox(this.app, data, selected_group[0]);
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].id == group_id) {
+        ChatManager.openChatBox(this.app, data, this.groups[i]);
+      }
+    }
 
   }
+
+  returnDefaultChat() {
+    for (let i = 0; i < this.groups.length; i++) {
+console.log("G: " + this.groups[i].id);
+      if (this.app.options.peers.length > 0) {
+        if (this.groups[i].members[0] === this.app.options.peers[0].publickey) {
+console.log("G:1");
+          return this.groups[i];
+        }
+      }
+      if (this.app.network.peers.length > 0) {
+        if (this.groups[i].members[0] === this.app.network.peers[0].peer.publickey) {
+console.log("G:2");
+          return this.groups[i];
+        }
+      }
+    }
+console.log("END G");
+    return this.groups[0];
+  }
+
 
 
   chatLoadMessages(app, tx) {}
