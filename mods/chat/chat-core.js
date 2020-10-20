@@ -178,9 +178,18 @@ class ChatCore extends ModTemplate {
     //
     if (cg.members) {
       if (cg.members.length >= 1) {
-	if (cg.members[0] === this.app.network.peers[0].peer.publickey) {
-	  prepend_group = 1;
-	}
+	if (this.app.options.peers) {
+	  if (this.app.options.peers.length > 0) {
+  	    if (cg.members[0] === this.app.options.peers[0].publickey) {
+	      prepend_group = 1;
+	    }
+  	    if (this.app.network.peers.length > 0) {
+  	      if (this.app.network.peers[0].peer.publickey) {
+	        prepend_group = 1;
+	      }
+	    }
+          }
+        }
       }
     }
 
@@ -319,6 +328,33 @@ class ChatCore extends ModTemplate {
     });
     this.app.storage.saveOptions();
   }
+
+
+  openChatBox(group_id=null) {
+
+    let data = {};
+    data.chat = this;
+
+    if (group_id == null) { return; }
+
+    if (document.getElementById(`chat-box-${group_id}`)) {
+      let chat_box_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
+      chat_box_input.focus();
+      chat_box_input.select();
+
+      // 
+      // maximize if minimized
+      //
+      let chat_box = document.getElementById(`chat-box-${group_id}`);
+      chat_box.classList.remove("chat-box-hide");
+      return;
+    }
+
+    let selected_group = this.groups.filter(group => group.id == group_id);
+    ChatManager.openChatBox(this.app, data, selected_group[0]);
+
+  }
+
 
   chatLoadMessages(app, tx) {}
   async chatRequestMessages(app, tx) {}

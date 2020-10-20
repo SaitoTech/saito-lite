@@ -103,7 +103,7 @@ class Twilight extends GameTemplate {
     let html =
     `
       <div class="game-overlay-menu" id="game-overlay-menu">
-        <div>Select your deck:</div>
+        <div>SELECT DECK:</div>
        <ul>
           <li class="menu-item" id="hand">Your Hand</li>
           <li class="menu-item" id="discards">Discarded Cards</li>
@@ -163,30 +163,97 @@ class Twilight extends GameTemplate {
   }
 
 
+
+  handleExportMenu() {
+
+    let twilight_self = this;
+    let html =
+    `
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>Export Options:</div>
+       <ul>
+          <li class="menu-item" id="private">Private <div style="font-size:0.8em;clear:both">Create a backup file that saves the game along with the (encrypted) hands of each player. Only the current players will be able to restore the game.</div></li>
+        </ul>
+      </div>
+    `;
+
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+
+    $('.menu-item').on('click', function() {
+
+      let player_action = $(this).attr("id");
+
+      switch (player_action) {
+        case "private":
+          break;
+        default:
+          break;
+      }
+
+      twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, "All players are backing up their game...");
+    });
+
+  }
+
+
+
+  handleStatsMenu() {
+
+    let twilight_self = this;
+    let html =
+    `
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>Game Statistics:</div>
+	<table class="statistics-table">
+	  <tr>
+	    <th></th>
+	    <th>US</th>
+	    <th>USSR</th>
+	  </tr>
+	  <tr>
+	    <td><b>OPS Played</b></td>
+	    <td>${this.game.state.stats.us_ops}</td>
+	    <td>${this.game.state.stats.ussr_ops}</td>
+	  </tr>
+	  <tr>
+	    <td><b>OPS Spaced</b></td>
+	    <td>${this.game.state.stats.us_ops_spaced}</td>
+	    <td>${this.game.state.stats.ussr_ops_spaced}</td>
+	  </tr>
+	  <tr>
+	    <td><b>Coups</b></td>
+	    <td>${JSON.stringify(this.game.state.stats.us_coups)}</td>
+	    <td>${JSON.stringify(this.game.state.stats.ussr_coups)}</td>
+	  </tr>
+	  <tr>
+	    <td><b>Scoring Cards</b></td>
+	    <td>${this.game.state.stats.us_scorings}</td>
+	    <td>${this.game.state.stats.ussr_scorings}</td>
+	  </tr>
+        </table>
+	<div class="statistics-info">
+	We need help deciding what to track and how to represent the information visually here. If you're comfortable with JAVASCRIPT / HTML / CSS and want to help, please reach out.
+        </div>
+      </div>
+    `;
+
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+
+  }
+
+
   handleDisplayMenu() {
 
     let twilight_self = this;
     let user_message = `
-      <div class="status-message" id="status-message">
-        <div>Select Language:</div>
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>DISPLAY MODE:</div>
        <ul>
           <li class="menu-item" id="english">English</li>
           <li class="menu-item" id="chinese">简体中文</li>
-        </ul>
-       <div style="margin-top:20px">Card Display:</div>
-       <ul>
-          <li class="menu-item" id="text">Text Menu</li>
-          <li class="menu-item" id="graphics">Graphical Menu</li>
-        </ul>
-       <div style="margin-top:20px">HUD Mode:</div>
-       <ul>
-          <li class="menu-item" id="enable_hud_horizontal">Horizontal</li>
-          <li class="menu-item" id="enable_hud_vertical">Vertical</li>
-          <li class="menu-item" id="enable_hud_square">Square</li>
-        </ul>
-       <div style="margin-top:20px">Observer Mode:</div>
-       <ul>
-          <li class="menu-item" id="enable_observer_mode">Enable</li>
+          <li class="menu-item" id="text">Text Cards</li>
+          <li class="menu-item" id="graphics">Graphical Cards</li>
+          <li class="menu-item" id="enable_observer_mode">Enable Observer Mode</li>
         </ul>
       </div>`;
 
@@ -194,7 +261,6 @@ class Twilight extends GameTemplate {
 
     $('.menu-item').on('click', function() {
       let action2 = $(this).attr("id");
-
 
       if (action2 === "enable_observer_mode") {
         twilight_self.game.saveGameState = 1;
@@ -208,7 +274,7 @@ class Twilight extends GameTemplate {
 	let tmpar = observe_link.split("/");
 	let oblink = tmpar[0] + "//" + tmpar[2];
 
-	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (if you do not reload your browser before you make it). Your friends can observe the game from your perspective at the following link:';
+	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (reload to cancel). Make your move and then share this link:';
 	html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">'+oblink+'/arcade/?i=watch&msg='+msg+'</div>';
 	html += '</div>';
 	twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
@@ -340,22 +406,24 @@ console.log(err);
 	game_mod.menu.showSubMenu("game-game");
       }
     });
+/***
     this.menu.addSubMenuOption("game-game", {
-      text : "Save",
-      id : "game-save",
-      class : "game-save",
+      text : "Export",
+      id : "game-export",
+      class : "game-export",
       callback : function(app, game_mod) {
 	game_mod.menu.hideSubMenus();
-	game_mod.overlay.showOverlay(app, game_mod, "This is our overlay text");
+        game_mod.handleExportMenu();
       }
     });
+***/
     this.menu.addSubMenuOption("game-game", {
       text : "Stats",
       id : "game-stats",
       class : "game-stats",
       callback : function(app, game_mod) {
 	game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+        game_mod.handleStatsMenu();
       }
     });
 
@@ -364,6 +432,7 @@ console.log(err);
       id : "game-cards",
       class : "game-cards",
       callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
         game_mod.handleCardsMenu();
       }
     });
@@ -372,21 +441,68 @@ console.log(err);
       id : "game-display",
       class : "game-display",
       callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
         game_mod.handleDisplayMenu();
       }
     });
-    this.menu.addMenuOption({
-      text : "Players",
-      id : "game-players",
-      class : "game-players",
-      callback : function(app, game_mod) {
-        game_mod.handlePlayerMenu();
+
+    let main_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+	for (let ii = 0; ii < this.game.players.length; ii++) {
+	  if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+	    // add main menu
+	    if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+          	id : "game-chat",
+          	class : "game-chat",
+          	callback : function(app, game_mod) {
+		  game_mod.menu.showSubMenu("game-chat");
+          	}
+              })
+	      main_menu_added = 1;
+	    }
+
+	    // add peer chat
+  	    let data = {};
+	    let members = [this.game.players[ii], this.app.wallet.returnPublicKey()];
+	    let gid = this.app.crypto.hash(members.join('_'));
+	    let name = "Player "+(ii+1);
+	    let chatmod = this.app.modules.mods[i];
+	
+    	    this.menu.addSubMenuOption("game-chat", {
+    	      text : name,
+      	      id : "game-chat-"+(ii+1),
+      	      class : "game-chat-"+(ii+1),
+      	      callback : function(app, game_mod) {
+		game_mod.menu.hideSubMenus();
+
+console.log("MEMBERS: " + members);
+
+        	// load the chat window
+	        let newgroup = chatmod.createChatGroup(members);
+	        if (newgroup) {
+        	  chatmod.addNewGroup(newgroup);
+        	  chatmod.sendEvent('chat-render-request', {});
+        	  chatmod.saveChat();
+		  chatmod.openChatBox(newgroup.id);
+    	        } else {
+        	  chatmod.sendEvent('chat-render-request', {});
+		  chatmod.openChatBox(newgroup.id);
+	        }
+    	      }
+            });
+	  }
+	}
       }
-    });
+    }
     this.menu.addMenuIcon({
       text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
       id : "game-menu-fullscreen",
       callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
         app.browser.requestFullscreen();
       }
     });
@@ -1681,6 +1797,10 @@ console.log("CARD: " + card);
           if (this.game.deck[0].cards[mv[2]] != undefined) { this.game.state.event_name = this.game.deck[0].cards[mv[2]].name; }
           this.updateLog("<span>" + mv[1].toUpperCase() + " plays </span><span class=\"logcard\" id=\""+mv[2]+"\">" + this.game.state.event_name + "</span> <span>for " + mv[3] + " OPS</span>");
 
+          // stats
+          if (mv[1] == "us") { this.game.state.stats.us_ops += parseInt(mv[3]); }
+          if (mv[1] == "ussr") { this.game.state.stats.ussr_ops += parseInt(mv[3]); }
+
           // unset formosan if China card played by US
           if (mv[1] == "us" && mv[2] == "china") {
             this.game.state.events.formosan = 0;
@@ -1728,6 +1848,7 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "coup") {
+
 
           let card = "";
           if (mv.length >= 5) { card = mv[4]; }
@@ -3419,7 +3540,6 @@ console.log("CARD: " + card);
         }
 
 
-
         if (action2 == "place") {
 
           let j = ops;
@@ -4065,7 +4185,7 @@ this.startClock();
 
   playerTurnCardSelected(card, player) {
 
-this.startClock();
+    this.startClock();
 
     let twilight_self = this;
     let opponent = "us";
@@ -5533,6 +5653,12 @@ this.startClock();
 
   playerSpaceCard(card, player) {
 
+    let card_ops = this.game.deck[0].cards[card].ops;
+
+    // stats
+    if (player == "us") { this.game.state.stats.us_ops_spaced += this.modifyOps(card_ops, card, player); }
+    if (player == "ussr") { this.game.state.stats.ussr_ops_spaced += this.modifyOps(card_ops, card, player); }
+
     if (player == "ussr") {
       this.game.state.space_race_ussr_counter++;
     } else {
@@ -5696,6 +5822,10 @@ this.startClock();
   playCoup(player, countryname, ops, mycallback=null) {
 
     let roll    = this.rollDice(6);
+
+    // stats
+    if (player == "us") { this.game.state.stats.us_coups.push(roll); }
+    if (player == "ussr") { this.game.state.stats.ussr_coups.push(roll); }
 
     //
     // Yuri and Samantha
@@ -6402,6 +6532,18 @@ console.log("CONTROL IS: " + control);
     state.round_ps[8] = { top : 150, left : 4714 };
     state.round_ps[9] = { top : 150, left : 4868 };
 
+    // stats - statistics
+    state.stats = {};
+    state.stats.us_scorings = 0;
+    state.stats.ussr_scorings = 0;
+    state.stats.us_ops = 0;
+    state.stats.ussr_ops = 0;
+    state.stats.us_ops_spaced = 0;
+    state.stats.ussr_ops_spaced = 0;
+    state.stats.us_coups = [];
+    state.stats.ussr_coups = [];
+
+
     // events - early war
     state.events = {};
     state.events.optional = {};			// optional cards -- makes easier to search for
@@ -6901,6 +7043,9 @@ console.log("CONTROL IS: " + control);
     }
     for (let i in this.game.deck[0].removed) {
       delete unplayed[i];
+    }
+    for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+      delete unplayed[this.game.deck[0].hand[i]];
     }
 
     return unplayed;
