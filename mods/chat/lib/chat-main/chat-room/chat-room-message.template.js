@@ -1,5 +1,5 @@
 module.exports = ChatRoomMessageTemplate = ({ message, sig, type }, data) => {
-
+  // if (document.getElementById(sig)) { return ""; } 
   // Preview common path/to/file.ext URL images
   var imgs = [".apng",".gif",".ico",".cur",".jpg",".jpeg",".jfif",".pjpeg",".pjp",".png",".svg"];
   try {
