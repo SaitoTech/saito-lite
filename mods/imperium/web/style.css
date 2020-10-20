@@ -1594,26 +1594,6 @@ body {
   opacity: 0.7;
 }
 
-.dash-faction-info .dash-label {
-  display: none;
-}
-
-.dash-faction-info:hover .dash-label {
-  display: block;
-}
-
-.dash-label {
-  transform: rotate(35deg);
-  color: #fff;
-  position: relative;
-  left: 2em;
-  height: 0;
-  top: 1em;
-  background: #000a;
-  z-index: 100;
-  padding: 10px;
-}
-
 .dash-faction-action {
   text-align: center;
   font-size: large;

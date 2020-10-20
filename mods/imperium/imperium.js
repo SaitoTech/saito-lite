@@ -8879,8 +8879,8 @@ console.log("done");
         id : ("game-faction-"+(i+1)),
         class : ("game-faction-"+(i+1)),
         callback : function(app, game_mod) {
-          game_mod.menu.hideSubMenus();
-          alert("callback in Stats Menu Option!");
+	  game_mod.menu.hideSubMenus();
+	  game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnFactionSheet(game_mod, (i+1)));
         }
       });
     }
@@ -8900,7 +8900,7 @@ console.log("done");
       class : "game-sectors",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+	game_mod.handleSystemsMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-info", {
@@ -8909,7 +8909,7 @@ console.log("done");
       class : "game-planets",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+	game_mod.handleInfoMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-info", {
@@ -8918,7 +8918,7 @@ console.log("done");
       class : "game-tech",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+        game_mod.handleTechMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-info", {
@@ -8927,7 +8927,7 @@ console.log("done");
       class : "game-strategy",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+	game_mod.handleStrategyMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-info", {
@@ -8936,6 +8936,7 @@ console.log("done");
       class : "game-vp",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
+	game_mod.handleObjectivesMenuItem();
         alert("callback in Stats Menu Option!");
       }
     });
@@ -8945,6 +8946,7 @@ console.log("done");
       class : "game-agendas",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
+	game_mod.handleLawsMenuItem();
         alert("callback in Stats Menu Option!");
       }
     });
@@ -9419,38 +9421,6 @@ respondTo(type) {
 /////////////////
 /// HUD MENUS ///
 /////////////////
-menuItems() {
-  return {
-    'game.sectors': {
-      name: 'Status',
-      callback: this.handleSystemsMenuItem.bind(this)
-    },
-/***
-    'game-player': {
-      name: 'Laws',
-      callback: this.handleLawsMenuItem.bind(this)
-    },
-    'game-tech': {
-      name: 'Tech',
-      callback: this.handleTechMenuItem.bind(this)
-    },
-***/
-    'game-strategy': {
-      name: 'Strategy',
-      callback: this.handleStrategyMenuItem.bind(this)
-    },
-    'game-objectives': {
-      name: 'VP',
-      callback: this.handleObjectivesMenuItem.bind(this)
-    },
-    'board-info': {
-      name: 'Info',
-      callback: this.handleInfoMenuItem.bind(this)
-    },
-  }
-}
-
-
 hideOverlays() {
   document.querySelectorAll('.overlay').forEach(el => {
     el.classList.add('hidden');
@@ -25101,9 +25071,6 @@ returnFactionDashboard() {
           </div>
         </div>
 
-        <div data-id="${(i+1)}" class="dash-label">Resources</div>
-        <div data-id="${(i+1)}" class="dash-label">Influence</div>
-        <div data-id="${(i+1)}" class="dash-label">Goods</div>
       </div>
 
       <div data-id="${(i+1)}" class="dash-faction-base">
@@ -25377,15 +25344,7 @@ displayFactionDashboard() {
     document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
     document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
 
-
   }
-
-    document.querySelectorAll('.dash-faction').forEach(el => {
-      el.addEventListener('click', (e) => {
-        let faction_player = e.target.dataset.id;
-        imperium_self.displayFactionSheet(faction_player);
-      });
-    });
 
   } catch (err) {}
 }
@@ -25537,6 +25496,7 @@ returnFactionSheet(imperium_self, player=null) {
   if (!player) { player = imperium_self.game.player; }
 
   let html = `
+      <div class="faction_sheet_container" style="width:90vw;height:90vh">
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
         <div>Command</div>
         <div>Strategy</div>
@@ -25796,6 +25756,7 @@ returnFactionSheet(imperium_self, player=null) {
     
       </div>
     </div>
+  </div>
 
     `;
 

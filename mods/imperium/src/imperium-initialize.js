@@ -67,8 +67,8 @@ console.log("done");
         id : ("game-faction-"+(i+1)),
         class : ("game-faction-"+(i+1)),
         callback : function(app, game_mod) {
-          game_mod.menu.hideSubMenus();
-          alert("callback in Stats Menu Option!");
+	  game_mod.menu.hideSubMenus();
+	  game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnFactionSheet(game_mod, (i+1)));
         }
       });
     }
@@ -88,7 +88,7 @@ console.log("done");
       class : "game-sectors",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+	game_mod.handleSystemsMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-info", {
@@ -97,7 +97,7 @@ console.log("done");
       class : "game-planets",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+	game_mod.handleInfoMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-info", {
@@ -106,7 +106,7 @@ console.log("done");
       class : "game-tech",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+        game_mod.handleTechMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-info", {
@@ -115,7 +115,7 @@ console.log("done");
       class : "game-strategy",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        alert("callback in Stats Menu Option!");
+	game_mod.handleStrategyMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-info", {
@@ -124,6 +124,7 @@ console.log("done");
       class : "game-vp",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
+	game_mod.handleObjectivesMenuItem();
         alert("callback in Stats Menu Option!");
       }
     });
@@ -133,6 +134,7 @@ console.log("done");
       class : "game-agendas",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
+	game_mod.handleLawsMenuItem();
         alert("callback in Stats Menu Option!");
       }
     });

@@ -3,7 +3,6 @@ const GameMenu = require('../../lib/saito/ui/game-menu/game-menu');
 const GameHud = require('../../lib/saito/ui/game-hud/game-hud'); 
 const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
-const elParser = require('../../lib/helpers/el_parser');
 class Imperium extends GameTemplate {
   
   constructor(app) {
