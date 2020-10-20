@@ -52,11 +52,29 @@ body {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 110vh;
   background-color: #444;
   opacity: 0.4;
   z-index: 100;
 }
+.game-overlay-menu {
+  padding: 10px;
+  background-color: whitesmoke;
+  opacity: 0.8;
+}
+.game-overlay-menu ul li {
+  width: 100%;
+  line-height: 3.5em;
+  border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
+  text-align: -webkit-match-parent;
+  display: list-item;
+  list-style: none;
+}
+.game-overlay-menu ul li:hover {
+  font-weight: bold;;
+}
+
 .game-overlay {
   position: absolute;
   display: inlie-block;
@@ -67,6 +85,8 @@ body {
   margin-right: auto;
   background-color: transparent;
   z-index: 1000;
+  font-size: 2em;
+  padding: 10px;
 }
 .game-menu {
   position: fixed;

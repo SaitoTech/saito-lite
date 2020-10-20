@@ -102,12 +102,13 @@ class Twilight extends GameTemplate {
     let twilight_self = this;
     let html =
     `
-      <div class="card-overlay status-message" id="status-message">
+      <div class="game-overlay-menu" id="game-overlay-menu">
         <div>Select your deck:</div>
        <ul>
-          <li class="menu-item" id="hand">Hand</li>
-          <li class="menu-item" id="discards">Discard</li>
-          <li class="menu-item" id="removed">Removed</li>
+          <li class="menu-item" id="hand">Your Hand</li>
+          <li class="menu-item" id="discards">Discarded Cards</li>
+          <li class="menu-item" id="removed">Removed Events</li>
+          <li class="menu-item" id="unplayed">Unplayed Cards</li>
         </ul>
       </div>
     `;
@@ -131,10 +132,14 @@ class Twilight extends GameTemplate {
         case "removed":
           cards = Object.keys(deck.removed)
           break;
+        case "unplayed":
+          cards = Object.keys(twilight_self.returnUnplayedCards())
+          break;
         default:
           break;
       }
 
+      html += '<div class="cardlist-container">';
       for (let i = 0; i < cards.length; i++) {
         html += '<div class="cardlist-card">';
         if (cards[i] != undefined) {
@@ -142,6 +147,7 @@ class Twilight extends GameTemplate {
 	}
         html += '</div>';
       }
+      html += '</div>';
 
       if (cards.length == 0) { 
         html = `
@@ -6881,6 +6887,27 @@ console.log("CONTROL IS: " + control);
     return deck;
 
   }
+
+
+
+  returnUnplayedCards() {
+
+    var unplayed = {};
+    for (let i in this.game.deck[0].cards) {
+      unplayed[i] = this.game.deck[0].cards[i];
+    }
+    for (let i in this.game.deck[0].discards) {
+      delete unplayed[i];
+    }
+    for (let i in this.game.deck[0].removed) {
+      delete unplayed[i];
+    }
+
+    return unplayed;
+
+  }
+
+
 
 
   returnDiscardedCards() {

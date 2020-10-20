@@ -25,7 +25,25 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-
+.cardlist-container {
+  height: 80vh;
+  width: 80vw;
+  overflow-y: scroll;
+}
+.cardlist-card {
+  position: relative;
+  float:left;
+  margin-right:10px;
+  margin-bottom: 10px;
+  height: 30vh;
+  max-height: 520px;
+  width: calc(30vh * 0.72110);
+  max-width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: block;
+}
 .china_card_status_us_faceup {
   background-color: #3277de;
 }
