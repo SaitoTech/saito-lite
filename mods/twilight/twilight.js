@@ -105,10 +105,10 @@ class Twilight extends GameTemplate {
       <div class="game-overlay-menu" id="game-overlay-menu">
         <div>Select your deck:</div>
        <ul>
-          <li class="menu-item" id="hand">Hand</li>
-          <li class="menu-item" id="discards">Discard</li>
-          <li class="menu-item" id="removed">Removed</li>
-          <li class="menu-item" id="unplayed">Unplayed</li>
+          <li class="menu-item" id="hand">Your Hand</li>
+          <li class="menu-item" id="discards">Discarded Cards</li>
+          <li class="menu-item" id="removed">Removed Events</li>
+          <li class="menu-item" id="unplayed">Unplayed Cards</li>
         </ul>
       </div>
     `;
