@@ -25,38 +25,6 @@ respondTo(type) {
 /////////////////
 /// HUD MENUS ///
 /////////////////
-menuItems() {
-  return {
-    'game.sectors': {
-      name: 'Status',
-      callback: this.handleSystemsMenuItem.bind(this)
-    },
-/***
-    'game-player': {
-      name: 'Laws',
-      callback: this.handleLawsMenuItem.bind(this)
-    },
-    'game-tech': {
-      name: 'Tech',
-      callback: this.handleTechMenuItem.bind(this)
-    },
-***/
-    'game-strategy': {
-      name: 'Strategy',
-      callback: this.handleStrategyMenuItem.bind(this)
-    },
-    'game-objectives': {
-      name: 'VP',
-      callback: this.handleObjectivesMenuItem.bind(this)
-    },
-    'board-info': {
-      name: 'Info',
-      callback: this.handleInfoMenuItem.bind(this)
-    },
-  }
-}
-
-
 hideOverlays() {
   document.querySelectorAll('.overlay').forEach(el => {
     el.classList.add('hidden');

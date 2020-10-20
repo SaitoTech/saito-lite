@@ -797,6 +797,11 @@ option {
   background: none;
 }
 
+.header-icon-disabled {
+  color: #ddd;
+  text-shadow: 5px 6px 2px #8a8a8a, 1px 3px #6f6f6f;
+}
+
 /** ARCADE INIT **/
 
 .arcade-initialize-game-container {
