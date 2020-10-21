@@ -5,6 +5,10 @@ body {
   margin: 0px;
 }
 
+.game-menu {
+  min-width: 300px;
+  width: 300px;
+}
 .main {
   margin-top: unset;
   padding: unset;
@@ -255,6 +259,7 @@ body {
   background: #ccc3;
 }
 
+/***
 .log {
   color: #fff;
   background: transparent;
@@ -268,6 +273,7 @@ body {
   height: 18vh;
   overflow-y: auto;
 }
+***/
 
 .player-info-log {
   font-size: 2vh;
@@ -332,11 +338,12 @@ body {
   min-width: 60px;
 }
 
+/**
 #log h2 {
   font-size: larger;
   margin: 8px 0 0px 0;
 }
-
+**/
 
 
 @media all and (max-aspect-ratio:13/9) {
@@ -449,9 +456,11 @@ body {
     height: 43vh;
     background-color: #4448;
   }
+/**
   #log {
     height: 34vh;
   }
+**/
 }
 
 @media only screen and (max-width: 750px) {
@@ -465,9 +474,11 @@ body {
     left: unset;
     transform: unset;
   }
+/*
   .log {
     font-size: smaller;
   }
+*/
   .player-info-name {
     font-size: 4vw;
   }

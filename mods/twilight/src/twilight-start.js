@@ -1,9 +1,4 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameHud = require('../../lib/saito/ui/game-hud/game-hud');
-const GameMenu = require('../../lib/saito/ui/game-menu/game-menu');
-const GameOverlay = require('../../lib/saito/ui/game-overlay/game-overlay');
-const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -65,10 +60,8 @@ class Twilight extends GameTemplate {
     this.type       	 = "Strategy Boardgame";
     this.categories 	 = "Bordgame Game"
 
-    this.menu = new GameMenu(this.app);
-    this.hud = new GameHud(this.app);
+    // long-horizontal
     this.hud.mode = 0;
-    this.overlay = new GameOverlay(this.app);
 
   }
 
@@ -406,17 +399,15 @@ console.log(err);
 	game_mod.menu.showSubMenu("game-game");
       }
     });
-/***
     this.menu.addSubMenuOption("game-game", {
-      text : "Export",
-      id : "game-export",
-      class : "game-export",
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
       callback : function(app, game_mod) {
-	game_mod.menu.hideSubMenus();
-        game_mod.handleExportMenu();
+        game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
       }
     });
-***/
     this.menu.addSubMenuOption("game-game", {
       text : "Stats",
       id : "game-stats",
@@ -536,6 +527,10 @@ console.log("MEMBERS: " + members);
     });
     this.menu.render(app, this);
     this.menu.attachEvents(app, this);
+
+
+    this.log.render(app, this);
+    this.log.attachEvents(app, this);
 
 
     //

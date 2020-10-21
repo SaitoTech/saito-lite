@@ -1,8 +1,5 @@
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const Cardfan = require('../../lib/templates/lib/game-cardfan/game-cardfan');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const saito = require('../../lib/saito/saito');
-
 
 
 
@@ -29,8 +26,6 @@ class Poker extends GameTemplate {
     this.boardgameWidth = 5100;
 
     this.updateHTML = "";
-
-    this.cardfan = new Cardfan(this.app, this);
 
     return this;
 
@@ -204,11 +199,130 @@ class Poker extends GameTemplate {
 
 
   initializeHTML(app) {
+
     super.initializeHTML(app);
+
+    //
+    // ADD CHAT
+    //
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+    //
+    // ADD MENU
+    //
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Stats",
+      id : "game-stats",
+      class : "game-stats",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.handleStatsMenu();
+      }
+    });
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        app.browser.requestFullscreen();
+      }
+    });
+    let main_menu_added = 0;
+    let community_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+        for (let ii = 0; ii < this.game.players.length; ii++) {
+          if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+            // add main menu
+            if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+                id : "game-chat",
+                class : "game-chat",
+                callback : function(app, game_mod) {
+                  game_mod.menu.showSubMenu("game-chat");
+                }
+              })
+              main_menu_added = 1;
+            }
+            if (community_menu_added == 0) {
+              this.menu.addSubMenuOption("game-chat", {
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
+                callback : function(app, game_mod) {
+                  game_mod.menu.hideSubMenus();
+
+                  // load the chat window
+                  let newgroup = chatmod.returnDefaultChat();
+                  if (newgroup) {
+                    chatmod.addNewGroup(newgroup);
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  } else {
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  }
+                }
+              });
+              community_menu_added = 1;
+            }
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = "Player "+(ii+1);
+            let chatmod = this.app.modules.mods[i];
+            this.menu.addSubMenuOption("game-chat", {
+              text : name,
+              id : "game-chat-"+(ii+1),
+              class : "game-chat-"+(ii+1),
+              callback : function(app, game_mod) {
+                game_mod.menu.hideSubMenus();
+                let newgroup = chatmod.createChatGroup(members);
+                if (newgroup) {
+                  chatmod.addNewGroup(newgroup);
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.saveChat();
+                  chatmod.openChatBox(newgroup.id);
+                } else {
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.openChatBox(gid);
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
+    this.log.render(app, this);
+    this.log.attachEvents(app, this);
+
+
   }
 
 
@@ -251,9 +365,11 @@ class Poker extends GameTemplate {
 
     this.game.state.big_blind_player--;
     this.game.state.small_blind_player--;
+    this.game.state.button_player--;
 
     if (this.game.state.big_blind_player < 1) { this.game.state.big_blind_player = this.game.players.length; }
     if (this.game.state.small_blind_player < 1) { this.game.state.small_blind_player = this.game.players.length; }
+    //if (this.game.state.small_blind_player < 1) { this.game.state.small_blind_player = this.game.players.length; }
 
     this.game.state.flipped = 0;
     this.game.state.plays_since_last_raise = -1;
@@ -743,11 +859,20 @@ class Poker extends GameTemplate {
         this.updateStatus("Your opponent is making the first move.");
         // not -1 to start with small blind
 
-        for (let i = this.game.state.big_blind_player; i <= (this.game.state.big_blind_player + this.game.players.length - 1); i++) {
-          let player_to_go = (i % this.game.players.length);
-          if (player_to_go == 0) { player_to_go = this.game.players.length; }
-          this.game.queue.push("turn\t" + player_to_go);
-        }
+	// big blind last before the flop
+        if (this.game.state.flipped == 0) {
+          for (let i = this.game.state.big_blind_player; i <= (this.game.state.big_blind_player + this.game.players.length - 1); i++) {
+            let player_to_go = (i % this.game.players.length);
+            if (player_to_go == 0) { player_to_go = this.game.players.length; }
+            this.game.queue.push("turn\t" + player_to_go);
+          }
+	} else {
+          for (let i = this.game.state.button_player; i <= (this.game.state.button_player + this.game.players.length - 1); i++) {
+            let player_to_go = (i % this.game.players.length);
+            if (player_to_go == 0) { player_to_go = this.game.players.length; }
+            this.game.queue.push("turn\t" + player_to_go);
+          }
+	}
       }
 
 
@@ -864,11 +989,15 @@ class Poker extends GameTemplate {
           this.game.state.required_pot += raise_portion;
           this.game.state.pot += raise_portion;
 
-          this.game.state.last_raise = raise_portion;
+	  if (raise_portion > 0) {
+            this.game.state.last_raise = raise_portion;
+	  }
 
           this.updateLog(this.game.state.player_names[player - 1] + " calls " + call_portion + ".");
-          this.updateLog(this.game.state.player_names[player - 1] + " raises " + raise_portion + ".");
-          this.updatePlayerLog(player, "raises " + raise_portion);
+	  if (raise_portion > 0) {
+            this.updateLog(this.game.state.player_names[player - 1] + " raises " + raise_portion + ".");
+            this.updatePlayerLog(player, "raises " + raise_portion);
+	  }
 
         } else {
 
@@ -912,6 +1041,8 @@ class Poker extends GameTemplate {
     // does the player need to call or raise?
     //
     let match_required = this.game.state.required_pot - this.game.state.player_pot[this.game.player - 1];
+
+console.log("LAST RAISE IS NOW RAISE REQUIRED: " + this.game.state.last_raise);
 
     let raise_required = this.game.state.last_raise;
     let html = '';
@@ -1012,6 +1143,8 @@ class Poker extends GameTemplate {
 
       if (choice === "raise") {
 
+        raise_required = parseInt(raise_required);
+
         // match_required
         // raise_required
         let credit_remaining = poker_self.game.state.player_credit[poker_self.game.player - 1];
@@ -1027,7 +1160,6 @@ class Poker extends GameTemplate {
           }
         });
 
-        raise_required = parseInt(raise_required);
         poker_self.game.state.last_raise = parseInt(poker_self.game.state.last_raise);
 
         let cost_to_monster = poker_self.game.state.required_pot - poker_self.game.state.player_pot[poker_self.game.player - 1];
@@ -1043,8 +1175,13 @@ class Poker extends GameTemplate {
         html += '<li class="menu_option" id="0">cancel raise</li>';
         //}
 
+console.log("raise required: " + raise_required);
+console.log("credit remaining: " + credit_remaining);
+console.log("smallest stack: " + smallest_stack);
+
         for (let i = 0; i < 6; i++) {
           let this_raise = (raise_required + (i * poker_self.game.state.last_raise));
+console.log("this raise: " + this_raise);
           if (credit_remaining > this_raise && smallest_stack > this_raise) {
             if (this_raise - cost_to_monster > 0) {
               html += '<li class="menu_option" id="' + (this_raise - cost_to_monster) + '">raise ' + (this_raise - cost_to_monster) + '</li>';
@@ -1135,6 +1272,9 @@ class Poker extends GameTemplate {
     state.small_blind = 25;
     state.big_blind_player = 1;
     state.small_blind_player = 2;
+    state.button_player = 3;
+    state.small_blind_is_button = 0;
+    if (num_of_players == 2) { state.button_player = 2; }
     state.big_blind_paid = 0;
     state.small_blind_paid = 0;
     state.required_pot = 0;
@@ -2456,6 +2596,27 @@ class Poker extends GameTemplate {
 
   }
 
+
+
+
+
+
+  handleStatsMenu() {
+
+    let poker_self = this;
+    let html =
+    `
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>Game Statistics:</div>
+        <div class="statistics-info">
+        We're adding statistics, tracking and other information to help improve player games. If you're comfortable with JAVASCRIPT / HTML / CSS and want to help, please reach out.
+        </div>
+      </div>
+    `;
+
+    poker_self.overlay.showOverlay(poker_self.app, poker_self, html);
+
+  }
 
 
 

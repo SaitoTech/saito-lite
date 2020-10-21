@@ -1,5 +1,3 @@
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const Cardfan = require('../../lib/templates/lib/game-cardfan/game-cardfan');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const saito = require('../../lib/saito/saito');
 
@@ -30,8 +28,6 @@ class Blackjack extends GameTemplate {
     this.boardgameWidth = 5100;
 
     this.updateHTML = "";
-
-    this.cardfan = new Cardfan(this.app, this);
 
     return this;
 
@@ -67,8 +63,6 @@ class Blackjack extends GameTemplate {
   startRound() {
 
     this.game.queue.push("startplay");
-
-
 
     this.game.state.player_wager = [];
     this.game.state.player_payout = [];
@@ -194,11 +188,16 @@ class Blackjack extends GameTemplate {
 
 
   initializeHTML(app) {
+
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+    this.log.render(app, this);
+    this.log.attachEvents(app, this);
+
   }
 
 
