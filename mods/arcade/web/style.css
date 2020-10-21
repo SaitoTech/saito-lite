@@ -796,10 +796,9 @@ option {
 .header {
   background: none;
 }
-
 .header-icon-disabled {
-  color: #ddd;
-  text-shadow: 5px 6px 2px #8a8a8a, 1px 3px #6f6f6f;
+  color: #B8E;
+  text-shadow: #444 2px 1px, #666 3px 2px;
 }
 
 /** ARCADE INIT **/

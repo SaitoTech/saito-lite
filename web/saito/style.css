@@ -795,7 +795,7 @@ div#message-wrapper {
 
 .header-icon-disabled {
   color: #ddd;
-  text-shadow: 5px 6px 2px #c54040, 1px 3px #c74b16;
+  text-shadow: #444 1px 2px, #aaa 3px 2px;
 }
 .header-dropdown {
   position: absolute;
