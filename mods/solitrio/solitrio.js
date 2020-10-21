@@ -29,7 +29,6 @@ class Solitrio extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.hud.mode = 1; // classic
-    this.hud.use_log = 0;
 
   }
 
@@ -83,8 +82,13 @@ class Solitrio extends GameTemplate {
 
 
   initializeHTML(app) {
+
     super.initializeHTML(app);
-    document.getElementById("hud-menu").style.display = "none";
+
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(app, this);
+      mod.respondTo('chat-manager').attachEvents(app, this);
+    });
   }
 
 
@@ -219,10 +223,6 @@ class Solitrio extends GameTemplate {
     let precessor_value_suit = this.game.board[precessor].name[0];
     let card_value_suit = this.game.board[card].name[0];
 
-console.log(precessor + " --- " + card + " --- " + JSON.stringify(tmparr));
-console.log(this.game.board[precessor].name + " -- " + this.game.board[card].name);
-console.log(precessor_value_num + " -- " + card_value_num);
-
     if (card_value_num == (precessor_value_num+1)) { 
       if (card_value_suit === precessor_value_suit) {
         return 1; 
@@ -262,13 +262,9 @@ console.log(precessor_value_num + " -- " + card_value_num);
     ///////////
     if (this.game.queue.length > 0) {
 
-console.log("QUEUE: " + JSON.stringify(this.game.queue));
-
       let qe = this.game.queue.length-1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
-
-console.log("MOVE: " + mv[0]);
 
       //
       // round
@@ -357,7 +353,6 @@ console.log("MOVE: " + mv[0]);
         console.log("NOT CONTINUING");
         return 0; 
       }
-console.log("... continuing loop");
 
     } // if cards in queue
     return 1;

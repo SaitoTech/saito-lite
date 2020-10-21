@@ -532,6 +532,9 @@ console.log("MEMBERS: " + members);
     this.log.render(app, this);
     this.log.attachEvents(app, this);
 
+    this.cardbox.render(app, this);
+    this.cardbox.attachEvents(app, this);
+
 
     //
     // add card events -- text shown and callback run if there

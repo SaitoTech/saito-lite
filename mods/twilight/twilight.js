@@ -532,6 +532,9 @@ console.log("MEMBERS: " + members);
     this.log.render(app, this);
     this.log.attachEvents(app, this);
 
+    this.cardbox.render(app, this);
+    this.cardbox.attachEvents(app, this);
+
 
     //
     // add card events -- text shown and callback run if there
@@ -9272,7 +9275,7 @@ console.log("CONTROL IS: " + control);
   }
 
   hideCard() {
-    this.cardbox.hideCardbox(1);
+    this.hud.cardbox.hideCardbox(1);
     //$('#cardbox').hide();
     //$('.cardbox_event_blocker').css('height','0px');
     //$('.cardbox_event_blocker').css('width','0px');

@@ -127,7 +127,6 @@ class Tutorial06 extends GameTemplate {
   //
   initializeHTML(app) {
     super.initializeHTML(app);
-    $('.hud-menu').css('display','none');
     this.displayBoard();
   }
   attachEvents(app) {
