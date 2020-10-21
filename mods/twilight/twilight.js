@@ -1,7 +1,9 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
+const GameHud = require('../../lib/saito/ui/game-hud/game-hud');
+const GameMenu = require('../../lib/saito/ui/game-menu/game-menu');
+const GameOverlay = require('../../lib/saito/ui/game-overlay/game-overlay');
+const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
+const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -63,8 +65,10 @@ class Twilight extends GameTemplate {
     this.type       	 = "Strategy Boardgame";
     this.categories 	 = "Bordgame Game"
 
-    this.hud = new GameHud(this.app, this.menuItems());
+    this.menu = new GameMenu(this.app);
+    this.hud = new GameHud(this.app);
     this.hud.mode = 0;
+    this.overlay = new GameOverlay(this.app);
 
   }
 
@@ -93,47 +97,29 @@ class Twilight extends GameTemplate {
 
 
 
+  handleCardsMenu() {
 
-  menuItems() {
-    return {
-      'game-cards': {
-        name: 'Cards',
-        callback: this.handleCardsMenuItem.bind(this)
-      },
-      'game-lang': {
-        name: 'Display',
-        callback: this.handleLangMenuItem.bind(this)
-      },
-      'game-player': {
-        name: 'Players',
-        callback: this.handlePlayerMenuItem.bind(this)
-      },
-    }
-  }
-
-  handleCardsMenuItem() {
     let twilight_self = this;
     let html =
     `
-      <div class="status-message" id="status-message">
-        <div>Select your deck:</div>
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>SELECT DECK:</div>
        <ul>
-          <li class="menu-item" id="hand">Hand</li>
-          <li class="menu-item" id="discards">Discard</li>
-          <li class="menu-item" id="removed">Removed</li>
+          <li class="menu-item" id="hand">Your Hand</li>
+          <li class="menu-item" id="discards">Discarded Cards</li>
+          <li class="menu-item" id="removed">Removed Events</li>
+          <li class="menu-item" id="unplayed">Unplayed Cards</li>
         </ul>
       </div>
     `;
 
-    $('.status-overlay').html(html);
-    $('.status').hide();
-    $('.status-overlay').show();
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
 
     $('.menu-item').on('click', function() {
 
       let player_action = $(this).attr("id");
       var deck = twilight_self.game.deck[0];
-      var cards_img_html = [];
+      var html = "";
       var cards;
 
       switch (player_action) {
@@ -146,69 +132,132 @@ class Twilight extends GameTemplate {
         case "removed":
           cards = Object.keys(deck.removed)
           break;
+        case "unplayed":
+          cards = Object.keys(twilight_self.returnUnplayedCards())
+          break;
         default:
           break;
       }
 
-      let cards_in_pile = 0;
+      html += '<div class="cardlist-container">';
+      for (let i = 0; i < cards.length; i++) {
+        html += '<div class="cardlist-card">';
+        if (cards[i] != undefined) {
+	  html += twilight_self.returnCardImage(cards[i], 1);
+	}
+        html += '</div>';
+      }
+      html += '</div>';
 
-      cards_img_html = cards.map(card =>  {
-        if (card != undefined) {
-          return `<div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">${twilight_self.returnCardImage(card, 1)}</div>`;
-        } else {
-  	  return '';
-        }
-      });
-
-      let display_message = `<div class="status-cardbox" id="status-cardbox">${cards_img_html.join('')}</div>`;
-
-      if (cards_img_html.length == 0) {
-        display_message = `
+      if (cards.length == 0) { 
+        html = `
           <div style="text-align:center; margin: auto;">
             There are no cards in ${player_action}
           </div>
         `;
       }
 
-      $('.status-overlay').html(display_message);
+      twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
     });
 
   }
 
 
-  handleLangMenuItem() {
+
+  handleExportMenu() {
+
+    let twilight_self = this;
+    let html =
+    `
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>Export Options:</div>
+       <ul>
+          <li class="menu-item" id="private">Private <div style="font-size:0.8em;clear:both">Create a backup file that saves the game along with the (encrypted) hands of each player. Only the current players will be able to restore the game.</div></li>
+        </ul>
+      </div>
+    `;
+
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+
+    $('.menu-item').on('click', function() {
+
+      let player_action = $(this).attr("id");
+
+      switch (player_action) {
+        case "private":
+          break;
+        default:
+          break;
+      }
+
+      twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, "All players are backing up their game...");
+    });
+
+  }
+
+
+
+  handleStatsMenu() {
+
+    let twilight_self = this;
+    let html =
+    `
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>Game Statistics:</div>
+	<table class="statistics-table">
+	  <tr>
+	    <th></th>
+	    <th>US</th>
+	    <th>USSR</th>
+	  </tr>
+	  <tr>
+	    <td><b>OPS Played</b></td>
+	    <td>${this.game.state.stats.us_ops}</td>
+	    <td>${this.game.state.stats.ussr_ops}</td>
+	  </tr>
+	  <tr>
+	    <td><b>OPS Spaced</b></td>
+	    <td>${this.game.state.stats.us_ops_spaced}</td>
+	    <td>${this.game.state.stats.ussr_ops_spaced}</td>
+	  </tr>
+	  <tr>
+	    <td><b>Coups</b></td>
+	    <td>${JSON.stringify(this.game.state.stats.us_coups)}</td>
+	    <td>${JSON.stringify(this.game.state.stats.ussr_coups)}</td>
+	  </tr>
+	  <tr>
+	    <td><b>Scoring Cards</b></td>
+	    <td>${this.game.state.stats.us_scorings}</td>
+	    <td>${this.game.state.stats.ussr_scorings}</td>
+	  </tr>
+        </table>
+	<div class="statistics-info">
+	We need help deciding what to track and how to represent the information visually here. If you're comfortable with JAVASCRIPT / HTML / CSS and want to help, please reach out.
+        </div>
+      </div>
+    `;
+
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+
+  }
+
+
+  handleDisplayMenu() {
 
     let twilight_self = this;
     let user_message = `
-      <div class="status-message" id="status-message">
-        <div>Select Language:</div>
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>DISPLAY MODE:</div>
        <ul>
           <li class="menu-item" id="english">English</li>
           <li class="menu-item" id="chinese">简体中文</li>
-        </ul>
-       <div style="margin-top:20px">Card Display:</div>
-       <ul>
-          <li class="menu-item" id="text">Text Menu</li>
-          <li class="menu-item" id="graphics">Graphical Menu</li>
-        </ul>
-       <div style="margin-top:20px">HUD Mode:</div>
-       <ul>
-          <li class="menu-item" id="enable_hud_horizontal">Horizontal</li>
-          <li class="menu-item" id="enable_hud_vertical">Vertical</li>
-          <li class="menu-item" id="enable_hud_square">Square</li>
-        </ul>
-       <div style="margin-top:20px">Observer Mode:</div>
-       <ul>
-          <li class="menu-item" id="enable_observer_mode">Enable</li>
+          <li class="menu-item" id="text">Text Cards</li>
+          <li class="menu-item" id="graphics">Graphical Cards</li>
+          <li class="menu-item" id="enable_observer_mode">Enable Observer Mode</li>
         </ul>
       </div>`;
 
-    $('.status-overlay').html(user_message);
-    $('.status').hide();
-    $('.status-overlay').show();
-
-    // leave action enabled on other panels
-    //$('.card').off();
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, user_message);
 
     $('.menu-item').on('click', function() {
       let action2 = $(this).attr("id");
@@ -225,10 +274,11 @@ class Twilight extends GameTemplate {
 	let tmpar = observe_link.split("/");
 	let oblink = tmpar[0] + "//" + tmpar[2];
 
-	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (if you do not reload your browser before you make it). Your friends can observe the game from your perspective at the following link:';
+	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (reload to cancel). Make your move and then share this link:';
 	html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">'+oblink+'/arcade/?i=watch&msg='+msg+'</div>';
 	html += '</div>';
-	$('.status-overlay').html(html);
+	twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+
       }
 
       if (action2 === "text") {
@@ -283,6 +333,7 @@ class Twilight extends GameTemplate {
         twilight_self.hud.render(twilight_self.app, twilight_self);
         twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
         twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+	twilight_self.overlay.hideOverlay();
         return;
       }
       if (action2 == "enable_hud_horizontal") {
@@ -292,38 +343,37 @@ class Twilight extends GameTemplate {
         twilight_self.hud.render(twilight_self.app, twilight_self);
         twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
         twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+	twilight_self.overlay.hideOverlay();
         return;
       }
 
     });
   }
 
-  async handlePlayerMenuItem() {
-    // let opponent = await this.app.dns.fetchIdentifierPromise(this.game.opponents[0]);
+
+  async handlePlayerMenu() {
 
     try {
 
-    $('.status').hide();
-    $('.status-overlay').show();
-    // let's use the address controller for this in the future;
-    let opponent = this.game.opponents[0];
+      let opponent = this.game.opponents[0];
+      if (this.app.crypto.isPublicKey(opponent)) {
+        opponent = opponent.substring(0, 16);
+      }
 
-    if (this.app.crypto.isPublicKey(opponent)) {
-      opponent = opponent.substring(0, 16);
+      let user_message = `
+        <div class="status-message" id="status-message">
+          <div>Opponent: ${opponent}</div>
+        </div>
+      `;
+
+      this.overlay.showOverlay(this.app, this, user_message);
+
+    } catch (err) {
+console.log(err);
     }
 
-    let user_message = `
-      <div class="status-message" id="status-message">
-        <div>Opponent: ${opponent}</div>
-      </div>
-    `;
-
-    $('.status-overlay').html(user_message);
-    $('.status-overlay').show();
-    $('.status').hide();
-
-    } catch (err) {}
   }
+
 
   handleLogMenuItem() {
     //
@@ -334,7 +384,11 @@ class Twilight extends GameTemplate {
   }
 
 
+
+
   initializeHTML(app) {
+
+    if (this.browser_active == 0) { return; }
 
     super.initializeHTML(app);
 
@@ -342,6 +396,146 @@ class Twilight extends GameTemplate {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+	game_mod.menu.showSubMenu("game-game");
+      }
+    });
+/***
+    this.menu.addSubMenuOption("game-game", {
+      text : "Export",
+      id : "game-export",
+      class : "game-export",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+        game_mod.handleExportMenu();
+      }
+    });
+***/
+    this.menu.addSubMenuOption("game-game", {
+      text : "Stats",
+      id : "game-stats",
+      class : "game-stats",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+        game_mod.handleStatsMenu();
+      }
+    });
+
+    this.menu.addMenuOption({
+      text : "Cards",
+      id : "game-cards",
+      class : "game-cards",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+        game_mod.handleCardsMenu();
+      }
+    });
+    this.menu.addMenuOption({
+      text : "Display",
+      id : "game-display",
+      class : "game-display",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+        game_mod.handleDisplayMenu();
+      }
+    });
+
+
+    let main_menu_added = 0;
+    let community_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+	for (let ii = 0; ii < this.game.players.length; ii++) {
+	  if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+	    // add main menu
+	    if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+          	id : "game-chat",
+          	class : "game-chat",
+          	callback : function(app, game_mod) {
+		  game_mod.menu.showSubMenu("game-chat");
+          	}
+              })
+	      main_menu_added = 1;
+	    }
+
+	    if (community_menu_added == 0) {
+    	      this.menu.addSubMenuOption("game-chat", {
+    	        text : "Community",
+      	        id : "game-chat-community",
+      	        class : "game-chat-community",
+      	        callback : function(app, game_mod) {
+	  	  game_mod.menu.hideSubMenus();
+
+          	  // load the chat window
+	          let newgroup = chatmod.returnDefaultChat();
+
+console.log("LOADING CHAT: " + newgroup.id);
+
+	          if (newgroup) {
+        	    chatmod.addNewGroup(newgroup);
+        	    chatmod.sendEvent('chat-render-request', {});
+		    chatmod.openChatBox(newgroup.id);
+    	          } else {
+        	    chatmod.sendEvent('chat-render-request', {});
+		    chatmod.openChatBox(newgroup.id);
+	          }
+    	        }
+              });
+	      community_menu_added = 1;
+	    }
+
+	    // add peer chat
+  	    let data = {};
+	    let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+	    let gid = this.app.crypto.hash(members.join('_'));
+	    let name = "Player "+(ii+1);
+	    let chatmod = this.app.modules.mods[i];
+	
+    	    this.menu.addSubMenuOption("game-chat", {
+    	      text : name,
+      	      id : "game-chat-"+(ii+1),
+      	      class : "game-chat-"+(ii+1),
+      	      callback : function(app, game_mod) {
+		game_mod.menu.hideSubMenus();
+
+console.log("MEMBERS: " + members);
+
+        	// load the chat window
+	        let newgroup = chatmod.createChatGroup(members);
+	        if (newgroup) {
+        	  chatmod.addNewGroup(newgroup);
+        	  chatmod.sendEvent('chat-render-request', {});
+        	  chatmod.saveChat();
+		  chatmod.openChatBox(newgroup.id);
+    	        } else {
+        	  chatmod.sendEvent('chat-render-request', {});
+		  chatmod.openChatBox(gid);
+	        }
+    	      }
+            });
+	  }
+	}
+      }
+    }
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+	game_mod.menu.hideSubMenus();
+        app.browser.requestFullscreen();
+      }
+    });
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
 
 
     //
@@ -372,12 +566,8 @@ class Twilight extends GameTemplate {
         GameBoardSizer.render(this.app, this);
         GameBoardSizer.attachEvents(this.app, this, '.gameboard');
 
-console.log("done attach events");
-
         $('#gameboard').draggable({
 	  stop : function(event, ui) {
-console.log("mouseup on gameboard");
-console.log(JSON.stringify(ui.offset));
 	    twilight_self.saveGamePreference((twilight_self.returnSlug()+"-board-offset"), ui.offset);
 	  }
 	});
@@ -1635,6 +1825,10 @@ console.log("CARD: " + card);
           if (this.game.deck[0].cards[mv[2]] != undefined) { this.game.state.event_name = this.game.deck[0].cards[mv[2]].name; }
           this.updateLog("<span>" + mv[1].toUpperCase() + " plays </span><span class=\"logcard\" id=\""+mv[2]+"\">" + this.game.state.event_name + "</span> <span>for " + mv[3] + " OPS</span>");
 
+          // stats
+          if (mv[1] == "us") { this.game.state.stats.us_ops += parseInt(mv[3]); }
+          if (mv[1] == "ussr") { this.game.state.stats.ussr_ops += parseInt(mv[3]); }
+
           // unset formosan if China card played by US
           if (mv[1] == "us" && mv[2] == "china") {
             this.game.state.events.formosan = 0;
@@ -1682,6 +1876,7 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "coup") {
+
 
           let card = "";
           if (mv.length >= 5) { card = mv[4]; }
@@ -2041,7 +2236,6 @@ console.log("CARD: " + card);
               this.game.deck[0].hand = ["sinoindian", "philadelphia", "brezhnev", "kissingerisawarcriminal", "brexit", "opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
-
 
           //
           // add china card
@@ -3374,7 +3568,6 @@ console.log("CARD: " + card);
         }
 
 
-
         if (action2 == "place") {
 
           let j = ops;
@@ -4020,7 +4213,7 @@ this.startClock();
 
   playerTurnCardSelected(card, player) {
 
-this.startClock();
+    this.startClock();
 
     let twilight_self = this;
     let opponent = "us";
@@ -5488,6 +5681,12 @@ this.startClock();
 
   playerSpaceCard(card, player) {
 
+    let card_ops = this.game.deck[0].cards[card].ops;
+
+    // stats
+    if (player == "us") { this.game.state.stats.us_ops_spaced += this.modifyOps(card_ops, card, player); }
+    if (player == "ussr") { this.game.state.stats.ussr_ops_spaced += this.modifyOps(card_ops, card, player); }
+
     if (player == "ussr") {
       this.game.state.space_race_ussr_counter++;
     } else {
@@ -5651,6 +5850,10 @@ this.startClock();
   playCoup(player, countryname, ops, mycallback=null) {
 
     let roll    = this.rollDice(6);
+
+    // stats
+    if (player == "us") { this.game.state.stats.us_coups.push(roll); }
+    if (player == "ussr") { this.game.state.stats.ussr_coups.push(roll); }
 
     //
     // Yuri and Samantha
@@ -6357,6 +6560,18 @@ console.log("CONTROL IS: " + control);
     state.round_ps[8] = { top : 150, left : 4714 };
     state.round_ps[9] = { top : 150, left : 4868 };
 
+    // stats - statistics
+    state.stats = {};
+    state.stats.us_scorings = 0;
+    state.stats.ussr_scorings = 0;
+    state.stats.us_ops = 0;
+    state.stats.ussr_ops = 0;
+    state.stats.us_ops_spaced = 0;
+    state.stats.ussr_ops_spaced = 0;
+    state.stats.us_coups = [];
+    state.stats.ussr_coups = [];
+
+
     // events - early war
     state.events = {};
     state.events.optional = {};			// optional cards -- makes easier to search for
@@ -6842,6 +7057,30 @@ console.log("CONTROL IS: " + control);
     return deck;
 
   }
+
+
+
+  returnUnplayedCards() {
+
+    var unplayed = {};
+    for (let i in this.game.deck[0].cards) {
+      unplayed[i] = this.game.deck[0].cards[i];
+    }
+    for (let i in this.game.deck[0].discards) {
+      delete unplayed[i];
+    }
+    for (let i in this.game.deck[0].removed) {
+      delete unplayed[i];
+    }
+    for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+      delete unplayed[this.game.deck[0].hand[i]];
+    }
+
+    return unplayed;
+
+  }
+
+
 
 
   returnDiscardedCards() {
@@ -7404,6 +7643,7 @@ console.log("CONTROL IS: " + control);
         scoring.ussr.total = scoring.ussr.bg;
 
         scoring = this.calculateControlledCountries(scoring, as_countries);
+        scoring = this.determineRegionVictor(scoring, as_scoring_range, as_bg_countries.length);
 
 
         if (this.game.state.events.formosan == 0) {
@@ -9400,6 +9640,7 @@ console.log("CONTROL IS: " + control);
 
 
 
+
     //
     // ABM Treaty
     //
@@ -9435,6 +9676,13 @@ console.log("CONTROL IS: " + control);
       let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
       this.game.state.vp += total_vp;
       this.updateLog("<span>Africa:</span> " + total_vp + " <span>VP</span>");
+
+      // stats
+      if (player == "us") { this.game.state.stats.us_scorings++; }
+      if (player == "ussr") { this.game.state.stats.ussr_scorings++; }
+
+
+
       this.updateVictoryPoints();
       return 1;
     }
@@ -9618,6 +9866,13 @@ console.log("CONTROL IS: " + control);
       this.game.state.vp += total_vp;
       this.updateLog("<span>Asia:</span> " + total_vp + " <span>VP</span>");
       this.updateVictoryPoints();
+
+      // stats
+      if (player == "us") { this.game.state.stats.us_scorings++; }
+      if (player == "ussr") { this.game.state.stats.ussr_scorings++; }
+
+
+
       return 1;
     }
 
@@ -10037,6 +10292,12 @@ console.log("CONTROL IS: " + control);
       let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
       this.game.state.vp += total_vp;
       this.updateLog("<span>Central America:</span> " + total_vp + " <span>VP</span>");
+
+      // stats
+      if (player == "us") { this.game.state.stats.us_scorings++; }
+      if (player == "ussr") { this.game.state.stats.ussr_scorings++; }
+
+
       this.updateVictoryPoints();
       return 1
     }
@@ -10798,6 +11059,11 @@ console.log("CONTROL IS: " + control);
       this.game.state.vp += total_vp;
       this.updateLog("<span>Europe:</span> " + total_vp + " <span>VP</span>");
       this.updateVictoryPoints();
+
+      // stats
+      if (player == "us") { this.game.state.stats.us_scorings++; }
+      if (player == "ussr") { this.game.state.stats.ussr_scorings++; }
+
       return 1;
     }
 
@@ -11960,6 +12226,13 @@ console.log("card: " + card);
       let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
       this.game.state.vp += total_vp;
       this.updateLog("<span>Middle East:</span> " + total_vp + " <span>VP</span>");
+
+      // stats
+      if (player == "us") { this.game.state.stats.us_scorings++; }
+      if (player == "ussr") { this.game.state.stats.ussr_scorings++; }
+
+
+
       this.updateVictoryPoints();
       return 1;
     }
@@ -12992,6 +13265,12 @@ console.log("card: " + card);
       let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
       this.game.state.vp += total_vp;
       this.updateLog("<span>Southeast Asia:</span> " + total_vp + " <span>VP</span>");
+
+      // stats
+      if (player == "us") { this.game.state.stats.us_scorings++; }
+      if (player == "ussr") { this.game.state.stats.ussr_scorings++; }
+
+
       this.updateVictoryPoints();
       return 1;
     }
@@ -13176,6 +13455,12 @@ console.log("card: " + card);
       let total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
       this.game.state.vp += total_vp;
       this.updateLog("<span>South America:</span> " + total_vp + " <span>VP</span>");
+
+      // stats
+      if (player == "us") { this.game.state.stats.us_scorings++; }
+      if (player == "ussr") { this.game.state.stats.ussr_scorings++; }
+
+
       this.updateVictoryPoints();
       return 1;
     }

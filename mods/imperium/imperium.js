@@ -1,5 +1,7 @@
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
+const GameOverlay = require('../../lib/saito/ui/game-overlay/game-overlay'); 
+const GameMenu = require('../../lib/saito/ui/game-menu/game-menu'); 
+const GameHud = require('../../lib/saito/ui/game-hud/game-hud'); 
+const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const elParser = require('../../lib/helpers/el_parser');
 class Imperium extends GameTemplate {
@@ -47,8 +49,10 @@ class Imperium extends GameTemplate {
     this.units          	= {};
     this.promissary_notes	= {};
 
-    this.hud = new GameHud(this.app, this.menuItems());
+    this.hud = new GameHud(this.app);
     this.hud.mode = 1;  // classic interface
+    this.menu = new GameMenu(this.app);
+    this.overlay = new GameOverlay(this.app);
 
     //
     // tutorial related
@@ -8813,13 +8817,151 @@ ACTION CARD - types
 
 
   initializeHTML(app) {
+
+    let imperium_self = this;
+
     super.initializeHTML(app);
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
     $('.content').css('visibility', 'visible');
     $('.hud_menu_game-status').css('display', 'none');
+
+    //
+    // menu
+    //
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Save",
+      id : "game-save",
+      class : "game-save",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(app, game_mod, "This is our overlay text");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Load",
+      id : "game-load",
+      class : "game-load",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+      }
+    });
+
+    //
+    // factions
+    //
+    this.menu.addMenuOption({
+      text : "Factions",
+      id : "game-factions",
+      class : "game-factions",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-factions");
+      }
+    });
+try {
+    for (let i = 0; i < this.game.players_info.length; i++) {
+console.log(i + " -- ");
+console.log(imperium_self.returnFaction(i+1));
+console.log("done");
+      this.menu.addSubMenuOption("game-factions", {
+        text : imperium_self.returnFaction((i+1)),
+        id : ("game-faction-"+(i+1)),
+        class : ("game-faction-"+(i+1)),
+        callback : function(app, game_mod) {
+	  game_mod.menu.hideSubMenus();
+	  game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnFactionSheet(game_mod, (i+1)));
+        }
+      });
+    }
+} catch (err) {}
+
+    this.menu.addMenuOption({
+      text : "Info",
+      id : "game-info",
+      class : "game-info",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-info");
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
+      text : "Sectors",
+      id : "game-sectors",
+      class : "game-sectors",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleSystemsMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
+      text : "Planets",
+      id : "game-planets",
+      class : "game-planets",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleInfoMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
+      text : "Tech",
+      id : "game-tech",
+      class : "game-tech",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.handleTechMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
+      text : "Strategy",
+      id : "game-strategy",
+      class : "game-strategy",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleStrategyMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
+      text : "VP",
+      id : "game-vp",
+      class : "game-vp",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleObjectivesMenuItem();
+        alert("callback in Stats Menu Option!");
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
+      text : "Agendas",
+      id : "game-agendas",
+      class : "game-agendas",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleLawsMenuItem();
+        alert("callback in Stats Menu Option!");
+      }
+    });
+
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        app.browser.requestFullscreen();
+      }
+    });
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
+
 
     try {
 
@@ -9279,38 +9421,6 @@ respondTo(type) {
 /////////////////
 /// HUD MENUS ///
 /////////////////
-menuItems() {
-  return {
-    'game.sectors': {
-      name: 'Status',
-      callback: this.handleSystemsMenuItem.bind(this)
-    },
-/***
-    'game-player': {
-      name: 'Laws',
-      callback: this.handleLawsMenuItem.bind(this)
-    },
-    'game-tech': {
-      name: 'Tech',
-      callback: this.handleTechMenuItem.bind(this)
-    },
-***/
-    'game-strategy': {
-      name: 'Strategy',
-      callback: this.handleStrategyMenuItem.bind(this)
-    },
-    'game-objectives': {
-      name: 'VP',
-      callback: this.handleObjectivesMenuItem.bind(this)
-    },
-    'board-info': {
-      name: 'Info',
-      callback: this.handleInfoMenuItem.bind(this)
-    },
-  }
-}
-
-
 hideOverlays() {
   document.querySelectorAll('.overlay').forEach(el => {
     el.classList.add('hidden');
@@ -24961,9 +25071,6 @@ returnFactionDashboard() {
           </div>
         </div>
 
-        <div data-id="${(i+1)}" class="dash-label">Resources</div>
-        <div data-id="${(i+1)}" class="dash-label">Influence</div>
-        <div data-id="${(i+1)}" class="dash-label">Goods</div>
       </div>
 
       <div data-id="${(i+1)}" class="dash-faction-base">
@@ -25237,15 +25344,7 @@ displayFactionDashboard() {
     document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
     document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
 
-
   }
-
-    document.querySelectorAll('.dash-faction').forEach(el => {
-      el.addEventListener('click', (e) => {
-        let faction_player = e.target.dataset.id;
-        imperium_self.displayFactionSheet(faction_player);
-      });
-    });
 
   } catch (err) {}
 }
@@ -25397,6 +25496,7 @@ returnFactionSheet(imperium_self, player=null) {
   if (!player) { player = imperium_self.game.player; }
 
   let html = `
+      <div class="faction_sheet_container" style="width:90vw;height:90vh">
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
         <div>Command</div>
         <div>Strategy</div>
@@ -25656,6 +25756,7 @@ returnFactionSheet(imperium_self, player=null) {
     
       </div>
     </div>
+  </div>
 
     `;
 

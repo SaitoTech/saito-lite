@@ -1,7 +1,6 @@
 const PostSidebarTemplate = require('./post-sidebar.template');
 const NewPost = require('../post/new-post');
 const ShowPost = require('../post/show-post');
-const elParser = require('../../../../lib/helpers/el_parser');
 
 module.exports = PostSidebar = {
 
@@ -97,7 +96,7 @@ module.exports = PostSidebar = {
 
     if (document.querySelector('.arcade-post-posts')) {
 
-      document.querySelector('.arcade-post-posts').append(elParser(html));
+      document.querySelector('.arcade-post-posts').append(app.browser.htmlToElement(html));
 
       document.getElementById(row.id).addEventListener('click', (e, app, data, row) => {
         console.log('click');

@@ -7,8 +7,11 @@
   position: unset;
 }
 
-.hud-menu {
+.game-menu {
   width: 550px;
+}
+.game-overlay-menu {
+  min-width: 450px;
 }
 .hud-cardbox {
   position: absolute;
@@ -25,7 +28,25 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-
+.cardlist-container {
+  height: 80vh;
+  width: 80vw;
+  overflow-y: scroll;
+}
+.cardlist-card {
+  position: relative;
+  float:left;
+  margin-right:10px;
+  margin-bottom: 10px;
+  height: 30vh;
+  max-height: 520px;
+  width: calc(30vh * 0.72110);
+  max-width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: block;
+}
 .china_card_status_us_faceup {
   background-color: #3277de;
 }
@@ -69,6 +90,15 @@
   max-width: 100%;
 }
 
+.statistics-table {
+  cell-padding: 50px;
+  cell-spacing: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.statistics-info {
+  margin-top:20px;
+}
 .zoom_button {
  border: 1px solid #707070;
  background-color: #646464;
@@ -490,7 +520,7 @@ body {
 
 /* color tweaks */
 
-.hud-menu {
+.game-menu {
   position: fixed;
   top: 3px;
   left: 3px;

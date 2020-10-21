@@ -244,9 +244,6 @@ returnFactionDashboard() {
           </div>
         </div>
 
-        <div data-id="${(i+1)}" class="dash-label">Resources</div>
-        <div data-id="${(i+1)}" class="dash-label">Influence</div>
-        <div data-id="${(i+1)}" class="dash-label">Goods</div>
       </div>
 
       <div data-id="${(i+1)}" class="dash-faction-base">
@@ -520,15 +517,7 @@ displayFactionDashboard() {
     document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
     document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
 
-
   }
-
-    document.querySelectorAll('.dash-faction').forEach(el => {
-      el.addEventListener('click', (e) => {
-        let faction_player = e.target.dataset.id;
-        imperium_self.displayFactionSheet(faction_player);
-      });
-    });
 
   } catch (err) {}
 }
@@ -611,7 +600,7 @@ addUIEvents() {
   }
 
   var html = this.returnTokenDisplay(); 
-  document.querySelector('.hud-header').append(elParser(html));
+  document.querySelector('.hud-header').append(this.app.browser.htmlToElement(html));
 
 
   document.querySelectorAll('.faction_sheet_buttons div').forEach((el) => {
@@ -680,6 +669,7 @@ returnFactionSheet(imperium_self, player=null) {
   if (!player) { player = imperium_self.game.player; }
 
   let html = `
+      <div class="faction_sheet_container" style="width:90vw;height:90vh">
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
         <div>Command</div>
         <div>Strategy</div>
@@ -939,6 +929,7 @@ returnFactionSheet(imperium_self, player=null) {
     
       </div>
     </div>
+  </div>
 
     `;
 

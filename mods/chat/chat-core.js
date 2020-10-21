@@ -178,9 +178,18 @@ class ChatCore extends ModTemplate {
     //
     if (cg.members) {
       if (cg.members.length >= 1) {
-	if (cg.members[0] === this.app.network.peers[0].peer.publickey) {
-	  prepend_group = 1;
-	}
+	if (this.app.options.peers) {
+	  if (this.app.options.peers.length > 0) {
+  	    if (cg.members[0] === this.app.options.peers[0].publickey) {
+	      prepend_group = 1;
+	    }
+  	    if (this.app.network.peers.length > 0) {
+  	      if (this.app.network.peers[0].peer.publickey) {
+	        prepend_group = 1;
+	      }
+	    }
+          }
+        }
       }
     }
 
@@ -272,6 +281,31 @@ class ChatCore extends ModTemplate {
       }
     }
 
+    //
+    // notify group chat if not-on-page
+    //
+    let chat_on_page = 1;
+    try {
+      let chat_box_id = "#chat-box-"+txmsg.group_id;
+console.log("CBI: " + chat_box_id);
+      if (!document.querySelector(chat_box_id)) {
+	chat_on_page = 0;
+      }
+    } catch (err) {
+console.log("eror trying to find chat on page");
+    }
+    if (chat_on_page == 0 && this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
+      let default_chat = this.returnDefaultChat();
+      let message2 = JSON.parse(JSON.stringify(txmsg));
+      message2.group_id = default_chat.id;
+      message2.sig = this.app.crypto.hash(tx.transaction.sig);
+      message2.identicon = this.app.keys.returnIdenticon();
+      message2.type = "others";
+      message2.message = this.app.crypto.stringToBase64("<i>you have received a private message</i>");
+      default_chat.messages.push(message2);
+      this.sendEvent('chat_receive_message', message2);
+    }
+
 
     this.groups.forEach(group => {
 
@@ -319,6 +353,57 @@ class ChatCore extends ModTemplate {
     });
     this.app.storage.saveOptions();
   }
+
+
+  openChatBox(group_id=null) {
+
+    let data = {};
+    data.chat = this;
+
+    if (group_id == null) { return; }
+
+    if (document.getElementById(`chat-box-${group_id}`)) {
+      let chat_box_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
+      chat_box_input.focus();
+      chat_box_input.select();
+
+      // 
+      // maximize if minimized
+      //
+      let chat_box = document.getElementById(`chat-box-${group_id}`);
+      chat_box.classList.remove("chat-box-hide");
+      return;
+    }
+
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].id == group_id) {
+        ChatManager.openChatBox(this.app, data, this.groups[i]);
+      }
+    }
+
+  }
+
+  returnDefaultChat() {
+    for (let i = 0; i < this.groups.length; i++) {
+console.log("G: " + this.groups[i].id);
+      if (this.app.options.peers.length > 0) {
+        if (this.groups[i].members[0] === this.app.options.peers[0].publickey) {
+console.log("G:1");
+          return this.groups[i];
+        }
+      }
+      if (this.app.network.peers.length > 0) {
+        if (this.groups[i].members[0] === this.app.network.peers[0].peer.publickey) {
+console.log("G:2");
+          return this.groups[i];
+        }
+      }
+    }
+console.log("END G");
+    return this.groups[0];
+  }
+
+
 
   chatLoadMessages(app, tx) {}
   async chatRequestMessages(app, tx) {}

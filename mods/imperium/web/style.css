@@ -24,9 +24,10 @@
 
 
 /* customize game.css */
-.hud-menu {
+.game-menu {
   width: 550px;
   min-width: 550px;
+  font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;
 }
 
 
@@ -993,9 +994,6 @@ body {
   background-color: #3334;
 }
 
-.hud-menu {
-  font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;
-}
 
 .status ul li:hover, .hud-menu ul li a:hover, hud-menu-overlay ul li:hover {
   background: #8888;
@@ -1594,26 +1592,6 @@ body {
   /* display: inline-block; */
   display: none;
   opacity: 0.7;
-}
-
-.dash-faction-info .dash-label {
-  display: none;
-}
-
-.dash-faction-info:hover .dash-label {
-  display: block;
-}
-
-.dash-label {
-  transform: rotate(35deg);
-  color: #fff;
-  position: relative;
-  left: 2em;
-  height: 0;
-  top: 1em;
-  background: #000a;
-  z-index: 100;
-  padding: 10px;
 }
 
 .dash-faction-action {
