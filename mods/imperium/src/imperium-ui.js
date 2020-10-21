@@ -32,20 +32,18 @@ hideOverlays() {
 }
 
 handleTechMenuItem() {
-  this.hideOverlays();
-  $('.tech_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnTechOverlay());
 }
 
+handleLawsMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnLawsOverlay());
+}
 handleStrategyMenuItem() {
-  this.hideOverlays();
-  $('.strategy_overlay').html(this.returnStrategyOverlay());
-  $('.strategy_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnStrategyOverlay());
 }
 
 handleObjectivesMenuItem() {
-  this.hideOverlays();
-  $('.objectives_overlay').html(this.returnObjectivesOverlay());
-  $('.objectives_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnObjectivesOverlay());
 }
 
 handleInfoMenuItem() {
@@ -89,11 +87,4 @@ handleSystemsMenuItem() {
 
 
 
-handleLawsMenuItem() {
-
-  this.hideOverlays();
-  $('.laws_overlay').html(this.returnLawsOverlay());
-  $('.laws_overlay').removeClass("hidden");
-
-}
 

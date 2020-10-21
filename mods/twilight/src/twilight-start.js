@@ -543,7 +543,7 @@ console.log("MEMBERS: " + members);
     this.hud.addCardType("showcard", "select", this.cardbox_callback);
     this.hud.addCardType("card", "select", this.cardbox_callback);
     if (!app.browser.isMobileBrowser(navigator.userAgent)) {
-      this.hud.cardbox.skip_card_prompt = 1;
+      this.cardbox.skip_card_prompt = 1;
     } else {
       this.hud.card_width = 110;
     }
@@ -9275,7 +9275,7 @@ console.log("CONTROL IS: " + control);
   }
 
   hideCard() {
-    this.hud.cardbox.hideCardbox(1);
+    this.cardbox.hideCardbox(1);
     //$('#cardbox').hide();
     //$('.cardbox_event_blocker').css('height','0px');
     //$('.cardbox_event_blocker').css('width','0px');

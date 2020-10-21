@@ -1,7 +1,3 @@
-const GameOverlay = require('../../lib/saito/ui/game-overlay/game-overlay'); 
-const GameMenu = require('../../lib/saito/ui/game-menu/game-menu'); 
-const GameHud = require('../../lib/saito/ui/game-hud/game-hud'); 
-const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
 class Imperium extends GameTemplate {
   
@@ -48,10 +44,7 @@ class Imperium extends GameTemplate {
     this.units          	= {};
     this.promissary_notes	= {};
 
-    this.hud = new GameHud(this.app);
     this.hud.mode = 1;  // classic interface
-    this.menu = new GameMenu(this.app);
-    this.overlay = new GameOverlay(this.app);
 
     //
     // tutorial related

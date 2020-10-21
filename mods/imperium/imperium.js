@@ -1,9 +1,4 @@
-const GameOverlay = require('../../lib/saito/ui/game-overlay/game-overlay'); 
-const GameMenu = require('../../lib/saito/ui/game-menu/game-menu'); 
-const GameHud = require('../../lib/saito/ui/game-hud/game-hud'); 
-const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
-const elParser = require('../../lib/helpers/el_parser');
 class Imperium extends GameTemplate {
   
   constructor(app) {
@@ -49,10 +44,7 @@ class Imperium extends GameTemplate {
     this.units          	= {};
     this.promissary_notes	= {};
 
-    this.hud = new GameHud(this.app);
     this.hud.mode = 1;  // classic interface
-    this.menu = new GameMenu(this.app);
-    this.overlay = new GameOverlay(this.app);
 
     //
     // tutorial related
@@ -8841,20 +8833,12 @@ ACTION CARD - types
       }
     });
     this.menu.addSubMenuOption("game-game", {
-      text : "Save",
-      id : "game-save",
-      class : "game-save",
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        game_mod.overlay.showOverlay(app, game_mod, "This is our overlay text");
-      }
-    });
-    this.menu.addSubMenuOption("game-game", {
-      text : "Load",
-      id : "game-load",
-      class : "game-load",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
       }
     });
 
@@ -8871,16 +8855,13 @@ ACTION CARD - types
     });
 try {
     for (let i = 0; i < this.game.players_info.length; i++) {
-console.log(i + " -- ");
-console.log(imperium_self.returnFaction(i+1));
-console.log("done");
       this.menu.addSubMenuOption("game-factions", {
         text : imperium_self.returnFaction((i+1)),
         id : ("game-faction-"+(i+1)),
         class : ("game-faction-"+(i+1)),
         callback : function(app, game_mod) {
 	  game_mod.menu.hideSubMenus();
-	  game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnFactionSheet(game_mod, (i+1)));
+	  game_mod.displayFactionSheet((i+1));
         }
       });
     }
@@ -8937,19 +8918,95 @@ console.log("done");
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
 	game_mod.handleObjectivesMenuItem();
-        alert("callback in Stats Menu Option!");
       }
     });
     this.menu.addSubMenuOption("game-info", {
-      text : "Agendas",
+      text : "Laws",
       id : "game-agendas",
       class : "game-agendas",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
 	game_mod.handleLawsMenuItem();
-        alert("callback in Stats Menu Option!");
       }
     });
+
+
+
+
+    let main_menu_added = 0;
+    let community_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+        for (let ii = 0; ii < this.game.players.length; ii++) {
+          if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+            // add main menu
+            if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+                id : "game-chat",
+                class : "game-chat",
+                callback : function(app, game_mod) {
+                  game_mod.menu.showSubMenu("game-chat");
+                }
+              })
+              main_menu_added = 1;
+            }
+
+            if (community_menu_added == 0) {
+              this.menu.addSubMenuOption("game-chat", {
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
+                callback : function(app, game_mod) {
+                  game_mod.menu.hideSubMenus();
+                  // load the chat window
+                  let newgroup = chatmod.returnDefaultChat();
+                  if (newgroup) {
+                    chatmod.addNewGroup(newgroup);
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  } else {
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  }
+                }
+              });
+              community_menu_added = 1;
+            }
+
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = "Player "+(ii+1);
+            let chatmod = this.app.modules.mods[i];
+
+            this.menu.addSubMenuOption("game-chat", {
+              text : name,
+              id : "game-chat-"+(ii+1),
+              class : "game-chat-"+(ii+1),
+              callback : function(app, game_mod) {
+                game_mod.menu.hideSubMenus();
+                // load the chat window
+                let newgroup = chatmod.createChatGroup(members);
+                if (newgroup) {
+                  chatmod.addNewGroup(newgroup);
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.saveChat();
+                  chatmod.openChatBox(newgroup.id);
+                } else {
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.openChatBox(gid);
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+
+
 
     this.menu.addMenuIcon({
       text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
@@ -8961,19 +9018,29 @@ console.log("done");
     this.menu.render(app, this);
     this.menu.attachEvents(app, this);
 
+    this.hud.render(app, this);
+    this.hud.attachEvents(app, this);
 
+    this.log.render(app, this);
+    this.log.attachEvents(app, this);
+
+    this.cardbox.render(app, this);
+    this.cardbox.attachEvents(app, this);
+
+    this.hud.render(app, this);
+    this.hud.attachEvents(app, this);
 
     try {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
-        GameHammerMobile.render(this.app, this);
-        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '.gameboard');
 
       } else {
 
-        GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexGrid
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexGrid
 
       }
     } catch (err) {}
@@ -9428,20 +9495,18 @@ hideOverlays() {
 }
 
 handleTechMenuItem() {
-  this.hideOverlays();
-  $('.tech_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnTechOverlay());
 }
 
+handleLawsMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnLawsOverlay());
+}
 handleStrategyMenuItem() {
-  this.hideOverlays();
-  $('.strategy_overlay').html(this.returnStrategyOverlay());
-  $('.strategy_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnStrategyOverlay());
 }
 
 handleObjectivesMenuItem() {
-  this.hideOverlays();
-  $('.objectives_overlay').html(this.returnObjectivesOverlay());
-  $('.objectives_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnObjectivesOverlay());
 }
 
 handleInfoMenuItem() {
@@ -9485,13 +9550,6 @@ handleSystemsMenuItem() {
 
 
 
-handleLawsMenuItem() {
-
-  this.hideOverlays();
-  $('.laws_overlay').html(this.returnLawsOverlay());
-  $('.laws_overlay').removeClass("hidden");
-
-}
 
   
   
@@ -24862,6 +24920,11 @@ addEventsToBoard() {
   });
 }
 
+returnTechOverlay() {
+  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png"></div>';
+  return html;
+}
+
 
 returnSectorInformationHTML(sector) {
 
@@ -25090,31 +25153,12 @@ returnFactionDashboard() {
 }
 
 
-returnFactionSheets() {
-
-  let html = '';
-  for (let i = 0; i < this.game.players_info.length; i++) {
-    html += `
-      <div data-id="${(i+1)}" class="faction_sheet faction_sheet_${(i+1)} p${(i+1)} hidden">
-        <div class="faction_name faction_name_${(i+1)} p1"></div>
-        <div id="faction_content_${(i+1)}" class="faction_content faction_content_${(i+1)} p${(i+1)}"></div>
-      </div>
-    `;
-  }
-  return html;
-
-}
-
-
-
 returnLawsOverlay() {
 
   let laws = this.returnAgendaCards();
-  let html = '';
+  let html = '<div class="overlay_laws_container">';
 
   if (this.game.state.laws.length > 0) {
-      html += '<div style="margin-bottom: 1em;color:white;font-size:1.4em;margin-left:auto;margin-right:auto">Galactic Laws Under Enforcement:</div>';
-      html += '<p></p>';
       html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.laws.length; i++) {
         html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i]].text}</div></li>`;
@@ -25123,7 +25167,6 @@ returnLawsOverlay() {
   }
 
   if (this.game.state.agendas.length > 0) {
-      html += '<div class="overlay_laws_header">Galactic Laws Under Consideration:</div>';
       html += '<div class="overlay_laws_list">';
       for (let i = 0; i < this.game.state.agendas.length; i++) {
         html += `  <div style="background-image: url('/imperium/img/agenda_card_template.png');" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.agendas[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.agendas[i]].text}</div></div>`;
@@ -25134,6 +25177,8 @@ returnLawsOverlay() {
   if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
       html += '<div class="overlay_laws_header">There are no laws in force or agendas up for consideration at this time.</div>';
   }
+
+  html += '</div>';
 
   return html;
 
@@ -25223,9 +25268,11 @@ returnStrategyOverlay() {
   }
 
   let final_result = "";
+  final_result += '<div class="overlay_strategy_container">';
   for (let i = 0; i < sorted_cards.length; i++) {
     final_result += sorted_cards[i];
   }
+  final_result += '</div>';
 
   return final_result;
 
@@ -25236,6 +25283,7 @@ returnObjectivesOverlay() {
   let html = '';
   let imperium_self = this;
 
+  html += '<div class="objectives-overlay-container" style="">';
 
   //
   // SECRET OBJECTIVES
@@ -25250,8 +25298,6 @@ returnObjectivesOverlay() {
       `;
     }
   }
-
-
 
   //
   // STAGE 1 OBJECTIVES
@@ -25310,6 +25356,8 @@ returnObjectivesOverlay() {
     }
   }
 
+  html += '</div>';
+
   return html;
 
 }
@@ -25322,30 +25370,26 @@ displayFactionDashboard() {
   let imperium_self = this;
 
   try {
+    document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard();
+    var pl = "";
+    for (let i = 0; i < this.game.players_info.length; i++) {
 
-  document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard();
+      pl = "p" + (i+1);
 
-  var pl = "";
-  for (let i = 0; i < this.game.players_info.length; i++) {
+      let total_resources = this.returnTotalResources((i+1)) - this.game.players_info[i].goods;
+      let available_resources = this.returnAvailableResources((i+1)) - this.game.players_info[i].goods;
+      let total_influence = this.returnTotalInfluence((i+1)) - this.game.players_info[i].goods;
+      let available_influence = this.returnAvailableInfluence((i+1)) - this.game.players_info[i].goods;
 
-    pl = "p" + (i+1);
-
-    let total_resources = this.returnTotalResources((i+1)) - this.game.players_info[i].goods;
-    let available_resources = this.returnAvailableResources((i+1)) - this.game.players_info[i].goods;
-    let total_influence = this.returnTotalInfluence((i+1)) - this.game.players_info[i].goods;
-    let available_influence = this.returnAvailableInfluence((i+1)) - this.game.players_info[i].goods;
-
-    document.querySelector(`.${pl} .dash-faction-name`).innerHTML = this.returnFaction(i+1);
-    document.querySelector(`.${pl} .resources .avail`).innerHTML = available_resources;
-    document.querySelector(`.${pl} .resources .total`).innerHTML = total_resources;
-    document.querySelector(`.${pl} .influence .avail`).innerHTML = available_influence;
-    document.querySelector(`.${pl} .influence .total`).innerHTML = total_influence;
-    document.querySelector(`.${pl} .dash-item-goods`).innerHTML = this.game.players_info[i].goods;
-    document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
-    document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
-
-  }
-
+      document.querySelector(`.${pl} .dash-faction-name`).innerHTML = this.returnFaction(i+1);
+      document.querySelector(`.${pl} .resources .avail`).innerHTML = available_resources;
+      document.querySelector(`.${pl} .resources .total`).innerHTML = total_resources;
+      document.querySelector(`.${pl} .influence .avail`).innerHTML = available_influence;
+      document.querySelector(`.${pl} .influence .total`).innerHTML = total_influence;
+      document.querySelector(`.${pl} .dash-item-goods`).innerHTML = this.game.players_info[i].goods;
+      document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
+      document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
+    }
   } catch (err) {}
 }
 
@@ -25353,186 +25397,52 @@ displayFactionDashboard() {
 displayFactionSheet(player) {
 
   let imperium_self = this;
-
-  if (!imperium_self.factions_enabled) {
-    imperium_self.factions_enabled = [];
-    for (let i = 0; i < imperium_self.game.players_info; i++) { 
-      imperium_self.factions_enabled.push(0);
-    }
-  }
-
-  let divar = "faction_content_"+player;
   let html = imperium_self.returnFactionSheet(imperium_self, player);
-  document.getElementById(divar).innerHTML = html;
-
-  if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
-    document.querySelector('.interface_overlay').classList.remove('hidden');
-  }
-
-  let is_visible = 0;
-  if (imperium_self.factions_enabled[player-1] == 1) {
-    imperium_self.factions_enabled[player-1] = 0;
-  } else {
-    imperium_self.factions_enabled[player-1] = 1;
-  }
-
-  let faction_sheet_class = ".faction_sheet_"+player;
-  document.querySelector(faction_sheet_class).toggleClass('hidden');
-  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-    if (imperium_self.factions_enabled[i] > 0) { is_visible++; }
-  }
-  if (is_visible == 0) {
-    document.querySelector('.interface_overlay').classList.add('hidden');
-  }
+  imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, html);
 
 }
-
-
-addUIEvents() {
-
-
-  var imperium_self = this;
-
-  if (this.browser_active == 0) { return; }
-
-//  $('#hexGrid').draggable();
-
-  document.querySelector('.leaderboardbox').addEventListener('click', (e) => {
-    document.querySelector('.leaderboardbox').toggleClass('leaderboardbox-lock');
-  });
-
-  //set player highlight color
-  document.documentElement.style.setProperty('--my-color', `var(--p${this.game.player})`);
-
-  document.getElementById('faction_sheets').innerHTML = this.returnFactionSheets();
-
-  //add faction names to their sheets
-  for (let i = 0; i < this.game.players_info.length; i++) {
-    document.querySelector('.faction_name_' + (i+1)).innerHTML = this.returnFaction(i+1);
-    let factions = this.returnFactions();
-    document.querySelector('.faction_sheet_' + (i+1)).style.backgroundImage = "url('./img/factions/" + factions[this.game.players_info[i].faction].background + "')";
-  };
-
-  this.displayFactionDashboard();
-
-
-  document.querySelectorAll('.faction_sheet').forEach(el => {
-    el.addEventListener('click', (e) => {
-      document.querySelector('.interface_overlay').classList.add('hidden');
-    });
-  });
-
-  for (let i = 0; i < this.game.players_info.length; i++) {
-    document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
-  }
-
-  var html = this.returnTokenDisplay(); 
-  document.querySelector('.hud-header').append(elParser(html));
-
-
-  document.querySelectorAll('.faction_sheet_buttons div').forEach((el) => {
-    var target = el.dataset.action;
-    el.addEventListener('click', (el) => {
-      document.querySelectorAll('.'+target+'.anchor').forEach((sec) => {
-        sec.parentElement.scrollTop = sec.offsetTop - sec.parentElement.offsetTop;
-      });
-    });
-  });
-  document.querySelectorAll('.overlay').forEach((el) => {
-    el.addEventListener('click', (e) => {
-      //e.target.classList.add("hidden");
-      imperium_self.hideOverlays();
-    });
-  });
-}
-
-
-
-
-returnTokenDisplay(player=null) {
-
-  if (player == null) { player = this.game.player; }
-
-  let html = `
-    <div class="hud-token-count">
-      <div>	
-        <span class="fa-stack fa-3x">
-        <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_command_token_count" class="token_count command_token_count">
-        ${this.game.players_info[player-1].command_tokens}
-        </div>
-        </span>
-        </span>
-      </div>
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_strategy_token_count" class="token_count strategy_token_count">
-        ${this.game.players_info[player-1].strategy_tokens}
-        </div>
-        </span>
-        </span>
-      </div>
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_fleet_supply_count" class="token_count fleet_supply_count">
-        ${this.game.players_info[player-1].fleet_supply}
-        </div>
-        </span>
-        </span>
-      </div>
-    </div>`;
-
-  return html;
-
-}
-
 returnFactionSheet(imperium_self, player=null) {
 
   if (!player) { player = imperium_self.game.player; }
 
   let html = `
-      <div class="faction_sheet_container" style="width:90vw;height:90vh">
+      <div class="faction_sheet_container" style="width:90vw;height:90vh;background-image:url('/imperium/img/factions/faction${player}.jpg');background-size:cover;')">
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
-        <div>Command</div>
-        <div>Strategy</div>
-        <div>Fleet</div>
-        <div>	
-          <span class="fa-stack fa-3x">
-          <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
-          <span class="fa fa-stack-1x">
-          <span class="token_count commend_token_count">
-          ${imperium_self.game.players_info[player - 1].command_tokens}
-          </span>
-          </span>
-          </span>
+          <div>Command</div>
+          <div>Strategy</div>
+          <div>Fleet</div>
+          <div>	
+            <span class="fa-stack fa-3x">
+            <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
+            <span class="fa fa-stack-1x">
+            <span class="token_count commend_token_count">
+            ${imperium_self.game.players_info[player - 1].command_tokens}
+            </span>
+            </span>
+            </span>
+          </div>
+          <div>
+            <span class="fa-stack fa-3x">
+            <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
+            <span class="fa fa-stack-1x">
+            <span class="token_count strategy_token_count">
+            ${this.game.players_info[player - 1].strategy_tokens}
+            </span>
+            </span>
+            </span>
+          </div>
+          <div>
+            <span class="fa-stack fa-3x">
+            <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
+            <span class="fa fa-stack-1x">
+            <span class="token_count fleet_supply_count">
+            ${this.game.players_info[player - 1].fleet_supply}
+            </span>
+            </span>
+            </span>
+          </div>
         </div>
-        <div>
-          <span class="fa-stack fa-3x">
-          <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
-          <span class="fa fa-stack-1x">
-          <span class="token_count strategy_token_count">
-          ${this.game.players_info[player - 1].strategy_tokens}
-          </span>
-          </span>
-          </span>
-        </div>
-        <div>
-          <span class="fa-stack fa-3x">
-          <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
-          <span class="fa fa-stack-1x">
-          <span class="token_count fleet_supply_count">
-          ${this.game.players_info[player - 1].fleet_supply}
-          </span>
-          </span>
-          </span>
-        </div>
-      </div>
-      <div class="faction_sheet_active">
+        <div class="faction_sheet_active">
    `;
 
 
@@ -25625,144 +25535,80 @@ returnFactionSheet(imperium_self, player=null) {
     }
     html += `</div>`;
 
-
-
-    //
-    // OBJECTIVES
-    //
-    let objc = imperium_self.returnPlayerObjectives(player);
-    let scored_objectives = [];
-    let unscored_objectives = [];
-
-
-      for (let i in objc) {
-        if (this.game.players_info[player-1].objectives_scored.includes(i)) {
-   	  scored_objectives.push(objc[i]);
-        } else {
-  	  unscored_objectives.push(objc[i]);
-        }
-      }
-
-      html += `
-        <h3 class="objectives anchor">Objectives</h3>
-        <div class="faction_sheet_objectives">
-          <div class="scored">
-            <h4>Scored</h4>
-            <div class="faction_sheet_objective_cards scored">
-      `;
-
-      for (let i = 0; i < scored_objectives.length; i++) {
-        html += `
-              <div class="faction_sheet_action_card bc" style="background-image: url(${scored_objectives[i].img})">
-                <div class="action_card_name">${scored_objectives[i].name}</div>
-                <div class="action_card_content">${scored_objectives[i].text}</div>
-              </div>
-        `;
-      }
-
-      html += `
-          </div>
-          </div>
-          <div class="unscored">
-            <h4>Unscored</h4>
-            <div class="faction_sheet_objective_cards unscored">
-      `;
-
-
-      if (this.game.player != player) {
-        for (let i = 0; i < this.game.players_info[player-1].secret_objectives_in_hand; i++) {
-          html += `
-            <div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">
-            </div>
-        `;
-        }
-      }
-	
-
-      for (let i = 0; i < unscored_objectives.length; i++) {
-        html += `
-            <div class="faction_sheet_action_card bc" style="background-image: url(${unscored_objectives[i].img})">
-              <div class="action_card_name">${unscored_objectives[i].name}</div>
-              <div class="action_card_content">${unscored_objectives[i].text}</div>
-            </div>
-        `;
-      }
-
-      html += `
-          </div>
-        </div>
-      </div>
-
-     
-      <h3 class="units anchor">Units</h3>
-
-       
-
-
-      <div class="faction_sheet_unit_box" id="faction_sheet_unit_box">
-          
-     `;
-     
-     //var unit_array = Object.entries(imperium_self.units);
-     var unit_array = [];
-     Object.entries(imperium_self.units).forEach(item => {
-       let unit = item[1];
-       if(unit.extension == 1) {
-       } else {
-         unit_array.push([item[0],{
-           type: unit.type,
-           name: unit.name,
-           cost: unit.cost,
-           combat: unit.combat, 
-           move: unit.move,
-           capacity: unit.capacity
-         }]);
-       }  
-     });
-     Object.entries(imperium_self.units).forEach(item => {
-      let unit = item[1];
-      if (unit.extension == 1) {
-        for(i=0; i < unit_array.length; i++){
-           if (unit_array[i][1].type == unit.type){
-             unit_array[i][1].cost += " (" + unit.cost +")";
-             unit_array[i][1].combat += " (" + unit.combat +")";
-             unit_array[i][1].move += " (" + unit.move +")";
-             unit_array[i][1].capacity += " (" + unit.capacity +")";
-           }
-         };
-      }
-    });
-    unit_array.forEach((u) =>{
-     html += `
-
-     <div class="unit-display-tile _${u[1].type}">
-   <div class="unit-name">${u[1].name}</div>
-     <div class="unit-image player_color_${player}" style="background-image: url(img/units/${u[0]}.png);"></div>
-     <div class="unit-display">
-       <div class="cost">Cost: ${u[1].cost}</div>
-       <div class="combat">Combat: ${u[1].combat}</div>
-       <div class="movement">Move: ${u[1].move}</div>
-       <div class="capacity">Carry: ${u[1].capacity}</div>
-     </div>
- </div>
-     `;
-    });
-
-    html += `
-    </div>
-    <h3 class="lore anchor">Faction Lore</h3>
-    <div class="faction_sheet_lore" id="faction_sheet_lore">
-    <div class="anyipsum-output"><p>Spicy jalapeno bacon ipsum dolor amet turducken jerky pork loin pork chop pig chislic boudin meatloaf biltong.  Beef tri-tip ham hock, swine biltong prosciutto frankfurter.  Porchetta swine chislic pork belly bacon salami beef ribs pork loin prosciutto fatback pastrami ham hock ham.  Pastrami sausage t-bone filet mignon cow porchetta, bresaola landjaeger pork loin shoulder alcatra chislic ham buffalo.  Beef ribs sirloin strip steak prosciutto corned beef.  Biltong sausage porchetta, hamburger turkey tenderloin tongue frankfurter bresaola rump doner kevin pancetta burgdoggen.  Picanha porchetta drumstick turkey tenderloin landjaeger pork ribeye pig swine sausage t-bone chuck flank bacon.</p><p>Andouille tail sausage, ham hock capicola turkey chicken short loin buffalo meatloaf sirloin.  Jerky filet mignon tenderloin pancetta bresaola kielbasa.  Beef venison t-bone, tongue sausage cow burgdoggen landjaeger jowl alcatra short loin shoulder turducken.  Tenderloin cow landjaeger, chuck capicola picanha beef tri-tip cupim prosciutto kevin.  Pancetta capicola short ribs shank.  Bacon porchetta short ribs short loin, prosciutto pork belly chicken corned beef.  Kielbasa biltong corned beef hamburger doner jowl boudin jerky shank cupim frankfurter pancetta strip steak ribeye.</p><p>Tri-tip beef pork chop beef ribs.  Capicola tongue cow flank ham, landjaeger hamburger beef ribs turkey sausage.  Meatball ground round pastrami cow bresaola.  Jerky tail tri-tip picanha salami ground round meatloaf shoulder strip steak jowl porchetta sausage pork chop short ribs shank.  Capicola bacon beef strip steak corned beef.  Strip steak beef pork leberkas.  Jerky shank ham hock leberkas beef ribs doner.</p><p>Pastrami drumstick picanha bresaola.  Cow kevin pork loin, turducken alcatra beef ribs jerky salami.  Pastrami pork meatball buffalo chuck, chicken short loin ham.  Pork belly swine venison chicken beef ribs beef.</p><p>Pork bresaola shankle short loin, frankfurter jowl flank leberkas.  Filet mignon drumstick tri-tip sirloin tenderloin meatloaf buffalo.  Cupim ground round venison tri-tip salami tenderloin pork chop spare ribs bacon.  Shank picanha flank chuck cupim jowl pork belly.  Meatball kevin jowl short ribs pork loin spare ribs.</p><p>Bacon frankfurter rump, chislic ground round sausage prosciutto fatback drumstick boudin.  Cow ground round burgdoggen tri-tip bresaola.  Pig chuck tail pork.  Pork loin swine chislic shoulder cupim.  Capicola pig doner brisket meatball burgdoggen.  Biltong short loin flank, pork loin meatball ham hock shank beef ribs fatback.  Shank ball tip beef ribs, ribeye ham hock pancetta sausage chislic chicken picanha biltong rump leberkas filet mignon alcatra.</p><p>Beef chislic short ribs jerky landjaeger tri-tip boudin corned beef.  Short ribs fatback rump shankle andouille.  Pig shoulder andouille burgdoggen, tongue frankfurter tail tenderloin pork landjaeger alcatra swine boudin turducken.  Short loin corned beef capicola chuck kielbasa tri-tip, burgdoggen bacon drumstick meatball spare ribs.  Sirloin pig jowl meatball, tail drumstick landjaeger short loin bresaola ham hock.  Capicola meatball ham hock ground round.  Boudin salami flank swine sirloin kevin ball tip strip steak capicola t-bone shankle landjaeger chuck chislic.</p><p>Ribeye rump pig doner tongue beef ribs boudin filet mignon turducken corned beef jowl shankle strip steak andouille short loin.  Turducken tongue pork belly pork loin short ribs jerky strip steak jowl shank leberkas filet mignon.  Corned beef flank buffalo, ham hock short loin turkey pork loin.  Tenderloin bacon bresaola, short ribs meatball rump tongue fatback picanha filet mignon.  Frankfurter chicken pork loin, pancetta chuck turkey rump cupim cow.  Picanha shank doner drumstick meatball landjaeger brisket cupim.</p><p>Capicola turkey pork belly andouille filet mignon buffalo.  Strip steak shoulder short ribs biltong chicken, corned beef sirloin salami capicola bacon.  Boudin tenderloin bresaola shank pork belly drumstick kevin alcatra brisket biltong chicken jerky shoulder shankle corned beef.  Pork chop beef ribs meatloaf boudin, buffalo shoulder jowl salami brisket ball tip beef chislic.  Turkey andouille spare ribs, pork belly tongue tail tri-tip venison.  Frankfurter chuck porchetta biltong pastrami andouille kielbasa flank chislic pig t-bone hamburger turducken boudin venison.  Tri-tip filet mignon kevin, porchetta jerky rump picanha shank buffalo flank short loin.</p></div>
-    
-      </div>
-    </div>
-  </div>
-
-    `;
-
   return html;
 }
 
+
+
+
+
+addUIEvents() {
+
+  var imperium_self = this;
+
+  if (this.browser_active == 0) { return; }
+
+  $('#hexGrid').draggable();
+
+  document.querySelector('.leaderboardbox').addEventListener('click', (e) => {
+    document.querySelector('.leaderboardbox').toggleClass('leaderboardbox-lock');
+  });
+
+  //set player highlight color
+  document.documentElement.style.setProperty('--my-color', `var(--p${this.game.player})`);
+
+  this.displayFactionDashboard();
+
+
+  var html = this.returnTokenDisplay(); 
+  document.querySelector('.hud-header').append(this.app.browser.htmlToElement(html));
+
+}
+
+
+
+
+returnTokenDisplay(player=null) {
+
+  if (player == null) { player = this.game.player; }
+
+  let html = `
+    <div class="hud-token-count">
+      <div>	
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <div id="token_display_command_token_count" class="token_count command_token_count">
+        ${this.game.players_info[player-1].command_tokens}
+        </div>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <div id="token_display_strategy_token_count" class="token_count strategy_token_count">
+        ${this.game.players_info[player-1].strategy_tokens}
+        </div>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <div id="token_display_fleet_supply_count" class="token_count fleet_supply_count">
+        ${this.game.players_info[player-1].fleet_supply}
+        </div>
+        </span>
+        </span>
+      </div>
+    </div>`;
+
+  return html;
+
+}
 
 
 showSector(pid) {
@@ -26228,10 +26074,10 @@ updateSectorGraphics(sector) {
   }
   showActionCard(c) {
     let thiscard = this.action_cards[c];
-    this.hud.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
+    this.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
   }
   hideActionCard(c) {
-    this.hud.cardbox.hideCardbox(1);
+    this.cardbox.hideCardbox(1);
   }
   showStrategyCard(c) {
 
@@ -26255,7 +26101,7 @@ updateSectorGraphics(sector) {
       </div>`;
 
     }
-    this.hud.cardbox.showCardboxHTML(thiscard, '<img src="/imperium/img' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
+    this.cardbox.showCardboxHTML(thiscard, '<img src="/imperium/img' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
   }
   /*
   // overriding this because imperium is incompatible with the generic function
@@ -26282,7 +26128,7 @@ updateSectorGraphics(sector) {
   }
 */
   hideStrategyCard(c) {
-    this.hud.cardbox.hideCardbox(1);
+    this.cardbox.hideCardbox(1);
   }
   showPlanetCard(sector, pid) {
     let planets = this.returnPlanets();
@@ -26290,22 +26136,22 @@ updateSectorGraphics(sector) {
     let sector_name = this.game.board[sector].tile;
     let this_planet_name = systems[sector_name].planets[pid];
     let thiscard = planets[this_planet_name];
-    this.hud.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" />');
+    this.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" />');
   }
   hidePlanetCard(sector, pid) {
-    this.hud.cardbox.hideCardbox(1);
+    this.cardbox.hideCardbox(1);
   }
   showAgendaCard(agenda) {
-    this.hud.cardbox.showCardboxHTML(agenda, '<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
+    this.cardbox.showCardboxHTML(agenda, '<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
   }
   hideAgendaCard(sector, pid) {
-    this.hud.cardbox.hideCardbox(1);
+    this.cardbox.hideCardbox(1);
   }
   showTechCard(tech) {
-    this.hud.cardbox.showCardboxHTML(tech, this.returnTechCardHTML(tech));
+    this.cardbox.showCardboxHTML(tech, this.returnTechCardHTML(tech));
   }
   hideTechCard(tech) {
-    this.hud.cardbox.hideCardbox(1);
+    this.cardbox.hideCardbox(1);
   }
 
 

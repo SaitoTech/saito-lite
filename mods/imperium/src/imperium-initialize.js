@@ -29,20 +29,12 @@
       }
     });
     this.menu.addSubMenuOption("game-game", {
-      text : "Save",
-      id : "game-save",
-      class : "game-save",
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        game_mod.overlay.showOverlay(app, game_mod, "This is our overlay text");
-      }
-    });
-    this.menu.addSubMenuOption("game-game", {
-      text : "Load",
-      id : "game-load",
-      class : "game-load",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
       }
     });
 
@@ -59,16 +51,13 @@
     });
 try {
     for (let i = 0; i < this.game.players_info.length; i++) {
-console.log(i + " -- ");
-console.log(imperium_self.returnFaction(i+1));
-console.log("done");
       this.menu.addSubMenuOption("game-factions", {
         text : imperium_self.returnFaction((i+1)),
         id : ("game-faction-"+(i+1)),
         class : ("game-faction-"+(i+1)),
         callback : function(app, game_mod) {
 	  game_mod.menu.hideSubMenus();
-	  game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnFactionSheet(game_mod, (i+1)));
+	  game_mod.displayFactionSheet((i+1));
         }
       });
     }
@@ -125,19 +114,95 @@ console.log("done");
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
 	game_mod.handleObjectivesMenuItem();
-        alert("callback in Stats Menu Option!");
       }
     });
     this.menu.addSubMenuOption("game-info", {
-      text : "Agendas",
+      text : "Laws",
       id : "game-agendas",
       class : "game-agendas",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
 	game_mod.handleLawsMenuItem();
-        alert("callback in Stats Menu Option!");
       }
     });
+
+
+
+
+    let main_menu_added = 0;
+    let community_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+        for (let ii = 0; ii < this.game.players.length; ii++) {
+          if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+            // add main menu
+            if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+                id : "game-chat",
+                class : "game-chat",
+                callback : function(app, game_mod) {
+                  game_mod.menu.showSubMenu("game-chat");
+                }
+              })
+              main_menu_added = 1;
+            }
+
+            if (community_menu_added == 0) {
+              this.menu.addSubMenuOption("game-chat", {
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
+                callback : function(app, game_mod) {
+                  game_mod.menu.hideSubMenus();
+                  // load the chat window
+                  let newgroup = chatmod.returnDefaultChat();
+                  if (newgroup) {
+                    chatmod.addNewGroup(newgroup);
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  } else {
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  }
+                }
+              });
+              community_menu_added = 1;
+            }
+
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = "Player "+(ii+1);
+            let chatmod = this.app.modules.mods[i];
+
+            this.menu.addSubMenuOption("game-chat", {
+              text : name,
+              id : "game-chat-"+(ii+1),
+              class : "game-chat-"+(ii+1),
+              callback : function(app, game_mod) {
+                game_mod.menu.hideSubMenus();
+                // load the chat window
+                let newgroup = chatmod.createChatGroup(members);
+                if (newgroup) {
+                  chatmod.addNewGroup(newgroup);
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.saveChat();
+                  chatmod.openChatBox(newgroup.id);
+                } else {
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.openChatBox(gid);
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+
+
 
     this.menu.addMenuIcon({
       text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
@@ -149,19 +214,29 @@ console.log("done");
     this.menu.render(app, this);
     this.menu.attachEvents(app, this);
 
+    this.hud.render(app, this);
+    this.hud.attachEvents(app, this);
 
+    this.log.render(app, this);
+    this.log.attachEvents(app, this);
+
+    this.cardbox.render(app, this);
+    this.cardbox.attachEvents(app, this);
+
+    this.hud.render(app, this);
+    this.hud.attachEvents(app, this);
 
     try {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
-        GameHammerMobile.render(this.app, this);
-        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '.gameboard');
 
       } else {
 
-        GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexGrid
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexGrid
 
       }
     } catch (err) {}

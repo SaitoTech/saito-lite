@@ -23,18 +23,108 @@
 }
 
 
-/* customize game.css */
 .game-menu {
   width: 550px;
   min-width: 550px;
   font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;
 }
 
+.overlay_laws_container {
+  width: 80vw;
+  height: auto;
+  overflow-y: scroll;
+}
 
-/* restore when lore added */
+.overlay_laws_header {
+  font-size: 2em;
+  color: #fff;
+  padding: 1em;
+}
 
-.faction_sheet_lore, .lore.anchor, .show_lore {
-  display: none;
+.overlay_laws_list {
+  display: flex;
+  justify-content: space-around;
+}
+
+.overlay_agendacard {
+  height: 380px;
+  width: 250px;
+  color: white;
+  padding: 10px;
+  background-size: cover;
+  margin: 5px 10px;
+}
+
+.overlay_agendatitle {
+  font-size: 1em;
+}
+
+.overlay_agendacontent {
+  margin-top: 40px;
+  font-size: 0.75em;
+  line-height: 1.4em;
+}
+
+.objectives-overlay-container {
+  width:80vw;
+  height: auto;
+  overflow-y: scroll;
+}
+.objectives_card_name {
+  color: white;
+  font-size: 1em;
+  padding: 15px 5px 10px;
+  background: #0008;
+}
+
+.objectives_card_content {
+  color: white;
+  font-size: 0.7em;
+  padding: 10px;
+  position: relative;
+  top: 33%;
+  transform: translateY(-50%);
+}
+
+.objectives_overlay_objectives_card {
+  width: 20vw;
+  height: 45vh;
+  margin: 10px;
+  background-size: cover;
+  max-width: 300px;
+  max-height: 450px;
+  float: left;
+}
+
+
+
+
+.overlay_strategy_container {
+  width: 86vw;
+  height: auto;
+  overflow-y: scroll;
+}
+.overlay_strategy_card_box {
+  position:relative;
+  float: left;
+  width: 20vw;
+  height: 45vh;
+  display: block;
+}
+.overlay_strategy_card_box_img {
+  position: absolute;
+}
+.overlay_strategy_card_text {
+  position: relative;
+  color: white;
+  padding-left: 15px;
+  padding-top: 70px;
+  top: 0px;
+  width: 80%;
+  font-family: 'orbitron-light', helvetica, sans-serif;
+  font-size: 0.7em;
+  line-height: 1.4;
+  z-index: 101;
 }
 
 .combat_log_th {
@@ -100,48 +190,8 @@
   font-size: 2em;
 }
 
-.overlay_strategy_card_box_img {
-  position: absolute;
-}
-
-.overlay_strategy_card_box {
-  /*! margin-right: 15px; */
-  /*! margin-bottom: 15px; */
-  position: relative;
-  width: 252px !important;
-  height: 378px;
-  display: block;
-  overflow: hidden;
-  transform: scale(0.9);
-}
-
-.overlay_strategy_card_text {
-  position: relative;
-  color: white;
-  padding-left: 15px;
-  padding-top: 70px;
-  top: 0px;
-  width: 80%;
-  font-family: 'orbitron-light', helvetica, sans-serif;
-  font-size: 1.3em;
-  line-height: 1.4;
-  z-index: 101;
-}
-
-.strategy_card_overlay {
-  position: absolute;
-  color: white;
-  padding-left: 20px;
-  padding-top: 70px;
-  top: 0px;
-  line-height: 1.8em;
-  width: 80%;
-  font-family: 'orbitron-light', helvetica, sans-serif;
-  font-size: 1.4em;
-}
-
 .strategy_card_state {
-  width: 195px;
+  width: 18vw;
   min-height: 20px;
   color: white;
   font-weight: bold;
@@ -152,6 +202,7 @@
   text-align: center;
   left: -17px;
   background: #0008;
+  font-size:0.6em;
 }
 
 .strategy_card_state_internal {
@@ -205,36 +256,6 @@
   margin-bottom: 10px;
   margin-top: 10px;
   cursor: pointer;
-}
-
-.overlay_laws_header {
-  font-size: 2em;
-  color: #fff;
-  padding: 1em;
-}
-
-.overlay_laws_list {
-  display: flex;
-  justify-content: space-around;
-}
-
-.overlay_agendacard {
-  height: 380px;
-  width: 250px;
-  color: white;
-  padding: 10px;
-  background-size: cover;
-  margin: 5px 10px;
-}
-
-.overlay_agendatitle {
-  font-size: 1.75em;
-}
-
-.overlay_agendacontent {
-  margin-top: 40px;
-font-size: 1.2em;
-line-height: 1.4em;
 }
 
 .hud-menu-overlay ul li {
@@ -425,31 +446,6 @@ body {
   transform: scale(0.6);
 }
 
-.objectives_card_name {
-  color: white;
-  font-size: 2em;
-  padding: 15px 5px 10px;
-  background: #0008;
-}
-
-.objectives_card_content {
-  color: white;
-  font-size: 1.5em;
-  padding: 10px;
-  position: relative;
-  top: 33%;
-  transform: translateY(-50%);
-}
-
-.objectives_overlay_objectives_card {
-  width: 17vh;
-  height: 24vh;
-  margin: 10px;
-  background-size: cover;
-  max-width: 300px;
-  max-height: 450px;
-}
-
 .objectives_players_scored {
   height: 20px;
   width: 80px;
@@ -472,7 +468,7 @@ body {
 
 .faction_sheet_active {
   overflow-y: auto;
-  height: calc(80vh - 24em);
+  height: 100%;
   scroll-behavior: smooth;
 }
 
@@ -837,94 +833,6 @@ body {
 
 .hud-token-count .pc {
   color: var(--my-color);
-}
-
-.overlay {
-  position: absolute;
-  top: 50vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
-  z-index: 999;
-  border: 1px solid var(--my-color);
-  background-color: #4448;
-  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  display: flex;
-  justify-content: space-around;
-  flex-flow: wrap;
-  max-height: 90vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-/*
-#objectives_overlay {
-}
-
-#laws_overlay {
-  width: 80vw;
-  height: auto;
-  padding: 10px;
-  border: 1px solid var(--my-color);
-  background-color: #4448;
-  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  display: flex;
-  justify-content: space-around;
-  flex-flow: wrap;
-}
-
-#strategy_overlay {
-  width: 80vw;
-  max-width: 900px;
-  height: auto;
-  padding: 10px;
-  border: 1px solid var(--my-color);
-  background-color: #4448;
-  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  display: flex;
-  justify-content: space-around;
-  flex-flow: wrap;
-}
-*/
-
-.overlay::after {
-  content: "\00D7";
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  font-size: 36px;
-  color: #fff;
-  border: 3px #fff solid;
-  width: 20px;
-  height: 20px;
-  text-align: center;
-  line-height: 28px;
-  background-color: #8888;
-  border-radius: 0;
-}
-
-.tech_overlay {
-  width: auto;
-  height: auto;
-  padding: 10px;
-  border: 1px solid var(--my-color);
-  background-color: #4448;
-  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  background-size: "contain";
-}
-
-.interface_overlay {
-  position: absolute;
-  width: 80vw;
-  height: 80vh;
-  border: 1px solid var(--my-color);
-  z-index: 99;
-  background-color: #4448;
-  margin: 12vh 10vw 8vh;
-  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-}
-
-.overlay_controls {
-  height: 2em;
 }
 
 .faction_buttons {

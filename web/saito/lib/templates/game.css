@@ -88,6 +88,17 @@ body {
   font-size: 2em;
   padding: 10px;
 }
+.game-cardbox {
+  position:absolute;
+  left: 50%;
+  top: 17vh;
+  height: auto;
+  width: 30vw;
+  -webkit-filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
+  filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
+}
+
+
 .game-menu {
   position: fixed;
   top: 0px;

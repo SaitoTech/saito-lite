@@ -31,4 +31,10 @@ CARDS ERRATA AND IMPLEMENTATION DETAILS:
 2. Red Purge:
   It is possible to event this card multiple times. The card does not stay out of the discard pile untilshould be possible to event this card multipletime
 
+3. Latin American Death Squads:
+  Coup bonus and penalities are applies only to coups in Central and South America, not across-the-board as in the original card text. This card has been updated to reflect the proper implementation.
+
+
+
+
 
