@@ -115,6 +115,10 @@ body {
   margin: 3px;
   z-index: 50;
 }
+.game-menu ul {
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+}
 .game-menu ul li {
   color: black;
   list-style: none;

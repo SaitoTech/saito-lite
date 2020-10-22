@@ -2,11 +2,24 @@
 .hud {
   z-index: 200000;
 }
-.hud-menu {
-  display: none;
+
+.hud-body {
+  overflow-x: hidden;
 }
 
-
+.display-cards {
+  width: 80vw;
+  height: 80vh;
+  overflow-y: scroll;
+}
+.display-cards .cardbox-hud {
+  position: relative;
+  float: left;
+  width: 20vw;
+  height: auto;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
 
 .vial {
   position: absolute;
@@ -14,31 +27,6 @@
   width: 82px;
   height: 102px;
 }
-.role_cards {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-.active_role_card {
-  float:left;
-  width: 243px;
-  height: 343px;
-}
-.role_card {
-  float:left;
-  width: 243px;
-  height: 343px;
-}
-.player1_role_card {
-}
-.player2_role_card {
-}
-.player3_role_card {
-}
-.player4_role_card {
-}
-
-
 .vial_yellow {
   background-image: url("/pandemic/img/Vial%20Yellow.png");
 }
@@ -107,7 +95,9 @@
   margin-top: 0;
 }
 
-
+.game-menu {
+ width: 700px;
+}
 .cardbox_menu {
   position: absolute;
   display: none;
@@ -172,7 +162,7 @@
 
 body {
  font-family: arial, helvetica, sans-serif;
- font-size: 1.4em;
+ font-size: 1.1em;
  padding:0px;
  margin:0px;
 }
@@ -276,15 +266,13 @@ body {
   background-size: cover;
   width: 2602px;
   height: 1812px;
-  //width: 1301px;
-  //height: 906px;
 }
 .city {
   position: absolute;
   cursor: pointer;
   height: 100px;
   width: 100px;
-  z-index: 10000;
+  z-index: 80;
 }
 
 
