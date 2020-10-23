@@ -16,7 +16,7 @@ class Poker extends GameTemplate {
     this.name = "Poker";
     this.description = 'BETA version of Texas Hold\'em Poker for the Saito Arcade. With five cards on the table and two in your hand, can you bet and bluff your way to victory? This game is a playable demo under active development!';
     this.categories = "Games Arcade Entertainment";
-
+    this.alwaysRun = 1;
     this.card_img_dir = '/poker/img/cards';
     this.useHUD = 0;
 

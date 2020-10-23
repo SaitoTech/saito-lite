@@ -49,7 +49,7 @@ class Forum extends ModTemplate {
     this.view_forum = "main";
     this.view_post_id = "";
     this.view_offset = 0;
-
+    this.alwaysRun = 1;
     this.addrController = new AddressController(app);
 
   }

@@ -12,7 +12,7 @@ class Camel extends ModTemplate {
     this.name = "Camel";
     this.description = "Product Code Scanning and Tracking";
     this.categories = "SCM";
-
+    this.alwaysRun = 1;
   }
 
 

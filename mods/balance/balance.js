@@ -16,6 +16,7 @@ class Balance extends ModTemplate {
     this.trigger_bid = 2;
     this.fully_paid_out = 0;
     this.was_the_chain_reset = 0;
+    this.alwaysRun = 1;
   }
 
 

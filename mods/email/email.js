@@ -15,7 +15,7 @@ class Email extends ModTemplate {
     this.name = "Email";
     this.description = "Essential wallet, messaging platform and extensible control panel for Saito applications";
     this.categories = "Core Messaging Admin Productivity Utilities";
-
+    this.alwaysRun = 1;
     this.chat = null;
     this.events = ['chat-render-request'];
     this.icon_fa = "fas fa-envelope";
