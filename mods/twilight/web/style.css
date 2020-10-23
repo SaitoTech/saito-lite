@@ -16,6 +16,12 @@
 .cardbox-card {
   background-image: url("/twilight/img/Base.svg");
   background-size: cover;
+  width:30vw;
+  height: 42vw;
+}
+.game-cardbox {
+  width: 30wv;
+  height: 42vh;
 }
 .hud-cardbox {
   position: absolute;
