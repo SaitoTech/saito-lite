@@ -8,6 +8,7 @@ class ApiCore extends ModTemplate {
     this.name = "Api";
     this.description = "API for off-chain server-client JSON querues";
     this.categories = "Utilities Dev";
+    this.alwaysRun = 1;
   }
 
   webServer(app, expressapp) {

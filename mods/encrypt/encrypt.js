@@ -32,13 +32,11 @@ class Encrypt extends ModTemplate {
 
     this.app = app;
     this.name = "Encrypt";
-    this.description = "Enables wallets to create secure, encrypted communications channels over a public blockchain";
-    this.categories = "Core Security Dev";
     this.encrypt = this.loadEncrypt(app);
 
     this.description = "A Diffie-Hellman encryption tool for Saito";
     this.categories  = "Crpyto Utilities";
-
+    this.alwaysRun = 1;
     return this;
   }
 

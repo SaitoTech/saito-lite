@@ -12,7 +12,7 @@ class MyQRCodes extends ModTemplate {
     this.name           = "MyQRCode";
     this.description	= "Displays your QRcode as an option in the top menu for easy scanning by other users";
     this.categories     = "Core Utilities";
-
+    this.alwaysRun = 1;
     this.link           = "/email?module=myqrcode";
 
     this.description = "QR Code display utility for Saito"

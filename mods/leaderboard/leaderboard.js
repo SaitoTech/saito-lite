@@ -16,6 +16,7 @@ class Leaderboard extends ModTemplate {
     this.name = "Leaderboard";
     this.description = "Objective ranking of player-skill based on public gaming information";
     this.categories = "Games Entertainment";
+    this.alwaysRun = 1;
     this.affix_callbacks_to = [];
 
     this.rankings = {};

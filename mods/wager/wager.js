@@ -13,6 +13,7 @@ class Wager extends ModTemplate {
     this.name = "Wager";
     this.description = "Adds a bit of skin in the game...";
     this.categories = "Games Entertainment";
+    this.alwaysRun = 1;
     this.affix_callbacks_to = [];
     this.mods = [];
   }

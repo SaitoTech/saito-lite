@@ -19,7 +19,7 @@ class President extends GameTemplate {
     this.name = "President";
     this.description = 'Play cards in singles or sets in increasing value. Last player starts when all are done. The first player who gets rid of their cards is the President. The last?';
     this.categories = "Games Arcade Entertainment";
-
+    this.alwaysRun = 1;
     this.card_img_dir = '/president/img/cards';
     this.useHUD = 1;
 

@@ -14,7 +14,7 @@ class Testing extends ModTemplate {
     this.name            = "Testing";
     this.description     = "Demo application with a clickable button - intended as guide for developers";
     this.categories      = "Dev Utilities";
-
+    this.alwaysRun = 1;
     return this;
 
   }

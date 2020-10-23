@@ -17,7 +17,7 @@ class Profile extends ModTemplate {
     this.link           = "/email?module=settings";
     this.categories     = "UI Admin Utilities";
     this.description    = "User profile module for Saito";
-
+    this.alwaysRun = 1;
     this.profile        = this.loadProfile(this.app);
     this.profile_utxo   = "";
 

@@ -30,7 +30,7 @@ class Chessgame extends GameTemplate {
     this.type       = "Classic Boardgame";
     this.description = "An implimentation of Chess for the Saito Blockchain";
     this.categories  = "Boardgame Game";
-
+    this.alwaysRun = 1;
     return this;
 
   }
