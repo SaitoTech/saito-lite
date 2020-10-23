@@ -16,6 +16,9 @@ const InviteFriends = require('./lib/modal/invite/invite-friends.js');
 const SurveyTemplate = require('./lib/modal/survey/survey.template.js');
 const Survey = require('./lib/modal/survey/survey.js');
 
+const ScreenSurveyTemplate = require('./lib/modal/screen-survey/screen-survey.template.js');
+const ScreenSurvey = require('./lib/modal/screen-survey/screen-survey.js');
+
 const SuggestTemplate = require('./lib/modal/suggest/suggest.template.js');
 const Suggest = require('./lib/modal/suggest/suggest.js');
 
@@ -99,7 +102,7 @@ class Tutorial extends ModTemplate {
       }
     }
 
-    if (message.request == "user survey") {
+    if (message.request == "user survey" || message.request == "screen survey") {
       try {
 
         let sql = "INSERT OR IGNORE INTO surveys (publickey, survey_data, unixtime) VALUES ($publickey, $survey_data, $unixtime);"
@@ -231,6 +234,25 @@ class Tutorial extends ModTemplate {
     modal.render("blank");
 
     Survey.attachEvents(this.app, data);
+
+  }
+
+  screenSurveyModal() {
+
+    let modal = new Modal(this.app, {
+      id: 'screen-survey',
+      title: 'Tell us about your hardware.',
+      content: ScreenSurveyTemplate()
+    });
+
+    let data = {};
+    data.tutorial = this;
+    data.modal = modal;
+
+    modal.render("blank");
+
+    ScreenSurvey.render(this.app, data);
+    ScreenSurvey.attachEvents(this.app, data);
 
   }
 

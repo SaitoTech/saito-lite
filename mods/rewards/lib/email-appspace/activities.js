@@ -30,6 +30,16 @@ module.exports = [
         action: function(app){app.modules.returnModule("Tutorial").inviteFriendsModal();},
     },
     {
+        id: "screen-survey",
+        icon: "<i class='fas fa-ruler-combined'></i>",
+        reward: 50,
+        title: "Hardware Survey",
+        event: "screen survey",
+        description:"Let us know a bit about how you are using Saito. Use an anonymous acount if you like - we are not tracking you.",
+        completed: false,
+        action: function(app){app.modules.returnModule("Tutorial").screenSurveyModal();},
+    },
+    {
         id: "survey",
         icon: "<i class='far fa-clipboard'></i>",
         reward: 50,
