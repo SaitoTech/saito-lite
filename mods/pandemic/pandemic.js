@@ -1,6 +1,6 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
+const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
+const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
  
   
 //////////////////
@@ -326,19 +326,32 @@ console.log("MEMBERS: " + members);
     this.cardbox.attachEvents(app, this);
 
 
+    //
+    // add card events -- text shown and callback run if there
+    //
+    //this.hud.addCardType("logcard", "", null);
+    //this.hud.addCardType("showcard", "select", this.cardbox_callback);
+    this.hud.addCardType("card", "select", this.cardbox_callback);
+    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
+      this.cardbox.skip_card_prompt = 1;
+    } else {
+      this.hud.card_width = 120;
+    }
+
     try {
 
-      $('#hud').draggable();
+      //$('#hud').draggable();
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
-        this.hammer.render(this.app, this);
-        this.hammer.attachEvents(this.app, this, '.gameboard');
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
       } else {
-        this.sizer.render(this.app, this);
-        this.sizer.attachEvents(this.app, this, '.gameboard');
-        $('#gameboard').draggable();
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
       }
-    } catch (err) {}
+    } catch (err) {
+console.log("ERROR TRIGGERED: " + err);
+    }
 
   }
 
@@ -2788,28 +2801,12 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   }
   
   hideCard(cardname="") {
-    $('#cardbox').hide();
+    this.cardbox.hideCardbox(cardname, url);  
   }
   
   showCard(cardname, cardtype="city") {
-  
     let url = this.returnCardImage(cardname, cardtype);
-  
-    //
-    // mobile needs recentering
-    //
-    if (this.app.browser.isMobileBrowser(navigator.userAgent)) {
-      // add additional html
-      url += `
-      <div id="cardbox-exit-background">
-      <div class="cardbox-exit" id="cardbox-exit">×</div>
-      </div>
-      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard">PLAY</div>`
-      $('.cardbox-exit').show();
-    }
-  
-    $('#cardbox').html(url);
-    $('#cardbox').show();
+    this.cardbox.showCardBoxHTML(cardname, url);  
   }
   
   removeCardFromHand(plyr, card) {

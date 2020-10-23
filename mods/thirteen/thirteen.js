@@ -1,6 +1,6 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const helpers = require('../../lib/helpers/index');
-
+const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
+const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
 
 
 //////////////////
@@ -90,18 +90,226 @@ class Thirteen extends GameTemplate {
 
 
   initializeHTML(app) {
+
     super.initializeHTML(app);
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
 
+    this.overlay.render(app, this);
+    this.overlay.attachEvents(app, this);
+
+    this.log.render(app, this);
+    this.log.attachEvents(app, this);
+
+    this.cardbox.render(app, this);
+    this.cardbox.attachEvents(app, this);
+
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
+      }
+    });
+
+
+    this.menu.addMenuOption({
+      text : "Cards",
+      id : "game-cards",
+      class : "game-cards",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.handleCardsMenu();
+      }
+    });
+
+    let main_menu_added = 0;
+    let community_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+        for (let ii = 0; ii < this.game.players.length; ii++) {
+          if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+            // add main menu
+            if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+                id : "game-chat",
+                class : "game-chat",
+                callback : function(app, game_mod) {
+                  game_mod.menu.showSubMenu("game-chat");
+                }
+              })
+              main_menu_added = 1;
+            }
+
+            if (community_menu_added == 0) {
+              this.menu.addSubMenuOption("game-chat", {
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
+                callback : function(app, game_mod) {
+                  game_mod.menu.hideSubMenus();
+
+                  // load the chat window
+                  let newgroup = chatmod.returnDefaultChat();
+
+console.log("LOADING CHAT: " + newgroup.id);
+
+                  if (newgroup) {
+                    chatmod.addNewGroup(newgroup);
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  } else {
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  }
+                }
+              });
+              community_menu_added = 1;
+            }
+
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = "Player "+(ii+1);
+            let chatmod = this.app.modules.mods[i];
+
+            this.menu.addSubMenuOption("game-chat", {
+              text : name,
+              id : "game-chat-"+(ii+1),
+              class : "game-chat-"+(ii+1),
+              callback : function(app, game_mod) {
+                game_mod.menu.hideSubMenus();
+
+console.log("MEMBERS: " + members);
+
+                // load the chat window
+                let newgroup = chatmod.createChatGroup(members);
+                if (newgroup) {
+                  chatmod.addNewGroup(newgroup);
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.saveChat();
+                  chatmod.openChatBox(newgroup.id);
+                } else {
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.openChatBox(gid);
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        app.browser.requestFullscreen();
+      }
+    });
+
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
+
+    this.hud.render(app, this);
     this.hud.addCardType("logcard", "", null);
     this.hud.addCardType("showcard", "select", this.cardbox_callback);
     if (!app.browser.isMobileBrowser(navigator.userAgent)) {
-      this.hud.cardbox.skip_card_prompt = 1;
+      this.cardbox.skip_card_prompt = 1;
     }
     this.hud.card_width = 160; // cards 160: pixels wide
+
+    this.hud.render(app, this);
+    this.hud.attachEvents(app, this);
+
+
+    try {
+      if (app.browser.isMobileBrowser(navigator.userAgent)) {
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+      } else {
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+      }
+    } catch (err) {}
+
+  }
+
+
+
+
+  handleCardsMenu() {
+
+    let twilight_self = this;
+    let html =
+    `
+      <div class="game-overlay-menu" id="game-overlay-menu">
+        <div>SELECT DECK:</div>
+       <ul>
+          <li class="menu-item" id="hand">Your Hand</li>
+          <li class="menu-item" id="unplayed">Unplayed Cards</li>
+        </ul>
+      </div>
+    `;
+
+    twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+
+    $('.menu-item').on('click', function() {
+
+      let player_action = $(this).attr("id");
+      var deck = twilight_self.game.deck[0];
+      var html = "";
+      var cards;
+
+      switch (player_action) {
+        case "hand":
+          cards = deck.hand
+          break;
+        case "unplayed":
+          cards = Object.keys(twilight_self.returnUnplayedCards())
+          break;
+        default:
+          break;
+      }
+
+      html += '<div class="cardlist-container">';
+      for (let i = 0; i < cards.length; i++) {
+        html += '<div class="cardlist-card">';
+        if (cards[i] != undefined) {
+          html += twilight_self.returnCardImage(cards[i], 1);
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+
+      if (cards.length == 0) {
+        html = `
+          <div style="text-align:center; margin: auto;">
+            There are no cards in ${player_action}
+          </div>
+        `;
+      }
+
+      twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, html);
+    });
+
   }
 
 
@@ -153,19 +361,17 @@ class Thirteen extends GameTemplate {
       this.game.queue.push("round");
       this.game.queue.push("READY");
 
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-      this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnAgendaCards()));
-
-      
       this.game.queue.push("DECKENCRYPT\t2\t2");
       this.game.queue.push("DECKENCRYPT\t2\t1");
       this.game.queue.push("DECKXOR\t2\t2");
       this.game.queue.push("DECKXOR\t2\t1");
       this.game.queue.push("DECK\t2\t"+JSON.stringify(this.returnStrategyCards()));
 
+      this.game.queue.push("DECKENCRYPT\t1\t2");
+      this.game.queue.push("DECKENCRYPT\t1\t1");
+      this.game.queue.push("DECKXOR\t1\t2");
+      this.game.queue.push("DECKXOR\t1\t1");
+      this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnAgendaCards()));
 
       this.game.queue.push("init");
 
@@ -287,13 +493,6 @@ class Thirteen extends GameTemplate {
     //
     this.showBoard();
 
-
-    //
-    // make board draggable
-    //
-    var element = document.getElementById('gameboard');
-    if (element !== null) { helpers.hammer(this, element); }
-
   }
 
 
@@ -368,7 +567,7 @@ class Thirteen extends GameTemplate {
       // place_command_tokens
       // trigger_opponent_event
       //
-      if (mv[0] == "init") {
+      if (mv[0] === "init") {
 
         let tmpar = this.game.players[0];
         if (this.game.options.player1 != undefined) {
@@ -401,9 +600,10 @@ class Thirteen extends GameTemplate {
         }
 
         this.game.queue.splice(qe, 1);
+	return 1;
 
       }
-      if (mv[0] == "reshuffle_discarded_agenda_cards") {
+      if (mv[0] === "reshuffle_discarded_agenda_cards") {
 
 	let discarded_cards = this.returnDiscardedCards(1);
 
@@ -412,24 +612,25 @@ class Thirteen extends GameTemplate {
           //
           // SHUFFLE in discarded cards
           //
-          thirteen_self.addMove("SHUFFLE\t1");
-          thirteen_self.addMove("DECKRESTORE\t1");
-          thirteen_self.addMove("DECKENCRYPT\t1\t2");
-          thirteen_self.addMove("DECKENCRYPT\t1\t1");
-          thirteen_self.addMove("DECKXOR\t1\t2");
-          thirteen_self.addMove("DECKXOR\t1\t1");
-          thirteen_self.addMove("flush\tdiscards\t1"); // opponent should know to flush discards as we have
-          thirteen_self.addMove("DECK\t1\t"+JSON.stringify(discarded_cards));
-          thirteen_self.addMove("DECKBACKUP\t1");
+          thirteen_self.game.queue.push("SHUFFLE\t1");
+          thirteen_self.game.queue.push("DECKRESTORE\t1");
+          thirteen_self.game.queue.push("DECKENCRYPT\t1\t2");
+          thirteen_self.game.queue.push("DECKENCRYPT\t1\t1");
+          thirteen_self.game.queue.push("DECKXOR\t1\t2");
+          thirteen_self.game.queue.push("DECKXOR\t1\t1");
+          thirteen_self.game.queue.push("flush\tdiscards\t1"); // opponent should know to flush discards as we have
+          thirteen_self.game.queue.push("DECK\t1\t"+JSON.stringify(discarded_cards));
+          thirteen_self.game.queue.push("DECKBACKUP\t1");
           thirteen_self.updateLog("cards remaining: " + thirteen_self.game.deck[0].crypt.length);
           thirteen_self.updateLog("shuffling discarded agenda cards back into the deck...");
 
         }
 
 	this.game.queue.splice(qe, 1);
+	return 1;
 
       }
-      if (mv[0] == "pick_agenda_card") {
+      if (mv[0] === "pick_agenda_card") {
 
 	let player = parseInt(mv[1]);
 	let ac = this.returnAgendaCards();
@@ -479,7 +680,7 @@ class Thirteen extends GameTemplate {
 
 	return 0;
       }
-      if (mv[0] == "discard") {
+      if (mv[0] === "discard") {
 
 	let player = parseInt(mv[1]);
 	let deckidx = parseInt(mv[2])-1;
@@ -505,7 +706,7 @@ class Thirteen extends GameTemplate {
 
       }
 
-      if (mv[0] == "setvar") {
+      if (mv[0] === "setvar") {
 
 	if (mv[1] == "opponent_cards_in_hand") {
 	  this.opponent_cards_in_hand = parseInt(mv[2]);
@@ -548,10 +749,11 @@ class Thirteen extends GameTemplate {
 	}
 
         this.game.queue.splice(qe, 1);
+	return 1;
 
       }
 
-      if (mv[0] == "flush") {
+      if (mv[0] === "flush") {
 
 	let deckidx = parseInt(mv[2])-1;
 
@@ -560,6 +762,8 @@ class Thirteen extends GameTemplate {
         }
 
         this.game.queue.splice(qe, 1);
+	return 1;
+
       }
 
       if (mv[0] == "flag") {
@@ -575,6 +779,8 @@ class Thirteen extends GameTemplate {
 
 	this.showBoard();
         this.game.queue.splice(qe, 1);
+	return 1;
+
       }
       if (mv[0] == "move_strategy_card_into_alliances") {
 
@@ -587,6 +793,7 @@ class Thirteen extends GameTemplate {
 	}
 
 	this.game.queue.splice(qe, 1);
+	return 1;
 
       }
       if (mv[0] == "defcon_check") {
@@ -622,6 +829,7 @@ class Thirteen extends GameTemplate {
 console.log("tallying alliances before scoring");
 
 	this.game.queue.splice(qe, 1);
+	return 1;
 
       }
       if (mv[0] == "scoring_result") {
@@ -664,6 +872,7 @@ console.log("tallying alliances before scoring");
 	}
 
 	this.game.queue.splice(qe, 1);
+	return 1;
 
       }
       if (mv[0] == "scoring_phase") {
@@ -875,9 +1084,12 @@ console.log("tallying alliances before scoring");
       if (mv[0] === "notify") {
         this.updateLog(mv[1]);
         this.game.queue.splice(qe, 1);
+	return 1;
       }
 
       if (mv[0] == "round") {
+
+console.log(JSON.stringify(this.game.deck[0]));
 
 	//
 	// next round
@@ -984,13 +1196,13 @@ console.log("tallying alliances before scoring");
 
         this.game.queue.push("DEAL\t2\t1\t5");
         this.game.queue.push("DEAL\t2\t2\t5");
-        this.game.queue.push("SHUFFLE\t2");
+//        this.game.queue.push("SHUFFLE\t2");
 
 
 	this.game.state.us_agendas = [];
 	this.game.state.ussr_agendas = [];
 
-        this.game.queue.push("reshuffle_discarded_agenda_cards\t2");
+        this.game.queue.push("reshuffle_discarded_agenda_cards");
         this.game.queue.push("pick_agenda_card\t2");
         this.game.queue.push("pick_agenda_card\t1");
 
@@ -1022,6 +1234,7 @@ console.log("tallying alliances before scoring");
 	// update defcon track
 	//
         this.showBoard();
+	return 1;
 
       }
 
@@ -1485,6 +1698,8 @@ console.log("SHOULD PLACE: " + player);
       if (this.game.player == this.game.state.personal_letter) {
         cards.push("personal_letter");
       }
+
+console.log("CARDS: "+JSON.stringify(cards));
 
       this.updateStatusAndListCards(html, cards, function(card) {
 	if (card == "personal_letter") {
@@ -4351,6 +4566,31 @@ console.log("SHOULD PLACE: " + player);
       this.updateStatus("<div class='status-message' id='status-message'><span>The Game is Over</span> - <span>" + winner.toUpperCase() + "</span> <span>wins by</span> <span>" + method + "<span></div>");
     }
   }
+
+
+
+
+  returnUnplayedCards() {
+
+    var unplayed = {};
+    for (let i in this.game.deck[1].cards) {
+      unplayed[i] = this.game.deck[1].cards[i];
+    }
+    for (let i in this.game.deck[1].discards) {
+      delete unplayed[i];
+    }
+    for (let i in this.game.deck[1].removed) {
+      delete unplayed[i];
+    }
+    for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+      delete unplayed[this.game.deck[1].hand[i]];
+    }
+
+    return unplayed;
+
+  }
+
+
 
 
 } // end Thirteen class

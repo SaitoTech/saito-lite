@@ -48,7 +48,7 @@ body {
 }
 .game-overlay-backdrop {
   position: absolute;
-  display: block;
+  display: none;
   top: 0;
   left: 0;
   width: 100vw;
@@ -343,6 +343,8 @@ ul li a {
 .cardfan {
   bottom: 0px;
   left: 0px;
+  height: 100%;
+  width: 100%;
 }
 
 /*
@@ -355,6 +357,11 @@ ul li a {
 .cardfan .card {
   position: absolute;
   width: 100%;
+  height: auto;
+}
+.cardfan .cardimg {
+  width: 100%;
+  height: auto;
 }
 
 .cardfan>.card:nth-child(1) {

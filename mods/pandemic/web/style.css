@@ -79,7 +79,7 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-
+/***
 
 .cardbox-hud {
   display: block;
@@ -94,6 +94,7 @@
 .cardbox-hud-status {
   margin-top: 0;
 }
+***/
 
 .game-menu {
  width: 700px;
