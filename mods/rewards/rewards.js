@@ -140,6 +140,10 @@ class Rewards extends ModTemplate {
       this.payoutFirstInstance(message.data.key, message.request, this.surveyPayout);
     }
 
+    if (message.request == "screen survey") {
+      this.payoutFirstInstance(message.data.key, message.request, this.surveyPayout);
+    }
+
     if (message.request == "user suggest") {
       this.payoutFirstInstance(message.data.key, message.request, this.suggestPayout);
     }

@@ -77,7 +77,7 @@ module.exports = RewardsAppspace = {
 
   updateRewardsGridRow(row) {
     const event = row.event;
-    var grid = document.querySelectorAll(".rewards-grid div");
+    var grid = document.querySelectorAll(".rewards-grid-row");
     for (let i = 0; i < grid.length; i++) {
       if (grid[i].dataset.event == event) {
         grid[i].querySelector(".rewards-grid-completed").innerHTML = '<i class="fas fa-check-circle"></i>';
