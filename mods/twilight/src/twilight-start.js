@@ -1814,7 +1814,7 @@ console.log("CARD: " + card);
           } else {
             this.updateStatus("<div class='status-message' id='status-message'><span>Opponent is being dealt new cards.</span></div>");
           }
-          this.updateStatus(player.toUpperCase() + "</span> <span>is fetching new cards</span>");
+          this.updateStatus("<div class='status-message' id='status-message'>"+player.toUpperCase() + " <span>is fetching new cards</span></div>");
           return 0;
         }
 
