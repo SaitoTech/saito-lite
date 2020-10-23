@@ -652,13 +652,13 @@ class Poker extends GameTemplate {
 	  this.updateLog("*** HOLE CARDS *** ["+this.cardToHuman(this.game.deck[0].hand[0])+" "+this.cardToHuman(this.game.deck[0].hand[1])+"]");
 	}
         if (this.game.state.flipped === 3) {
-	  this.updateLog("*** FLOP *** ["+this.game.pool[0].hand[0]+" "+this.game.pool[0].hand[1]+" "+this.game.pool[0].hand[2]+"]");
+	  this.updateLog("*** FLOP *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"]");
 	}
         if (this.game.state.flipped === 4) {
-	  this.updateLog("*** TURN *** ["+this.game.pool[0].hand[0]+" "+this.game.pool[0].hand[1]+" "+this.game.pool[0].hand[2]+"] ["+this.game.pool[0].hand[3]+"]");
+	  this.updateLog("*** TURN *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"] ["+this.cardToHuman(this.game.pool[0].hand[3])+"]");
 	}
         if (this.game.state.flipped === 5) {
-	  this.updateLog("*** TURN *** ["+this.game.pool[0].hand[0]+" "+this.game.pool[0].hand[1]+" "+this.game.pool[0].hand[2]+"] ["+this.game.pool[0].hand[3]+"] ["+this.game.pool[0].hand[4]+"]");
+	  this.updateLog("*** TURN *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"] ["+this.cardToHuman(this.game.pool[0].hand[3])+"] ["+this.cardToHuman(this.game.pool[0].hand[4])+"]");
 	}
 
 	return 1;
