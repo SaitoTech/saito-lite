@@ -18,6 +18,7 @@
   "dependencies": {
     "adm-zip": "^0.4.16",
     "archiver": "^3.1.1",
+    "babel": "^6.23.0",
     "base-58": "0.0.1",
     "big.js": "^5.2.2",
     "bitwise-xor": "0.0.0",
@@ -64,6 +65,7 @@
     "tls": "0.0.1",
     "tui-editor": "^1.4.10",
     "tunnel-agent": "^0.6.0",
+    "ua-parser-js": "^0.7.22",
     "unzipper": "^0.10.5",
     "url": "^0.11.0",
     "utf-8-validate": "^5.0.2"
