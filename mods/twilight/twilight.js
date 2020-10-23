@@ -37,7 +37,7 @@ class Twilight extends GameTemplate {
       One player plays the United States (US), and the other plays the Soviet Union (USSR).`;
     this.publisher_message = "Twilight Struggle is owned by GMT Games. This module is made available under an open source license provided by GMT Games for usage in open source game engines. Publisher requirements is that at least one player per game has purchased a copy of the game.";
     this.categories      = "Games Arcade Entertainment";
-
+    this.alwaysRun = 1;
     //
     // this sets the ratio used for determining
     // the size of the original pieces
