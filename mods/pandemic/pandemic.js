@@ -1,6 +1,6 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
+const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
+const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
  
   
 //////////////////
@@ -32,6 +32,7 @@ class Pandemic extends GameTemplate {
     this.interface = 1;  			// default to graphics
 
     this.hud.mode = 0;
+    this.hud.card_width = 120;
 
     return this;
   
@@ -41,47 +42,23 @@ class Pandemic extends GameTemplate {
   
   
   
-  triggerHUDMenu(menuitem) {
-    switch (menuitem) {
-      case "cards":
-        this.handleCardsMenuItem();
-        break;
-    }
-  }
   
   
-  handleCardsMenuItem() {
-  
+  showPlayerCards(player_num) {
+
+    let html = '';
     let pandemic_self = this;
-    let display_message = "";
-  
-    let html = `<div id="menu-container"><div style="margin-bottom: 1em">Select your deck:</div><ul>`;
-    for (let i = 0; i <= this.game.opponents.length; i++) {
-      html += `<li class="card" id="${i}">${this.game.players_info[i].role} (${(i+1)} - ${this.game.cities[this.game.players_info[i].city].name})</li>`;
+    let deck = pandemic_self.game.players_info[player_num-1].cards;
+
+    for (let i = 0; i < deck.length; i++) {
+      let city = pandemic_self.game.deck[1].cards[deck[i]];
+      html += `<div class="cardbox-hud" id="cardbox-hud-${i}"><img src="/pandemic/img/${city.img}" /></div>`;
     }
-    html += `</ul></div>`
-  
-    $('.hud_menu_overlay').html(html);
-  
-    // leave action enabled on other panels
-    $('.card').on('click', function() {
-  
-      let player_chosen = parseInt($(this).attr("id"));
-      var deck = pandemic_self.game.players_info[player_chosen].cards;
-  
-      for (let i = 0; i < deck.length; i++) {
-        let city = pandemic_self.game.deck[1].cards[deck[i]];
-        display_message += `<div class="cardbox-hud" id="cardbox-hud-${i}"><img src="/pandemic/img/${city.img}" /></div>`;
-      }
-  
-      display_message = `<div class="display-cards">${display_message}</div>`;
-      $('.hud_menu_overlay').html(display_message);
-  
-    });
-  
+
+    html = `<div class="display-cards">${html}</div>`;
+    this.overlay.showOverlay(this.app, this, html);
+
   }
-  
-  
   
   
   
@@ -101,9 +78,9 @@ class Pandemic extends GameTemplate {
     //  chat.addPopUpChat();
     //}
   
-    this.updateStatus("loading game...");
+    this.updateStatus("<div class='status-message'>loading game...</div>");
     this.loadGame(game_id);
-    if (this.game.status != "") { this.updateStatus(this.game.status); }
+    if (this.game.status != "") { this.updateStatus('<div class="status-message">'+this.game.status+'</div>'); }
   
     //
     // new state if needed
@@ -118,7 +95,7 @@ class Pandemic extends GameTemplate {
       this.game.state     = this.returnState();
       this.game.players_info   = this.returnPlayers((this.game.players.length));
   
-      this.updateStatus("Generating the Game");
+      this.updateStatus('<div class="status-message">Generating the Game</div>');
   
       //
       // start game once here
@@ -156,16 +133,6 @@ class Pandemic extends GameTemplate {
       this.game.queue.push("SHUFFLE\t1");
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnInfectionCards()));
   
-    }
-  
-  
-    //
-    // display the players
-    //
-    for (let i = 1; i <= this.game.players_info.length; i++) {
-      let divname = ".player"+i+"_role_card";
-      let cssvalue = 'url("/pandemic/img/'+this.game.players_info[i-1].card+'")';
-      $(divname).css('background-image',cssvalue);
     }
   
   
@@ -211,26 +178,180 @@ class Pandemic extends GameTemplate {
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
 
-    $('.hud_menu_game-status').css('display', 'none');
+
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
+      }
+    });
+    this.menu.addMenuOption({
+      text : "Cards",
+      id : "game-cards",
+      class : "game-cards",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-cards");
+      }
+    });
+    for (let i = 0; i < this.game.players.length; i++) {
+      this.menu.addSubMenuOption("game-cards", {
+        text : "Player "+(i+1),
+        id : "game-player-cards-"+(i+1),
+        class : "game-player-cards-"+(i+1),
+        callback : function(app, game_mod) {
+          game_mod.menu.hideSubMenus();
+          game_mod.showPlayerCards((i+1));
+        }
+      });
+    }
+
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        app.browser.requestFullscreen();
+      }
+    });
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
+
+
+    let main_menu_added = 0;
+    let community_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+        for (let ii = 0; ii < this.game.players.length; ii++) {
+          if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+            // add main menu
+            if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+                id : "game-chat",
+                class : "game-chat",
+                callback : function(app, game_mod) {
+                  game_mod.menu.showSubMenu("game-chat");
+                }
+              })
+              main_menu_added = 1;
+            }
+
+            if (community_menu_added == 0) {
+              this.menu.addSubMenuOption("game-chat", {
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
+                callback : function(app, game_mod) {
+                  game_mod.menu.hideSubMenus();
+
+                  // load the chat window
+                  let newgroup = chatmod.returnDefaultChat();
+
+console.log("LOADING CHAT: " + newgroup.id);
+
+                  if (newgroup) {
+                    chatmod.addNewGroup(newgroup);
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  } else {
+                    chatmod.sendEvent('chat-render-request', {});
+                    chatmod.openChatBox(newgroup.id);
+                  }
+                }
+              });
+              community_menu_added = 1;
+            }
+
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = "Player "+(ii+1);
+            let chatmod = this.app.modules.mods[i];
+
+            this.menu.addSubMenuOption("game-chat", {
+              text : name,
+              id : "game-chat-"+(ii+1),
+              class : "game-chat-"+(ii+1),
+              callback : function(app, game_mod) {
+                game_mod.menu.hideSubMenus();
+
+console.log("MEMBERS: " + members);
+
+                // load the chat window
+                let newgroup = chatmod.createChatGroup(members);
+                if (newgroup) {
+                  chatmod.addNewGroup(newgroup);
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.saveChat();
+                  chatmod.openChatBox(newgroup.id);
+                } else {
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.openChatBox(gid);
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        app.browser.requestFullscreen();
+      }
+    });
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
+    this.log.render(app, this);
+    this.log.attachEvents(app, this);
+
+    this.cardbox.render(app, this);
+    this.cardbox.attachEvents(app, this);
+
+
+    //
+    // add card events -- text shown and callback run if there
+    //
+    //this.hud.addCardType("logcard", "", null);
+    //this.hud.addCardType("showcard", "select", this.cardbox_callback);
+    this.hud.addCardType("card", "select", this.cardbox_callback);
+    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
+      this.cardbox.skip_card_prompt = 1;
+    } else {
+      this.hud.card_width = 120;
+    }
 
     try {
 
-      $('#hud').draggable();
+      //$('#hud').draggable();
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
-
         GameHammerMobile.render(this.app, this);
         GameHammerMobile.attachEvents(this.app, this, '.gameboard');
-
       } else {
-
         GameBoardSizer.render(this.app, this);
         GameBoardSizer.attachEvents(this.app, this, '.gameboard');
-
-        $('#gameboard').draggable();
-
       }
-    } catch (err) {}
+    } catch (err) {
+console.log("ERROR TRIGGERED: " + err);
+    }
 
   }
 
@@ -337,7 +458,7 @@ class Pandemic extends GameTemplate {
   
     this.active_moves = moves;
   
-    let html  = "You are the " + player.role + " ("+this.game.cities[player.city].name+"). " + moves +' moves remaining. Choose an action:<ul>';
+    let html  = "<div class='status-message'>You are the " + player.role + " ("+this.game.cities[player.city].name+"). " + moves +' moves remaining. Choose an action:<ul>';
         html += '<li class="card" id="move">drive / ferry</li>';
         html += '<li class="card" id="flight">direct flight</li>';
     
@@ -369,10 +490,10 @@ class Pandemic extends GameTemplate {
         }
         html += '<li class="card" id="pass">pass</li>';
         html += '</ul>';
-  
+        html += '</div>';
   
     $('.card').off();
-    this.updateStatusAndListCards(html);
+    this.updateStatus(html);
     $('.card').on('click', function() {
   
       let action = $(this).attr('id');
@@ -453,13 +574,14 @@ class Pandemic extends GameTemplate {
     //
     if (exchange_mode == 1) {
   
-      let html = 'Give card to whom?<ul>';
+      let html = '<div class="status-message">Give card to whom?<ul>';
       for (let i = 0; i < this.game.players_info.length; i++) {
         if (this.game.players_info[i].city == city && i != (this.game.player-1)) { 
           html += '<li class="card" id="'+(i+1)+'">Player '+(i+1)+'</li>';
         }
       }
       html += '</ul>';
+      html += '</div>';
       this.updateStatus(html);
   
       $('.card').off();
@@ -562,7 +684,7 @@ class Pandemic extends GameTemplate {
     let cards = this.game.players_info[this.game.player-1].cards;
     let pandemic_self = this;
   
-    let html = 'Play an event card:<ul>';
+    let html = '<div class="status-message">Play an event card:<ul>';
   
     for (let i = 0; i < cards.length; i++) {
       if (cards[i] == "event1" || cards[i] == "event2" || cards[i] == "event3" || cards[i] == "event4" || cards[i] == "event5") {
@@ -570,7 +692,8 @@ class Pandemic extends GameTemplate {
       }
     }
     html += '</ul>';
-  
+    html += '</div>';  
+
     this.updateStatus(html);
   
     $('.card').off();
@@ -586,11 +709,12 @@ class Pandemic extends GameTemplate {
       //
       if (id == "event1") {
   
-        html = 'Pick a pawn to move to another city:<ul>';
+        html = '<div class="status-message">Pick a pawn to move to another city:<ul>';
         for (let i = 0; i < pandemic_self.game.players_info.length; i++) {
   	html += '<li id="'+(i+1)+'" class="card">Player '+(i+1)+' ('+pandemic_self.game.players_info[i].role+')</li>'
         }
         html += '</ul>';
+        html += '</div>';
         pandemic_self.updateStatus(html);
   
         $('.card').off();
@@ -599,7 +723,7 @@ class Pandemic extends GameTemplate {
   	let player_to_move = $(this).attr('id');
   	let cities_array = [];
   
-          html = 'Move to which city:<ul>';
+          html = '<div class="status-message">Move to which city:<ul>';
           for (let key in pandemic_self.game.cities) {
     	  cities_array.push(key);
           }
@@ -609,7 +733,8 @@ class Pandemic extends GameTemplate {
     	  html += '<li id="'+cities_array[i]+'" class="card">'+pandemic_self.game.cities[cities_array[i]].name+'</li>'
           }
           html += '</ul>';
-  
+          html += '</div>';  
+
           pandemic_self.updateStatus(html);
   
           $('.card').off();
@@ -641,12 +766,13 @@ class Pandemic extends GameTemplate {
   
         pandemic_self.game.state.infection_drawn.sort();
   
-        html = 'Resilient Population: remove a card from the infection discard pile<ul>';
+        html = '<div class="status-message">Resilient Population: remove a card from the infection discard pile<ul>';
         for (let i = 0; i < pandemic_self.game.state.infection_drawn.length; i++) {
           html += '<li class="card" id="'+pandemic_self.game.state.infection_drawn[i]+'">'+pandemic_self.game.cities[pandemic_self.game.state.infection_drawn[i]].name+'</li>';
         }
         html += '</ul>';
-  
+        html += '</div>';  
+
         pandemic_self.updateStatus(html);
   
         $('.card').off();
@@ -700,12 +826,13 @@ class Pandemic extends GameTemplate {
   	forecast.push(pandemic_self.app.crypto.hexToString(pandemic_self.game.deck[0].crypt[i]));
         }
   
-        let html = 'These are the top six cards of the infection pile. Put them back on the pile one-by-one:<ul>';
+        let html = '<div class="status-message">These are the top six cards of the infection pile. Put them back on the pile one-by-one:<ul>';
         for (let i = 0; i < forecast.length; i++) {
   	html += '<li id="'+forecast[i]+'" class="card">'+pandemic_self.game.cities[forecast[i]].name+'</li>';
         }
         html += '</ul>';
-  
+        html += '</div>';  
+
         pandemic_self.updateStatus(html);
   
         $('.card').off();
@@ -755,7 +882,7 @@ class Pandemic extends GameTemplate {
   
         let cities_array = [];
   
-        html = 'Pick a city for a free research station:<ul>';
+        html = '<div class="status-message">Pick a city for a free research station:<ul>';
         for (let key in pandemic_self.game.cities) {
   	cities_array.push(key);
         }
@@ -767,7 +894,8 @@ class Pandemic extends GameTemplate {
   	}
         }
         html += '</ul>';
-  
+        html += '</div>';  
+
         pandemic_self.updateStatus(html);
   
         $('.card').off();
@@ -828,14 +956,15 @@ class Pandemic extends GameTemplate {
       }
     }
   
-    let html = 'Research Cure:<ul>';
+    let html = '<div class="status-message">Research Cure:<ul>';
   
     if (yellow >= research_limit && this.game.state.yellow_cure == 0) { html += '<li id="yellow" class="card">yellow</li>'; }
     if (blue >= research_limit && this.game.state.blue_cure == 0) { html += '<li id="blue" class="card">blue</li>'; }
     if (black >= research_limit && this.game.state.black_cure == 0) { html += '<li id="black" class="card">black</li>'; }
     if (red >= research_limit && this.game.state.red_cure == 0) { html += '<li id="red" class="card">red</li>'; }
     html += '</ul>';
-  
+    html += '</div>';  
+
     this.updateStatus(html);
   
     $('.card').off();
@@ -955,12 +1084,13 @@ class Pandemic extends GameTemplate {
     let pandemic_self = this;
     let city = this.game.players_info[this.game.player-1].city;
   
-    let html  = "Move where: ";
+    let html  = "<div class='status-message'>Move where: <ul>";
     for (let i = 0; i < this.game.cities[city].neighbours.length; i++) {
       let c = this.game.cities[city].neighbours[i];
       html += '<li class="card" id="'+c+'">'+this.game.cities[c].name+'</li>';
     }
-  
+    html += '</ul></div>';
+
     this.updateStatus(html);
   
     $('.city').off();
@@ -1070,13 +1200,14 @@ class Pandemic extends GameTemplate {
     }
   
   
-    let html  = "Cure disease: ("+pandemic_self.active_moves+" moves)";
+    let html  = "<div class='status-message'>Cure disease: ("+pandemic_self.active_moves+" moves)";
     if (this.game.cities[city].virus.blue > 0)     { html += '<li class="card" id="blue">blue</li>'; }
     if (this.game.cities[city].virus.red > 0)      { html += '<li class="card" id="red">red</li>'; }
     if (this.game.cities[city].virus.black > 0)    { html += '<li class="card" id="black">black</li>'; }
     if (this.game.cities[city].virus.yellow > 0)   { html += '<li class="card" id="yellow">yellow</li>'; }
     html += '<li class="card" id="stop">stop</li>';
-  
+    html += '</ul></div>';
+
     this.updateStatus(html);
   
     $('.card').off();
@@ -1136,7 +1267,7 @@ class Pandemic extends GameTemplate {
     let city = this.game.players_info[this.game.player-1].city;
     let cards = this.game.players_info[this.game.player-1].cards;
   
-    let html  = "Take a direct flight: <ul>";
+    let html  = "<div class='status-message'>Take a direct flight: <ul>";
     for (let i = 0; i < cards.length; i++) {
       if (this.game.cities[cards[i]] != undefined) {
         html += '<li class="card" id="'+cards[i]+'">'+this.game.cities[cards[i]].name+'</li>';
@@ -1144,6 +1275,7 @@ class Pandemic extends GameTemplate {
     }
     html += '<li class="card" id="stop">stop</li>';
     html += '</ul>';
+    html += '</div>';
   
     this.updateStatus(html);
   
@@ -1194,12 +1326,13 @@ class Pandemic extends GameTemplate {
     let pandemic_self = this;
     let city = this.game.players_info[this.game.player-1].city;
   
-    let html  = "Take a shuttle flight: <ul>";
+    let html  = "<div class='status-message'>Take a shuttle flight: <ul>";
     for (let i = 0; i < this.game.state.research_stations.length; i++) {
       html += '<li class="card" id="'+this.game.state.research_stations[i]+'">'+this.game.cities[this.game.state.research_stations[i]].name+'</li>';
     }
     html += '<li class="card" id="stop">stop</li>';
     html += '</ul>';
+    html += '</div>';
   
     this.updateStatus(html);
   
@@ -1444,13 +1577,11 @@ class Pandemic extends GameTemplate {
       }
       if (mv[0] === "turn") {
   
-        this.highlightActivePlayerTurn(mv[1]);
-  
         if (parseInt(mv[1]) == this.game.player) {
           this.playerTurn();
         } else {
   	this.removeEvents();
- 	this.updateStatus("You are the "+this.game.players_info[this.game.player-1].role+" ("+this.game.cities[this.game.players_info[this.game.player-1].city].name+"). Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
+ 	this.updateStatusAndListCards("You are the "+this.game.players_info[this.game.player-1].role+" ("+this.game.cities[this.game.players_info[this.game.player-1].city].name+"). Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
         }
   
   
@@ -1777,7 +1908,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   
   endTurn() {
   
-    this.updateStatus("Waiting for information from peers....");
+    this.updateStatus("<div class='status-message'>Waiting for information from peers...</div>");
     
     let extra = {};
         extra.target = this.returnNextPlayer(this.game.player);
@@ -2609,7 +2740,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
       <div class="status-message">
         ${message}
       </div>
-        ${this.returnCardList(cards, "city")}
+      ${this.returnCardList(cards, "city")}
     `
   
     this.updateStatus(html);
@@ -2623,7 +2754,9 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   addShowCardEvents() {
   
     let pandemic_self = this;
-  
+
+    this.hud.attachCardEvents(this.app, this);
+
     if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
   
       $('.showcard').off();
@@ -2668,28 +2801,12 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   }
   
   hideCard(cardname="") {
-    $('#cardbox').hide();
+    this.cardbox.hideCardbox(cardname, url);  
   }
   
   showCard(cardname, cardtype="city") {
-  
     let url = this.returnCardImage(cardname, cardtype);
-  
-    //
-    // mobile needs recentering
-    //
-    if (this.app.browser.isMobileBrowser(navigator.userAgent)) {
-      // add additional html
-      url += `
-      <div id="cardbox-exit-background">
-      <div class="cardbox-exit" id="cardbox-exit">×</div>
-      </div>
-      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard">PLAY</div>`
-      $('.cardbox-exit').show();
-    }
-  
-    $('#cardbox').html(url);
-    $('#cardbox').show();
+    this.cardbox.showCardBoxHTML(cardname, url);  
   }
   
   removeCardFromHand(plyr, card) {
@@ -2786,21 +2903,6 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
     return new_options;
   
   }
-  
-  
-  highlightActivePlayerTurn(num=1) {
-  
-    for (let i = 1; i <= this.game.players_info.length; i++) {
-      let active_player = ".player"+i+"_role_card";
-      if (i == num) {
-        $(active_player).css('border','5px solid #FFF');
-      } else {
-        $(active_player).css('border','5px solid #444');
-      }
-    }
-  
-  }
-  
   
 }
 module.exports = Pandemic;

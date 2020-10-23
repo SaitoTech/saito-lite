@@ -13,6 +13,10 @@
 .game-overlay-menu {
   min-width: 450px;
 }
+.cardbox-card {
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+}
 .hud-cardbox {
   position: absolute;
   height: 48vh;

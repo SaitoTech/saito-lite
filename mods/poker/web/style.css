@@ -167,9 +167,8 @@ body {
 
 .cardfan {
   position: absolute;
-  bottom: 30vh;
-  left: 45vw;
-  transform: translateX(-40vh);
+  top: 70vh;
+  left: 20vw;
 }
 
 .cardfan .card {
