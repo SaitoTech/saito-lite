@@ -655,10 +655,6 @@ console.log("\n\n\n\n");
     //
     if (this.is_testing == 1) {
 
-      this.game.state.vp = -2;
-      this.game.state.round = 9;
-
-
       this.game.options = {};
       this.game.options.culturaldiplomacy = 1;
       this.game.options.gouzenkoaffair = 1;
@@ -1814,7 +1810,7 @@ console.log("CARD: " + card);
           } else {
             this.updateStatus("<div class='status-message' id='status-message'><span>Opponent is being dealt new cards.</span></div>");
           }
-          this.updateStatus(player.toUpperCase() + "</span> <span>is fetching new cards</span>");
+          this.updateStatus("<div class='status-message' id='status-message'>"+player.toUpperCase() + " <span>is fetching new cards</span></div>");
           return 0;
         }
 
@@ -2229,9 +2225,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["communistrevolution","sovietcoup" , "tehran","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["unintervention","abmtreaty","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
-              this.game.deck[0].hand = ["sinoindian", "philadelphia", "brezhnev", "kissingerisawarcriminal", "brexit", "opec", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["olympic", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -2785,6 +2781,7 @@ console.log("CARD: " + card);
           //
           // back button functions again
           //
+console.log("resetging bbc");
           this.game.state.back_button_cancelled = 0;
 
           //
@@ -3495,14 +3492,13 @@ console.log("CARD: " + card);
       let bind_back_button_state = true;
       if (twilight_self.game.state.event_before_ops == 1) { bind_back_button_state = false; }
       if (twilight_self.game.state.headline == 1) { bind_back_button_state = false; }
+      if (twilight_self.game.state.back_button_cancelled == 1) { bind_back_button_state = false; }
+
       let html = twilight_self.formatPlayOpsStatus(player, ops, bind_back_button_state); // back button
       twilight_self.updateStatus(html);
 
       if (bind_back_button_state) {
         twilight_self.bindBackButtonFunction(() => {
-          //
-          // revert to the start of the turn
-          //
           twilight_self.addMove("revert");
           twilight_self.endTurn();
   	  return;
@@ -6684,7 +6680,7 @@ console.log("CONTROL IS: " + control);
     countries['iraq'] = { top : 1350, left : 2870, us : 0 , ussr : 1 , control : 3 , bg : 1 , neighbours : [ 'jordan','iran','gulfstates','saudiarabia' ], region : "mideast" , name : "Iraq" };
     countries['iran'] = { top : 1350, left : 3082, us : 1 , ussr : 0 , control : 2 , bg : 1 , neighbours : [ 'iraq','afghanistan','pakistan' ], region : "mideast" , name : "Iran" };
     countries['jordan'] = { top : 1500, left : 2760, us : 0 , ussr : 0 , control : 2 , bg : 0 , neighbours : [ 'israel','lebanon','iraq','saudiarabia' ], region : "mideast" , name : "Jordan" };
-    countries['gulfstates'] = { top : 1500, left : 3010, us : 0 , ussr : 0 , control : 3 , bg : 1 , neighbours : [ 'iraq','saudiarabia' ], region : "mideast" , name : "Gulf States" };
+    countries['gulfstates'] = { top : 1500, left : 3010, us : 0 , ussr : 0 , control : 3 , bg : 0 , neighbours : [ 'iraq','saudiarabia' ], region : "mideast" , name : "Gulf States" };
     countries['saudiarabia'] = { top : 1650, left : 2950, us : 0 , ussr : 0 , control : 3 , bg : 1 , neighbours : [ 'jordan','iraq','gulfstates' ], region : "mideast" , name : "Saudi Arabia" };
 
 
@@ -7331,32 +7327,32 @@ console.log("CONTROL IS: " + control);
     vp_adjustment = this.calculateScoring("europe");
     total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
     this.game.state.vp += total_vp;
-    this.updateLog("<span>Europe:</span> " + vp_adjustment + " <span>VP</span>");
+    this.updateLog("<span>Europe:</span> " + total_vp + " <span>VP</span>");
  
     vp_adjustment = this.calculateScoring("asia");
     total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
     this.game.state.vp += total_vp;
-    this.updateLog("<span>Asia:</span> " + vp_adjustment + " <span>VP</span>");
+    this.updateLog("<span>Asia:</span> " + total_vp + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("mideast");
     total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
     this.game.state.vp += total_vp;
-    this.updateLog("<span>Middle East:</span> " + vp_adjustment + " <span>VP</span>");
+    this.updateLog("<span>Middle East:</span> " + total_vp + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("africa");
     total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
     this.game.state.vp += total_vp;
-    this.updateLog("<span>Africa:</span> " + vp_adjustment + " <span>VP</span>");
+    this.updateLog("<span>Africa:</span> " + total_vp + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("southamerica");
     total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
     this.game.state.vp += total_vp;
-    this.updateLog("<span>South America:</span> " + vp_adjustment + " <span>VP</span>");
+    this.updateLog("<span>South America:</span> " + total_vp + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("centralamerica");
     total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
     this.game.state.vp += total_vp;
-    this.updateLog("<span>Central America:</span> " + vp_adjustment + " <span>VP</span>");
+    this.updateLog("<span>Central America:</span> " + total_vp + " <span>VP</span>");
 
     this.updateVictoryPoints();
 
@@ -7394,9 +7390,14 @@ console.log("CONTROL IS: " + control);
   }
 
   determineRegionVictor(scoring, region_scoring_range, max_bg_num) {
+
+console.log("RANGE: " + JSON.stringify(region_scoring_range));
+console.log("SCORING: " + JSON.stringify(scoring));
+
     if (scoring.us.bg == max_bg_num && scoring.us.total > scoring.ussr.total) { scoring.us.vp = region_scoring_range.control; }
     else if (scoring.us.bg > scoring.ussr.bg && scoring.us.total > scoring.us.bg && scoring.us.total > scoring.ussr.total) { scoring.us.vp = region_scoring_range.domination; }
     else if (scoring.us.total > 0) { scoring.us.vp = region_scoring_range.presence; }
+
 
     if (scoring.ussr.bg == max_bg_num && scoring.ussr.total > scoring.us.total) { scoring.ussr.vp = region_scoring_range.control; }
     else if (scoring.ussr.bg > scoring.us.bg && scoring.ussr.total > scoring.ussr.bg && scoring.ussr.total > scoring.us.total) { scoring.ussr.vp = region_scoring_range.domination; }
@@ -7410,6 +7411,8 @@ console.log("CONTROL IS: " + control);
 
 
   calculateScoring(region, mouseover_preview=0) {
+
+console.log(region + " -- " + mouseover_preview);
 
     var scoring = {
       us: {total: 0, bg: 0, vp: 0},
@@ -7476,12 +7479,15 @@ console.log("CONTROL IS: " + control);
 	  }
 	}
         let me_scoring_range = { presence: 3, domination: 5, control: 7 };
-
+console.log("X");
         // pseudo function to calculate control
         scoring = this.calculateControlledBattlegroundCountries(scoring, me_bg_countries);
+console.log("1 + " + JSON.stringify(scoring));
         scoring.us.total = scoring.us.bg;
         scoring.ussr.total = scoring.ussr.bg;
+console.log("2 + " + JSON.stringify(scoring));
         scoring = this.calculateControlledCountries(scoring, me_countries);
+console.log("3 + " + JSON.stringify(scoring));
 
         //
         // Shuttle Diplomacy
@@ -7502,8 +7508,10 @@ console.log("CONTROL IS: " + control);
 
           }
         }
-
+console.log("BG C: " + JSON.stringify(me_bg_countries));
         scoring = this.determineRegionVictor(scoring, me_scoring_range, me_bg_countries.length);
+
+console.log("HERE SC: " + JSON.stringify(scoring));
 
         // scoring transform
         break;
@@ -9644,6 +9652,7 @@ console.log("CONTROL IS: " + control);
     //
     if (card == "abmtreaty") {
 
+      this.game.state.back_button_cancelled = 1;
       this.updateStatus(player.toUpperCase() + "</span> <span>plays ABM Treaty");
       this.updateLog("DEFCON increases by 1");
 
@@ -12685,6 +12694,7 @@ console.log("card: " + card);
 
           if (action == "boycott") {
             twilight_self.addMove("ops\t"+opponent+"\tolympic\t4");
+            twilight_self.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
             twilight_self.addMove("defcon\tlower");
             twilight_self.addMove("notify\t"+opponent.toUpperCase()+" plays 4 OPS");
             twilight_self.addMove("notify\t"+me.toUpperCase()+" boycotts the Olympics");

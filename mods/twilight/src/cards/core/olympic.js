@@ -24,6 +24,7 @@
 
           if (action == "boycott") {
             twilight_self.addMove("ops\t"+opponent+"\tolympic\t4");
+            twilight_self.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
             twilight_self.addMove("defcon\tlower");
             twilight_self.addMove("notify\t"+opponent.toUpperCase()+" plays 4 OPS");
             twilight_self.addMove("notify\t"+me.toUpperCase()+" boycotts the Olympics");
