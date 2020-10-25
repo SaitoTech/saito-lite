@@ -14,6 +14,7 @@ body {
   background-color: #4e4e4e !important;
 }
 
+
 .hud {
   display: grid;
   grid-template-rows: 40px auto;
@@ -96,6 +97,7 @@ body {
   width: 30vw;
   -webkit-filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
   filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
+  z-index: -10; // start behind the board
 }
 
 
@@ -135,9 +137,12 @@ body {
   float: left;
 }
 .game-menu ul .game-menu-icon {
-    width: 40px;
-    margin-left: 10px;
-    font-size: 2em;
+  width: 40px;
+  margin-left: 10px;
+  font-size: 2em;
+}
+.game-menu-icon .fa-window-maximize {
+  vertical-align: middle;
 }
 .game-menu ul .game-menu-sub-option {
   position: relative;

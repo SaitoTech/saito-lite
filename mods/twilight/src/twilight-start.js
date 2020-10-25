@@ -196,8 +196,8 @@ class Twilight extends GameTemplate {
     let html =
     `
       <div class="game-overlay-menu" id="game-overlay-menu">
-        <div>Game Statistics:</div>
-	<table class="statistics-table">
+        <div>Headline Statistics</div>
+	<table class="headline-statistics-table">
 	  <tr>
 	    <th></th>
 	    <th>US</th>
@@ -224,9 +224,160 @@ class Twilight extends GameTemplate {
 	    <td>${this.game.state.stats.ussr_scorings}</td>
 	  </tr>
         </table>
-	<div class="statistics-info">
-	We need help deciding what to track and how to represent the information visually here. If you're comfortable with JAVASCRIPT / HTML / CSS and want to help, please reach out.
-        </div>
+        <div>Round-by-Round Statistics</div>
+	<table class="round-statistics-table">
+	  <tr>
+	`;
+	for (let z = 0; z < 11; z++) {
+	  if (z == 0) { 
+	    html += '<th></th>'; 
+	  } else { 
+	    html += `<th>R${(z)}</th>`; 
+	  }
+	}
+	html += `;
+	  </tr>
+       `;
+	for (let y = 0; y < 10; y++) {
+	  html += '<tr>';
+
+	  if (y == 0) { html += '<td>US ops</td>'; }
+	  if (y == 1) { html += '<td>USSR ops</td>'; }
+	  if (y == 2) { html += '<td>US (us) ops</td>'; }
+	  if (y == 3) { html += '<td>USSR (us) ops</td>'; }
+	  if (y == 4) { html += '<td>US (ussr) ops</td>'; }
+	  if (y == 5) { html += '<td>USSR (ussr) ops</td>'; }
+	  if (y == 6) { html += '<td>US (neutral) ops</td>'; }
+	  if (y == 7) { html += '<td>USSR (neutral) ops</td>'; }
+	  if (y == 8) { html += '<td>US scoring</td>'; }
+	  if (y == 9) { html += '<td>USSR scoring</td>'; }
+
+	  for (let z = 0; z < 10; z++) {
+
+	    if (y == 0) {
+	      if (z > this.game.state.stats.round.length) {
+	        html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.us_ops}</th>`;
+		} else {
+	          html += `<td>${this.game.state.stats.round[z].us_ops}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 1) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.ussr_ops}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].ussr_ops}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 2) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.us_us_ops}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].us_us_ops}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 3) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.ussr_us_ops}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].ussr_us_ops}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 4) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.us_ussr_ops}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].us_ussr_ops}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 5) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.ussr_ussr_ops}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].ussr_ussr_ops}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 6) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.us_neutral_ops}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].us_neutral_ops}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 7) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.ussr_neutral_ops}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].ussr_neutral_ops}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 8) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.us_scorings}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].us_scorings}</th>`;
+	        }
+	      }
+	    }
+
+	    if (y == 9) {
+	      if (z > this.game.state.stats.round.length) {
+	          html += `<td> - </td>`;
+	      } else {
+		if (z == this.game.state.stats.round.length) {
+	          html += `<td>${this.game.state.stats.ussr_scorings}</th>`;
+		} else {
+	        html += `<td>${this.game.state.stats.round[z].ussr_scorings}</th>`;
+	        }
+	      }
+	    }
+	  }
+	  html += '</tr>';
+	}
+	html += `
+        </table>
       </div>
     `;
 
@@ -630,6 +781,7 @@ console.log("------ INITIALIZE GAME ----");
 console.log("---------------------------");
 console.log("---------------------------");
 console.log("---------------------------");
+console.log("DECK: " + this.game.options.deck);
 console.log("\n\n\n\n");
 
     this.updateStatus("<div class='status-message' id='status-message'>Generating the Game</div>");
@@ -895,7 +1047,8 @@ console.log("QUEUE: " + this.game.queue);
                 }
               }
 
-              if (this.game.players[0] === this.app.wallet.returnPublicKey()) {
+	      // [1] should be creator 
+              if (this.game.players[1] === this.app.wallet.returnPublicKey()) {
                 if (this.game.options.player1 == "us") {
                   this.game.player = 2;
                 } else {
@@ -1822,6 +1975,32 @@ console.log("CARD: " + card);
           // stats
           if (mv[1] == "us") { this.game.state.stats.us_ops += parseInt(mv[3]); }
           if (mv[1] == "ussr") { this.game.state.stats.ussr_ops += parseInt(mv[3]); }
+	  if (this.game.deck[0].cards[mv[2]] != undefined) {
+	    if (this.game.deck[0].cards[mv[2]].player == "us") {
+	      if (this.game.player == 1) {
+	        this.game.state.stats.ussr_us_ops += parseInt(mv[3]);
+	      }
+	      if (this.game.player == 2) {
+	        this.game.state.stats.us_us_ops += parseInt(mv[3]);
+	      }
+	    }
+	    if (this.game.deck[0].cards[mv[2]].player == "ussr") {
+	      if (this.game.player == 1) {
+	        this.game.state.stats.ussr_ussr_ops += parseInt(mv[3]);
+	      }
+	      if (this.game.player == 2) {
+	        this.game.state.stats.us_ussr_ops += parseInt(mv[3]);
+	      }
+	    }
+	    if (this.game.deck[0].cards[mv[2]].player == "both") {
+	      if (this.game.player == 1) {
+	        this.game.state.stats.ussr_neutral_ops += parseInt(mv[3]);
+	      }
+	      if (this.game.player == 2) {
+	        this.game.state.stats.us_neutral_ops += parseInt(mv[3]);
+	      }
+	    }
+	  }
 
           // unset formosan if China card played by US
           if (mv[1] == "us" && mv[2] == "china") {
@@ -2225,7 +2404,7 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["unintervention","abmtreaty","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["greatsociety","unintervention","abmtreaty","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
               this.game.deck[0].hand = ["olympic", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
@@ -2320,6 +2499,7 @@ console.log("CARD: " + card);
         }
         if (mv[0] === "round") {
 
+
 	  //
 	  // china card is face-up
 	  //
@@ -2383,6 +2563,20 @@ console.log("CARD: " + card);
           // prevent DEFCON bonus from carrying over to next round
           //
           this.game.state.us_defcon_bonus = 0;
+
+
+	  // STATS - aggregate the statisics
+	  this.game.state.stats.round.push({});
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_scorings = this.game.state.stats.us_scorings;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_scorings = this.game.state.stats.ussr_scorings;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_ops = this.game.state.stats.us_ops;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_ops = this.game.state.stats.ussr_ops;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_us_ops = this.game.state.stats.us_ops;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_us_ops = this.game.state.stats.ussr_ussr_ops;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_ussr_ops = this.game.state.stats.us_ussr_ops;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_ussr_ops = this.game.state.stats.ussr_ussr_ops;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_neutral_ops = this.game.state.stats.us_neutral_ops;
+	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_neutral_ops = this.game.state.stats.ussr_neutral_ops;
 
 
           //
@@ -3378,14 +3572,16 @@ console.log("resetging bbc");
 	    }
 	  }
 
-	  let html = `Great Society is active. US may earn a VP for either skipping its turn or playing a scoring card:<ul>`;
+	  let html = `<div class="status-message">Great Society is active. US may earn a VP for either skipping its turn or playing a scoring card:<ul>`;
 	  if (scoring_cards.length > 0) { 
 	    html += `
 		<li class='card' id='scoring'>play scoring card</li>
+		<li class='card' id='scoring_w_card'>play scoring card and draw card</li>
 	    `;
 	  }
 	  html += `
 		<li class='card' id='skip'>skip turn</li>
+		<li class='card' id='skip_w_card'>skip turn and draw card</li>
 	  `;
 	  if (this.game.deck[0].hand.length > 0) {
 	    html += `
@@ -3393,6 +3589,7 @@ console.log("resetging bbc");
 	    `;
 	  }
 	  html += '</ul>';
+	  html += '</div>';
 	  this.updateStatus(html);
 
 	  let twilight_self = this;
@@ -3404,16 +3601,24 @@ console.log("resetging bbc");
 	      twilight_self.playerMove();
 	      return;
             }
-            if (action2 === "skip") {
+            if (action2 === "skip" || action2 === "skip_w_card") {
               twilight_self.addMove("resolve\tplay");
+	      if (action2 === "skip_w_card") {
+	        twilight_self.addMove("SAFEDEAL\t1\t2\t1");
+	        twilight_self.addMove("notify\tUS is drawing a bonus card");
+	      }
               twilight_self.addMove("vp\tus\t1\t0");
               twilight_self.addMove("notify\tUS skips a turn for 1 VP as a Great Society");
               twilight_self.endTurn();
             }
-            if (action2 === "scoring") {
+            if (action2 === "scoring" || action2 === "scoring_w_card") {
               twilight_self.addMove("resolve\tplay");
               twilight_self.addMove("vp\tus\t1\t0");
               twilight_self.addMove("notify\tUS plays a scoring card for 1 VP as a Great Society");
+	      if (action2 === "scoring_w_card") {
+	        twilight_self.addMove("SAFEDEAL\t1\t2\t1");
+	        twilight_self.addMove("notify\tUS is drawing a bonus card");
+	      }
               twilight_self.playerTurn("greatsociety");
             }
 	  });
@@ -6560,11 +6765,17 @@ console.log("CONTROL IS: " + control);
     state.stats.ussr_scorings = 0;
     state.stats.us_ops = 0;
     state.stats.ussr_ops = 0;
+    state.stats.us_us_ops = 0;
+    state.stats.ussr_us_ops = 0;
+    state.stats.us_ussr_ops = 0;
+    state.stats.ussr_ussr_ops = 0;
+    state.stats.us_neutral_ops = 0;
+    state.stats.ussr_neutral_ops = 0;
     state.stats.us_ops_spaced = 0;
     state.stats.ussr_ops_spaced = 0;
     state.stats.us_coups = [];
     state.stats.ussr_coups = [];
-
+    state.stats.round = [];
 
     // events - early war
     state.events = {};
@@ -6763,6 +6974,8 @@ console.log("CONTROL IS: " + control);
 
   returnEarlyWarCards() {
 
+console.log("RETURNING CARDS: " + this.game.options.deck);
+
     var deck = {};
 
     // EARLY WAR
@@ -6812,26 +7025,7 @@ console.log("CONTROL IS: " + control);
     }
 
     //
-    // END OF HISTORY - we default to the expanded deck
-    //
-    if (this.game.options.deck == "endofhistory" ) {
-      deck['peronism']       = { img : "TNRnTS-307png" ,name : "Peronism", scoring : 0 , player : "both"   , recurring : 0 , ops : 1 };
-    }
-
-    //
-    // COLD WAR CRAZIES
-    //
-    if (this.game.options.deck == "coldwarcrazies" ) {
-      deck['berlinairlift']      	= { img : "TNRnTS-401png" ,name : "Berlin Airlift", scoring : 0 , player : "us"     , recurring : 0 , ops : 1 };
-      deck['communistrevolution']       = { img : "TNRnTS-402png" ,name : "Communist Revolution", scoring : 0 , player : "ussr"   , recurring : 1 , ops : 2 };
-      deck['philadelphia']      	= { img : "TNRnTS-403png" ,name : "Philadelphia Experiment", scoring : 0 , player : "us"     , recurring : 0 , ops : 3 };
-      deck['sinoindian']                = { img : "TNRnTS-404png" ,name : "Sino-Indian War", scoring : 0 , player : "both"   , recurring : 1 , ops : 2 };
-      deck['titostalin']                = { img : "TNRnTS-405png" ,name : "Tito-Stalin Split", scoring : 0 , player : "us"   , recurring : 1 , ops : 3 };
-    }
-
-
-    //
-    // remove any cards specified
+    // remove or add specified cards
     //
     if (this.game.options != undefined) {
       for (var key in this.game.options) {
@@ -6844,6 +7038,18 @@ console.log("CONTROL IS: " + control);
         if (key === "culturaldiplomacy") { deck['culturaldiplomacy'] = { img : "TNRnTS-202png" , name : "Cultural Diplomacy", scoring : 0 , player : "both" , recurring : 1 , ops : 2 }; }
         if (key === "gouzenkoaffair") { deck['gouzenkoaffair'] = { img : "TNRnTS-204png" , name : "Gouzenko Affair", scoring : 0 , player : "ussr" , recurring : 0 , ops : 2 }; }
         if (key === "poliovaccine") { deck['poliovaccine'] = { img : "TNRnTS-206png" , name : "Polio Vaccine", scoring : 0 , player : "both" , recurring : 0 , ops : 3 }; }
+
+	// END OF HISTORY
+        if (key === "peronism") { deck['peronism']       = { img : "TNRnTS-307png" ,name : "Peronism", scoring : 0 , player : "both"   , recurring : 0 , ops : 1 }; }
+
+
+	// COLD WAR CRAZIES 
+        if (key === "berlinairlift") { deck['berlinairlift']      	= { img : "TNRnTS-401png" ,name : "Berlin Airlift", scoring : 0 , player : "us"     , recurring : 0 , ops : 1 }; }
+        if (key === "communistrevolution") { deck['communistrevolution']       = { img : "TNRnTS-402png" ,name : "Communist Revolution", scoring : 0 , player : "ussr"   , recurring : 1 , ops : 2 }; }
+        if (key === "philadelphia") { deck['philadelphia']      	= { img : "TNRnTS-403png" ,name : "Philadelphia Experiment", scoring : 0 , player : "us"     , recurring : 0 , ops : 3 }; }
+        if (key === "sinoindian") { deck['sinoindian']                = { img : "TNRnTS-404png" ,name : "Sino-Indian War", scoring : 0 , player : "both"   , recurring : 1 , ops : 2 }; }
+        if (key === "titostalin") { deck['titostalin']                = { img : "TNRnTS-405png" ,name : "Tito-Stalin Split", scoring : 0 , player : "us"   , recurring : 1 , ops : 3 }; }
+
       }
     }
 
@@ -6918,26 +7124,6 @@ console.log("CONTROL IS: " + control);
       deck['tehran']            = { img : "TNRnTS-108" , name : "Our Man in Tehran", scoring : 0 , player : "us" , recurring : 0 , ops : 2 };
     }
 
-    //
-    // END OF HISTORY
-    //
-    if (this.game.options.deck == "endofhistory" ) {
-      deck['manwhosavedtheworld']       = { img : "TNRnTS-301png" ,name : "The Man Who Saved the World", scoring : 0 , player : "both"   , recurring : 0 , ops : 4 };
-      deck['breakthroughatlopnor']      = { img : "TNRnTS-302png" ,name : "Breakthrough at Lop Nor", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 2 };
-      deck['greatsociety']              = { img : "TNRnTS-303png" ,name : "Great Society", scoring : 0 , player : "us"   , recurring : 0 , ops : 2 };
-      deck['nationbuilding']            = { img : "TNRnTS-304png" ,name : "Nation Building", scoring : 0 , player : "both"   , recurring : 1 , ops : 2 };
-      deck['eurocommunism']             = { img : "TNRnTS-306png" ,name : "Eurocommunism", scoring : 0 , player : "us"   , recurring : 0 , ops : 3 };
-    }
-
-
-    //
-    // TWILIGHT ABSURDUM
-    //
-    if (this.game.options.deck == "absurdum" ) {
-      deck['kissingerisawarcriminal'] 	     	= { img : "TNRnTS-502png" ,name : "Kissinger Bombs Cambodia", scoring : 0 , player : "us"     , recurring : 1 , ops : 2 };
-    }
-
-
 
     //
     // remove any cards specified
@@ -6952,6 +7138,19 @@ console.log("CONTROL IS: " + control);
         //
         if (key === "handshake") { deck['handshake'] = { img : "TNRnTS-201png" , name : "Handshake in Space", scoring : 0 , player : "both" , recurring : 1 , ops : 1 }; }
         if (key === "berlinagreement") { deck['berlinagreement'] = { img : "TNRnTS-205png" , name : "Berlin Agreement", scoring : 0 , player : "both" , recurring : 0 , ops : 2 }; }
+
+
+	// END OF HISTORY
+        if (key === "manwhosavedtheworld") { deck['manwhosavedtheworld']       = { img : "TNRnTS-301png" ,name : "The Man Who Saved the World", scoring : 0 , player : "both"   , recurring : 0 , ops : 4 }; }
+        if (key === "breakthroughatlopnor") { deck['breakthroughatlopnor']      = { img : "TNRnTS-302png" ,name : "Breakthrough at Lop Nor", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 2 }; }
+        if (key === "greatsociety") { deck['greatsociety']              = { img : "TNRnTS-303png" ,name : "Great Society", scoring : 0 , player : "us"   , recurring : 0 , ops : 2 }; }
+        if (key === "nationbuilding") { deck['nationbuilding']            = { img : "TNRnTS-304png" ,name : "Nation Building", scoring : 0 , player : "both"   , recurring : 1 , ops : 2 }; }
+	if (key === "eurocommunism") { deck['eurocommunism']             = { img : "TNRnTS-306png" ,name : "Eurocommunism", scoring : 0 , player : "us"   , recurring : 0 , ops : 3 }; }
+
+
+	// ABSURDUM
+        if (key === "kissingerisawarcriminal") { deck['kissingerisawarcriminal'] 	     	= { img : "TNRnTS-502png" ,name : "Kissinger Bombs Cambodia", scoring : 0 , player : "us"     , recurring : 1 , ops : 2 }; }
+
 
       }
     }
@@ -7002,30 +7201,6 @@ console.log("CONTROL IS: " + control);
     }
 
     //
-    // END OF HISTORY
-    //
-    if (this.game.options.deck == "endofhistory" ) {
-      deck['perestroika']       = { img : "TNRnTS-305png" ,name : "Perestroika", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 3 };
-      deck['inftreaty']         = { img : "TNRnTS-308png" ,name : "INF Treaty", scoring : 0 , player : "both"   , recurring : 0 , ops : 3 };
-    }
-
-    //
-    // COLD WAR CRAZIES
-    //
-    if (this.game.options.deck == "coldwarcrazies" ) {
-      deck['sovietcoup']       = { img : "TNRnTS-405png" ,name : "Soviet Coup", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 4 };
-    }
-    
-
-    //
-    // TWILIGHT ABSURDUM
-    //
-    if (this.game.options.deck == "absurdum" ) {
-      deck['brexit'] 	     	= { img : "TNRnTS-501png" ,name : "Brexit", scoring : 0 , player : "both"     , recurring : 1 , ops : 4 };
-    }
-
-
-    //
     // remove any cards specified
     //
     if (this.game.options != undefined) {
@@ -7038,6 +7213,15 @@ console.log("CONTROL IS: " + control);
         //
         if (key === "rustinredsquare") { deck['rustinredsquare'] = { img : "TNRnTS-203png" , name : "Rust Lands in Red Square", scoring : 0 , player : "us" , recurring : 0 , ops : 1 }; }
 
+        // END OF HISTORY
+        if (key === "perestroika") { deck['perestroika']       = { img : "TNRnTS-305png" ,name : "Perestroika", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 3 }; }
+        if (key === "inftreaty") { deck['inftreaty']         = { img : "TNRnTS-308png" ,name : "INF Treaty", scoring : 0 , player : "both"   , recurring : 0 , ops : 3 }; }
+
+        // COLD WAR CRAZIES
+        if (key === "sovietcoup") { deck['sovietcoup']       = { img : "TNRnTS-405png" ,name : "Soviet Coup", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 4 }; }    
+
+        // TWILIGHT ABSURDUM
+        if (key === "brexit") { deck['brexit'] 	     	= { img : "TNRnTS-501png" ,name : "Brexit", scoring : 0 , player : "both"     , recurring : 1 , ops : 4 }; }
 
       }
     }
@@ -9316,6 +9500,7 @@ console.log("HERE SC: " + JSON.stringify(scoring));
 	 	} else { 
 		  $(".optional_edition").prop("checked", true); 
 		  if ($("#deckselect").val() == "endofhistory") { 
+alert("end of history!");
 		    $(".endofhistory_edition").prop("checked",true); 
 		    $(".optional_edition").prop("checked", false);
 		  } else {
