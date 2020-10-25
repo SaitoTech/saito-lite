@@ -337,7 +337,7 @@ p {
 .chat-box-main {
   display: block;
   flex-direction: column;
-  height: 32em;
+  /* height: 32em; */
   grid-area: chat_main;
   overflow-y: scroll;
   overflow-x: hidden;
