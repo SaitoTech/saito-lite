@@ -369,7 +369,7 @@ class Poker extends GameTemplate {
 
     if (this.game.state.big_blind_player < 1) { this.game.state.big_blind_player = this.game.players.length; }
     if (this.game.state.small_blind_player < 1) { this.game.state.small_blind_player = this.game.players.length; }
-    //if (this.game.state.small_blind_player < 1) { this.game.state.small_blind_player = this.game.players.length; }
+    if (this.game.state.button_player < 1) { this.game.state.button_player = this.game.players.length; }
 
     this.game.state.flipped = 0;
     this.game.state.plays_since_last_raise = -1;
