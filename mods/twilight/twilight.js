@@ -197,8 +197,8 @@ class Twilight extends GameTemplate {
     `
       <div class="game-overlay-menu" id="game-overlay-menu">
         <div>Headline Statistics</div>
-	<table class="headline-statistics-table">
-	  <tr>
+	<table class="headline-statistics-table" style="width:80vw">
+	  <atr>
 	    <th></th>
 	    <th>US</th>
 	    <th>USSR</th>
@@ -395,11 +395,11 @@ class Twilight extends GameTemplate {
        <ul>
           <li class="menu-item" id="english">English</li>
           <li class="menu-item" id="chinese">简体中文</li>
-          <li class="menu-item" id="text">Text Cards</li>
-          <li class="menu-item" id="graphics">Graphical Cards</li>
-          <li class="menu-item" id="enable_observer_mode">Enable Observer Mode</li>
+          <li class="menu-item" id="enable_observer_mode">Observer Mode</li>
         </ul>
       </div>`;
+//          <li class="menu-item" id="text">Text Cards</li>
+//          <li class="menu-item" id="graphics">Graphical Cards</li>
 
     twilight_self.overlay.showOverlay(twilight_self.app, twilight_self, user_message);
 
@@ -4941,7 +4941,7 @@ this.startClock();
         // Flower Power
         //
         if (twilight_self.game.state.events.flowerpower == 1) {
-          if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+          if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
             if (player === "us") {
               twilight_self.addMove("notify\tFlower Power triggered by "+card);
               twilight_self.addMove("vp\tussr\t2\t1");
@@ -4962,7 +4962,7 @@ this.startClock();
         // Flower Power
         //
         if (twilight_self.game.state.events.flowerpower == 1) {
-          if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+          if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
             if (player === "us") {
               twilight_self.addMove("notify\tFlower Power triggered by "+card);
               twilight_self.addMove("vp\tussr\t2\t1");
@@ -11834,15 +11834,9 @@ console.log("card: " + card);
 
               if (player == "us") {
                 twilight_self.addMove("milops\tus\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.endTurn();
               } else {
                 twilight_self.addMove("milops\tussr\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.endTurn();
               }
 
@@ -11884,15 +11878,9 @@ console.log("card: " + card);
 
               if (player == "us") {
                 twilight_self.addMove("milops\tus\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.endTurn();
               } else {
                 twilight_self.addMove("milops\tussr\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.endTurn();
               }
             }

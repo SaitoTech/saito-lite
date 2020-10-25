@@ -493,7 +493,7 @@ input#game_board_sizer {
 .cardbox-menu {
   position: relative;
   left: 0%;
-  top: 100%;
+  top: 0%;
   text-align: center;
   font-size: 2em;
   font-weight: bold;
@@ -514,7 +514,7 @@ input#game_board_sizer {
   top: 50%;
   transform: translate(-50%, -50%); 
   text-align: center;
-  font-size: 2.9em;
+  font-size: 2.1em;
   color: white;
   z-index: 9999999999;
   cursor: pointer;
@@ -615,14 +615,24 @@ input#game_board_sizer {
 
 
 
-
-
-
-
-
-
-
 @media screen and (orientation:landscape) and (max-width: 700px) {
+
+  .hud-long .hud-body {
+    height: 120px;
+    min-height: 120px;
+    width: 550px;
+    min-width: 550px;
+    max-width: 550px;
+  }
+
+  .hud-long .hud-header {
+    visibility: hidden;
+  }
+
+  .status {
+    height: 100px;
+  }
+
 
   /****************/
   /**** MODE 1 ****/
@@ -660,6 +670,24 @@ input#game_board_sizer {
   .game-menu {
     height: 25px;
   }
+  .game-menu ul .game-menu-icon {
+    width: 20px;
+    margin-left: 10px;
+    font-size: 1em;
+  }
+  .game-menu ul li {
+    line-height: 24px;
+    font-size: 12px;
+    height: 25px;
+    width: 70px;
+  }
+
+  .game-overlay-menu {
+    max-width: 80vw;
+    max-height: 80vh;
+    overflow-y: scroll;
+  }
+
   .hud-controls {
     font-size: 12px;
   }
@@ -689,7 +717,6 @@ input#game_board_sizer {
   }
 
 
-
   /****************/
   /**** MODE 2 ****/
   /****************/
@@ -703,6 +730,14 @@ input#game_board_sizer {
 
 
 
+  /****************/
+  /**** MODE 2 ****/
+  /****************/
+  .game-cardbox {
+    width: calc(48vh * 0.72110);
+    height: 48vh;
+    top: 10vh;
+  }
 
 }
 /***

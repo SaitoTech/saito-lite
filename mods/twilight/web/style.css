@@ -16,12 +16,14 @@
 .cardbox-card {
   background-image: url("/twilight/img/Base.svg");
   background-size: cover;
-  width:30vw;
-  height: 42vw;
+  width:24vw;
+  height: 34vw;
 }
 .game-cardbox {
-  width: 30wv;
-  height: 42vh;
+  width: 24vw;
+  height: 34vw;
+  left: 38%;
+  top: 15vh;
 }
 .hud-cardbox {
   position: absolute;
@@ -480,6 +482,24 @@ body {
 
 
 
+.cardbox-hud {
+  display: block; 
+  width: calc(9em * 0.811);
+  height: 10em;
+  background-image: url(/twilight/img/Base.svg);
+  background-size: cover;
+  z-index: 2;
+  transform: translate(0%, 0%);
+  justify-self: center;
+}
+.cardimg-hud {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
 
 
 
@@ -515,6 +535,18 @@ body {
     height: 4em;
   }
 
+  .game-menu {
+    width: 330px;
+  }
+  .game-cardbox {
+    width: 155px;
+    height: 215px;
+  }
+  .cardbox-card {
+    width: 155px;
+    height: 215px;
+  }
+
   .status {
     height: 100px;
   }
@@ -527,6 +559,7 @@ body {
  }
 
 }
+
 
 /* color tweaks */
 

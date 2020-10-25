@@ -55,15 +55,9 @@
 
               if (player == "us") {
                 twilight_self.addMove("milops\tus\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.endTurn();
               } else {
                 twilight_self.addMove("milops\tussr\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.endTurn();
               }
 
@@ -105,15 +99,9 @@
 
               if (player == "us") {
                 twilight_self.addMove("milops\tus\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.endTurn();
               } else {
                 twilight_self.addMove("milops\tussr\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.endTurn();
               }
             }
