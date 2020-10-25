@@ -22,31 +22,12 @@ class Tutorial1 extends ModTemplate {
     return this;
   }
 
-  onConfirmation(blk, tx, conf, app) {
-    console.log("Tutorial1 onConfirmation")
-    // let txmsg = tx.returnMessage();
-    // if (conf == 0) {
-    //   if (txmsg.request == "chat message") {
-    //     if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
-    //     this.receiveMessage(app, tx);
-    //   }
-    // }
-
-  }
-
   initialize(app) {
-    console.log("Tutorial1 initialize");
     super.initialize(app);
     this.balance = app.wallet.returnBalance();
   }
 
-  respondTo(type) {
-    console.log("Tutorial1 respondTo");
-    return null;
-  }
-
   initializeHTML(app) {
-    console.log("Tutorial1 initializeHTML");
     this.render(app);
   }
 
@@ -84,14 +65,6 @@ class Tutorial1 extends ModTemplate {
     });
     super.webServer(app, expressapp, express);
   };
-  attachEvents(app) {
-    console.log("Tutorial1 attachEvents")
-  }
-
-  async installModule(app) {
-    console.log("Tutorial1 installModule")
-  }
-
 }
 
 module.exports = Tutorial1;

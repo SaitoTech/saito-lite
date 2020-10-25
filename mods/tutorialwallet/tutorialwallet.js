@@ -1,3 +1,5 @@
+var saito = require('../../lib/saito/saito');
+const Big = require('big.js');
 var ModTemplate = require('../../lib/templates/modtemplate');
 
 class TutorialWallet extends ModTemplate {
@@ -51,7 +53,6 @@ class TutorialWallet extends ModTemplate {
     this.description     = "A Basic Wallet to demonstrate the basic Saito Module APIs";
     this.categories      = "Tutorials";
     this.balance         = null;
-
     // Will cause initialize to always be run
     this.alwaysRunThese = [this.initialize];
 
@@ -60,14 +61,6 @@ class TutorialWallet extends ModTemplate {
 
   onConfirmation(blk, tx, conf, app) {
     console.log("****** tutorial wallet onConfirmation")
-    // let txmsg = tx.returnMessage();
-    // if (conf == 0) {
-    //   if (txmsg.request == "chat message") {
-    //     if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
-    //     this.receiveMessage(app, tx);
-    //   }
-    // }
-
   }
 
   initialize(app) {
@@ -88,10 +81,8 @@ class TutorialWallet extends ModTemplate {
 
   render(app) {
     console.log("****** tutorial wallet render")
-    let html = "<div id='helloworld'>Hello World!</div>";
-    if(this.balance) {
-      html += "<div>" + this.balance + "</div>";
-    }
+
+    let html = this.makeHTML();
     document.querySelector("#content .main").innerHTML = html;
     document.getElementById("helloworld").onclick = (event) => {
        fetch(`/gimme?pubkey=${app.wallet.returnPublicKey()}`).then(response => {
@@ -100,14 +91,16 @@ class TutorialWallet extends ModTemplate {
          console.log(err)
        });
     };
+    document.getElementById("sendbutton").onclick = (event) => {
+      let toAddress = document.getElementById("toaddress").value;
+      console.log("toAddress")
+      console.log(toAddress);
+      this.sendSaito(toAddress, 10, 2);
+    };
   }
 
   updateBalance(app) {
-    console.log("tutorial wallet update balance...")
-    console.log(this.browser_active)
     if(this.browser_active == 1) {
-      console.log("tutorial wallet wtf...")
-      console.log(this.browser_active)
       this.balance = app.wallet.returnBalance();
       this.render(app);
     }
@@ -124,13 +117,48 @@ class TutorialWallet extends ModTemplate {
       return;
     });
     super.webServer(app, expressapp, express);
-  };
+  }
+
   attachEvents(app) {
     console.log("tutWallet attachEvents")
   }
 
   async installModule(app) {
     console.log("tutWallet installModule")
+  }
+
+  makeHTML() {
+    let html =  "";
+    html += "<div id='wallet'>";
+    html += " <div id='helloworld'>Hello World!</div>";
+    if(this.balance) {
+    html += " <div>" + this.balance + "</div>";
+    }
+    html += " <div>";
+    html += "  <input id='toaddress' type='text'/>";
+    html += "  <input id='sendbutton' type='button' value='send'/>";
+    html += " </div>"
+    html += "</div>"
+    return html;
+  }
+  sendSaito(toAddress, amount, fee = 2){
+    try {
+      let total_fees = Big(amount + fee);
+      let newtx = new saito.transaction();
+      newtx.transaction.from = this.app.wallet.returnAdequateInputs(total_fees.toString());
+      // add change input
+      var total_from_amt = newtx.transaction.from
+        .map(slip => slip.amt)
+        .reduce((a, b) => Big(a).plus(Big(b)), 0);
+      // generate change address(es)
+      var change_amount = total_from_amt.minus(total_fees);
+      newtx.transaction.to = this.app.wallet.createToSlips(10, toAddress, amount, change_amount);
+      newtx = this.app.wallet.signTransaction(newtx);
+      this.app.network.propagateTransaction(newtx);
+    } catch(err){
+      console.log("error sending transaction");
+      console.log(err);
+    }
   }
 
   // loadFromArchives(app, tx) {
@@ -181,9 +209,6 @@ class TutorialWallet extends ModTemplate {
   // sendEvent(eventname, data) {
   //   console.log("tutWallet sendEvent")
   // }
-
-
-
 }
 
 module.exports = TutorialWallet;
