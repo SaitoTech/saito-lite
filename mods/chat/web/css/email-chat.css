@@ -509,7 +509,7 @@ p {
 
 /*** Hide in Landscape Mode Small Screens ***/
 
-@media screen and (orientation:landscape) and (max-height: 700px) {
+@media screen and (orientation:landscape) and (max-height: 600px) {
   .chat-manager {
       display: none;
   }
