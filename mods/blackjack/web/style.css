@@ -245,12 +245,12 @@ body {
 }
 
 .chat-box {
-  height: unset !important;
+  max-height: 30vh !important;
 }
 
-.chat-box-main {
+/* .chat-box-main {
   max-height: 20vh !important;
-}
+} */
 
 .hud {
   display: none;
