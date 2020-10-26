@@ -1,10 +1,10 @@
 var ModTemplate = require('../../lib/templates/modtemplate');
 
-class Tutorial1 extends ModTemplate {
+class Tutorial2 extends ModTemplate {
 
   constructor(app) {
     super(app);
-    this.name            = "Tutorial1";
+    this.name            = "Tutorial2";
     this.description     = "A Basic Wallet to demonstrate the basic Saito Module APIs";
     this.categories      = "Tutorials";
     this.default_html    = 1;
@@ -28,12 +28,34 @@ class Tutorial1 extends ModTemplate {
       html += "<div>" + this.balance + "</div>";
     }
     document.querySelector("#content .main").innerHTML = html;
+    document.getElementById("helloworld").onclick = (event) => {
+       fetch(`/gimme?pubkey=${app.wallet.returnPublicKey()}`).then(response => {
+         console.log(response);
+       }).catch((err) => {
+         console.log(err)
+       });
+    };
   }
 
   updateBalance(app) {
-    this.balance = app.wallet.returnBalance();
-    this.render(app);
+    if(app.BROWSER) {
+      this.balance = app.wallet.returnBalance();
+      this.render(app);
+    }
   }
+
+  webServer(app, expressapp, express) {
+    expressapp.get('/gimme2', function (req, res) {
+      app.modules.requestInterfaces("send-reward").forEach((itnerface, i) => {
+        itnerface.makePayout(req.query.pubkey, 10000);
+        res.type('application/json');
+        res.status(200);
+        res.send({status: "ok"});
+      });
+      return;
+    });
+    super.webServer(app, expressapp, express);
+  };
 }
 function addCss() {
   var style = document.createElement("style");
@@ -46,4 +68,4 @@ function addCss() {
   `;
   document.head.appendChild(style);
 }
-module.exports = Tutorial1;
+module.exports = Tutorial2;

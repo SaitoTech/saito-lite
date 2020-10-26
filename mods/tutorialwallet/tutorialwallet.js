@@ -4,44 +4,6 @@ var ModTemplate = require('../../lib/templates/modtemplate');
 
 class TutorialWallet extends ModTemplate {
 
-//////////////////// MODULE API: //////////////////////////
-//
-// async installModule(app)
-// async initialize(app)
-// initializeHTML(app) }
-// attachEvents(app)
-// loadFromArchives(app, tx)
-// implementsKeys(request)
-// async onConfirmation(blk, tx, confnum, app)
-// onNewBlock(blk, lc)
-// onChainReorganization(block_id, block_hash, lc, pos)
-// onConnectionUnstable(app)
-// onConnectionStable(app)
-// onWalletReset()
-// onPeerHandshakeComplete(app, peer)
-// onConnectionStable(app, peer)
-// onConnectionUnstable(app, peer)
-// shouldAffixCallbackToModule(modname)
-// webServer(app, expressapp, express)
-// updateBalance(app)
-// updateIdentifier(app)
-// updateBlockchainSync(app, current, target)
-// respondTo(request_type = "")
-// receiveEvent(eventname, data)
-// sendEvent(eventname, data)
-// async handlePeerRequest(app, message, peer, mycallback = null)
-// async sendPeerDatabaseRequest(dbname, tablename, select = "", where = "", peer = null, mycallback = null)
-// isSQLSafe (sql)
-// async sendPeerDatabaseRequestWithFilter(modname="", sql="", success_callback=null, peerfilter=null)
-// async sendPeerRequestWithFilter(msg_callback=null, success_callback=null, peerfilter=null)
-// async sendPeerDatabaseRequestRaw(db, sql, mycallback = null)
-// returnSlug()
-// returnLink()
-// returnServices()
-// handleUrlParams(urlParams)}
-// showAlert()
-//
-
   constructor(app) {
     console.log("tutWallet constructor")
     super(app);
@@ -49,24 +11,37 @@ class TutorialWallet extends ModTemplate {
     // This name will form the "slug" in the url of your module. If
     // name.toLowerCase matches the filename Saito's Lite Client will
     // detect this in the browser and fire your initializeHTML() method.
+    //
+    // If any transactions are found which have tx.msg.module = slug, Saito
+    // will send these to your module via onConfirmation
+    //
+
     this.name            = "TutorialWallet";
     this.description     = "A Basic Wallet to demonstrate the basic Saito Module APIs";
     this.categories      = "Tutorials";
     this.balance         = null;
+    this.serverkey       = null;
     // Will cause initialize to always be run
-    this.alwaysRunThese = [this.initialize];
+    // this.alwaysRunThese = [this.initialize];
 
     return this;
   }
 
-  onConfirmation(blk, tx, conf, app) {
-    console.log("****** tutorial wallet onConfirmation")
-  }
-
   initialize(app) {
     console.log("****** tutorial wallet initialize");
+    if (this.app.BROWSER == 0) { return; };
     super.initialize(app);
     this.balance = app.wallet.returnBalance();
+    fetch("/getserverkey").then(response => {
+      response.json().then(json => {
+        console.log(json.pubkey);
+        this.serverkey = json.pubkey;
+        this.render(app);
+      });
+
+    }).catch((err) => {
+      console.log(err)
+    });
   }
 
   respondTo(type) {
@@ -77,14 +52,15 @@ class TutorialWallet extends ModTemplate {
   initializeHTML(app) {
     console.log("****** tutorial wallet initializeHTML");
     this.render(app);
+    addCss();
   }
 
   render(app) {
     console.log("****** tutorial wallet render")
 
-    let html = this.makeHTML();
+    let html = makeHTML(this);
     document.querySelector("#content .main").innerHTML = html;
-    document.getElementById("helloworld").onclick = (event) => {
+    document.getElementById("getpaid").onclick = (event) => {
        fetch(`/gimme?pubkey=${app.wallet.returnPublicKey()}`).then(response => {
          console.log(response);
        }).catch((err) => {
@@ -93,9 +69,11 @@ class TutorialWallet extends ModTemplate {
     };
     document.getElementById("sendbutton").onclick = (event) => {
       let toAddress = document.getElementById("toaddress").value;
+      let amount = document.getElementById("amount").value;
       console.log("toAddress")
       console.log(toAddress);
-      this.sendSaito(toAddress, 10, 2);
+      console.log(amount);
+      this.sendSaito(toAddress, amount, 2);
     };
   }
 
@@ -116,6 +94,14 @@ class TutorialWallet extends ModTemplate {
       });
       return;
     });
+    expressapp.get("/getserverkey", function(req, res){
+      res.type('application/json');
+      //res.setHeader('Content-type', 'text/html');
+      res.status(200);
+      res.write(JSON.stringify({pubkey: app.wallet.returnPublicKey()}));
+      res.end();
+      //res.send();
+    });
     super.webServer(app, expressapp, express);
   }
 
@@ -127,20 +113,7 @@ class TutorialWallet extends ModTemplate {
     console.log("tutWallet installModule")
   }
 
-  makeHTML() {
-    let html =  "";
-    html += "<div id='wallet'>";
-    html += " <div id='helloworld'>Hello World!</div>";
-    if(this.balance) {
-    html += " <div>" + this.balance + "</div>";
-    }
-    html += " <div>";
-    html += "  <input id='toaddress' type='text'/>";
-    html += "  <input id='sendbutton' type='button' value='send'/>";
-    html += " </div>"
-    html += "</div>"
-    return html;
-  }
+
   sendSaito(toAddress, amount, fee = 2){
     try {
       let total_fees = Big(amount + fee);
@@ -209,6 +182,58 @@ class TutorialWallet extends ModTemplate {
   // sendEvent(eventname, data) {
   //   console.log("tutWallet sendEvent")
   // }
+
 }
 
+function addCss() {
+  var style = document.createElement("style");
+  style.innerHTML = `
+    #content .main {
+
+    }
+    #greeting {
+      font-size: 24px;
+    }
+    #wallet {
+      width: 50%;
+      background-color: #FF6030;
+      margin: auto;
+      text-align: center;
+    }
+    #toaddress {
+      width: 90%;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    #amount {
+      width: 40%;
+    }
+    #wallet * {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  `;
+  document.head.appendChild(style);
+}
+function makeHTML(mod) {
+  let html =  "";
+  html += "<div id='wallet'>";
+  html += " <div id='greeting'>My Saito Wallet</div>";
+  html += " <input id='getpaid' type='button' value='Get Some Coins!'/>";
+  if(mod.balance) {
+  html += " <div>" + mod.balance + "</div>";
+  }
+  html += " <div>to:</div>";
+  if(mod.serverkey) {
+  html += " <input id='toaddress' type='text' value='" + mod.serverkey + "'/>";
+  } else {
+  html += " <input id='toaddress' type='text'/>";
+  }
+  html += " <div>amount:</div>";
+  html += " <input id='amount' type='text'/>";
+  html += " <input id='sendbutton' type='button' value='send'/>";
+
+  html += "</div>"
+  return html;
+}
 module.exports = TutorialWallet;
