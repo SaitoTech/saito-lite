@@ -13,11 +13,13 @@ class Tutorial2 extends ModTemplate {
   }
 
   initialize(app) {
+    if (this.app.BROWSER == 0) { return; };
     super.initialize(app);
     this.balance = app.wallet.returnBalance();
   }
 
   initializeHTML(app) {
+    if (this.app.BROWSER == 0) { return; };
     this.render(app);
     addCss();
   }
@@ -38,6 +40,7 @@ class Tutorial2 extends ModTemplate {
   }
 
   updateBalance(app) {
+    if (this.app.BROWSER == 0) { return; };
     if(app.BROWSER) {
       this.balance = app.wallet.returnBalance();
       this.render(app);

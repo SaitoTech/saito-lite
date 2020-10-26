@@ -69,21 +69,22 @@ class TutorialWallet extends ModTemplate {
     };
     document.getElementById("sendbutton").onclick = (event) => {
       let toAddress = document.getElementById("toaddress").value;
-      let amount = document.getElementById("amount").value;
-      console.log("toAddress")
-      console.log(toAddress);
-      console.log(amount);
+      let amount = parseInt(document.getElementById("amount").value, 10);
       this.sendSaito(toAddress, amount, 2);
     };
   }
 
   updateBalance(app) {
+    console.log("****** tutorial updateBalance");
     if(this.browser_active == 1) {
       this.balance = app.wallet.returnBalance();
       this.render(app);
     }
   }
 
+  onConfirmation(app) {
+    console.log("****** tutorial walletonConfirmation");
+  }
   webServer(app, expressapp, express) {
     expressapp.get('/gimme', function (req, res) {
       app.modules.requestInterfaces("send-reward").forEach((itnerface, i) => {
@@ -119,6 +120,8 @@ class TutorialWallet extends ModTemplate {
       let total_fees = Big(amount + fee);
       let newtx = new saito.transaction();
       newtx.transaction.from = this.app.wallet.returnAdequateInputs(total_fees.toString());
+      console.log("newtx.transaction.from");
+      console.log(newtx.transaction.from);
       // add change input
       var total_from_amt = newtx.transaction.from
         .map(slip => slip.amt)
@@ -219,8 +222,8 @@ function makeHTML(mod) {
   let html =  "";
   html += "<div id='wallet'>";
   html += " <div id='greeting'>My Saito Wallet</div>";
-  html += " <input id='getpaid' type='button' value='Get Some Coins!'/>";
   if(mod.balance) {
+  html += " <div>balance:</div>";
   html += " <div>" + mod.balance + "</div>";
   }
   html += " <div>to:</div>";
@@ -232,7 +235,7 @@ function makeHTML(mod) {
   html += " <div>amount:</div>";
   html += " <input id='amount' type='text'/>";
   html += " <input id='sendbutton' type='button' value='send'/>";
-
+  html += " <input id='getpaid' type='button' value='Get Some Coins!'/>";
   html += "</div>"
   return html;
 }

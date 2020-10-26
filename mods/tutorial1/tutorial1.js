@@ -13,16 +13,21 @@ class Tutorial1 extends ModTemplate {
   }
 
   initialize(app) {
+    console.log("Tutorial1 intialize");
+    if (this.app.BROWSER == 0) { return; };
     super.initialize(app);
     this.balance = app.wallet.returnBalance();
   }
 
   initializeHTML(app) {
+    if (this.app.BROWSER == 0) { return; };
+    console.log("Tutorial1 initializeHTML");
     this.render(app);
     addCss();
   }
 
   render(app) {
+    console.log("Tutorial1 render");
     let html = "<div id='helloworld'>Hello World!</div>";
     if(this.balance) {
       html += "<div>" + this.balance + "</div>";
@@ -31,6 +36,8 @@ class Tutorial1 extends ModTemplate {
   }
 
   updateBalance(app) {
+    if (this.app.BROWSER == 0) { return; };
+    console.log("Tutorial1 updateBalance");
     this.balance = app.wallet.returnBalance();
     this.render(app);
   }
