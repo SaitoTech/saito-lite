@@ -33,8 +33,8 @@ Saito Mystery Button: <input type="button" id="tutorial03_btn" class="tutorial03
     try {
       document.querySelector('.main').addEventListener('click', function() {
         let address = app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey());
-	if (address == "") { alert("You have not registered an address!"); }
-	else { alert("You have registered the address: " + address); }
+        if (address == "") { alert("You have not registered an address!"); }
+        else { alert("You have registered the address: " + address); }
       });
     } catch (err) {}
   }

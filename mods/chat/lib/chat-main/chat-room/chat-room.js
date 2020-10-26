@@ -1,7 +1,6 @@
 const ChatRoomTemplate = require('./chat-room.template');
 const ChatRoomHeaderTemplate = require('./chat-room-header.template');
 const ChatRoomFooterTemplate = require('./chat-room-footer.template');
-const ChatRoomMessageTemplate = require('./chat-room-message.template');
 
 const ChatMessageContainerTemplate = require('./chat-message-container.template');
 
@@ -14,30 +13,46 @@ module.exports = ChatRoom = {
     group: {},
     room_message_blocks: [],
     render(app, data) {
-        this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.id}`);
+      this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.id}`);
 
-        let { id, name, messages } = this.group[0];
-        let main = document.querySelector('.main');
-        let message_input = document.querySelector('#input.chat-room-input');
-        let msg = message_input == null ? '' : message_input.value;
+      let { id, name, messages } = this.group[0];
+      let main = document.querySelector('.main');
+      let message_input = document.querySelector('#input.chat-room-input');
+      let msg = message_input == null ? '' : message_input.value;
 
-        main.innerHTML = ChatRoomTemplate(id);
-        document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(name);
-        document.querySelector('.chat-room-footer').innerHTML = ChatRoomFooterTemplate(msg);
 
-        this.room_message_blocks = this.createRoomMessageBlocks(app, data, messages);
+      main.innerHTML = ChatRoomTemplate(id);
+      document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(name);
+      document.querySelector('.chat-room-footer').innerHTML = ChatRoomFooterTemplate(msg);
+      this.room_message_blocks = this.createRoomMessageBlocks(app, data, messages);
+      this.room_message_blocks.forEach(message_block => {
+          message_block = Object.assign({}, message_block, {
+              type : app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
+          });
+          this.appendMessage(message_block, data);
+      });
 
-        this.room_message_blocks.forEach(message_block => {
-            message_block = Object.assign({}, message_block, {
-                type : app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
-            });
-            document.querySelector('.chat-room-content').innerHTML += ChatMessageContainerTemplate(message_block, data);
-        });
-
-        this.scrollToBottom();
-        this.attachEvents(app, data);
+      this.scrollToBottom();
+      this.attachEvents(app, data);
     },
-
+    appendMessage(message_block, data) {
+      // Need to clean any duplicate messages...
+      // The source of this problem is unknown, should be resolved elsewhere,
+      // but in the meantime simply remove any duplicate messages here.
+      // message_block.messages is some kind of hybrid object+array javascript
+      // monster so messages.splice() did not work, instead copy messages to
+      // a clean array and reassign that to message_block.messages
+      let cleanedMessages = [];
+      let messageIDs = {};
+      message_block.messages.forEach((message, i) => {
+        if(!messageIDs[message_block.messages[i].sig]) {
+          messageIDs[message.sig] = 1;
+          cleanedMessages.push(message);
+        }
+      });
+      message_block.messages = cleanedMessages;
+      document.querySelector('.chat-room-content').innerHTML += ChatMessageContainerTemplate(message_block, data);
+    },
     attachEvents(app, data) {
         let fired = false;
 
@@ -158,8 +173,7 @@ module.exports = ChatRoom = {
                 messages: [...last_message_block.messages, message],
                 type : app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others'
             });
-            document.querySelector('.chat-room-content')
-                .innerHTML += ChatMessageContainerTemplate(last_message_block, data);
+            this.appendMessage(last_message_block, data);
         } else {
             let new_message_block = Object.assign({}, {
                 publickey: message.publickey,
@@ -173,8 +187,7 @@ module.exports = ChatRoom = {
                 messages: [message]
             });
             this.room_message_blocks.push(new_message_block);
-            document.querySelector('.chat-room-content')
-                .innerHTML += ChatMessageContainerTemplate(new_message_block, data);
+            this.appendMessage(new_message_block, data);
         }
     },
 
