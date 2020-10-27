@@ -5,6 +5,7 @@ module.exports = EmailDetailTemplate = (app, data) => {
 
   let from  	= selected_email.transaction.from[0].add;
   let to  	= selected_email.transaction.to[0].add;
+  let amt  	= selected_email.transaction.to[0].amt;
   let ts  	= selected_email.transaction.ts;
   let message	= selected_email.returnMessage();
   let subject   = message.title;
@@ -30,6 +31,10 @@ module.exports = EmailDetailTemplate = (app, data) => {
         <div class="email-detail-address-row">
           <p>TO:</p>
           <p class="email-detail-address-id">${to}</p>
+        </div>
+        <div class="email-detail-address-row">
+          <p>Amt:</p>
+          <p class="email-detail-ammount">${s2Number(amt)}</p>
         </div>
       </div>
       <div class="email-detail-message">
