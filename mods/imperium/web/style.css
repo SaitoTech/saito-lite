@@ -23,6 +23,18 @@
 }
 
 
+.cardbox-card img {
+  position: absolute;
+}
+.strategy_card_overlay {
+  position: absolute;
+  color: white;
+  margin-top: 50px;
+  padding: 20px;
+  padding-right: 50px;
+  font-size: 1.2em;
+}
+
 .game-menu {
   width: 550px;
   min-width: 550px;
@@ -47,22 +59,24 @@
 }
 
 .overlay_agendacard {
-  height: 380px;
-  width: 250px;
+  width: calc(42vh * 0.72110);
+  height: 42vh;
   color: white;
   padding: 10px;
   background-size: cover;
   margin: 5px 10px;
+  font-size:0.7em;
 }
 
 .overlay_agendatitle {
-  font-size: 1em;
+  font-size: 0.9em;
+  min-height: 7vh;
 }
 
 .overlay_agendacontent {
-  margin-top: 40px;
-  font-size: 0.75em;
-  line-height: 1.4em;
+  margin-top: 10px;
+  font-size: 0.8em;
+  line-height: 1.3em;
 }
 
 .objectives-overlay-container {
@@ -71,10 +85,12 @@
   overflow-y: scroll;
 }
 .objectives_card_name {
+  min-height: 60px;
   color: white;
   font-size: 1em;
   padding: 15px 5px 10px;
   background: #0008;
+  position: relative;
 }
 
 .objectives_card_content {
@@ -82,18 +98,18 @@
   font-size: 0.7em;
   padding: 10px;
   position: relative;
-  top: 33%;
-  transform: translateY(-50%);
+  background: #0006;
 }
 
 .objectives_overlay_objectives_card {
-  width: 20vw;
-  height: 45vh;
+  width: calc(42vh * 0.72110);
+  height: 42vh;
   margin: 10px;
   background-size: cover;
   max-width: 300px;
   max-height: 450px;
   float: left;
+  font-size: 0.8em;
 }
 
 
@@ -107,9 +123,11 @@
 .overlay_strategy_card_box {
   position:relative;
   float: left;
-  width: 20vw;
-  height: 45vh;
+  width: calc(42vh * 0.72110);
   display: block;
+  height: 42vh;
+  margin-bottom: 20px;
+  font-size: 0.8em;
 }
 .overlay_strategy_card_box_img {
   position: absolute;
@@ -118,7 +136,7 @@
   position: relative;
   color: white;
   padding-left: 15px;
-  padding-top: 70px;
+  padding-top: 45px;
   top: 0px;
   width: 80%;
   font-family: 'orbitron-light', helvetica, sans-serif;
@@ -314,27 +332,27 @@
   color: var(--p6);
 }
 
-.p1 .bc, .p1 .bc::before {
+.p1 .bc, .p1 .bc::before, .bc1 {
   border-color: var(--p1);
 }
 
-.p2 .bc, .p2 .bc::before {
+.p2 .bc, .p2 .bc::before, .bc2 {
   border-color: var(--p2);
 }
 
-.p3 .bc, .p3 .bc::before {
+.p3 .bc, .p3 .bc::before, .bc3 {
   border-color: var(--p3);
 }
 
-.p4 .bc, .p4 .bc::before {
+.p4 .bc, .p4 .bc::before, .bc4 {
   border-color: var(--p4);
 }
 
-.p5 .bc, .p5 .bc::before {
+.p5 .bc, .p5 .bc::before, .bc5 {
   border-color: var(--p5);
 }
 
-.p6 .bc, .p6 .bc::before {
+.p6 .bc, .p6 .bc::before, .bc6 {
   border-color: var(--p6);
 }
 
