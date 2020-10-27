@@ -4698,6 +4698,9 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
         let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
 
+
+console.log("Z Index: " + JSON.stringify(z[z_index]));
+
 	return z[z_index].groundCombatEvent(this, player, sector, planet_idx);
 
       }
