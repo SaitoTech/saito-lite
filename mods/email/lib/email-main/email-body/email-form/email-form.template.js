@@ -10,21 +10,24 @@ module.exports = EmailFormTemplate = () => {
     <div>
       <input id="email-to-address" class="email-address" type="text" placeholder="Address">
     </div>
-    <div class="hidden amount-label">Send Saito:</div>
-    <div class="hidden amount-value">
+    <div class="amount-label tip">
+      SAITO:
+      <div class="tiptext" style="font-family: 'visuelt-light';"> Optional.</div>
+    </div>
+    <div class="amount-value">
       <input class="email-amount" type="number" placeholder="0.0">
     </div>  
   </div>
   
   <div id="email-form-options" class="tip">
     <!--i class="icon-med fas fa-paperclip"></i>
-    <i class="icon-med fas fa-image"></i-->
+    <i class="icon-med fas fa-image"></i>
     <i class="icon-small fas fa-dollar-sign"></i>
     <div class="tiptext tip-left">
       <div>
         <i class="icon-small fas fa-dollar-sign"></i>Send Saito
       </div>
-    </div>
+    </div-->
   </div>
   <div>
       <input class="email-title" type="text" placeholder="Subject">

@@ -13,12 +13,14 @@ class Email extends ModTemplate {
     super(app);
 
     this.name = "Email";
+    this.appname = "Wallet";
     this.description = "Essential wallet, messaging platform and extensible control panel for Saito applications";
     this.categories = "Core Messaging Admin Productivity Utilities";
+    this.app_path = "wallet";
 
     this.chat = null;
     this.events = ['chat-render-request'];
-    this.icon_fa = "fas fa-envelope";
+    this.icon_fa = "fas fa-wallet";
 
     this.emails = {};
     this.emails.inbox = [];

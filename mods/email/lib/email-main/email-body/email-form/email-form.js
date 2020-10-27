@@ -47,11 +47,11 @@ module.exports = EmailForm = {
         document.querySelector('.email-submit')
             .addEventListener('click', (e) => this.sendEmailTransaction(app, data));
 
-        document.querySelector('.fa-dollar-sign')
+        /*document.querySelector('.fa-dollar-sign')
             .addEventListener('click', (e) => {
             document.querySelector('.amount-value').toggleClass("hidden");
             document.querySelector('.amount-label').toggleClass("hidden");
-        });
+        });*/
     },
 
 

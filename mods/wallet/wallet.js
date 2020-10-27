@@ -52,7 +52,7 @@ class Wallet extends ModTemplate {
 
   respondTo(type) {
 
-    if (type == 'email') {
+    if (type == 'wallet') {
       return {};
     }
 

@@ -198,7 +198,7 @@ button:active, .button:active, i:active {
   transform: scale(.96);
 }
 
-button:hover, .button:hover {
+button:hover, .button:hover, button:focus, .button:focus {
   text-shadow: #ffffff 1px 0;
   background: var(--saito-red);
   color: #ffffff;
