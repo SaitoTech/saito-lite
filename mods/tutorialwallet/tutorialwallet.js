@@ -23,6 +23,12 @@ class TutorialWallet extends ModTemplate {
     this.serverkey       = null;
     // Will cause initialize to always be run
     // this.alwaysRunThese = [this.initialize];
+    //
+    // this.initialize = ModTemplate.onlyInBrowser(app, this.initialize.bind(this));
+    // this.initializeHTML = ModTemplate.onlyInBrowser(app, this.initializeHTML.bind(this));
+    // this.updateBalance = ModTemplate.onlyInBrowser(app, this.updateBalance.bind(this));
+    // this.render = ModTemplate.onlyInBrowser(app, this.render.bind(this));
+    // this.attachEvents = ModTemplate.onlyInBrowser(app, this.attachEvents.bind(this)); // deprecated
 
     return this;
   }
@@ -119,15 +125,15 @@ class TutorialWallet extends ModTemplate {
     try {
       let total_fees = Big(amount + fee);
       let newtx = new saito.transaction();
+      // an array of unspent inputs with enough saito for total_fees.
       newtx.transaction.from = this.app.wallet.returnAdequateInputs(total_fees.toString());
-      console.log("newtx.transaction.from");
-      console.log(newtx.transaction.from);
-      // add change input
+      // compute total amount available from slips
       var total_from_amt = newtx.transaction.from
         .map(slip => slip.amt)
         .reduce((a, b) => Big(a).plus(Big(b)), 0);
-      // generate change address(es)
       var change_amount = total_from_amt.minus(total_fees);
+      // Send 10 slips as a courtesy(saito users may will want to )
+      // Should we count the
       newtx.transaction.to = this.app.wallet.createToSlips(10, toAddress, amount, change_amount);
       newtx = this.app.wallet.signTransaction(newtx);
       this.app.network.propagateTransaction(newtx);
