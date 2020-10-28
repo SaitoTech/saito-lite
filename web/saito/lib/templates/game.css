@@ -98,8 +98,9 @@ body {
   top: 13vh;
   height: 55vh;
   width: calc(55vh * 0.72110);
-  -webkit-filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
-  filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
+  border: 0px;
+/*  -webkit-filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8); */
+/*  filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8); */
   z-index: -10; /* start behind the board *
 }
 
