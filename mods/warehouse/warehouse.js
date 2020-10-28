@@ -7,7 +7,6 @@ class Warehouse extends ModTemplate {
     this.name = "Warehouse";
     this.description = "Block data warehouse for the Saito blockchain. Not suitable for lite-clients";
     this.categories = "Utilities Dev";
-    this.alwaysRun = 1;
   }
 
   onConfirmation(blk, tx, conf, app) {

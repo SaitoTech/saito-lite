@@ -36,7 +36,6 @@ class Encrypt extends ModTemplate {
 
     this.description = "A Diffie-Hellman encryption tool for Saito";
     this.categories  = "Crpyto Utilities";
-    this.alwaysRun = 1;
     return this;
   }
 

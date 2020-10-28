@@ -17,7 +17,6 @@ class Hospital extends ModTemplate {
 
     this.description = "A hospital management framework for Saito";
     this.categories  = "Admin Healthcare Productivity";
-    this.alwaysRun = 1;
     return this;
   }
 

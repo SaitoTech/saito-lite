@@ -9,7 +9,6 @@ class Design extends ModTemplate {
     this.name           = "Design";
     this.description    = "Visual exploration and reference guide to Saito's standard design elements";
     this.categories     = "Dev Utilities"
-    this.alwaysRun = 1;
     return this;
   }
 

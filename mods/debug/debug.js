@@ -15,7 +15,6 @@ class Debug extends ModTemplate {
 
     this.description = "A debug configuration dump for Saito";
     this.categories  = "Dev Utilities";
-    this.alwaysRun = 1;
     return this;
   }
 

@@ -23,7 +23,6 @@ class Chat extends ChatCore {
     this.icon_fa = "far fa-comments";
 
     this.categories  = "Messaging Communication";
-    this.alwaysRun = 1;
 
     this.mods = [];
 

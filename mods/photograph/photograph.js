@@ -14,7 +14,6 @@ class Photograph extends ModTemplate {
     this.name = "Photograph";
     this.description = "Take a photo and upload it to the Saito Blockchain";
     this.categories = "Utitlities";
-    this.alwaysRun = 1;
     this.video = null;
     this.canvas = null;
     this.canvas_context = null;

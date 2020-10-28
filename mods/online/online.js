@@ -16,7 +16,6 @@ class online extends ModTemplate {
     this.name = "online";
     this.description = "Simple Addresses Online Counter";
     this.categories = "Utilities";
-    this.alwaysRun = 1;
     this.affix_callbacks_to = [];
 
     this.rankings = {};

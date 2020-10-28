@@ -16,7 +16,6 @@ class Observer extends ModTemplate {
     this.name = "Observer";
     this.description = "Adds sidebar to Arcade allowing non-players to view ongoing games";
     this.categories = "Games Entertainment";
-    this.alwaysRun = 1;
     this.affix_callbacks_to = [];
     this.mods = [];
   }

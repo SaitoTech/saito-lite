@@ -14,7 +14,6 @@ class Website extends ModTemplate {
 
     this.description = "Module that creates a root website on a Saito node.";
     this.categories  = "Utilities Communications";
-    this.alwaysRun = 1;
 
     return this;
   }

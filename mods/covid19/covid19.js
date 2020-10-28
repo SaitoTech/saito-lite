@@ -32,7 +32,6 @@ class Covid19 extends DBModTemplate {
     this.name = "Covid19";
     this.description = "Open Source PPE Procurement Platform";
     this.categories = "Health NGO";
-    this.alwaysRun = 1;
     this.icon_fa = "fas fa-shipping-cart";
 
     this.db_tables.push("products JOIN suppliers");

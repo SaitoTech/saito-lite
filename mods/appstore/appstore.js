@@ -17,7 +17,6 @@ class AppStore extends ModTemplate {
     this.name          = "AppStore";
     this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
     this.categories    = "Utilities Dev";
-    this.alwaysRun = 1;
     this.featured_apps = ['Email', 'Testing', 'Escrow', 'Design'];
   }
 

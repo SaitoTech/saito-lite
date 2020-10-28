@@ -36,7 +36,6 @@ class Arcade extends ModTemplate {
 
     this.description = "A place to find, play and manage games!";
     this.categories = "Games Utilities";
-    this.alwaysRun = 1;
     this.addrController = new AddressController(app);
 
   }
