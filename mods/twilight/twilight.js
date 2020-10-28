@@ -559,6 +559,29 @@ console.log(err);
         game_mod.log.toggleLog();
       }
     });
+    let initial_confirm_moves = "Newbie Mode"; 
+    if (this.dont_show_confirm == 1) {
+      let initial_confirm_moves = "Expert Mode"; 
+    }
+    this.menu.addSubMenuOption("game-game", {
+      text : initial_confirm_moves,
+      id : "game-confirm",
+      class : "game-confirm",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	if (game_mod.dont_show_confirm == 1) {
+	  game_mod.dont_show_confirm = 0;
+          game_mod.saveGamePreference('dont_show_confirm', 0);
+	  window.location.reload();	
+	  return;
+	} else {
+	  game_mod.dont_show_confirm = 1;
+          game_mod.saveGamePreference('dont_show_confirm', 1);
+	  window.location.reload();	
+	  return;
+	}
+      }
+    });
     this.menu.addSubMenuOption("game-game", {
       text : "Stats",
       id : "game-stats",
@@ -746,6 +769,7 @@ initializeGame(game_id) {
       }
       if (this.app.options.gameprefs.dont_show_confirm == 1) {
         this.dont_show_confirm = 1;
+	this.confirm_moves = 0;
       }
     }
   }
@@ -4080,6 +4104,7 @@ this.startClock();
 
     let twilight_self = this;
 
+
     // cannot pick china card or UN intervention
     if (card == "china") {
       twilght_self.displayModal("Invalid Headline", "You cannot headline China"); return; }
@@ -4138,6 +4163,11 @@ this.startClock();
     this.startClock();
 
     let twilight_self = this;
+
+    //
+    // if the clock is going, ask to confirm moves
+    //
+    twilight_self.confirm_this_move = 1;
 
     //
     // END OF HISTORY
@@ -4836,9 +4866,13 @@ this.startClock();
               <li class="card" id="playevent">play for ops</li>
               <li class="card" id="pickagain">pick again</li>
               </ul>
-              <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't ask me to confirm moves...
-	      </div>
               `;
+	    if (twilight_self.dont_show_confirm == 1) {
+              fr += `<input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't ask me to confirm moves...`;
+	    }
+	    fr += `
+	      </div>
+	    `;
 
             twilight_self.updateStatus(fr);
             twilight_self.addShowCardEvents(function(action) {
@@ -10430,6 +10464,7 @@ alert("end of history!");
     if (card == "campdavid") {
 
       this.game.state.events.campdavid = 1;
+      this.game.state.back_button_cancelled = 1;
 
       this.updateLog("US gets 1 VP for Camp David Accords");
 

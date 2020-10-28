@@ -6,6 +6,7 @@
     if (card == "campdavid") {
 
       this.game.state.events.campdavid = 1;
+      this.game.state.back_button_cancelled = 1;
 
       this.updateLog("US gets 1 VP for Camp David Accords");
 
