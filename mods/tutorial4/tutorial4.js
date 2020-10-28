@@ -31,7 +31,6 @@ class Tutorial4 extends ModTemplate {
   // }
   
   initialize(app) {
-    console.log("******** Tutorial4 initialize ********")
     this.readTxId();
     super.initialize(app); 
     //this.write(app);
@@ -39,7 +38,6 @@ class Tutorial4 extends ModTemplate {
   }
 
   initializeHTML(app) {
-    console.log("tut 4 initializeHTML");
     this.render(app);
     addCss();
   }

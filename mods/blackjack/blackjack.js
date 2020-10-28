@@ -29,7 +29,6 @@ class Blackjack extends GameTemplate {
 
     this.updateHTML = "";
 
-    this.alwaysRun = 1;
     return this;
 
   }
