@@ -1,3 +1,4 @@
+*~
 .vscode
 .vscode/*
 
@@ -62,5 +63,6 @@ mods/registry/web/addresses.txt
 mods/reddit/web
 mods/reddit/web/*
 mods/mailrelay/lib/template-credentials.js
+mods/tutorial4/web/txid
 
 extras/shashmap/build

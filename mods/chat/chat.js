@@ -24,7 +24,6 @@ class Chat extends ChatCore {
 
     this.categories  = "Messaging Communication";
 
-
     this.mods = [];
 
     // defined in parent

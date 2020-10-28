@@ -15,7 +15,6 @@ class Pandemic extends GameTemplate {
     this.name            = "Pandemic";
     this.description     = `Pandemic is a cooperative multiplayer board game in which players works together to try and fend off a global epidemic.`;
     this.categories      = "Arcade Games Entertainment";
-
     this.useHUD          = 1;
     this.addHUDMenu      = ['Cards'];
     this.maxPlayers      = 4;

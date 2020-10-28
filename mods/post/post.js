@@ -19,7 +19,6 @@ class Post extends ModTemplate {
     this.icon_fa = "fa fa-map-signs";
     this.description = `Post or reply to short messages.`;
     this.categories = "Social Messaging";
-
   }
 
   returnServices() {

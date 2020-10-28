@@ -23,7 +23,6 @@ class Registry extends ModTemplate {
 
     this.description = "A naming service for Saito Addresses";
     this.categories  = "Utilities Communications";
-
     return this;
   }
 

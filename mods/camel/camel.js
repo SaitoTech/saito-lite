@@ -23,7 +23,6 @@ class Camel extends ModTemplate {
     this.categories = "SCM";
     this.mode = "product";
 
-
     Object.assign(Camel.prototype, utils)
 
   }

@@ -26,7 +26,6 @@ class QRScanner extends ModTemplate {
     this.name = "QRScanner";
     this.description = "Adds QRCode scanning functionality to Saito";
     this.categories = "Core";
-
     this.video = null;
     this.canvas = null;
     this.canvas_context = null;
