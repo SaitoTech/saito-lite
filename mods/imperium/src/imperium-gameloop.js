@@ -1648,6 +1648,9 @@ console.log(JSON.stringify(this.game.state.choices));
         } else {
 	  this.unloadUnitFromShip(player, sector, source_idx, "infantry");
         }
+
+        this.game.queue.splice(qe, 1);
+        return 1;
       }
 
       if (mv[0] === "load_infantry") {
@@ -1665,6 +1668,8 @@ console.log(JSON.stringify(this.game.state.choices));
           this.loadUnitOntoShip(player, sector, source_idx, "infantry");
 	}
 
+        this.game.queue.splice(qe, 1);
+        return 1;
       }
 
 

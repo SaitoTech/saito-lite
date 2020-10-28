@@ -4418,6 +4418,7 @@ playerSelectInfantryToLand(sector) {
 
     let id = $(this).attr("id");
     let assigned_planets = [];
+    let infantry_available_for_reassignment = 0;
     for (let i = 0; i < sys.p.length; i++) {
       assigned_planets.push(0);
     }
@@ -4428,15 +4429,17 @@ playerSelectInfantryToLand(sector) {
     if (id == "confirm") {
 
       for (let i = 0; i < space_infantry.length; i++) {
-	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"ship"+"\t"+space_infantry[i]);
+	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"ship"+"\t"+space_infantry[i].ship_idx);
+        infantry_available_for_reassignment++;
       }
       for (let i = 0; i < ground_infantry.length; i++) {
-	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+ground_infantry[i]);
+	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+ground_infantry[i].planet_idx);
+        infantry_available_for_reassignment++;
       }
 
-      let html = '<div class="status-message" id="status-message">Reassign Infantry to Planets: <ul>';
+      let html = '<div class="sf-readable" id="status-message">Reassign Infantry to Planets: <ul>';
           for (let i = 0; i < sys.p.length; i++) {
-  	    html += `<li class="option textchoice" id="${i}">${sys.s[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i] }</span></li>`;
+  	    html += `<li class="option textchoice" id="${i}">${sys.p[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i].planet_idx }</span></li>`;
           }
           html += '<div id="confirm" class="option">click here to move</div>';
           html += '</ul'; 
@@ -4453,12 +4456,14 @@ playerSelectInfantryToLand(sector) {
 	  imperium_self.endTurn();
         }
 
-        let divname = "infantry_on_"+id;
-        let v = parseInt($(divname).html());
-        v++;
-	$(divname).html((v));
-
-	imperium_self.addMove("load_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+id);
+        if (infantry_available_for_reassignment > 0)  {
+          infantry_available_for_reassignment--;
+          let divname = ".infantry_on_"+id;
+          let v = parseInt($(divname).html());
+          v++;
+	  $(divname).html((v));
+	  imperium_self.addMove("load_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+id);
+	}
 
       });
     };

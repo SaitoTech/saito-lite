@@ -156,12 +156,14 @@
   };
   unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
-    for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
-      if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
-        let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
-        sys.p[planet_idx].units[player-1].splice(i, 1);
-        this.saveSystemAndPlanets(sys);
-        return JSON.stringify(unit_to_remove);
+    if (sys.p.length > planet_idx) {
+      for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
+        if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
+          let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
+          sys.p[planet_idx].units[player-1].splice(i, 1);
+          this.saveSystemAndPlanets(sys);
+          return JSON.stringify(unit_to_remove);
+        }
       }
     }
     return "";
