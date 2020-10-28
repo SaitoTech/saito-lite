@@ -284,15 +284,6 @@ class Rewards extends ModTemplate {
   }
 
   async onConfirmation(blk, tx, conf, app) {
-    // could be written as:
-    // this.onlyInBrowser(()=>{
-    //   let txmsg = tx.returnMessage();
-    //   let rewards_self = app.modules.returnModule("Rewards");
-    // 
-    //   if (txmsg.module != rewards_self.name) { return; }
-    // 
-    //   this.renderBadges();
-    // }).bind(this);
     if (app.BROWSER == 1) {
       //
       // only handle our stuff
@@ -304,19 +295,6 @@ class Rewards extends ModTemplate {
 
       this.renderBadges();
     }
-    // could be written as:
-    // this.onlyOnServer(()=>{
-      // if (conf == 0) {
-      //   if (tx.transaction.type == 0) {
-      //     if (this.app.BROWSER == 1) { return; }
-      //     this.updateUsers(tx);
-      //   }
-      // 
-      //   if (tx.returnMessage().origin == "Registry") {
-      //     this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registryPayout);
-      //   }
-      // }
-    // }).bind(this);
     if (app.wallet.returnPublicKey() != this.rewards_publickey) { return; } 
 
     if (conf == 0) {
@@ -591,7 +569,6 @@ class Rewards extends ModTemplate {
   }
 
   makePayout(address, amount, event = "") {
-    console.log("makePayout")
     if (this.app.wallet.returnPublicKey() != this.rewards_publickey) { return; }
     //send the user a little something.
 
