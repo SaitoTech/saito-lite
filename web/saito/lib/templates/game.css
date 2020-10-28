@@ -91,10 +91,10 @@ body {
 }
 .game-cardbox {
   position:absolute;
-  left: 50%;
-  top: 17vh;
-  height: auto;
-  width: 30vw;
+  left: 35%;
+  top: 13vh;
+  height: 55vh;
+  width: calc(55vh * 0.72110);
   -webkit-filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
   filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
   z-index: -10; // start behind the board
