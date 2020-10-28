@@ -770,6 +770,9 @@ initializeGame(game_id) {
       if (this.app.options.gameprefs.dont_show_confirm == 1) {
         this.dont_show_confirm = 1;
 	this.confirm_moves = 0;
+      } else {
+	this.dont_show_confirm = 0;
+	this.confirm_moves = 1;
       }
     }
   }
