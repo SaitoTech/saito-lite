@@ -15,7 +15,6 @@ class Appointments extends ModTemplate {
 
     this.description = "Appointment booking helper module.";
     this.categories  = "Admin Productivity Utilities";
-
     return this;
 
   }

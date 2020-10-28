@@ -16,8 +16,7 @@ class Hospital extends ModTemplate {
     this.admin_pkey     = app.wallet.returnPublicKey();
 
     this.description = "A hospital management framework for Saito";
-    this.categories  = "Admin Healthcare Productivity";    
-
+    this.categories  = "Admin Healthcare Productivity";
     return this;
   }
 

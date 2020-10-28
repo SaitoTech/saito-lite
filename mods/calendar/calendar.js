@@ -15,7 +15,6 @@ class Calendar extends ModTemplate {
     this.categories     = "Utilities";
 
     this.appointments   = [];
-
     return this;
   }
 

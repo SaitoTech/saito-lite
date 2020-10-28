@@ -12,7 +12,6 @@ class Escrow extends ModTemplate {
     this.name           = "Escrow";
     this.description    = "BETA - a simple module with integrated Escrow services in non-Saito crypto channels";
     this.categories     = "Utility Finance";
-
     this.publickey      = app.wallet.returnPublicKey();
 
     this.escrow         = {};

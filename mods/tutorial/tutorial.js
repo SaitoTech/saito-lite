@@ -33,12 +33,9 @@ class Tutorial extends ModTemplate {
 
     this.app = app;
     this.name = "Tutorial";
-    this.description = "Adds easy-to-use modal popups to the Saito system to help users get started creating accounts and earning tokens";
-    this.categories = "Core Dev Utilities";
 
     this.description = "User introduction and help system.";
     this.categories = "UX Users";
-
 
     this.username_registered = 0;
 

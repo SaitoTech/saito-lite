@@ -17,8 +17,7 @@ class Settings extends ModTemplate {
 
     this.description = "User settings module.";
     this.categories  = "Admin Users";
-
-
+    
 //    if (app.modules.returnModule("Email") != null) { this.link = "/email?module=settings"; }
 
     return this;

@@ -13,7 +13,6 @@ class Archive extends ModTemplate {
 
     this.description = "A tool for storing transactions for asynchronous retreival.";
     this.categories  = "Utilities";
-
   }
 
 

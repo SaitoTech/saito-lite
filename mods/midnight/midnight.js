@@ -15,7 +15,6 @@ class Midnight extends GameTemplate {
     this.slug            = "midnight";
     this.description     = "Experimental Interactive Fiction demo";
     this.categories      = "Arcade Games Entertainment";
-
     this.maxPlayers      = 1;
     this.minPlayers      = 1;
     this.type            = "Fiction";
