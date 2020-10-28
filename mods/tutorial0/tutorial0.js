@@ -19,13 +19,12 @@ class Tutorial0 extends ModTemplate {
   }
 
   initialize(app) {
-    if (this.app.BROWSER == 0) { return; };
+    if (this.app.BROWSER == 0 || !this.browser_active) { return; };
     super.initialize(app);
   }
 
   initializeHTML(app) {
-    if (this.app.BROWSER == 0) { return; };
-    console.log("tut0 initializeHTML")
+    if (this.app.BROWSER == 0 || !this.browser_active) { return; };
     document.querySelector("#content .main").innerHTML = "<div id='greeting'>Hello World!</div>"
     addCss();
   }

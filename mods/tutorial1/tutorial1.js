@@ -9,35 +9,29 @@ class Tutorial1 extends ModTemplate {
     this.categories      = "Tutorials";
     this.default_html    = 1;
     this.balance         = null;
+    // this.appify(this);
+    this.initialize = this.onlyOnActiveBrowser(this.initialize.bind(this));
+    this.initializeHTML = this.onlyOnActiveBrowser(this.initializeHTML.bind(this));
+    this.updateBalance = this.onlyOnActiveBrowser(this.updateBalance.bind(this));
+    this.render = this.onlyOnActiveBrowser(this.render.bind(this));
     return this;
   }
 
   initialize(app) {
-    console.log("Tutorial1 intialize");
-    if (this.app.BROWSER == 0) { return; };
     super.initialize(app);
     this.balance = app.wallet.returnBalance();
   }
 
   initializeHTML(app) {
-    if (this.app.BROWSER == 0) { return; };
-    console.log("Tutorial1 initializeHTML");
     this.render(app);
     addCss();
   }
 
   render(app) {
-    console.log("Tutorial1 render");
-    let html = "<div id='helloworld'>Hello World!</div>";
-    if(this.balance) {
-      html += "<div>" + this.balance + "</div>";
-    }
-    document.querySelector("#content .main").innerHTML = html;
+    document.querySelector("#content .main").innerHTML = makeHTML(this);
   }
 
   updateBalance(app) {
-    if (this.app.BROWSER == 0) { return; };
-    console.log("Tutorial1 updateBalance");
     this.balance = app.wallet.returnBalance();
     this.render(app);
   }
@@ -47,10 +41,27 @@ function addCss() {
   style.innerHTML = `
     #greeting {
       font-size: 24px;
+    }
+    #wallet {
+      width: 50%;
+      background-color: #FF6030;
+      margin: auto;
       text-align: center;
-      margin: 10px 10px 10px 10px;
+      margin-top: 5px;
+      margin-bottom: 5px;
     }
   `;
   document.head.appendChild(style);
+}
+function makeHTML(mod) {
+  let html =  "";
+  html += "<div id='wallet'>";
+  html += " <div id='greeting'>My Saito Wallet</div>";
+  if(mod.balance) {
+  html += " <div>balance:</div>";
+  html += " <div>" + mod.balance + "</div>";
+  }
+  html += "</div>"
+  return html;
 }
 module.exports = Tutorial1;

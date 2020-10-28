@@ -9,28 +9,23 @@ class Tutorial2 extends ModTemplate {
     this.categories      = "Tutorials";
     this.default_html    = 1;
     this.balance         = null;
+    this.appify(this);
     return this;
   }
 
   initialize(app) {
-    if (this.app.BROWSER == 0) { return; };
     super.initialize(app);
     this.balance = app.wallet.returnBalance();
   }
 
   initializeHTML(app) {
-    if (this.app.BROWSER == 0) { return; };
     this.render(app);
     addCss();
   }
 
   render(app) {
-    let html = "<div id='helloworld'>Hello World!</div>";
-    if(this.balance) {
-      html += "<div>" + this.balance + "</div>";
-    }
-    document.querySelector("#content .main").innerHTML = html;
-    document.getElementById("helloworld").onclick = (event) => {
+    document.querySelector("#content .main").innerHTML = makeHTML(this);
+    document.getElementById("getpaid").onclick = (event) => {
        fetch(`/gimme?pubkey=${app.wallet.returnPublicKey()}`).then(response => {
          console.log(response);
        }).catch((err) => {
@@ -40,15 +35,14 @@ class Tutorial2 extends ModTemplate {
   }
 
   updateBalance(app) {
-    if (this.app.BROWSER == 0) { return; };
-    if(app.BROWSER) {
-      this.balance = app.wallet.returnBalance();
-      this.render(app);
-    }
+    this.balance = app.wallet.returnBalance();
+    this.render(app);
   }
 
   webServer(app, expressapp, express) {
-    expressapp.get('/gimme2', function (req, res) {
+    super.webServer(app, expressapp, express);
+    expressapp.get('/gimme', function (req, res) {
+      // "interface" is a reserved word :P
       app.modules.requestInterfaces("send-reward").forEach((itnerface, i) => {
         itnerface.makePayout(req.query.pubkey, 10000);
         res.type('application/json');
@@ -57,7 +51,6 @@ class Tutorial2 extends ModTemplate {
       });
       return;
     });
-    super.webServer(app, expressapp, express);
   };
 }
 function addCss() {
@@ -65,10 +58,28 @@ function addCss() {
   style.innerHTML = `
     #greeting {
       font-size: 24px;
+    }
+    #wallet {
+      width: 50%;
+      background-color: #FF6030;
+      margin: auto;
       text-align: center;
-      margin: 10px 10px 10px 10px;
+      margin-top: 5px;
+      margin-bottom: 5px;
     }
   `;
   document.head.appendChild(style);
+}
+function makeHTML(mod) {
+  let html =  "";
+  html += "<div id='wallet'>";
+  html += " <div id='greeting'>My Saito Wallet</div>";
+  if(mod.balance) {
+  html += " <div>balance:</div>";
+  html += " <div>" + mod.balance + "</div>";
+  }
+  html += " <input id='getpaid' type='button' value='Get Some Coins!'/>";
+  html += "</div>"
+  return html;
 }
 module.exports = Tutorial2;
