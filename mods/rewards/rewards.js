@@ -18,7 +18,7 @@ class Rewards extends ModTemplate {
     this.categories = "Core Utilities Finance";
     this.initial = 10;
     this.payoutRatio = 0.75;
-    this.rewards_publickey = "kq9dTGFpXQmfT7QTQ5LwE7MzszthC2PTcZq6yMpPHj7U";
+    this.rewards_publickey = "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
 
 
     this.backupPayout = 50;
