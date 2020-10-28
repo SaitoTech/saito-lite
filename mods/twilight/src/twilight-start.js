@@ -7596,8 +7596,6 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
   calculateScoring(region, mouseover_preview=0) {
 
-console.log(region + " -- " + mouseover_preview);
-
     var scoring = {
       us: {total: 0, bg: 0, vp: 0},
       ussr: {total: 0, bg: 0, vp: 0},
@@ -7663,15 +7661,11 @@ console.log(region + " -- " + mouseover_preview);
 	  }
 	}
         let me_scoring_range = { presence: 3, domination: 5, control: 7 };
-console.log("X");
         // pseudo function to calculate control
         scoring = this.calculateControlledBattlegroundCountries(scoring, me_bg_countries);
-console.log("1 + " + JSON.stringify(scoring));
         scoring.us.total = scoring.us.bg;
         scoring.ussr.total = scoring.ussr.bg;
-console.log("2 + " + JSON.stringify(scoring));
         scoring = this.calculateControlledCountries(scoring, me_countries);
-console.log("3 + " + JSON.stringify(scoring));
 
         //
         // Shuttle Diplomacy
@@ -7692,10 +7686,7 @@ console.log("3 + " + JSON.stringify(scoring));
 
           }
         }
-console.log("BG C: " + JSON.stringify(me_bg_countries));
         scoring = this.determineRegionVictor(scoring, me_scoring_range, me_bg_countries.length);
-
-console.log("HERE SC: " + JSON.stringify(scoring));
 
         // scoring transform
         break;
@@ -7817,7 +7808,11 @@ console.log("HERE SC: " + JSON.stringify(scoring));
 	    if (this.countries[i].bg === 1) {
 	      as_bg_countries.push(i);
 	    } else {
-	      as_countries.push(i);
+              if (this.game.state.events.formosan == 1 && i === "taiwan") {
+                if (this.isControlled("us", "taiwan") == 1) { as_bg_countries.push(i); } else { as_countries.push(i); }
+              } else {
+	        as_countries.push(i);
+	      }
 	    }
 	  }
         };
@@ -7825,23 +7820,14 @@ console.log("HERE SC: " + JSON.stringify(scoring));
 
         scoring = this.calculateControlledBattlegroundCountries(scoring, as_bg_countries);
 
-        if (this.game.state.events.formosan == 1) {
-          if (this.isControlled("us", "taiwan") == 1) { scoring.us.bg++; }
-        }
+console.log("HEE: " + JSON.stringify(scoring));
 
         scoring.us.total = scoring.us.bg;
         scoring.ussr.total = scoring.ussr.bg;
 
+console.log("SCORING: " + JSON.stringify(scoring));
+
         scoring = this.calculateControlledCountries(scoring, as_countries);
-        scoring = this.determineRegionVictor(scoring, as_scoring_range, as_bg_countries.length);
-
-
-        if (this.game.state.events.formosan == 0) {
-          if (this.isControlled("us", "taiwan") == 1) { scoring.us.total++; }
-          if (this.isControlled("ussr", "taiwan") == 1) { scoring.ussr.total++; }
-        } else {
-          if (this.isControlled("ussr", "taiwan") == 1) { scoring.ussr.total++; }
-        }
 
         //
         // Shuttle Diplomacy
@@ -7862,27 +7848,9 @@ console.log("HERE SC: " + JSON.stringify(scoring));
           }
 	}
 
-        if (this.game.state.events.formosan == 1) {
-          if (scoring.us.bg == 7 && scoring.us.total > scoring.ussr.total) { scoring.us.vp = 9; }
-          if (scoring.us.bg == 6 && scoring.us.total > scoring.ussr.total && this.isControlled("us", "taiwan") == 0) { scoring.us.vp = 9; }
-          if (scoring.ussr.bg == 6 && scoring.ussr.total > scoring.us.total) { vp_ussr = 9; }
-        } else {
-          if (scoring.us.bg == 6 && scoring.us.total > scoring.ussr.total) { scoring.us.vp = 9; }
-          if (scoring.ussr.bg == 6 && scoring.ussr.total > scoring.us.total) { vp_ussr = 9; }
-        }
+        scoring = this.determineRegionVictor(scoring, as_scoring_range, as_bg_countries.length);
 
 	
-        if (scoring.us.vp >= 9 && scoring.us.total > scoring.ussr.total) {}
-        else if (scoring.us.bg > scoring.ussr.bg && scoring.us.total > scoring.us.bg && scoring.us.total > scoring.ussr.total) { scoring.us.vp = as_scoring_range.domination; }
-        else if (scoring.us.total > 0) { scoring.us.vp = as_scoring_range.presence; }
-
-        if (scoring.ussr.bg == 6 && scoring.ussr.total > scoring.us.total) { scoring.ussr.vp = 9; }
-        else if (scoring.ussr.bg > scoring.us.bg && scoring.ussr.total > scoring.ussr.bg && scoring.ussr.total > scoring.us.total) { scoring.ussr.vp = as_scoring_range.domination; }
-        else if (scoring.ussr.total > 0) { scoring.ussr.vp = as_scoring_range.presence; }
-
-        scoring.us.vp = scoring.us.vp + scoring.us.bg;
-        scoring.ussr.vp = scoring.ussr.vp + scoring.ussr.bg;
-
         //
         // neighbouring countries
         //

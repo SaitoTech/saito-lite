@@ -8936,7 +8936,8 @@ try {
 
 
 
-
+    // runs before init then issues, so try/catch
+    try {
     let main_menu_added = 0;
     let community_menu_added = 0;
     for (let i = 0; i < this.app.modules.mods.length; i++) {
@@ -8983,7 +8984,7 @@ try {
             let data = {};
             let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
             let gid = this.app.crypto.hash(members.join('_'));
-            let name = "Player "+(ii+1);
+            let name = imperium_self.returnFaction((ii+1));
             let chatmod = this.app.modules.mods[i];
 
             this.menu.addSubMenuOption("game-chat", {
@@ -9009,7 +9010,7 @@ try {
         }
       }
     }
-
+    } catch (err) {}
 
 
     this.menu.addMenuIcon({
@@ -9779,12 +9780,14 @@ handleSystemsMenuItem() {
   };
   unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
-    for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
-      if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
-        let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
-        sys.p[planet_idx].units[player-1].splice(i, 1);
-        this.saveSystemAndPlanets(sys);
-        return JSON.stringify(unit_to_remove);
+    if (sys.p.length > planet_idx) {
+      for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
+        if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
+          let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
+          sys.p[planet_idx].units[player-1].splice(i, 1);
+          this.saveSystemAndPlanets(sys);
+          return JSON.stringify(unit_to_remove);
+        }
       }
     }
     return "";
@@ -9803,9 +9806,9 @@ handleSystemsMenuItem() {
   };
   unloadUnitFromShip(player, sector, ship_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storage.length + " UNITS");
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
       if (sys.s.units[player - 1][ship_idx].storage[i].type === unitname) {
+        let unitjson = JSON.stringify(sys.s.units[player-1][ship_idx].storage[i]);
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return unitjson;
@@ -11727,8 +11730,13 @@ console.log(JSON.stringify(this.game.state.choices));
   	let player       = parseInt(mv[1]);
   	let vp 		 = parseInt(mv[2]);
   	let objective    = mv[3];
-  
-  	this.updateLog(this.returnFaction(player)+" scores "+objective+" ("+vp+" VP)");
+        let objective_name = objective;
+
+        if (this.secret_objectives[objective] != null) { objective_name = this.secret_objectives[objective].name; }
+        if (this.stage_i_objectives[objective] != null) { objective_name = this.stage_i_objectives[objective].name; }
+        if (this.stage_ii_ojectives[objective] != null) { objective_name = this.stage_ii_objectives[objective].name; }
+
+  	this.updateLog(this.returnFaction(player)+" scores "+objective_name+" ("+vp+" VP)");
 
   	this.game.players_info[player-1].vp += vp;
   	this.game.players_info[player-1].objectives_scored.push(objective);
@@ -17601,7 +17609,7 @@ playerContinueTurn(player, sector) {
       //
       // check the fleet supply and NOTIFY users if they are about to surpass it
       //
-      let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(imperium - self.game.player, sector);
+      let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(imperium_self.game.player, sector);
       if (fleet_supply_in_sector <= 1) {
         let notice = "You have no spare fleet supply in this sector. Do you still wish to produce more ships?";
         if (fleet_supply_in_sector == 1) {
@@ -19831,15 +19839,13 @@ playerSelectInfantryToLand(sector) {
   let ground_infantry = [];
 
   for (let i = 0; i < sys.s.units[this.game.player-1].length; i++) {
-    space_infantry.push(0);
     let unit = sys.s.units[this.game.player-1][i];
     if (imperium_self.returnInfantryInUnit(unit) > 0) { 
-    html += `<li class="option textchoice" id="addinfantry_s_${i}">remove infantry from ${unit.name} - <span class="add_infantry_remaining_s_${i}">${imperium_self.returnInfantryInUnit(unit)}</span></li>`;
+      html += `<li class="option textchoice" id="addinfantry_s_${i}">remove infantry from ${unit.name} - <span class="add_infantry_remaining_s_${i}">${imperium_self.returnInfantryInUnit(unit)}</span></li>`;
     }
   }
 
   for (let p = 0; p < sys.p.length; p++) {
-    ground_infantry.push(0);
     let planet = sys.p[p];
     if (imperium_self.returnInfantryOnPlanet(planet) > 0) { 
       html += `<li class="option textchoice" id="addinfantry_p_${p}">remove infantry from ${planet.name} - <span class="add_infantry_remaining_p_${p}">${imperium_self.returnInfantryOnPlanet(planet)}</span></li>`;
@@ -19870,23 +19876,29 @@ playerSelectInfantryToLand(sector) {
     if (id == "confirm") {
 
       for (let i = 0; i < space_infantry.length; i++) {
-	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"ship"+"\t"+space_infantry[i]);
+	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"ship"+"\t"+space_infantry[i].ship_idx);
         infantry_available_for_reassignment++;
       }
       for (let i = 0; i < ground_infantry.length; i++) {
-	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+ground_infantry[i]);
+	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+ground_infantry[i].planet_idx);
         infantry_available_for_reassignment++;
       }
 
       let html = '<div class="sf-readable" id="status-message">Reassign Infantry to Planets: <ul>';
           for (let i = 0; i < sys.p.length; i++) {
-  	    html += `<li class="option textchoice" id="${i}">${sys.p[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i] }</span></li>`;
+	    let infantry_remaining_on_planet = imperium_self.returnInfantryOnPlanet(sys.p[i]);
+	    for (let ii = 0; ii < ground_infantry.length; ii++) {
+	      if (ground_infantry[ii].planet_idx == i) { infantry_remaining_on_planet--; }
+	    }
+  	    html += `<li class="option textchoice" id="${i}">${sys.p[i].name} - <span class="infantry_on_${i}">${infantry_remaining_on_planet}</span></li>`;
           }
           html += '<div id="confirm" class="option">click here to move</div>';
           html += '</ul'; 
           html += '</div>';
 
       imperium_self.updateStatus(html);
+
+alert("infantry avail: " + infantry_available_for_reassignment);
 
       $('.option').off();
       $('.option').on('click', function () {

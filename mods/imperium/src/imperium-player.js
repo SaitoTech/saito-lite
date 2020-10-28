@@ -2160,7 +2160,7 @@ playerContinueTurn(player, sector) {
       //
       // check the fleet supply and NOTIFY users if they are about to surpass it
       //
-      let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(imperium - self.game.player, sector);
+      let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(imperium_self.game.player, sector);
       if (fleet_supply_in_sector <= 1) {
         let notice = "You have no spare fleet supply in this sector. Do you still wish to produce more ships?";
         if (fleet_supply_in_sector == 1) {
@@ -4390,15 +4390,13 @@ playerSelectInfantryToLand(sector) {
   let ground_infantry = [];
 
   for (let i = 0; i < sys.s.units[this.game.player-1].length; i++) {
-    space_infantry.push(0);
     let unit = sys.s.units[this.game.player-1][i];
     if (imperium_self.returnInfantryInUnit(unit) > 0) { 
-    html += `<li class="option textchoice" id="addinfantry_s_${i}">remove infantry from ${unit.name} - <span class="add_infantry_remaining_s_${i}">${imperium_self.returnInfantryInUnit(unit)}</span></li>`;
+      html += `<li class="option textchoice" id="addinfantry_s_${i}">remove infantry from ${unit.name} - <span class="add_infantry_remaining_s_${i}">${imperium_self.returnInfantryInUnit(unit)}</span></li>`;
     }
   }
 
   for (let p = 0; p < sys.p.length; p++) {
-    ground_infantry.push(0);
     let planet = sys.p[p];
     if (imperium_self.returnInfantryOnPlanet(planet) > 0) { 
       html += `<li class="option textchoice" id="addinfantry_p_${p}">remove infantry from ${planet.name} - <span class="add_infantry_remaining_p_${p}">${imperium_self.returnInfantryOnPlanet(planet)}</span></li>`;
@@ -4439,13 +4437,19 @@ playerSelectInfantryToLand(sector) {
 
       let html = '<div class="sf-readable" id="status-message">Reassign Infantry to Planets: <ul>';
           for (let i = 0; i < sys.p.length; i++) {
-  	    html += `<li class="option textchoice" id="${i}">${sys.p[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i].planet_idx }</span></li>`;
+	    let infantry_remaining_on_planet = imperium_self.returnInfantryOnPlanet(sys.p[i]);
+	    for (let ii = 0; ii < ground_infantry.length; ii++) {
+	      if (ground_infantry[ii].planet_idx == i) { infantry_remaining_on_planet--; }
+	    }
+  	    html += `<li class="option textchoice" id="${i}">${sys.p[i].name} - <span class="infantry_on_${i}">${infantry_remaining_on_planet}</span></li>`;
           }
           html += '<div id="confirm" class="option">click here to move</div>';
           html += '</ul'; 
           html += '</div>';
 
       imperium_self.updateStatus(html);
+
+alert("infantry avail: " + infantry_available_for_reassignment);
 
       $('.option').off();
       $('.option').on('click', function () {

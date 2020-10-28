@@ -1371,8 +1371,13 @@ console.log(JSON.stringify(this.game.state.choices));
   	let player       = parseInt(mv[1]);
   	let vp 		 = parseInt(mv[2]);
   	let objective    = mv[3];
-  
-  	this.updateLog(this.returnFaction(player)+" scores "+objective+" ("+vp+" VP)");
+        let objective_name = objective;
+
+        if (this.secret_objectives[objective] != null) { objective_name = this.secret_objectives[objective].name; }
+        if (this.stage_i_objectives[objective] != null) { objective_name = this.stage_i_objectives[objective].name; }
+        if (this.stage_ii_ojectives[objective] != null) { objective_name = this.stage_ii_objectives[objective].name; }
+
+  	this.updateLog(this.returnFaction(player)+" scores "+objective_name+" ("+vp+" VP)");
 
   	this.game.players_info[player-1].vp += vp;
   	this.game.players_info[player-1].objectives_scored.push(objective);

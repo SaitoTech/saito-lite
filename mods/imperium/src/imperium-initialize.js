@@ -128,7 +128,8 @@ try {
 
 
 
-
+    // runs before init then issues, so try/catch
+    try {
     let main_menu_added = 0;
     let community_menu_added = 0;
     for (let i = 0; i < this.app.modules.mods.length; i++) {
@@ -175,7 +176,7 @@ try {
             let data = {};
             let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
             let gid = this.app.crypto.hash(members.join('_'));
-            let name = "Player "+(ii+1);
+            let name = imperium_self.returnFaction((ii+1));
             let chatmod = this.app.modules.mods[i];
 
             this.menu.addSubMenuOption("game-chat", {
@@ -201,7 +202,7 @@ try {
         }
       }
     }
-
+    } catch (err) {}
 
 
     this.menu.addMenuIcon({
