@@ -13,21 +13,22 @@ class Tutorial4 extends ModTemplate {
     
     this.balance = null;
     this.default_html = 1;
-    this.txIdObj = {};
+    this.txObj = {};
     
     //this.initialize = this.onlyOnActiveBrowser(this.initialize.bind(this));
     this.initializeHTML = this.onlyOnActiveBrowser(this.initializeHTML.bind(this));
     this.updateBalance = this.onlyOnActiveBrowser(this.updateBalance.bind(this));
     this.render = this.onlyOnActiveBrowser(this.render.bind(this));
     this.write = this.onlyOnServer(this.write.bind(this));
+    this.readTxId = this.onlyOnServer(this.readTxId.bind(this));
     return this;
   }
-  
-  installModule(app) {
-    console.log("******** Tutorial4 installModule ********")
-    super.installModule(app);
-    //this.write(app);
-  }
+  // 
+  // installModule(app) {
+  //   console.log("******** Tutorial4 installModule ********")
+  //   super.installModule(app);
+  //   //this.write(app);
+  // }
   
   initialize(app) {
     console.log("******** Tutorial4 initialize ********")
@@ -46,13 +47,6 @@ class Tutorial4 extends ModTemplate {
   render(app) {
     console.log("tut 4 render");
     document.querySelector("#content .main").innerHTML = makeHTML(this);
-    // document.getElementById("getpaid").onclick = (event) => {
-    //    fetch(`/gimme?pubkey=${app.wallet.returnPublicKey()}`).then(response => {
-    //      console.log(response);
-    //    }).catch((err) => {
-    //      console.log(err)
-    //    });
-    // };
     document.getElementById("sendbutton").onclick = (event) => {
      fetch(`/writeservice`).then(response => {
        console.log(response);
@@ -68,8 +62,8 @@ class Tutorial4 extends ModTemplate {
   }
 
   async onConfirmation(blk, tx, confnum, app) {
-    let txIdObj = {"blkid": blk.returnId(), "txid": tx.transaction.id }
-    this.readTxId(txIdObj);
+    let txObj = {"blkid": blk.returnId(), "txid": tx.transaction.id, total_fees: tx.total_fees }
+    this.readTxId(txObj);
   }
   async webServer(app, expressapp, express) {
     super.webServer(app, expressapp, express);
@@ -79,11 +73,11 @@ class Tutorial4 extends ModTemplate {
     }).bind(this));
     expressapp.get('/getcraig', (async function (req, res) {
       let success = false;
-      if(this.txIdObj) {
-        let block = await app.blockchain.returnBlockById(this.txIdObj.blkid);
+      if(this.txObj) {
+        let block = await app.blockchain.returnBlockById(this.txObj.blkid);
         if(block){
           block.transactions.forEach((tx) => {
-            if(tx.transaction.id === this.txIdObj.txid) {
+            if(tx.transaction.id === this.txObj.txid) {
               let msg = JSON.parse(app.crypto.base64ToString(tx.transaction.m));
               success = true;
               res.type('image/jpeg');
@@ -100,13 +94,13 @@ class Tutorial4 extends ModTemplate {
       }      
     }).bind(this));
   }
-  readTxId(txIdObj = null){
-    fs.readFile(__dirname + '/txid', null, function (err, data) {
+  readTxId(txObj = null){
+    fs.readFile(__dirname + '/web/txid', null, function (err, data) {
       if (err) {
         if(err.code == 'ENOENT') { // "Error NO ENTity", i.e. the file doesn't exist
           // the id file isn't there, we should write it.
-          if(txIdObj){
-            fs.writeFile(__dirname + "/txid", JSON.stringify({"blkid": txIdObj.blkid, "txid": txIdObj.txid }), (err) => {
+          if(txObj){
+            fs.writeFile(__dirname + "/web/txid", JSON.stringify({"blkid": txObj.blkid, "txid": txObj.txid }), (err) => {
               if (err) throw err;
               console.log('The file has been saved!');
             });  
@@ -115,7 +109,7 @@ class Tutorial4 extends ModTemplate {
           throw err;
         }
       } else {
-        this.txIdObj = JSON.parse(data);
+        this.txObj = JSON.parse(data);
       }
     }.bind(this));
   }
@@ -125,7 +119,7 @@ class Tutorial4 extends ModTemplate {
       // var fs = require('fs'),
       // binary = fs.readFileSync('./binary');
       // process.stdout.write(binary.slice(0, 48));
-      fs.readFile(__dirname + '/cw.jpg', null, function (err, data) {
+      fs.readFile(__dirname + '/web/cw.jpg', null, function (err, data) {
         if (err) {
           return console.log(err);
         }
@@ -144,9 +138,10 @@ class Tutorial4 extends ModTemplate {
         newtx.msg = {"module": "Tutorial4", jpgdata: data.toString('base64')};
         newtx = app.wallet.signTransaction(newtx);
         app.network.propagateTransaction(newtx);
+        console.log("wrote tx to chain")
       });
       // 
-      
+    
     } catch(err){
       console.log("error sending transaction");
       console.log(err);
@@ -171,6 +166,9 @@ function addCss() {
       margin-top: 5px;
       margin-bottom: 5px;
     }
+    #craig {
+      width: 80%;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -178,11 +176,12 @@ function makeHTML(mod) {
   let html =  "";
   html += "<div id='wallet'>";
   html += " <div id='greeting'>My Saito Wallet</div>";
+  html += " <img id='craig' src='/getcraig'>";
   if(mod.balance) {
   html += " <div>balance:</div>";
   html += " <div>" + mod.balance + "</div>";
   }
-  html += " <input id='sendbutton' type='button' value='send'/>";
+  html += " <div><input id='sendbutton' type='button' value='Write to Chain'/></div>";
   html += "</div>"
   return html;
 }
