@@ -1648,6 +1648,9 @@ console.log(JSON.stringify(this.game.state.choices));
         } else {
 	  this.unloadUnitFromShip(player, sector, source_idx, "infantry");
         }
+
+        this.game.queue.splice(qe, 1);
+        return 1;
       }
 
       if (mv[0] === "load_infantry") {
@@ -1665,6 +1668,8 @@ console.log(JSON.stringify(this.game.state.choices));
           this.loadUnitOntoShip(player, sector, source_idx, "infantry");
 	}
 
+        this.game.queue.splice(qe, 1);
+        return 1;
       }
 
 
@@ -4697,6 +4702,9 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
         let planet_idx 	 = mv[3];
         let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
+
+
+console.log("Z Index: " + JSON.stringify(z[z_index]));
 
 	return z[z_index].groundCombatEvent(this, player, sector, planet_idx);
 

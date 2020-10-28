@@ -24,20 +24,24 @@
       text        :       "Spend 2 influence to convert 1 enemy infantry at combat start" ,
       groundCombatTriggers : function(imperium_self, player, sector, planet_idx) {
         if (imperium_self.doesPlayerHaveTech(player, "faction5-indoctrination")) {
-          if (imperium_self.returnAvailableInfluence(player) >= 2) {
-	    return 1;
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  if (sys.p[planet_idx].units[player-1].length > 0) {
+            if (imperium_self.returnAvailableInfluence(player) >= 2) {
+	      return 1;
+            }
           }
         }
 	return 0;
       },
       groundCombatEvent : function(imperium_self, player, sector, planet_idx) { 
-        if (imperium_self.game.player == player) {
+	if (imperium_self.game.player == player) {
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  if (sys.p[planet_idx].units[player-1].length > 0) {
             imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
   	      imperium_self.endTurn();
             });
 	  } else {
+  	    imperium_self.endTurn();
           }
           return 0;
         }

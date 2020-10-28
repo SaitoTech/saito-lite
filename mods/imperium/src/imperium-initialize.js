@@ -230,13 +230,13 @@ try {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
-        this.hammer.render(this.app, this);
-        this.hammer.attachEvents(this.app, this, '.gameboard');
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '#hexGrid');
 
       } else {
 
-        this.sizer.render(this.app, this);
-        this.sizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexGrid
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexgrid
 
       }
     } catch (err) {}

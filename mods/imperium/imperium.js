@@ -2339,20 +2339,24 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       text        :       "Spend 2 influence to convert 1 enemy infantry at combat start" ,
       groundCombatTriggers : function(imperium_self, player, sector, planet_idx) {
         if (imperium_self.doesPlayerHaveTech(player, "faction5-indoctrination")) {
-          if (imperium_self.returnAvailableInfluence(player) >= 2) {
-	    return 1;
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  if (sys.p[planet_idx].units[player-1].length > 0) {
+            if (imperium_self.returnAvailableInfluence(player) >= 2) {
+	      return 1;
+            }
           }
         }
 	return 0;
       },
       groundCombatEvent : function(imperium_self, player, sector, planet_idx) { 
-        if (imperium_self.game.player == player) {
+	if (imperium_self.game.player == player) {
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  if (sys.p[planet_idx].units[player-1].length > 0) {
             imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
   	      imperium_self.endTurn();
             });
 	  } else {
+  	    imperium_self.endTurn();
           }
           return 0;
         }
@@ -9034,13 +9038,13 @@ try {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
-        this.hammer.render(this.app, this);
-        this.hammer.attachEvents(this.app, this, '.gameboard');
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '#hexGrid');
 
       } else {
 
-        this.sizer.render(this.app, this);
-        this.sizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexGrid
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexgrid
 
       }
     } catch (err) {}
@@ -12000,6 +12004,9 @@ console.log(JSON.stringify(this.game.state.choices));
         } else {
 	  this.unloadUnitFromShip(player, sector, source_idx, "infantry");
         }
+
+        this.game.queue.splice(qe, 1);
+        return 1;
       }
 
       if (mv[0] === "load_infantry") {
@@ -12017,6 +12024,8 @@ console.log(JSON.stringify(this.game.state.choices));
           this.loadUnitOntoShip(player, sector, source_idx, "infantry");
 	}
 
+        this.game.queue.splice(qe, 1);
+        return 1;
       }
 
 
@@ -15049,6 +15058,9 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
         let planet_idx 	 = mv[3];
         let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
+
+
+console.log("Z Index: " + JSON.stringify(z[z_index]));
 
 	return z[z_index].groundCombatEvent(this, player, sector, planet_idx);
 
@@ -19847,6 +19859,7 @@ playerSelectInfantryToLand(sector) {
 
     let id = $(this).attr("id");
     let assigned_planets = [];
+    let infantry_available_for_reassignment = 0;
     for (let i = 0; i < sys.p.length; i++) {
       assigned_planets.push(0);
     }
@@ -19858,14 +19871,16 @@ playerSelectInfantryToLand(sector) {
 
       for (let i = 0; i < space_infantry.length; i++) {
 	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"ship"+"\t"+space_infantry[i]);
+        infantry_available_for_reassignment++;
       }
       for (let i = 0; i < ground_infantry.length; i++) {
 	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+ground_infantry[i]);
+        infantry_available_for_reassignment++;
       }
 
-      let html = '<div class="status-message" id="status-message">Reassign Infantry to Planets: <ul>';
+      let html = '<div class="sf-readable" id="status-message">Reassign Infantry to Planets: <ul>';
           for (let i = 0; i < sys.p.length; i++) {
-  	    html += `<li class="option textchoice" id="${i}">${sys.s[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i] }</span></li>`;
+  	    html += `<li class="option textchoice" id="${i}">${sys.p[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i] }</span></li>`;
           }
           html += '<div id="confirm" class="option">click here to move</div>';
           html += '</ul'; 
@@ -19882,12 +19897,14 @@ playerSelectInfantryToLand(sector) {
 	  imperium_self.endTurn();
         }
 
-        let divname = "infantry_on_"+id;
-        let v = parseInt($(divname).html());
-        v++;
-	$(divname).html((v));
-
-	imperium_self.addMove("load_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+id);
+        if (infantry_available_for_reassignment > 0)  {
+          infantry_available_for_reassignment--;
+          let divname = ".infantry_on_"+id;
+          let v = parseInt($(divname).html());
+          v++;
+	  $(divname).html((v));
+	  imperium_self.addMove("load_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+id);
+	}
 
       });
     };
