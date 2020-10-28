@@ -50,7 +50,6 @@ class Twilight extends GameTemplate {
 
     this.log_length 	 = 150;
     this.interface 	 = 1;
-    this.dont_show_confirm = 0;
 
     this.gameboardZoom   = 0.90;
     this.gameboardMobileZoom = 0.67;
@@ -541,6 +540,12 @@ console.log(err);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
 
+    // required here so menu will be proper
+    if (this.app.options.gameprefs.confirm_moves == 1) {
+      this.confirm_moves = 1;
+    } else {
+      this.confirm_moves = 0;
+    }
 
     this.menu.addMenuOption({
       text : "Game",
@@ -560,8 +565,8 @@ console.log(err);
       }
     });
     let initial_confirm_moves = "Newbie Mode"; 
-    if (this.dont_show_confirm == 1) {
-      let initial_confirm_moves = "Expert Mode"; 
+    if (this.confirm_moves == 1) {
+      initial_confirm_moves = "Expert Mode"; 
     }
     this.menu.addSubMenuOption("game-game", {
       text : initial_confirm_moves,
@@ -569,16 +574,14 @@ console.log(err);
       class : "game-confirm",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	if (game_mod.dont_show_confirm == 1) {
-	  game_mod.dont_show_confirm = 0;
-          game_mod.saveGamePreference('dont_show_confirm', 0);
+	if (game_mod.confirm_moves == 0) {
+	  game_mod.confirm_moves = 1;
+          game_mod.saveGamePreference('confirm_moves', 1);
 	  window.location.reload();	
-	  return;
 	} else {
-	  game_mod.dont_show_confirm = 1;
-          game_mod.saveGamePreference('dont_show_confirm', 1);
+	  game_mod.confirm_moves = 0;
+          game_mod.saveGamePreference('confirm_moves', 0);
 	  window.location.reload();	
-	  return;
 	}
       }
     });
@@ -767,12 +770,10 @@ initializeGame(game_id) {
       if (this.app.options.gameprefs.interface == 1) {
         this.interface = 1;
       }
-      if (this.app.options.gameprefs.dont_show_confirm == 1) {
-        this.dont_show_confirm = 1;
-	this.confirm_moves = 0;
+      if (this.app.options.gameprefs.confirm_moves == 1) {
+        this.confirm_moves = 1;
       } else {
-	this.dont_show_confirm = 0;
-	this.confirm_moves = 1;
+	this.confirm_moves = 0;
       }
     }
   }
@@ -4064,7 +4065,10 @@ this.startClock();
 
     this.updateStatus(x);
 
+
+    if (twilight_self.confirm_moves == 1) { twilight_self.cardbox.skip_card_prompt = 0; }
     twilight_self.addShowCardEvents(function(card) {
+      if (twilight_self.confirm_moves == 1) { twilight_self.cardbox.skip_card_prompt = 1; }
       twilight_self.playerTurnHeadlineSelected(card, player);
     });
 
@@ -4809,21 +4813,24 @@ this.startClock();
           //
           // our event or both
           //
-          if (twilight_self.dont_show_confirm == 0) {
+          if (twilight_self.confirm_moves == 1) {
 
-            let fr =
+            let fr_header = 
               `
-	      <div class="status-message" id="status-message">
-              <div>Confirm you want to play this event</div>
+              Confirm you want to play this event:
+	      `;
+            let fr_msg = `
              <ul>
               <li class="card" id="playevent">play event</li>
               <li class="card" id="pickagain">pick again</li>
               </ul>
-              <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't ask me to confirm moves...
-	      </div>
+              <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't confirm moves (expert mode)...
               `;
 
-            twilight_self.updateStatus(fr);
+            let html = twilight_self.formatStatusHeader(fr_header, fr_msg, false);
+	    twilight_self.updateStatus(html);
+
+//            twilight_self.updateStatus(fr);
             twilight_self.addShowCardEvents(function(action) {
               $('.card').off();
 
@@ -4840,8 +4847,9 @@ this.startClock();
 
             $('input:checkbox').change(function() {
               if ($(this).is(':checked')) {
-                twilight_self.dont_show_confirm = 1;
-                twilight_self.saveGamePreference('dont_show_confirm', 1);
+                twilight_self.confirm_moves = 0;
+                twilight_self.saveGamePreference('confirm_moves', 1);
+		try { $(".game-confirm").text("Newbie Mode"); } catch (err) {}
               }
             })
 
@@ -4859,25 +4867,26 @@ this.startClock();
           //
           // our event or both
           //
-          if (twilight_self.dont_show_confirm == 0 && (card != "missileenvy" || is_this_missile_envy_noneventable == 0)) {
+          if (twilight_self.confirm_moves == 1 && (card != "missileenvy" || is_this_missile_envy_noneventable == 0)) {
 
-            let fr =
-              `
-	      <div class="status-message" id="status-message">
-              <div>Confirm you want to play for ops</div>
+            let fr_header = "Confirm you want to play for ops:";
+	    let fr_msg = `
               <ul>
               <li class="card" id="playevent">play for ops</li>
               <li class="card" id="pickagain">pick again</li>
               </ul>
               `;
-	    if (twilight_self.dont_show_confirm == 1) {
-              fr += `<input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't ask me to confirm moves...`;
+	    if (twilight_self.confirm_moves == 1) {
+              fr_msg += `<input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't confirm moves (expert mode)...`;
 	    }
-	    fr += `
+	    fr_msg += `
 	      </div>
 	    `;
 
-            twilight_self.updateStatus(fr);
+            let html = twilight_self.formatStatusHeader(fr_header, fr_msg,  false)
+	    twilight_self.updateStatus(html);
+
+//            twilight_self.updateStatus(fr);
             twilight_self.addShowCardEvents(function(action) {
               $('.card').off();
 
@@ -4894,8 +4903,9 @@ this.startClock();
 
             $('input:checkbox').change(function() {
               if ($(this).is(':checked')) {
-                twilight_self.dont_show_confirm = 1;
-                twilight_self.saveGamePreference('dont_show_confirm', 1);
+                twilight_self.confirm_moves = 0;
+                twilight_self.saveGamePreference('confirm_moves', 0);
+		try { $(".game-confirm").text("Newbie Mode"); } catch (err) {}
               }
             })
 
@@ -4910,7 +4920,7 @@ this.startClock();
 
         if (action == "space") {
 
-          if (twilight_self.dont_show_confirm == 0) {
+          if (twilight_self.confirm_moves == 1) {
 
             let fr =
               `
@@ -4920,7 +4930,7 @@ this.startClock();
               <li class="card" id="playevent">send into orbit</li>
               <li class="card" id="pickagain">pick again</li>
               </ul>
-              <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't ask to confirm moves...
+              <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't confirm moves (expert mode)...
 	      </div>
               `;
 
@@ -4943,8 +4953,9 @@ this.startClock();
 
             $('input:checkbox').change(function() {
               if ($(this).is(':checked')) {
-                twilight_self.dont_show_confirm = 1;
-                twilight_self.saveGamePreference('dont_show_confirm', 1);
+                twilight_self.confirm_moves = 0;
+                twilight_self.saveGamePreference('confirm_moves', 1);
+		try { $(".game-confirm").text("Newbie Mode"); } catch (err) {}
               }
             })
 
