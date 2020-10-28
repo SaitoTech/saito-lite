@@ -62,6 +62,7 @@ body {
   padding: 10px;
   background-color: whitesmoke;
   opacity: 0.8;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
 }
 .game-overlay-menu ul li {
   width: 100%;
@@ -71,9 +72,11 @@ body {
   text-align: -webkit-match-parent;
   display: list-item;
   list-style: none;
+  padding: 0 1em;
 }
 .game-overlay-menu ul li:hover {
-  font-weight: bold;;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75), -2px -2px 5px #eee;
+  background: #0001;
 }
 
 .game-overlay {
@@ -97,7 +100,7 @@ body {
   width: calc(55vh * 0.72110);
   -webkit-filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
   filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
-  z-index: -10; // start behind the board
+  z-index: -10; /* start behind the board *
 }
 
 
@@ -147,15 +150,33 @@ body {
 .game-menu ul .game-menu-sub-option {
   position: relative;
   background-color: #f5f5f5cc;
-  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75) 
-  opacity: 0.5;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
   height: 50px;
 }
 .game-menu-sub-options {
   display:none;
 }
+.game-menu-option:hover {
+  text-shadow: 1px 1px 0px #444, -1px -1px 0px #ddd;
+  color: #222;
+}
 
+.game-menu-option:hover ul {
+  text-shadow: none;
+  color: #000;
+}
 
+.game-menu-sub-option:hover {
+  text-shadow: 1px 1px 0px #444, -1px -1px 0px #ddd;
+  color: #222;
+}
+/*
+.game-menu-sub-option:hover {
+  background-color: #2228 !important;
+  color: #efefef;
+  border: 1px solid #efefef;
+}
+*/
 
 .hud-controls {
   position: relative;
