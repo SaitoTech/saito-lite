@@ -194,28 +194,23 @@ class Twilight extends GameTemplate {
     let twilight_self = this;
     let html =
     `
-      <div class="game-overlay-menu" id="game-overlay-menu">
+      <div class="game-overlay-menu statistics-overlay" id="game-overlay-menu">
         <div>Headline Statistics</div>
-	<table class="headline-statistics-table" style="width:80vw">
+	<table class="headline-statistics-table" style="max-width:80vw; width:50%;">
 	  <atr>
 	    <th></th>
 	    <th>US</th>
 	    <th>USSR</th>
 	  </tr>
 	  <tr>
-	    <td><b>OPS Played</b></td>
+	    <td><b>Played OPS</b></td>
 	    <td>${this.game.state.stats.us_ops}</td>
 	    <td>${this.game.state.stats.ussr_ops}</td>
 	  </tr>
 	  <tr>
-	    <td><b>OPS Spaced</b></td>
+	    <td><b>Spaced OPS</b></td>
 	    <td>${this.game.state.stats.us_ops_spaced}</td>
 	    <td>${this.game.state.stats.ussr_ops_spaced}</td>
-	  </tr>
-	  <tr>
-	    <td><b>Coups</b></td>
-	    <td>${JSON.stringify(this.game.state.stats.us_coups)}</td>
-	    <td>${JSON.stringify(this.game.state.stats.ussr_coups)}</td>
 	  </tr>
 	  <tr>
 	    <td><b>Scoring Cards</b></td>
@@ -223,8 +218,11 @@ class Twilight extends GameTemplate {
 	    <td>${this.game.state.stats.ussr_scorings}</td>
 	  </tr>
         </table>
+
         <div>Round-by-Round Statistics</div>
-	<table class="round-statistics-table">
+
+
+	<table class="statistics-round-table">
 	  <tr>
 	`;
 	for (let z = 0; z < 11; z++) {
@@ -2005,26 +2003,26 @@ console.log("CARD: " + card);
           if (mv[1] == "ussr") { this.game.state.stats.ussr_ops += parseInt(mv[3]); }
 	  if (this.game.deck[0].cards[mv[2]] != undefined) {
 	    if (this.game.deck[0].cards[mv[2]].player == "us") {
-	      if (this.game.player == 1) {
+	      if (mv[1] == "ussr") {
 	        this.game.state.stats.ussr_us_ops += parseInt(mv[3]);
 	      }
-	      if (this.game.player == 2) {
+	      if (mv[1] == "us") {
 	        this.game.state.stats.us_us_ops += parseInt(mv[3]);
 	      }
 	    }
 	    if (this.game.deck[0].cards[mv[2]].player == "ussr") {
-	      if (this.game.player == 1) {
+	      if (mv[1] == "ussr") {
 	        this.game.state.stats.ussr_ussr_ops += parseInt(mv[3]);
 	      }
-	      if (this.game.player == 2) {
+	      if (mv[1] == "us") {
 	        this.game.state.stats.us_ussr_ops += parseInt(mv[3]);
 	      }
 	    }
 	    if (this.game.deck[0].cards[mv[2]].player == "both") {
-	      if (this.game.player == 1) {
+	      if (mv[1] == "ussr") {
 	        this.game.state.stats.ussr_neutral_ops += parseInt(mv[3]);
 	      }
-	      if (this.game.player == 2) {
+	      if (mv[1] == "us") {
 	        this.game.state.stats.us_neutral_ops += parseInt(mv[3]);
 	      }
 	    }
@@ -2594,18 +2592,19 @@ console.log("CARD: " + card);
 
 
 	  // STATS - aggregate the statisics
-	  this.game.state.stats.round.push({});
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_scorings = this.game.state.stats.us_scorings;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_scorings = this.game.state.stats.ussr_scorings;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_ops = this.game.state.stats.us_ops;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_ops = this.game.state.stats.ussr_ops;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_us_ops = this.game.state.stats.us_ops;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_us_ops = this.game.state.stats.ussr_ussr_ops;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_ussr_ops = this.game.state.stats.us_ussr_ops;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_ussr_ops = this.game.state.stats.ussr_ussr_ops;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].us_neutral_ops = this.game.state.stats.us_neutral_ops;
-	  this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_neutral_ops = this.game.state.stats.ussr_neutral_ops;
-
+	  if (this.game.state.round > 1) {
+	    this.game.state.stats.round.push({});
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].us_scorings = this.game.state.stats.us_scorings;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_scorings = this.game.state.stats.ussr_scorings;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].us_ops = this.game.state.stats.us_ops;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_ops = this.game.state.stats.ussr_ops;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].us_us_ops = this.game.state.stats.us_ops;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_us_ops = this.game.state.stats.ussr_ussr_ops;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].us_ussr_ops = this.game.state.stats.us_ussr_ops;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_ussr_ops = this.game.state.stats.ussr_ussr_ops;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].us_neutral_ops = this.game.state.stats.us_neutral_ops;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_neutral_ops = this.game.state.stats.ussr_neutral_ops;
+	  }
 
           //
           // settle outstanding VP issue

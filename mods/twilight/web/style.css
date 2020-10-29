@@ -13,6 +13,14 @@
 .game-overlay-menu {
   min-width: 450px;
 }
+.statistics-overlay {
+  background-image: url("/twilight/img/1963-06-17-Soviet-Tanks.jpg");
+  background-size: cover;
+}
+.statistics-rpund-table {
+
+}
+
 .cardbox-card {
   background-image: url("/twilight/img/Base.svg");
   background-size: cover;
