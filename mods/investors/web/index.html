@@ -7,17 +7,17 @@
   <meta name="description" content="Welcome to saito.io">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Richard Parris">
-
+  
   <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
-
+  
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="saito.io">
-
+  
   <meta name="msapplication-navbutton-color" content="#FFFFFF">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="msapplication-starturl" content="/index.html">
-
+  
   <meta name="twitter:image:src" content="https://saito.io/arcade/img/dreamscape-logo.png" />
   <meta property="twitter:url" content="https://saito.io/arcade" />
   <meta name="twitter:site" content="Saito Project" />
@@ -30,34 +30,114 @@
   <meta property="og:title" content="Saito" />
   <meta property="og:url" content="https://saito.io/arcade" />
   <meta property="og:description" content="Saito is an open Public Key Infrastructure for application development." />
-
+  
   <link rel=" icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png">
   <link rel="apple-touch-icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png">
   <link rel="icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png">
   <link rel="apple-touch-icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png">
-
+  
   <title>Saito.io</title>
-
+  
   <link rel="stylesheet" href="/saito/style.css" />
   <link rel="stylesheet" href="/website/style.css" />
   <link rel="stylesheet" type="text/css" href="/chat/css/email-chat.css">
-
+  
 </head>
-
 <body>
-
-  <div class="header">
-    <h2>Downloading Saito then Synching the Chain</h2>
+  
+  <div class="header header-home">
+    <a href="/">
+      <img class="logo" src="/saito/img/logo.svg">
+    </a>
+    <div id="header-icon-links" class="header-icon-links">
+      <a class="header-icon-fullscreen tip" target="_blank" href="https://org.saito.tech/blog">
+        <i id="blog" class="header-icon icon-med fas fa-rss-square"><div class="redicon"></div></i>
+        <div class="tiptext headertip">Saito Blog</div>
+      </a>
+      <a class="header-icon-fullscreen tip" href="/arcade">
+        <i id="arcade" class="header-icon icon-med fas fa-gamepad"><div class="redicon"></div></i>
+        <div class="tiptext headertip">Arcade</div>
+      </a>
+      <a class="header-icon-fullscreen tip" href="/chat">
+        <i id="chat" class="header-icon icon-med far fa-comments"><div class="redicon"></div></i>
+        <div class="tiptext headertip">Chat</div>
+      </a>
+      <a class="header-icon-fullscreen tip" href="/wallet">
+        <i id="wallet" class="header-icon icon-med fas fa-wallet"><div class="redicon"></div></i>
+        <div class="tiptext headertip">Wallet</div>
+      </a>
+      <a class="header-icon-fullscreen tip" href="/forum">
+        <i id="forum" class="header-icon icon-med far fa-comment-alt"><div class="redicon"></div></i>
+        <div class="tiptext headertip">Forum</div>
+      </a>
+      <i id="navigator" class="header-icon icon-med fas fa-bars"></i>
+      <i id="settings" class="header-icon icon-med fas fa-cog"></i>
+    </div>
+    <div id="modules-dropdown" class="header-dropdown">
+      <ul>
+        <a href="/arcade"><li>Arcade</li></a>
+        <a href="/chat"><li>Chat</li></a>
+        <a href="/wallet"><li>Email</li></a>
+        <a href="/forum"><li>Forum</li></a>
+      </ul>
+    </div>
+    <div id="settings-dropdown" class="header-dropdown">
+      <div class="personal-info">
+        <img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0MjAnIGhlaWdodD0nNDIwJyBzdHlsZT0nYmFja2dyb3VuZC1jb2xvcjpyZ2JhKDI0MCwyNDAsMjQwLDEpOyc+PGcgc3R5bGU9J2ZpbGw6cmdiYSgyMTcsMjEyLDM4LDEpOyBzdHJva2U6cmdiYSgyMTcsMjEyLDM4LDEpOyBzdHJva2Utd2lkdGg6Mi4xOyc+PHJlY3QgIHg9JzE2OCcgeT0nMCcgd2lkdGg9Jzg0JyBoZWlnaHQ9Jzg0Jy8+PHJlY3QgIHg9JzE2OCcgeT0nODQnIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjxyZWN0ICB4PScxNjgnIHk9JzE2OCcgd2lkdGg9Jzg0JyBoZWlnaHQ9Jzg0Jy8+PHJlY3QgIHg9JzE2OCcgeT0nMzM2JyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nODQnIHk9JzAnIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjxyZWN0ICB4PScyNTInIHk9JzAnIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjxyZWN0ICB4PSc4NCcgeT0nMjUyJyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nMjUyJyB5PScyNTInIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjxyZWN0ICB4PScwJyB5PScwJyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nMzM2JyB5PScwJyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nMCcgeT0nMjUyJyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nMzM2JyB5PScyNTInIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjwvZz48L3N2Zz4=">
+        <div class="account-info">
+          <div class="profile-identifier">clay@saito</div>
+          <div class="profile-public-key">27ZzfoWvrWmqtdZKqTmnvKWB233MRgSL7rTcdfCZZWY4M</div>
+        </div>
+      </div>
+      
+      <center><hr style="color:#888" width="98%"></center>
+      
+      <div class="wallet-actions">
+        
+        <div class="wallet-action-row" id="header-dropdown-backup-wallet">
+          <span class="scan-qr-info"><i class="settings-fas-icon fas fa-copy"></i> Backup Access Keys</span>
+        </div>
+        
+        <div class="wallet-action-row" id="header-dropdown-restore-wallet">
+          <span class="scan-qr-info"><i class="settings-fas-icon fas fa-redo"></i> Restore Access Keys</span>
+        </div>
+        
+        <div class="wallet-action-row" id="header-dropdown-my-profile">
+          <span class="scan-qr-info"><i class="settings-fas-icon fas fa-user"></i> Public Profile </span>
+        </div>
+        
+        <div class="wallet-action-row" id="header-dropdown-settings">
+          <span class="scan-qr-info"><i class="settings-fas-icon fas fa-wrench"></i> Settings </span>
+        </div>
+        
+        <div class="wallet-action-row" id="header-dropdown-add-contacts">
+          <span class="scan-qr-info"><i class="settings-fas-icon fas fa-user-friends"></i> Add Contacts </span>
+        </div>
+        
+        <div class="wallet-action-row" id="header-dropdown-myqrcode">
+          <span class="scan-qr-info"><i class="settings-fas-icon fas fa-barcode"></i> QRCode </span>
+        </div>
+        
+        <div class="wallet-action-row" id="header-dropdown-scan-qr">
+          <span class="scan-qr-info"><i class="settings-fas-icon fas fa-qrcode"></i> Scan </span>
+        </div>
+        
+        <div class="wallet-action-row" id="header-dropdown-backup-wallet">
+          <span class="scan-qr-info"><i class="settings-fas-icon fas fa-copy"></i> Backup Wallet</span>
+        </div>
+        
+      </div>
+    </div>
   </div>
-
+  
   <div class="all">
     <div class="parallax-layer parallax-back">
       <section id="banner" class="banner">
-        <img class="banner-logo" alt="saito logo" src="/saito/img/logo.svg"></img>
-        <img class="background-logo mobile" alt="saito logo" src="/website/img/saito-shape-white.svg"></img>
+        <img class="banner-logo" alt="saito logo" src="/saito/img/logo.svg">
+        <img class="background-logo mobile" alt="saito logo" src="/website/img/saito-shape-white.svg">
       </section>
       <div class="background-logo-box">
-        <img class="background-logo" alt="saito logo" src="/website/img/saito-shape-red.svg"></img>
+        <img class="background-logo" alt="saito logo" src="/website/img/saito-shape-red.svg">
       </div>
       <div class="backslash"></div>
       
@@ -66,12 +146,12 @@
       <div class="main">
         <div class="site-main">
           <!-- banner was here -->
-
+          
           <section class="splash-row">
             <div class="grid-2-columns row">
-
+              
               <div class="title-container">
-
+                
                 <div class="featured-app">
                   <div class="featured-app-inner">
                     <div class="featured-app-front">
@@ -90,7 +170,7 @@
                   </div>
                 </div>
               </div>
-
+              
               <div class="intro-box">
                 <div class="intro-title">Welcome to the Saito Network</div>
                 <div class="intro-content">
@@ -105,12 +185,12 @@
                     throughput than any other blockchain.
                   </p>
                   <p>
-                    <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a
-                      href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
+                    <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
                   </p>
                 </div>
               </div>
             </div>
+          </section>
         </div>
         <section class="mobile-banner">
           <div class="intro-box-mobile">
@@ -120,13 +200,13 @@
                 Most blockchains force users to pay for <em>forever storage</em> and require separate payments for
                 off-chain data. Saito fixes both problems.
               </p>
-
+              
               <p>
-                <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a
-                  href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
+                <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
               </p>
             </div>
           </div>
+        </section>
       </div>
       <div class="featured-app-inner-mobile">
         <div class="featured-app-front-mobile">
@@ -144,17 +224,16 @@
         </div>
       </div>
     </div>
-    </section>
-
+    
     <!--what you can build-->
     <section class="can-build">
       <div id="slider" class="slider">
         <div class="slider-content">
-          <div class="slider-content-wrapper">
+          <div class="slider-content-wrapper" style="transform: translateX(0%);">
             <div class="slider-content__item image-1">
               <div class="slider-content_grid">
-                <img class="can-build-img-tall desktop" src="/website/img/build/chat.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/build/chat2.png" />
+                <img class="can-build-img-tall desktop" src="/website/img/build/chat.png">
+                <img class="can-build-img-tall mobile" src="/website/img/build/chat2.png">
                 <div class="slider-content_html">
                   <div class="saito-content-title">Android / iOS Applications</div>
                 </div>
@@ -165,14 +244,14 @@
                 <div class="slider-content_html">
                   <div class="saito-content-title">Browser Applications Without Metamask</div>
                 </div>
-                <img class="can-build-img-tall desktop" src="/website/img/build/email.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/how_saito_works_mobile2.png" />
+                <img class="can-build-img-tall desktop" src="/website/img/build/email.png">
+                <img class="can-build-img-tall mobile" src="/website/img/how_saito_works_mobile2.png">
               </div>
             </div>
             <div class="slider-content__item image-3">
               <div class="slider-content_grid">
-                <img class="can-build-img-tall desktop" src="/website/img/build/imperium.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/build/imperium2.png" />
+                <img class="can-build-img-tall desktop" src="/website/img/build/imperium.png">
+                <img class="can-build-img-tall mobile" src="/website/img/build/imperium2.png">
                 <div class="slider-content_html">
                   <div class="saito-content-title">Visually Stunning Games</div>
                 </div>
@@ -183,8 +262,8 @@
                 <div class="slider-content_html">
                   <div class="saito-content-title">Provably-Fair, Crypto-graphically Secure Apps</div>
                 </div>
-                <img class="can-build-img-tall desktop" src="/website/img/build/poker.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/build/poker2.png" />
+                <img class="can-build-img-tall desktop" src="/website/img/build/poker.png">
+                <img class="can-build-img-tall mobile" src="/website/img/build/poker2.png">
               </div>
             </div>
             <div class="slider-content__item image-5">
@@ -192,28 +271,45 @@
                 <div class="slider-content_html">
                   <div class="saito-content-title">QRCodes and Scanning</div>
                 </div>
-                <img class="can-build-img-tall desktop" src="/website/img/build/qrcode.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/build/qrcode2.png" />
+                <img class="can-build-img-tall desktop" src="/website/img/build/qrcode.png">
+                <img class="can-build-img-tall mobile" src="/website/img/build/qrcode2.png">
               </div>
             </div>
             <div class="slider-content__item image-6">
               <div class="slider-content_html love-tools">
                 <p>All with the tools you know and love.</p>
-                <p><img class="can-build-img-tall" src="/website/img/htmlcssjs.png" /></p>
+                <p><img class="can-build-img-tall" src="/website/img/htmlcssjs.png"></p>
               </div>
+            </div>
+          </div>
+          <div class="slider-content__controls">
+            <div class="prev-arrow d-none">
+              <svg viewBox="0 0 256 512"><path fill="currentColor" d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"></path></svg>
+            </div>
+            <div class="next-arrow">
+              <svg viewBox="0 0 256 512"><path fill="currentColor" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg>
+            </div>
+            <div class="dots">
+              <div class="dot dot--active"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
             </div>
           </div>
         </div>
         <div class="slider-controls-wrapper"></div>
+        <div class="slider-controls"><button class="prev-control disabled">Prev</button><button class="auto-control">Auto</button><button class="next-control">Next</button></div>
       </div>
     </section>
-
+  
     <section class="fundamentals-row white fadeInLeft">
       <div class="fundamentals">
         <!--h2>How Saito Works:</h2-->
         <div class="intro-email">
-          <img class="fundamentals-img desktop" src="/website/img/how_saito_works2.png" />
-          <img class="fundamentals-img mobile" src="/website/img/how_saito_works_mobile2.png" />
+          <img class="fundamentals-img desktop" src="/website/img/how_saito_works2.png"/>
+          <img class="fundamentals-img mobile" src="/website/img/how_saito_works_mobile2.png"/>
         </div>
         <!--
           <div class="fundamentals-intro">
@@ -261,13 +357,11 @@
           </div>
         -->
       </div>
-
-
     </section>
-
+    
     <section class="compare fadeInRight">
       <div class="row">
-
+        
         <div class="compare-grid">
           <div class="compare-grid-header">
             <div><span class="compare-title">How Saito Compares</span></div>
@@ -398,19 +492,18 @@
         </div>
       </div>
     </section>
-
+    
     <section class="supporters black">
       <h2>Our Supporters</h2>
       <div class="supporter-list">
-        <img alt="inblockchain" src="/website/img/inblockchain.png" />
-        <img alt="fengshui" src="/website/img/fengshui.png" />
-        <img alt="ausvic" src="/website/img/ausvic.png" />
-        <img alt="ngc" src="/website/img/ngc.png" />
-      0  <img alt="fission" src="/website/img/fission.png" />
-        <img alt="bchangel" src="/website/img/bchangel.png" />
+        <img alt="inblockchain" src="/website/img/inblockchain.png">
+        <img alt="fengshui" src="/website/img/fengshui.png">
+        <img alt="ausvic" src="/website/img/ausvic.png">
+        <img alt="ngc" src="/website/img/ngc.png">
+        <img alt="fission" src="/website/img/fission.png">
+        <img alt="bchangel" src="/website/img/bchangel.png">
       </div>
     </section>
-
     <!--section class="happening">
         <h2>Saito Network Growth</h2>
         <div class="happening-chart">
@@ -428,7 +521,7 @@
     <section class="roadmap white">
       <div class="roadmap-wrapper">
         <h2>Roadmap</h2>
-
+        
         <div class="roadmap-row project">
           <div class="content blanc start">
             <h3>Project</h3>
@@ -456,7 +549,7 @@
           </div>
           <div class="content blanc end"></div>
         </div>
-
+        
         <div class="roadmap-row technical">
           <div class="content blanc">
             <h3>Technical</h3>
@@ -485,7 +578,7 @@
           <div class="content blanc"></div>
         </div>
       </div>
-
+      
     </section>
 
     <!--about-->
@@ -526,8 +619,7 @@
             <i class="fab fa-twitter"></i>
             <!-- div class="deepertext">Twitter</div-->
           </a>
-          <a href="https://github.com/saitotech/saito-lite" target="_blank" alt="saito for developers"
-            class="deeperbox">
+          <a href="https://github.com/saitotech/saito-lite" target="_blank" alt="saito for developers" class="deeperbox">
             <i class="fas fa-code-branch"></i>
             <!-- div class="deepertext">Github</div-->
           </a>
@@ -539,24 +631,56 @@
       </div>
     </section>
 
-
     <footer class="footer">
       <div class="footer-container">
-        <img class="footer-logo" alt="saito logo" src="/saito/img/logo.svg"></img>
+        <img class="footer-logo" alt="saito logo" src="/saito/img/logo.svg">
         <center>
           <div class="light">info@saito.tech</div>
         </center>
         <p></p>
-        <span class="copyright">&copy; Proclus Technologies. All Rights Reserved</span>
+        <span class="copyright">© Proclus Technologies. All Rights Reserved</span>
       </div>
     </footer>
   </div>
+
+  <div class="chat-manager" id="chat-manager">
+    <div class="chat-box" id="chat-box-e6128bae70175c7e18a77fb7d88de2cf8612d205f4811948a867ec58a417bd10">
+      <div class="chat-box-header" id="chat-box-header-e6128bae70175c7e18a77fb7d88de2cf8612d205f4811948a867ec58a417bd10">
+        <span><h2 class="chat-box-header-title">Group e6128bae70</h2></span>
+        <span class="chat-box-close" id="chat-box-close-e6128bae70175c7e18a77fb7d88de2cf8612d205f4811948a867ec58a417bd10" style="justify-self:end;font-size: 0.75em">✕</span>
+      </div>
+      <div class="chat-box-main" id="chat-box-main-e6128bae70175c7e18a77fb7d88de2cf8612d205f4811948a867ec58a417bd10">
+        
+        <div class="chat-message-set chat-message-set-myself" id="chat-message-set-27ZzfoWvrWmqtdZKqTmnvKWB233MRgSL7rTcdfCZZWY4M-1603944701560">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0MjAnIGhlaWdodD0nNDIwJyBzdHlsZT0nYmFja2dyb3VuZC1jb2xvcjpyZ2JhKDI0MCwyNDAsMjQwLDEpOyc+PGcgc3R5bGU9J2ZpbGw6cmdiYSgyMTcsMjEyLDM4LDEpOyBzdHJva2U6cmdiYSgyMTcsMjEyLDM4LDEpOyBzdHJva2Utd2lkdGg6Mi4xOyc+PHJlY3QgIHg9JzE2OCcgeT0nMCcgd2lkdGg9Jzg0JyBoZWlnaHQ9Jzg0Jy8+PHJlY3QgIHg9JzE2OCcgeT0nODQnIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjxyZWN0ICB4PScxNjgnIHk9JzE2OCcgd2lkdGg9Jzg0JyBoZWlnaHQ9Jzg0Jy8+PHJlY3QgIHg9JzE2OCcgeT0nMzM2JyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nODQnIHk9JzAnIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjxyZWN0ICB4PScyNTInIHk9JzAnIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjxyZWN0ICB4PSc4NCcgeT0nMjUyJyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nMjUyJyB5PScyNTInIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjxyZWN0ICB4PScwJyB5PScwJyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nMzM2JyB5PScwJyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nMCcgeT0nMjUyJyB3aWR0aD0nODQnIGhlaWdodD0nODQnLz48cmVjdCAgeD0nMzM2JyB5PScyNTInIHdpZHRoPSc4NCcgaGVpZ2h0PSc4NCcvPjwvZz48L3N2Zz4=" class="chat-room-message-identicon">
+          <div class="chat-message-set-content chat-message-set-content-myself">
+            <div class="chat-message-header">
+              <p class="chat-message-author"><span class="saito-address saito-address-27ZzfoWvrWmqtdZKqTmnvKWB233MRgSL7rTcdfCZZWY4M">clay@saito</span></p>
+              <p class="chat-message-timestamp">12:11</p>
+            </div>
+            <div class="chat-box-message-container chat-box-message-container-myself" style="border-color:rgba(217,212,38);">
+              
+              <div id="2TWyWwhr265bKGdftKwRqDGb5q6Ersb5CRo9SiUbHLwAu5QtcZEhjkeXSoA9cwKWUxVYwhGgyB7XkmQ6NEw6HA1N" class="chat-room-message chat-room-message-myself">
+                <div class="chat-message-text"><p>asdf</p></div>
+              </div>
+              
+              <div id="2UcbrVBF19M8b7SFbSs2fguVyx16aNEhFDvtrLGBRFs3bBPFN9jL7VRv2ZwbVbaWabDRM19duFNkuKt62S7pzuYC" class="chat-room-message chat-room-message-myself">
+                <div class="chat-message-text"><p>adsf</p></div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-box-input" id="chat-box-input-e6128bae70175c7e18a77fb7d88de2cf8612d205f4811948a867ec58a417bd10">
+        <textarea class="chat-box-new-message-input" id="chat-box-new-message-input-e6128bae70175c7e18a77fb7d88de2cf8612d205f4811948a867ec58a417bd10"></textarea>
+        <div class="chat-room-submit-button" id="chat-room-submit-button-e6128bae70175c7e18a77fb7d88de2cf8612d205f4811948a867ec58a417bd10"><i class="icon-small fas fa-arrow-circle-right"></i></div>
+      </div>
+    </div>
   </div>
-  <div class="chat-manager" id="chat-manager"></div>
 
   <script type="text/javascript" src="/website/js/slider.js"></script>
   <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
-
 </body>
 
 </html>

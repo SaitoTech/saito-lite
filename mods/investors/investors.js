@@ -4,15 +4,15 @@ const Header = require('../../lib/ui/header/header');
 const Data = require('./lib/data');
 
 
-class Website extends ModTemplate {
+class Investors extends ModTemplate {
 
   constructor(app) {
     super(app);
 
     this.app            = app;
-    this.name           = "Website";
-
-    this.description = "Module that creates a root website on a Saito node.";
+    this.name           = "Investors";
+    
+    this.description = "Investor information frontend";
     this.categories  = "Utilities Communications";
 
     return this;
@@ -30,7 +30,7 @@ class Website extends ModTemplate {
 */
 
   initializeHTML(app) {
-
+    console.log("investors initializeHTML")
     super.initializeHTML(app);
 
     Header.render(app, this.uidata);
@@ -72,4 +72,4 @@ class Website extends ModTemplate {
 
 
 
-module.exports = Website;
+module.exports = Investors;
