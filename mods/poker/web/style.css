@@ -368,7 +368,7 @@ body {
   }
   .cardfan {
     position: absolute;
-    top: 40vh;
+    top: 80vh;
     left: 50%;
     transform: translateX(-50%);
     padding: unset;
@@ -379,7 +379,7 @@ body {
     width: 10vh;
   }
   .p4 .hand, .p5 .hand, .p3 .hand {
-    right: -3vh;
+    right: 3vh;
     left: unset;
     top: 9vh;
   }
