@@ -6,6 +6,7 @@
     if (card == "unintervention") {
 
       this.game.state.events.unintervention = 1;
+      this.game.state.cancel_back_button = 1;
 
       let me = "ussr";
       let opponent = "us";

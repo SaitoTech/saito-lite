@@ -871,8 +871,8 @@ console.log("QUEUE: " + this.game.queue);
   // when 7 is rolled
   //
   playBandit() {
-
-<div class="status-message">Waiting for Player ${player} to roll the dice...</div>
+/***
+    <div class="status-message">Waiting for Player ${player} to roll the dice...</div>
 	if (this.game.state.players[player-1].resources.length > 7) {
 	  if (this.game.player == player) {
 	    this.addMove("play\t"+player);
@@ -884,7 +884,7 @@ console.log("QUEUE: " + this.game.queue);
 	    return 0;
 	  }
 	}
-
+***/
 
   }
 
