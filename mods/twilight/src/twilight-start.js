@@ -217,14 +217,20 @@ class Twilight extends GameTemplate {
 	    <td>${this.game.state.stats.us_scorings}</td>
 	    <td>${this.game.state.stats.ussr_scorings}</td>
 	  </tr>
+	  <tr>
+	    <td><b>Coups</b></td>
+	    <td>`;
+            if (this.game.state.stats.us_coups.length > 0) { html += JSON.stringify(this.game.state.stats.us_coups); }
+	    html += `</td><td>`;
+	    if (this.game.state.stats.ussr_coups.length > 0) { html += JSON.stringify(this.game.state.stats.ussr_coups); }
+	    html += `</td>
+	  </tr>
         </table>
-
-        <div>Round-by-Round Statistics</div>
-
-
+	<div style="margin-top:20px;margin-bottom:10px;clear:both">Round-by-Round Statistics</div>
 	<table class="statistics-round-table">
 	  <tr>
 	`;
+
 	for (let z = 0; z < 11; z++) {
 	  if (z == 0) { 
 	    html += '<th></th>'; 
@@ -232,22 +238,16 @@ class Twilight extends GameTemplate {
 	    html += `<th>R${(z)}</th>`; 
 	  }
 	}
-	html += `;
+	html += `
 	  </tr>
        `;
 	for (let y = 0; y < 10; y++) {
 	  html += '<tr>';
 
-	  if (y == 0) { html += '<td>US ops</td>'; }
-	  if (y == 1) { html += '<td>USSR ops</td>'; }
-	  if (y == 2) { html += '<td>US (us) ops</td>'; }
-	  if (y == 3) { html += '<td>USSR (us) ops</td>'; }
-	  if (y == 4) { html += '<td>US (ussr) ops</td>'; }
-	  if (y == 5) { html += '<td>USSR (ussr) ops</td>'; }
-	  if (y == 6) { html += '<td>US (neutral) ops</td>'; }
-	  if (y == 7) { html += '<td>USSR (neutral) ops</td>'; }
-	  if (y == 8) { html += '<td>US scoring</td>'; }
-	  if (y == 9) { html += '<td>USSR scoring</td>'; }
+	  if (y == 0) { html += '<td style="text-align:left">OPS</td>'; }
+	  if (y == 1) { html += '<td style="text-align:left">VP</td>'; }
+	  if (y == 2) { html += '<td style="text-align:left">US Scoring</td>'; }
+	  if (y == 3) { html += '<td style="text-align:left">USSR Scoring</td>'; }
 
 	  for (let z = 0; z < 10; z++) {
 
@@ -256,9 +256,9 @@ class Twilight extends GameTemplate {
 	        html += `<td> - </td>`;
 	      } else {
 		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.us_ops}</th>`;
+	          html += `<td>${this.game.state.stats.us_ops-this.game.state.stats.ussr_ops}</th>`;
 		} else {
-	          html += `<td>${this.game.state.stats.round[z].us_ops}</th>`;
+	          html += `<td>${this.game.state.stats.round[z].us_ops-this.game.state.stats.round[z].ussr_ops}</th>`;
 	        }
 	      }
 	    }
@@ -268,9 +268,9 @@ class Twilight extends GameTemplate {
 	          html += `<td> - </td>`;
 	      } else {
 		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.ussr_ops}</th>`;
+	          html += `<td>${this.game.state.vp}</th>`;
 		} else {
-	        html += `<td>${this.game.state.stats.round[z].ussr_ops}</th>`;
+	          html += `<td>${this.game.state.stats.round[z].vp}</th>`;
 	        }
 	      }
 	    }
@@ -280,9 +280,9 @@ class Twilight extends GameTemplate {
 	          html += `<td> - </td>`;
 	      } else {
 		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.us_us_ops}</th>`;
+	          html += `<td>${this.game.state.stats.us_scorings}</th>`;
 		} else {
-	        html += `<td>${this.game.state.stats.round[z].us_us_ops}</th>`;
+	          html += `<td>${this.game.state.stats.round[z].us_scorings}</th>`;
 	        }
 	      }
 	    }
@@ -292,89 +292,20 @@ class Twilight extends GameTemplate {
 	          html += `<td> - </td>`;
 	      } else {
 		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.ussr_us_ops}</th>`;
-		} else {
-	        html += `<td>${this.game.state.stats.round[z].ussr_us_ops}</th>`;
-	        }
-	      }
-	    }
-
-	    if (y == 4) {
-	      if (z > this.game.state.stats.round.length) {
-	          html += `<td> - </td>`;
-	      } else {
-		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.us_ussr_ops}</th>`;
-		} else {
-	        html += `<td>${this.game.state.stats.round[z].us_ussr_ops}</th>`;
-	        }
-	      }
-	    }
-
-	    if (y == 5) {
-	      if (z > this.game.state.stats.round.length) {
-	          html += `<td> - </td>`;
-	      } else {
-		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.ussr_ussr_ops}</th>`;
-		} else {
-	        html += `<td>${this.game.state.stats.round[z].ussr_ussr_ops}</th>`;
-	        }
-	      }
-	    }
-
-	    if (y == 6) {
-	      if (z > this.game.state.stats.round.length) {
-	          html += `<td> - </td>`;
-	      } else {
-		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.us_neutral_ops}</th>`;
-		} else {
-	        html += `<td>${this.game.state.stats.round[z].us_neutral_ops}</th>`;
-	        }
-	      }
-	    }
-
-	    if (y == 7) {
-	      if (z > this.game.state.stats.round.length) {
-	          html += `<td> - </td>`;
-	      } else {
-		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.ussr_neutral_ops}</th>`;
-		} else {
-	        html += `<td>${this.game.state.stats.round[z].ussr_neutral_ops}</th>`;
-	        }
-	      }
-	    }
-
-	    if (y == 8) {
-	      if (z > this.game.state.stats.round.length) {
-	          html += `<td> - </td>`;
-	      } else {
-		if (z == this.game.state.stats.round.length) {
-	          html += `<td>${this.game.state.stats.us_scorings}</th>`;
-		} else {
-	        html += `<td>${this.game.state.stats.round[z].us_scorings}</th>`;
-	        }
-	      }
-	    }
-
-	    if (y == 9) {
-	      if (z > this.game.state.stats.round.length) {
-	          html += `<td> - </td>`;
-	      } else {
-		if (z == this.game.state.stats.round.length) {
 	          html += `<td>${this.game.state.stats.ussr_scorings}</th>`;
 		} else {
-	        html += `<td>${this.game.state.stats.round[z].ussr_scorings}</th>`;
+	          html += `<td>${this.game.state.stats.round[z].ussr_scorings}</th>`;
 	        }
 	      }
 	    }
 	  }
 	  html += '</tr>';
 	}
-	html += `
+
+    html += `
         </table>
+    `;
+    html += `
       </div>
     `;
 
@@ -983,16 +914,6 @@ try {
     } catch (err) {}
 
 
-    //
-    // copy for reversion
-    //
-    try {
-      start_turn_game_state = JSON.parse(JSON.stringify(this.game.state));
-      start_turn_game_queue = JSON.parse(JSON.stringify(this.game.queue));
-    } catch (err) {
-      start_turn_game_state = null;
-      start_turn_game_queue = null;
-    }
 
     //
     // support observer mode
@@ -2432,7 +2353,7 @@ console.log("CARD: " + card);
             if (this.game.player == 2) {
               this.game.deck[0].hand = ["greatsociety","unintervention","abmtreaty","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
-              this.game.deck[0].hand = ["olympic", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["campdavid", "olympic", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -2604,6 +2525,7 @@ console.log("CARD: " + card);
 	    this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_ussr_ops = this.game.state.stats.ussr_ussr_ops;
 	    this.game.state.stats.round[this.game.state.stats.round.length-1].us_neutral_ops = this.game.state.stats.us_neutral_ops;
 	    this.game.state.stats.round[this.game.state.stats.round.length-1].ussr_neutral_ops = this.game.state.stats.ussr_neutral_ops;
+	    this.game.state.stats.round[this.game.state.stats.round.length-1].vp = this.game.state.vp;
 	  }
 
           //
@@ -2971,6 +2893,17 @@ console.log("CARD: " + card);
           return 1;
         }
         if (mv[0] === "play") {
+
+          //
+          // copy for reversion
+          //
+          try {
+            start_turn_game_state = JSON.parse(JSON.stringify(this.game.state));
+            start_turn_game_queue = JSON.parse(JSON.stringify(this.game.queue));
+          } catch (err) {
+            start_turn_game_state = null;
+            start_turn_game_queue = null;
+          }
 
           //
           // it is no longer the headline
@@ -3726,6 +3659,10 @@ console.log("resetging bbc");
       if (twilight_self.game.state.headline == 1) { bind_back_button_state = false; }
       if (twilight_self.game.state.back_button_cancelled == 1) { bind_back_button_state = false; }
 
+console.log("event_before_ops: " + twilight_self.game.state.event_before_ops);
+console.log("headline: " + twilight_self.game.state.headline);
+console.log("back_button_cancelled: " + twilight_self.game.state.back_button_cancelled);
+
       let html = twilight_self.formatPlayOpsStatus(player, ops, bind_back_button_state); // back button
       twilight_self.updateStatus(html);
 
@@ -4094,11 +4031,13 @@ this.startClock();
 	}
       }
       if (tmpar[0] === "play") {
+        this.displayBoard();
 	return 1;
       } else {
 	twilight_self.game.queue.splice(i, 1);
       }
     }
+    this.displayBoard();
   }
 
 
@@ -4187,7 +4126,10 @@ this.startClock();
     //
     // remove back button from forced gameplay
     //
-    if (selected_card != null) { this.game.state.back_button_cancelled = 1; }
+    if (selected_card != null) { 
+console.log("SELECTED CARD NOT NULL: bbc");
+      this.game.state.back_button_cancelled = 1; 
+    }
 
     //
     // check who has China Card
@@ -6360,7 +6302,9 @@ console.log("CONTROL IS: " + control);
     //
     // cancel back button on subsequent cards picks
     //
-    this.game.state.back_button_cancelled = 1;
+//console.log("END TURN -- bbc");
+    //this.game.state.back_button_cancelled = 1;
+
 
     //
     // show active events
@@ -6466,7 +6410,14 @@ console.log("CONTROL IS: " + control);
     }
   }
 
-
+  displayBoard() {
+    this.updateDefcon();
+    this.updateActionRound();
+    this.updateSpaceRace();
+    this.updateVictoryPoints();
+    this.updateMilitaryOperations();
+    this.updateRound();
+  }
 
 
   endRound() {

@@ -1,63 +1,83 @@
-
-
-
-
-#hexGrid {
-  display: flex;
-  flex-wrap: wrap;
-  width: 2000px;
-  margin: 0 auto;
-  overflow: hidden;
-  font-size: 15px;
-  list-style-type: none;
-  /*
-%  3D Perspective
-%  -webkit-transform: perspective(600px) rotateX(60deg);
-%  -moz-transform: perspective(600px) rotateX(60deg);
-%  -ms-transform: perspective(600px) rotateX(60deg);
-%  -o-transform: perspective(600px) rotateX(60deg);
-%  transform: perspective(600px) rotateX(60deg);
-*/
+.game-menu {
+  width: 320px;
 }
 
-.hex {
-  position: relative;
-  visibility: hidden;
-  outline: 1px solid transparent;
-  /* fix for jagged edges in FF on hover transition */
+body {
+  background-image: url(/settlers/img/background2.jpg);
+  background-size: cover;
 }
 
-.hex::after {
-  content: '';
+
+.hud-body {
+  overflow: unset;
+}
+
+.textchoice {
+  background-color: whitesmoke;
+}
+
+.card {
+  width: 150px;
+}
+.startmove {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.game-hexgrid-cities {
+  position: absolute;
+}
+
+.hover:hover {
+  border: 1px solid white;
+}
+
+.road {
+  position: absolute;
   display: block;
-  padding-bottom: 86.602%;
-  /* =  100 / tan(60) * 1.5 */
+  width: 150px;
+  height: 30px;
+  background-color: transparent;
+  z-index: 5892351;
 }
 
 
-
-
-.hexIn {
+.city {
   position: absolute;
-  width: 96%;
-  padding-bottom: 110.851%;
-  /* =  width / sin(60) */
-  margin: 0 2%;
-  overflow: hidden;
-  visibility: hidden;
-  outline: 1px solid transparent;
-  /* fix for jagged edges in FF on hover transition */
-  -webkit-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
-  -ms-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
-  transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  z-index: 5892350;
 }
 
-.hexIn * {
+.sector_value {
   position: absolute;
-  visibility: visible;
-  outline: 1px solid transparent;
-  /* fix for jagged edges in FF on hover transition */
+  font-size: 4em;
+  z-index: 99;
+  font-weight: bold;
+  border: 1px solid #fff;
+  padding: 20px;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  line-height: 1.5em;
+  text-align: center;
+  background: #444a;
+  color: white;
+  font-weight: bold;
 }
 
-
+.p1 {
+  background-color: red;
+}
+.p2 {
+  background-color: blue;
+}
+.p3 {
+  background-color: green;
+}
+.p4 {
+  background-color: orange;
+}
 
