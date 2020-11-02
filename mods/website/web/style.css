@@ -25,28 +25,25 @@ body {
 }
 
 .frontpage-wallet {
-  padding: 1em;
+  padding: 1em 1em 1em 2em;
   width: 550px;
   overflow: hidden;
   background-color: #222d;
   color: #ffffff;
   font-weight: bold;
+  /* grid-gap: 0em 1em 0em 1em; */
+  grid-gap: 0em; 
+  margin: 0;
 }
 
-.frontpage-wallet div {
+.frontpage-wallet div.frontpage-wallet-div {
   font-size: 1.2em;
   text-decoration: none;
   text-overflow: ellipsis;
-  white-space: nowrap
+  white-space: nowrap;
+  padding: 0.2em 0.2em;
+  line-height: normal;
 }
-
-/* .new-intro-box {
-  position: relative;
-  background-image: linear-gradient(to bottom right, #ffffff, #bfbfff);
-  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
-  padding: 2em 2em 0em 2em;
-  background-color: transparent;
-} */
 
 #frontPageParagraphs {
   padding: 20px 20px 20px 20px;

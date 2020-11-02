@@ -12,7 +12,7 @@ class Website extends ModTemplate {
 
     this.description = "Investor information frontend";
     this.categories = "Utilities Communications";
-
+    this.onConfirmation = this.onlyInBrowser(this.onConfirmation.bind(this));
     return this;
   }
 
