@@ -6,10 +6,9 @@ const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
 const ArcadeGameCarousel = require('./lib/arcade-main/arcade-game-carousel/arcade-game-carousel');
-
-const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
+const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 
 class Arcade extends ModTemplate {
 
@@ -282,8 +281,8 @@ class Arcade extends ModTemplate {
     let data = {};
     data.arcade = this;
 
-    Header.render(app, data);
-    Header.attachEvents(app, data);
+    SaitoHeader.render(app, data);
+    SaitoHeader.attachEvents(app, data);
 
     if (window.location.pathname.split('/')[2] == "invite") {
       this.renderInvite(app, data);
