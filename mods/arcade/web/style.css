@@ -6,6 +6,12 @@
   --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
 }
 
+.a2 {
+  border: 1px solid aqua;
+  line-height: 2em;
+
+}
+
 body {
   font-size: 1.0em;
   color: var(--saito-skyline-grey);
@@ -61,10 +67,12 @@ input {
 }
 
 .arcade-container {
+  max-width: 1500px;
+  margin: 5em auto;
   display: grid;
   grid-column-gap: 1.5em;
-  grid-template-columns: 20em auto;
   grid-template-areas: "arcade-sidebar arcade-main";
+  grid-template-columns: 15em auto;
   font-size: 1em;
 }
 
@@ -133,8 +141,46 @@ input {
   background: #1e1e1f50;
 }
 
+
+
 /** MAIN **/
 
+.arcade-main {
+  display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    background-image: url(/arcade/img/dreamscape-logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.arcade-middle {
+  display: grid;
+  gap: 1.5em;
+  grid-template-rows: 40vh auto;
+}
+
+.arcade-sub {
+  display: grid;
+  gap: 1.5em;
+  grid-template-columns: 1fr 1fr;
+}
+
+.game-tile {
+  width: 30%;
+  height: 50%;
+  margin: 1em;
+}
+
+.arcade-gamelist {
+  width: 100%;
+}
+
+>>>>>>> 3af714e1f29290605e5033f02192dacb4c95ce70
 .game-options-html {
   overflow-y: auto;
   max-height: 4em;
