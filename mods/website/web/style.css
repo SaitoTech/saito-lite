@@ -86,30 +86,27 @@ body {
   margin: 5em auto;
 }
 
-.featured-app {
+.frontpage-card {
   width: 100%;
   perspective: 1000px;
   height: 400px;
   z-index: 10;
 }
-.featured-app h2 {
+.frontpage-card h2 {
   text-align: center;
 }
-.featured-app-inner {
-  position: relative;
+.frontpage-card-inner {
   width: 100%;
   height: 100%;
   transition: transform 0.8s;
   transform-style: preserve-3d;
-  /* border: solid 3px var(--saito-cyber-black); */
-  background-color: var(--saito-cyber-black);
 }
 
-.featured-app:hover .featured-app-inner {
+.frontpage-card:hover .frontpage-card-inner {
   transform: rotateY(180deg);
 }
 
-.featured-app-front, .featured-app-back {
+.frontpage-card-front, .frontpage-card-back {
   position: absolute;
   width: 100%;
   -webkit-backface-visibility: hidden;
@@ -118,12 +115,13 @@ body {
   left: 0;
 }
 
-.featured-app-front {
+.frontpage-card-front {
   color: var(--saito-cyber-black);
-  /* border: 0.3b em solid var(--saito-skyline-grey); */
+  background-color: var(--saito-cyber-black);
+  height: 100%;
 }
 
-.featured-app-back {
+.frontpage-card-back {
   transform: rotateY(180deg);
   background-color: #fff;
   color: white;
@@ -131,32 +129,32 @@ body {
   background: url(/saito/img/dreamscape.png);
   background-size: 125% 100%;
 }
-.featured-app-front h2{
+.frontpage-card-front h2{
   height: 30px;
   color: white;
 }
-.featured-app-left {
+.frontpage-card-left {
   width: 20%;
   float: left;
 }
-.featured-app-right {
+.frontpage-card-right {
   width: 80%;
   overflow: hidden;
   float: left;
   padding: 0em 1.5em 0em 0em;
 }
-.featured-app-left a {
+.frontpage-card-left a {
   display: block;
   font-size: 48px;
   color: var(--saito-cyber-black);
   text-align: center;
 }
-.featured-app-front img{
+.frontpage-card-front img{
   width: 100%;
   height: 290px;
 }
 
-.featured-app-back a, .featured-app-back h2{
+.frontpage-card-back a, .frontpage-card-back h2{
   color: white;
 }
 
@@ -989,7 +987,7 @@ button:focus {
   display: none;
 }
 
-.featured-app-inner-mobile {
+.frontpage-card-inner-mobile {
   display: none;
 }
 
@@ -1016,7 +1014,7 @@ button:focus {
   .grid-2-columns div {
     overflow: unset;
   }
-  .featured-app {
+  .frontpage-card {
     height: 400px;
   }
   .fundamentals-grid {
@@ -1080,7 +1078,7 @@ button:focus {
     flex-flow: column;
     justify-content: space-around;
   }
-  .featured-app-inner-mobile {
+  .frontpage-card-inner-mobile {
     width: calc(100vw - 2em);
     margin: 1em auto;
     display: block;
@@ -1088,7 +1086,7 @@ button:focus {
   .roadmap-wrapper {
     padding: 1em 0;
   }
-  .featured-app-back-inner {
+  .frontpage-card-back-inner {
     padding: 0 1em;
     text-align: center;
     color: #fff;
@@ -1099,7 +1097,7 @@ button:focus {
   .banner-logo {
     display: none;
   }
-  .featured-app-back-inner p {
+  .frontpage-card-back-inner p {
     margin: 1em;
   }
   .fundamentals-grid {
