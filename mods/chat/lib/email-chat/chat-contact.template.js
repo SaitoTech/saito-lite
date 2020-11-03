@@ -1,7 +1,5 @@
 module.exports = ChatContactTemplate = (app, group) => {
 
-console.log("GROUP: " + JSON.stringify(group));
-
   let ts = new Date().getTime();
   let msg = '';
   let message = group.messages[group.messages.length-1];
@@ -15,10 +13,7 @@ console.log("GROUP: " + JSON.stringify(group));
     msg = msg.substring(0, 48);
   }
 
-/***
-  let {datetime_formatter} = helpers;
-  let datetime = datetime_formatter(ts);
-***/
+  let datetime = app.browser.formatDate(ts);
 
   return `
     <div id="${group.id}" class="chat-row">
@@ -28,9 +23,9 @@ console.log("GROUP: " + JSON.stringify(group));
           <div class="chat-last-message">${msg}</div>
       </div>
       <div style="disaply; grid;">
+        <div class="chat-last-message-timestamp">${datetime.hours}:${datetime.minutes}</div>
       </div>
     </div>
   `;
 }
-        //<div class="chat-last-message-timestamp">${datetime.hours}:${datetime.minutes}</div>
 

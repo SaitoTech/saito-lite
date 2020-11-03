@@ -316,8 +316,6 @@ class Chat extends ModTemplate {
   //////////////////
   openChatBox(group_id=null) {
 
-console.log("trying to open chat box..");
-
     if (group_id == null) { return; }
 
     if (document.getElementById(`chat-box-${group_id}`)) {
@@ -335,9 +333,7 @@ console.log("trying to open chat box..");
 
     for (let i = 0; i < this.groups.length; i++) {
       if (this.groups[i].id == group_id) {
-alert(" 1 FOUND THE GROUP< OPENING BOX");
 	EmailChat.showChatBox(this.app, this, this.groups[i]);
-alert(" 2 FOUND THE GROUP< OPENING BOX");
       }
     }
 

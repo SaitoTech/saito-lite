@@ -11,7 +11,7 @@ module.exports = ChatSidebar = {
       // show groups 
       //
       for (let i = 0; i < mod.groups.length; i++) {
-        if (!document.querySelector(mod.groups[i].id)) { 
+        if (!document.getElementById(mod.groups[i].id)) { 
 	  app.browser.addElementToDom(ChatContactTemplate(app, mod.groups[i]), "chat-list" );
 	}
       }
@@ -24,10 +24,7 @@ module.exports = ChatSidebar = {
       // open chat window if clicked
       //
       document.querySelectorAll(".chat-row").forEach(row => {
-	row.onclick = (e) => {
-	  let id = e.currentTarget.id;
-	  mod.openChatBox(id);
-	};
+	row.onclick = (e) => { mod.openChatBox(e.currentTarget.id); };
       });
 
 
