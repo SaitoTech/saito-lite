@@ -1,4 +1,5 @@
 const ArcadeSidebarTemplate = require('./arcade-sidebar.template');
+const GameOverlay = require('./../../../../lib/saito/ui/game-overlay/game-overlay');
 
 module.exports = ArcadeSidebar = {
 
@@ -32,46 +33,16 @@ module.exports = ArcadeSidebar = {
 
   attachEvents(app, mod) {
 
-    let add_game = document.querySelector('#games-add-game')
-    if (!add_game) return;
-    add_game.onclick = () => {
+    if (!document.getElementById("games-add-game")) { return; }
 
-      ///////////////////////////////////////////
-      // TUTORIAL - REGISTER USERNAME OVERRIDE //
-      ///////////////////////////////////////////
-      let tutorialmod = app.modules.returnModule("Tutorial");
-      if (tutorialmod) {
-        if (tutorialmod.username_registered == 0) {
-          if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
-            try { tutorialmod.registerIdentifierModal(); } catch (err) { };
-            return;
-          }
-        }
-      }
-
-      alert("Clicked on Game Creation!");
-
+    document.getElementById("games-add-game").onclick = () => {
+      mod.overlay.showOverlay('Add or Install New Games');
     };
 
 
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
       game.addEventListener('click', (e) => {
-
-        ///////////////////////////////////////////
-        // TUTORIAL - REGISTER USERNAME OVERRIDE //
-        ///////////////////////////////////////////
-        let tutorialmod = app.modules.returnModule("Tutorial");
-        if (tutorialmod) {
-	  if (tutorialmod.username_registered != 1) {
-            if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
-              try { tutorialmod.registerIdentifierModal(); } catch (err) { };
-              return;
-            }
-          }
-        }
-
-alert("Clicked on Game Creation!");
-
+        mod.overlay.showOverlay('This is our overlay');
       });
     });
 
