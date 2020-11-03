@@ -51,16 +51,6 @@ body {
   margin: 0;
 }
 
-/* font-size: 1.4em;
-margin: 10px auto 10px auto;
-padding: 1em 1em 1em 1em;
-width: 450px;
-overflow: hidden;
-background-color: var(--saito-white);
-color: var(--saito-cyber-black);
-border: solid 2px var(--saito-cyber-black); 
-font-weight: bold; */
-
 .frontpage-wallet div.frontpage-wallet-div {
   font-size: 1.2em;
   text-decoration: none;
@@ -78,11 +68,6 @@ font-weight: bold; */
   border: solid 2px var(--saito-cyber-black);
   font-size: 1.6em;
 }
-
-/* #whitePaperContent a, #whitePaperContent a:hover, #whitePaperContent *, #whitePaperContent a:hover{
-  text-decoration: none;
-} */
-
 
 .register_username {
   cursor: pointer;
@@ -116,8 +101,8 @@ font-weight: bold; */
   height: 100%;
   transition: transform 0.8s;
   transform-style: preserve-3d;
-  border: solid 3px black;
-  background-color: var(--saito-skyline-grey);
+  /* border: solid 3px var(--saito-cyber-black); */
+  background-color: var(--saito-cyber-black);
 }
 
 .featured-app:hover .featured-app-inner {
@@ -134,9 +119,8 @@ font-weight: bold; */
 }
 
 .featured-app-front {
-  color: black;
-  border: 0.3b em solid var(--saito-skyline-grey);
-  
+  color: var(--saito-cyber-black);
+  /* border: 0.3b em solid var(--saito-skyline-grey); */
 }
 
 .featured-app-back {
@@ -149,6 +133,7 @@ font-weight: bold; */
 }
 .featured-app-front h2{
   height: 30px;
+  color: white;
 }
 .featured-app-left {
   width: 20%;
@@ -163,10 +148,10 @@ font-weight: bold; */
 .featured-app-left a {
   display: block;
   font-size: 48px;
-  color: var(--saito-red);
+  color: var(--saito-cyber-black);
   text-align: center;
 }
-.featured-app-right img{
+.featured-app-front img{
   width: 100%;
   height: 290px;
 }
