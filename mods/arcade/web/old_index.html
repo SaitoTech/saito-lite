@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="/chat/css/email-chat.css">
   <link rel="stylesheet" href="/arcade/style.css">
 
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/saito/lib/fitty/fitty.min.js"></script>
 
 </head>
@@ -39,26 +40,17 @@
 
   <div id="content" class="content" style="visibility: visible !important;">
     <div class="wizard-holder"></div>
-    <div class="a2 arcade-container main">
-      <div class="a2 arcade-left-sidebar sidebar">Left</div>
-      <div class="a2 arcade-middle">
-        <div class="a2 arcade-main">
-          <div class="a2 game-tile"></div>
-          <div class="a2 game-tile"></div>
-          <div class="a2 game-tile"></div>
-          <div class="a2 game-tile"></div>
-          <div class="a2 game-tile"></div>
-          <div class="a2 game-tile"></div>
-        </div>
-        <div class="a2 arcade-sub">
-          <div class="a2 arcade-latest">Latest</div>
-          <div class="a2 arcade-chatman">Chatman</div>
-        </div>
+    <div class="arcade-container main">
+      <div class="arcade-left-sidebar sidebar"></div>
+      <div class="arcade-middle">
+        <div class="arcade-game-carousel"></div>
+        <div class="arcade-main"></div>
       </div>
+      <div class="arcade-right-sidebar sidebar"></div>
     </div>
   </div>
 
-  <!--script id="saito" type="text/javascript" src="/saito/saito.js"></script-->
+  <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
 
 </body>
 
