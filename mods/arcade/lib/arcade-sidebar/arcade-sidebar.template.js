@@ -14,7 +14,7 @@ module.exports = ArcadeSidebarTemplate = () => {
         </div>
     </div>
   </div>
-  <div class="arcade-sidebar-apps"></div>
-  <div class="email-chat"></div>
+  <div id-"arcade-sidebar-apps" class="arcade-sidebar-apps"></div>
+  <div id="email-chat" class="email-chat"></div>
   `;
 }

@@ -39,8 +39,8 @@ class Arcade extends ModTemplate {
   receiveEvent(type, data) {
     if (type == 'chat-render-request') {
       if (this.browser_active) {
-//        ArcadeSidebar.render(this.app, this);
-//        ArcadeSidebar.attachEvents(this.app, this);
+        ArcadeSidebar.render(this.app, this);
+        ArcadeSidebar.attachEvents(this.app, this);
       }
     }
   }
@@ -77,7 +77,7 @@ class Arcade extends ModTemplate {
   }
 
 
-  initializeHTML(app) {
+  async render(app) {
 
     if (!document.getElementById("arcade-container")) { 
       app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); 
@@ -93,8 +93,6 @@ class Arcade extends ModTemplate {
     ArcadeSidebar.attachEvents(app, this);
 
   }
-
-
 
 
 

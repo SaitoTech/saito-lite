@@ -7,28 +7,28 @@ module.exports = ArcadeSidebar = {
     if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
     if (!document.querySelector(".arcade-sidebar")) { app.browser.addElementToDom(ArcadeSidebarTemplate(), "arcade-container"); }
 
+
    app.modules.respondTo("email-chat").forEach(module => {
       if (module != null) { 
-	let data = {};
-	    data.arcade = mod;
-	module.respondTo('email-chat').render(app, data); 
+	module.respondTo('email-chat').render(app, module); // send in chat, not mod=Arcade
       }
     });
 
 
     let games_menu = document.querySelector(".arcade-apps");
-
     app.modules.respondTo("arcade-games").forEach(module => {
       let title = mod.name;
-      if (module.respondTo("arcade-carousel") != null) {
-        if (module.respondTo("arcade-carousel").title) {
-          title = module.respondTo("arcade-carousel").title;
+      if (!document.getElementById(module.name)) {
+        if (module.respondTo("arcade-carousel") != null) {
+          if (module.respondTo("arcade-carousel").title) {
+            title = module.respondTo("arcade-carousel").title;
+          }
         }
+        games_menu.innerHTML += `<li class="arcade-navigator-item" id="${module.name}">${title}</li>`;
       }
-      games_menu.innerHTML += `<li class="arcade-navigator-item" id="${module.name}">${title}</li>`;
     });
-
   },
+
 
   attachEvents(app, mod) {
 
@@ -49,10 +49,7 @@ module.exports = ArcadeSidebar = {
         }
       }
 
-alert("Clicked on Game Creation!");
-
-      //ArcadeStartGameList.render(app, data);
-      //ArcadeStartGameList.attachEvents(app, data);
+      alert("Clicked on Game Creation!");
 
     };
 
@@ -75,18 +72,12 @@ alert("Clicked on Game Creation!");
 
 alert("Clicked on Game Creation!");
 
-        //data.active_game = e.currentTarget.id;
-        //ArcadeGameCreate.render(app, data);
-        //ArcadeGameCreate.attachEvents(app, data);
-
       });
     });
 
 
     app.modules.respondTo("email-chat").forEach(module => {
-      data = {};
-      data.arcade = mod;
-      module.respondTo('email-chat').attachEvents(app, data);
+      module.respondTo('email-chat').attachEvents(app, mod);
     });
 
   }

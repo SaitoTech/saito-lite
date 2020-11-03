@@ -140,12 +140,6 @@ p {
   padding: 4px 0 0 0;
 }
 
-.chat-header {
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between;
-}
-
 .chat-last-message {
   color: grey;
   margin-top: 2px;
@@ -294,9 +288,6 @@ p {
 }
 
 .chat-box {
-  bottom: 0px;
-  right: 0px;
-  position: absolute;
   display: grid;
   margin-left: 1em;
   background-color: white;
