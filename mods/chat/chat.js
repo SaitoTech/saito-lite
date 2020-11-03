@@ -405,6 +405,7 @@ console.log("TESTING HERE AND GOT ERROR: " + err);
 	if (chatgroup.members)  { cg.members = chatgroup.members; }
 	if (chatgroup.messages) { cg.messages = chatgroup.messages; }
 	if (chatgroup.id)       { cg.id = chatgroup.id; }
+	if (chatgroup.name)       { cg.name = chatgroup.name; }
 	cg.identicon = this.app.keys.returnIdenticon(JSON.stringify(cg.members));
         if (cg.messages.length == 0) { cg.messages.push("no messages in this group..."); }
 

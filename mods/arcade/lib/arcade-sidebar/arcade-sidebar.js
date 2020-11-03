@@ -1,4 +1,5 @@
 const ArcadeSidebarTemplate = require('./arcade-sidebar.template');
+const ArcadeGamesFullListOverlayTemplate = require('./arcade-games-full-list-overlay.template');
 const GameOverlay = require('./../../../../lib/saito/ui/game-overlay/game-overlay');
 
 module.exports = ArcadeSidebar = {
@@ -35,13 +36,14 @@ module.exports = ArcadeSidebar = {
     if (!document.getElementById("games-add-game")) { return; }
 
     document.getElementById("games-add-game").onclick = () => {
-      mod.overlay.showOverlay('Add or Install New Games');
+      mod.overlay.showOverlay(app, mod, ArcadeGamesFullListOverlayTemplate(app, mod));
+//      mod.overlay.showOverlay(app, mod, 'Add or Install New Games');
     };
 
 
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
       game.addEventListener('click', (e) => {
-        mod.overlay.showOverlay('This is our overlay');
+        mod.overlay.showOverlay(app, mod, 'This is our overlay');
       });
     });
 
