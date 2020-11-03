@@ -7,8 +7,7 @@ const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
 const ArcadeGameCarousel = require('./lib/arcade-main/arcade-game-carousel/arcade-game-carousel');
 const AddressController = require('../../lib/ui/menu/address-controller');
-
-const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
+let SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 
 class Arcade extends ModTemplate {
 
@@ -36,6 +35,8 @@ class Arcade extends ModTemplate {
     this.description = "A place to find, play and manage games!";
     this.categories = "Games Utilities";
     this.addrController = new AddressController(app);
+
+    this.header = new SaitoHeader(app, this);
 
   }
 
@@ -281,8 +282,8 @@ class Arcade extends ModTemplate {
     let data = {};
     data.arcade = this;
 
-    SaitoHeader.render(app, data);
-    SaitoHeader.attachEvents(app, data);
+    this.header.render(app, this);
+    this.header.attachEvents(app, this);
 
     if (window.location.pathname.split('/')[2] == "invite") {
       this.renderInvite(app, data);
