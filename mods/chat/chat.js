@@ -2,6 +2,9 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailChat = require('./lib/email-chat/email-chat');
 
+const AddressController = require('../../lib/ui/menu/address-controller');
+const helpers = require('../../lib/helpers/index');
+
 class Chat extends ModTemplate {
 
   constructor(app) {
@@ -12,6 +15,12 @@ class Chat extends ModTemplate {
     this.groups = [];
 
     this.relay_moves_onchain_if_possible = 1;
+
+    // legacy requires purging
+    this.addrController = new AddressController(app);
+    this.helpers = helpers;
+
+
   }
 
   receiveEvent(type, data) {
@@ -269,14 +278,19 @@ class Chat extends ModTemplate {
           let from_add = tx.transaction.from[0].add;
           let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
 
+console.log("A 1");
+
           this.addrController.fetchIdentifiers([from_add]);
+console.log("A 2");
           let message = Object.assign(txmsg, {
             sig: tx.transaction.sig,
             type: msg_type,
             identicon: this.app.keys.returnIdenticon()
           });
+console.log("A 3");
 
           group.messages.push(message);
+console.log("A 4");
 
           if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
             let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
@@ -287,11 +301,14 @@ class Chat extends ModTemplate {
             app.browser.sendNotification(title, clean_message, 'chat-message-notification');
             this.sendEvent('chat_receive_message', message);
           }
+console.log("A 5");
 
           this.sendEvent('chat-render-request', {});
+console.log("A 6");
         }
 
       } catch (err) {
+console.log("TESTING HERE AND GOT ERROR: " + err);
       }
 
     });

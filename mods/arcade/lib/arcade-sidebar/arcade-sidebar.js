@@ -15,7 +15,6 @@ module.exports = ArcadeSidebar = {
       }
     });
 
-
     let games_menu = document.querySelector(".arcade-apps");
     app.modules.respondTo("arcade-games").forEach(module => {
       let title = mod.name;
