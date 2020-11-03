@@ -12,13 +12,11 @@ function stopVideo() {
 module.exports = AddContactModal = {
 
   render(app, data) {
-    let {el_parser} = data.chat.helpers;
-    document.querySelector(".email-chat").append(el_parser(AddContactModalTemplate()));
+    app.browser.addElementToDom(AddContactModalTemplate(), "email-chat");
     data.renderView = this.renderView;
   },
 
   attachEvents(app, data) {
-    let {el_parser} = data.chat.helpers;
     var modal = document.getElementById('add-contact-modal');
 
     document.getElementById('email-chat-add-contact').onclick = () => {
@@ -45,21 +43,17 @@ module.exports = AddContactModal = {
   },
 
   renderView(app, data) {
-    let {el_parser} = data.chat.helpers;
     stopVideo();
     document.querySelector(".add-contact-modal-body").innerHTML = '';
 
     if (data.contact_view == 'qr') {
       AddContactModalQR.render(app, data);
       AddContactModalQR.attachEvents(app, data);
-      document.querySelector(".add-contact-modal-body")
-              .append(el_parser(
-                `<div class="add-contact-toggle" id="key" style="
+      app.browser.addElementToDom(`<div class="add-contact-toggle" id="key" style="
                 text-align: right;
                 text-decoration: underline;
                 color: blue;
-                cursor: pointer">Add By Key</div>`
-              ));
+                cursor: pointer">Add By Key</div>`, "add-contact-modal-body");
       document.querySelector('.add-contact-toggle')
         .onclick = () => {
           if (!document.querySelector('.add-contact-text')) {

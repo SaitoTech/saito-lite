@@ -18,8 +18,15 @@ module.exports = ChatManager = {
 
   render(app, data) {
 
+
     if( typeof window != "undefined") {
+
+
       if (!document.querySelector('.chat-manager')) {
+
+        app.browser.addElementToDom('<div class="chat-manager"></div>');
+
+/***
         let {el_parser} = data.chat.helpers;
         let parent_ids = ['content', 'container', 'main'];
         let parent_elem;
@@ -32,6 +39,8 @@ module.exports = ChatManager = {
 
         if (!parent_elem) return;
         parent_elem.append(el_parser('<div class="chat-manager"></div>'));
+***/
+
       }
 
       if (data.chat.active_groups == 0 && data.chat.groups.length > 0) { 

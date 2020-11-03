@@ -39,12 +39,14 @@ class Leaderboard extends ModTemplate {
     //
     // main-panel games
     //
+/***
     if (this.app.modules.respondTo("arcade-games")) {
       this.app.modules.respondTo("arcade-games").forEach(mod => {
         this.mods.push(mod);
         this.affix_callbacks_to.push(mod.name);
       });
     }
+***/
 
   }
 
@@ -66,6 +68,12 @@ class Leaderboard extends ModTemplate {
     let arcade_self = app.modules.returnModule("Arcade");
 
     if (arcade_self == null) { return ; }
+
+    //
+    // avoid errors for now
+    //
+    return;
+
     if (arcade_self.browser_active == 1) {
 
       let installed_games = "(";
