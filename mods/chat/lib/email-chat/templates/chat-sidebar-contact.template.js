@@ -1,4 +1,4 @@
-module.exports = ChatContactTemplate = (app, group) => {
+module.exports = ChatSidebarContactTemplate = (app, group) => {
 
   let ts = new Date().getTime();
   let msg = '';

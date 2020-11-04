@@ -1,5 +1,5 @@
-const ChatSidebarTemplate = require('./chat-sidebar.template');
-const ChatContactTemplate = require('./chat-contact.template');
+const ChatSidebarTemplate = require('./templates/chat-sidebar.template');
+const ChatSidebarContactTemplate = require('./templates/chat-sidebar-contact.template');
 
 module.exports = ChatSidebar = {
 
@@ -7,12 +7,9 @@ module.exports = ChatSidebar = {
 
       if (!document.querySelector('.chat-header')) { app.browser.addElementToDom(ChatSidebarTemplate(), "email-chat" ); } 
 
-      //
-      // show groups 
-      //
       for (let i = 0; i < mod.groups.length; i++) {
         if (!document.getElementById(mod.groups[i].id)) { 
-	  app.browser.addElementToDom(ChatContactTemplate(app, mod.groups[i]), "chat-list" );
+	  app.browser.addElementToDom(ChatSidebarContactTemplate(app, mod.groups[i]), "chat-list" );
 	}
       }
 

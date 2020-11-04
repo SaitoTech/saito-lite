@@ -1,5 +1,5 @@
-const ChatBoxTemplate = require('./chat-box.template');
-const ChatBoxMessageBlockTemplate = require('./chat-box-message-block.template');
+const ChatBoxTemplate = require('./templates/chat-box.template');
+const ChatBoxMessageBlockTemplate = require('./templates/chat-box-message-block.template');
 
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');

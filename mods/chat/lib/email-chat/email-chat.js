@@ -8,7 +8,6 @@ module.exports = EmailChat = {
       ChatSidebar.render(app, mod);
       ChatSidebar.attachEvents(app, mod);
 
-console.log("NOW RENDERING CHAT BOXES: " + mod.name);
       ChatBox.render(app, mod);
       ChatBox.attachEvents(app, mod);
 
