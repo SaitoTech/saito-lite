@@ -1,4 +1,4 @@
-const ChatRoomMessageTemplate = require('./chat-message.template');
+const ChatBoxMessageTemplate = require('./chat-box-message.template');
 const emoji = require('node-emoji');
 
 module.exports = ChatBoxMessageBlockTemplate = (message_block, mod) => {
@@ -12,7 +12,7 @@ module.exports = ChatBoxMessageBlockTemplate = (message_block, mod) => {
    messages.forEach(message => {
      if (!sigs.includes(message.sig) && !document.getElementById(message.sig)) {
        sigs.push(message.sig);
-       messages_html += ChatMessageTemplate(message, mod);
+       messages_html += ChatBoxMessageTemplate(message, mod);
      }
    });
 

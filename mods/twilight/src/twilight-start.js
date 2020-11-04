@@ -2802,8 +2802,8 @@ console.log("CARD: " + card);
 		// shuttle diplomacy
 		//
        		if (this.game.state.events.shuttlediplomacy == 1) {
-		  if (discarded_cards['shuttlediplomacy'] != undefined) {
-		    delete discarded_cards['shuttlediplomacy'];
+		  if (discarded_cards['shuttle'] != undefined) {
+		    delete discarded_cards['shuttle'];
 		  }
 		}
 
@@ -5059,8 +5059,8 @@ console.log("SELECTED CARD NOT NULL: bbc");
 	// shuttle diplomacy
 	//
        	if (this.game.state.events.shuttlediplomacy == 1) {
-	  if (discarded_cards['shuttlediplomacy'] != undefined) {
-	    delete discarded_cards['shuttlediplomacy'];
+	  if (discarded_cards['shuttle'] != undefined) {
+	    delete discarded_cards['shuttle'];
 	  }
 	}
 
@@ -7834,8 +7834,9 @@ console.log("SCORING: " + JSON.stringify(scoring));
           if (scoring.ussr.bg > 0) {
             scoring.ussr.bg--;
             scoring.ussr.total--;
-          }          
+          }
 	  if (mouseover_preview == 0) {
+
             this.game.state.events.shuttlediplomacy = 0;
 
 	    //

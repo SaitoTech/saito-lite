@@ -55,6 +55,61 @@ module.exports = ChatBox = {
 
     attachEvents(app, mod) {
 
+      let chat_self = this;
+
+      //
+      // foreach chat box
+      //
+      document.querySelectorAll(".chat-box").forEach(box => {    
+
+        let group_id = box.id.split('chat-box-')[1];
+        let group = null;
+        let msg_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
+
+        //
+        // paste image into comment-box
+        //
+        window.handlePasteImage(msg_input, (img) => {
+
+          let msg_data = {
+            message: img,
+            group_id: group_id,
+            publickey: app.wallet.returnPublicKey(),
+            timestamp: new Date().getTime()
+          };
+
+          let newtx = chat_self.createMessage(app, mod, msg_data);
+          app.modules.returnModule("Chat").sendMessage(app, newtx);
+          chat_self.addMessage(app, mod, newtx);
+
+        });
+
+
+        //
+        // submit on enter
+        //
+        msg_input.addEventListener("keypress", (e) => {
+          if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
+            e.preventDefault();
+            if (msg_input.value == '') { return; }
+
+            let msg_data = {
+              message: msg_input.value,
+              group_id: group_id,
+              publickey: app.wallet.returnPublicKey(),
+              timestamp: new Date().getTime()
+            };
+
+            let newtx = chat_self.createMessage(app, mod, msg_data);
+            app.modules.returnModule("Chat").sendMessage(app, newtx);
+            chat_self.addMessage(app, mod, newtx);
+            msg_input.value = '';
+          }
+        });
+      });
+
+
+
       //
       // send messages
       //
@@ -72,11 +127,11 @@ module.exports = ChatBox = {
             timestamp: new Date().getTime()
           };
 
-          let newtx = this.createMessage(app, mod, msg_data);
+          let newtx = chat_self.createMessage(app, mod, msg_data);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
 
 	  alert("sending chat message!");
-          this.addMessage(app, mod, newtx);
+          chat_self.addMessage(app, mod, newtx);
           msg_input.value = '';
 
 	};
@@ -107,6 +162,32 @@ module.exports = ChatBox = {
           chat_box.parentNode.removeChild(chat_box);
         };
       });
+
+
+      //
+      // drag and drop images into chat window
+      //
+      document.querySelectorAll(".chat-box-main").forEach(el => {
+        app.browser.addDragAndDropFileUploadToElement(el.id, function(filesrc) {
+
+	  let group_id = el.id.split('chat-box-main-')[1];
+	  let img = document.createElement('img'); 
+              img.src = filesrc;
+
+          let msg_data = {
+            message: img.outerHTML, 
+            group_id: group_id,
+            publickey: app.wallet.returnPublicKey(),
+            timestamp: new Date().getTime()
+          };
+
+          let newtx = chat_self.createMessage(app, mod, msg_data);
+          app.modules.returnModule("Chat").sendMessage(app, newtx);
+          chat_self.addMessage(app, mod, newtx);
+
+	});
+      });
+
 
 
     },

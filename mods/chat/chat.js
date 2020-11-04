@@ -296,19 +296,14 @@ class Chat extends ModTemplate {
           let from_add = tx.transaction.from[0].add;
           let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
 
-console.log("A 1");
-
           this.addrController.fetchIdentifiers([from_add]);
-console.log("A 2");
           let message = Object.assign(txmsg, {
             sig: tx.transaction.sig,
             type: msg_type,
             identicon: this.app.keys.returnIdenticon()
           });
-console.log("A 3");
 
           group.messages.push(message);
-console.log("A 4");
 
           if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
             let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
@@ -319,10 +314,8 @@ console.log("A 4");
             app.browser.sendNotification(title, clean_message, 'chat-message-notification');
             this.sendEvent('chat_receive_message', message);
           }
-console.log("A 5");
 
           this.sendEvent('chat-render-request', {});
-console.log("A 6");
         }
 
       } catch (err) {
