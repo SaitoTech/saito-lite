@@ -1,23 +1,27 @@
-const ModTemplate = require('../../lib/templates/modtemplate');
-const Header = require('../../lib/ui/header/header');
-const EmailMain = require('./lib/email-main/email-main');
-const EmailSidebar = require('./lib/email-sidebar/email-sidebar');
+const ModTemplate = require("../../lib/templates/modtemplate");
+const Header = require("../../lib/ui/header/header");
+const EmailMain = require("./lib/email-main/email-main");
+const EmailSidebar = require("./lib/email-sidebar/email-sidebar");
 
-const AddressController = require('../../lib/ui/menu/address-controller');
-const helpers = require('../../lib/helpers/index');
-
+const AddressController = require("../../lib/ui/menu/address-controller");
+const helpers = require("../../lib/helpers/index");
 
 class Email extends ModTemplate {
-
   constructor(app) {
     super(app);
 
+    console.log("email constructor", app);
+
+    app.peer.host = "localhost";
+    app.peer.port = "12101";
+
     this.name = "Email";
-    this.description = "Essential wallet, messaging platform and extensible control panel for Saito applications";
+    this.description =
+      "Essential wallet, messaging platform and extensible control panel for Saito applications";
     this.categories = "Core Messaging Admin Productivity Utilities";
 
     this.chat = null;
-    this.events = ['chat-render-request'];
+    this.events = ["chat-render-request"];
     this.icon_fa = "fas fa-envelope";
 
     this.emails = {};
@@ -34,10 +38,9 @@ class Email extends ModTemplate {
     this.active = "email_list";
     this.header_title = "";
 
-
     this.selected_email = null;
 
-    this.appspace = 0;	// print email-body with appspace
+    this.appspace = 0; // print email-body with appspace
     this.appspace_mod = null;
     this.appspace_mod_idx = -1; // index in mods of appspace module
 
@@ -47,7 +50,6 @@ class Email extends ModTemplate {
 
     // add our address controller
     this.addrController = new AddressController(app, this.returnMenuItems());
-
   }
 
   render(app, data) {
@@ -66,13 +68,12 @@ class Email extends ModTemplate {
   }
 
   initialize(app) {
-
     super.initialize(app);
 
     //
     // add an email
     //
-    
+
     let tx = app.wallet.createUnsignedTransaction();
     /*
     tx.transaction.msg.module = "Email";
@@ -99,13 +100,11 @@ class Email extends ModTemplate {
     tx = app.wallet.createUnsignedTransaction();
     tx.transaction.msg.module = "Email";
     tx.transaction.msg.title = "Sent Message Folder";
-    tx.transaction.msg.message = "This folder is where your sent messages are stored...";
+    tx.transaction.msg.message =
+      "This folder is where your sent messages are stored...";
     tx = this.app.wallet.signTransaction(tx);
     this.emails.sent.push(tx);
-
   }
-
-
 
   respondTo(type = "") {
     if (type == "header-dropdown") {
@@ -114,14 +113,12 @@ class Email extends ModTemplate {
     return null;
   }
 
-
-
-
   initializeHTML(app) {
-
     super.initializeHTML(app);
 
-    if(getPreference('darkmode')) {
+    console.log("INIT1223 APPPP", app);
+
+    if (getPreference("darkmode")) {
       addStyleSheet("/forum/dark.css");
     }
 
@@ -143,31 +140,26 @@ class Email extends ModTemplate {
     this.uidata.helpers = helpers;
 
     this.render(app, this.uidata);
-
   }
 
-
-
   deleteTransaction(tx) {
-
     for (let i = 0; i < this.emails[this.emails.active].length; i++) {
       let mytx = this.emails[this.emails.active][i];
       if (mytx.transaction.sig == tx.transaction.sig) {
         this.app.storage.deleteTransaction(tx);
         this.emails[this.emails.active].splice(i, 1);
-        this.emails['trash'].unshift(tx);
+        this.emails["trash"].unshift(tx);
       }
     }
-
   }
-
 
   //
   // load transactions into interface when the network is up
   //
   onPeerHandshakeComplete(app, peer) {
-
-    if (this.browser_active == 0) { return; }
+    if (this.browser_active == 0) {
+      return;
+    }
 
     //
     // leaving this here for the short term,
@@ -181,16 +173,19 @@ class Email extends ModTemplate {
     //
     //
     url = new URL(window.location.href);
-    if (url.searchParams.get('module') != null) { return; }
+    if (url.searchParams.get("module") != null) {
+      return;
+    }
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
-
       let keys = [];
 
       for (let i = 0; i < txs.length; i++) {
         let addtx = true;
         for (let k = 0; k < this.emails.inbox.length; k++) {
-          if (txs[i].returnSignature() == this.emails.inbox[k].returnSignature()) {
+          if (
+            txs[i].returnSignature() == this.emails.inbox[k].returnSignature()
+          ) {
             addtx = false;
           }
         }
@@ -204,31 +199,23 @@ class Email extends ModTemplate {
       EmailList.attachEvents(this.app, this.uidata);
 
       this.addrController.fetchIdentifiers(keys);
-
     });
-
 
     //EmailList.render(this.app, this.uidata);
     //EmailList.attachEvents(this.app, this.uidata);
-
   }
 
-
-
   onConfirmation(blk, tx, conf, app) {
-
     let txmsg = tx.returnMessage();
     let email = app.modules.returnModule("Email");
 
     if (conf == 0) {
-
       let publickey = app.wallet.returnPublicKey();
 
       //
       // if transaction is for me
       //
       if (tx.transaction.to[0].add == publickey) {
-
         //
         // great lets save this
         //
@@ -242,10 +229,11 @@ class Email extends ModTemplate {
     }
   }
 
-
   addEmail(tx) {
     try {
-      if (this.browser_active == 0) { this.showAlert(); }
+      if (this.browser_active == 0) {
+        this.showAlert();
+      }
       let addtx = true;
       for (let k = 0; k < this.emails.inbox.length; k++) {
         if (this.emails.inbox[k].returnSignature() == tx.returnSignature()) {
@@ -255,31 +243,29 @@ class Email extends ModTemplate {
       if (addtx) {
         this.emails.inbox.unshift(tx);
         this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
-        if (this.browser_active) { this.renderMain(this.app, this.uidata); }
+        if (this.browser_active) {
+          this.renderMain(this.app, this.uidata);
+        }
       }
     } catch (err) {
       console.error(err);
     }
   }
 
-
-
   receiveEvent(type, data) {
-
     console.log("EVENT RECEIVED: ");
 
-    if (type == 'chat-render-request') {
+    if (type == "chat-render-request") {
       if (this.browser_active) {
         this.renderSidebar(this.app, this.uidata);
       }
     }
-
   }
 
   returnMenuItems() {
     return {
-      'send-email': {
-        name: 'Send Email',
+      "send-email": {
+        name: "Send Email",
         callback: (address) => {
           this.previous_state = this.active;
           this.active = "email_form";
@@ -287,17 +273,16 @@ class Email extends ModTemplate {
           this.main.render(this.app, this.uidata);
           this.main.attachEvents(this.app, this.uidata);
 
-          document.getElementById('email-to-address').value = address;
-        }
-      }
-    }
+          document.getElementById("email-to-address").value = address;
+        },
+      },
+    };
   }
 
   getTokens() {
-
     let msg = {};
     msg.data = { address: this.app.wallet.returnPublicKey() };
-    msg.request = 'get tokens';
+    msg.request = "get tokens";
     setTimeout(() => {
       console.log("sending request for funds...");
       this.app.network.sendRequest(msg.request, msg.data);
@@ -306,13 +291,14 @@ class Email extends ModTemplate {
 
   updateBalance() {
     if (this.browser_active) {
-      if (document.querySelector('.email-balance')) {
+      if (document.querySelector(".email-balance")) {
         let balance = this.app.wallet.returnBalance();
-        document.querySelector('.email-balance').innerHTML = balance + " SAITO";
+        document.querySelector(".email-balance").innerHTML = balance + " SAITO";
       }
     }
   }
-
 }
+
+// console.log("hi", Email);
 
 module.exports = Email;

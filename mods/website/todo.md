@@ -1,0 +1,3 @@
+- each module has it's own webpack config?
+- all modules use modtemplate.js to talk to the saito network
+-
