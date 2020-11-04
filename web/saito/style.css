@@ -164,6 +164,54 @@ hr {
   font-weight: bolder;
 }
 
+/* Overlay */
+.saito-overlay-backdrop {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #444;
+  opacity: 0.4;
+  z-index: 100;
+}
+.saito-overlay-menu {
+  padding: 10px;
+  background-color: whitesmoke;
+  opacity: 0.8;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+}
+.saito-overlay-menu ul li {
+  width: 100%;
+  line-height: 3.5em;
+  border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
+  text-align: -webkit-match-parent;
+  display: list-item;
+  list-style: none;
+  padding: 0 1em;
+}
+.saito-overlay-menu ul li:hover {
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75), -2px -2px 5px #eee;
+  background: #0001;
+}
+
+.saito-overlay {
+  position: absolute;
+  display: inlie-block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  z-index: 1000;
+  font-size: 2em;
+  padding: 10px;
+}
+
+
 /* Forms and Inputs */
 
 button, .button, .file-label {
