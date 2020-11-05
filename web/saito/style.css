@@ -486,7 +486,7 @@ fieldset {
 }
 
 #navigator {
-  display: none;
+  display: inline-block;
 }
 
 input {
@@ -765,7 +765,7 @@ div#message-wrapper {
   padding: 1em;
   background-color: #eee;
   max-width: 90%;
-    max-height: 90%;
+  max-height: 90%;
 }
 
 .img-prev {
@@ -796,25 +796,44 @@ div#message-wrapper {
   z-index: 1;
 }
 
-.header h2 {
-  color: #fff;
-  font-family: visuelt-light;
-  line-height: 60px;
-}
-
-.header h2:after {
-  overflow: hidden;
+.header-mini-wallet {
+  height: 3.2em;
+  padding: 0.6em 1.0em 0em 1.0em;
+  border: solid 1px var(--saito-white);
+  color: white;
   display: inline-block;
-  vertical-align: bottom;
-  animation: ellipsis steps(4,end) 1200ms infinite;
-  content: "\2026"; /* ascii code for the ellipsis character */
-  width: 0px;
+  justify-self: end;
+  text-align: left;
 }
 
-@keyframes ellipsis {
-  to {
-    width: 1em;    
-  }
+.header-profile-photo {
+  height: 1.8em;
+  background-color: red;
+}
+.header-username, .header-balance {
+  display: inline-block;
+  padding-left: 0.3em;
+  height: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+  overflow: hidden;
+}
+.header-username {
+  width: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+}
+.header-mini-wallet .header-profile-photo {
+  
+}
+.header-mini-wallet .header-balance {
+  
+}
+.header-mini-wallet .header-username {
+  
+}
+.header-mini-wallet .header-icon {
+  
 }
 
 .header-home {
@@ -831,9 +850,9 @@ div#message-wrapper {
 }
 
 .header-icon-links {
+  display: inline;
   text-align: right;
   height: 44px;
-  padding-top: 10px;
 }
 
 .header-icon-links i {
