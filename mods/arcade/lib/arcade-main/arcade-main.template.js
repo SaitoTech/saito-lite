@@ -1,10 +1,10 @@
 module.exports = ArcadeMainTemplate = () => {
   return `
-    <div class="arcade-middle">
-      <div class="arcade-main"></div>
-      <div class="arcade-sub">
-        <div class="arcade-latest"></div>
-        <div class="arcade-chatman"></div>
+    <div id="arcade-main" class="arcade-main">
+      <div id="arcade-hero" class="arcade-hero"></div>
+      <div id="arcade-sub" class="arcade-sub">
+        <div id="arcade-posts" class="arcade-posts"></div>
+        <div id-"arcade-infobox" class="arcade-infobox"></div>
       </div>
     </div>
   `;

@@ -189,6 +189,22 @@ module.exports = ChatBox = {
       });
 
 
+      //
+      // chat windows draggable
+      //
+      document.querySelectorAll(".chat-box").forEach(el => {
+	let group_id = el.id.split('chat-box-')[1];
+        app.browser.makeDraggable(el.id, `chat-box-header-${group_id}`, function() {
+
+	  // toggle height
+          let chat_box = document.getElementById(`chat-box-${group_id}`);
+          chat_box.classList.toggle('chat-box-hide');
+          chat_box.parentNode.classList.toggle('min-chat');
+
+	});
+      });
+
+
 
     },
 

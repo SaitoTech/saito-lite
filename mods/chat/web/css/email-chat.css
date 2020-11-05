@@ -285,14 +285,6 @@ p {
   font-size: 1em;
 }
 
-.chat-manager {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  z-index: 90;
-}
-
 .chat-box {
   bottom: 0px;
   right: 0px;
@@ -392,7 +384,7 @@ p {
 }
 
 .chat-box-input {
-  position: fixed;
+  position: absolute;
   bottom: 0%;
   width: 32em;
   height: 3em;

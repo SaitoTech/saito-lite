@@ -36,7 +36,7 @@ a {
   gap: 1em;
 }
 
-.arcade-main {
+.arcade-hero {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   background-image: url(/arcade/img/dreamscape-logo.png);
@@ -46,7 +46,7 @@ a {
   border: 1px solid var(--saito-red);
 }
 
-.arcade-middle {
+.arcade-main {
   display: grid;
   gap: 1.5em;
   grid-template-rows: 40vh auto;
@@ -110,7 +110,7 @@ a {
     grid-template-rows: auto 3em;
   }
 
-  .arcade-chatman {
+  .arcade-infobox {
     position: absolute;
     transition: all ease-in-out 0.5s;
     background-color: darkorange;
@@ -118,7 +118,7 @@ a {
     width: 100vw;
     top: calc(100vh - 3em);
   }
-  .arcade-chatman:hover, .arcade-chatman:active, .arcade-chatman.active {
+  .arcade-infobox:hover, .arcade-infobox:active, .arcade-infobox.active {
     top: 5em;
   }
 }
