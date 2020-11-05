@@ -17,7 +17,7 @@ class Post extends ModTemplate {
     this.post.domain = "saito";
 
     this.icon_fa = "fa fa-map-signs";
-    this.description = `Post or reply to short messages.`;
+    this.description = `Simple forum for persistent posts and discussions';
     this.categories = "Social Messaging";
   }
 
@@ -30,37 +30,9 @@ class Post extends ModTemplate {
   initialize(app) {
 
     super.initialize(app);
-
     if (this.browser_active == 0) { return; }
 
   }
-
-  respondTo(type = "") {
-    if (type == "arcade-sidebar") {
-      let obj = {};
-      obj.render = this.renderArcadeSidebar;
-      obj.attachEvents = this.attachEventsArcadeSidebar;
-      return obj;
-    }
-    return null;
-  }
-
-  renderArcadeSidebar(app, data) {
-    data.post = app.modules.returnModule("Post");
-    ArcadeSidebar.render(app, data);
-  }
-  attachEventsArcadeSidebar(app, data) {
-    data.post = app.modules.returnModule("Post");
-    ArcadeSidebar.attachEvents(app, data);
-  }
-
-
-  onPeerHandshakeComplete(app, data) {
-    data.post = app.modules.returnModule("Post");
-    ArcadeSidebar.addPosts(app, data);
-  }
-
-
 
   onConfirmation(blk, tx, conf, app) {
 
@@ -84,9 +56,9 @@ class Post extends ModTemplate {
           post_self.deletePostTransaction(tx);
           post_self.deleteCommentCountPostTransaction(tx);
         }
-        if (tx.msg.type == "stick") {
-          post_self.receiveReportTransaction(tx);
-        }
+        //if (tx.msg.type == "stick") {
+        //  post_self.receiveReportTransaction(tx);
+        //}
       }
     }
 

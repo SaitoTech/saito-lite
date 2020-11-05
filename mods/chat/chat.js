@@ -45,28 +45,25 @@ class Chat extends ModTemplate {
           render: this.renderEmailChat,
           attachEvents: this.attachEventsEmailChat,
         }
-      // case 'header-dropdown':
-      //   return {}
+      case 'header-dropdown':
+        return {}
       default:
         return null;
     }
   }
   
   
-  // requestInterface(type = "") {
-  //   if (type == "header-dropdown") {        
-  //     return {
-  //       // link: (this.browser_active === 1) ? "javascript:void(0)" : "/" + this.name.toLowerCase(),
-  //       // css_classes: (this.browser_active === 1) ? "header-icon-disabled" : "",
-  //       // 
-  //       name: this.appname ? this.appname : this.name,
-  //       icon_fa: this.icon_fa,
-  //       browser_active: this.browser_active,
-  //       slug: this.returnSlug()
-  //     };
-  //   }
-  //   return null;
-  // }
+  requestInterface(type = "") {
+    if (type == "header-dropdown") {        
+      return {
+        name: this.appname ? this.appname : this.name,
+        icon_fa: this.icon_fa,
+        browser_active: this.browser_active,
+        slug: this.returnSlug()
+      };
+    }
+    return null;
+  }
 
 
   //

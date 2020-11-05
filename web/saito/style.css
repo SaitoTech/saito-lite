@@ -804,8 +804,8 @@ div#message-wrapper {
   display: inline-block;
   justify-self: end;
   text-align: left;
+  cursor: pointer;
 }
-
 .header-profile-photo {
   height: 1.8em;
   background-color: red;
