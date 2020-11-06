@@ -46,6 +46,27 @@ a {
   border: 1px solid var(--saito-red);
 }
 
+/*
+.arcade-hero {
+    display: flex;
+    background-image: url(/arcade/img/dreamscape-logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid var(--saito-red);
+    flex-flow: row;
+    justify-content: space-around;
+    align-items: center;
+}
+*/
+
+.game-page .arcade-hero {
+  display: grid;
+  gap: 1em;
+  grid-template-columns: 40vh auto;
+  overflow-y: hidden;
+}
+
 .arcade-main {
   display: grid;
   gap: 1.5em;
@@ -56,17 +77,47 @@ a {
   display: grid;
   gap: 1.5em;
   grid-template-columns: 1fr 1fr;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-
-.game-tile {
+.arcade-tile {
   transition: all ease-in-out 0.5s;
   min-height: 5em;
   transform-origin: center center;
 }
 
+.hero-list {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-around;
+}
+
+.game-tile {
+  transition: all ease-in-out 0.5s;
+  transform-origin: center center;
+  width: 20vh;
+  height: 20vh;
+  margin: 1vh;
+}
+
+.hero-action {
+  display: grid;
+  gap: 1em;
+  grid-template-rows: 5vh auto;
+}
+
 .game-tile:hover {
   transform: scale(1.1) translateZ(1em);
+}
+
+.game-title {
+  font-size: 3em;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 8vh;
+  display: flex;
+  justify-content: center;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -87,7 +138,6 @@ a {
   }
   .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
     left: 0;
-    gap: 1em;
   }
 }
 
@@ -109,7 +159,6 @@ a {
     grid-template-columns: auto;
     grid-template-rows: auto 3em;
   }
-
   .arcade-infobox {
     position: absolute;
     transition: all ease-in-out 0.5s;
@@ -121,7 +170,13 @@ a {
   .arcade-infobox:hover, .arcade-infobox:active, .arcade-infobox.active {
     top: 5em;
   }
+
+  .game-page .arcade-hero {
+    grid-template-columns: auto;
+    grid-template-rows: 20vh auto;
+  }
 }
+
 /* controls */
 
 .arcade-announcement {
@@ -362,14 +417,6 @@ button.add-games {
 
 .game-image {
   width: 100%;
-}
-
-.game-title {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-top: 6px;
-  text-align: center;
-  cursor: pointer;
 }
 
 /* GAME WIZARD */
