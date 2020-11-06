@@ -1,4 +1,6 @@
-const ArcadeMainTemplate = require('./arcade-main.template');
+const ArcadeMainTemplate = require('./templates/arcade-main.template');
+const ArcadePosts = require('./arcade-posts');
+const ArcadeInfobox = require('./arcade-infobox');
 
 module.exports = ArcadeMain = {
 
@@ -6,6 +8,9 @@ module.exports = ArcadeMain = {
 
     if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
     if (!document.querySelector(".arcade-main")) { app.browser.addElementToDom(ArcadeMainTemplate(), "arcade-container"); }
+
+    ArcadePosts.render(app, mod);
+    ArcadeInfobox.render(app, mod);
 
     //
     // add games to header
