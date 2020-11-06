@@ -4,8 +4,8 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeSidebar = require('./lib/arcade-sidebar/arcade-sidebar');
 const AddressController = require('../../lib/ui/menu/address-controller');
-//let SaitoHeader = require('../../lib/saito/ui/saito-header2/saito-header');
-let SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
+//let SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
+let SaitoHeader = require('../../lib/saito/ui/saito-header3/saito-header');
 
 class Arcade extends ModTemplate {
 
