@@ -256,6 +256,7 @@ console.log(" ... update ranking");
     await this.app.storage.executeDatabase(sql, {}, "leaderboard");
   }
 
+/*
   respondTo(type = "") {
     if (type == "arcade-sidebar") {
       let obj = {};
@@ -265,6 +266,8 @@ console.log(" ... update ranking");
     }
     return null;
   }
+*/
+
   renderSidebar(app, data) {
     data.leaderboard = app.modules.returnModule("Leaderboard");
     LeaderboardSidebar.render(app, data);

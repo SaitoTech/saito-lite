@@ -10,11 +10,23 @@ module.exports = ArcadeSidebar = {
     if (!document.querySelector(".arcade-sidebar")) { app.browser.addElementToDom(ArcadeSidebarTemplate(), "arcade-container"); }
 
 
-   app.modules.respondTo("email-chat").forEach(module => {
+    app.modules.respondTo("email-chat").forEach(module => {
       if (module != null) { 
-	module.respondTo('email-chat').render(app, module); // send in chat, not mod=Arcade
+	module.respondTo('email-chat').render(app, module);
       }
     });
+
+
+    let arcade_sidebar_apps_loaded = 0;
+    app.modules.respondTo("arcade-sidebar").forEach(module => {
+      if (module != null) { 
+	module.respondTo('arcade-sidebar').render(app, module);
+        arcade_sidebar_apps_loaded = 1;
+      }
+    });
+    if (arcade_sidebar_apps_loaded == 0) {
+      document.getElementById("arcade-sidebar-apps").style.display = "none";
+    }
 
     let games_menu = document.querySelector(".arcade-apps");
     app.modules.respondTo("arcade-games").forEach(module => {

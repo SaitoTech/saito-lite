@@ -60,7 +60,7 @@ class Rewards extends ModTemplate {
       obj.attachEvents = this.attachEventsEmail;
       return obj;
     }
-
+/***
     if (type == 'arcade-sidebar') {
       let obj = {};
       obj.render = this.renderArcadeSidebar;
@@ -68,6 +68,7 @@ class Rewards extends ModTemplate {
       return obj;
     }
     return null;
+***/
   }
 
   requestInterface(type) {
