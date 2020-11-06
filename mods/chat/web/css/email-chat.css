@@ -300,6 +300,7 @@ p {
   width: 32em;
   height: 38em;
   font-family: visuelt-light;
+  z-index: 100;
 }
 
 .chat-box .chat-box-header {
