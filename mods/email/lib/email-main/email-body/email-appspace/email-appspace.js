@@ -2,23 +2,23 @@ const EmailAppspaceTemplate = require('./email-appspace.template.js');
 
 module.exports = EmailAppspace = {
 
-  render(app, data) {
+  render(app, mod) {
 
     document.querySelector(".email-body").innerHTML = EmailAppspaceTemplate();
 
-    if (data.email.appspace_mod == null) { return; }
-    let modobj = data.email.appspace_mod.respondTo("email-appspace");
+    if (mod.appspace_mod == null) { return; }
+    let modobj = mod.appspace_mod.respondTo("email-appspace");
     if (modobj == null) { return; }
-    modobj.render(app, data);
+    modobj.render(app, mod);
 
   },
 
-  attachEvents(app, data) {
+  attachEvents(app, mod) {
 
-    if (data.email.appspace_mod == null) { return; }
-    let modobj = data.email.appspace_mod.respondTo("email-appspace");
+    if (mod.appspace_mod == null) { return; }
+    let modobj = mod.appspace_mod.respondTo("email-appspace");
     if (modobj == null) { return; }
-    modobj.attachEvents(app, data);
+    modobj.attachEvents(app, mod);
 
   },
 

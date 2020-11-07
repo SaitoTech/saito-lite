@@ -1,6 +1,8 @@
 const ArcadeMainTemplate = require('./templates/arcade-main.template');
 const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
+const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
+const SaitoCarouselTemplate = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
 
 module.exports = ArcadeMain = {
 
@@ -21,6 +23,30 @@ module.exports = ArcadeMain = {
       let html = `<div id="game-tile-${module.returnSlug()}" class="game-tile" style="background-image: url('${arcade_banner}'); background-size: cover"></div>`;
       app.browser.addElementToDom(html, "arcade-hero");
     });
+
+/***
+    //
+    // add games to carousel
+    //
+    // create carousel, but manually insert instead of rendering in body
+    //
+    mod.carousel.render(app, mod, "arcade-hero");
+    mod.carousel.attachEvents(app, mod);
+
+    app.modules.mods.forEach(module => {
+      if (module.respondTo("arcade-games")) {
+        if (module.respondTo("arcade-carousel")) {
+	  let gameobj = module.respondTo("arcade-carousel");
+          let html = `<div class="leaf" style="background: url(${gameobj.background});background-size:cover">
+                        <div class="big">${gameobj.title}</div>
+                      </div> 
+	  `;
+	  let leaf = app.browser.htmlToElement(html);
+          mod.carousel.addLeaf(leaf);
+        }
+      }
+    });
+***/
 
   },
 

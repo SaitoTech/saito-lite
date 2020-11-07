@@ -1,7 +1,7 @@
 const ModTemplate = require('../../lib/templates/modtemplate');
-const Header = require('../../lib/ui/header/header');
 const EmailMain = require('./lib/email-main/email-main');
 const EmailSidebar = require('./lib/email-sidebar/email-sidebar');
+const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 
 const AddressController = require('../../lib/ui/menu/address-controller');
 const helpers = require('../../lib/helpers/index');
@@ -10,6 +10,7 @@ const helpers = require('../../lib/helpers/index');
 class Email extends ModTemplate {
 
   constructor(app) {
+
     super(app);
 
     this.name = "Email";
@@ -22,6 +23,8 @@ class Email extends ModTemplate {
     this.events = ['chat-render-request'];
     this.icon_fa = "fas fa-wallet";
 
+    this.header = new SaitoHeader(app);
+
     this.emails = {};
     this.emails.inbox = [];
     this.emails.sent = [];
@@ -32,10 +35,8 @@ class Email extends ModTemplate {
     // trash
 
     this.mods = [];
-
     this.active = "email_list";
     this.header_title = "";
-
 
     this.selected_email = null;
 
@@ -43,8 +44,8 @@ class Email extends ModTemplate {
     this.appspace_mod = null;
     this.appspace_mod_idx = -1; // index in mods of appspace module
 
-    this.uidata = {};
-    this.uidata.mods = [];
+//    this.uidata = {};
+//    this.uidata.mods = [];
     this.count = 0;
 
     // add our address controller
@@ -52,19 +53,58 @@ class Email extends ModTemplate {
 
   }
 
-  render(app, data) {
-    this.renderMain(app, data);
-    this.renderSidebar(app, data);
-  }
+  render(app) {
 
-  renderMain(app, data) {
-    EmailMain.render(app, data);
-    EmailMain.attachEvents(app, data);
-  }
+    super.render(app);
 
-  renderSidebar(app, data) {
-    EmailSidebar.render(app, data);
-    EmailSidebar.attachEvents(app, data);
+    let html = `
+      <div id="content">
+        <div class="email-container main">
+          <div class="email-sidebar"></div>
+          <div class="email-main"></div>
+        </div>
+      </div>
+    `;
+    app.browser.addElementToDom(html);
+
+    this.header.render(app, this);
+    this.header.attachEvents(app, this);
+
+    EmailSidebar.render(app, this);
+    EmailSidebar.attachEvents(app, this);
+
+    EmailMain.render(app, this);
+    EmailMain.attachEvents(app, this);
+
+    console.log("TODO - fark mode in email is cross-module");
+    if (getPreference('darkmode')) { addStyleSheet("/forum/dark.css"); }
+
+/***
+    let x = [];
+    x = this.app.modules.respondTo("email-appspace");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+    }
+    x = this.app.modules.respondTo("email-chat");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+    }
+
+    this.uidata.mods = this.mods;
+    this.uidata.email = this;
+    this.uidata.helpers = helpers;
+
+    this.render(app, this.uidata);
+***/
+  }
+  renderSidebar(app) {
+    EmailSidebar.render(app, this);
+    EmailSidebar.attachEvents(app, this);
+
+  }
+  renderMain(app) {
+    EmailMain.render(app, this);
+    EmailMain.attachEvents(app, this);
   }
 
   initialize(app) {
@@ -74,7 +114,6 @@ class Email extends ModTemplate {
     //
     // add an email
     //
-    
     let tx = app.wallet.createUnsignedTransaction();
     tx.msg.module = "Email";
     tx.msg.title = "Sent Message Folder";
@@ -85,7 +124,7 @@ class Email extends ModTemplate {
   }
 
 
-  
+/****
   respondTo(type = "") {
     if (type == "header-dropdown") {
       return {};
@@ -104,35 +143,10 @@ class Email extends ModTemplate {
     }
     return null;
   }
+****/
 
-  initializeHTML(app) {
 
-    super.initializeHTML(app);
 
-    if(getPreference('darkmode')) {
-      addStyleSheet("/forum/dark.css");
-    }
-
-    Header.render(app, this.uidata);
-    Header.attachEvents(app, this.uidata);
-
-    let x = [];
-    x = this.app.modules.respondTo("email-appspace");
-    for (let i = 0; i < x.length; i++) {
-      this.mods.push(x[i]);
-    }
-    x = this.app.modules.respondTo("email-chat");
-    for (let i = 0; i < x.length; i++) {
-      this.mods.push(x[i]);
-    }
-
-    this.uidata.mods = this.mods;
-    this.uidata.email = this;
-    this.uidata.helpers = helpers;
-
-    this.render(app, this.uidata);
-
-  }
 
 
 
@@ -188,16 +202,16 @@ class Email extends ModTemplate {
         }
       }
 
-      EmailList.render(this.app, this.uidata);
-      EmailList.attachEvents(this.app, this.uidata);
+      EmailList.render(this.app, this);
+      EmailList.attachEvents(this.app, this);
 
       this.addrController.fetchIdentifiers(keys);
 
     });
 
 
-    //EmailList.render(this.app, this.uidata);
-    //EmailList.attachEvents(this.app, this.uidata);
+    //EmailList.render(this.app, this);
+    //EmailList.attachEvents(this.app, this);
 
   }
 

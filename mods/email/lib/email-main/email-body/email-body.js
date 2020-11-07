@@ -9,41 +9,41 @@ module.exports = EmailBody = {
 
     app: {},
 
-    render(app, data={}) {
+    render(app, mod) {
 
-        data.email.body = this;
+        mod.body = this;
 
-        switch(data.email.active) {
+        switch(mod.active) {
             case "email_list":
-                EmailList.render(app, data);
-                EmailList.attachEvents(app, data);
+                EmailList.render(app, mod);
+                EmailList.attachEvents(app, mod);
                 break;
             case "email_form":
-                EmailForm.render(app, data);
-                EmailForm.attachEvents(app, data);
+                EmailForm.render(app, mod);
+                EmailForm.attachEvents(app, mod);
                 break;
             case "email_detail":
-                EmailDetail.render(app, data);
-                EmailDetail.attachEvents(app, data);
+                EmailDetail.render(app, mod);
+                EmailDetail.attachEvents(app, mod);
                 break;
             case "email_appspace":
                 document.querySelector('.email-body').innerHTML = EmailAppspaceTemplate();
-                EmailAppspace.render(app, data);
-                EmailAppspace.attachEvents(app, data);
+                EmailAppspace.render(app, mod);
+                EmailAppspace.attachEvents(app, mod);
                 break;
             default:
                 break;
         }
     },
 
-    attachEvents(app, data) {
+    attachEvents(app, mod) {
         if (document.querySelector('#email.create-button')) {
             document.querySelector('#email.create-button')
             .addEventListener('click', (e) => {
-                data.email.active = "email_form";
-                data.email.previous_state = "email_list";
-                data.email.main.render(app, data);
-                data.email.main.attachEvents(app, data);
+                mod.active = "email_form";
+                mod.previous_state = "email_list";
+                mod.main.render(app, mod);
+                mod.main.attachEvents(app, mod);
             });
         }
     }

@@ -2,18 +2,17 @@ const EmailAppspaceHeaderTemplate = require('./email-appspace-header.template');
 
 
 module.exports = EmailAppspaceHeader = {
-  render(app, data) {
-    document.querySelector('.email-header').innerHTML = EmailAppspaceHeaderTemplate(app, data);
+  render(app, mod) {
+    document.querySelector('.email-header').innerHTML = EmailAppspaceHeaderTemplate(app, mod);
   },
 
-  attachEvents(app, data) {
+  attachEvents(app, mod) {
     document.getElementById('email-form-back-button')
             .addEventListener('click', (e) => {
-              data.email.active = data.email.previous_state;
-              data.email.previous_state = "email_appspace";
-
-              data.email.main.render(app, data);
-              data.email.main.attachEvents(app, data);
+              mod.active = data.email.previous_state;
+              mod.previous_state = "email_appspace";
+              mod.main.render(app, mod);
+              mod.main.attachEvents(app, mod);
             });
   },
 }

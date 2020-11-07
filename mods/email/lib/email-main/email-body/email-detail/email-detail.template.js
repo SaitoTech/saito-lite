@@ -1,7 +1,6 @@
 
-module.exports = EmailDetailTemplate = (app, data) => {
-  let { selected_email, addrController }  = data.email;
-  let { datetime_formatter } = data.helpers;
+module.exports = EmailDetailTemplate = (app, mod) => {
+  let { selected_email, addrController }  = mod;
 
   let from  	= selected_email.transaction.from[0].add;
   let to  	= selected_email.transaction.to[0].add;
@@ -16,7 +15,7 @@ module.exports = EmailDetailTemplate = (app, data) => {
   if (hr_from != "") { from = hr_from; }
   if (hr_to != "")   { to   = hr_to; }
 
-  let datetime = datetime_formatter(ts);
+  let datetime = app.browser.formatDate(ts);
 
   return `
     <div>

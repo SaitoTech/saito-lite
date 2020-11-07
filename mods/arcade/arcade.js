@@ -5,6 +5,7 @@ const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeSidebar = require('./lib/arcade-sidebar/arcade-sidebar');
 const AddressController = require('../../lib/ui/menu/address-controller');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
+const SaitoCarousel = require('../../lib/saito/ui/saito-carousel/saito-carousel');
 
 class Arcade extends ModTemplate {
 
@@ -35,6 +36,7 @@ class Arcade extends ModTemplate {
 
     this.header = new SaitoHeader(app, this);
     this.overlay = new SaitoOverlay(app, this);
+    this.carousel = new SaitoCarousel(app, this);
 
   }
 

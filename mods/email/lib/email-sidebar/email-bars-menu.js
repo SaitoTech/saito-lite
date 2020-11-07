@@ -4,24 +4,24 @@ module.exports = EmailBarsMenu = {
 
   module_application_loaded: 0,
 
-  render(app, data) {
+  render(app, mod) {
 
     document.querySelector('.email-bars-menu').innerHTML = EmailBarsMenuTemplate();
 
     let email_apps = document.querySelector(".email-apps");
-    for (let i = 0; i < data.mods.length; i++) {
-      if (data.mods[i].respondTo("email-appspace") != null) {
-        if (data.mods[i].name === "MyQRCode") {
-          email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" style="display:none" id="${i}">${data.mods[i].name}</li>`;
-        } else {
-          email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" id="${i}">${data.mods[i].name}</li>`;
-        }
+    let mods = app.modules.respondTo("email-appspace");
+    for (let i = 0; i < mods.length; i++) {
+      let module = mods[i];
+      if (module.name === "MyQRCode") {
+        email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" style="display:none" id="${i}">${module.name}</li>`;
+      } else {
+        email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" id="${i}">${module.name}</li>`;
       }
     }
 
   },
 
-  attachEvents(app, data) {
+  attachEvents(app, mod) {
 
     //
     // inbox / sent / trash
@@ -41,13 +41,13 @@ module.exports = EmailBarsMenu = {
                   e.currentTarget.classList.add("active-navigator-item");
 
                   if (e.currentTarget.id == "inbox") {
-                    data.email.emails.active = "inbox";
+                    mod.emails.active = "inbox";
                   }
                   if (e.currentTarget.id == "sent") {
-                    data.email.emails.active = "sent";
+                    mod.emails.active = "sent";
                   }
                   if (e.currentTarget.id == "trash") {
-                    data.email.emails.active = "trash";
+                    mod.emails.active = "trash";
                   }
 
 
@@ -63,25 +63,25 @@ module.exports = EmailBarsMenu = {
                   e.currentTarget.classList.add("active-navigator-item");
 
                   if (e.currentTarget.id == "inbox") {
-                    data.email.emails.active = "inbox";
+                    mod.emails.active = "inbox";
                   }
                   if (e.currentTarget.id == "sent") {
-                    data.email.emails.active = "sent";
+                    mod.emails.active = "sent";
                   }
                   if (e.currentTarget.id == "trash") {
-                    data.email.emails.active = "trash";
+                    mod.emails.active = "trash";
                   }
 
                 }
               }
           });
 
-          data.email.appspace_mod = null;
-          data.email.active = "email_list";
-          data.email.header_title = "";
+          mod.appspace_mod = null;
+          mod.active = "email_list";
+          mod.header_title = "";
 
-          data.email.main.render(app, data);
-          data.email.main.attachEvents(app, data);
+          mod.main.render(app, mod);
+          mod.main.attachEvents(app, mod);
 
         }
     }));
@@ -115,14 +115,14 @@ module.exports = EmailBarsMenu = {
               }
           });
 
-          data.email.active = "email_appspace";
-          data.email.previous_state = "email_list";
-          data.email.appspace_mod = data.email.mods[e.currentTarget.id];
-          data.email.appspace_mod_idx = e.currentTarget.id;
-          data.email.header_title = data.email.appspace_mod.name;
+          mod.active = "email_appspace";
+          mod.previous_state = "email_list";
+          mod.appspace_mod = mod.mods[e.currentTarget.id];
+          mod.appspace_mod_idx = e.currentTarget.id;
+          mod.header_title = mod.appspace_mod.name;
 
-          data.email.main.render(app, data)
-          data.email.main.attachEvents(app, data)
+          mod.main.render(app, mod)
+          mod.main.attachEvents(app, mod)
 
         }
     }));
@@ -138,8 +138,9 @@ module.exports = EmailBarsMenu = {
 
       if (app.browser.returnURLParameter("module") != "") {
 	let modname = app.browser.returnURLParameter("module"); 
-        for (let i = 0; i < data.mods.length; i++) {
-          if (data.mods[i].returnSlug() == modname) {
+	let mods = app.modules.respondTo("email-appspace");
+        for (let i = 0; i < mods.length; i++) {
+          if (mods[i].returnSlug() == modname) {
             let modobj = document.querySelector(`.email-apps-item-${i}`);
 	    setTimeout(function () { 
 	      modobj.click();

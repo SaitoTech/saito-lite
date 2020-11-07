@@ -6,7 +6,7 @@ module.exports = EmailForm = {
     saito: {},
     emailList: {},
 
-    render(app, data={ emailList: {} }) {
+    render(app, mod) {
         this.app = app;
         this.saito = this.app;
 
@@ -43,9 +43,9 @@ module.exports = EmailForm = {
     
     },
 
-    attachEvents(app, data) {
+    attachEvents(app, mod) {
         document.querySelector('.email-submit')
-            .addEventListener('click', (e) => this.sendEmailTransaction(app, data));
+            .addEventListener('click', (e) => this.sendEmailTransaction(app, mod));
 
         /*document.querySelector('.fa-dollar-sign')
             .addEventListener('click', (e) => {
@@ -59,7 +59,7 @@ module.exports = EmailForm = {
         document.getElementById('email-from-address').value = `${this.saito.wallet.returnPublicKey()} (me)`;
     },
 
-    async sendEmailTransaction(app, data) {
+    async sendEmailTransaction(app, mod) {
 
         let email_title = document.querySelector('.email-title').value;
         let email_to = document.getElementById('email-to-address').value;
@@ -81,7 +81,7 @@ module.exports = EmailForm = {
             }
         }
 
-        email_to = await data.email.addrController.returnPublicKey(email_to);
+        email_to = await mod.addrController.returnPublicKey(email_to);
 
         let newtx = app.wallet.returnBalance() > 0 ?
             app.wallet.createUnsignedTransactionWithDefaultFee(email_to, email_amount) :
@@ -99,9 +99,9 @@ module.exports = EmailForm = {
 
         app.network.propagateTransaction(newtx);
 
-        data.email.active = "email_list";
-        data.email.main.render(app, data);
-        data.email.main.attachEvents(app, data);
+        mod.active = "email_list";
+        mod.main.render(app, mod);
+        mod.main.attachEvents(app, mod);
 
         salert("Your message has been sent");
 

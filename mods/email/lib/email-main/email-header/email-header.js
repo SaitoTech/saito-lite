@@ -5,35 +5,35 @@ const EmailAppspaceHeader = require('./email-appspace-header/email-appspace-head
 
 module.exports = EmailHeader = {
 
-  render(app, data) {
+  render(app, mod) {
 
-    data.email.header = this;
+    mod.header = this;
 
-    switch(data.email.active) {
+    switch(mod.active) {
       case "email_list":
-        EmailInboxHeader.render(app, data);
-        EmailInboxHeader.attachEvents(app, data);
+        EmailInboxHeader.render(app, mod);
+        EmailInboxHeader.attachEvents(app, mod);
         break;
       case "email_detail":
-        EmailDetailHeader.render(app, data);
-        EmailDetailHeader.attachEvents(app, data);
+        EmailDetailHeader.render(app, mod);
+        EmailDetailHeader.attachEvents(app, mod);
         break;
       case "email_form":
-        EmailFormHeader.render(app, data);
-        EmailFormHeader.attachEvents(app, data);
+        EmailFormHeader.render(app, mod);
+        EmailFormHeader.attachEvents(app, mod);
         break;
       case "email_appspace":
-        EmailAppspaceHeader.render(app, data);
-        EmailAppspaceHeader.attachEvents(app, data);
+        EmailAppspaceHeader.render(app, mod);
+        EmailAppspaceHeader.attachEvents(app, mod);
         break;
       default:
         break;
     }
 
-    data.email.updateBalance();
+    mod.updateBalance();
 
   },
 
-  attachEvents(app, data) {},
+  attachEvents(app, mod) {},
 
 }

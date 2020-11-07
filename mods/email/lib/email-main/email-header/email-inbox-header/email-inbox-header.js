@@ -3,11 +3,11 @@ const EmailInboxHeaderTemplate = require('./email-inbox-header.template');
 
 module.exports = EmailInboxHeader = {
 
-  render(app, data) {
-    document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate(app, data);
+  render(app, mod) {
+    document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate(app, mod);
   },
 
-  attachEvents(app, data) {
+  attachEvents(app, mod) {
 
     document.getElementById('email-select-icon')
             .addEventListener('click', (e) => {
@@ -29,10 +29,10 @@ module.exports = EmailInboxHeader = {
                   // tell our email to purge this transaction
                   //
                   let mysig = mail.id;
-                  for (let i = 0; i < data.email.emails[data.email.emails.active].length; i++) {
-                    let mytx = data.email.emails[data.email.emails.active][i];
+                  for (let i = 0; i < mod.emails[mod.emails.active].length; i++) {
+                    let mytx = mod.emails[mod.emails.active][i];
                     if (mytx.transaction.sig == mysig) {
-                      data.email.deleteTransaction(mytx);
+                      mod.deleteTransaction(mytx);
                     }
                   }
                 }
@@ -51,15 +51,16 @@ module.exports = EmailInboxHeader = {
                     email_bars_menu.id = "mobile"
                     email_bars_menu.style.display = "block";
                     email_bars_menu.innerHTML = EmailBarsMenuTemplate();
-                    for (let i = 0; i < data.mods.length; i++) {
-                      if (data.mods[i].respondTo("email-appspace") != null) {
+		    let mods = app.modules.respondTo("email-appspace");
+                    for (let i = 0; i < mods.length; i++) {
+                      if (mods[i].respondTo("email-appspace") != null) {
                         let mobile_email_apps = email_bars_menu.querySelector(".email-apps")
                         mobile_email_apps.innerHTML
-                            += `<li class="email-apps-item" id="${i}">${data.mods[i].name}</li>`;
+                            += `<li class="email-apps-item" id="${i}">${mods[i].name}</li>`;
                       }
                     }
                     document.querySelector('body').append(email_bars_menu);
-                    EmailBarsMenu.attachEvents(app, data);
+                    EmailBarsMenu.attachEvents(app, mod);
                     // extend functionatliy for mobile menu
 
                     email_bars_menu.addEventListener('click', () => {
