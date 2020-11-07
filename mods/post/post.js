@@ -17,7 +17,7 @@ class Post extends ModTemplate {
     this.post.domain = "saito";
 
     this.icon_fa = "fa fa-map-signs";
-    this.description = `Simple forum for persistent posts and discussions';
+    this.description = `Simple forum for persistent posts and discussions`;
     this.categories = "Social Messaging";
   }
 
