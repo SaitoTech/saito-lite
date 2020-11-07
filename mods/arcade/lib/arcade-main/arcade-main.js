@@ -18,10 +18,14 @@ module.exports = ArcadeMain = {
     app.modules.respondTo("arcade-games").forEach(module => {
       let title = module.name;
       let arcade_banner = "/" + module.returnSlug() + "/img/arcade.jpg";
-      let html = `<div id="game-tile-${module.returnSlug()}" class="game-tile" style="background-image: url('${arcade_banner}'); background-size: cover"></div>`;
+      let html = `
+      <div id="game-tile-${module.returnSlug()}" class="game-tile" style="background-image: url('${arcade_banner}'); background-size: cover">
+        <div class="game-tile-name">${module.name}</div>
+        <div class="game-tile-action">Play Now</div>
+      </div>`;
       app.browser.addElementToDom(html, "arcade-hero");
     });
-
+  
   },
 
 
