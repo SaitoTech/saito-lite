@@ -18,8 +18,8 @@ module.exports = EmailMain = {
   },
 
   attachEvents(app, mod) {
-    EmailHeader.attachEvents(app, data);
-    EmailBody.attachEvents(app, data);
+    EmailHeader.attachEvents(app, mod);
+    EmailBody.attachEvents(app, mod);
   }
 
 }

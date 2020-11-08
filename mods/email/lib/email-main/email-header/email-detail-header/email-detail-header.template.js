@@ -1,4 +1,4 @@
-module.exports = EmailDetailHeaderTempkate = (app, data) => {
+module.exports = EmailDetailHeaderTempkate = (app, mod) => {
   return `
     <div class="email-detail-left-options">
       <i id="email-form-back-button" class="icon-med fas fa-arrow-left"></i>

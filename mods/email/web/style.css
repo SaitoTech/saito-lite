@@ -237,6 +237,7 @@ hr {
 .email-message-timestamp {
   text-align: right;
   font-family: monospace, 'Courier New', Courier;
+  padding-top: 10px;
 }
 
 .email-text {

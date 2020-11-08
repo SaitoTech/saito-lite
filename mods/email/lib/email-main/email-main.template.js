@@ -1,4 +1,4 @@
-module.exports = EmailMainTemplate = (app, data) => {
+module.exports = EmailMainTemplate = (app, mod) => {
   let html = `
       <div class="email-header"></div>
       <div class="email-body"></div>

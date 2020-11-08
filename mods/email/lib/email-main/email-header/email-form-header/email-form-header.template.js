@@ -1,4 +1,4 @@
-module.exports = EmailHeaderTemplate = (app, data) => {
+module.exports = EmailHeaderTemplate = (app, mod) => {
   return `
     <div class="email-icons">
       <i id="email-form-back-button" class="icon-med fas fa-arrow-left"></i>

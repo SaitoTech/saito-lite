@@ -1,5 +1,6 @@
 const helpers = require('../../lib/helpers/index');
 const ModTemplate = require('../../lib/templates/modtemplate');
+const AppStoreOverlay = require('./lib/appstore-overlay/appstore-overlay');
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
 const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
 const fs = require('fs');
@@ -777,6 +778,20 @@ console.log("ZIP LEN: " + zip.length);
       });
     }
   }
+
+
+
+  //////////////////
+  // UI Functions //
+  //////////////////
+  openAppstoreOverlay() {
+
+    AppStoreOverlay.render(this.app, this);
+    AppStoreOverlay.attachEvents(this.app, this);
+
+  }
+
+
 }
 module.exports = AppStore;
 

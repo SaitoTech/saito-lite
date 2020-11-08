@@ -76,13 +76,11 @@ module.exports = ArcadePostsTemplate = () => {
 
 <style type="text/css">
 
-.arcade-sub {
-  grid-template-columns: 6fr 3fr;
-}
-
 
 .arcade-posts {
-  font-size: 1.3em;
+  font-size: 1.2em;
+  padding: 1em;
+  background-color: #4444;
 }
 .arcade-post {
   margin-bottom: 40px;

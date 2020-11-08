@@ -1,5 +1,22 @@
 .settings-grid {}
 
+.grid-2 {
+  row-gap: 0em;
+  column-gap: 1em;
+  padding: 0px;
+  margin-bottom: 0px;
+}
+.grid-4 {
+  row-gap: 0em;
+  column-gap: 1em;
+  padding: 0px;
+  margin-bottom: 0px;
+}
+.grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) { 
+  line-height: 1em;
+}
+
+
 .settings-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

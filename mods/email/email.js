@@ -76,6 +76,9 @@ class Email extends ModTemplate {
     EmailMain.render(app, this);
     EmailMain.attachEvents(app, this);
 
+    // make visible
+    document.getElementById('content').style.visibility = "visible";
+
     console.log("TODO - fark mode in email is cross-module");
     if (getPreference('darkmode')) { addStyleSheet("/forum/dark.css"); }
 

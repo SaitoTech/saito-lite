@@ -795,7 +795,15 @@ div#message-wrapper {
   top: 0%;
   z-index: 1;
 }
-
+.header-balance {
+  float: left;
+  font-weight: normal;
+  margin-left: 20px;
+}
+.header-token {
+  float: left;
+  font-weight: normal;
+}
 .header-mini-wallet {
   height: 3.2em;
   padding: 0.6em 1.0em 0em 1.0em;

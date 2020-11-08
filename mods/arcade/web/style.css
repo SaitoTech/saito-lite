@@ -21,7 +21,7 @@ a {
 /** MAIN **/
 
 .arcade-container {
-  max-width: 1500px;
+  max-width: var(--saito-max-width);
   margin: 5em auto;
   padding: 0 1em;
   display: grid;
@@ -32,18 +32,22 @@ a {
 }
 
 .arcade-sidebar {
-  display: grid;
-  gap: 1em;
+  display: flex;
+  flex-flow: column;
 }
 
 .arcade-hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  background-image: url(/arcade/img/dreamscape-logo.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  border: 1px solid var(--saito-red);
+  display: flex;
+    flex-flow: wrap;
+    background-image: url(/arcade/img/dreamscape-logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid var(--saito-red);
+    justify-content: space-around;
+    padding: 1vh 2vh;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /*
@@ -76,7 +80,7 @@ a {
 .arcade-sub {
   display: grid;
   gap: 1.5em;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 2fr;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -94,12 +98,42 @@ a {
 }
 
 .game-tile {
+  cursor: pointer;
+  position: relative;
   transition: all ease-in-out 0.5s;
   transform-origin: center center;
-  width: 20vh;
-  height: 20vh;
+  width: 30vh;
+  max-width: 250px;
+  height: 30vh;
+  max-height: 250px;
   margin: 1vh;
 }
+
+.game-tile-name {
+  background-color: #0008;
+  height: 20%;
+  font-size: 3vh;
+  text-align: center;
+  line-height: 6vh;
+  text-transform: uppercase;
+  position: absolute;
+  width: 100%;
+  top: 25%;
+}
+
+.game-tile-action {
+  background-color: #0008;
+  height: 20%;
+  font-size: 2vh;
+  text-align: center;
+  line-height: 7vh;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+
 
 .hero-action {
   display: grid;
@@ -118,6 +152,25 @@ a {
   line-height: 8vh;
   display: flex;
   justify-content: center;
+}
+
+@media only screen and (min-height: 1000px) {
+  .game-tile {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .game-tile-name {
+    font-size: 2.25em;
+    line-height: 56px;
+  }
+  
+  .game-tile-action {
+    font-size: 2em;
+    line-height: 56px;
+  }
+  
+
 }
 
 @media only screen and (max-width: 1000px) {
