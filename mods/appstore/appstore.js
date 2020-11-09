@@ -1,3 +1,4 @@
+const saito = require('../../lib/saito/saito');
 const helpers = require('../../lib/helpers/index');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreOverlay = require('./lib/appstore-overlay/appstore-overlay');
@@ -156,6 +157,8 @@ console.log("processing: " + dir);
           let mod_path = path.resolve(__dirname, `mods/${mod_zip_filename}`);
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
+
+console.log("sending tx");
 
 
 
@@ -441,6 +444,8 @@ console.log("ZIP LEN: " + zip.length);
 
     if (this.app.BROWSER == 1) { return; }
 
+console.log("SERVER REQUEST BUNDLE");
+
     let sql = '';
     let params = '';
     let txmsg = tx.returnMessage();
@@ -481,11 +486,12 @@ console.log("ZIP LEN: " + zip.length);
 
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
+        let { module_zip } = new saito.transaction(tx).returnMessage();
         modules_selected.push(
           {
             name: rows[i].name,
             description: rows[i].description,
-            zip: tx.msg.module_zip
+            zip: module_zip
           }
         );
       }
@@ -501,16 +507,18 @@ console.log("ZIP LEN: " + zip.length);
 
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
+        let { module_zip } = new saito.transaction(tx).returnMessage();
         modules_selected.push(
           {
             name: rows[i].name,
             description: rows[i].description,
-            zip: tx.msg.module_zip
+            zip: module_zip
           }
         );
       }
     }
 
+console.log("about to webpack this bundle!");
 
     //
     // WEBPACK
@@ -520,6 +528,8 @@ console.log("ZIP LEN: " + zip.length);
     //
     // insert resulting JS into our bundles database
     //
+console.log("bundle filename: " + bundle_filename);
+
     let bundle_binary = fs.readFileSync(path.resolve(__dirname, `./bundler/dist/${bundle_filename}`), { encoding: 'binary' });
 
     //
@@ -544,6 +554,8 @@ console.log("ZIP LEN: " + zip.length);
     //
     let online_version = this.app.options.server.endpoint.protocol + "://" + this.app.options.server.endpoint.host + ":" + this.app.options.server.endpoint.port + "/appstore/bundle/" + bundle_filename;
 
+
+console.log("online version: " + online_version);
 
     //
     // send our filename back at our person of interest
@@ -572,6 +584,8 @@ console.log("ZIP LEN: " + zip.length);
     const util = require('util');
     const exec = util.promisify(require('child_process').exec);
 
+console.log("1");
+
     //
     // modules has name, description, version, zip
     //
@@ -579,6 +593,7 @@ console.log("ZIP LEN: " + zip.length);
     const path = require('path');
     const unzipper = require('unzipper');
 
+console.log("2");
 
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
@@ -592,6 +607,8 @@ console.log("ZIP LEN: " + zip.length);
     let bash_script_delete = '';
     let bash_script_create_dirs = '';
 
+console.log("3");
+
     //
     // create and execute script that creates directories
     //
@@ -601,6 +618,7 @@ console.log("ZIP LEN: " + zip.length);
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/mods" + "\n";
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/dist" + "\n";
 
+console.log("4");
 
     fs.writeFileSync(path.resolve(__dirname, bash_script_create), bash_script_create_dirs, { encoding: 'binary' });
     try {
@@ -611,6 +629,7 @@ console.log("ZIP LEN: " + zip.length);
       console.log(err);
     }
 
+console.log("5");
 
     bash_script_content += 'cd ' + __dirname + '/mods' + "\n";
     bash_script_delete  += 'cd ' + __dirname + '/mods' + "\n";
@@ -618,12 +637,15 @@ console.log("ZIP LEN: " + zip.length);
     //
     // save MODS.zip and create bash script to unzip
     //
+
+console.log("6");
+
     let module_paths = modules.map(mod => {
 
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
 
 
-      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
+      bash_script_content += `unzip -o ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/web` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/www` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/sql` + "\n";
@@ -643,6 +665,7 @@ console.log("ZIP LEN: " + zip.length);
       return `${returnSlug(mod.name)}/${returnSlug(mod.name)}.js`;
     });
 
+console.log("7");
 
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}-create` + "\n";
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}` + "\n";
@@ -655,6 +678,8 @@ console.log("ZIP LEN: " + zip.length);
     await fs.writeFile(path.resolve(__dirname, `../../bundler/${newappdir}/config/${modules_config_filename}`),
       JSON.stringify({ mod_paths: module_paths })
     );
+
+console.log("8");
 
     //
     // other filenames
@@ -670,6 +695,7 @@ console.log("ZIP LEN: " + zip.length);
       IndexTemplate(modules_config_filename)
     );
 
+console.log("9");
 
     //
     // execute bundling process
@@ -683,17 +709,22 @@ console.log("ZIP LEN: " + zip.length);
     bash_script_content += "\n";
     //bash_script_content += bash_script_delete;
 
+console.log("9 - 2");
+
 
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
     try {
       let cwdir = __dirname;
       let bash_command = 'sh ' + bash_script;
-//console.log("running bash command: " + bash_command);
+console.log("running bash command: " + bash_command);
 //console.log(" with: " + bash_script_content);
+console.log("this comment: " + bash_command);
       const { stdout, stderr } = await exec(bash_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
     } catch (err) {
       console.log(err);
     }
+
+console.log("10");
 
     //
     // create tx
@@ -705,7 +736,7 @@ console.log("ZIP LEN: " + zip.length);
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-
+console.log("11");
 
     //
     // cleanup
