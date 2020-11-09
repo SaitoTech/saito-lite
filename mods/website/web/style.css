@@ -73,6 +73,19 @@ body {
   cursor: pointer;
 }
 
+.project {
+  gap: 3em;
+}
+
+.about-img {
+  float: left;
+  margin: 0 1em;
+}
+
+.web-3-stack {
+  height:90px;
+}
+
 .supporters {
   border: solid 2px #ff8235;
   padding: 2em 2em 2em 2em;
