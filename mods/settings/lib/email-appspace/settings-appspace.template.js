@@ -77,7 +77,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
         <h3>Installed Modules: `;
 
       if (app.modules.returnModule("AppStore") != null) {
-	html += `<span id="trigger-appstore-btn" class="trigger-appstore-btn">click to install more applications</span>`;
+	html += ` &nbsp; (<span id="trigger-appstore-btn" class="trigger-appstore-btn">click to install more applications</span>)`;
       }
 
       html += `</h2>
