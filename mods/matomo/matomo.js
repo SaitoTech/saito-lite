@@ -6,7 +6,7 @@ class Matomo extends ModTemplate {
     super(app);
     this.name            = "Matomo";
     this.description     = "Saito tracking tag";
-    this.categories      = "Dark Arts";
+    this.categories      = "Marketing";
     
     //this.browserize(this);
     this.alreadyAdded = false;
@@ -14,32 +14,28 @@ class Matomo extends ModTemplate {
   }
 
   initialize(app) {
-    console.log("Matomo initializeHTML")
+    console.log("matomo initialize")
     super.initialize(app);
-  }
-
-  initializeHTML(app) {
-    console.log("Matomo initializeHTML")
-    if(!this.alreadyAdded) {
-      this.alreadyAdded = true;
-      document.head.insertAdjacentHTML('afterbegin',`
-      <!-- Matomo Tag Manager -->
-      <meta property="og:type" content="article" />
-      <!-- End Matomo Tag Manager -->
-      `);
-      // document.head.insertAdjacentHTML('afterbegin',`
-      // <!-- Matomo Tag Manager -->
-      // <script type="text/javascript">
-      // var _mtm = window._mtm = window._mtm || [];
-      // _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-      // var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-      // g.type='text/javascript'; g.async=true; g.src='https://cdn.matomo.cloud/saitotech.matomo.cloud/container_uN6KE9K7.js'; s.parentNode.insertBefore(g,s);
-      // </script>
-      // <!-- End Matomo Tag Manager -->
-      // `);      
-    } else {
-      console.log("already added")
+    // This module should only be installed on the client, but let's not break
+    // things in case someone installs it on the server.
+    if (app.BROWSER) {
+      // It shouldnt' be necessary to track alreadyAdded but let's do it anyway
+      // just to be 100% sure the tracking isn't inserted multiple times.
+      if(!this.alreadyAdded) {
+        this.alreadyAdded = true;
+        app.browser.prependElementToDom(`
+        <!-- Matomo Tag Manager -->
+        <script type="text/javascript">
+        var _mtm = window._mtm = window._mtm || [];
+        _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.src='https://cdn.matomo.cloud/saitotech.matomo.cloud/container_uN6KE9K7.js'; s.parentNode.insertBefore(g,s);
+        </script>
+        <!-- End Matomo Tag Manager -->
+        `, document.head);
+      }  
     }
+    
   }
 }
 module.exports = Matomo;
