@@ -48,12 +48,6 @@
     animation: rightToLeft 50s linear infinite 0s;
 }
 
-/*
-.arcade-carousel-wrapper div.leaf:nth-child(1) {
-    animation-delay: 0s;
-}
-*/
-
 .arcade-carousel-wrapper div.leaf:nth-child(2) {
     animation-delay: 10s;
 }
@@ -71,9 +65,6 @@
 }
 
 
-
-/*rightToLeft Animation*/
-
 @keyframes rightToLeft {
     0%   { opacity: 0; }
     5%   { opacity: 0; transform: translateX(-100%) }
@@ -84,6 +75,11 @@
     80%  { opacity: 0; }
     100% { opacity: 0; }
 }
+
+ 
+
+
+
 
 
 .big {

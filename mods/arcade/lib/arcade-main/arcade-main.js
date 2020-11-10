@@ -2,8 +2,6 @@ const ArcadeMainTemplate = require('./templates/arcade-main.template');
 const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
 const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
-const SaitoCarouselTemplate = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
-const ArcadeGameCarouselLeafTemplate = require('./templates/arcade-carousel-leaf.template')
 
 module.exports = ArcadeMain = {
 

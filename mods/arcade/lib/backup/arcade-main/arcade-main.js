@@ -19,6 +19,7 @@ module.exports = ArcadeMain = {
     if (!arcade_main) { return; }
     arcade_main.innerHTML = ArcadeMainTemplate();
 
+
     data.arcade.games.forEach(tx => {
 
       let game_id = tx.msg.game_id;
