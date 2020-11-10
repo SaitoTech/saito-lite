@@ -70,8 +70,12 @@ a {
   background-color: #000A;
   display: grid;
   grid-template-columns: 50fr 50fr;
-  justify-items: center; 
+  justify-items: center;
   align-items: center;
+}
+
+.arcade-tile .invite-tile-right div {
+  text-align: center;
 }
 
 .arcade-tile.twilight-struggle-invite {
