@@ -69,12 +69,14 @@ a {
   gap: 1em;
   grid-template-columns: 40vh auto;
   overflow-y: hidden;
+  grid-template-rows: 40vh auto;
 }
+
 
 .arcade-main {
   display: grid;
   gap: 1.5em;
-  grid-template-rows: 40vh auto;
+  /* grid-template-rows: 40vh auto; */
 }
 
 .arcade-sub {
@@ -87,8 +89,9 @@ a {
 
 .arcade-tile {
   transition: all ease-in-out 0.5s;
-  min-height: 5em;
+  min-height: 15em;
   transform-origin: center center;
+  min-width: 25em;
 }
 
 .hero-list {

@@ -58,15 +58,21 @@ class ArcadeGamePage extends ModTemplate {
 
   webServer(app, expressapp, express) {
     super.webServer(app, expressapp, express);
-
-    expressapp.get('/arcade/observer/:game_id', async (req, res) => {
+    let games = [];
+    this.app.modules.respondTo("arcade-games").forEach(mod => {
+      this.affix_callbacks_to.push(mod.name);
+    });
+    expressapp.get('/arcade/:game_id', async (req, res) => {
 
       // res.setHeader('Content-type', 'text/html');
       // res.charset = 'UTF-8';
       // res.write(game.game_state);
       // res.end();
       // return;
-
+      
+      this.app.modules.respondTo("arcade-games").forEach(mod => {
+        this.affix_callbacks_to.push(mod.name);
+      });
     });
   }
 

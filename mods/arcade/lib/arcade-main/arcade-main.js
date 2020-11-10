@@ -3,6 +3,7 @@ const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
 const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
 const SaitoCarouselTemplate = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
+const ArcadeGameCarouselLeafTemplate = require('./templates/arcade-carousel-leaf.template')
 
 module.exports = ArcadeMain = {
 
@@ -13,7 +14,18 @@ module.exports = ArcadeMain = {
 
     ArcadePosts.render(app, mod);
     ArcadeInfobox.render(app, mod);
-
+    let carousel = new SaitoCarousel(app);
+    carousel.render(app, mod);
+    //carousel.addLeaves(app, "arcade-carousel");
+    
+    // carousel = document.querySelector(".arcade-carousel-wrapper");
+    // carousel.innerHTML += "";
+    // app.modules.respondTo("arcade-games").forEach((mod, i) => {
+    //   let response = mod.respondTo("arcade-carousel")
+    //   if(response) {
+    //     carousel.innerHTML += ArcadeGameCarouselLeafTemplate(mod, response);
+    //   }
+    // });
     //
     // add games to header
     //
@@ -29,29 +41,32 @@ module.exports = ArcadeMain = {
       app.browser.addElementToDom(html, "arcade-hero");
     });
 */
-/***
+
     //
     // add games to carousel
     //
     // create carousel, but manually insert instead of rendering in body
     //
-    mod.carousel.render(app, mod, "arcade-hero");
-    mod.carousel.attachEvents(app, mod);
+    // let carousel = new SaitoCarousel(app);
+    // // mod.carousel.render(app, mod, "arcade-hero");
+    // // mod.carousel.attachEvents(app, mod);
+    // carousel.render(app, mod, "arcade-hero");
+    // carousel.attachEvents(app, mod);
+    // 
+    // app.modules.mods.forEach(module => {
+    //   if (module.respondTo("arcade-games")) {
+    //     if (module.respondTo("arcade-carousel")) {
+    //       let gameobj = module.respondTo("arcade-carousel");
+    //       let html = `<div class="leaf" style="background: url(${gameobj.background});background-size:cover">
+    //                     <div class="big">${gameobj.title}</div>
+    //                   </div> 
+    //                   `;
+    //       let leaf = app.browser.htmlToElement(html);
+    //       carousel.addLeaf(leaf);
+    //     }
+    //   }
+    // });
 
-    app.modules.mods.forEach(module => {
-      if (module.respondTo("arcade-games")) {
-        if (module.respondTo("arcade-carousel")) {
-	  let gameobj = module.respondTo("arcade-carousel");
-          let html = `<div class="leaf" style="background: url(${gameobj.background});background-size:cover">
-                        <div class="big">${gameobj.title}</div>
-                      </div> 
-	  `;
-	  let leaf = app.browser.htmlToElement(html);
-          mod.carousel.addLeaf(leaf);
-        }
-      }
-    });
-***/
 
   },
 
