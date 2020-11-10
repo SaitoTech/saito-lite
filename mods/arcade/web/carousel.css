@@ -107,7 +107,7 @@
   position: relative;
 }
 
-.saito-carousel-wrapper {
+.carousel-wrapper {
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -128,29 +128,29 @@
    border: 1px solid darkorange;
 }
 
-.saito-carousel-wrapper > div {
+.carousel-wrapper > div {
     animation: rightToLeft 50s linear infinite 0s;
 }
 
 /*
-.saito-carousel-wrapper div.leaf:nth-child(1) {
+.carousel-wrapper div.leaf:nth-child(1) {
     animation-delay: 0s;
 }
 */
 
-.saito-carousel-wrapper div.leaf:nth-child(2) {
+.carousel-wrapper div.leaf:nth-child(2) {
     animation-delay: 10s;
 }
 
-.saito-carousel-wrapper div.leaf:nth-child(3) {
+.carousel-wrapper div.leaf:nth-child(3) {
     animation-delay: 20s;
 }
 
-.saito-carousel-wrapper div.leaf:nth-child(4) {
+.carousel-wrapper div.leaf:nth-child(4) {
     animation-delay: 30s;
 }
 
-.saito-carousel-wrapper div.leaf:nth-child(5) {
+.carousel-wrapper div.leaf:nth-child(5) {
     animation-delay: 40s;
 }
 
