@@ -45,37 +45,33 @@ a {
   grid-template-columns: auto;
   grid-template-rows: auto;
   grid-auto-flow: column;
-  /* place-items: stretch/stretch; */
   justify-items: stretch; 
   align-items: stretch;
 }
 .arcade-tile {
-  transition: all ease-in-out 0.5s;
-  transform-origin: center center;
-  width: 25vw;
+  width: 20vh;
   display: grid;
-  grid-template-columns: 50fr 50fr;
-  grid-template-rows: 100fr;
-  
+  grid-template-rows: 1fr 2fr;
+  grid-template-columns: 1fr;  
 }
 
 .arcade-tile .invite-tile-left {
-  font-size: 4.5em;
+  width: 20vh;
+  font-size: 2.8em;
   -webkit-text-fill-color: white;
   -webkit-text-stroke-width: 0.03em;
   -webkit-text-stroke-color: black;
 }
 
 .arcade-tile .invite-tile-right {
+  width: 20vh;
   color: white;
   font-size: 1.5em;
   background-color: #000A;
   display: grid;
   grid-template-columns: 50fr 50fr;
-  
   justify-items: center; 
   align-items: center;
-  
 }
 
 .arcade-tile.twilight-struggle-invite {
