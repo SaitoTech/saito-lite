@@ -21,7 +21,7 @@ a {
 /** MAIN **/
 
 .arcade-container {
-  max-width: var(--saito-max-width);
+  height: 100%;
   margin: 5em auto;
   padding: 0 1em;
   display: grid;
@@ -36,11 +36,18 @@ a {
   flex-flow: column;
 }
 
-.arcade-hero {
-  height: 20vh;
+.arcade-main {
+  overflow-y: scroll;
   display: grid;
+  gap: 1.5em;
+  grid-template-rows: auto 10em auto;
+}
+
+.arcade-hero {
+  display: grid;
+  width: auto;
+  height: 11em;
   gap: 1em;
-  overflow-y: hidden;
   overflow-x: scroll;
   grid-template-columns: auto;
   grid-template-rows: auto;
@@ -49,22 +56,62 @@ a {
   align-items: stretch;
 }
 .arcade-tile {
-  width: 20vh;
+  position: relative;
+  width: 15em;
+  height: 10em;
   display: grid;
-  grid-template-rows: 1fr 2fr;
+  grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr;  
+  overflow-y: hidden;
 }
 
-.arcade-tile .invite-tile-left {
-  width: 20vh;
-  font-size: 2.8em;
-  -webkit-text-fill-color: white;
-  -webkit-text-stroke-width: 0.03em;
-  -webkit-text-stroke-color: black;
+.arcade-tile .invite-tile-cancel-button {
+  position:absolute;
+  top: 0;
+  right: 0;
+  height: 1.5em;
+  width: 1.5em;
+  color: white;
+  background-color: red;
+  font-size: 1.1em;
+  font-weight: 900;
+  /* padding-top: 0.4em; */
+  text-align: center;
+  justify-content: center;
+}
+.arcade-tile .invite-tile-join-button {
+  
+  position:absolute;
+  bottom: 0;
+  right: 0;
+  height: 1.5em;
+  width: 4.5em;
+  color: white;
+  background-color: green;
+  font-size: 1.1em;
+  font-weight: 900;
+  /* padding-top: 0.4em; */
+  text-align: center;
+  justify-content: center;
+}
+.arcade-tile .invite-tile-left .invite-tile-title {
+  display: inline;
+  font-weight: 900;
+  background: #0005;
+  font-size: 3.5em;
+  padding-left: 0.3em;
+  -webkit-text-fill-color: var(--saito-skyline-grey);
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: #0003;
 }
 
-.arcade-tile .invite-tile-right {
-  width: 20vh;
+.arcade-tile .invite-tile-top {
+  width: 100%;
+  
+}
+
+.arcade-tile .invite-tile-bottom {
+  width: 100%;
   color: white;
   font-size: 1.5em;
   background-color: #000A;
@@ -72,6 +119,7 @@ a {
   grid-template-columns: 50fr 50fr;
   justify-items: center;
   align-items: center;
+  padding-bottom: 1.5em;
 }
 
 .arcade-tile .invite-tile-right div {
@@ -82,19 +130,63 @@ a {
   background: url(/twilight/img/arcade/arcade-banner-background.png);background-size:cover;
 }
 
-.arcade-main {
-  display: grid;
-  gap: 1.5em;
-  grid-template-rows: auto 20vh auto;
-}
-
 .arcade-sub {
   display: grid;
   gap: 1.5em;
   grid-template-columns: 3fr 2fr;
-  overflow-x: hidden;
-  overflow-y: auto;
+  /* overflow-x: hidden;
+  overflow-y: auto; */
 }
+
+
+@media only screen and (max-width: 1000px) {
+  .main {
+    margin-left: 1em;
+  }
+  .arcade-container {
+    grid-template-columns: auto;
+  }
+  .arcade-sidebar {
+    position: absolute;
+    width: 15em;
+    top: 5em;
+    left: -14em;
+    height: calc(100vh - 5em);
+    transition: all ease-in-out 1s;
+    background-color: darkslateblue;
+  }
+  .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
+    left: 0;
+  }
+  
+  /* .arcade-main {
+    overflow-y: scroll;
+    display: grid;
+    gap: 1.5em;
+    height: 100vh;
+    grid-template-rows: 1fr 3fr;
+  }
+  .arcade-hero {
+    display: grid;
+    gap: 1em;
+    overflow-y: scroll;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-auto-flow: row;
+    justify-items: stretch;
+    align-items: stretch;
+  }
+  .arcade-tile {
+    width: 15em;
+    height: 10em;
+  } */
+  .arcade-sub {
+    /* display: none; */
+  }
+}
+
+
+
 
 
 .hero-list {
@@ -160,7 +252,7 @@ a {
   justify-content: center;
 }
 
-@media only screen and (min-height: 1000px) {
+/* @media only screen and (min-height: 1000px) {
   .game-tile {
     width: 250px;
     height: 250px;
@@ -177,32 +269,11 @@ a {
   }
   
 
-}
+} */
 
-@media only screen and (max-width: 1000px) {
-  .main {
-    margin-left: 1em;
-  }
-  .arcade-container {
-    grid-template-columns: auto;
-  }
-  .arcade-sidebar {
-    position: absolute;
-    width: 15em;
-    top: 5em;
-    left: -14em;
-    height: calc(100vh - 5em);
-    transition: all ease-in-out 1s;
-    background-color: darkslateblue;
-  }
-  .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
-    left: 0;
-  }
-}
+/* @media only screen and (max-width: 750px) {} */
 
-@media only screen and (max-width: 750px) {}
-
-@media only screen and (max-width: 600px) {
+/* @media only screen and (max-width: 600px) {
   .arcade-container {
     padding: 0;
   }
@@ -230,7 +301,7 @@ a {
     top: 5em;
   }
 
-}
+} */
 
 /* controls */
 
@@ -438,14 +509,6 @@ button.add-games {
   cursor: pointer;
 }
 
-/** Game Carousel **/
-
-#saito-carousel {
-  width: 100%;
-  max-width: 1100px;
-  justify-self: center;
-}
-
 .glide__arrows {
   display: flex;
   justify-content: space-between;
@@ -526,7 +589,7 @@ button.add-games {
   grid-template-columns: 1fr 4fr;
 }
 
-@media only screen and (max-width: 650px) {
+/* @media only screen and (max-width: 650px) {
   .create-game-wizard, .escrow-game-wizard {
     width: 85%;
     height: 70%;
@@ -537,7 +600,7 @@ button.add-games {
   .game-start-controls {
     grid-template-columns: 1fr;
   }
-}
+} */
 
 /* .game-image-wizard {
   max-width: 500px;
