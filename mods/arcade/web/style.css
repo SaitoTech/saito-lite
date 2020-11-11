@@ -4,6 +4,7 @@
   --saito-red: #639;
   --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
   --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
+  --tile-height: 15em;
 }
 
 body {
@@ -17,8 +18,6 @@ body {
 a {
   color: #BCF;
 }
-
-/** MAIN **/
 
 .arcade-container {
   height: 100%;
@@ -40,13 +39,13 @@ a {
   overflow-y: scroll;
   display: grid;
   gap: 1.5em;
-  grid-template-rows: auto 10em auto;
+  grid-template-rows: auto var(--tile-height) auto;
 }
 
 .arcade-hero {
   display: grid;
   width: auto;
-  height: 11em;
+  height: calc(var(--tile-height) + 1em);
   gap: 1em;
   overflow-x: scroll;
   grid-template-columns: auto;
@@ -57,8 +56,8 @@ a {
 }
 .arcade-tile {
   position: relative;
-  width: 15em;
-  height: 10em;
+  width: calc(2 * var(--tile-height));
+  height: var(--tile-height);
   display: grid;
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr;  
@@ -79,8 +78,8 @@ a {
   text-align: center;
   justify-content: center;
 }
+
 .arcade-tile .invite-tile-join-button {
-  
   position:absolute;
   bottom: 0;
   right: 0;
@@ -90,11 +89,11 @@ a {
   background-color: green;
   font-size: 1.1em;
   font-weight: 900;
-  /* padding-top: 0.4em; */
   text-align: center;
   justify-content: center;
 }
-.arcade-tile .invite-tile-left .invite-tile-title {
+
+.arcade-tile .invite-tile-top .invite-tile-title {
   display: inline;
   font-weight: 900;
   background: #0005;
@@ -107,13 +106,12 @@ a {
 
 .arcade-tile .invite-tile-top {
   width: 100%;
-  
 }
 
 .arcade-tile .invite-tile-bottom {
   width: 100%;
   color: white;
-  font-size: 1.5em;
+  font-size: 1.2em;
   background-color: #000A;
   display: grid;
   grid-template-columns: 50fr 50fr;
@@ -122,7 +120,7 @@ a {
   padding-bottom: 1.5em;
 }
 
-.arcade-tile .invite-tile-right div {
+.arcade-tile .invite-tile-bottom div {
   text-align: center;
 }
 

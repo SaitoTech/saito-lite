@@ -14,7 +14,6 @@ module.exports = ArcadeMainTemplate = () => {
             <div>Team:</div><div>US</div>
             <div>Deck:</div><div>Twilight Absurdum</div>
             <div>US Bonus:</div><div>10</div>
-            <div>Time Limit:</div><div>120 Minutes</div>
           </div>
         </div>
         
