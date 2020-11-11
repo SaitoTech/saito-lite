@@ -4,6 +4,9 @@
   --saito-red: #639;
   --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
   --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
+  --tile-height: 15em;
+  --sidebar-width: 15em;
+  --main-width: 100em;
 }
 
 body {
@@ -12,13 +15,13 @@ body {
   color: var(--saito-skyline-grey);
   background: var(--saito-nightscape);
   overflow: hidden;
+  text-align: center;
+  justify-content: center;
 }
 
 a {
   color: #BCF;
 }
-
-/** MAIN **/
 
 .arcade-container {
   height: 100%;
@@ -26,9 +29,10 @@ a {
   padding: 0 1em;
   display: grid;
   gap: 1em;
-  grid-template-columns: 15em auto;
+  grid-template-columns: var(--sidebar-width) auto;
   font-size: 1em;
   overflow: hidden;
+  max-width: calc(var(--sidebar-width) + var(--main-width));;
 }
 
 .arcade-sidebar {
@@ -38,62 +42,29 @@ a {
 
 .arcade-main {
   overflow-y: scroll;
-  display: grid;
+  /* display: grid;
   gap: 1.5em;
-  grid-template-rows: auto 10em auto;
+  grid-template-rows: auto var(--tile-height) auto; */
+  max-width: 100em;
 }
 
 .arcade-hero {
-  display: grid;
-  width: auto;
-  height: 11em;
-  gap: 1em;
-  overflow-x: scroll;
-  grid-template-columns: auto;
-  grid-template-rows: auto;
-  grid-auto-flow: column;
-  justify-items: stretch; 
-  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0px auto;
+  justify-content: space-around;
 }
 .arcade-tile {
-  position: relative;
-  width: 15em;
-  height: 10em;
+  margin: 1em;
+  width: calc(2 * var(--tile-height));
+  height: var(--tile-height);
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr;  
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr;  
   overflow-y: hidden;
 }
 
-.arcade-tile .invite-tile-cancel-button {
-  position:absolute;
-  top: 0;
-  right: 0;
-  height: 1.5em;
-  width: 1.5em;
-  color: white;
-  background-color: red;
-  font-size: 1.1em;
-  font-weight: 900;
-  /* padding-top: 0.4em; */
-  text-align: center;
-  justify-content: center;
-}
-.arcade-tile .invite-tile-join-button {
-  
-  position:absolute;
-  bottom: 0;
-  right: 0;
-  height: 1.5em;
-  width: 4.5em;
-  color: white;
-  background-color: green;
-  font-size: 1.1em;
-  font-weight: 900;
-  /* padding-top: 0.4em; */
-  text-align: center;
-  justify-content: center;
-}
 .arcade-tile .invite-tile-left .invite-tile-title {
   display: inline;
   font-weight: 900;
@@ -105,38 +76,107 @@ a {
   -webkit-text-stroke-color: #0003;
 }
 
-.arcade-tile .invite-tile-top {
+.arcade-tile .invite-tile-left {
   width: 100%;
-  
 }
 
-.arcade-tile .invite-tile-bottom {
+.arcade-tile .invite-tile-right {
+  position: relative;
   width: 100%;
   color: white;
-  font-size: 1.5em;
-  background-color: #000A;
-  display: grid;
-  grid-template-columns: 50fr 50fr;
-  justify-items: center;
-  align-items: center;
-  padding-bottom: 1.5em;
+  font-size: 1.2em;
+  background-color: var(--saito-cyber-black);
+  padding-top: 0.5em;
 }
 
-.arcade-tile .invite-tile-right div {
+.arcade-tile .invite-tile-bottom div {
   text-align: center;
 }
 
-.arcade-tile.twilight-struggle-invite {
+.arcade-tile .invite-tile-button {
+  position:absolute;
+  margin: 0.5em;
+  padding: 0.2em;
+  color: white;
+  font-size: 1.1em;
+  font-weight: 900;
+  text-align: center;
+  justify-content: center;
+  width: 4.5em;
+}
+
+.arcade-tile .invite-tile-cancel-button {
+  bottom: 0;
+  left: 0;
+  background-color: red;
+}
+
+.arcade-tile .invite-tile-join-button {
+  bottom: 0;
+  right: 0;
+  background-color: green;
+}
+
+.arcade-tile.twilight-struggle-invite .invite-tile-left {
   background: url(/twilight/img/arcade/arcade-banner-background.png);background-size:cover;
 }
 
 .arcade-sub {
-  display: grid;
-  gap: 1.5em;
-  grid-template-columns: 3fr 2fr;
-  /* overflow-x: hidden;
-  overflow-y: auto; */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
+
+.arcade-infobox {
+  width: 40em;
+}
+
+.arcade-posts {
+  width: 40em;
+  font-size: 1.2em;
+  padding: 1em;
+  background-color: #4444;
+}
+.arcade-post {
+  margin-bottom: 40px;
+}
+
+.arcade-post-sublinks {
+  clear: both;
+  font-size:0.8em;
+}
+.arcade-post-title {
+  font-weight: bold;  
+}
+
+.arcade-post-user {
+  float: left;
+  font-weight: bold;  
+  margin-left: 1em;
+}
+.arcade-post-title {
+  float: left;
+  font-weight: bold;  
+}
+.arcade-post-comments {
+  float: left;
+  font-weight: bold;  
+  margin-left: 1em;
+  text-decoration: underline;
+}
+.arcade-post-report {
+  float: left;
+  font-weight: bold;  
+  margin-left: 1em;
+  text-decoration: underline;
+}
+.arcade-post-posted-by {
+  float: left;
+}
+
+
+
 
 
 @media only screen and (max-width: 1000px) {
@@ -187,7 +227,7 @@ a {
 
 
 
-
+/* 
 
 .hero-list {
   display: flex;
@@ -250,7 +290,7 @@ a {
   line-height: 8vh;
   display: flex;
   justify-content: center;
-}
+} */
 
 /* @media only screen and (min-height: 1000px) {
   .game-tile {

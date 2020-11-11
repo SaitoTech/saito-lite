@@ -108,52 +108,134 @@ class Arcade extends ModTemplate {
 
   }
 
+  //
+  // purge any bad games from options file
+  //
+  purgeBadGames(app) {
+    if (app.options) {
+      if (app.options.games) {
+        for (let i = app.options.games.length-1; i >= 0; i--) {
+          if (app.options.games[i].module === "" && app.options.games[i].id.length < 25) {
+            app.options.games.splice(i, 1);
+          }
+        }
+      }
+    }
+  }
+  notifyPeers(app) {
+    for (let i = 0; i < app.network.peers.length; i++) {
+      if (app.network.peers[i].peer.synctype == "lite") {
+        //
+        // fwd tx to peer
+        //
+        let message = {};
+          message.request = "arcade spv update";
+          message.data = {};
+          message.data.tx = tx;
+        app.network.peers[i].sendRequest(message.request, message.data);
+      }
+    }
+  }
+
+  joinGame(app, tx) {
+    let game_id = txmsg.game_id;
+
+    for (let i = 0; i < this.games; i++) {
+      if (this.games[i].transaction) {
+        if (this.games[i].transaction.msg) {
+          if (txmsg.game_id == this.games[i].transaction.msg.game_id) {
+
+            let existing_players_found = 0;
+
+            for (let z = 0; z < this.games[i].transaction.msg.players.length; z++) {
+              for (let zz = 0; zz < tx.transaction.to.length; zz++) {
+                if (this.games[i].transaction.msg.players[z] == tx.transaction.to[zz].add) {
+                  existing_players_found++;
+                  z = this.games[i].transaction.msg.players.length+1;
+                }
+              }
+            }
+            if (existing_players_found < this.games[i].transaction.msg.players.length) {
+
+    //console.log("WE HAVE FOUND A GAME WITH A PLAYER IN IT WHO WAS NOT ACCEPTED...");
+    //console.log(JSON.stringify(this.games[i].transaction.msg.players));
+    //console.log("vs");
+    //console.log(JSON.stringify(tx.transaction.to));
 
 
+            }
+          }
+        }
+      }
+    }
 
+    this.joinGameOnOpenList(tx);
+    this.receiveJoinRequest(blk, tx, conf, app);
+
+    //
+    // it is possible that we have multiple joins that bring us up to
+    // the required number of players, but that did not arrive in the
+    // one-by-one sequence needed for the last player to trigger an
+    // "accept" request instead of another "join".
+    //
+    // in this case the last player sends an accept request which triggers
+    // the start of the game automatically.
+    if (tx.transaction) {
+      if (!tx.transaction.sig) { return; }
+      if (tx.msg.over == 1) { return; }
+
+      for (let i = 0; i < this.games.length; i++) {
+        if (this.games[i].transaction.sig == txmsg.game_id) {
+
+          //
+          // console.log
+          //
+          let number_of_willing_players = this.games[i].msg.players.length;
+          let number_of_players_needed  = this.games[i].msg.players_needed;
+
+          console.log("NUMBER OF WILLING PLAYERS IN THIS GAME: " + number_of_willing_players);
+          console.log("NUMBER OF PLAYERS NEEDED IN THIS GAME: " + number_of_players_needed);
+
+          if (number_of_willing_players >= number_of_players_needed) {
+
+            //
+            // first player is the only one with a guaranteed consistent order in all 
+            // browsers -- cannot use last player to join as players may disagree on 
+            // their order. so the first player is responsible for processing the "accept"
+            //
+            if (this.games[i].msg.players[0] == this.app.wallet.returnPublicKey()) {
+
+              // i should send an accept request to kick this all off
+              this.games[i].msg.players.splice(0, 1);
+              this.games[i].msg.players_sigs.splice(0, 1);
+
+              let newtx = this.createAcceptTransaction(this.games[i]);
+              this.app.network.propagateTransaction(newtx);
+
+            }
+          }
+        }
+      }
+    }
+  }
   //
   // MESSY -- not deleting immediately
   //
   async onConfirmation(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
-    let arcade_self = app.modules.returnModule("Arcade");
-
+    
     if (conf == 0) {
 
-      //
-      // purge any bad games from options file
-      //
-      if (app.options) {
-        if (app.options.games) {
-          for (let i = app.options.games.length-1; i >= 0; i--) {
-            if (app.options.games[i].module === "" && app.options.games[i].id.length < 25) {
-	      app.options.games.splice(i, 1);
-  	    }
-  	  }
-        }
-      }
+
+      this.purgeBadGames(app)
 
       //
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
       //
       if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "accept" || txmsg.request == "close") {
-
-        for (let i = 0; i < arcade_self.app.network.peers.length; i++) {
-          if (arcade_self.app.network.peers[i].peer.synctype == "lite") {
-
-            //
-            // fwd tx to peer
-            //
-            let message = {};
-              message.request = "arcade spv update";
-              message.data = {};
-              message.data.tx = tx;
-            arcade_self.app.network.peers[i].sendRequest(message.request, message.data);
-          }
-        }
+        this.notifyPeers(app);
       }
-
 
       //
       // open msgs -- public invitations
@@ -174,90 +256,7 @@ class Arcade extends ModTemplate {
       // join msgs -- add myself to game list
       //
       if (txmsg.request == "join") {
-
-	let game_id = txmsg.game_id;
-
-	for (let i = 0; i < this.games; i++) {
-	  if (this.games[i].transaction) {
-	    if (this.games[i].transaction.msg) {
-	      if (txmsg.game_id == this.games[i].transaction.msg.game_id) {
-
-		let existing_players_found = 0;
-
-		for (let z = 0; z < this.games[i].transaction.msg.players.length; z++) {
-		  for (let zz = 0; zz < tx.transaction.to.length; zz++) {
-		    if (this.games[i].transaction.msg.players[z] == tx.transaction.to[zz].add) {
-		      existing_players_found++;
-		      z = this.games[i].transaction.msg.players.length+1;
-		    }
-		  }
-		}
-
-		if (existing_players_found < this.games[i].transaction.msg.players.length) {
-
-//console.log("WE HAVE FOUND A GAME WITH A PLAYER IN IT WHO WAS NOT ACCEPTED...");
-//console.log(JSON.stringify(this.games[i].transaction.msg.players));
-//console.log("vs");
-//console.log(JSON.stringify(tx.transaction.to));
-
-
-		}
-	      }
-	    }
-	  }
-	}
-
-
-        this.joinGameOnOpenList(tx);
-        this.receiveJoinRequest(blk, tx, conf, app);
-
-	//
-	// it is possible that we have multiple joins that bring us up to
-	// the required number of players, but that did not arrive in the
-	// one-by-one sequence needed for the last player to trigger an
-	// "accept" request instead of another "join".
-	//
-	// in this case the last player sends an accept request which triggers
-	// the start of the game automatically.
-	//
-        if (tx.transaction) {
-          if (!tx.transaction.sig) { return; }
-          if (tx.msg.over == 1) { return; }
-  
-          for (let i = 0; i < this.games.length; i++) {
-            if (this.games[i].transaction.sig == txmsg.game_id) {
-
- 	      //
-	      // console.log
-	      //
-	      let number_of_willing_players = this.games[i].msg.players.length;
-	      let number_of_players_needed  = this.games[i].msg.players_needed;
-
-	      console.log("NUMBER OF WILLING PLAYERS IN THIS GAME: " + number_of_willing_players);
-	      console.log("NUMBER OF PLAYERS NEEDED IN THIS GAME: " + number_of_players_needed);
-
-	      if (number_of_willing_players >= number_of_players_needed) {
-
-	        //
-	        // first player is the only one with a guaranteed consistent order in all 
-	        // browsers -- cannot use last player to join as players may disagree on 
-		// their order. so the first player is responsible for processing the "accept"
-		//
-	        if (this.games[i].msg.players[0] == this.app.wallet.returnPublicKey()) {
-
-	 	  // i should send an accept request to kick this all off
-		  this.games[i].msg.players.splice(0, 1);
-		  this.games[i].msg.players_sigs.splice(0, 1);
-
-		  let newtx = this.createAcceptTransaction(this.games[i]);
-		  this.app.network.propagateTransaction(newtx);
-
-	        }
-	      }
-	    }
-          }
-        }
-
+        this.joinGame(app, tx);
       }
 
       //
@@ -278,20 +277,15 @@ class Arcade extends ModTemplate {
 
       if (txmsg.request === "sorry") {
         if (tx.isTo(app.wallet.returnPublicKey())) {
-          arcade_self.receiveSorryAcceptedTransaction(blk, tx, conf, app);
+          //TODO: Can we just use "this.receiveSorryAcceptedTransaction"?
+          app.modules.returnModule("Arcade").receiveSorryAcceptedTransaction(blk, tx, conf, app);
         }
       }
-
 
       //
       // acceptances
       //
       if (txmsg.request === "accept") {
-
-//        console.info("\n\n\nARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
-//        console.info("i am " + app.wallet.returnPublicKey());
-//        console.info("TX: " + JSON.stringify(tx.transaction));
-//        console.info("MSG: " + txmsg);
 
         //
         // remove game from server
@@ -309,8 +303,8 @@ class Arcade extends ModTemplate {
         //
         if (!tx.isTo(app.wallet.returnPublicKey())) { 
 
-	  return;
-	}
+          return;
+        }
 
 
 
