@@ -228,14 +228,13 @@ a {
 
 
 /* 
-
 .hero-list {
   display: flex;
   flex-flow: wrap;
   justify-content: space-around;
-}
+} */
 
-.game-tile {
+/* .game-tile {
   cursor: pointer;
   position: relative;
   transition: all ease-in-out 0.5s;
@@ -269,10 +268,10 @@ a {
   position: absolute;
   bottom: 0px;
   width: 100%;
-}
+} */
 
 
-
+/* 
 .hero-action {
   display: grid;
   gap: 1em;
@@ -344,7 +343,7 @@ a {
 } */
 
 /* controls */
-
+/* 
 .arcade-announcement {
   cursor: pointer;
   font-size: 1em;
@@ -409,7 +408,7 @@ select {
 input {
   background: #55555555;
   color: var(--saito-skyline-grey);
-}
+} */
 
 .background-shim {
   position: fixed;

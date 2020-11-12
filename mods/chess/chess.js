@@ -53,6 +53,18 @@ class Chessgame extends GameTemplate {
     return null;
 
   }
+  
+  requestInterface(type) {
+    if (type == "makeInviteDescription") {
+      return {
+        makeDescription: (txMsg) => {
+          return txMsg.color;
+        }    
+      }
+    }
+
+    return null;
+  }
 
   initializeHTML(app) {
 
