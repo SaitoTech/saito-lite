@@ -3,7 +3,6 @@ const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
 const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
 const ArcadeGameDetails = require('./arcade-game-details');
-//const ArcadeGameViewTemplate = require('./templates/arcade-game-view.template');
 
 
 module.exports = ArcadeMain = {
@@ -19,7 +18,6 @@ module.exports = ArcadeMain = {
     //
     invites.forEach((invite, i) => {
       document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-join-button`).onclick = () => {
-	// using subclass instead of directly writing overlay
 	ArcadeGameDetails.render(app, mod, invite);
 	ArcadeGameDetails.attachEvents(app, mod);
       }
@@ -31,7 +29,6 @@ module.exports = ArcadeMain = {
     carousel.render(app, mod);
 
   },
-
 
   attachEvents(app, mod) {
     

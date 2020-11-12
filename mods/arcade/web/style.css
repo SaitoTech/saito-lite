@@ -4,9 +4,10 @@
   --saito-red: #639;
   --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
   --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
-  --tile-height: 15em;
-  --sidebar-width: 15em;
+  --tile-height: 8em;
+  --sidebar-width: 10em;
   --main-width: 100em;
+  --identicon-height: 1em;
 }
 
 body {
@@ -42,9 +43,6 @@ a {
 
 .arcade-main {
   overflow-y: scroll;
-  /* display: grid;
-  gap: 1.5em;
-  grid-template-rows: auto var(--tile-height) auto; */
   max-width: 100em;
 }
 
@@ -52,73 +50,108 @@ a {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  
   padding: 0px auto;
-  justify-content: space-around;
+  justify-content: center;
 }
 .arcade-tile {
-  margin: 1em;
-  width: calc(2 * var(--tile-height));
+  margin: 0.3em;
+  width: calc(2.5 * var(--tile-height));
   height: var(--tile-height);
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr;  
   overflow-y: hidden;
-}
-
-.arcade-tile .invite-tile-left .invite-tile-title {
-  display: inline;
-  font-weight: 900;
-  background: #0005;
-  font-size: 3.5em;
-  padding-left: 0.3em;
-  -webkit-text-fill-color: var(--saito-skyline-grey);
-  -webkit-text-stroke-width: 3px;
-  -webkit-text-stroke-color: #0003;
+  border: solid 3px var(--saito-red);
 }
 
 .arcade-tile .invite-tile-left {
-  width: 100%;
+  display: block;
+  /* height: 100%;
+  width: 100%; */
+   position: relative;
 }
+
+.arcade-tile .invite-tile-left .invite-tile-title {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #000A;
+  color: white;
+  font-size: 1.4em;
+  font-family: visuelt-medium;
+  text-shadow: 2px 2px 5px #9400d38f;
+}
+
 
 .arcade-tile .invite-tile-right {
-  position: relative;
   width: 100%;
   color: white;
-  font-size: 1.2em;
   background-color: var(--saito-cyber-black);
-  padding-top: 0.5em;
 }
 
-.arcade-tile .invite-tile-bottom div {
+.arcade-tile .invite-tile-right .gameName {
+  height: calc(var(--tile-height)*0.15);
+  font-size: 1.4em;
+}
+.arcade-tile .invite-tile-right .gameHost {
+  padding: 0em 0.5em;
   text-align: center;
+  width: calc(var(--tile-height) * 1.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.0em;
+}
+.arcade-tile .invite-tile-right .gameHost .identicon{
+  margin-right: 0.2em;
+}
+.arcade-tile .invite-tile-right .playerInfo {
+  margin: 0.8em 0.2em 0em 0em;
+  float: right;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 4em;
+  height: calc(2*var(--identicon-height));
+  /* height: calc(var(--tile-height)/3); */
+}
+.arcade-tile .invite-tile-right .identicon {
+  width: 100%;
+  max-width: var(--identicon-height);
+  min-width: var(--identicon-height);
+  height: var(--identicon-height);
+  margin: 0;
+}
+.arcade-tile .invite-tile-right .identicon-empty {
+  height: var(--identicon-height);
+  width: var(--identicon-height);
+  margin: 0;
+  border: solid 2px var(--saito-white);
+  background-color: var(--saito-cyber-black)
 }
 
-.arcade-tile .invite-tile-button {
-  position:absolute;
-  margin: 0.5em;
+/* .arcade-tile .invite-tile-right .identicon-empty {
+  width: 100%;
+  max-width: 1em;
+  min-width: 1em;
+  margin: 0 3px;
+} */
+
+.arcade-tile .invite-tile-join-button {
+  clear: right;
+  float: right;
+  margin: 0.4em 0.2em 0em 0em;
   padding: 0.2em;
   color: white;
-  font-size: 1.1em;
+  font-size: 0.8em;
   font-weight: 900;
   text-align: center;
   justify-content: center;
   width: 4.5em;
-}
-
-.arcade-tile .invite-tile-cancel-button {
-  bottom: 0;
-  left: 0;
-  background-color: red;
-}
-
-.arcade-tile .invite-tile-join-button {
-  bottom: 0;
-  right: 0;
   background-color: green;
-}
-
-.arcade-tile.twilight-struggle-invite .invite-tile-left {
-  background: url(/twilight/img/arcade/arcade-banner-background.png);background-size:cover;
 }
 
 .arcade-sub {
@@ -647,11 +680,11 @@ button.add-games {
   text-align: justify;
 }
 
-.game-details form#options {
+/* .game-details form#options {
   display: grid;
   grid-template-columns: 6em auto;
   grid-gap: 1em;
-}
+} */
 
 /* USED BY WORDBLOCKS */
 
@@ -1147,3 +1180,5 @@ span.rewards-row-name {
 #game-publisher-message {
   margin: 2em 1em 0;
 }
+
+

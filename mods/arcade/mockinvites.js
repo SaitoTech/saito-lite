@@ -87,7 +87,10 @@ function makeid(length) {
    }
    return result;
 }
-
+function randomModule() {
+  let mods = ["Wordblocks", "Chess", "Twilight", "Solitrio", "Poker", "Imperium"];
+  return mods[Math.floor(Math.random() * mods.length)]
+}
 module.exports = getMockGames = () => {
   let mockgames = [
     JSON.parse(JSON.stringify(mockGame)), 
@@ -95,11 +98,25 @@ module.exports = getMockGames = () => {
     JSON.parse(JSON.stringify(mockGame)), 
     JSON.parse(JSON.stringify(mockGame)), 
     JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    JSON.parse(JSON.stringify(mockGame)), 
+    mockGame,
+    mockGame,
+    mockGame,
+    mockGame,
   ];
   mockgames.forEach((mg, i) => {
-    console.log(mg.transaction.sig)
     mg.transaction.sig = makeid(90);
-    console.log(mg.transaction.sig)
+    mg.msg.game = randomModule();
   });
   return mockgames;
 }
