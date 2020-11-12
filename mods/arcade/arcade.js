@@ -107,7 +107,6 @@ class Arcade extends ModTemplate {
 
     ArcadeSidebar.render(app, this);
     ArcadeSidebar.attachEvents(app, this);
-    //document.querySelector(".arcade-game-carousel").innerHTML = ArcadeGameCarouselTemplate();
 
 
   }

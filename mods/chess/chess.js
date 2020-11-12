@@ -58,7 +58,7 @@ class Chessgame extends GameTemplate {
     if (type == "makeInviteDescription") {
       return {
         makeDescription: (txMsg) => {
-          return txMsg.color;
+          return txMsg.options.color;
         }    
       }
     }

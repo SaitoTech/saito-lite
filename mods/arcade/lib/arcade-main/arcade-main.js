@@ -2,7 +2,6 @@ const ArcadeMainTemplate = require('./templates/arcade-main.template');
 const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
 const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
-// const ArcadeGameView = require('./arcade-game-view');
 const ArcadeGameViewTemplate = require('./templates/arcade-game-view.template');
 
 module.exports = ArcadeMain = {
@@ -13,9 +12,11 @@ module.exports = ArcadeMain = {
     if (!document.querySelector(".arcade-main")) { app.browser.addElementToDom(ArcadeMainTemplate(app, mod, invites), "arcade-container"); }
     invites.forEach((invite, i) => {
       document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-join-button`).onclick = () => {
-        
         mod.overlay.showOverlay(app, mod, ArcadeGameViewTemplate(app, mod, invite));
-        // TODO attach callbacks for ArcadeGameViewTemplate
+        document.querySelector(".game-invite-btn").onclick = () => {
+          // TODO: Join game here~~~
+          console.log("Join game here")
+        }
       }
     });
     
@@ -24,7 +25,6 @@ module.exports = ArcadeMain = {
     let carousel = new SaitoCarousel(app);
     carousel.render(app, mod);
   },
-
 
   attachEvents(app, mod) {
     
