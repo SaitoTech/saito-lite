@@ -5,6 +5,7 @@ const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeSidebar = require('./lib/arcade-sidebar/arcade-sidebar');
 const AddressController = require('../../lib/ui/menu/address-controller');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
+const getMockGames = require('./mockinvites.js');
 
 class Arcade extends ModTemplate {
 
@@ -35,6 +36,9 @@ class Arcade extends ModTemplate {
 
     this.header = new SaitoHeader(app, this);
     this.overlay = new SaitoOverlay(app, this);
+    
+    //TODO: DELETE THESE LINES
+    this.games = getMockGames();
   }
 
   receiveEvent(type, data) {
@@ -98,7 +102,7 @@ class Arcade extends ModTemplate {
     this.overlay.render(app, this);
     this.overlay.attachEvents(app, this);
 
-    ArcadeMain.render(app, this);
+    ArcadeMain.render(app, this, this.games);
     ArcadeMain.attachEvents(app, this);
 
     ArcadeSidebar.render(app, this);
