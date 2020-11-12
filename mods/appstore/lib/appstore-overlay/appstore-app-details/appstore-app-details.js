@@ -3,9 +3,10 @@ let AppstoreAppDetailsTemplate = require('./appstore-app-details.template.js');
 module.exports = AppstoreAppDetails = {
 
   render(app, data) {
-    const {el_parser} = data.helpers;
-    if (!document.querySelector('.appstore-app-install-overlay'))
-      document.querySelector('body').append(el_parser('<div class="appstore-app-install-overlay"></div>'));
+
+    if (!document.getElementById("appstore-app-install-overlay")) {
+      app.browser.addElementToDom('<div id="appstore-app-install-overlay" class="appstore-app-install-overlay"></div>');
+    }
 
     document.querySelector('.appstore-app-install-overlay').innerHTML = AppstoreAppDetailsTemplate(app, data);
     document.querySelector('.appstore-app-install-overlay').style.display = "block";
@@ -18,7 +19,7 @@ module.exports = AppstoreAppDetails = {
   attachEvents(app, data) {
 
     // remove event listeners
-    //document.querySelector('.email-detail-left-options').innerHTML = document.querySelector('.email-detail-left-options').innerHTML;
+    try {
     document.querySelector('#email-form-back-button').onclick = () => {
 
       document.querySelector('.appstore-app-install-overlay').style.display = "none";
@@ -37,13 +38,11 @@ module.exports = AppstoreAppDetails = {
 
       }
     }
+    } catch (err) {}
 
     document.querySelector('.appstore-app-install-overlay').onclick = () => {
       document.querySelector('.appstore-app-install-overlay').style.display = 'none';
     }
-
-    console.log("ATTACHING EVENTS WITH MODULE: " + data.module);
-    console.log(JSON.stringify(data.module));
 
     let dm = data.module;
 

@@ -47,11 +47,24 @@ module.exports = ArcadeSidebar = {
 
     if (!document.getElementById("games-add-game")) { return; }
 
+
+    if (app.modules.returnModule("AppStore") != null) {
+      document.getElementById("games-add-game").onclick = () => {
+        let appstore_mod = app.modules.returnModule("AppStore");
+        if (appstore_mod) {
+	  let options = { search : "" , category : "Entertainment" , featured : 1 };
+          appstore_mod.openAppstoreOverlay(options);
+        }
+      };
+    }
+
+
+/**
     document.getElementById("games-add-game").onclick = () => {
       mod.overlay.showOverlay(app, mod, ArcadeGamesFullListOverlayTemplate(app, mod));
 //      mod.overlay.showOverlay(app, mod, 'Add or Install New Games');
     };
-
+**/
 
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
       game.addEventListener('click', (e) => {

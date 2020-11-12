@@ -1,4 +1,5 @@
 module.exports = AppstoreAppDetailsTemplate = (app, data) => {
+
   var unixtime = new Date(data.module.unixtime);
     
   return `
