@@ -5,9 +5,13 @@
   --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
   --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
   --tile-height: 8em;
-  --sidebar-width: 10em;
-  --main-width: 100em;
+  --saito-width: 1500px;
+  --sidebar-width: 15em;
   --identicon-height: 1em;
+}
+
+.saito-carousel {
+  display: none;
 }
 
 body {
@@ -16,7 +20,6 @@ body {
   color: var(--saito-skyline-grey);
   background: var(--saito-nightscape);
   overflow: hidden;
-  text-align: center;
   justify-content: center;
 }
 
@@ -32,8 +35,8 @@ a {
   gap: 1em;
   grid-template-columns: var(--sidebar-width) auto;
   font-size: 1em;
-  overflow: hidden;
-  max-width: calc(var(--sidebar-width) + var(--main-width));;
+  width: 100vw;
+  max-width: var(--saito-width);
 }
 
 .arcade-sidebar {
@@ -42,34 +45,59 @@ a {
 }
 
 .arcade-main {
-  overflow-y: scroll;
-  max-width: 100em;
+  display: grid;
+  grid-template-rows: 45vh auto;
+  gap: 1em;
+  /*
+  max-width: calc(var(--saito-width) - var(--sidebar-width) - 1em);
+  */
 }
 
 .arcade-hero {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  
-  padding: 0px auto;
-  justify-content: center;
+  justify-content: space-around;
+  overflow-y: auto;
+  padding: 1em;
+  background: linear-gradient(-45deg, #0002, #0004);
+  border: 1px solid var(--saito-red);
 }
+
 .arcade-tile {
-  margin: 0.3em;
-  width: calc(2.5 * var(--tile-height));
-  height: var(--tile-height);
+  margin: 1em;
+  width: calc(33% - 3em);
+  overflow-y: hidden;
+}
+
+.invite-title-wrapper {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr 1fr;  
-  overflow-y: hidden;
-  border: solid 3px var(--saito-red);
+  grid-template-columns: 1fr 12em;
+  border: solid 1px #c89af6;
+  background-color: #222b;
+  height: var(--tile-height);
+  margin: 5px;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 1500px) {
+  .arcade-tile {
+    width: calc(50% - 3em);
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .arcade-tile {
+    width: calc(100% - 3em);
+  }
 }
 
 .arcade-tile .invite-tile-left {
   display: block;
   /* height: 100%;
   width: 100%; */
-   position: relative;
+  position: relative;
 }
 
 .arcade-tile .invite-tile-left .invite-tile-title {
@@ -83,54 +111,53 @@ a {
   font-size: 1.4em;
   font-family: visuelt-medium;
   text-shadow: 2px 2px 5px #9400d38f;
+  width: 100%;
+  text-align: center;
+  padding: 5px;
 }
-
 
 .arcade-tile .invite-tile-right {
-  width: 100%;
   color: white;
-  background-color: var(--saito-cyber-black);
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 }
 
-.arcade-tile .invite-tile-right .gameName {
-  height: calc(var(--tile-height)*0.15);
+.gameName {
   font-size: 1.4em;
+  padding: 10px;
 }
+
 .arcade-tile .invite-tile-right .gameHost {
-  padding: 0em 0.5em;
+  padding: 0.5em;
   text-align: center;
-  width: calc(var(--tile-height) * 1.5);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 1.0em;
+  font-size: 1.2em;
+  display: none;
 }
-.arcade-tile .invite-tile-right .gameHost .identicon{
+
+.arcade-tile .invite-tile-right .gameHost .identicon {
   margin-right: 0.2em;
 }
+
 .arcade-tile .invite-tile-right .playerInfo {
-  margin: 0.8em 0.2em 0em 0em;
-  float: right;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 4em;
-  height: calc(2*var(--identicon-height));
-  /* height: calc(var(--tile-height)/3); */
-}
-.arcade-tile .invite-tile-right .identicon {
   width: 100%;
-  max-width: var(--identicon-height);
-  min-width: var(--identicon-height);
-  height: var(--identicon-height);
-  margin: 0;
+  justify-content: space-around;
 }
+
+.arcade-tile .invite-tile-right .identicon {
+  background-color: #444;
+  box-shadow: 1px 1px #999;
+}
+
 .arcade-tile .invite-tile-right .identicon-empty {
-  height: var(--identicon-height);
-  width: var(--identicon-height);
-  margin: 0;
-  border: solid 2px var(--saito-white);
-  background-color: var(--saito-cyber-black)
+  background-color: #444;
+  box-shadow: 1px 1px #999;
 }
 
 /* .arcade-tile .invite-tile-right .identicon-empty {
@@ -141,83 +168,89 @@ a {
 } */
 
 .arcade-tile .invite-tile-join-button {
-  clear: right;
-  float: right;
-  margin: 0.4em 0.2em 0em 0em;
-  padding: 0.2em;
   color: white;
-  font-size: 0.8em;
-  font-weight: 900;
-  text-align: center;
-  justify-content: center;
-  width: 4.5em;
-  background-color: green;
+  cursor: pointer;
+  transform: scale(0.8);
+  margin: 0 0 7px 24px;
+}
+
+.arcade-tile .invite-tile-join-button:hover {
+  background-color: #8888;
 }
 
 .arcade-sub {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 1em;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-image: url(/arcade/img/dreamscape-logo.png);
+  background-size: contain;
 }
 
 .arcade-infobox {
+  /*
   width: 40em;
+  */
 }
 
 .arcade-posts {
-  width: 40em;
   font-size: 1.2em;
   padding: 1em;
   background-color: #4444;
 }
+
 .arcade-post {
   margin-bottom: 40px;
 }
 
 .arcade-post-sublinks {
   clear: both;
-  font-size:0.8em;
+  font-size: 0.8em;
 }
+
 .arcade-post-title {
-  font-weight: bold;  
+  font-weight: bold;
 }
 
 .arcade-post-user {
   float: left;
-  font-weight: bold;  
+  font-weight: bold;
   margin-left: 1em;
 }
+
 .arcade-post-title {
   float: left;
-  font-weight: bold;  
+  font-weight: bold;
 }
+
 .arcade-post-comments {
   float: left;
-  font-weight: bold;  
+  font-weight: bold;
   margin-left: 1em;
   text-decoration: underline;
 }
+
 .arcade-post-report {
   float: left;
-  font-weight: bold;  
+  font-weight: bold;
   margin-left: 1em;
   text-decoration: underline;
 }
+
 .arcade-post-posted-by {
   float: left;
 }
 
-
-
 /*** AppStore Loader ***/
+
 .appstore-overlay-container {
   background-color: #171c40;
 }
+
 .appstore-overlay-app {
   background-color: #c2cdde;
 }
-
 
 @media only screen and (max-width: 1000px) {
   .main {
@@ -238,7 +271,6 @@ a {
   .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
     left: 0;
   }
-  
   /* .arcade-main {
     overflow-y: scroll;
     display: grid;
@@ -264,8 +296,6 @@ a {
     /* display: none; */
   }
 }
-
-
 
 /* 
 .hero-list {
@@ -309,7 +339,6 @@ a {
   bottom: 0px;
   width: 100%;
 } */
-
 
 /* 
 .hero-action {
@@ -383,6 +412,26 @@ a {
 } */
 
 /* controls */
+
+button, .button, .file-label {
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  min-width: 10em;
+  padding: 10px 6px;
+  background: var(--saito-jester);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+  letter-spacing: 1px;
+  transition: transform .25s;
+  margin: 0.2em 0;
+  min-width: 180px;
+}
+
+button:hover, .button:hover {
+  background: linear-gradient(-45deg, #537 50%, #324 100%);
+}
+
 /* 
 .arcade-announcement {
   cursor: pointer;
@@ -413,24 +462,7 @@ a {
   margin: 0;
 }
 
-button, .button, .file-label {
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  min-width: 10em;
-  padding: 10px 6px;
-  background: var(--saito-jester);
-  border: 1px solid var(--saito-red);
-  color: var(--saito-skyline-grey);
-  letter-spacing: 1px;
-  transition: transform .25s;
-  margin: 0.2em 0;
-  min-width: 180px;
-}
 
-button:hover, .button:hover {
-  background: linear-gradient(-45deg, #537 50%, #324 100%);
-}
 
 select {
   border: 1px solid var(--saito-red);
@@ -1199,5 +1231,3 @@ span.rewards-row-name {
 #game-publisher-message {
   margin: 2em 1em 0;
 }
-
-
