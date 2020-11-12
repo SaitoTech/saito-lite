@@ -1,14 +1,11 @@
-module.exports = ArcadeGameViewTemplate = (app, mod, invite) => {
+module.exports = ArcadeGameDetailsTemplate = (app, mod, invite) => {
+
   let optionsHtml = "";
   Object.keys(invite.msg.options).forEach((key, i) => {
     optionsHtml += `<div>${key}:</div><div>${invite.msg.options[key]}</div>`
   });
   return `
-  <div class="view-game-overlay create-game-wizard" style="width: 100em; font-size: 15px;">
-    <div class="return-to-arcade" id="return-to-arcade">
-      <i class="icon-large fas fa-times-circle"></i>
-    </div>
-    <div class="game-wizard-content">
+    <div class="game-wizard">
       <div class="game-wizard-form">
         <div class="game-wizard-main">
           <div class="game-info-container">
@@ -51,20 +48,7 @@ module.exports = ArcadeGameViewTemplate = (app, mod, invite) => {
         </div>
       </div>
     </div>
-  </div>
-
 
 `;
 }
 
-/*
-
-
-
-<option value="1" id="game-players-select-1p">1 player</option>
-                <option value="2" id="game-players-select-2p" selected>2 players</option>
-                <option value="3" id="game-players-select-3p">3 players</option>
-                <option value="4" id="game-players-select-4p">4 players</option>
-                <option value="5" id="game-players-select-5p">5 players</option>
-                <option value="6" id="game-players-select-6p">6 players</option>
-                */

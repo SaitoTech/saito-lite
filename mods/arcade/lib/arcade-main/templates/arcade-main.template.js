@@ -1,5 +1,7 @@
 const ArcadeInviteTemplate = require('./arcade-invite.template');
+
 module.exports = ArcadeMainTemplate = (app, mod, invites) => {
+
   let invitesHtml = "";
   invites.forEach((invite, i) => {
     invitesHtml += ArcadeInviteTemplate(app, mod, invite)
@@ -14,4 +16,5 @@ module.exports = ArcadeMainTemplate = (app, mod, invites) => {
       </div>
     </div>
   `;
+
 }
