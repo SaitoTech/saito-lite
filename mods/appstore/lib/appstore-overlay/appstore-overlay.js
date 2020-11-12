@@ -13,8 +13,6 @@ module.exports = AppStoreAppspace = {
 
     mod.overlay.showOverlay(app, mod, AppStoreOverlayTemplate());
 
-console.log(JSON.stringify(search_options));
-
     //
     // server also performs sanity checks, but we'll do basic ones here too
     //
@@ -27,7 +25,7 @@ console.log(JSON.stringify(search_options));
       } else {
 	where_clause += " AND ";
       }
-      where_clause = " description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\"";
+      where_clause += " description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\"";
     }
     let featured = 0; if (search_options.featured == 1) { featured = 1; }
     if (where_clause == "") { 
@@ -35,12 +33,18 @@ console.log(JSON.stringify(search_options));
     } else {
       where_clause += " AND ";
     }
-    where_clause += " featured = "+featured;
+    if (featured == 1) {
+      where_clause += " featured = 1";
+    } else {
+      where_clause += " featured = 1 OR featured = 0";
+    }
 
     //
     // form sql query
     //
     let sql_query = ("SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules " + where_clause);
+
+console.log(sql_query);
 
     //
     // fetch modules from appstore
@@ -101,6 +105,8 @@ console.log(JSON.stringify(search_options));
 
   attachEvents(app, mod) {
 
+    search_self = this;
+
     //
     // install module (button)
     //
@@ -113,6 +119,31 @@ console.log(JSON.stringify(search_options));
         AppStoreAppDetails.attachEvents(app, data);
       };
     });
+
+    //
+    // search box
+    //
+    document.getElementById('appstore-search-box').addEventListener('focus', (e) => {
+      e.currentTarget.placeholder = "";
+      e.currentTarget.value = "";
+    });
+
+    //
+    // search
+    //
+    document.getElementById('appstore-search-box').addEventListener('keypress', (e) => {
+      let key = e.which || e.keyCode;
+      if (key === 13) {
+
+        alert("Search Query: " + e.currentTarget.value);
+
+	let options = { search : e.currentTarget.value , category : "" , featured : 0 };
+	search_self.render(app, mod, options);	
+
+      }
+    });
+
+
 
   }
 

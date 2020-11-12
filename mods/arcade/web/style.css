@@ -650,32 +650,13 @@ button.add-games {
 
 /* GAME WIZARD */
 
-.create-game-wizard, .escrow-game-wizard {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  width: 80%;
-  margin: 1em auto;
-  background-color: #0009;
-  padding: 1em;
-  z-index: 5;
-  max-width: 900px;
-  max-height: 67vh;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-}
-
-.escrow-game-wizard div {
-  margin: 1em 0;
-}
-
-.game-wizard-content {
+.game-wizard {
   overflow-y: scroll;
   padding: 1em;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  font-size: 1em;
+  background-color: #0009;
 }
 
 .game-wizard-content::-webkit-scrollbar {
