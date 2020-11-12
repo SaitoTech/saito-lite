@@ -177,6 +177,13 @@ a {
 
 
 
+/*** AppStore Loader ***/
+.appstore-overlay-container {
+  background-color: #171c40;
+}
+.appstore-overlay-app {
+  background-color: #c2cdde;
+}
 
 
 @media only screen and (max-width: 1000px) {

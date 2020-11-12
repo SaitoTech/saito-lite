@@ -19,7 +19,7 @@ module.exports = AppstoreAppDetails = {
   attachEvents(app, data) {
 
     // remove event listeners
-    //document.querySelector('.email-detail-left-options').innerHTML = document.querySelector('.email-detail-left-options').innerHTML;
+    try {
     document.querySelector('#email-form-back-button').onclick = () => {
 
       document.querySelector('.appstore-app-install-overlay').style.display = "none";
@@ -38,13 +38,11 @@ module.exports = AppstoreAppDetails = {
 
       }
     }
+    } catch (err) {}
 
     document.querySelector('.appstore-app-install-overlay').onclick = () => {
       document.querySelector('.appstore-app-install-overlay').style.display = 'none';
     }
-
-    console.log("ATTACHING EVENTS WITH MODULE: " + data.module);
-    console.log(JSON.stringify(data.module));
 
     let dm = data.module;
 

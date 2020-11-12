@@ -1,6 +1,5 @@
 const AppStoreBundleConfirmTemplate 	  = require('./appstore-bundle-confirm.template.js');
 
-
 module.exports = AppStoreBundleConfirm = {
 
     render(app, data) {
@@ -9,7 +8,6 @@ module.exports = AppStoreBundleConfirm = {
     },
 
     attachEvents(app, data) {
-
 
       document.getElementById('confirm-bundle-install-btn')
         .addEventListener('click', (e) => {

@@ -2,8 +2,7 @@ const saito = require('../../lib/saito/saito');
 const helpers = require('../../lib/helpers/index');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreOverlay = require('./lib/appstore-overlay/appstore-overlay');
-const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
-const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
+const AppStoreBundleConfirm = require('./lib/appstore-overlay/appstore-bundle-confirm');
 const fs = require('fs');
 const path = require('path');
 
@@ -19,34 +18,8 @@ class AppStore extends ModTemplate {
     this.name          = "AppStore";
     this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
     this.categories    = "Utilities Dev";
-    this.featured_apps = ['Email', 'Testing', 'Escrow', 'Design'];
+    this.featured_apps = ['Imperium', 'Debug', 'Scotland', 'Escrow'];
   }
-
-
-  //
-  // appstore displays in email
-  //
-  respondTo(type) {
-    if (type == 'email-appspace') {
-      let obj = {};
-      obj.render = this.renderEmail;
-      obj.attachEvents = this.attachEventsEmail;
-      obj.script = '<link ref="stylesheet" href="/appstore/css/email-appspace.css" />';
-      return obj;
-    }
-    return null;
-  }
-  renderEmail(app, data) {
-    data.appstore = app.modules.returnModule("AppStore");
-    data.helpers = helpers;
-    AppStoreAppspace.render(app, data);
-  }
-  attachEventsEmail(app, data) {
-    data.appstore = app.modules.returnModule("AppStore");
-    data.helpers = helpers;
-    AppStoreAppspace.attachEvents(app, data);
-  }
-
 
 
   //
@@ -518,8 +491,6 @@ console.log("SERVER REQUEST BUNDLE");
       }
     }
 
-console.log("about to webpack this bundle!");
-
     //
     // WEBPACK
     //
@@ -528,8 +499,6 @@ console.log("about to webpack this bundle!");
     //
     // insert resulting JS into our bundles database
     //
-console.log("bundle filename: " + bundle_filename);
-
     let bundle_binary = fs.readFileSync(path.resolve(__dirname, `./bundler/dist/${bundle_filename}`), { encoding: 'binary' });
 
     //
@@ -553,9 +522,6 @@ console.log("bundle filename: " + bundle_filename);
     //
     //
     let online_version = this.app.options.server.endpoint.protocol + "://" + this.app.options.server.endpoint.host + ":" + this.app.options.server.endpoint.port + "/appstore/bundle/" + bundle_filename;
-
-
-console.log("online version: " + online_version);
 
     //
     // send our filename back at our person of interest
@@ -584,16 +550,12 @@ console.log("online version: " + online_version);
     const util = require('util');
     const exec = util.promisify(require('child_process').exec);
 
-console.log("1");
-
     //
     // modules has name, description, version, zip
     //
     const fs = this.app.storage.returnFileSystem();
     const path = require('path');
     const unzipper = require('unzipper');
-
-console.log("2");
 
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
@@ -607,8 +569,6 @@ console.log("2");
     let bash_script_delete = '';
     let bash_script_create_dirs = '';
 
-console.log("3");
-
     //
     // create and execute script that creates directories
     //
@@ -617,8 +577,6 @@ console.log("3");
     bash_script_create_dirs += 'rm -rf ' + __dirname + "/../../bundler/" + newappdir + "/mods" + "\n";
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/mods" + "\n";
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/dist" + "\n";
-
-console.log("4");
 
     fs.writeFileSync(path.resolve(__dirname, bash_script_create), bash_script_create_dirs, { encoding: 'binary' });
     try {
@@ -629,17 +587,12 @@ console.log("4");
       console.log(err);
     }
 
-console.log("5");
-
     bash_script_content += 'cd ' + __dirname + '/mods' + "\n";
     bash_script_delete  += 'cd ' + __dirname + '/mods' + "\n";
 
     //
     // save MODS.zip and create bash script to unzip
     //
-
-console.log("6");
-
     let module_paths = modules.map(mod => {
 
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
@@ -665,11 +618,8 @@ console.log("6");
       return `${returnSlug(mod.name)}/${returnSlug(mod.name)}.js`;
     });
 
-console.log("7");
-
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}-create` + "\n";
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}` + "\n";
-
 
     //
     // write our modules config file
@@ -678,8 +628,6 @@ console.log("7");
     await fs.writeFile(path.resolve(__dirname, `../../bundler/${newappdir}/config/${modules_config_filename}`),
       JSON.stringify({ mod_paths: module_paths })
     );
-
-console.log("8");
 
     //
     // other filenames
@@ -695,8 +643,6 @@ console.log("8");
       IndexTemplate(modules_config_filename)
     );
 
-console.log("9");
-
     //
     // execute bundling process
     //
@@ -709,22 +655,14 @@ console.log("9");
     bash_script_content += "\n";
     //bash_script_content += bash_script_delete;
 
-console.log("9 - 2");
-
-
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
     try {
       let cwdir = __dirname;
       let bash_command = 'sh ' + bash_script;
-console.log("running bash command: " + bash_command);
-//console.log(" with: " + bash_script_content);
-console.log("this comment: " + bash_command);
       const { stdout, stderr } = await exec(bash_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
     } catch (err) {
       console.log(err);
     }
-
-console.log("10");
 
     //
     // create tx
@@ -736,15 +674,12 @@ console.log("10");
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-console.log("11");
-
     //
     // cleanup
     //
-// tmp disabled
-//    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
-//      console.log("Appstore Compilation Files Removed!");
-//    });
+    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
+      console.log("Appstore Compilation Files Removed!");
+    });
 
     return bundle_filename;
   }
@@ -815,9 +750,9 @@ console.log("11");
   //////////////////
   // UI Functions //
   //////////////////
-  openAppstoreOverlay() {
+  openAppstoreOverlay(options) {
 
-    AppStoreOverlay.render(this.app, this);
+    AppStoreOverlay.render(this.app, this, options);
     AppStoreOverlay.attachEvents(this.app, this);
 
   }

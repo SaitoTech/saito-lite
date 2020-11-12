@@ -5,13 +5,42 @@ const AppStoreAppDetails = require('./appstore-app-details/appstore-app-details.
 
 module.exports = AppStoreAppspace = {
 
-  render(app, mod) {
+  render(app, mod, search_options={}) {
 
     mod.overlay = new SaitoOverlay(app, mod);
     mod.overlay.render(app, mod);
     mod.overlay.attachEvents(app, mod);
 
     mod.overlay.showOverlay(app, mod, AppStoreOverlayTemplate());
+
+console.log(JSON.stringify(search_options));
+
+    //
+    // server also performs sanity checks, but we'll do basic ones here too
+    //
+    let where_clause = ""; if (search_options.category != "") {
+      where_clause = " WHERE categories LIKE \"%" + search_options.category.replace(/\W/, '') + "%\"";
+    }
+    if (search_options.search != "") {
+      if (where_clause == "") { 
+	where_clause = " WHERE ";
+      } else {
+	where_clause += " AND ";
+      }
+      where_clause = " description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\"";
+    }
+    let featured = 0; if (search_options.featured == 1) { featured = 1; }
+    if (where_clause == "") { 
+      where_clause = " WHERE ";
+    } else {
+      where_clause += " AND ";
+    }
+    where_clause += " featured = "+featured;
+
+    //
+    // form sql query
+    //
+    let sql_query = ("SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules " + where_clause);
 
     //
     // fetch modules from appstore
@@ -20,7 +49,7 @@ module.exports = AppStoreAppspace = {
 
         "AppStore" ,
 
-        `SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1` ,
+	sql_query ,
 
         (res) => {
 
