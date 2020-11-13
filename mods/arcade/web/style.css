@@ -38,27 +38,67 @@ a {
   width: 100vw;
   max-width: var(--saito-width);
 }
-
 .arcade-sidebar {
   display: flex;
   flex-flow: column;
 }
-
 .arcade-main {
   display: grid;
-  grid-template-rows: 45vh auto;
-  gap: 1em;
-  /*
-  max-width: calc(var(--saito-width) - var(--sidebar-width) - 1em);
-  */
+  grid-template-rows: 3em 45vh auto;
+}
+#arcade-tab-buttons {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  overflow: hidden;
+  border-left: solid 2px var(--saito-red);
+}
+#arcade-tab-buttons .tab-button {
+  border: solid 2px var(--saito-red);
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  border-left: none;
+  border-bottom: none;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 1.5em;
+  transform: skew(20deg) translateX(-0.35em);
 }
 
+#arcade-tab-buttons .tab-button span {
+  transform: skew(-20deg);
+}
+
+#arcade-tab-buttons .tab-button:nth-child(1) {
+  border-left: solid 1px var(--saito-red);
+}
+#arcade-tab-buttons .tab-button.active-tab-button {
+  background: var(--saito-jester);
+}
+#observables-hero{
+  font-size: 4em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: solid 1px var(--saito-red);
+}
+#tournaments-hero{
+  font-size: 4em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: solid 1px var(--saito-red);
+}
+.arcade-tab-hidden{
+  display: none !important;
+}
 .arcade-hero {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
-  overflow-y: auto;
   padding: 1em;
   background: linear-gradient(-45deg, #0002, #0004);
   border: 1px solid var(--saito-red);
