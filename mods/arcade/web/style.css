@@ -68,14 +68,14 @@ a {
   margin: 1em;
   width: calc(33% - 3em);
   overflow-y: hidden;
+  border: solid 1px #c89af6;
 }
 
 .invite-title-wrapper {
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 12em;
-  border: solid 1px #c89af6;
-  background-color: #222b;
+  background: linear-gradient(45deg, #222B 38%, #0002 100%);
   height: var(--tile-height);
   margin: 5px;
   overflow: hidden;
