@@ -1,5 +1,5 @@
 
-module.exports = ArcadeInviteTemplate = (app, mod, invite) => {
+module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
   let playersHtml = "";
   for(let i = 0; i < invite.msg.players_needed; i++) {
     //TODO: implement this!!
@@ -15,7 +15,7 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite) => {
   `;
   return `
 
-    <div id="invite-${invite.transaction.sig}" class="arcade-tile twilight-struggle-invite" style="background: url(/${invite.msg.game}/img/arcade.jpg);background-size:cover;">
+    <div id="invite-${invite.transaction.sig}" class="arcade-tile i_${idx}" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);">
       <div class="invite-title-wrapper">
       <div class="invite-tile-left">
         <div class="gameName">${invite.msg.game}</div>
