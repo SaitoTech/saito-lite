@@ -35,7 +35,7 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite) => {
 }
 // If the transction message contains a description, use that, otherwise if the module provides a makeInviteDescription function, use that, otherwise fallback to "Game Available"
 let makeDescription = (app, invite) => {
-  let defaultDescription = "";
+  let defaultDescription = "Game";
   let gameModule = app.modules.returnModule(invite.msg.game);
   if(gameModule){
     let moduleDescriptionMaker = gameModule.requestInterface("makeInviteDescription");  

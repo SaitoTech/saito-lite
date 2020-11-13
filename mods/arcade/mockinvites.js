@@ -92,28 +92,13 @@ function randomModule() {
   return mods[Math.floor(Math.random() * mods.length)]
 }
 module.exports = getMockGames = () => {
-  let mockgames = [
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    JSON.parse(JSON.stringify(mockGame)), 
-    mockGame,
-    mockGame,
-    mockGame,
-    mockGame,
-  ];
+  let mockgames = [];
+  let howMany = Math.floor(Math.random() * 100);
+  console.log("howmany");
+  console.log(howMany);
+  for(let i = 0; i < howMany; i++) {
+    mockgames.push(JSON.parse(JSON.stringify(mockGame)));
+  }
   mockgames.forEach((mg, i) => {
     mg.transaction.sig = makeid(90);
     mg.msg.game = randomModule();
