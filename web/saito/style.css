@@ -45,6 +45,7 @@ Generic Style Settings for Modules in the Saito App Suite
   --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
   --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
   --saito-wu: none;
+  --saito-width: 1500px;
 }
 
 * {
@@ -972,7 +973,6 @@ div#message-wrapper {
 /* Page Sections */
 
 .header {
-  display: grid;
   height: 5em;
   padding: 0 1em;
   background-image: url(/saito/img/dreamscape.png);
@@ -984,6 +984,18 @@ div#message-wrapper {
   top: 0%;
   z-index: 1;
 }
+
+.header-wrapper {
+  display: grid;
+  width: 100%;
+  max-width: var(--saito-width);
+  margin: auto;
+  grid-template-columns: 12em auto;
+  align-items: center;
+  height: 100%;
+  padding: 0 1.1em;
+}
+
 .header-balance {
   float: left;
   font-weight: normal;
@@ -1045,12 +1057,12 @@ div#message-wrapper {
 .header-mini-wallet .header-icon {
   
 }
-
+/*
 .header-home {
   grid-template-columns: 12em auto;
   align-items: center;
 }
-
+*/
 .header-icon {
   color: white;
   align-self: center;
