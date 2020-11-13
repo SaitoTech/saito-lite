@@ -38,28 +38,66 @@ a {
   width: 100vw;
   max-width: var(--saito-width);
 }
-
 .arcade-sidebar {
   display: flex;
   flex-flow: column;
 }
-
 .arcade-main {
   display: grid;
-  grid-template-rows: 45vh auto;
-  gap: 1em;
-  /*
-  max-width: calc(var(--saito-width) - var(--sidebar-width) - 1em);
-  */
+  grid-template-rows: 2em 45vh auto;
+}
+#arcade-tab-buttons {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  overflow: hidden;
+  border-left: solid 2px var(--saito-red);
+}
+#arcade-tab-buttons .tab-button {
+  border: solid 2px var(--saito-red);
+  font-weight: bold;
+  border-left: none;
+  border-bottom: none;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  transform: skew(20deg) translateX(-0.35em);
 }
 
+#arcade-tab-buttons .tab-button span {
+  transform: skew(-20deg);
+}
+
+#arcade-tab-buttons .tab-button:nth-child(1) {
+  border-left: solid 1px var(--saito-red);
+}
+#arcade-tab-buttons .tab-button.active-tab-button {
+  background: var(--saito-jester);
+}
+#observables-hero{
+  font-size: 4em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: solid 1px var(--saito-red);
+}
+#tournaments-hero{
+  font-size: 4em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: solid 1px var(--saito-red);
+}
+.arcade-tab-hidden{
+  display: none !important;
+}
 .arcade-hero {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
   overflow-y: auto;
-  padding: 10px 0;
   background: linear-gradient(-45deg, #0002, #0004);
   border: 1px solid var(--saito-red);
 }
@@ -70,12 +108,13 @@ a {
   border: solid 1px #c89af6;
   background-size: cover;
   background-position: center;
+  margin: 0.5em;
 }
 
 @media only screen and (min-width: 1000px) {
   .arcade-tile.i_0 {
     width: calc(100% - 1em);
-    height: 26vh;
+    height: 22vh;
   }
   .of_1 .arcade-tile.i_0 {
     height: 42vh;
@@ -83,7 +122,6 @@ a {
   .of_2 .arcade-tile.i_0, .of_2 .arcade-tile.i_1 {
     height: 20vh;
     width: calc(100% - 1em);
-    margin: 0.5em 0 0 0;
   }
   .of_3 .arcade-tile.i_1, .of_3 .arcade-tile.i_2 {
     width: calc(50% - 1em);
@@ -200,7 +238,7 @@ a {
 .arcade-sub {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  gap: 1em;
+  gap: 0.5em;
   background-repeat: no-repeat;
   background-position: top;
   background-size: contain;
@@ -293,6 +331,15 @@ a {
   .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
     left: 0;
   }
+
+  .arcade-sub {
+    margin: 1em 0 0 0;
+    grid-template-columns: auto;
+    grid-template-rows: 20vh auto;
+  }
+
+
+
   /* .arcade-main {
     overflow-y: scroll;
     display: grid;

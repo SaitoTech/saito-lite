@@ -4,7 +4,7 @@ const ArcadeInfobox = require('./arcade-infobox');
 const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
 const ArcadeGameDetails = require('./arcade-game-details');
 
-
+let tabNames = ["arcade", "observables", "tournaments"];
 module.exports = ArcadeMain = {
 
   render(app, mod) {
@@ -12,6 +12,19 @@ module.exports = ArcadeMain = {
     if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
     if (!document.querySelector(".arcade-main")) { app.browser.addElementToDom(ArcadeMainTemplate(app, mod, mod.games), "arcade-container"); }
 
+    tabNames.forEach((tabButtonName, i) => {
+      document.querySelector("#tab-button-" + tabButtonName).onclick = () => {
+        tabNames.forEach((tabName, i) => {
+          if (tabName === tabButtonName) {
+            document.querySelector("#" + tabName + "-hero").classList.remove("arcade-tab-hidden");
+            document.querySelector("#tab-button-" + tabName).classList.add("active-tab-button");
+          } else {
+            document.querySelector("#" + tabName + "-hero").classList.add("arcade-tab-hidden");
+            document.querySelector("#tab-button-" + tabName).classList.remove("active-tab-button");
+          }
+        });
+      }
+    });
 
     //add invites to arcade-hero section
     if (document.querySelector('.arcade-hero')) {

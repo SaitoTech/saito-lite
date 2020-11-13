@@ -93,9 +93,7 @@ function randomModule() {
 }
 module.exports = getMockGames = () => {
   let mockgames = [];
-  let howMany = Math.floor(Math.random() * 7);
-  console.log("howmany");
-  console.log(howMany);
+  let howMany = Math.floor(Math.random() * 6);
   for(let i = 0; i < howMany; i++) {
     mockgames.push(JSON.parse(JSON.stringify(mockGame)));
   }
