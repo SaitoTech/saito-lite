@@ -41,6 +41,7 @@ a {
 .arcade-sidebar {
   display: flex;
   flex-flow: column;
+  z-index: 999;
 }
 .arcade-main {
   display: grid;
@@ -112,30 +113,28 @@ a {
 }
 
 @media only screen and (min-width: 1000px) {
-  .arcade-tile.i_0 {
+  .i_0 {
     width: calc(100% - 1em);
     height: 22vh;
   }
-  .of_1 .arcade-tile.i_0 {
+  .of_1 .i_0 {
     height: 42vh;
   }
-  .of_2 .arcade-tile.i_0, .of_2 .arcade-tile.i_1 {
+  .of_2 .i_0, .of_2 .i_1 {
     height: 20vh;
     width: calc(100% - 1em);
   }
-  .of_3 .arcade-tile.i_1, .of_3 .arcade-tile.i_2 {
+  .of_3 .i_1, .of_3 .i_2 {
     width: calc(50% - 1em);
   }
-}
 
-.invite-title-wrapper {
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: 1fr 12em;
-  background: linear-gradient(45deg, #222B 38%, #0002 100%);
-  height: var(--tile-height);
-  margin: 5px;
-  overflow: hidden;
+  .of_5 .i_1, .of_5 .i_2, .of_5 .i_3, .of_5 .i_4 {
+    width: calc(50% - 1em);
+  }
+
+  .of_1 .i_0 .gameName {
+    font-size: 3.5;
+  }
 }
 
 @media only screen and (max-width: 1500px) {
@@ -150,89 +149,68 @@ a {
   }
 }
 
-.arcade-tile .invite-tile-left {
-  display: block;
-  /* height: 100%;
-  width: 100%; */
-  position: relative;
-}
-
-.arcade-tile .invite-tile-left .invite-tile-title {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #000A;
-  color: white;
-  font-size: 1.4em;
-  font-family: visuelt-medium;
-  text-shadow: 2px 2px 5px #9400d38f;
-  width: 100%;
-  text-align: center;
-  padding: 5px;
-}
-
-.arcade-tile .invite-tile-right {
-  color: white;
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-}
-
-.gameName {
-  font-size: 1.4em;
-  padding: 10px;
-}
-
-.arcade-tile .invite-tile-right .gameHost {
-  padding: 0.5em;
-  text-align: center;
-  white-space: nowrap;
+.invite-title-wrapper {
+  display: grid;
+  grid-template-rows: 1fr 2em;
+  grid-template-columns: 1fr 12em;
+  background: linear-gradient(-45deg, #222B 38%, #0002 100%);
+  height: 8em;
   overflow: hidden;
-  text-overflow: ellipsis;
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  text-shadow: 1px 0 2px black, 0 1px 2px black, -1px 0 2px black, 0 -1px 2px black;
+}
+
+.arcade-tile .gameName {
+  font-size: 2.5em;
+}
+
+.arcade-tile .gameShortDescription {
+  background: #0008;
   font-size: 1.2em;
-  display: none;
 }
 
-.arcade-tile .invite-tile-right .gameHost .identicon {
-  margin-right: 0.2em;
+.invite-title-wrapper .content {
+  position: relative;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
-.arcade-tile .invite-tile-right .playerInfo {
+.arcade-tile .identicon {
+  border: 1px solid indigo;
+}
+
+.arcade-tile .playerInfo {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
   justify-content: space-around;
+  position: relative;
+  padding: 8px 0 0 0;
 }
 
-.arcade-tile .invite-tile-right .identicon {
-  background-color: #444;
-  box-shadow: 1px 1px #999;
-}
-
-.arcade-tile .invite-tile-right .identicon-empty {
-  background-color: #444;
-  box-shadow: 1px 1px #999;
-}
-
-/* .arcade-tile .invite-tile-right .identicon-empty {
+.arcade-tile .identicon {
   width: 100%;
-  max-width: 1em;
-  min-width: 1em;
-  margin: 0 3px;
-} */
-
-.arcade-tile .invite-tile-join-button {
-  color: white;
-  cursor: pointer;
-  transform: scale(0.8);
-  margin: 0 0 7px 24px;
+  max-width: 2em;
+  min-width: 2em;
 }
 
-.arcade-tile .invite-tile-join-button:hover {
-  background-color: #8888;
+.arcade-tile .player-slot {
+  background-color: #8884;
+  box-shadow: 1px 1px #ccc, 1px 1px #333 inset;
+  width: 2em;
+  height: 2em;
+  margin: 0.2em 1em;
+}
+
+.invite-tile-join-button {
+  border-radius: 0;
+  margin: 0;
+  line-height: 0.7em;
 }
 
 .arcade-sub {
@@ -242,6 +220,7 @@ a {
   background-repeat: no-repeat;
   background-position: top;
   background-size: contain;
+  margin: 0.5em 0;
 }
 
 .arcade-infobox {
@@ -483,56 +462,16 @@ a {
 /* controls */
 
 button, .button, .file-label {
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  min-width: 10em;
-  padding: 10px 6px;
   background: var(--saito-jester);
   border: 1px solid var(--saito-red);
   color: var(--saito-skyline-grey);
-  letter-spacing: 1px;
-  transition: transform .25s;
-  margin: 0.2em 0;
-  min-width: 180px;
 }
 
 button:hover, .button:hover {
   background: linear-gradient(-45deg, #537 50%, #324 100%);
 }
 
-/* 
-.arcade-announcement {
-  cursor: pointer;
-  font-size: 1em;
-  width: 100%;
-  padding: 10px 5px 5px;
-  background: #66339910;
-  border: 2px solid var(--saito-red);
-  color: var(--saito-skyline-grey);
-  letter-spacing: 1px;
-  margin: 0;
-  text-align: center;
-  box-shadow: 0 0 2px #efefef;
-  overflow: hidden;
-}
-
-.play-now {
-  cursor: pointer;
-  font-size: 1em;
-  width: 100%;
-  padding: 10px 6px;
-  background: var(--saito-jester);
-  border: 1px solid var(--saito-red);
-  border-bottom: 0px;
-  color: var(--saito-skyline-grey);
-  letter-spacing: 1px;
-  transition: transform .25s;
-  margin: 0;
-}
-
-
-
+/*
 select {
   border: 1px solid var(--saito-red);
   border-radius: 5px;
@@ -898,12 +837,7 @@ button.add-games {
   border: 1px solid grey;
 }
 
-.identicon {
-  width: 100%;
-  max-width: 2em;
-  min-width: 2em;
-  margin: 0 3px;
-}
+
 
 .arcade-game-invitation {
   clear: both;
