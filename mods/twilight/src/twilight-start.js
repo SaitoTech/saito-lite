@@ -9515,11 +9515,14 @@ alert("end of history!");
               <option value="120">120 minutes</option>
             </select>
 
+	    <div id="game-wizard-advanced-btn" class="game-wizard-advanced-btn button">advanced</div>
 
-            <div onclick='$(".remove_cards_box").show();$(this).html(" ");' style="font-size:0.80em;cursor:pointer;">&gt; advanced...</div>
-            <div id="remove_cards_box" class="remove_cards_box" style="display:none">
-              <div style="font-size:0.85em;font-weight:bold">remove cards from play: </div>
-             <ul id="removecards" class="removecards">
+            <div id="game-wizard-advanced-box" class="game-wizard-advanced-box" style="display:none">
+
+	      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">return to game creation menu:</div>
+
+              <div style="font-size:0.85em;font-weight:bold">remove cards: </div>
+              <ul id="removecards" class="removecards">
               <li><input class="remove_card" type="checkbox" name="asia" /> Asia Scoring</li>
               <li><input class="remove_card" type="checkbox" name="europe" /> Europe Scoring</li>
               <li><input class="remove_card" type="checkbox" name="mideast" /> Middle-East Scoring</li>
@@ -9559,7 +9562,7 @@ alert("end of history!");
               <li><input class="remove_card optional_edition" type="checkbox" name="cambridge" /> The Cambridge Five</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="norad" /> NORAD</li>
             </ul>
-           <ul class="removecards" style="clear:both;margin-top:13px">
+            <ul class="removecards" style="clear:both;margin-top:13px">
               <li><input class="remove_card" type="checkbox" name="brushwar" /> Brush War</li>
               <li><input class="remove_card" type="checkbox" name="centralamerica" /> Central America Scoring</li>
               <li><input class="remove_card" type="checkbox" name="seasia" /> Southeast Asia Scoring</li>
@@ -9609,7 +9612,7 @@ alert("end of history!");
               <li><input class="remove_card optional_edition" type="checkbox" name="che" /> Che</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="tehran" /> Our Man in Tehran</li>
             </ul>
-           <ul class="removecards" style="clear:both;margin-top:13px">
+            <ul class="removecards" style="clear:both;margin-top:13px">
               <li><input class="remove_card" type="checkbox" name="iranianhostage" /> Iranian Hostage Crisis</li>
               <li><input class="remove_card" type="checkbox" name="ironlady" /> The Iron Lady</li>
               <li><input class="remove_card" type="checkbox" name="reagan" /> Reagan Bombs Libya</li>
@@ -9636,7 +9639,7 @@ alert("end of history!");
             </ul>
 
             <div style="font-size:0.85em;font-weight:bold;clear:both;margin-top:10px;">add cards to game: </div>
-           <ul id="removecards" class="removecards">
+            <ul id="removecards" class="removecards">
               <li><input class="remove_card saito_edition" type="checkbox" name="culturaldiplomacy" /> Cultural Diplomacy (Early-War)</li>
               <li><input class="remove_card saito_edition" type="checkbox" name="handshake" /> Handshake in Space (Mid-War)</li>
               <li><input class="remove_card saito_edition" type="checkbox" name="rustinredsquare" /> Rust Lands in Red Square (Late-War)</li>
