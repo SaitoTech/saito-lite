@@ -104,14 +104,14 @@ a {
 }
 
 .arcade-tile {
-  width: calc(33% - 1em);
+  width: calc(100% - 1em);
   overflow-y: hidden;
   border: solid 1px #c89af6;
   background-size: cover;
   background-position: center;
   margin: 0.5em;
 }
-
+/*
 @media only screen and (min-width: 1000px) {
   .i_0 {
     width: calc(100% - 1em);
@@ -125,21 +125,34 @@ a {
     width: calc(100% - 1em);
   }
   .of_3 .i_1, .of_3 .i_2 {
-    width: calc(50% - 1em);
+    width: calc(1000% - 1em);
   }
 
   .of_5 .i_1, .of_5 .i_2, .of_5 .i_3, .of_5 .i_4 {
-    width: calc(50% - 1em);
+    width: calc(100% - 1em);
   }
 
   .of_1 .i_0 .gameName {
     font-size: 3.5;
   }
 }
+*/
+
+.of_1 .arcade-tile {
+  height: 96%;
+}
+
+.of_2 .arcade-tile {
+  height: 48%;
+}
+
+.of_3 .arcade-tile {
+  height: 30%;
+}
 
 @media only screen and (max-width: 1500px) {
   .arcade-tile {
-    width: calc(50% - 1em);
+    width: calc(100% - 1em);
   }
 }
 
@@ -151,9 +164,9 @@ a {
 
 .invite-title-wrapper {
   display: grid;
-  grid-template-rows: 1fr 2em;
-  grid-template-columns: 1fr 12em;
-  background: linear-gradient(-45deg, #222B 38%, #0002 100%);
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 12em 12em;
+  background: linear-gradient(45deg, #222B 38%, #0002 100%);
   height: 8em;
   overflow: hidden;
   position: relative;
@@ -167,8 +180,7 @@ a {
 }
 
 .arcade-tile .gameShortDescription {
-  background: #0008;
-  font-size: 1.2em;
+  font-size: 2.2em;
 }
 
 .invite-title-wrapper .content {
@@ -184,6 +196,7 @@ a {
 }
 
 .arcade-tile .playerInfo {
+  background-color: #0004;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -208,9 +221,15 @@ a {
 }
 
 .invite-tile-join-button {
-  border-radius: 0;
-  margin: 0;
-  line-height: 0.7em;
+  background: var(--saito-jester);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+  height: 3em;
+  margin: 5px;
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  border-radius: 5px;
 }
 
 .arcade-sub {

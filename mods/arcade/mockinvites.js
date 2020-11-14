@@ -88,7 +88,7 @@ function makeid(length) {
    return result;
 }
 function randomModule() {
-  let mods = ["Wordblocks", "Chess", "Twilight", "Solitrio", "Poker", "Imperium"];
+  let mods = ["Wordblocks", "Chess", "Twilight", "Poker", "Imperium"];
   return mods[Math.floor(Math.random() * mods.length)]
 }
 module.exports = getMockGames = () => {
