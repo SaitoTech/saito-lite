@@ -38,15 +38,18 @@ a {
   width: 100vw;
   max-width: var(--saito-width);
 }
+
 .arcade-sidebar {
   display: flex;
   flex-flow: column;
   z-index: 999;
 }
+
 .arcade-main {
   display: grid;
   grid-template-rows: 2em 45vh auto;
 }
+
 #arcade-tab-buttons {
   width: 100%;
   display: grid;
@@ -55,6 +58,7 @@ a {
   overflow: hidden;
   border-left: solid 2px var(--saito-red);
 }
+
 #arcade-tab-buttons .tab-button {
   border: solid 2px var(--saito-red);
   font-weight: bold;
@@ -73,26 +77,31 @@ a {
 #arcade-tab-buttons .tab-button:nth-child(1) {
   border-left: solid 1px var(--saito-red);
 }
+
 #arcade-tab-buttons .tab-button.active-tab-button {
   background: var(--saito-jester);
 }
-#observables-hero{
+
+#observables-hero {
   font-size: 4em;
   height: 100%;
   display: grid;
   place-items: center;
   border: solid 1px var(--saito-red);
 }
-#tournaments-hero{
+
+#tournaments-hero {
   font-size: 4em;
   height: 100%;
   display: grid;
   place-items: center;
   border: solid 1px var(--saito-red);
 }
-.arcade-tab-hidden{
+
+.arcade-tab-hidden {
   display: none !important;
 }
+
 .arcade-hero {
   display: flex;
   flex-direction: row;
@@ -111,6 +120,7 @@ a {
   background-position: center;
   margin: 0.5em;
 }
+
 /*
 @media only screen and (min-width: 1000px) {
   .i_0 {
@@ -162,17 +172,25 @@ a {
   }
 }
 
+
 .invite-title-wrapper {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr 1fr 12em 12em;
-  background: linear-gradient(45deg, #222B 38%, #0002 100%);
-  height: 8em;
+  grid-template-columns: 12em 1fr 1fr 12em 15em;
+  background: linear-gradient(45deg, #444a 38%, #0002 100%);
+  height: 7em;
   overflow: hidden;
   position: relative;
   top: 50%;
   transform: translate(0, -50%);
   text-shadow: 1px 0 2px black, 0 1px 2px black, -1px 0 2px black, 0 -1px 2px black;
+}
+
+.game-inset-img {
+  margin: 1em;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid darkorange;
 }
 
 .arcade-tile .gameName {
@@ -186,7 +204,7 @@ a {
 .invite-title-wrapper .content {
   position: relative;
   top: 50%;
-  left:50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
 }
@@ -204,6 +222,8 @@ a {
   justify-content: space-around;
   position: relative;
   padding: 8px 0 0 0;
+  margin: 1em 0;
+  border-radius: 3px;
 }
 
 .arcade-tile .identicon {
@@ -221,15 +241,45 @@ a {
 }
 
 .invite-tile-join-button {
-  background: var(--saito-jester);
-  border: 1px solid var(--saito-red);
-  color: var(--saito-skyline-grey);
+  background: linear-gradient(45deg, #540e81, #b539e8) !important;
   height: 3em;
-  margin: 5px;
+  margin: 5px 1em;
   position: relative;
   top: 50%;
   transform: translate(0, -50%);
   border-radius: 5px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .game-inset-img {
+    display: none;
+  }
+  .invite-title-wrapper {
+    grid-template-columns: 4fr 3fr 12em 8em;
+  }
+  .arcade-tile .gameName {
+    font-size: 2.2em;
+  }
+    .arcade-tile .gameShortDescription {
+    font-size: 2.2em;
+  }
+  .playerInfo {
+    transform: scale(0.8);
+  }
+  .invite-tile-join-button {
+    min-width: 0;
+  } 
+}
+
+@media only screen and (max-width: 600px) {
+  .arcade-tile {
+    min-height: 10em;
+  }
+  .invite-title-wrapper {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 12em;
+    height: unset;
+  }
 }
 
 .arcade-sub {
@@ -329,15 +379,11 @@ a {
   .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
     left: 0;
   }
-
   .arcade-sub {
     margin: 1em 0 0 0;
     grid-template-columns: auto;
     grid-template-rows: 20vh auto;
   }
-
-
-
   /* .arcade-main {
     overflow-y: scroll;
     display: grid;
@@ -855,8 +901,6 @@ button.add-games {
 .arcade-game-row-avi img {
   border: 1px solid grey;
 }
-
-
 
 .arcade-game-invitation {
   clear: both;

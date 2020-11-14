@@ -19,10 +19,11 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
 
     <div id="invite-${invite.transaction.sig}" class="arcade-tile i_${idx}" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);">
       <div class="invite-title-wrapper">
+        <div class="game-inset-img" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);"></div>
         <div class="gameName"><div class="content">${invite.msg.game}</div></div>
-        <div class="playerInfo">${playersHtml}</div>
         <div class="gameShortDescription"><div class="content">${makeDescription(app, invite)}</div></div>
-        <button class="button invite-tile-join-button">JOIN</button>
+        <div class="playerInfo">${playersHtml}</div>
+        <button class="button invite-tile-join-button">JOIN GAME</button>
       </div>
     </div>
     `;
