@@ -177,7 +177,7 @@ a {
 .invite-title-wrapper {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 12em 1fr 1fr 12em 15em;
+  grid-template-columns: 12em 1fr 1fr auto;
   background: linear-gradient(45deg, #444a 38%, #0002 100%);
   height: 7em;
   overflow: hidden;
@@ -194,56 +194,50 @@ a {
   border: 1px solid darkorange;
 }
 
+.arcade-tile .invite-column-2 {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
 .arcade-tile .gameName {
+  margin-top: 0.2em;
   font-size: 2.5em;
 }
 
 .arcade-tile .gameShortDescription {
+  display: grid;
+  place-items: center;
+  margin-top: 0.2em;
+  margin-bottom: 0.4em;
   font-size: 2.2em;
 }
 
-.invite-title-wrapper .content {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.arcade-tile .identicon {
-  border: 1px solid indigo;
-}
-
 .arcade-tile .playerInfo {
-  background-color: #0004;
-  justify-self: center;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: space-around;
+  margin-bottom: 0.8em;
+  display: grid;
+  justify-self: start;
   position: relative;
-  padding: 4px 0 4px 0;
-  
-  margin: 1em 0;
   border-radius: 3px;
 }
 
-.arcade-tile .identicon {
-  width: 100%;
-  max-width: 2em;
-  min-width: 2em;
-}
 .arcade-tile .playerName {
   display: grid;
-    place-items: center;
+  place-items: center;
   width: 8em;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
+.arcade-tile .identicon {
+  border: 1px solid indigo;
+  width: 100%;
+  max-width: 2em;
+  min-width: 2em;
+  
+}
 .arcade-tile .player-slot {
   background-color: #8884;
+  font-size: 1.2em;
   box-shadow: 1px 1px #ccc, 1px 1px #333 inset;
   width: 2em;
   height: 2em;
@@ -251,10 +245,13 @@ a {
 }
 
 .invite-tile-join-button {
+  
+  height: 4.8em;
+  margin: auto 0;
   background: linear-gradient(45deg, #540e81, #b539e8) !important;
-  margin: 1em 0.3em;
-  padding: 1em 1em;
-  font-size: 1.5em;
+  /* margin: 1em 0.3em;
+  padding: 1em 1em; */
+  font-size: 1.2em;
   border-radius: 5px;
 }
 
