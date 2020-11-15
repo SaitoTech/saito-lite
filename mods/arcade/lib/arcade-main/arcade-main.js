@@ -10,7 +10,7 @@ module.exports = ArcadeMain = {
   render(app, mod) {
 
     if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
-    if (!document.querySelector(".arcade-main")) { app.browser.addElementToDom(ArcadeMainTemplate(app, mod, mod.games), "arcade-container"); }
+    if (!document.querySelector(".arcade-main")) { app.browser.addElementToDom(ArcadeMainTemplate(app, mod), "arcade-container"); }
 
     tabNames.forEach((tabButtonName, i) => {
       document.querySelector("#tab-button-" + tabButtonName).onclick = () => {
