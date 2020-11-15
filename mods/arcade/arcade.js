@@ -38,7 +38,7 @@ class Arcade extends ModTemplate {
     this.overlay = new SaitoOverlay(app, this);
     
     //TODO: DELETE THESE LINES
-    this.games = getMockGames();
+    this.games = getMockGames(app);
   }
 
   receiveEvent(type, data) {

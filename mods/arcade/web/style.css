@@ -246,8 +246,7 @@ a {
 .arcade-tile .player-slot-ellipsis {
   align-self: end;
 }
-.invite-tile-join-button {
-  
+.arcade-tile .button {  
   height: 4.8em;
   margin: auto 0;
   background: linear-gradient(45deg, #540e81, #b539e8) !important;
@@ -256,6 +255,10 @@ a {
   font-size: 1.2em;
   border-radius: 5px;
 }
+.open-invite .invite-tile-join-button {}
+.open-invite .invite-tile-cancel-button {display: none;}
+.my-invite .invite-tile-join-button {display: none;}
+.my-invite .invite-tile-cancel-button {}
 
 @media only screen and (max-width: 1000px) {
   .game-inset-img {
