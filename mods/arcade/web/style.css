@@ -11,7 +11,7 @@
 }
 
 .saito-carousel {
-  display: none;
+  
 }
 
 body {
@@ -243,7 +243,9 @@ a {
   height: 2em;
   margin: 0.2em 0.3em;
 }
-
+.arcade-tile .player-slot-ellipsis {
+  align-self: end;
+}
 .invite-tile-join-button {
   
   height: 4.8em;

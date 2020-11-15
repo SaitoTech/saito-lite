@@ -39,18 +39,20 @@ module.exports = ArcadeMain = {
     // invite join buttons
     //
     mod.games.forEach((invite, i) => {
-      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-join-button`).onclick = () => {
+      let onclickCallback = () => {
         ArcadeGameDetails.render(app, mod, invite);
         ArcadeGameDetails.attachEvents(app, mod);
       }
+      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-join-button`).onclick = onclickCallback;
+      document.querySelector(`#invite-${invite.transaction.sig} .fa-sign-in-alt`).onclick = onclickCallback;
     });
-
 
     ArcadePosts.render(app, mod);
     ArcadeInfobox.render(app, mod);
-    let carousel = new SaitoCarousel(app);
-    carousel.render(app, mod);
-
+    if (mod.games.length == 0){
+      let carousel = new SaitoCarousel(app);
+      carousel.render(app, mod, "arcade", "arcade-hero");  
+    }
   },
 
   attachEvents(app, mod) {
