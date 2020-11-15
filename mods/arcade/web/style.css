@@ -103,6 +103,7 @@ a {
 }
 
 .arcade-hero {
+  height: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -181,8 +182,8 @@ a {
   height: 7em;
   overflow: hidden;
   position: relative;
-  top: 50%;
-  transform: translate(0, -50%);
+  /* top: 50%;
+  transform: translate(0, -50%); */
   text-shadow: 1px 0 2px black, 0 1px 2px black, -1px 0 2px black, 0 -1px 2px black;
 }
 
@@ -215,13 +216,15 @@ a {
 
 .arcade-tile .playerInfo {
   background-color: #0004;
+  justify-self: center;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
   justify-content: space-around;
   position: relative;
-  padding: 8px 0 0 0;
+  padding: 4px 0 4px 0;
+  
   margin: 1em 0;
   border-radius: 3px;
 }
@@ -231,22 +234,27 @@ a {
   max-width: 2em;
   min-width: 2em;
 }
+.arcade-tile .playerName {
+  display: grid;
+    place-items: center;
+  width: 8em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
 .arcade-tile .player-slot {
   background-color: #8884;
   box-shadow: 1px 1px #ccc, 1px 1px #333 inset;
   width: 2em;
   height: 2em;
-  margin: 0.2em 1em;
+  margin: 0.2em 0.3em;
 }
 
 .invite-tile-join-button {
   background: linear-gradient(45deg, #540e81, #b539e8) !important;
-  height: 3em;
-  margin: 5px 1em;
-  position: relative;
-  top: 50%;
-  transform: translate(0, -50%);
+  margin: 1em 0.3em;
+  padding: 1em 1em;
+  font-size: 1.5em;
   border-radius: 5px;
 }
 

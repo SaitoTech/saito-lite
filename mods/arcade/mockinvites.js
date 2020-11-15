@@ -91,15 +91,21 @@ function randomModule() {
   let mods = ["Wordblocks", "Chess", "Twilight", "Poker", "Imperium"];
   return mods[Math.floor(Math.random() * mods.length)]
 }
+function randomPlayersNeeded() {
+  let playersNeeded = [2,4,6,8];
+  return playersNeeded[Math.floor(Math.random() * playersNeeded.length)]
+}
+
 module.exports = getMockGames = () => {
   let mockgames = [];
-  let howMany = Math.floor(Math.random() * 6);
+  let howMany = Math.floor(Math.random() * 16);
   for(let i = 0; i < howMany; i++) {
     mockgames.push(JSON.parse(JSON.stringify(mockGame)));
   }
   mockgames.forEach((mg, i) => {
     mg.transaction.sig = makeid(90);
     mg.msg.game = randomModule();
+    mg.msg.players_needed = randomPlayersNeeded();
   });
   return mockgames;
 }
