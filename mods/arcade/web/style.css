@@ -1,6 +1,5 @@
-/** Email **/
 
-
+/**
 .button {
   background: var(--saito-red);
   color: #fefefe;
@@ -9,7 +8,7 @@
   background: #fefefe;
   color: var(--saito-red);
 }
-
+**/
 
 
 :root {
@@ -131,89 +130,39 @@ a {
   border: solid 1px #c89af6;
   background-size: cover;
   background-position: center;
-  margin: 0.5em;
+  margin: 0.25em;
 }
-
-/*
-@media only screen and (min-width: 1000px) {
-  .i_0 {
-    width: calc(100% - 1em);
-    height: 22vh;
-  }
-  .of_1 .i_0 {
-    height: 42vh;
-  }
-  .of_2 .i_0, .of_2 .i_1 {
-    height: 20vh;
-    width: calc(100% - 1em);
-  }
-  .of_3 .i_1, .of_3 .i_2 {
-    width: calc(1000% - 1em);
-  }
-
-  .of_5 .i_1, .of_5 .i_2, .of_5 .i_3, .of_5 .i_4 {
-    width: calc(100% - 1em);
-  }
-
-  .of_1 .i_0 .gameName {
-    font-size: 3.5;
-  }
-}
-*/
-
-.of_1 .arcade-tile {
-  height: 96%;
-}
-
-.of_2 .arcade-tile {
-  height: 48%;
-}
-
-.of_3 .arcade-tile {
-  height: 30%;
-}
-
-@media only screen and (max-width: 1500px) {
-  .arcade-tile {
-    width: calc(100% - 1em);
-  }
-}
-
-@media only screen and (max-width: 1200px) {
-  .arcade-tile {
-    width: calc(100% - 1em);
-  }
-}
-
 
 .invite-title-wrapper {
+  width: 100%;
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 12em 1fr 1fr auto;
+  grid-template-columns: 12em auto auto 12em;
   background: linear-gradient(45deg, #444a 38%, #0002 100%);
   height: 7em;
   overflow: hidden;
   position: relative;
-  /* top: 50%;
-  transform: translate(0, -50%); */
   text-shadow: 1px 0 2px black, 0 1px 2px black, -1px 0 2px black, 0 -1px 2px black;
 }
 
 .game-inset-img {
-  margin: 1em;
   background-size: cover;
   background-position: center;
   border: 1px solid darkorange;
+  max-height: 6em;
+  margin: 0.5em;
 }
 
-.arcade-tile .invite-column-2 {
+.arcade-tile .invite-row-2 {
   display: grid;
   grid-template-rows: 1fr auto;
 }
 
 .arcade-tile .gameName {
   margin-top: 0.2em;
+  margin-left: 0.2em;
   font-size: 2.5em;
+  font-weight: bold;
 }
 
 .arcade-tile .gameShortDescription {
@@ -222,6 +171,17 @@ a {
   margin-top: 0.2em;
   margin-bottom: 0.4em;
   font-size: 2.2em;
+}
+
+.invite-description {
+  background-color: #0009;
+  padding: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 0.55em;
+  font-weight: bold;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
 }
 
 .arcade-tile .playerInfo {
@@ -259,18 +219,17 @@ a {
   align-self: end;
 }
 .arcade-tile .button {  
-  height: 4.8em;
-  margin: auto 0;
   background: linear-gradient(45deg, #540e81, #b539e8) !important;
-  /* margin: 1em 0.3em;
   padding: 1em 1em; */
   font-size: 1.2em;
   border-radius: 5px;
+  height: 6em;
+  max-height: 6em;
+  margin: 0.5em;
 }
-.open-invite .invite-tile-join-button {}
-.open-invite .invite-tile-cancel-button {display: none;}
-.my-invite .invite-tile-join-button {display: none;}
-.my-invite .invite-tile-cancel-button {}
+
+}
+
 
 @media only screen and (max-width: 1000px) {
   .game-inset-img {
@@ -288,9 +247,6 @@ a {
   .playerInfo {
     transform: scale(0.8);
   }
-  .invite-tile-join-button {
-    min-width: 0;
-  } 
 }
 
 @media only screen and (max-width: 600px) {
