@@ -10,7 +10,7 @@ module.exports = ArcadeCreateGameOverlay = {
         if(module) {
           mod.overlay.showOverlay(app, mod, ArcadeCreateGameOverlayTemplate(app, {...module.requestInterface("arcade-create-game"), modname: moduleName}));
           document.querySelector('#return-to-arcade').onclick = () => { window.location.hash = "#"; };
-          document.querySelector('#background-shim').onclick = () => { window.location.hash = "#"; };
+          //document.querySelector('#background-shim').onclick = () => { window.location.hash = "#"; };
         }
       }
     });
