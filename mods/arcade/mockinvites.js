@@ -1,9 +1,11 @@
+
+let mockAddress = "zPwFAUi2S3AAUwhAxX19UAAUUisrrw9QtMTpwAC6w3fK";
 let mockGame = { 
   "transaction": {
     "id": 9,
     "from": [
       {
-        "add": "zPwFAUi2S3AAUwhAxX19UAAUUisrrw9QtMTpwAC6w3fK",
+        "add": mockAddress,
         "bid": 0,
         "tid": 0,
         "sid": 0,
@@ -15,7 +17,7 @@ let mockGame = {
     ],
     "to": [
       {
-        "add": "zPwFAUi2S3AAUwhAxX19UAAUUisrrw9QtMTpwAC6w3fK",
+        "add": mockAddress,
         "bid": 0,
         "tid": 0,
         "sid": 0,
@@ -25,7 +27,7 @@ let mockGame = {
         "lc": 1
       },
       {
-        "add": "zPwFAUi2S3AAUwhAxX19UAAUUisrrw9QtMTpwAC6w3fK",
+        "add": mockAddress,
         "bid": 0,
         "tid": 0,
         "sid": 1,
@@ -40,7 +42,7 @@ let mockGame = {
     "ver": 1,
     "path": [
       {
-        "from": "zPwFAUi2S3AAUwhAxX19UAAUUisrrw9QtMTpwAC6w3fK",
+        "from": mockAddress,
         "to": "ySSjMVrEqbtAAtcob5ZWDC2hZQ5Cj6zSC4Q4t1myosGd",
         "sig": "66ZAocz6VMwxpwhVA2h3vdMjgpQ5myTnm5kAJXLnXSvCbb912DWpzR19j1TqHr9CRejgahu5nBRSSwjS4aKSNLbf"
       }
@@ -66,7 +68,7 @@ let mockGame = {
     "options_html": "<span class=\"game-option\">color: black</span>, <span class=\"game-option\">clock: 0</span>",
     "players_needed": 2,
     "players": [
-      "zPwFAUi2S3AAUwhAxX19UAAUUisrrw9QtMTpwAC6w3fK"
+      mockAddress
     ],
     "players_sigs": [
       "4zqoKkt75GbNCF9rNaf8M7yBPRBZn1ZDfd8ttPqFpzK52jtMVYxXPbJrTBNMwDrnkbonuioJBwZq9UXeePo8tA9m"
@@ -95,10 +97,14 @@ function randomPlayersNeeded() {
   let playersNeeded = [2,4,6,8];
   return playersNeeded[Math.floor(Math.random() * playersNeeded.length)]
 }
+function randomlyMe(app) {
+  return Math.floor(Math.random() * 2) ? mockAddress : app.wallet.returnPublicKey();
+}
 
-module.exports = getMockGames = () => {
+
+module.exports = getMockGames = (app) => {
   let mockgames = [];
-  let howMany = Math.floor(Math.random() * 16);
+  let howMany = Math.floor(Math.random() * 20);
   for(let i = 0; i < howMany; i++) {
     mockgames.push(JSON.parse(JSON.stringify(mockGame)));
   }
@@ -106,6 +112,7 @@ module.exports = getMockGames = () => {
     mg.transaction.sig = makeid(90);
     mg.msg.game = randomModule();
     mg.msg.players_needed = randomPlayersNeeded();
+    mg.msg.players[0] = randomlyMe(app);
   });
   return mockgames;
 }

@@ -5,9 +5,30 @@ const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-car
 const ArcadeGameDetails = require('./arcade-game-details');
 
 let tabNames = ["arcade", "observables", "tournaments"];
+let isMyGame = (invite, app) => {
+  for(let i = 0; i < invite.msg.players.length; i++) {
+    if (invite.msg.players[i] == app.wallet.returnPublicKey()) {
+      return true;
+    }
+  }
+  return false;
+}
 module.exports = ArcadeMain = {
-
   render(app, mod) {
+    // Sort mod.games in-place to put "my invites" at the top, i.e. any games that the player is in.
+    // Sort by looping through games and swapping with the "next" game if the 
+    let whereTo = 0;
+    for (let i = 0; i < mod.games.length; i++) {
+      if (isMyGame(mod.games[i], app)) {
+        mod.games[i].isMine = true;
+        let replacedGame = mod.games[whereTo];
+        mod.games[whereTo] = mod.games[i];
+        mod.games[i] = replacedGame;
+        whereTo++;
+      } else {
+        mod.games[i].isMine = false;
+      }
+    }
 
     if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
     if (!document.querySelector(".arcade-main")) { app.browser.addElementToDom(ArcadeMainTemplate(app, mod), "arcade-container"); }
@@ -39,18 +60,20 @@ module.exports = ArcadeMain = {
     // invite join buttons
     //
     mod.games.forEach((invite, i) => {
-      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-join-button`).onclick = () => {
+      let onclickCallback = () => {
         ArcadeGameDetails.render(app, mod, invite);
         ArcadeGameDetails.attachEvents(app, mod);
       }
+      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-join-button`).onclick = onclickCallback;
+      document.querySelector(`#invite-${invite.transaction.sig} .fa-sign-in-alt`).onclick = onclickCallback;
     });
-
 
     ArcadePosts.render(app, mod);
     ArcadeInfobox.render(app, mod);
-    let carousel = new SaitoCarousel(app);
-    carousel.render(app, mod);
-
+    if (mod.games.length == 0){
+      let carousel = new SaitoCarousel(app);
+      carousel.render(app, mod, "arcade", "arcade-hero");  
+    }
   },
 
   attachEvents(app, mod) {
