@@ -1,44 +1,17 @@
-const ArcadeGameDetailsTemplate = require('./templates/arcade-game-details.template');
+const ArcadeGameDetailsOverlayTemplate = require('./templates/arcade-game-details-overlay.template');
 
 
-module.exports = ArcadeGameDetails = {
+module.exports = ArcadeGameDetailsOverlay= {
+
+  
 
   render(app, mod, invite) {
 
-    if (!document.getElementById("background-shim")) {
-      app.browser.addElementToDom(`<div id="background-shim" class="background-shim" style=""><div id="background-shim-cover" class="background-shim-cover"></div></div>`); 
-    }
-    mod.overlay.showOverlay(app, mod, ArcadeGameDetailsTemplate(app, mod, invite));
-
-    let gamemod = app.modules.returnModule("Twilight");
-    let gamemod_url = "/" + gamemod.returnSlug() + "/img/arcade.jpg";
-    document.querySelector('.game-image').src = gamemod_url;
-    document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';
-    document.querySelector('.game-title').innerHTML = gamemod.name;
-    document.querySelector('.game-description').innerHTML = gamemod.description;
-    document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
+    mod.overlay.showOverlay(app, mod, ArcadeGameDetailsOverlayTemplate(app, mod, invite));
 
     let header_menu = '';
         header_menu += '<div class="arcade-game-details-menu"></div>';
         header_menu += '<h3>Create New Game:</h3>';
-    let x = '<form id="options" class="options">' + gamemod.returnGameOptionsHTML() + '</form>';
-    if (x != "") { document.querySelector('.game-details').innerHTML = (header_menu + x); }
-
-    setTimeout(() => {
-      for (let p = gamemod.minPlayers; p <= gamemod.maxPlayers; p++) {
-        var option = document.createElement("option");
-            option.text = p + " player";
-            option.value = p;
-        document.querySelector('.game-players-select').add(option);
-      }
-    }, 100);
-
-    //
-    // move advanced content
-    //
-    let advanced1 = document.querySelector('.game-wizard-advanced-box');
-    let advanced2 = document.querySelector('.game-wizard-advanced-options');
-    advanced2.appendChild(advanced1);
 
   },
 

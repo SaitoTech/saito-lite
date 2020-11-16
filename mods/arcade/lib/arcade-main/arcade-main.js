@@ -2,7 +2,7 @@ const ArcadeMainTemplate = require('./templates/arcade-main.template');
 const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
 const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
-const ArcadeGameDetails = require('./arcade-game-details');
+const ArcadeGameDetailsOverlay = require('../arcade-game-details-overlay/arcade-game-details-overlay');
 
 let tabNames = ["arcade", "observables", "tournaments"];
 module.exports = ArcadeMain = {
@@ -56,7 +56,7 @@ module.exports = ArcadeMain = {
     //
     mod.games.forEach((invite, i) => {
       let onclickCallback = () => {
-        ArcadeGameDetails.render(app, mod, invite);
+        ArcadeGameDetailsOverlay.render(app, mod, invite);
       }
       document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-join-button`).onclick = onclickCallback;
       document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-play-button`).onclick = onclickCallback;

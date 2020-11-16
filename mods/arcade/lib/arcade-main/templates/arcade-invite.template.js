@@ -52,6 +52,6 @@ let makeDescription = (app, invite) => {
       defaultDescription = invite.msg.description;
     }
   }
-  return ('<div class="invite-description">'+invite.msg.description+'</div>');
+  return ('<div class="invite-description">'+defaultDescription+'</div>');
 
 }
