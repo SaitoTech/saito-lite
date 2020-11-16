@@ -227,9 +227,16 @@ a {
   max-height: 6em;
   margin: 0.5em;
 }
+<<<<<<< Updated upstream
 
 }
 
+=======
+.open-invite .invite-tile-join-button {}
+.open-invite .invite-tile-play-button {display: none;}
+.my-invite .invite-tile-join-button {display: none;}
+.my-invite .invite-tile-play-button {}
+>>>>>>> Stashed changes
 
 @media only screen and (max-width: 1000px) {
   .game-inset-img {
@@ -533,21 +540,6 @@ input {
   color: var(--saito-skyline-grey);
 } */
 
-.background-shim {
-  position: fixed;
-  top: 80px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 80px);
-  background-size: cover;
-  z-index: 999;
-}
-
-.background-shim-cover {
-  width: 100%;
-  height: 100%;
-  background-color: #00000099;
-}
 
 .footer {
   display: none;
@@ -701,16 +693,57 @@ button.add-games {
 
 /* GAME WIZARD */
 
-.game-wizard {
-  overflow-y: scroll;
+.saito-overlay {
+  display: none;
+  height: 100%;
+  width: 100%;
+}
+.background-shim {
+  /* position: fixed; */
+  padding: 5em;
+  height: 100%;
+  width: 100%;
+  /* height: calc(100vh - 80px); */
+  background-size: cover;
+  z-index: 999;
+}
+
+/* .background-shim-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000033;
+  z-index: 1000;
+} */
+
+.return-to-arcade {
+  cursor: pointer;
+  display: inline-block;
+  position: absolute;
+  right: -1em;
+  top: -1em;
+  z-index: 1001;
+}
+
+.game-wizard, .create-game-wizard {
+  position: relative;
+  height: 100%;
+  width: 100%;
   padding: 1em;
   scrollbar-width: none;
-  -ms-overflow-style: none;
   font-size: 1em;
   background-color: #0009;
   width: 90vw;
   height: 90vh;
 }
+
+.game-wizard-content {
+  height: 100%;
+  overflow-y: scroll;
+}
+
 .game-wizard-advanced-options {
   display: none;
   grid-area: span 1 / span 2;
@@ -762,31 +795,6 @@ button.add-games {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: 1fr 4fr;
-}
-
-/* @media only screen and (max-width: 650px) {
-  .create-game-wizard, .escrow-game-wizard {
-    width: 85%;
-    height: 70%;
-  }
-  .game-info-container {
-    grid-template-columns: 1fr;
-  }
-  .game-start-controls {
-    grid-template-columns: 1fr;
-  }
-} */
-
-/* .game-image-wizard {
-  max-width: 500px;
-} */
-
-.return-to-arcade {
-  cursor: pointer;
-  display: inline-block;
-  position: absolute;
-  right: -16px;
-  top: -16px;
 }
 
 .game-description {

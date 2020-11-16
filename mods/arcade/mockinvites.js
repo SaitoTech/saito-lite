@@ -101,10 +101,9 @@ function randomlyMe(app) {
   return Math.floor(Math.random() * 2) ? mockAddress : app.wallet.returnPublicKey();
 }
 
-
 module.exports = getMockGames = (app) => {
   let mockgames = [];
-  let howMany = Math.floor(Math.random() * 20);
+  let howMany = Math.floor(Math.random() * 4);
   for(let i = 0; i < howMany; i++) {
     mockgames.push(JSON.parse(JSON.stringify(mockGame)));
   }

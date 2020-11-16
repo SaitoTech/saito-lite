@@ -6,6 +6,7 @@ const ArcadeSidebar = require('./lib/arcade-sidebar/arcade-sidebar');
 const AddressController = require('../../lib/ui/menu/address-controller');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const getMockGames = require('./mockinvites.js');
+const ArcadeCreateGameOverlay = require('./lib/arcade-create-game-overlay/arcade-create-game-overlay');
 
 class Arcade extends ModTemplate {
 
@@ -40,9 +41,8 @@ class Arcade extends ModTemplate {
     //TODO: DELETE THESE LINES
     this.games = getMockGames(app);
   }
-
+  
   receiveEvent(type, data) {
-    console.log("receiveEvent");
     if (type == 'chat-render-request') {
       if (this.browser_active) {
         ArcadeSidebar.render(this.app, this);
@@ -86,7 +86,10 @@ class Arcade extends ModTemplate {
     this.app.modules.respondTo("arcade-games").forEach(mod => {
       this.affix_callbacks_to.push(mod.name);
     });
-
+    if(app.BROWSER) {
+      ArcadeMain.initialize(app, this);
+      ArcadeSidebar.initialize(app, this);
+    }
   }
 
 
@@ -107,10 +110,27 @@ class Arcade extends ModTemplate {
 
     ArcadeSidebar.render(app, this);
     ArcadeSidebar.attachEvents(app, this);
-
+    
+    //
+    // Because we are not actually deep linking, set the hash to match the state, i.e. # = no overlay.
+    // This will not support going "forward" because that would require a lot more work.
+    //
+    window.location.hash = "#";
+    window.addEventListener("hashchange", () => {
+      if (!(window.location.hash.startsWith("#creategame") || window.location.hash.startsWith("#viewgame"))) {
+        this.overlay.hideOverlay();
+      }
+    });
 
   }
-
+  isMyGame(invite, app) {
+    for(let i = 0; i < invite.msg.players.length; i++) {
+      if (invite.msg.players[i] == app.wallet.returnPublicKey()) {
+        return true;
+      }
+    }
+    return false;
+  }
   //
   // purge any bad games from options file
   //

@@ -53,7 +53,19 @@ class Poker extends GameTemplate {
     return null;
 
   }
-
+  requestInterface(type) {
+    if (type == "make-invite-description") {
+      return {
+        makeDescription: (txMsg) => {
+          return "Hold 'em";
+        }    
+      }
+    }
+    if (type == "arcade-sidebar") {
+      return { title: this.name };
+    }
+    return null;
+  }
 
 
 

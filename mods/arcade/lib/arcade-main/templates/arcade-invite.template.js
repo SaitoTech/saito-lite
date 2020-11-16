@@ -30,7 +30,8 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
           ${playersHtml}
         </div>
         <div class="gameShortDescription">${makeDescription(app, invite)}</div>
-        <button class="button invite-tile-button">JOIN</button>
+        <button class="button invite-tile-join-button">JOIN</button>
+        <button class="button invite-tile-play-button">Play</button>
       </div>
     </div>
     `;
@@ -39,8 +40,8 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
 let makeDescription = (app, invite) => {
   let defaultDescription = "";
   let gameModule = app.modules.returnModule(invite.msg.game);
-  if (gameModule) {
-    let moduleDescriptionMaker = gameModule.requestInterface("makeInviteDescription");  
+  if(gameModule){
+    let moduleDescriptionMaker = gameModule.requestInterface("make-invite-description");  
     if(moduleDescriptionMaker){
       defaultDescription = moduleDescriptionMaker.makeDescription(invite.msg);
     }
