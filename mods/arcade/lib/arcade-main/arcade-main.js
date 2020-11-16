@@ -7,7 +7,7 @@ const ArcadeGameDetailsOverlay = require('../arcade-game-details-overlay/arcade-
 let tabNames = ["arcade", "observables", "tournaments"];
 module.exports = ArcadeMain = {
   initialize(app, mod) {
-    
+    ArcadeGameDetailsOverlay.initialize(app, mod);
   },
   render(app, mod) {
     // Sort mod.games in-place to put "my invites" at the top, i.e. any games that the player is in.

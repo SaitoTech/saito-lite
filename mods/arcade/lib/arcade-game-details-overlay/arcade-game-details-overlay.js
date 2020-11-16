@@ -3,12 +3,23 @@ const ArcadeGameDetailsOverlayTemplate = require('./templates/arcade-game-detail
 
 module.exports = ArcadeGameDetailsOverlay= {
 
-  
-
+  initialize(app, mod) {
+    window.addEventListener("hashchange", () => {
+      if (window.location.hash.startsWith("#viewgame")){
+        let inviteSig = window.location.hash.split("=")[1];
+        mod.games.forEach((invite, i) => {
+          if(invite.transaction.sig === inviteSig) {
+            mod.overlay.showOverlay(app, mod, ArcadeGameDetailsOverlayTemplate(app, mod, invite));  
+          }
+        });
+        document.querySelector('#return-to-arcade').onclick = () => { window.location.hash = "#"; };
+        //document.querySelector('#background-shim').onclick = () => { window.location.hash = "#"; };
+      }
+    });
+  },
   render(app, mod, invite) {
-
-    mod.overlay.showOverlay(app, mod, ArcadeGameDetailsOverlayTemplate(app, mod, invite));
-
+    window.location.hash = `#viewgame=${invite.transaction.sig}`;
+    
     let header_menu = '';
         header_menu += '<div class="arcade-game-details-menu"></div>';
         header_menu += '<h3>Create New Game:</h3>';
