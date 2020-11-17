@@ -1,31 +1,45 @@
 const ArcadeGameDetailsOverlayTemplate = require('./templates/arcade-game-details-overlay.template');
 
-
 module.exports = ArcadeGameDetailsOverlay= {
-
   initialize(app, mod) {
     window.addEventListener("hashchange", () => {
       if (window.location.hash.startsWith("#viewgame")){
+        // This is basically "render"
         let inviteSig = window.location.hash.split("=")[1];
+        // check if the invite is in mod.games...
+        let theInvite = null;
         mod.games.forEach((invite, i) => {
           if(invite.transaction.sig === inviteSig) {
-            mod.overlay.showOverlay(app, mod, ArcadeGameDetailsOverlayTemplate(app, mod, invite));  
+            theInvite = invite;
           }
         });
-        // document.querySelector('#return-to-arcade').onclick = () => { window.location.hash = "#"; };
-        //document.querySelector('#background-shim').onclick = () => { window.location.hash = "#"; };
+        if (theInvite) {
+          let module = app.modules.returnModule(theInvite.msg.game);
+          if(module) {
+            let gameCreator = {...module.requestInterface("arcade-create-game"), modname: module.name};
+            mod.overlay.showOverlay(app, mod, ArcadeGameDetailsOverlayTemplate(app, mod, theInvite, gameCreator));  
+            document.getElementById('return-to-arcade').onclick = () => {
+              window.location.hash = "#";
+            };
+            document.getElementById('game-how-to-play').onclick = () => {
+              alert("Please Implement me!!!")
+            };
+            document.getElementById('game-game-rules').onclick = () => {
+              alert("Please Implement me!!!")
+            };
+            document.getElementById('game-invite-btn').onclick = () => {
+              alert("Please Implement me!!!")
+            };
+          } else {
+            window.location.hash = "#";
+          }
+        }
       }
     });
   },
   render(app, mod, invite) {
     window.location.hash = `#viewgame=${invite.transaction.sig}`;
-    
-    let header_menu = '';
-        header_menu += '<div class="arcade-game-details-menu"></div>';
-        header_menu += '<h3>Create New Game:</h3>';
-
   },
-
 
   attachEventsOLD(app, mod) {
 
@@ -58,7 +72,6 @@ module.exports = ArcadeGameDetailsOverlay= {
         }
       }
     });
-
 
     //
     // move into advanced menu

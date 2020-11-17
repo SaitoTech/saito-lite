@@ -6,7 +6,7 @@ const ArcadeSidebar = require('./lib/arcade-sidebar/arcade-sidebar');
 const AddressController = require('../../lib/ui/menu/address-controller');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const getMockGames = require('./mockinvites.js');
-const ArcadeCreateGameOverlay = require('./lib/arcade-create-game-overlay/arcade-create-game-overlay');
+// const ArcadeCreateGameOverlay = require('./lib/arcade-create-game-overlay/arcade-create-game-overlay');
 
 class Arcade extends ModTemplate {
 

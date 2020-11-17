@@ -103,12 +103,12 @@ function randomlyMe(app) {
 
 module.exports = getMockGames = (app) => {
   let mockgames = [];
-  let howMany = Math.floor(Math.random() * 4);
+  let howMany = Math.floor(Math.random() * 40);
   for(let i = 0; i < howMany; i++) {
     mockgames.push(JSON.parse(JSON.stringify(mockGame)));
   }
   mockgames.forEach((mg, i) => {
-    mg.transaction.sig = makeid(90);
+    mg.transaction.sig = makeid(1);
     mg.msg.game = randomModule();
     mg.msg.players_needed = randomPlayersNeeded();
     mg.msg.players[0] = randomlyMe(app);

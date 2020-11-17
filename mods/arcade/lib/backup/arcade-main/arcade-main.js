@@ -87,7 +87,7 @@ module.exports = ArcadeMain = {
 
 
 
-  attachEvents(app, data) {
+  attachEventsOLD(app, data) {
 
     //
     // carousel

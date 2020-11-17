@@ -723,14 +723,30 @@ button.add-games {
   top: -1em;
   z-index: 1001;
 }
-
+.create-game-tabs{
+  padding: 0 5.5em;
+  border: solid 1px white;
+}
 .create-game-tabs-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  place-items: center;
+}
+.create-game-tab-button {
+  font-size: 1.8em;
+  width: 100%;
+  text-align: center;
+}
+.arcade-tab-selected {
+  text-decoration: underline;
+  background-color: white;
+  color: black;
   
 }
 #next-tab-button, #prev-tab-button {
   position: absolute;
+  font-size: 1.8em;
+  padding: 0 1em;
 }
 #next-tab-button {
   top: 50%;
@@ -785,6 +801,7 @@ button.add-games {
   float: left;
 }
 .game-wizard-advanced-btn {
+  display: none;
 }
 .game-wizard-form {
   display: grid;

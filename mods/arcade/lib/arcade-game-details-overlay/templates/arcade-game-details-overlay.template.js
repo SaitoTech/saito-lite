@@ -1,10 +1,10 @@
-module.exports = ArcadeGameDetailsTemplate = (app, mod, invite) => {
+module.exports = ArcadeGameDetailsTemplate = (app, mod, invite, gameCreator) => {
   let gameModule = app.modules.returnModule(invite.msg.game);
   if(!gameModule) {
     return 
-`<div id="background-shim" class="background-shim" style="">
-  <div>Game Module Not Installed</div>
-</div>`;
+      `<div id="background-shim" class="background-shim" style="">
+        <div>Game Module Not Installed</div>
+      </div>`;
   } else {
     let optionsHtml = "";
     Object.keys(invite.msg.options).forEach((key, i) => {
@@ -12,21 +12,22 @@ module.exports = ArcadeGameDetailsTemplate = (app, mod, invite) => {
     });
 
     return `
-    <div id="background-shim" class="background-shim" style="background-image: url('/${invite.msg.game}/img/arcade.jpg')">
-    
+    <div id="background-shim" class="background-shim" style="background-image: url('/${gameCreator.slug}/img/arcade.jpg')">
       <div class="game-wizard">
+        <div class="return-to-arcade" id="return-to-arcade">
+          <i class="icon-large fas fa-times-circle"></i>
+        </div>
         <form id="game-wizard-form" class="game-wizard-form">
           <div id="game-wizard-advanced-options" class="game-wizard-advanced-options"></div>
           <div id="game-wizard-sidebar" class="game-wizard-sidebar">
             <div class="arcade-sidebar-leaderboard">
-              <h2 class="game-title">Imperium</h2>
+              <h2 class="game-title">${gameCreator.modname}</h2>
               <div class="game-info-container">
-                <img class="game-image game-image-wizard" src="/${invite.msg.game}/img/arcade.jpg"/>
+                <img class="game-image game-image-wizard" src="/${gameCreator.slug}/img/arcade.jpg"/>
                 <div class="game-detail-text">
-                  <div class="game-description">Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.</div>
+                  <div class="game-description">${gameCreator.description}</div>
                 </div>
               </div>
-
               <div id="game-buttons" class="game-buttons">
                 <div id="game-how-to-play" class="game-how-to-play button">learn to play</div>
                 <div id="game-game-rules" class="game-game-rules button">game rules</div>
