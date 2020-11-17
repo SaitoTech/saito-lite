@@ -227,16 +227,12 @@ a {
   max-height: 6em;
   margin: 0.5em;
 }
-<<<<<<< Updated upstream
 
-}
 
-=======
 .open-invite .invite-tile-join-button {}
 .open-invite .invite-tile-play-button {display: none;}
 .my-invite .invite-tile-join-button {display: none;}
 .my-invite .invite-tile-play-button {}
->>>>>>> Stashed changes
 
 @media only screen and (max-width: 1000px) {
   .game-inset-img {
@@ -697,6 +693,7 @@ button.add-games {
   display: none;
   height: 100%;
   width: 100%;
+  padding: 0;
 }
 .background-shim {
   /* position: fixed; */
@@ -727,6 +724,22 @@ button.add-games {
   z-index: 1001;
 }
 
+.create-game-tabs-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  
+}
+#next-tab-button, #prev-tab-button {
+  position: absolute;
+}
+#next-tab-button {
+  top: 50%;
+  right: 0;
+}
+#prev-tab-button {
+  top: 50%;
+  left: 0;
+}
 .game-wizard, .create-game-wizard {
   position: relative;
   height: 100%;
@@ -734,7 +747,7 @@ button.add-games {
   padding: 1em;
   scrollbar-width: none;
   font-size: 1em;
-  background-color: #0009;
+  background-color: #000D;
   width: 90vw;
   height: 90vh;
 }
@@ -812,8 +825,8 @@ button.add-games {
 /* USED BY WORDBLOCKS */
 
 #options {
-  display: grid;
-  grid-template-columns: 10em auto;
+  /* display: grid;
+  grid-template-columns: 10em auto; */
 }
 
 /* observer mode box */

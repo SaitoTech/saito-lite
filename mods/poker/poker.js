@@ -61,7 +61,7 @@ class Poker extends GameTemplate {
         title: this.name,
         description: this.description,
         publisher_message: this.publisher_message,
-        returnGameOptionsHTML: this.returnGameOptionsHTML,
+        returnGameOptionsHTML: this.returnGameOptionsHTML.bind(this),
         minPlayers: this.minPlayers,
         maxPlayers: this.maxPlayers,
       }

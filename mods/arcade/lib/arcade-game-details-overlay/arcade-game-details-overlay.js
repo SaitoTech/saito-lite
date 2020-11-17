@@ -12,7 +12,7 @@ module.exports = ArcadeGameDetailsOverlay= {
             mod.overlay.showOverlay(app, mod, ArcadeGameDetailsOverlayTemplate(app, mod, invite));  
           }
         });
-        document.querySelector('#return-to-arcade').onclick = () => { window.location.hash = "#"; };
+        // document.querySelector('#return-to-arcade').onclick = () => { window.location.hash = "#"; };
         //document.querySelector('#background-shim').onclick = () => { window.location.hash = "#"; };
       }
     });
@@ -27,7 +27,7 @@ module.exports = ArcadeGameDetailsOverlay= {
   },
 
 
-  attachEvents(app, mod) {
+  attachEventsOLD(app, mod) {
 
     //
     // create game

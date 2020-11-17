@@ -112,10 +112,13 @@ class Arcade extends ModTemplate {
     ArcadeSidebar.attachEvents(app, this);
     
     //
-    // Because we are not actually deep linking, set the hash to match the state, i.e. # = no overlay.
-    // This will not support going "forward" because that would require a lot more work.
-    //
+    // Each overlay will manage it's own hashchange event listeners which hides/shows
+    // the overlay. To support deep linking, we set and reset the location hash
+    // to trigger those event listeners
+    // 
+    let locationHash = window.location.hash;
     window.location.hash = "#";
+    window.location.hash = locationHash;
     window.addEventListener("hashchange", () => {
       if (!(window.location.hash.startsWith("#creategame") || window.location.hash.startsWith("#viewgame"))) {
         this.overlay.hideOverlay();
