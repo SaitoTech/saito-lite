@@ -86,10 +86,6 @@ class Arcade extends ModTemplate {
     this.app.modules.respondTo("arcade-games").forEach(mod => {
       this.affix_callbacks_to.push(mod.name);
     });
-    if(app.BROWSER) {
-      ArcadeMain.initialize(app, this);
-      ArcadeSidebar.initialize(app, this);
-    }
   }
 
 

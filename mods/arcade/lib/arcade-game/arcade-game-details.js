@@ -1,47 +1,55 @@
-const ArcadeGameDetailsOverlayTemplate = require('./templates/arcade-game-details-overlay.template');
+const ArcadeGameDetailsTemplate = require('./arcade-game-details.template');
 
-module.exports = ArcadeGameDetailsOverlay= {
-  initialize(app, mod) {
-    window.addEventListener("hashchange", () => {
-      if (window.location.hash.startsWith("#viewgame")){
-        // This is basically "render"
-        let inviteSig = window.location.hash.split("=")[1];
-        // check if the invite is in mod.games...
-        let theInvite = null;
-        mod.games.forEach((invite, i) => {
-          if(invite.transaction.sig === inviteSig) {
-            theInvite = invite;
-          }
-        });
-        if (theInvite) {
-          let module = app.modules.returnModule(theInvite.msg.game);
-          if(module) {
-            let gameCreator = {...module.requestInterface("arcade-create-game"), modname: module.name};
-            mod.overlay.showOverlay(app, mod, ArcadeGameDetailsOverlayTemplate(app, mod, theInvite, gameCreator));  
-            document.getElementById('return-to-arcade').onclick = () => {
-              window.location.hash = "#";
-            };
-            document.getElementById('game-how-to-play').onclick = () => {
-              alert("Please Implement me!!!")
-            };
-            document.getElementById('game-game-rules').onclick = () => {
-              alert("Please Implement me!!!")
-            };
-            document.getElementById('game-invite-btn').onclick = () => {
-              alert("Please Implement me!!!")
-            };
-          } else {
-            window.location.hash = "#";
-          }
-        }
-      }
-    });
-  },
+
+module.exports = ArcadeGameDetails = {
+
   render(app, mod, invite) {
-    window.location.hash = `#viewgame=${invite.transaction.sig}`;
+
+    if (!document.getElementById("background-shim")) {
+      app.browser.addElementToDom(`<div id="background-shim" class="background-shim" style=""><div id="background-shim-cover" class="background-shim-cover"></div></div>`); 
+    }
+    mod.overlay.showOverlay(app, mod, ArcadeGameDetailsTemplate(app, mod, invite));
+
+    let gamemod = app.modules.returnModule("Twilight");
+    let gamemod_url = "/" + gamemod.returnSlug() + "/img/arcade.jpg";
+    document.querySelector('.game-image').src = gamemod_url;
+    document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';
+    document.querySelector('.game-title').innerHTML = gamemod.name;
+    document.querySelector('.game-description').innerHTML = gamemod.description;
+    document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
+
+    let header_menu = '';
+        header_menu += '<div class="arcade-game-details-menu"></div>';
+        header_menu += '<h1>Create New Game:</h1>';
+        header_menu += '<div class="arcade-game-details-icons-menu">';
+	header_menu += '  <div class="clock">clock</div>';
+	header_menu += '  <div class="ranked">ranked</div>';
+	header_menu += '  <div class="stake">stake</div>';
+        header_menu += '</div>';
+
+    let x = '<form id="options" class="options">' + gamemod.returnGameOptionsHTML() + '</form>';
+    if (x != "") { document.querySelector('.game-details').innerHTML = (header_menu + x); }
+
+    setTimeout(() => {
+      for (let p = gamemod.minPlayers; p <= gamemod.maxPlayers; p++) {
+        var option = document.createElement("option");
+            option.text = p + " player";
+            option.value = p;
+        document.querySelector('.game-players-select').add(option);
+      }
+    }, 100);
+
+    //
+    // move advanced content
+    //
+    let advanced1 = document.querySelector('.game-wizard-advanced-box');
+    let advanced2 = document.querySelector('.game-wizard-advanced-options');
+    advanced2.appendChild(advanced1);
+
   },
 
-  attachEventsOLD(app, mod) {
+
+  attachEvents(app, mod) {
 
     //
     // create game
@@ -72,6 +80,7 @@ module.exports = ArcadeGameDetailsOverlay= {
         }
       }
     });
+
 
     //
     // move into advanced menu

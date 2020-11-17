@@ -30,8 +30,7 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
           ${playersHtml}
         </div>
         <div class="gameShortDescription">${makeDescription(app, invite)}</div>
-        <button class="button invite-tile-join-button">JOIN</button>
-        <button class="button invite-tile-play-button">Play</button>
+        <button class="button invite-tile-button">JOIN</button>
       </div>
     </div>
     `;

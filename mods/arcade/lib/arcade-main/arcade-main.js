@@ -1,14 +1,12 @@
 const ArcadeMainTemplate = require('./templates/arcade-main.template');
 const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
-const SaitoCarousel = require('../../../../lib/saito/ui/saito-carousel/saito-carousel');
-const ArcadeGameDetailsOverlay = require('../arcade-game-details-overlay/arcade-game-details-overlay');
+const SaitoCarousel = require('./../../../../lib/saito/ui/saito-carousel/saito-carousel');
+const ArcadeGameDetails = require('./../arcade-game/arcade-game-details');
 
 let tabNames = ["arcade", "observables", "tournaments"];
 module.exports = ArcadeMain = {
-  initialize(app, mod) {
-    ArcadeGameDetailsOverlay.initialize(app, mod);
-  },
+
   render(app, mod) {
     // Sort mod.games in-place to put "my invites" at the top, i.e. any games that the player is in.
     // Sort by looping through games and swapping with the "next" game if the 
@@ -42,25 +40,22 @@ module.exports = ArcadeMain = {
       }
     });
 
-    //add invites to arcade-hero section
+    //
+    // add games
+    //
     if (document.querySelector('.arcade-hero')) {
       mod.games.forEach((invite, i) => {
         app.browser.addElementToElement(ArcadeInviteTemplate(app, mod, invite, i), document.querySelector('.arcade-hero'));
       });
-      //add the count of games to the box to let the grid know what to render;
-      document.querySelector('.arcade-hero').classList.add("of_"+mod.games.length);
     }
 
     //
-    // invite join buttons
+    // enable join buttons
     //
     mod.games.forEach((invite, i) => {
-      let onclickCallback = () => {
-        ArcadeGameDetailsOverlay.render(app, mod, invite);
+      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-button`).onclick = function() { 
+        ArcadeGameDetails.render(app, mod, invite);
       }
-      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-join-button`).onclick = onclickCallback;
-      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-play-button`).onclick = onclickCallback;
-      //document.querySelector(`#invite-${invite.transaction.sig} .fa-sign-in-alt`).onclick = onclickCallback;
     });
 
     ArcadePosts.render(app, mod);
