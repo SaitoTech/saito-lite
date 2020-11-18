@@ -695,9 +695,6 @@ button.add-games {
   cursor: pointer;
 }
 
-.game-image {
-  width: 100%;
-}
 
 /* GAME WIZARD */
 
@@ -708,44 +705,79 @@ button.add-games {
   -ms-overflow-style: none;
   font-size: 1em;
   background-color: #0009;
-  width: 90vw;
-  height: 90vh;
-}
-.game-wizard-advanced-options {
-  display: none;
-  grid-area: span 1 / span 2;
+  width: 60vw;
+  min-height: 50vh;
 }
 .game-wizard-advanced-box {
   display: block;
   text-align: left;
 }
-.game-wizard-sidebar {
-
-}
 .game-wizard-main {
   padding: 50px;
+}
+.game-wizard-header {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+}
+.game-wizard-intro {
+  padding: 10px;
+}
+.game-wizard-title {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+.game-wizard-description {
+  font-size:1.2em;
+  line-height: 1.5em;
+}
+.game-wizard-image {
+  padding: 10px;
+}
+.game-image {
+  width: 100%;
+}
+.game-wizard-controls {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+}
+.game-wizard-players {
+  padding: 10px;
+  width: 100%;
+}
+.game-wizard-options-toggle {
+  padding-top: 10px;
+}
+.game-wizard-invite {
+  padding: 10px;
+  width: 100%;
+  height: 90px;
+}
+.game-invite-btn {
+  width: 100%;
+  min-height: 80px;
+  font-weight: bold;
+  margin: 0px;
+}
+.game-wizard-players-select {
+
+}
+.game-wizard-advanced-options {
+  display: none;
+}
+.game-wizard-basic-options {
+  display: none;
 }
 .game-buttons {
   padding-top:20px;
   margin-left: 10%;
-}
-.game-how-to-play {
-  width: 40%;
-  float: left;
-}
-.game-game-rules {
-  width: 40%;
-  margin-left: 25px;
-  float: left;
 }
 .game-wizard-advanced-btn {
 }
 .game-wizard-form {
   display: grid;
   grid-gap: 1em;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
 }
-
 
 .game-wizard-content::-webkit-scrollbar {
   /* WebKit */

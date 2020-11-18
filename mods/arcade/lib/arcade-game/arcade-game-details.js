@@ -14,6 +14,7 @@ module.exports = ArcadeGameDetails = {
     let gamemod_url = "/" + gamemod.returnSlug() + "/img/arcade.jpg";
     document.querySelector('.game-image').src = gamemod_url;
     document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';
+/****
     document.querySelector('.game-title').innerHTML = gamemod.name;
     document.querySelector('.game-description').innerHTML = gamemod.description;
     document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
@@ -29,13 +30,14 @@ module.exports = ArcadeGameDetails = {
 
     let x = '<form id="options" class="options">' + gamemod.returnGameOptionsHTML() + '</form>';
     if (x != "") { document.querySelector('.game-details').innerHTML = (header_menu + x); }
+***/
 
     setTimeout(() => {
       for (let p = gamemod.minPlayers; p <= gamemod.maxPlayers; p++) {
         var option = document.createElement("option");
             option.text = p + " player";
             option.value = p;
-        document.querySelector('.game-players-select').add(option);
+        document.querySelector('.game-wizard-players-select').add(option);
       }
     }, 100);
 
