@@ -699,14 +699,14 @@ button.add-games {
 /* GAME WIZARD */
 
 .game-wizard {
-  overflow-y: scroll;
   padding: 1em;
   scrollbar-width: none;
   -ms-overflow-style: none;
   font-size: 1em;
   background-color: #0009;
   width: 60vw;
-  min-height: 50vh;
+  max-height: 50vh;
+  overflow-y: scroll;
 }
 .game-wizard-advanced-box {
   display: block;
@@ -747,6 +747,10 @@ button.add-games {
 .game-wizard-options-toggle {
   padding-top: 10px;
 }
+.game-wizard-options-toggle-text {
+  border-bottom: 1px dashed;
+  cursor: pointer;
+}
 .game-wizard-invite {
   padding: 10px;
   width: 100%;
@@ -761,6 +765,13 @@ button.add-games {
 .game-wizard-players-select {
 
 }
+.game-wizard-publisher-message {
+  padding:10px;
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+.game-wizard-advanced-options-overlay {
+}
 .game-wizard-advanced-options {
   display: none;
 }
@@ -770,8 +781,6 @@ button.add-games {
 .game-buttons {
   padding-top:20px;
   margin-left: 10%;
-}
-.game-wizard-advanced-btn {
 }
 .game-wizard-form {
   display: grid;
@@ -1322,6 +1331,3 @@ span.rewards-row-name {
   width: 100%;
 }
 
-#game-publisher-message {
-  margin: 2em 1em 0;
-}

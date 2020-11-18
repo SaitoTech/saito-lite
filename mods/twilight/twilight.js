@@ -9515,8 +9515,6 @@ alert("end of history!");
               <option value="120">120 minutes</option>
             </select>
 
-	    <div id="game-wizard-advanced-btn" class="game-wizard-advanced-btn">advanced</div>
-
             <div id="game-wizard-advanced-box" class="game-wizard-advanced-box" style="display:none">
 
 	      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">return to game creation menu:</div>

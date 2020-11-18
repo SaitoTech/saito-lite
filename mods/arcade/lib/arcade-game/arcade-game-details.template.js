@@ -23,31 +23,22 @@ module.exports = ArcadeGameDetailsTemplate = (app, mod, invite) => {
 	<div class="game-wizard-controls">
 
           <div id="game-wizard-players" class="game-wizard-players">
-          </div>
-
-	<div>
-
             <select class="game-wizard-players-select" name="game-wizard-players-select">
             </select>
-	
-	    <div class="game-wizard-options-toggle"> <i class="fas fa-caret-right"></i> options... </div>
+	    <div class="game-wizard-options-toggle"><span class="game-wizard-options-toggle-text">advanced options...</span></div>
+          </div>
 
 	  <div id="game-wizard-invite" class="game-wizard-invite">	
             <button id="game-invite-btn" class="game-invite-btn">Create New Game</button>
 	  </div>
+
 	</div>
-	  <div class="game-wizard-options">
 
-            <div id="game-wizard-basic-options" class="game-wizard-basic-options">
-	      <div class="sage-options-time">[icon]</div>
-	      <div class="sage-options-ranked">[icon]</div>
-	      <div class="sage-options-escrow">[icon]</div>
-	      <div class="game-basic-controls">${optionsHtml}</div>
-	    </div>
+        <div id="game-wizard-publisher-message" class="game-wizard-publisher-message"></div>
 
-            <div id="game-wizard-advanced-options" class="game-wizard-advanced-options"></div>
-          </div>
-        </div>
+        <div id="game-wizard-advanced-options-overlay" class="game-wizard-advanced-options-overlay"></div>
+        <div id="game-wizard-advanced-options" class="game-wizard-advanced-options"></div>
+
       </form>
     </div>
 `;

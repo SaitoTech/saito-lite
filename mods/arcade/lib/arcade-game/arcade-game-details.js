@@ -1,9 +1,14 @@
 const ArcadeGameDetailsTemplate = require('./arcade-game-details.template');
+const GameOverlay = require('./../../../../lib/saito/ui/game-overlay/game-overlay');
 
 
 module.exports = ArcadeGameDetails = {
 
   render(app, mod, invite) {
+
+    mod.meta_overlay = new GameOverlay(app, mod);
+    mod.meta_overlay.render(app, mod);
+    mod.meta_overlay.attachEvents(app, mod);
 
     if (!document.getElementById("background-shim")) {
       app.browser.addElementToDom(`<div id="background-shim" class="background-shim" style=""><div id="background-shim-cover" class="background-shim-cover"></div></div>`); 
@@ -14,23 +19,37 @@ module.exports = ArcadeGameDetails = {
     let gamemod_url = "/" + gamemod.returnSlug() + "/img/arcade.jpg";
     document.querySelector('.game-image').src = gamemod_url;
     document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';
-/****
-    document.querySelector('.game-title').innerHTML = gamemod.name;
-    document.querySelector('.game-description').innerHTML = gamemod.description;
-    document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
 
-    let header_menu = '';
-        header_menu += '<div class="arcade-game-details-menu"></div>';
-        header_menu += '<h1>Create New Game:</h1>';
-        header_menu += '<div class="arcade-game-details-icons-menu">';
-	header_menu += '  <div class="clock">clock</div>';
-	header_menu += '  <div class="ranked">ranked</div>';
-	header_menu += '  <div class="stake">stake</div>';
-        header_menu += '</div>';
+    document.querySelector('.game-wizard-options-toggle').onclick = (e) => {
 
-    let x = '<form id="options" class="options">' + gamemod.returnGameOptionsHTML() + '</form>';
-    if (x != "") { document.querySelector('.game-details').innerHTML = (header_menu + x); }
-***/
+      document.querySelector('.game-wizard-advanced-options-overlay').style.display = "block";
+
+      //
+      // mod.game_overlay ---> Game Overlay (advanced menu)
+      //
+      let overlay_el = document.querySelector(".game-overlay");
+          overlay_el.style.display = "block";
+      let overlay_backdrop_el = document.querySelector(".game-overlay-backdrop");
+          overlay_backdrop_el.style.display = "block";
+          overlay_backdrop_el.style.opacity = 1;
+
+      overlay_backdrop_el.onclick = (e) => {
+        document.querySelector('.game-wizard-advanced-options-overlay').style.display = "none";
+        mod.game_overlay.hideOverlay();
+      }
+
+      alert("Clicked Toggle");
+
+    };
+
+    if (gamemod.publisher_message) {
+      document.querySelector('.game-wizard-publisher-message').innerHTML = `<span style="font-weight:bold">NOTE: </span>${gamemod.publisher_message}`;
+    }
+
+    document.querySelector('.game-wizard-title').innerHTML = gamemod.name;
+    document.querySelector('.game-wizard-description').innerHTML = gamemod.description;
+    document.querySelector('.game-wizard-advanced-options').innerHTML = gamemod.returnGameOptionsHTML();
+    document.querySelector('.game-wizard-advanced-options-overlay').style.display = "none";
 
     setTimeout(() => {
       for (let p = gamemod.minPlayers; p <= gamemod.maxPlayers; p++) {
@@ -47,6 +66,16 @@ module.exports = ArcadeGameDetails = {
     let advanced1 = document.querySelector('.game-wizard-advanced-box');
     let advanced2 = document.querySelector('.game-wizard-advanced-options');
     advanced2.appendChild(advanced1);
+
+    //
+    // move meta-overlay into form -- form now contains all advanced options
+    //
+    let overlay1 = document.querySelector('.game-overlay');
+    let overlay2 = document.querySelector('.game-overlay-backdrop');
+    let overlaybox = document.querySelector('.game-wizard-advanced-options-overlay');
+    overlay2.appendChild(advanced2); 
+    overlaybox.appendChild(overlay1);
+    overlaybox.appendChild(overlay2);
 
   },
 
