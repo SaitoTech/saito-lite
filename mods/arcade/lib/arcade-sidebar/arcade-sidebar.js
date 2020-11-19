@@ -1,3 +1,4 @@
+const saito = require('./../../../../lib/saito/saito');
 const ArcadeSidebarTemplate = require('./arcade-sidebar.template');
 const ArcadeGamesFullListOverlayTemplate = require('./arcade-games-full-list-overlay.template');
 const SaitoOverlay = require('./../../../../lib/saito/ui/saito-overlay/saito-overlay');
@@ -61,8 +62,10 @@ module.exports = ArcadeSidebar = {
 
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
       game.addEventListener('click', (e) => {
-        ArcadeGameDetails.render(app, mod, {});
-        ArcadeGameDetails.attachEvents(app, mod, {});
+	let tx = new saito.transaction();
+	tx.msg.game = e.currentTarget.id;
+        ArcadeGameDetails.render(app, mod, tx);
+        ArcadeGameDetails.attachEvents(app, mod, tx);
       });
     });
 

@@ -1,4 +1,4 @@
-const saito = require('../../lib/saito/saito');
+const saito = require('./../../lib/saito/saito');
 const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
@@ -39,7 +39,9 @@ class Arcade extends ModTemplate {
     this.overlay = new SaitoOverlay(app, this);
     
     //TODO: DELETE THESE LINES
-    this.games = getMockGames(app);
+    // no mock games
+    //this.games = getMockGames(app);
+
   }
   
   receiveEvent(type, data) {

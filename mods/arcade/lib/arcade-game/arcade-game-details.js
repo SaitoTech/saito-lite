@@ -22,13 +22,10 @@ module.exports = ArcadeGameDetails = {
   render(app, mod, invite) {
 
     let gamemod = app.modules.returnModule(invite.msg.game);
-    //let gamemod = app.modules.returnModule("Twilight");
 
     if (!document.getElementById("background-shim")) {
       app.browser.addElementToDom(`<div id="background-shim" class="background-shim" style=""><div id="background-shim-cover" class="background-shim-cover"></div></div>`); 
     }
-
-console.log("INVITE: " + JSON.stringify(invite));
 
     mod.overlay.showOverlay(app, mod, ArcadeGameDetailsTemplate(app, mod, invite));
     mod.meta_overlay = new AdvancedOverlay(app, mod);
@@ -39,27 +36,19 @@ console.log("INVITE: " + JSON.stringify(invite));
     document.querySelector('.game-image').src = gamemod_url;
     document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';
 
+    //
+    // move into advanced menu
+    //
     document.querySelector('.game-wizard-options-toggle').onclick = (e) => {
-
-      if (!document.querySelector('.game-wizard-advanced-return-btn')) {
-        mod.meta_overlay.showOverlay(app, mod, gamemod.returnGameOptionsHTML());
-      }
+      if (!document.querySelector('.game-wizard-advanced-return-btn')) { mod.meta_overlay.showOverlay(app, mod, gamemod.returnGameOptionsHTML()); }
       document.querySelector('.game-wizard-advanced-options-overlay').style.display = "block";
-
-      //
-      // move into advanced menu
-      //
       try {
         if (document.getElementById("game-wizard-advanced-return-btn")) {
           document.querySelector('.game-wizard-advanced-return-btn').onclick = (e) => {
-alert("hide overlay");
-            //mod.meta_overlay.hideOverlay();
   	    document.getElementById("game-wizard-advanced-options-overlay").style.display = "none";
           }
         }
-      } catch (err) {
-console.log("ERR: " + err);
-      }
+      } catch (err) {}
     };
 
     if (gamemod.publisher_message) {
@@ -122,6 +111,7 @@ console.log("OPTIONS: " + JSON.stringify(options));
         return;
       } else {
         mod.overlay.hideOverlay();
+        document.getElementById('background-shim').destroy();
       }
 
 } catch (err) {

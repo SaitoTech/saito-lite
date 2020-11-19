@@ -1,12 +1,5 @@
 module.exports = ArcadeGameDetailsTemplate = (app, mod, invite) => {
 
-  let html = '';
-
-  let optionsHtml = "";
-  Object.keys(invite.msg.options).forEach((key, i) => {
-    optionsHtml += `<div>${key}:</div><div>${invite.msg.options[key]}</div>`
-  });
-
   return `
     <div class="game-wizard">
       <form id="game-wizard-form" class="game-wizard-form">
