@@ -60,7 +60,11 @@ module.exports = ArcadeMain = {
     // enable join buttons
     //
     mod.games.forEach((invite, i) => {
-      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-button`).onclick = function() { 
+      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-button`).onclick = function(e) { 
+
+	let whatif = e.currentTarget.getAttribute("data-id");
+console.log(whatif);
+
         ArcadeGameDetails.render(app, mod, invite);
         ArcadeGameDetails.attachEvents(app, mod);
       }

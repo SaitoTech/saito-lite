@@ -5,6 +5,7 @@ module.exports = ChatSidebarContactTemplate = (app, group) => {
   let message = group.messages[group.messages.length-1];
 
   if (message) {
+    if (!message.message) { return ''; }
     ts = message.timestamp;
     msg = app.crypto.base64ToString(message.message);
     let tmp = document.createElement("DIV");

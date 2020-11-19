@@ -132,10 +132,13 @@ class Arcade extends ModTemplate {
         (res) => {
           if (res.rows) {
             res.rows.forEach(row => {
+console.log("X: "+JSON.stringify(gametx));
               let gametx = JSON.parse(row.tx);
               let tx = new saito.transaction(gametx.transaction);
               this.addGameToOpenList(tx);
             });
+	    ArcadeMain.render(app, this);
+	    ArcadeMain.attachEvents(app, this);
           }
         }
     );
@@ -203,7 +206,7 @@ class Arcade extends ModTemplate {
       }
     }
   }
-  notifyPeers(app) {
+  notifyPeers(app, tx) {
     for (let i = 0; i < app.network.peers.length; i++) {
       if (app.network.peers[i].peer.synctype == "lite") {
         //
@@ -318,7 +321,7 @@ console.log("RECEIVED GAME TX: " + JSON.stringify(tx));
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
       //
       if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "accept" || txmsg.request == "close") {
-        this.notifyPeers(app);
+        this.notifyPeers(app, tx);
       }
 
       //
