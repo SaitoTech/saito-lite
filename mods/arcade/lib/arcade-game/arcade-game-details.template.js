@@ -29,7 +29,7 @@ module.exports = ArcadeGameDetailsTemplate = (app, mod, invite) => {
           </div>
 
 	  <div id="game-wizard-invite" class="game-wizard-invite">	
-            <button id="game-invite-btn" class="game-invite-btn">Create New Game</button>
+            <button type="button" id="game-invite-btn" class="game-invite-btn">Create New Game</button>
 	  </div>
 
 	</div>
@@ -37,7 +37,6 @@ module.exports = ArcadeGameDetailsTemplate = (app, mod, invite) => {
         <div id="game-wizard-publisher-message" class="game-wizard-publisher-message"></div>
 
         <div id="game-wizard-advanced-options-overlay" class="game-wizard-advanced-options-overlay"></div>
-        <div id="game-wizard-advanced-options" class="game-wizard-advanced-options"></div>
 
       </form>
     </div>

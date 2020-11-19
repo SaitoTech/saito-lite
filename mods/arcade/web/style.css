@@ -131,6 +131,8 @@ a {
   background-size: cover;
   background-position: center;
   margin: 0.25em;
+  height: 7em;
+  max-height: 7em;
 }
 
 .invite-title-wrapper {

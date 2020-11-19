@@ -55,6 +55,7 @@ module.exports = ArcadeMain = {
     mod.games.forEach((invite, i) => {
       document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-button`).onclick = function() { 
         ArcadeGameDetails.render(app, mod, invite);
+        ArcadeGameDetails.attachEvents(app, mod);
       }
     });
 

@@ -9448,6 +9448,10 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
     return `
 
+      <div style="padding:40px;width:100vw;height:100vh;overflow-y:scroll;display:grid;grid-template-columns: 200px auto">
+
+	<div style="top:0;left:0;">
+
             <label for="player1">Play as:</label>
             <select name="player1">
               <option value="random">random</option>
@@ -9515,11 +9519,14 @@ alert("end of history!");
               <option value="120">120 minutes</option>
             </select>
 
-            <div id="game-wizard-advanced-box" class="game-wizard-advanced-box" style="display:none">
+	    <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 
-	      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">return to game creation menu:</div>
+	</div>
 
-              <div style="font-size:0.85em;font-weight:bold">remove cards: </div>
+            <div id="game-wizard-advanced-box" class="game-wizard-advanced-box" style="display:block;padding-left:20px;">
+
+	      <style type="text/css">li { list-style: none; } .saito-select { margin-bottom: 10px; margin-top:5px; } label { text-transform: uppercase; } .removecards { grid-gap: 0.1em; } .list-header { font-weight: bold; font-size:1.5em; margin-top:0px; margin-bottom:10px; margin-left: 15px; text-transform: uppercase; } </style>
+              <div class="list-header">remove cards:</div>
               <ul id="removecards" class="removecards">
               <li><input class="remove_card" type="checkbox" name="asia" /> Asia Scoring</li>
               <li><input class="remove_card" type="checkbox" name="europe" /> Europe Scoring</li>
@@ -9636,7 +9643,7 @@ alert("end of history!");
               <li><input class="remove_card optional_edition" type="checkbox" name="awacs" /> AWACS Sale to Saudis</li>
             </ul>
 
-            <div style="font-size:0.85em;font-weight:bold;clear:both;margin-top:10px;">add cards to game: </div>
+            <div class="list-header">add cards:</div>
             <ul id="removecards" class="removecards">
               <li><input class="remove_card saito_edition" type="checkbox" name="culturaldiplomacy" /> Cultural Diplomacy (Early-War)</li>
               <li><input class="remove_card saito_edition" type="checkbox" name="handshake" /> Handshake in Space (Mid-War)</li>
@@ -9655,6 +9662,7 @@ alert("end of history!");
               <li><input class="remove_card coldwarcrazies_edition" type="checkbox" name="communistrevolution" /> Communist Revolution (Early-War)</li>
             </div>
 
+    </div>
           `;
 
   }

@@ -1,19 +1,34 @@
 const ArcadeGameDetailsTemplate = require('./arcade-game-details.template');
-const GameOverlay = require('./../../../../lib/saito/ui/game-overlay/game-overlay');
+const AdvancedOverlay = require('./advanced-overlay'); // game-overlay
+
+
+const getOptions = () => {
+  let options = {};
+  document.querySelectorAll('form input, form select').forEach(element => {
+    if (element.type == "checkbox") {
+      if (element.checked) {
+        options[element.name] = 1;
+      }
+    } else {
+      options[element.name] = element.value;
+    }
+  });
+  return options;
+}
 
 
 module.exports = ArcadeGameDetails = {
 
   render(app, mod, invite) {
 
-    mod.meta_overlay = new GameOverlay(app, mod);
-    mod.meta_overlay.render(app, mod);
-    mod.meta_overlay.attachEvents(app, mod);
-
     if (!document.getElementById("background-shim")) {
       app.browser.addElementToDom(`<div id="background-shim" class="background-shim" style=""><div id="background-shim-cover" class="background-shim-cover"></div></div>`); 
     }
+
     mod.overlay.showOverlay(app, mod, ArcadeGameDetailsTemplate(app, mod, invite));
+    mod.meta_overlay = new AdvancedOverlay(app, mod);
+    mod.meta_overlay.render(app, mod);
+    mod.meta_overlay.attachEvents(app, mod);
 
     let gamemod = app.modules.returnModule("Twilight");
     let gamemod_url = "/" + gamemod.returnSlug() + "/img/arcade.jpg";
@@ -21,25 +36,8 @@ module.exports = ArcadeGameDetails = {
     document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';
 
     document.querySelector('.game-wizard-options-toggle').onclick = (e) => {
-
       document.querySelector('.game-wizard-advanced-options-overlay').style.display = "block";
-
-      //
-      // mod.game_overlay ---> Game Overlay (advanced menu)
-      //
-      let overlay_el = document.querySelector(".game-overlay");
-          overlay_el.style.display = "block";
-      let overlay_backdrop_el = document.querySelector(".game-overlay-backdrop");
-          overlay_backdrop_el.style.display = "block";
-          overlay_backdrop_el.style.opacity = 1;
-
-      overlay_backdrop_el.onclick = (e) => {
-        document.querySelector('.game-wizard-advanced-options-overlay').style.display = "none";
-        mod.game_overlay.hideOverlay();
-      }
-
-      alert("Clicked Toggle");
-
+      mod.meta_overlay.showOverlay(app, mod, gamemod.returnGameOptionsHTML());
     };
 
     if (gamemod.publisher_message) {
@@ -48,8 +46,6 @@ module.exports = ArcadeGameDetails = {
 
     document.querySelector('.game-wizard-title').innerHTML = gamemod.name;
     document.querySelector('.game-wizard-description').innerHTML = gamemod.description;
-    document.querySelector('.game-wizard-advanced-options').innerHTML = gamemod.returnGameOptionsHTML();
-    document.querySelector('.game-wizard-advanced-options-overlay').style.display = "none";
 
     setTimeout(() => {
       for (let p = gamemod.minPlayers; p <= gamemod.maxPlayers; p++) {
@@ -61,21 +57,15 @@ module.exports = ArcadeGameDetails = {
     }, 100);
 
     //
-    // move advanced content
+    // move advanced options into game form
     //
     let advanced1 = document.querySelector('.game-wizard-advanced-box');
-    let advanced2 = document.querySelector('.game-wizard-advanced-options');
-    advanced2.appendChild(advanced1);
-
-    //
-    // move meta-overlay into form -- form now contains all advanced options
-    //
     let overlay1 = document.querySelector('.game-overlay');
     let overlay2 = document.querySelector('.game-overlay-backdrop');
     let overlaybox = document.querySelector('.game-wizard-advanced-options-overlay');
-    overlay2.appendChild(advanced2); 
     overlaybox.appendChild(overlay1);
     overlaybox.appendChild(overlay2);
+    if (advanced1) { overlaybox.appendChild(advanced1); }
 
   },
 
@@ -86,6 +76,8 @@ module.exports = ArcadeGameDetails = {
     // create game
     //
     document.getElementById('game-invite-btn').addEventListener('click', (e) => {
+
+try {
 
       let options = getOptions();
 
@@ -110,6 +102,15 @@ module.exports = ArcadeGameDetails = {
           document.querySelector('#link-invite').toggleClass('hidden');
         }
       }
+
+} catch (err) {
+
+alert("error: " + err);
+
+}
+
+      return false;
+
     });
 
 
