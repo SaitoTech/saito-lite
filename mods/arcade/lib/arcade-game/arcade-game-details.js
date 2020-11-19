@@ -112,6 +112,11 @@ console.log("OPTIONS: " + JSON.stringify(options));
       } else {
         mod.overlay.hideOverlay();
         document.getElementById('background-shim').destroy();
+
+        let newtx = mod.createOpenTransaction(gamedata);
+        mod.app.network.propagateTransaction(newtx);
+        mod.renderArcadeMain(app, mod);
+
       }
 
 } catch (err) {

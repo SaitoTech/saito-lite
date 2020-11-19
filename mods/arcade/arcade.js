@@ -53,6 +53,11 @@ class Arcade extends ModTemplate {
     }
   }
 
+  renderArcadeMain(app, mod) {
+    ArcadeMain.render(this.app, this);
+    ArcadeMain.attachEvents(this.app, this);
+  }
+
   returnServices() {
     let services = [];
     services.push({ service : "arcade" , domain : "saito" });
@@ -83,12 +88,61 @@ class Arcade extends ModTemplate {
     super.initialize(app);
 
     //
+    // add my own games (as fake txs)
+    //
+    if (this.app.options.games != null) {
+      let { games } = this.app.options;
+      games.forEach(game => {
+        let game_tx = this.createGameTXFromOptionsGame(game);
+        if(game_tx) {
+          this.addGameToOpenList(game_tx);
+        }
+      });
+    }
+
+    //
     // listen for txs from arcade-supporting games
     //
     this.app.modules.respondTo("arcade-games").forEach(mod => {
       this.affix_callbacks_to.push(mod.name);
     });
+
   }
+
+
+
+  //
+  // load transactions into interface when the network is up
+  //
+  onPeerHandshakeComplete(app, peer) {
+
+    if (this.browser_active == 0) { return; }
+
+    let arcade_self = this;
+
+    //
+    // load open games from server
+    //
+    this.sendPeerDatabaseRequestWithFilter(
+
+        "Arcade",
+
+        `SELECT * FROM games WHERE status = "open"`,
+
+        (res) => {
+          if (res.rows) {
+            res.rows.forEach(row => {
+              let gametx = JSON.parse(row.tx);
+              let tx = new saito.transaction(gametx.transaction);
+              this.addGameToOpenList(tx);
+            });
+          }
+        }
+    );
+  }
+
+
+
 
 
   async render(app) {
@@ -108,7 +162,10 @@ class Arcade extends ModTemplate {
 
     ArcadeSidebar.render(app, this);
     ArcadeSidebar.attachEvents(app, this);
-    
+ 
+
+
+   
     //
     // Each overlay will manage it's own hashchange event listeners which hides/shows
     // the overlay. To support deep linking, we set and reset the location hash
@@ -242,6 +299,8 @@ class Arcade extends ModTemplate {
       }
     }
   }
+
+
   //
   // MESSY -- not deleting immediately
   //
@@ -251,8 +310,9 @@ class Arcade extends ModTemplate {
     
     if (conf == 0) {
 
-
       this.purgeBadGames(app)
+
+console.log("RECEIVED GAME TX: " + JSON.stringify(tx));
 
       //
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
@@ -480,8 +540,11 @@ class Arcade extends ModTemplate {
     }
   }
 
+
+
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
+console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
     //
     // this code doubles onConfirmation
@@ -1107,6 +1170,134 @@ class Arcade extends ModTemplate {
 
     }
   }
+
+
+
+
+
+  createGameTXFromOptionsGame(game) {
+
+    let game_tx = new saito.transaction();
+
+    //
+    // ignore games that are over
+    //
+    //console.info("GAME OVER + LAST BLOCK: " + game.over + " -- " + game.last_block + " -- " + game.id);
+
+    if (game.over) { if (game.last_block > 0) { return; } }
+
+    if (game.players) {
+      game_tx.transaction.to = game.players.map(player => new saito.slip(player));
+      game_tx.transaction.from = game.players.map(player => new saito.slip(player));
+    } else {
+      game_tx.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
+      game_tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey()));
+    }
+
+    let msg = {
+      request: "loaded",
+      game: game.module,
+      game_id: game.id,
+      options: game.options,
+      players: game.players ,
+      players_needed: game.players_needed,
+      over: game.over,
+      last_block: game.last_block,
+    }
+    if (game.status === "Opponent Resigned") { msg.options_html = "Opponent Resigned"; }
+
+    game_tx.transaction.sig = game.id;
+    game_tx.msg = msg;
+
+    return game_tx;
+  }
+
+
+
+  removeOldGames() {
+
+    let removed_old_games = 0;
+
+    // if the game is very old, remove it
+    for (let i = 0; i < this.games.length; i++) {
+      let gamets = parseInt(this.games[i].transaction.ts);
+      let timepassed = (new Date().getTime()) - gamets;
+      if (timepassed > this.old_game_removal_delay) {
+        this.games.splice(i, 1);
+        removed_old_games = 1;
+        i--;
+      }
+    }
+
+    if (this.browser_active == 1) {
+      if (this.viewing_arcade_initialization_page == 0) {
+        if (removed_old_games == 1) {
+          ArcadeMain.render(this.app, this);
+          ArcadeMain.attachEvents(this.app, this);
+        }
+      }
+    }
+
+  }
+
+
+  addGameToOpenList(tx) {
+
+    if (!tx.transaction) {
+      return;
+    } else {
+      if (!tx.transaction.sig) { return; }
+      if (tx.msg.over == 1) { return; }
+    }
+
+    let txmsg = tx.returnMessage();
+
+    for (let i = 0; i < this.games.length; i++) {
+
+      let transaction = Object.assign({sig: "" }, this.games[i].transaction);
+      if (tx.transaction.sig == transaction.sig) { return; }
+      if (txmsg.game_id != "" && txmsg.game_id == transaction.sig) { return; }
+
+      if (txmsg.game_id === this.games[i].transaction.sig) {
+        console.log("ERROR 480394: not re-adding existing game to list");
+        return;
+      }
+
+    }
+
+
+    var for_us = true;
+    if (txmsg.options.players_invited) {
+      for_us = false;
+      if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) {
+        for_us = true;
+      } else {
+        txmsg.options.players_invited.forEach(player => {
+          if (player == this.app.wallet.returnPublicKey() || player == this.app.keys.returnIdentifierByPublicKey(this.app.wallet.returnPublicKey())) {
+            for_us = true;
+          }
+        });
+      }
+    }
+
+    this.removeOldGames();
+
+
+    if (for_us) {
+
+      this.games.unshift(tx);
+
+      if (this.browser_active == 1) {
+        if (this.viewing_arcade_initialization_page == 0) {
+          ArcadeMain.render(this.app, this);
+          ArcadeMain.attachEvents(this.app, this);
+        }
+      }
+    }
+  }
+
+
+
 
   shouldAffixCallbackToModule(modname) {
     if (modname == "ArcadeInvite") { return 1; }

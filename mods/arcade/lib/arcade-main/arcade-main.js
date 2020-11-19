@@ -8,6 +8,13 @@ let tabNames = ["arcade", "observables", "tournaments"];
 module.exports = ArcadeMain = {
 
   render(app, mod) {
+
+    //
+    // purge existing content
+    //
+    if (document.getElementById("arcade-main")) { document.getElementById("arcade-main").destroy(); }
+
+
     // Sort mod.games in-place to put "my invites" at the top, i.e. any games that the player is in.
     // Sort by looping through games and swapping with the "next" game if the 
     let whereTo = 0;

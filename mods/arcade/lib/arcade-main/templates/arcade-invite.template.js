@@ -18,10 +18,9 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
       break;
     }
   }
-
-
   playersHtml += '</div>';
-  return `
+
+  let inviteHtml = `
     <div id="invite-${invite.transaction.sig}" class="arcade-tile i_${idx} ${inviteTypeClass}" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);">
       <div class="invite-title-wrapper">
         <div class="game-inset-img" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);"></div>
@@ -30,10 +29,19 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
           ${playersHtml}
         </div>
         <div class="gameShortDescription">${makeDescription(app, invite)}</div>
-        <button class="button invite-tile-button">JOIN</button>
+    `;
+     if (invite.isMine) {
+       inviteHtml += `<button class="button invite-tile-button">CANCEL</button>`;
+     } else {
+       inviteHtml += `<button class="button invite-tile-button">JOIN</button>`;
+     }
+
+  inviteHtml += `
       </div>
     </div>
     `;
+
+  return inviteHtml;
 }
 // If the transction message contains a description, use that, otherwise if the module provides a makeInviteDescription function, use that, otherwise fallback to ""
 let makeDescription = (app, invite) => {
