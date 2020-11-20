@@ -75,19 +75,16 @@ module.exports = ArcadeMain = {
 	let game_cmd = e.currentTarget.getAttribute("data-cmd");
 
 	if (game_cmd == "cancel") {
-alert("CANCEL GAME PRE");
 	  arcade_main_self.joinGame(app, mod, game_sig);
 	  return;
 	}
 
 	if (game_cmd == "join") {
-alert("JOIN GAME PRE");
 	  arcade_main_self.joinGame(app, mod, game_sig);
 	  return;
 	}
 
 	if (game_cmd == "continue") {
-alert("CANCEL GAME PRE -- just send to join as it will load");
 	  arcade_main_self.joinGame(app, mod, game_sig);
 	  return;
 	}
@@ -125,7 +122,7 @@ alert("CANCEL GAME PRE -- just send to join as it will load");
     let players_needed = parseInt(accepted_game.msg.players_needed);
     let players_available = accepted_game.msg.players.length;
     if ( players_needed > (players_available+1) ) {
-      let newtx = mod.createJoinTransaction(app, accepted_game);
+      let newtx = mod.createJoinTransaction(accepted_game);
       app.network.propagateTransaction(newtx);
       mod.joinGameOnOpenList(newtx);
       salert("Joining game! Please wait a moment");
@@ -156,8 +153,8 @@ alert("CANCEL GAME PRE -- just send to join as it will load");
 
             salert("Accepted Game! It may take a minute for your browser to update -- please be patient!");
 
-            ArcadeGameLoader.render(app, data);
-            ArcadeGameLoader.attachEvents(app, data);
+            GameLoader.render(app, data);
+            GameLoader.attachEvents(app, data);
 
             return;
 
@@ -216,10 +213,11 @@ alert("CANCEL GAME PRE -- just send to join as it will load");
               return;
 
             } else {
+console.log(JSON.stringify(res.rows));
               salert("Sorry, this game has been accepted already!");
             }
           } else {
-            salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
+            salert("Sorry, this game has already been accepted!");
           }
         }
       );

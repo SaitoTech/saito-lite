@@ -968,21 +968,47 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
 
 
-  createJoinTransaction(app, gametx) {
+  createJoinTransaction(gametx) {
 
     let txmsg = gametx.returnMessage();
 
-    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     tx.transaction.to.push(new saito.slip(gametx.transaction.from[0].add, 0.0));
-    tx.transaction.to.push(new saito.slip(app.wallet.returnPublicKey(), 0.0));
+    tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
     tx.msg.ts = "";
     tx.msg.module = txmsg.game;
     tx.msg.request = "join";
     tx.msg.game_id = gametx.transaction.sig;
     tx.msg.players_needed = parseInt(txmsg.players_needed);
     tx.msg.options = txmsg.options;
-    tx.msg.invite_sig = app.crypto.signMessage(("invite_game_" + gametx.msg.ts), app.wallet.returnPrivateKey());
+    tx.msg.invite_sig = this.app.crypto.signMessage(("invite_game_" + gametx.msg.ts), this.app.wallet.returnPrivateKey());
     if (gametx.msg.ts != "") { tx.msg.ts = gametx.msg.ts; }
+    tx = this.app.wallet.signTransaction(tx);
+
+    return tx;
+
+  }
+
+  createAcceptTransaction(gametx) {
+
+    let txmsg = gametx.returnMessage();
+
+    let accept_sig = this.app.crypto.signMessage(("invite_game_" + txmsg.ts), this.app.wallet.returnPrivateKey());
+    txmsg.players.push(this.app.wallet.returnPublicKey());
+    txmsg.players_sigs.push(accept_sig);
+    txmsg.request = "accept";
+
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+    for (let i = 0; i < txmsg.players.length; i++) { tx.transaction.to.push(new saito.slip(txmsg.players[i], 0.0)); }
+    tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
+
+    //
+    // arcade will listen, but we need game engine to receive to start initialization
+    //
+    tx.msg = txmsg;
+    tx.msg.game_id = gametx.transaction.sig;
+    tx.msg.request = "accept";
+    tx.msg.module = txmsg.game;
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;

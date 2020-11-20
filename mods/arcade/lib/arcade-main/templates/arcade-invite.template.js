@@ -1,6 +1,8 @@
 
 module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
 
+console.log(JSON.stringify(invite));
+
   let inviteTypeClass = "open-invite";
   if (invite.isMine) { inviteTypeClass = "my-invite"; }
 
@@ -29,14 +31,17 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
           ${playersHtml}
         </div>
         <div class="gameShortDescription">${makeDescription(app, invite)}</div>
+	<div class="gameButtons">
     `;
      if (invite.isMine) {
+       //inviteHtml += `<button data-sig="${invite.transaction.sig}" data-cmd="cancel" class="button invite-tile-button">CONTINUE</button>`;
        inviteHtml += `<button data-sig="${invite.transaction.sig}" data-cmd="cancel" class="button invite-tile-button">CANCEL</button>`;
      } else {
        inviteHtml += `<button data-sig="${invite.transaction.sig}" data-cmd="join" class="button invite-tile-button">JOIN</button>`;
      }
 
   inviteHtml += `
+        </div>
       </div>
     </div>
     `;
