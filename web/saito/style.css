@@ -166,7 +166,7 @@ hr {
 }
 
 /* Overlay */
-.saito-overlay-backdrop {
+.saito-overlay-backdrop, .game-overlay-backdrop {
   position: absolute;
   display: none;
   top: 0;
@@ -177,6 +177,28 @@ hr {
   opacity: 0.4;
   z-index: 100;
 }
+.saito-overlay, .game-overlay {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  z-index: 1000;
+  padding: 10px;
+}
+.game-overlay {
+  z-index:9010;
+}
+.game-overlay-backdrop {
+  z-index:9000;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .saito-overlay-menu {
   padding: 10px;
   background-color: whitesmoke;
@@ -197,20 +219,6 @@ hr {
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75), -2px -2px 5px #eee;
   background: #0001;
 }
-
-.saito-overlay {
-  position: absolute;
-  display: inline-block;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  margin-left: auto;
-  margin-right: auto;
-  background-color: transparent;
-  z-index: 1000;
-  padding: 10px;
-}
-
 
 /* Forms and Inputs */
 
