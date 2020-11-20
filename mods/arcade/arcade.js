@@ -968,7 +968,7 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
 
 
-  createJoinTransaction(app, data, gametx) {
+  createJoinTransaction(app, gametx) {
 
     let txmsg = gametx.returnMessage();
 
@@ -988,6 +988,7 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
     return tx;
 
   }
+
 
 
 

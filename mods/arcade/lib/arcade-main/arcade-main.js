@@ -1,6 +1,7 @@
 const ArcadeMainTemplate = require('./templates/arcade-main.template');
 const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
+const GameLoader = require('./../arcade-game/game-loader');
 const SaitoCarousel = require('./../../../../lib/saito/ui/saito-carousel/saito-carousel');
 const ArcadeGameDetails = require('./../arcade-game/arcade-game-details');
 
@@ -15,8 +16,9 @@ module.exports = ArcadeMain = {
     if (document.getElementById("arcade-main")) { document.getElementById("arcade-main").destroy(); }
 
 
-    // Sort mod.games in-place to put "my invites" at the top, i.e. any games that the player is in.
-    // Sort by looping through games and swapping with the "next" game if the 
+    //
+    // put active games first
+    //
     let whereTo = 0;
     for (let i = 0; i < mod.games.length; i++) {
       if (mod.isMyGame(mod.games[i], app)) {
@@ -30,9 +32,15 @@ module.exports = ArcadeMain = {
       }
     }
 
+    //
+    // add parent wrapping class
+    //
     if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
     if (!document.querySelector(".arcade-main")) { app.browser.addElementToDom(ArcadeMainTemplate(app, mod), "arcade-container"); }
 
+    //
+    // add tabs
+    //
     tabNames.forEach((tabButtonName, i) => {
       document.querySelector("#tab-button-" + tabButtonName).onclick = () => {
         tabNames.forEach((tabName, i) => {
@@ -59,14 +67,33 @@ module.exports = ArcadeMain = {
     //
     // enable join buttons
     //
+    let arcade_main_self = this;
     mod.games.forEach((invite, i) => {
       document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-button`).onclick = function(e) { 
 
-	let whatif = e.currentTarget.getAttribute("data-id");
-console.log(whatif);
+	let game_sig = e.currentTarget.getAttribute("data-sig");
+	let game_cmd = e.currentTarget.getAttribute("data-cmd");
 
-        ArcadeGameDetails.render(app, mod, invite);
-        ArcadeGameDetails.attachEvents(app, mod);
+	if (game_cmd == "cancel") {
+alert("CANCEL GAME PRE");
+	  arcade_main_self.joinGame(app, mod, game_sig);
+	  return;
+	}
+
+	if (game_cmd == "join") {
+alert("JOIN GAME PRE");
+	  arcade_main_self.joinGame(app, mod, game_sig);
+	  return;
+	}
+
+	if (game_cmd == "continue") {
+alert("CANCEL GAME PRE -- just send to join as it will load");
+	  arcade_main_self.joinGame(app, mod, game_sig);
+	  return;
+	}
+
+        //ArcadeGameDetails.render(app, mod, invite);
+        //ArcadeGameDetails.attachEvents(app, mod);
       }
     });
 
@@ -81,4 +108,123 @@ console.log(whatif);
   attachEvents(app, mod) {
 
   },
+
+
+  joinGame(app, mod, game_id) {
+
+    alert("JOIN GAME");
+
+    let accepted_game = null;
+    mod.games.forEach((g) => { if (g.transaction.sig === game_id) { accepted_game = g; } });
+
+    if (!accepted_game) { console.log("ERR: game not found"); return; }
+
+    //
+    // not enough players? join not accept
+    //
+    let players_needed = parseInt(accepted_game.msg.players_needed);
+    let players_available = accepted_game.msg.players.length;
+    if ( players_needed > (players_available+1) ) {
+      let newtx = mod.createJoinTransaction(app, accepted_game);
+      app.network.propagateTransaction(newtx);
+      mod.joinGameOnOpenList(newtx);
+      salert("Joining game! Please wait a moment");
+      return;
+    }
+
+
+    //
+    // enough players, so "accept" to kick off
+    //
+    if (accepted_game.transaction.from[0].add == app.wallet.returnPublicKey()) {
+      let { players } = accepted_game.returnMessage();
+      if (players.length > 1) {
+        salert(`You created this game! Waiting for enough players to join we can start...`);
+      }
+    } else {
+
+      //
+      // we are going to send a message to accept this game, but first check if we have
+      // already done this, in which case we will have the game loaded in our local games list
+      //
+      if (app.options.games) {
+
+        let existing_game = app.options.games.find(g => g.id == game_id);
+
+        if (existing_game != -1 && existing_game) {
+          if (existing_game.initializing == 1) {
+
+            salert("Accepted Game! It may take a minute for your browser to update -- please be patient!");
+
+            ArcadeGameLoader.render(app, data);
+            ArcadeGameLoader.attachEvents(app, data);
+
+            return;
+
+          } else {
+
+            //
+            // game exists, so "continue" not "join"
+            //
+            existing_game.ts = new Date().getTime();
+            existing_game.initialize_game_run = 0;
+            app.storage.saveOptions();
+            window.location = '/' + existing_game.module.toLowerCase();
+            return;
+          }
+        }
+      }
+
+      //
+      // ready to go? check with server game is not taken
+      //
+      mod.sendPeerRequestWithFilter(
+
+        () => {
+          let msg = {};
+              msg.request = 'rawSQL';
+              msg.data = {};
+              msg.data.module = "Arcade";
+              msg.data.sql = `SELECT is_game_already_accepted FROM games WHERE game_id = "${game_id}"`;
+              msg.data.game_id = game_id;
+          return msg;
+        },
+
+        (res) => {
+
+          if (res.rows == undefined) {
+            console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
+            return;
+          }
+
+          if (res.rows.length > 0) {
+            if (res.rows[0].game_still_open == 1 || (res.rows[0].game_still_open == 0 && players_needed > 2)) {
+
+              //
+              // data re: game in form of tx
+              //
+              let { transaction } = accepted_game;
+              let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
+
+              salert("Game accepted - please wait");
+              let newtx = mod.createAcceptTransaction(accepted_game);
+              mod.app.network.propagateTransaction(newtx);
+
+              GameLoader.render(app, mod);
+              GameLoader.attachEvents(app, mod);
+
+              return;
+
+            } else {
+              salert("Sorry, this game has been accepted already!");
+            }
+          } else {
+            salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
+          }
+        }
+      );
+
+    }
+
+  }
 }
