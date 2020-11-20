@@ -58,7 +58,7 @@ a {
 
 .arcade-main {
   display: grid;
-  grid-template-rows: 2em 45vh auto;
+  grid-template-rows: 40px 45vh auto;
 }
 
 #arcade-tab-buttons {
@@ -68,6 +68,9 @@ a {
   justify-items: center;
   overflow: hidden;
   border-left: solid 2px var(--saito-red);
+  font-size: 1.3em;
+  line-height: 2.3em;
+  cursor: pointer;
 }
 
 #arcade-tab-buttons .tab-button {
@@ -222,7 +225,7 @@ a {
 }
 .arcade-tile .button {  
   background: linear-gradient(45deg, #540e81, #b539e8) !important;
-  padding: 1em 1em; */
+  padding: 1em 1em; 
   font-size: 1.2em;
   border-radius: 5px;
   height: 6em;

@@ -1077,6 +1077,7 @@ div#message-wrapper {
   justify-self: end;
   text-shadow: #333 1px 0;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .header-icon-links {
