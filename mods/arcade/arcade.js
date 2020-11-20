@@ -24,6 +24,7 @@ class Arcade extends ModTemplate {
     this.games = [];
     this.observer = [];
     this.old_game_removal_delay = 2000000;
+    this.is_initializing = false;
     this.initialization_timer = null;
     this.viewing_arcade_initialization_page = 0;
 
@@ -507,7 +508,7 @@ console.log("RECEIVED GAME TX: " + JSON.stringify(tx));
                   this.games.splice(i, 1);
                   console.info("RE-RENDER");
                   if (this.viewing_arcade_initialization_page == 0) {
-                    this.renderMain(this.app);
+                    this.renderArcadeMain(this.app, this);
                   }
                 }
               }
@@ -635,7 +636,7 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
         this.removeGameFromOpenList(txmsg.sig);
         if (this.viewing_arcade_initialization_page == 0 && this.browser_active == 1) {
-          this.renderMain(this.app);
+          this.renderArcadeMain(this.app, this);
         }
       }
       this.receiveCloseRequest(blk, tx, conf, app);
@@ -1114,6 +1115,70 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
 
 
+  launchGame(game_id) {
+
+    if (this.browser_active == 0) { return; }
+
+    let arcade_self = this;
+    arcade_self.is_initializing = true;
+    arcade_self.initialization_timer = setInterval(() => {
+
+      let game_idx = -1;
+      if (arcade_self.app.options.games != undefined) {
+        for (let i = 0; i < arcade_self.app.options.games.length; i++) {
+          if (arcade_self.app.options.games[i].id == game_id) {
+            game_idx = i;
+          }
+        }
+      }
+
+      if (game_idx == -1) { return; }
+
+      if (arcade_self.app.options.games[game_idx].initializing == 0) {
+
+        //
+        // check we don't have a pending TX for this game...
+        //
+        let ready_to_go = 1;
+
+        if (arcade_self.app.wallet.wallet.pending.length > 0) {
+          for (let i = 0; i < arcade_self.app.wallet.wallet.pending.length; i++) {
+            let thistx = new saito.transaction(JSON.parse(arcade_self.app.wallet.wallet.pending[i]));
+            let thistxmsg = thistx.returnMessage();
+            if (thistxmsg.module == arcade_self.app.options.games[game_idx].module) {
+              if (thistxmsg.game_id == arcade_self.app.options.games[game_idx].id) {
+                ready_to_go = 0;
+              }
+            }
+          }
+        }
+
+        if (ready_to_go == 0) {
+          console.log("transaction for this game still in pending...");
+          return;
+        }
+
+        clearInterval(arcade_self.initialization_timer);
+
+        if (window.location.pathname.split('/')[2] == "invite") {
+alert("Invite Needs Processing!");
+          ArcadeLoader.render(this.app, this, game_id);
+          ArcadeLoader.attachEvents(this.app, mod);
+          this.viewing_arcade_initialization_page = 1;
+        } else {
+          ArcadeLoader.render(this.app, this, game_id);
+          ArcadeLoader.attachEvents(this.app, mod);
+          this.viewing_arcade_initialization_page = 1;
+        }
+
+      }
+    }, 1000);
+
+  }
+
+
+
+
   webServer(app, expressapp, express) {
 
     super.webServer(app, expressapp, express);
@@ -1269,6 +1334,40 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
     }
 
   }
+
+
+
+  // just receive the sig of the game to remove
+  removeGameFromOpenList(game_sig) {
+
+    this.games = this.games.filter(game => {
+      if (game.transaction) {
+        return game.transaction.sig != game_sig;
+      } else {
+        return true;
+      }
+    });
+
+    if (this.app.options) {
+      if (this.app.options.games) {
+        for (let i = 0; i < this.app.options.games.length; i++) {
+          if (this.app.options.games[i].id == game_sig) {
+            this.app.options.games.splice(i, 1);
+            this.app.storage.saveOptions();
+          }
+        }
+      }
+    }
+
+    if (this.browser_active == 1) {
+      ArcadeMain.render(this.app, this);
+      ArcadeMain.attachEvents(this.app, this);
+//      if (document.getElementById(`arcade-game-${game_sig}`)) {
+//        document.getElementById(`arcade-gamelist`).removeChild(document.getElementById(`arcade-game-${game_sig}`));
+//      }
+    }
+  }
+
 
 
   addGameToOpenList(tx) {

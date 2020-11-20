@@ -74,8 +74,13 @@ module.exports = ArcadeMain = {
 	let game_sig = e.currentTarget.getAttribute("data-sig");
 	let game_cmd = e.currentTarget.getAttribute("data-cmd");
 
+	if (game_cmd == "delete") {
+	  arcade_main_self.deleteGame(app, mod, game_sig);
+	  return;
+	}
+
 	if (game_cmd == "cancel") {
-	  arcade_main_self.joinGame(app, mod, game_sig);
+	  arcade_main_self.cancelGame(app, mod, game_sig);
 	  return;
 	}
 
@@ -85,7 +90,7 @@ module.exports = ArcadeMain = {
 	}
 
 	if (game_cmd == "continue") {
-	  arcade_main_self.joinGame(app, mod, game_sig);
+	  arcade_main_self.continueGame(app, mod, game_sig);
 	  return;
 	}
 
@@ -108,8 +113,6 @@ module.exports = ArcadeMain = {
 
 
   joinGame(app, mod, game_id) {
-
-    alert("JOIN GAME");
 
     let accepted_game = null;
     mod.games.forEach((g) => { if (g.transaction.sig === game_id) { accepted_game = g; } });
@@ -213,7 +216,6 @@ module.exports = ArcadeMain = {
               return;
 
             } else {
-console.log(JSON.stringify(res.rows));
               salert("Sorry, this game has been accepted already!");
             }
           } else {
@@ -224,5 +226,108 @@ console.log(JSON.stringify(res.rows));
 
     }
 
+  },
+
+
+  continueGame(app, mod, game_id) {
+
+    let existing_game = app.options.games.find(g => g.id == game_id);
+
+    if (existing_game != -1 && existing_game) {
+      if (existing_game.initializing == 1) {
+
+        salert("Accepted Game! It may take a minute for your browser to update -- please be patient!");
+
+        GameLoader.render(app, data);
+        GameLoader.attachEvents(app, data);
+
+        return;
+
+      } else {
+
+        //
+        // game exists, so "continue" not "join"
+        //
+        existing_game.ts = new Date().getTime();
+        existing_game.initialize_game_run = 0;
+        app.storage.saveOptions();
+        window.location = '/' + existing_game.module.toLowerCase();
+        return;
+
+      }
+    }
+  },
+
+
+  cancelGame(app, mod, game_id) {
+
+    let sig = game_id;
+    var testsig = "";
+    let players = [];
+
+    if (app.options.games) {
+      for (let i = 0; i < app.options.games.length; i++) {
+        if (typeof(app.options.games[i].transaction) != 'undefined') {
+          testsig = app.options.games[i].transaction.sig;
+        } else if (typeof(app.options.games[i].id) != 'undefined') {
+          testsig = app.options.games[i].id;
+        }
+        if (testsig == sig) {
+          app.options.games[i].over = 1;
+          players = app.options.games[i].players;
+          app.options.games.splice(i, 1);
+          app.storage.saveOptions();
+        }
+      }
+    }
+
+    let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+    let my_publickey = app.wallet.returnPublicKey();
+
+    for (let i = 0; i < players.length; i++) { if (players[i] != my_publickey) newtx.transaction.to.push(app.wallet.createSlip(players[i])); }
+
+    let msg = {
+      sig: sig,
+      status: 'close',
+      request: 'close',
+      winner: players[0] == my_publickey ? players[1] : players[0],
+      module: 'Arcade'
+    }
+
+    newtx.msg = msg;
+    newtx = app.wallet.signTransaction(newtx);
+    app.network.propagateTransaction(newtx);
+
+    this.removeGameFromList(sig);
+  },
+
+
+  deleteGame(app, mod, game_id) {
+
+    salert(`Delete game id: ${game_id}`);
+
+    if (app.options.games) {
+      let { games } = app.options;
+      for (let i = 0; i < app.options.games.length; i++) {
+        if (app.options.games[i].id == game_id) {
+
+          let resigned_game = app.options.games[i];
+
+          if (resigned_game.over == 0) {
+            let game_mod = app.modules.returnModule(resigned_game.module);
+            game_mod.resignGame(game_id);
+          } else {
+            //
+            // removing game someone else ended
+            //
+            app.options.games[i].over = 1;
+            app.options.games[i].last_block = app.blockchain.last_bid;
+            app.storage.saveOptions();
+          }
+        }
+      }
+      this.removeGameFromList(game_id);
+    }
   }
+
 }

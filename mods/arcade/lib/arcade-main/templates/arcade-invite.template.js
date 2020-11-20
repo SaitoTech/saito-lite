@@ -1,10 +1,17 @@
 
 module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
 
-console.log(JSON.stringify(invite));
+console.log(JSON.stringify(invite.transaction));
 
   let inviteTypeClass = "open-invite";
+  let game_initialized = 0;
   if (invite.isMine) { inviteTypeClass = "my-invite"; }
+  if (invite.msg) {
+    if (invite.msg.options['game-wizard-players-select'] == invite.msg.players.length) {
+      game_initialized = 1;
+    }
+  }
+
 
   let playersHtml = `<div class="playerInfo" style="grid-template-columns: repeat(${invite.msg.players_needed}, 1fr);">`;
   for(let i = 0; i < invite.msg.players_needed; i++) {
@@ -34,7 +41,9 @@ console.log(JSON.stringify(invite));
 	<div class="gameButtons">
     `;
      if (invite.isMine) {
-       //inviteHtml += `<button data-sig="${invite.transaction.sig}" data-cmd="cancel" class="button invite-tile-button">CONTINUE</button>`;
+       if (game_initialized == 1) { 
+         inviteHtml += `<button data-sig="${invite.transaction.sig}" data-cmd="continue" class="button invite-tile-button">CONTINUE</button>`;
+       }
        inviteHtml += `<button data-sig="${invite.transaction.sig}" data-cmd="cancel" class="button invite-tile-button">CANCEL</button>`;
      } else {
        inviteHtml += `<button data-sig="${invite.transaction.sig}" data-cmd="join" class="button invite-tile-button">JOIN</button>`;
@@ -48,14 +57,17 @@ console.log(JSON.stringify(invite));
 
   return inviteHtml;
 }
-// If the transction message contains a description, use that, otherwise if the module provides a makeInviteDescription function, use that, otherwise fallback to ""
+
+
+
 let makeDescription = (app, invite) => {
   let defaultDescription = "";
   let gameModule = app.modules.returnModule(invite.msg.game);
-  if(gameModule){
+  if (gameModule) {
     let moduleDescriptionMaker = gameModule.requestInterface("make-invite-description");  
-    if(moduleDescriptionMaker){
+    if (moduleDescriptionMaker) {
       defaultDescription = moduleDescriptionMaker.makeDescription(invite.msg);
+      if (defaultDescription === undefined) { defaultDescription = ""; }
     }
   }
   if (defaultDescription == "") { return ""; }
@@ -65,5 +77,4 @@ let makeDescription = (app, invite) => {
     }
   }
   return ('<div class="invite-description">'+defaultDescription+'</div>');
-
 }

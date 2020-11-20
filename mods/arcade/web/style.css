@@ -1336,3 +1336,42 @@ span.rewards-row-name {
   width: 100%;
 }
 
+
+
+.game-loader {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  z-index: 1000;
+  padding: 10px;
+  background-color: whitesmoke;
+}
+.game-loader-backdrop {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #444;
+  opacity: 0.4;
+  z-index: 100;
+}
+.game-loader-spinner {
+  display: none;
+  justify-self: center;
+  width: 6em;
+  height: 6em;
+  margin: 25%;
+}
+
+
+}
+
+
+
