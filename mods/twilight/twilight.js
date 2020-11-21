@@ -5225,6 +5225,7 @@ console.log("SELECTED CARD NOT NULL: bbc");
 
   playerPlaceInitialInfluence(player) {
 
+    try {
 this.startClock();
 
     let twilight_self = this;
@@ -5275,7 +5276,7 @@ this.startClock();
             twilight_self.displayModal("Invalid Influence Placement", `You cannot place there...: ${j} influence left`);
           }
         });
-      }
+      } 
     }
 
 
@@ -5331,6 +5332,7 @@ this.startClock();
         });
       }
     }
+    } catch (err) {}
   }
 
 
@@ -6317,8 +6319,10 @@ console.log("CONTROL IS: " + control);
     //
     // remove events from board to prevent "Doug Corley" gameplay
     //
+    try {
     $(".card").off();
     $(".country").off();
+    } catch (err) {}
 
     //
     // we will bury you scores first!
@@ -8896,6 +8900,8 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
   updateEventTiles() {
 
+    try {
+
     if (this.game.state.events.warsawpact == 0) {
       $('#eventtile_warsaw').css('display','none');
     } else {
@@ -9030,6 +9036,8 @@ console.log("SCORING: " + JSON.stringify(scoring));
     } else {
       $('#eventtile_awacs').css('display','block');
     }
+
+    } catch (err) {}
 
   }
 
