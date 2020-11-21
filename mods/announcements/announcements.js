@@ -26,7 +26,7 @@ class Announcements extends ModTemplate {
 
       "Announcements" ,
 
-      `SELECT * FROM announcements WHERE id = MAX(id)`,
+      `SELECT * FROM announcements ORDER BY id DESC LIMIT 1`,
 
       (res) => {
 
