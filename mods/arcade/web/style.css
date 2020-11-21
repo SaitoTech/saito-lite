@@ -232,6 +232,13 @@ a {
   margin: 5px;
 }
 
+.invite-tile-wrapper .tiptext {
+  top: -1em;
+  left: 2.5em;
+  background-color: #444a;
+    color: #efefef !important;
+}
+
 @media only screen and (max-width: 1000px) {
   .game-inset-img {
     display: none;
@@ -1212,7 +1219,7 @@ option {
 
 #invite-game-spinner {
   margin: unset;
-  display: none;
+  display: block;
   justify-self: center;
   width: 6em;
   height: 6em;
@@ -1359,16 +1366,14 @@ span.rewards-row-name {
 }
 
 .game-loader {
-  position: absolute;
-  display: inline-block;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
+  display: block;
   margin-left: auto;
   margin-right: auto;
   background-color: transparent;
   z-index: 1000;
   padding: 10px;
+<<<<<<< HEAD
   background-color: whitesmoke;
 }
 
@@ -1390,6 +1395,10 @@ span.rewards-row-name {
   width: 6em;
   height: 6em;
   margin: 25%;
+=======
+  font-weight: bold;
+  font-size: 1.5em;
+>>>>>>> 9131d96b846254cf5ceb3eae8ad73fe36fb0a47b
 }
 
 }

@@ -12,9 +12,8 @@ console.log(JSON.stringify(invite.transaction));
     }
   }
 
-
   let playersHtml = `<div class="playerInfo" style="grid-template-columns: repeat(${invite.msg.players_needed}, 1fr);">`;
-  for(let i = 0; i < invite.msg.players_needed; i++) {
+  for (let i = 0; i < invite.msg.players_needed; i++) {
     if (i < 4) {
       if (i < invite.msg.players.length) {
         let identicon = app.keys.returnIdenticon(invite.msg.players[i]);

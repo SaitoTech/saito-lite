@@ -6,6 +6,15 @@ module.exports = ArcadeInfobox = {
 
     if (!document.querySelector(".arcade-infobox")) { app.browser.addElementToDom(ArcadeInfoboxTemplate(), "arcade-sub"); }
 
+    //
+    // show leaderboard
+    //
+    app.modules.respondTo("arcade-infobox").forEach(module => {
+      let obj = module.respondTo("arcade-infobox");
+      obj.render(app, mod);
+      obj.attachEvents(app, mod);
+    });
+
   },
 
 

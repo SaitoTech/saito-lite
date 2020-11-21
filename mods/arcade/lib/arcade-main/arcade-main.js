@@ -11,6 +11,12 @@ module.exports = ArcadeMain = {
   render(app, mod) {
 
     //
+    // avoid rendering over inits
+    //
+    if (mod.viewing_arcade_initialization_page == 1) { return; }
+
+
+    //
     // purge existing content
     //
     if (document.getElementById("arcade-main")) { document.getElementById("arcade-main").destroy(); }
@@ -328,6 +334,11 @@ module.exports = ArcadeMain = {
       }
       this.removeGameFromList(game_id);
     }
+  },
+
+
+  removeGameFromList(game_id) {
+    document.getElementById(`arcade-hero`).removeChild(document.getElementById(`invite-${game_id}`));
   }
 
 }

@@ -744,6 +744,19 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
   }
 
 
+  async receiveGameoverRequest(blk, tx, conf, app) {
+    let txmsg = tx.returnMessage();
+    let sql = "UPDATE games SET status = $status, winner = $winner WHERE game_id = $game_id";
+    let params = {
+      $status: 'over',
+      $game_id: txmsg.game_id,
+      $winner: txmsg.winner
+    }
+    await this.app.storage.executeDatabase(sql, params, "arcade");
+  }
+
+
+
   async receiveOpenRequest(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
@@ -1066,11 +1079,9 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
   async receiveAcceptRequest(blk, tx, conf, app) {
 
     if (this.browser_active == 1) {
-      let data = {};
-      data.arcade = this;
       if (tx.isTo(app.wallet.returnPublicKey())) {
-        ArcadeLoader.render(app, data);
-        ArcadeLoader.attachEvents(app, data);
+        GameLoader.render(app, this);
+        GameLoader.attachEvents(app, this);
         this.viewing_arcade_initialization_page = 1;
       }
     }
@@ -1162,12 +1173,12 @@ console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
         if (window.location.pathname.split('/')[2] == "invite") {
 alert("Invite Needs Processing!");
-          ArcadeLoader.render(this.app, this, game_id);
-          ArcadeLoader.attachEvents(this.app, mod);
+          GameLoader.render(this.app, this, game_id);
+          GameLoader.attachEvents(this.app, this);
           this.viewing_arcade_initialization_page = 1;
         } else {
-          ArcadeLoader.render(this.app, this, game_id);
-          ArcadeLoader.attachEvents(this.app, mod);
+          GameLoader.render(this.app, this, game_id);
+          GameLoader.attachEvents(this.app, this);
           this.viewing_arcade_initialization_page = 1;
         }
 
