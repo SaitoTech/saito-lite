@@ -1005,12 +1005,10 @@ div#message-wrapper {
 }
 
 .header-balance {
-  float: left;
   font-weight: normal;
-  margin-left: 20px;
+  margin: 0 3px 0 0;
 }
 .header-token {
-  float: left;
   font-weight: normal;
 }
 .header-mini-wallet {
@@ -1024,13 +1022,15 @@ div#message-wrapper {
   text-align: left;
   cursor: pointer;
 }
+
 .header-profile-photo {
   height: 75px;
   width: 75px;
   border: 1px solid #ddd;
   box-shadow: 0px 0px 1px 1px rgba(170, 170, 170, 0.75);
 }
-.header-username {
+
+.header-token {
   text-align: right;
   display: inline-block;
   padding-left: 0em;
@@ -1039,6 +1039,7 @@ div#message-wrapper {
   font-weight: bold;
   overflow: hidden;
 }
+
 .header-balance {
   text-align: left;
   display: inline-block;
@@ -1052,6 +1053,10 @@ div#message-wrapper {
   width: 10em;
   overflow: hidden;
   text-overflow: ellipsis;  
+}
+.profile-public-key {
+  width: 275px;
+  margin: 0 9em 0 0;
 }
 .header-mini-wallet .header-profile-photo {
   
@@ -1158,8 +1163,8 @@ div#message-wrapper {
 }
 
 .account-info {
-  display: grid;
-  grid-gap: 0em;
+  display: flex;
+  flex-flow: wrap;
 }
 
 .account-info div {
