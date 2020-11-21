@@ -4,7 +4,7 @@ module.exports = ArcadeMainTemplate = (app, mod) => {
     <div id="arcade-main" class="arcade-main">
       <div id="arcade-tab-buttons">
         <div id="tab-button-arcade" class="tab-button active-tab-button"><span>Invites</span></div>
-        <div id="tab-button-observables" class="tab-button"><span>Observe a Game</span></div>
+        <div id="tab-button-observables" class="tab-button"><span>Watch</span></div>
         <div id="tab-button-tournaments" class="tab-button"><span>Tournaments</span></div>
       </div>
       <div id="arcade-tabs">

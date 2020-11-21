@@ -133,7 +133,7 @@ a {
   margin: 0.25em;
 }
 
-.invite-title-wrapper {
+.invite-tile-wrapper {
   width: 100%;
   display: grid;
   grid-template-rows: 1fr;
@@ -238,7 +238,7 @@ a {
   .game-inset-img {
     display: none;
   }
-  .invite-title-wrapper {
+  .invite-tile-wrapper {
     grid-template-columns: 4fr 3fr 12em 8em;
   }
   .arcade-tile .gameName {
@@ -256,7 +256,7 @@ a {
   .arcade-tile {
     min-height: 10em;
   }
-  .invite-title-wrapper {
+  .invite-tile-wrapper {
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 12em;
     height: unset;

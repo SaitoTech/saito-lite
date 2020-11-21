@@ -31,7 +31,7 @@ console.log(JSON.stringify(invite.transaction));
 
   let inviteHtml = `
     <div id="invite-${invite.transaction.sig}" class="arcade-tile i_${idx} ${inviteTypeClass}" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);">
-      <div class="invite-title-wrapper">
+      <div class="invite-tile-wrapper">
         <div class="game-inset-img" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);"></div>
         <div class="invite-row-2">
           <div class="gameName">${invite.msg.game}</div>

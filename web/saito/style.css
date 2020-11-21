@@ -1486,6 +1486,10 @@ div#message-wrapper {
   .header h2 {
     font-size: 1em;
   }
+  .header-wrapper {
+    padding: 0;
+    grid-template-columns: 5em auto;
+  }
 }
 
 /* modals */
