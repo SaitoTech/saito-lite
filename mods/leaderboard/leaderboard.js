@@ -1,6 +1,6 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const LeaderboardSidebar = require('./lib/arcade-sidebar/side-leaderboard');
+const LeaderboardArcadeInfobox = require('./lib/arcade-infobox/arcade-infobox');
 const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
@@ -37,16 +37,14 @@ class Leaderboard extends ModTemplate {
     super.initialize(app);
 
     //
-    // main-panel games
+    // track which games?
     //
-/***
     if (this.app.modules.respondTo("arcade-games")) {
       this.app.modules.respondTo("arcade-games").forEach(mod => {
         this.mods.push(mod);
         this.affix_callbacks_to.push(mod.name);
       });
     }
-***/
 
   }
 
@@ -72,7 +70,7 @@ class Leaderboard extends ModTemplate {
     //
     // avoid errors for now
     //
-    return;
+    //return;
 
     if (arcade_self.browser_active == 1) {
 
@@ -256,25 +254,21 @@ console.log(" ... update ranking");
     await this.app.storage.executeDatabase(sql, {}, "leaderboard");
   }
 
-/*
+
   respondTo(type = "") {
-    if (type == "arcade-sidebar") {
+    if (type == "arcade-infobox") {
       let obj = {};
-      obj.render = this.renderSidebar;
-      obj.attachEvents = this.attachEventsSidebar;
+      obj.render = this.renderArcadeInfobox;
+      obj.attachEvents = this.attachEventsArcadeInfobox;
       return obj;
     }
     return null;
   }
-*/
-
-  renderSidebar(app, data) {
-    data.leaderboard = app.modules.returnModule("Leaderboard");
-    LeaderboardSidebar.render(app, data);
+  renderArcadeInfobox(app, mod) {
+    LeaderboardArcadeInfobox.render(app, app.modules.returnModule("Leaderboard"));
   }
-  attachEventsSidebar(app, data) {
-    data.leaderboard = app.modules.returnModule("Leaderboard");
-    LeaderboardSidebar.attachEvents(app, data);
+  attachEventsArcadeInfobox(app, mod) {
+    LeaderboardArcadeInfobox.attachEvents(app, app.modules.returnModule("Leaderboard"));
   }
 
   shouldAffixCallbackToModule(modname) {
