@@ -236,45 +236,7 @@ a {
   top: -1em;
   left: 2.5em;
   background-color: #444a;
-    color: #efefef !important;
-}
-
-@media only screen and (max-width: 1000px) {
-  .game-inset-img {
-    display: none;
-  }
-  .invite-tile-wrapper {
-    grid-template-columns: 4fr 3fr 1fr;
-  }
-  .arcade-tile .invite-row-2 {
-    grid-template-columns: 3fr 2fr;
-  }
-  .arcade-tile .gameName {
-    font-size: 2.2em;
-  }
-  .arcade-tile .gameShortDescription {
-    font-size: 2.2em;
-  }
-  .playerInfo {
-    transform: scale(0.8);
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .arcade-tile {
-    min-height: 10em;
-  }
-  .invite-tile-wrapper {
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 12em;
-    height: unset;
-  }
-  .arcade-tile .invite-row-2 {
-    grid-column: 1 / span 2;
-  }
-  .tab-button {
-    font-size: smaller;
-  }
+  color: #efefef !important;
 }
 
 .arcade-sub {
@@ -1373,7 +1335,6 @@ span.rewards-row-name {
   background-color: transparent;
   z-index: 1000;
   padding: 10px;
-<<<<<<< HEAD
   background-color: whitesmoke;
 }
 
@@ -1395,10 +1356,55 @@ span.rewards-row-name {
   width: 6em;
   height: 6em;
   margin: 25%;
-=======
-  font-weight: bold;
-  font-size: 1.5em;
->>>>>>> 9131d96b846254cf5ceb3eae8ad73fe36fb0a47b
 }
 
+@media only screen and (max-width: 1000px) {
+  .game-inset-img {
+    display: none;
+  }
+  .invite-tile-wrapper {
+    grid-template-columns: 4fr 3fr 1fr;
+  }
+  .arcade-tile .invite-row-2 {
+    grid-template-columns: 3fr 2fr;
+  }
+  .arcade-tile .gameName {
+    font-size: 2.2em;
+  }
+  .arcade-tile .gameShortDescription {
+    font-size: 2.2em;
+  }
+  .playerInfo {
+    transform: scale(0.8);
+  }
+  .saito-overlay, game-overlay {
+    width: 90%;
+  }
+  .game-wizard {
+    width: 100%;
+    max-height: calc(100vh - 7em);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .arcade-tile {
+    min-height: 10em;
+  }
+  .invite-tile-wrapper {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 12em;
+    height: unset;
+  }
+  .arcade-tile .invite-row-2 {
+    grid-column: 1 / span 2;
+  }
+  .tab-button {
+    font-size: smaller;
+  }
+  .saito-overlay, .game-overlay {
+    width: 100%;
+  }
+  .game-wizard-controls {
+    grid-template-columns: auto;
+  }
 }
