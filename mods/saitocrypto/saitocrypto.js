@@ -46,10 +46,10 @@ class SaitoCrypto extends ModTemplate {
   async getBal(){
     
     console.log("getbalanace");
-    //const wsProvider = new WsProvider('wss://rpc.polkadot.io');
+    const wsProvider = new WsProvider('wss://rpc.polkadot.io');
     //const wsProvider = new WsProvider('wss://localhost:8888');
     //const wsProvider = new WsProvider('ws://localhost:8887');
-    const wsProvider = new WsProvider('ws://localhost');
+    //const wsProvider = new WsProvider('ws://localhost');
     //const wsProvider = new WsProvider('ws://138.197.202.211');
     
     console.log("made provider");
@@ -78,6 +78,7 @@ class SaitoCrypto extends ModTemplate {
   initialize(app) {
 
     super.initialize(app);
+    //this.getBal();
   }
 
   initializeHTML(app) {
