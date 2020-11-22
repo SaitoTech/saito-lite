@@ -41,9 +41,28 @@ class DOTCrypto extends ModTemplate {
     return null;
   }
   async initializeApi() { 
+    console.log("initializeApi");
+    const wsProvider = new WsProvider('wss://rpc.polkadot.io');
+    //const wsProvider = new WsProvider('wss://localhost:8888');
+    //const wsProvider = new WsProvider('ws://localhost:8887');
+    //const wsProvider = new WsProvider('ws://localhost');
+    //const wsProvider = new WsProvider('ws://138.197.202.211');
+    
+    console.log("made provider");
+    // returns an API instance when connected, decorated and ready-to use...
+    //const api = await ApiPromise.create({ provider: wsProvider });  
+    //this._api = await ApiPromise.create({ provider: wsProvider });  
+    this._api = new ApiPromise({ provider: wsProvider });
+    console.log("made api");
+    await this._api.isReady;
+    console.log("api ready...");
+    
+    let ADDR = '5DTestUPts3kjeXSTMyerHihn1uwMfLj8vU8sqF7qYrFabHE';
+    ADDR = "13MfMQeGbBb73HAAGRctG8GomWg3mXumP2vnrrRqxBBbqiQH";
+    console.log("isReady");
   }
   async getApi() {
-    await api.isReady;
+    await this._api.isReady;
     return this._api;
   }
   async getPubkey() {
@@ -69,6 +88,9 @@ class DOTCrypto extends ModTemplate {
       // console.log("api read");
       // const { nonce, data: balance } = await api.query.system.account(this.optionsStorage.keypair.address);
       // console.log("got balance");
+      let api = await this.getApi();
+      const { nonce, data: balance } = await api.query.system.account(this.optionsStorage.keypair.address);
+      
       return balance.free;  
     } catch(error) {
       console.log("catch?????");
@@ -94,28 +116,12 @@ class DOTCrypto extends ModTemplate {
       throw "Module Not Installed: " + this.name;
     }
   }
-  async initialize(app) {
+  initialize(app) {
     console.log("****************** DOTCrypto initialize ******************");
-  
     const wsProvider = new WsProvider('wss://rpc.polkadot.io');
-    console.log("made provider");
-    const api = await ApiPromise.create({ provider: wsProvider });  
-    
-    try {
-      // //this._api = await ApiPromise.create({ provider: wsProvider });   
-      // console.log("made api");
-      // await api.isReady;
-      // console.log("api read");
-      // const { nonce, data: balance } = await api.query.system.account('5DTestUPts3kjeXSTMyerHihn1uwMfLj8vU8sqF7qYrFabHE');
-      // console.log("got balance");
-  
-  
 
-    //  this.initializeApi();
-    } catch(error) {
-      console.log("load api error.");
-      console.log(error);
-    }
+    this._api = new ApiPromise({ provider: wsProvider });
+    
     this.load();
     
     if(!this.optionsStorage.keypair) {

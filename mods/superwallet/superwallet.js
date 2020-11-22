@@ -8,8 +8,8 @@ class SuperWallet extends ModTemplate {
     super(app);
 
     this.name = "SuperWallet";
-    this.description = "Interface for creating and joining games coded for the Saito Open Source Game Engine.";
-    this.categories = "Games Entertainment";
+    this.description = "";
+    this.categories = "";
     this.default_html = 1;
   }
   
