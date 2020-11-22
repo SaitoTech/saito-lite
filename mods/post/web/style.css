@@ -1,0 +1,48 @@
+
+.post-teaser {
+  margin-bottom: 40px;
+}
+
+.post-teaser-thumbnail {
+  float: left;
+  min-width: 50px;
+}
+
+.post-teaser-title {
+  float: left;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.post-teaser-sublinks {
+  clear: both;
+  font-size: 0.8em;
+}
+
+.post-teaser-posted-by {
+  float: left;
+  margin-right: 1em;
+}
+
+.post-teaser-user {
+  float: left;
+  font-weight: bold;
+}
+
+.post-teaser-comments {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+  text-decoration: underline;
+}
+
+.post-teaser-report {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+  text-decoration: underline;
+}
+
+
+
+

@@ -1,9 +1,7 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
-
-const ArcadeSidebar = require('./lib/arcade-sidebar/post-sidebar');
-
-const AddressController = require('../../lib/ui/menu/address-controller');
+const PostMain = require('./lib/post-main/post-main');
+const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 
 class Post extends ModTemplate {
 
@@ -13,12 +11,27 @@ class Post extends ModTemplate {
 
     this.name = "Post";
 
+    this.header = new SaitoHeader(app, this);
+    this.events = ['chat-render-request'];
+
+
+
     this.post = {};
     this.post.domain = "saito";
+
 
     this.icon_fa = "fa fa-map-signs";
     this.description = `Simple forum for persistent posts and discussions`;
     this.categories = "Social Messaging";
+  }
+
+  receiveEvent(type, data) {
+    if (type == 'chat-render-request') {
+      if (this.browser_active) {
+        PostMain.render(this.app, this);
+        PostMain.attachEvents(this.app, this);
+      }
+    }
   }
 
   returnServices() {
@@ -27,17 +40,19 @@ class Post extends ModTemplate {
     return services;
   }
 
-  initialize(app) {
+  initializeHTML(app) {
 
-    super.initialize(app);
-    if (this.browser_active == 0) { return; }
+    this.header.render(app, this);
+    this.header.attachEvents(app, this);
+
+    PostMain.render(app, this);
+    PostMain.attachEvents(app, this);
 
   }
 
   onConfirmation(blk, tx, conf, app) {
 
     if (app.BROWSER == 0) {
-
       if (conf == 0) {
 
         let post_self = app.modules.returnModule("Post");

@@ -1,35 +1,37 @@
-const PostSidebarTemplate = require('./post-sidebar.template');
-const NewPost = require('../post/new-post');
-const ShowPost = require('../post/show-post');
+const PostMainTemplate = require('./post-main.template');
+const PostTeaserTemplate = require('./post-teaser.template');
 
 module.exports = PostSidebar = {
 
-  loaded: 0,
-  contentLoaded: 0,
+  render(app, mod) {
 
-  render(app, data) {
-    if (this.loaded == 0) {
-      try {
-        document.querySelector(".arcade-left-sidebar-apps").innerHTML += PostSidebarTemplate(app, data);
-        this.loaded = 1;
-      } catch (err) {
-        console.log(err);
+    if (!document.getElementById("post-main")) {
+      app.browser.addElementToDom(PostMainTemplate());
+      for (let i = 0; i < 10; i++) {
+        app.browser.addElementToDom(PostTeaserTemplate(), "post-posts");
       }
     }
 
-  },
-
-  attachEvents(app, data) {
-
-    // add button
-    document.querySelector(".new-post").addEventListener('click', (e) => {
-      if (!document.querySelector('.new-post-wrapper')) {
-        NewPost.render(app, data);
-        NewPost.attachEvents(app, data);
+    app.modules.respondTo("email-chat").forEach(module => {
+      if (module != null) {
+        module.respondTo('email-chat').render(app, module);
       }
     });
+
   },
 
+
+  attachEvents(app, mod) {
+
+    app.modules.respondTo("email-chat").forEach(module => {
+      module.respondTo('email-chat').attachEvents(app, mod);
+    });
+
+  },
+
+
+
+/***
   addPosts(app, data) {
     if (this.contentLoaded == 0) {
       try {
@@ -105,6 +107,8 @@ module.exports = PostSidebar = {
       });
     }
   }
+***/
+
 
 }
 
