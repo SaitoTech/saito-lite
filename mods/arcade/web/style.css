@@ -54,7 +54,7 @@ a {
 
 .arcade-main {
   display: grid;
-  grid-template-rows: 40px 45vh auto;
+  grid-template-rows: 40px 45vh calc(100vh - 40px - 5em - 45vh);
 }
 
 #arcade-tab-buttons {
@@ -227,9 +227,7 @@ a {
   background: linear-gradient(45deg, #540e81, #b539e8) !important;
   font-size: 1.2em;
   border-radius: 5px;
-  height: 4em;
-  max-height: 6em;
-  margin: 5px;
+  flex-grow: 1;
 }
 
 .invite-tile-wrapper .tiptext {
@@ -252,7 +250,6 @@ a {
 .arcade-infobox {
   border: 1px solid var(--saito-red);
   padding: 1em;
-  margin: 0 0 1em 0;
   overflow-y: auto;
 }
 
@@ -260,7 +257,6 @@ a {
   border: 1px solid var(--saito-red);
   padding: 1em;
   background-color: #4444;
-  margin: 0 0 1em 0;
   overflow-y: auto;
 }
 
