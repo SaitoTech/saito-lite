@@ -21,6 +21,7 @@ class Post extends ModTemplate {
     this.post = {};
     this.post.domain = "saito";
     this.posts = [];
+    this.comments = [];
 
     this.icon_fa = "fa fa-map-signs";
     this.description = `Simple forum for persistent posts and discussions`;
@@ -34,6 +35,28 @@ class Post extends ModTemplate {
         PostSidebar.attachEvents(this.app, this);
       }
     }
+  }
+
+
+
+  //
+  // manually announce arcade banner support
+  //
+  respondTo(type) {
+
+    if (super.respondTo(type) != null) {
+      return super.respondTo(type);
+    }
+
+    if (type == "arcade-posts") {
+      let obj = {};
+      obj.render = this.renderArcade;;
+      obj.attachEvents = function() {};
+      return obj;
+    }
+
+    return null;
+
   }
 
   returnServices() {
@@ -53,6 +76,7 @@ class Post extends ModTemplate {
     PostMain.render(app, this);
     PostMain.attachEvents(app, this);
   }
+
 
   onConfirmation(blk, tx, conf, app) {
 
@@ -90,7 +114,7 @@ class Post extends ModTemplate {
     //
     // fetch posts from server
     //
-    let sql = "SELECT id, children, tx FROM posts ORDER BY ts DESC";
+    let sql = `SELECT id, children, tx FROM posts WHERE parent_id = "" ORDER BY ts DESC`;
     this.sendPeerDatabaseRequestWithFilter(
 
         "Post" ,
@@ -113,6 +137,8 @@ class Post extends ModTemplate {
     );
   }
 
+
+
   render() {
 
     if (this.renderMethod === "main") {
@@ -125,6 +151,11 @@ class Post extends ModTemplate {
       ArcadePosts.attachEvents(this.app, this);
     }
 
+  }
+
+  renderArcade(app, mod) {
+    mod.renderMethod = "arcade";
+    mod.render(app, mod);
   }
 
 
@@ -191,6 +222,84 @@ class Post extends ModTemplate {
 	$ptext		: txmsg.comment ,
 	$pforum		: txmsg.forum ,
 	$plink		: txmsg.link ,
+	$ptx		: JSON.stringify(tx.transaction) ,
+	$pts		: tx.transaction.ts ,
+	$pchildren	: 0 ,
+	$pflagged 	: 0 ,
+	$pdeleted	: 0 ,
+    };
+
+    await this.app.storage.executeDatabase(sql, params, "post");
+
+  }
+
+
+
+  createCommentTransaction(parent_id, comment) {
+
+      let newtx = this.app.wallet.createUnsignedTransaction();
+
+      newtx.msg.module = "Post";
+      newtx.msg.type = "comment";
+      newtx.msg.parent_id = parent_id;
+      newtx.msg.thread_id = parent_id;
+      newtx.msg.title = "";
+      newtx.msg.comment = comment;
+      newtx.msg.link = "";
+      newtx.msg.forum = "";
+      newtx.msg.images = [];      
+
+      return this.app.wallet.signTransaction(newtx);
+      
+  }
+  async receiveCommentTransaction(tx) {
+
+    let txmsg = tx.returnMessage();
+    let sql = `
+        INSERT INTO 
+            posts (
+                id,
+                thread_id,
+                parent_id, 
+                type,
+		publickey,
+                title,
+                text,
+		forum,
+		link,
+                tx, 
+                ts,
+                children,
+                flagged,
+                deleted
+                ) 
+            VALUES (
+                $pid ,
+	        $pthread_id ,
+                $pparent_id ,
+                $ptype ,
+		$ppublickey ,
+		$ptitle ,
+		$ptext ,
+		$pforum ,
+		$plink ,
+		$ptx ,
+		$pts ,
+		$pchildren ,
+		$pflagged ,
+		$pdeleted
+            );
+        `;
+    let params = {
+	$pid 		: tx.transaction.sig ,
+	$pthread_id 	: txmsg.thread_id ,
+	$pparent_id	: txmsg.parent_id ,
+	$ptype		: 'comment' ,
+	$ppublickey	: tx.transaction.from[0].add ,
+	$ptitle		: '' ,
+	$ptext		: txmsg.comment ,
+	$pforum		: '' ,
+	$plink		: '' ,
 	$ptx		: JSON.stringify(tx.transaction) ,
 	$pts		: tx.transaction.ts ,
 	$pchildren	: 0 ,

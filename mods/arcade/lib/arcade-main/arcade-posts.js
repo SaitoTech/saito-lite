@@ -6,6 +6,13 @@ module.exports = ArcadePosts = {
 
     if (!document.querySelector(".arcade-posts")) { app.browser.addElementToDom(ArcadePostsTemplate(), "arcade-sub"); }
 
+    app.modules.respondTo("arcade-posts").forEach(module => {
+      if (module != null) {
+        module.respondTo('arcade-posts').render(app, module);
+      }
+    });
+
+
   },
 
 
