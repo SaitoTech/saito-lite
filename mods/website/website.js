@@ -44,9 +44,8 @@ class Website extends ModTemplate {
     `;
     var iconlist = document.querySelector('.header-icon-links');
     iconlist.insertBefore(app.browser.htmlToElement(html), iconlist.firstChild);
-    ***/
-
 ***/
+  }
 
 
   onConfirmation(blk, tx, conf, app) {
