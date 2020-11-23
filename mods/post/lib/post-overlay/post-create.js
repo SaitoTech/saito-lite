@@ -1,9 +1,17 @@
 const PostCreateTemplate = require('./post-create.template');
 const SaitoOverlay = require('./../../../../lib/saito/ui/saito-overlay/saito-overlay');
 
+
 module.exports = PostCreate = {
 
   render(app, mod) {
+
+    this.new_post = {};
+    this.new_post.images = [];
+    this.new_post.title = "";
+    this.new_post.comment = "";
+    this.new_post.link = "";
+    this.new_post.forum = "";
 
     mod.overlay = new SaitoOverlay(app, mod);
     mod.overlay.render(app, mod);
@@ -18,12 +26,37 @@ module.exports = PostCreate = {
     document.querySelector('.post-create-header-link').onclick = (e) =>       { this.showTab("link"); }
     document.querySelector('.post-create-header-image').onclick = (e) =>      { this.showTab("image"); }
 
-  },
+    app.browser.addDragAndDropFileUploadToElement("post-create-image", (file) => {
+      console.log(file);
+      this.new_post.images.push(file);
+    });
 
+  },
 
   attachEvents(app, mod) {
 
+    document.querySelector('.post-submit-btn').onclick = (e) => {
+
+      this.new_post.title = document.querySelector('.post-create-title').value;
+      this.new_post.comment = document.querySelector('.post-create-textarea').innerHTML;
+      this.new_post.link = document.querySelector('.post-create-link').value;
+      this.new_post.forum = document.querySelector('.post-create-forum').value;
+
+      let newtx = mod.createPostTransaction(this.new_post.title, this.new_post.comment, this.new_post.link, this.new_post.forum, this.new_post.images);
+      app.network.propagateTransaction(newtx);
+
+      newtx.children = 0;
+      mod.posts.push(newtx);
+      mod.render();
+
+      mod.overlay.hideOverlay();
+
+    }
+
   },
+
+
+
 
 
   showTab(tab) {

@@ -2,6 +2,7 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const PostMain = require('./lib/post-main/post-main');
 const PostSidebar = require('./lib/post-sidebar/post-sidebar');
+const ArcadePosts = require('./lib/arcade-posts/arcade-posts');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 
 
@@ -15,10 +16,11 @@ class Post extends ModTemplate {
 
     this.header = new SaitoHeader(app, this);
     this.events = ['chat-render-request'];
+    this.renderMethod = "none";
 
     this.post = {};
     this.post.domain = "saito";
-
+    this.posts = [];
 
     this.icon_fa = "fa fa-map-signs";
     this.description = `Simple forum for persistent posts and discussions`;
@@ -57,55 +59,93 @@ class Post extends ModTemplate {
     if (app.BROWSER == 0) {
       if (conf == 0) {
 
-        let post_self = app.modules.returnModule("Post");
+	if (tx.msg.module === "Post") {
 
-        if (tx.msg.type == "post") {
-          post_self.receivePostTransaction(tx);
+          let post_self = app.modules.returnModule("Post");
+
+          if (tx.msg.type == "post") {
+            post_self.receivePostTransaction(tx);
+          }
+          if (tx.msg.type == "comment") {
+            post_self.receiveCommentTransaction(tx);
+          }
+          if (tx.msg.type == "update") {
+            post_self.updatePostTransaction(tx);
+          }
+          if (tx.msg.type == "delete") {
+            post_self.deletePostTransaction(tx);
+            post_self.deleteCommentCountPostTransaction(tx);
+          }
+          //if (tx.msg.type == "report") {
+          //  post_self.receiveReportTransaction(tx);
+          //}
         }
-        if (tx.msg.type == "update") {
-          post_self.updatePostTransaction(tx);
-        }
-        if (tx.msg.type == "comment") {
-          post_self.receiveVoteTransaction(tx);
-          post_self.updateCommentCountPostTransaction(tx);
-        }
-        if (tx.msg.type == "delete") {
-          post_self.deletePostTransaction(tx);
-          post_self.deleteCommentCountPostTransaction(tx);
-        }
-        //if (tx.msg.type == "stick") {
-        //  post_self.receiveReportTransaction(tx);
-        //}
       }
+    }
+  }
+
+
+  onPeerHandshakeComplete(app, peer) {
+
+    //
+    // fetch posts from server
+    //
+    let sql = "SELECT id, children, tx FROM posts ORDER BY ts DESC";
+    this.sendPeerDatabaseRequestWithFilter(
+
+        "Post" ,
+
+        sql ,
+
+        (res) => {
+          if (res) {
+            if (res.rows) {
+              for (let i = 0; i < res.rows.length; i++) {
+		this.posts.push(new saito.transaction(JSON.parse(res.rows[i].tx)));
+		this.posts[this.posts.length-1].children = res.rows[i].children;
+              }
+            }
+          }
+
+	  this.render();
+
+        }
+    );
+  }
+
+  render() {
+
+    if (this.renderMethod === "main") {
+      PostMain.render(this.app, this);
+      PostMain.attachEvents(this.app, this);
+    }
+
+    if (this.renderMethod === "arcade") {
+      ArcadePosts.render(this.app, this);
+      ArcadePosts.attachEvents(this.app, this);
     }
 
   }
 
-  createPostTransaction(content, type = "post", thread_id = "", parent_id = "") {
 
-    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+  createPostTransaction(title, comment, link, forum, images) {
 
-    //
-    // broadcast post tx generator
-    //
-    tx.msg.module = "Post";
-    tx.msg.type = "post";
+      let newtx = this.app.wallet.createUnsignedTransaction();
 
-    tx.msg.content = content;
-    tx.msg.thread_id = thread_id;
-    tx.msg.parent_id = parent_id;
-    tx.msg.type = type;
-
-    tx = this.app.wallet.signTransaction(tx);
-
-    return tx;
-
+      newtx.msg.module = "Post";
+      newtx.msg.type = "post";
+      newtx.msg.title = title;
+      newtx.msg.comment = comment;
+      newtx.msg.link = link;
+      newtx.msg.forum = forum;
+      newtx.msg.images = images;
+      
+      return this.app.wallet.signTransaction(newtx);
+      
   }
-
   async receivePostTransaction(tx) {
 
     let txmsg = tx.returnMessage();
-
     let sql = `
         INSERT INTO 
             posts (
@@ -113,30 +153,55 @@ class Post extends ModTemplate {
                 thread_id,
                 parent_id, 
                 type,
-                author, 
-                content, 
-                post_transaction, 
+		publickey,
+                title,
+                text,
+		forum,
+		link,
+                tx, 
                 ts,
                 children,
+                flagged,
                 deleted
                 ) 
             VALUES (
-                '${tx.transaction.sig}',
-                '${txmsg.thread_id}',
-                '${txmsg.parent_id}', 
-                '${txmsg.type}',
-                '${tx.transaction.from[0].add}', 
-                '${txmsg.content}', 
-                '${JSON.stringify(tx.transaction)}', 
-                ${tx.transaction.ts},
-                0,
-                0
-                );
+                $pid ,
+	        $pthread_id ,
+                $pparent_id ,
+                $ptype ,
+		$ppublickey ,
+		$ptitle ,
+		$ptext ,
+		$pforum ,
+		$plink ,
+		$ptx ,
+		$pts ,
+		$pchildren ,
+		$pflagged ,
+		$pdeleted
+            );
         `;
-    var params = {};
+    let params = {
+	$pid 		: tx.transaction.sig ,
+	$pthread_id 	: tx.transaction.sig ,
+	$pparent_id	: '' ,
+	$ptype		: 'post' ,
+	$ppublickey	: tx.transaction.from[0].add ,
+	$ptitle		: txmsg.title ,
+	$ptext		: txmsg.comment ,
+	$pforum		: txmsg.forum ,
+	$plink		: txmsg.link ,
+	$ptx		: JSON.stringify(tx.transaction) ,
+	$pts		: tx.transaction.ts ,
+	$pchildren	: 0 ,
+	$pflagged 	: 0 ,
+	$pdeleted	: 0 ,
+    };
 
     await this.app.storage.executeDatabase(sql, params, "post");
+
   }
+
 
   async updatePostTransaction(tx) {
 
@@ -166,7 +231,7 @@ class Post extends ModTemplate {
       `;
   }
 
-  async stickPostTransaction(tx) {
+  async reportPostTransaction(tx) {
 
     let txmsg = tx.returnMessage();
 
@@ -175,34 +240,6 @@ class Post extends ModTemplate {
           posts
         SET
           ts = ${tx.transaction.ts}
-        WHERE
-          id = '${txmsg.parent_id};
-      `;
-  }
-
-  async updateCommentCountPostTransaction(tx) {
-
-    let txmsg = tx.returnMessage();
-
-    let sql = `
-        UPDATE 
-          posts
-        SET
-          children = children + 1
-        WHERE
-          id = '${txmsg.parent_id};
-      `;
-  }
-
-  async deleteCommentCountPostTransaction(tx) {
-
-    let txmsg = tx.returnMessage();
-
-    let sql = `
-        UPDATE 
-          posts
-        SET
-          children = children - 1
         WHERE
           id = '${txmsg.parent_id};
       `;

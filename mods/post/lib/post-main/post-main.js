@@ -2,9 +2,11 @@ const PostMainTemplate = require('./post-main.template');
 const PostTeaserTemplate = require('./post-teaser.template');
 const PostView = require('./../post-overlay/post-view');
 
-module.exports = PostSidebar = {
+module.exports = PostMain = {
 
   render(app, mod) {
+
+    mod.renderMethod = "main";
 
     //
     // add parent wrapping class
@@ -14,9 +16,9 @@ module.exports = PostSidebar = {
     }
     if (!document.querySelector(".post-main")) { 
       app.browser.addElementToDom(PostMainTemplate(app, mod), "post-container"); 
-      for (let i = 0; i < 10; i++) {
-        app.browser.addElementToDom(PostTeaserTemplate(), "post-main");
-      }
+    }
+    for (let i = 0; i < mod.posts.length; i++) {
+      this.addPost(app, mod, mod.posts[i]);
     }
 
   },
@@ -26,14 +28,26 @@ module.exports = PostSidebar = {
 
     document.querySelectorAll('.post-teaser-title').forEach(el => { 
       el.onclick = (e) => {
-        PostView.render(app, mod);
-        PostView.attachEvents(app, mod);
+	let sig = e.currentTarget.getAttribute("data-id");
+        PostView.render(app, mod, sig);
+        PostView.attachEvents(app, mod, sig);
       }
     });
 
-   
+    document.querySelectorAll('.post-teaser-comments').forEach(el => { 
+      el.onclick = (e) => {
+	let sig = e.currentTarget.getAttribute("data-id");
+        PostView.render(app, mod, sig);
+        PostView.attachEvents(app, mod, sig);
+      }
+    });
+
 
   },
+
+  addPost(app, mod, post) {
+    app.browser.addElementToDom(PostTeaserTemplate(app, mod, post), "post-posts");
+  }
 
 
 }

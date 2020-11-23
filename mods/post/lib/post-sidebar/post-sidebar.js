@@ -13,9 +13,6 @@ module.exports = PostSidebar = {
     }
     if (!document.querySelector(".post-sidebar")) { 
       app.browser.addElementToDom(PostSidebarTemplate(app, mod), "post-container"); 
-      for (let i = 0; i < 10; i++) {
-        app.browser.addElementToDom(PostTeaserTemplate(), "post-posts");
-      }
     }
 
     app.modules.respondTo("email-chat").forEach(module => {
@@ -25,10 +22,8 @@ module.exports = PostSidebar = {
     });
 
     document.querySelector(".post-sidebar-create-btn").onclick = (e) => {
-
       PostCreate.render(app, mod);
       PostCreate.attachEvents(app, mod);
-
     };
 
   },
