@@ -1,7 +1,9 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const PostMain = require('./lib/post-main/post-main');
+const PostSidebar = require('./lib/post-sidebar/post-sidebar');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
+
 
 class Post extends ModTemplate {
 
@@ -13,8 +15,6 @@ class Post extends ModTemplate {
 
     this.header = new SaitoHeader(app, this);
     this.events = ['chat-render-request'];
-
-
 
     this.post = {};
     this.post.domain = "saito";
@@ -28,8 +28,8 @@ class Post extends ModTemplate {
   receiveEvent(type, data) {
     if (type == 'chat-render-request') {
       if (this.browser_active) {
-        PostMain.render(this.app, this);
-        PostMain.attachEvents(this.app, this);
+        PostSidebar.render(this.app, this);
+        PostSidebar.attachEvents(this.app, this);
       }
     }
   }
@@ -45,9 +45,11 @@ class Post extends ModTemplate {
     this.header.render(app, this);
     this.header.attachEvents(app, this);
 
+    PostSidebar.render(this.app, this);
+    PostSidebar.attachEvents(this.app, this);
+
     PostMain.render(app, this);
     PostMain.attachEvents(app, this);
-
   }
 
   onConfirmation(blk, tx, conf, app) {
