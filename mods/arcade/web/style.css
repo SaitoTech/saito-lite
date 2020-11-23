@@ -257,7 +257,6 @@ a {
   border: 1px solid var(--saito-red);
   padding: 1em;
   background-color: #4444;
-  margin: 0 0 1em 0;
   overflow-y: auto;
 }
 
