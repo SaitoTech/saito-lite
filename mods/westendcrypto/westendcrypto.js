@@ -4,16 +4,16 @@ const { Keyring }  = require('@polkadot/keyring');
 const { mnemonicGenerate } = require('@polkadot/util-crypto');
 const { ApiPromise, WsProvider }  = require('@polkadot/api');
 const { randomBytes }   = require('crypto');
-class DOTCrypto extends ModTemplate {
+class WestendCrypto extends ModTemplate {
 
   constructor(app) {
 
     super(app);
 
-    this.name = "DOTCrypto";
+    this.name = "WestendCrypto";
     this.description = "Payment Gateway for DOT cryptocurrency in Saito Application";
     this.categories = "Crptocurrency";
-    this.ticker = "DOT";
+    this.ticker = "WESTIE";
     this.optionsStorage = {};
     this.app = app;
     this._api = null; // treat as private, please use getApi to access
@@ -35,41 +35,27 @@ class DOTCrypto extends ModTemplate {
     return null;
   }
   async initializeApi() { 
-    console.log("initializeApi");
-    const wsProvider = new WsProvider('wss://rpc.polkadot.io');
-    //const wsProvider = new WsProvider('wss://localhost:8888');
-    //const wsProvider = new WsProvider('ws://localhost:8887');
-    //const wsProvider = new WsProvider('ws://localhost');
-    //const wsProvider = new WsProvider('ws://138.197.202.211');
-    
-    console.log("made provider");
-    // returns an API instance when connected, decorated and ready-to use...
-    //const api = await ApiPromise.create({ provider: wsProvider });  
-    //this._api = await ApiPromise.create({ provider: wsProvider });  
+    const wsProvider = new WsProvider('ws://localhost');
     this._api = new ApiPromise({ provider: wsProvider });
-    console.log("made api");
     await this._api.isReady;
-    console.log("api ready...");
   }
   async getApi() {
-    console.log("getapi");
+    console.log("WestendCrypto getapi");
     console.log(this._api);
     await this._api.isReady;
-    console.log("ready...");
+    console.log("WestendCrypto ready...");
     return this._api;
   }
   async getPubkey() {
-    return this.optionsStorage.keypair3.address;
+    return this.optionsStorage.keypair.address;
   }
   async getBal(){
-    console.log("getbalance");
     let api = await this.getApi();
-    console.log("got api");
-    const { nonce, data: balance } = await api.query.system.account(this.optionsStorage.keypair3.address);
+    const { nonce, data: balance } = await api.query.system.account(this.optionsStorage.keypair.address);
     return balance.free;  
   }
   async transfer(howMuch, to) {
-    console.log("transfer");
+    console.log("WestendCrypto transfer");
     console.log(howMuch);
     console.log(to);
     // let api = await this.getApi();
@@ -95,14 +81,14 @@ class DOTCrypto extends ModTemplate {
     }
   }
   initialize(app) {
-    console.log("****************** DOTCrypto initialize ******************");
+    console.log("****************** WestendCrypto initialize ******************");
     if(app.BROWSER) {
       super.initialize(app);
       const wsProvider = new WsProvider('wss://rpc.polkadot.io');
       this._api = new ApiPromise({ provider: wsProvider });
       this.getApi();
       this.load();
-        // sr25519 only has a WASM interface
+      // sr25519 only has a WASM interface
       const keyring = new Keyring({ type: 'ed25519', ss58Format: 2 });
       if(!this.optionsStorage.keypair) {
         this.optionsStorage.keypair = keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
@@ -147,5 +133,5 @@ class DOTCrypto extends ModTemplate {
 
 }
 
-module.exports = DOTCrypto;
+module.exports = WestendCrypto;
 
