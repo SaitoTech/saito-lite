@@ -17,7 +17,7 @@ module.exports = ArcadePosts = {
 
   attachEvents(app, mod) {
 
-    document.querySelectorAll('.post-teaser-title').forEach(el => {
+    document.querySelectorAll('.arcade-post-title').forEach(el => {
       el.onclick = (e) => {
         let sig = e.currentTarget.getAttribute("data-id");
         PostView.render(app, mod, sig);
@@ -25,7 +25,7 @@ module.exports = ArcadePosts = {
       }
     });
 
-    document.querySelectorAll('.post-teaser-comments').forEach(el => {
+    document.querySelectorAll('.arcade-post-comments').forEach(el => {
       el.onclick = (e) => {
         let sig = e.currentTarget.getAttribute("data-id");
         PostView.render(app, mod, sig);

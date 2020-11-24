@@ -89,6 +89,7 @@
   background-color: whitesmoke;
   padding: 20px;
   border-radius: 20px;
+  color: #444;
 }
 
 .post-create-header {
@@ -170,6 +171,7 @@
 /* Post View */
 
 .post-view-container {
+  color: #444;
   width: 90vw;
   min-height: 90vh;
   max-height: 90vh;
@@ -210,9 +212,14 @@
 }
 
 .post-view-report {
+  color: #888;
   float: left;
-  font-weight: bold;
   margin-left: 1em;
+  cursor: pointer;
+}
+.post-view-report:hover {
+  color: #444;
+  cursor: pointer;
   text-decoration: underline;
 }
 

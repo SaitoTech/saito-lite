@@ -6,13 +6,13 @@ module.exports = PostTeaserTemplate = (app, mod, tx) => {
   if (tx.children > 1) { cmt = (tx.children+" comments"); }
 
   return `
-    <div data-id="${tx.transaction.sig}" id="post-teaser" class="post-teaser">
-        <div id="post-teaser-thumbnail" class="post-teaser-thumbnail" style="background-image: url('/post/img/post-logo.png');"></div>
-        <div  data-id="${tx.transaction.sig}" id="post-teaser-title" class="post-teaser-title">${tx.msg.title}</div>
-        <div id="post-teaser-sublinks"  class="post-teaser-sublinks">
-          <div id="post-teaser-posted-by" class="post-teaser-posted-by">posted by </div>
-          <div id="post-teaser-user" class="post-teaser-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
-          <div data-id="${tx.transaction.sig}" id="post-teaser-comments" class="post-teaser-comments">${cmt}</div>
+    <div data-id="${tx.transaction.sig}" id="arcade-post" class="arcade-post">
+        <div id="arcade-post-thumbnail" class="arcade-post-thumbnail" style="background-image: url('/post/img/post-logo.png');"></div>
+        <div  data-id="${tx.transaction.sig}" id="arcade-post-title" class="arcade-post-title">${tx.msg.title}</div>
+        <div id="arcade-post-sublinks"  class="arcade-post-sublinks">
+          <div id="arcade-post-posted-by" class="arcade-post-posted-by">posted by </div>
+          <div id="arcade-post-user" class="arcade-post-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
+          <div data-id="${tx.transaction.sig}" id="arcade-post-comments" class="arcade-post-comments">${cmt}</div>
         </div>
     </div>
 
