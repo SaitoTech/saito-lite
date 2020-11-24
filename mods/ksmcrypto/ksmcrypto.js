@@ -26,7 +26,7 @@ class KSMCrypto extends ModTemplate {
         ticker: this.ticker,
         getBalance: this.getBal.bind(this),
         transfer: this.transfer.bind(this),
-        getPubkey: this.getPubkey.bind(this),
+        getAddress: this.getAddress.bind(this),
         subscribe: null,
         getKeyring: null,
         buildRawTx: null,
@@ -45,7 +45,7 @@ class KSMCrypto extends ModTemplate {
     console.log("KSMCrypto ready...");
     return this._api;
   }
-  async getPubkey() {
+  async getAddress() {
     return this.optionsStorage.keypair.address;
   }
   async getBal(){
@@ -83,7 +83,10 @@ class KSMCrypto extends ModTemplate {
     console.log("****************** KSMCrypto initialize ******************");
     if(app.BROWSER) {
       super.initialize(app);
-      const provider = new WsProvider('wss://kusama-rpc.polkadot.io/');
+      // Parity Archive Node
+      const wsProvider = new WsProvider('wss://kusama-rpc.polkadot.io/');
+      // Web3 Foundation Archive Node
+      const altWsProvider = new WsProvider('wss://cc3-5.kusama.network/')
       this._api = new ApiPromise({ provider: wsProvider });
       this.getApi();
       this.load();

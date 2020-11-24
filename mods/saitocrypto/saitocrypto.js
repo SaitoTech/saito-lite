@@ -30,7 +30,7 @@ class SaitoCrypto extends ModTemplate {
         // sign and send a raw transaction
         signAndSend: null,
         subscribe: null,
-        getPubkey: async() => { return "asdf"; },
+        getAddress: async() => { return "asdf"; },
         getKeyring: null,
         buildRawTx: null,
       }
