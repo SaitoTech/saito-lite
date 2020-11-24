@@ -1,23 +1,25 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const { Keyring }  = require('@polkadot/keyring');
+const { Keyring, decodeAddress, encodeAddress } = require('@polkadot/keyring');
 const { mnemonicGenerate } = require('@polkadot/util-crypto');
 const { ApiPromise, WsProvider }  = require('@polkadot/api');
 const { randomBytes }   = require('crypto');
-class WestendCrypto extends ModTemplate {
+class DOTCrypto2 extends ModTemplate {
 
   constructor(app) {
 
     super(app);
 
-    this.name = "WestendCrypto";
+    this.name = "DOTCrypto2";
     this.description = "Payment Gateway for DOT cryptocurrency in Saito Application";
     this.categories = "Crptocurrency";
-    this.ticker = "WESTIE";
+    this.ticker = "DOT2";
     this.optionsStorage = {};
     this.app = app;
     this._api = null; // treat as private, please use getApi to access
     this.mods = [];
+    this.keypair = null;
+    this.keyring = null;
   }
   
   requestInterface(type = "") {
@@ -34,34 +36,38 @@ class WestendCrypto extends ModTemplate {
     }
     return null;
   }
-  async initializeApi() { 
-    const wsProvider = new WsProvider('ws://localhost');
-    this._api = new ApiPromise({ provider: wsProvider });
-    await this._api.isReady;
-  }
   async getApi() {
-    console.log("WestendCrypto getapi");
-    console.log(this._api);
     await this._api.isReady;
-    console.log("WestendCrypto ready...");
     return this._api;
   }
-  async getAddress() {
-    return this.optionsStorage.keypair.address;
+  // address can be any format
+  getFormattedAddress(address, format = "polkadot") {
+    // https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)
+    // give some semantics to the polkadot magic numbers
+    let formats = {"polkadot": 0, "kusama": 2, "substrateRaw": 42 };
+    return encodeAddress(decodeAddress(address), formats[format]);
+  }
+  getAddress() {
+    return this.keypair.address;
+    //return this.getFormattedAddress(this.keypair.address, "polkadot");
   }
   async getBal(){
     let api = await this.getApi();
-    const { nonce, data: balance } = await api.query.system.account(this.optionsStorage.keypair.address);
+    //5ERZ1oCunsuRueffZBEfsScu169GReLHb84yaETzMQZcsjko
+    console.log("getbalance");
+    console.log(this.keypair);
+    console.log(this.keypair.address);
+    const { nonce, data: balance } = await api.query.system.account(this.getFormattedAddress(this.keypair.address, "substrateRaw"));
     return balance.free;  
   }
   async transfer(howMuch, to) {
-    console.log("WestendCrypto transfer");
-    console.log(howMuch);
-    console.log(to);
-    // let api = await this.getApi();
-    // const txHash = await api.tx.balances
-    //   .transfer(to, howMuch)
-    //   .signAndSend(this.optionsStorage.keypair);
+    console.log("transfer");
+    console.log(this.keypair);
+    // console.log(howMuch);
+    // console.log(to);
+    let api = await this.getApi();
+    const tx = await api.tx.balances.transfer(to, howMuch)
+    const hash = await tx.signAndSend(this.keypair);
   }
   save() {
     let moduleOptions = this.app.storage.getModuleOptionsByName(this.name);
@@ -81,19 +87,28 @@ class WestendCrypto extends ModTemplate {
     }
   }
   initialize(app) {
-    console.log("****************** WestendCrypto initialize ******************");
+    console.log("****************** DOTCrypto2 initialize ******************");
     if(app.BROWSER) {
       super.initialize(app);
       const wsProvider = new WsProvider('wss://rpc.polkadot.io');
       this._api = new ApiPromise({ provider: wsProvider });
-      this.getApi();
       this.load();
-      // sr25519 only has a WASM interface
-      const keyring = new Keyring({ type: 'ed25519', ss58Format: 2 });
+        // sr25519 only has a WASM interface
+      this.keyring = new Keyring({ type: 'ed25519'});
+      this.keyring.setSS58Format(0);
       if(!this.optionsStorage.keypair) {
-        this.optionsStorage.keypair = keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
+        let keypair = this.keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
+        //let keypair = this.keyring.addFromJson();
+        this.optionsStorage.keypair = keypair.toJson();
         this.save();
       }
+      //this.keypair = this.keyring.addFromJson(this.optionsStorage.keypair);  
+      this.keypair = this.keyring.addFromJson(JSON.parse('{"address":"5ERZ1oCunsuRueffZBEfsScu169GReLHb84yaETzMQZcsjko","encoded":"BV/ziyal+U+c9/rxfq4ZHqZPshwil3JVWFlSb38s+zwAgAAAAQAAAAgAAABV2laOigO/8YOPxpalfZ9OAUAfhij2gde/ZfteoH2VNUrvn3Ud21ze9sESBA0v/zN3A4L6RfBKKKgKzGQmg9jtXirPB+xxM+8vPEmTGqZzSW7b0kQpj9/zG/N78h/nbFKRthLryCumERRzviWCx8IM5HMhMX9E/OXrl5gTs6idOZndWUulFKzpkzYjt94Hd/eLdQ0qp8sP5rZ1dxM+","encoding":{"content":["pkcs8","sr25519"],"type":["scrypt","xsalsa20-poly1305"],"version":"3"},"meta":{"genesisHash":"0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3","name":"saito","whenCreated":1606092444131}}'));  
+      
+      this.keypair.decodePkcs8("maskmask")
+      //this.keypair = this.keyring.addPair(this.optionsStorage.keypair);
+      console.log("DOTCrypto2");
+      console.log(this.keypair);
     }
   }
 
@@ -133,5 +148,5 @@ class WestendCrypto extends ModTemplate {
 
 }
 
-module.exports = WestendCrypto;
+module.exports = DOTCrypto2;
 

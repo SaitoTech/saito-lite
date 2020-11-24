@@ -1,6 +1,6 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const { Keyring }  = require('@polkadot/keyring');
+const { Keyring, decodeAddress, encodeAddress, createPair } = require('@polkadot/keyring');
 const { mnemonicGenerate } = require('@polkadot/util-crypto');
 const { ApiPromise, WsProvider }  = require('@polkadot/api');
 const { randomBytes }   = require('crypto');
@@ -18,6 +18,8 @@ class DOTCrypto extends ModTemplate {
     this.app = app;
     this._api = null; // treat as private, please use getApi to access
     this.mods = [];
+    this.keypair = null;
+    this.keyring = null;
   }
   
   requestInterface(type = "") {
@@ -26,56 +28,47 @@ class DOTCrypto extends ModTemplate {
         ticker: this.ticker,
         getBalance: this.getBal.bind(this),
         transfer: this.transfer.bind(this),
-        getPubkey: this.getPubkey.bind(this),
+        getAddress: this.getAddress.bind(this),
         subscribe: null,
         getKeyring: null,
         buildRawTx: null,
+        //https://polkadot.js.org/docs/api/cookbook/tx/
+        estimateFee: null,
       }
     }
     return null;
   }
-  async initializeApi() { 
-    console.log("initializeApi");
-    const wsProvider = new WsProvider('wss://rpc.polkadot.io');
-    //const wsProvider = new WsProvider('wss://localhost:8888');
-    //const wsProvider = new WsProvider('ws://localhost:8887');
-    //const wsProvider = new WsProvider('ws://localhost');
-    //const wsProvider = new WsProvider('ws://138.197.202.211');
-    
-    console.log("made provider");
-    // returns an API instance when connected, decorated and ready-to use...
-    //const api = await ApiPromise.create({ provider: wsProvider });  
-    //this._api = await ApiPromise.create({ provider: wsProvider });  
-    this._api = new ApiPromise({ provider: wsProvider });
-    console.log("made api");
-    await this._api.isReady;
-    console.log("api ready...");
-  }
   async getApi() {
-    console.log("getapi");
-    console.log(this._api);
     await this._api.isReady;
-    console.log("ready...");
     return this._api;
   }
-  async getPubkey() {
-    return this.optionsStorage.keypair3.address;
+  // address can be any format
+  getFormattedAddress(address, format = "polkadot") {
+    // https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)
+    // give some semantics to the polkadot magic numbers
+    let formats = {"polkadot": 0, "kusama": 2, "substrateRaw": 42 };
+    return encodeAddress(decodeAddress(address), formats[format]);
+  }
+  getAddress() {
+    return this.keypair.address;
+    //return this.getFormattedAddress(this.keypair.address, "polkadot");
   }
   async getBal(){
-    console.log("getbalance");
     let api = await this.getApi();
-    console.log("got api");
-    const { nonce, data: balance } = await api.query.system.account(this.optionsStorage.keypair3.address);
+    //5ERZ1oCunsuRueffZBEfsScu169GReLHb84yaETzMQZcsjko
+    const { nonce, data: balance } = await api.query.system.account(this.keypair.publicKey);
     return balance.free;  
   }
   async transfer(howMuch, to) {
     console.log("transfer");
-    console.log(howMuch);
-    console.log(to);
-    // let api = await this.getApi();
-    // const txHash = await api.tx.balances
-    //   .transfer(to, howMuch)
-    //   .signAndSend(this.optionsStorage.keypair);
+    // console.log(howMuch);
+    // console.log(to);
+    console.log(this.keypair.address);
+    console.log(this.keyring.getPair(this.keypair.address));
+    console.log(this.keyring.getPairs()[0]);
+    let api = await this.getApi();
+    const tx = await api.tx.balances.transfer(to, howMuch)
+    const hash = await tx.signAndSend(this.keypair);
   }
   save() {
     let moduleOptions = this.app.storage.getModuleOptionsByName(this.name);
@@ -100,14 +93,58 @@ class DOTCrypto extends ModTemplate {
       super.initialize(app);
       const wsProvider = new WsProvider('wss://rpc.polkadot.io');
       this._api = new ApiPromise({ provider: wsProvider });
-      this.getApi();
       this.load();
-        // sr25519 only has a WASM interface
-      const keyring = new Keyring({ type: 'ed25519', ss58Format: 2 });
+      // sr25519 only has a WASM interface
+      this.keyring = new Keyring({ type: 'ed25519'});
+      this.keyring.setSS58Format(0);
       if(!this.optionsStorage.keypair) {
-        this.optionsStorage.keypair = keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
+        let keypair = this.keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
+        //let keypair = this.keyring.addFromMnemonic("calm leopard uncover will muscle match parrot finish hair drum total erupt", { name: 'polkadot pair' }, 'ed25519');
+        //let keypair = this.keyring.addFromUri("calm leopard uncover will muscle match parrot finish hair drum total erupt", { name: 'first pair' }, 'sr25519');
+        this.optionsStorage.keypair = keypair.toJson();
         this.save();
       }
+      this.keypair = this.keyring.addFromJson(this.optionsStorage.keypair);  
+      this.keypair.decodePkcs8()
+      console.log(this.keypair);
+      //this.keypair = this.keyring.addPair(this.optionsStorage.keypair);
+      //
+      // Need to go through the keyring API so that setSS58Format will work 
+      // and the keypair will have all the functions it needs like signing.
+      // if(this.optionsStorage.keypair.encoded) {
+      //   this.keypair = this.keyring.addFromJson(this.optionsStorage.keypair);  
+      // } else {
+      //   this.keypair = this.keyring.addPair(this.optionsStorage.keypair);
+      // }
+      
+      // if(this.optionsStorage.keypair5){
+      //   this.keypair5 = this.keyring.addFromJson(this.optionsStorage.keypair5);  
+      // }
+      
+      // if(this.optionsStorage.keypair3){
+      //   this.keypair3 = this.keyring.addFromJson(this.optionsStorage.keypair3);  
+      //   console.log(this.keypair2.isLocked);
+      // }
+      // if(this.optionsStorage.keypair2){
+      //   this.keypair4 = this.keyring.addFromJson(this.optionsStorage.keypair4);  
+      //   console.log(this.keypair2.isLocked);
+      // }
+      // console.log(this.keyring.getPairs()[0].isLocked);
+      // console.log(this.keyring.getPairs()[1].isLocked);
+      //console.log(this.keyring.getPair(""));
+      // console.log("adsf");
+      // console.log(this.optionsStorage.keypair.address);
+      // console.log(this.keypair.address);
+      // this.keyring.setSS58Format(2);
+      // console.log(this.optionsStorage.keypair.address);
+      // console.log(this.keypair.address);
+      // this.keyring.setSS58Format(42);
+      // console.log(this.optionsStorage.keypair.address);
+      // console.log(this.keypair.address);
+      
+      // this.optionsStorage.keypair = {"address":"5ERZ1oCunsuRueffZBEfsScu169GReLHb84yaETzMQZcsjko","encoded":"BV/ziyal+U+c9/rxfq4ZHqZPshwil3JVWFlSb38s+zwAgAAAAQAAAAgAAABV2laOigO/8YOPxpalfZ9OAUAfhij2gde/ZfteoH2VNUrvn3Ud21ze9sESBA0v/zN3A4L6RfBKKKgKzGQmg9jtXirPB+xxM+8vPEmTGqZzSW7b0kQpj9/zG/N78h/nbFKRthLryCumERRzviWCx8IM5HMhMX9E/OXrl5gTs6idOZndWUulFKzpkzYjt94Hd/eLdQ0qp8sP5rZ1dxM+","encoding":{"content":["pkcs8","sr25519"],"type":["scrypt","xsalsa20-poly1305"],"version":"3"},"meta":{"genesisHash":"0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3","name":"saito","whenCreated":1606092444131}}
+      // this.save();
+    
     }
   }
 
