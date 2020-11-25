@@ -123,6 +123,54 @@ a {
   border: 1px solid var(--saito-red);
 }
 
+.hero-invite-wrapper {
+  width: 100%;
+  min-height: 30vh;
+}
+
+.hero-invite-title {
+  padding: 10px 0 0;
+  font-size: 2em;
+  text-align: center;
+}
+
+.hero-invites {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-evenly;
+}
+
+.hero-game-create {
+  min-width: 30%;
+  max-width: 40%;
+  height: 10vh;
+  margin: 1vh;
+  transition: all ease 0.33s;
+  padding: 5px;
+  cursor: pointer;
+  display: grid;
+  gap: 1em;
+  grid-template-columns: 5fr 4fr;
+  border: 1px solid var(--saito-red);
+}
+
+.hero-game-create:hover {
+  transform: scale(1.05);
+}
+
+.hero-game-create-img {
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-game-create-title {
+  font-size: x-large;
+  white-space: break-spaces;
+  height: 100%;
+  max-width: 140px;
+  padding: 5px;
+}
+
 .arcade-tile {
   width: calc(100% - 1em);
   overflow-y: hidden;

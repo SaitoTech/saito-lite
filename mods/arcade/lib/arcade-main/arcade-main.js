@@ -65,6 +65,28 @@ module.exports = ArcadeMain = {
     // add games
     //
     if (document.querySelector('.arcade-hero')) {
+      if (mod.games.length < 3) {
+        var html = `<div class="hero-invite-wrapper">
+          <div class="hero-invite-title">Create Game</div>
+            <div class="hero-invites">
+        `;
+        app.modules.respondTo("arcade-games").forEach(module => {
+          let title = module.name;
+          if (module.respondTo("arcade-carousel") != null) {
+            if (module.respondTo("arcade-carousel").title) {
+              title = module.respondTo("arcade-carousel").title;
+            }
+          }
+  
+          
+            html += `<div class="hero-game-create">
+            <div class="hero-game-create-img" style="background-image: url(/${module.slug}/img/arcade.jpg)" id="hero-${module.slug}"></div>
+            <div class="hero-game-create-title">${title}</div></div>`;
+          
+        });
+        html += `</div></div>`;
+        app.browser.addElementToElement(html, document.querySelector('.arcade-hero'));
+      }
       mod.games.forEach((invite, i) => {
         app.browser.addElementToElement(ArcadeInviteTemplate(app, mod, invite, i), document.querySelector('.arcade-hero'));
       });
@@ -75,30 +97,30 @@ module.exports = ArcadeMain = {
     //
     let arcade_main_self = this;
     mod.games.forEach((invite, i) => {
-      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-button`).onclick = function(e) { 
+      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-button`).onclick = function (e) {
 
-	let game_sig = e.currentTarget.getAttribute("data-sig");
-	let game_cmd = e.currentTarget.getAttribute("data-cmd");
+        let game_sig = e.currentTarget.getAttribute("data-sig");
+        let game_cmd = e.currentTarget.getAttribute("data-cmd");
 
-	if (game_cmd == "delete") {
-	  arcade_main_self.deleteGame(app, mod, game_sig);
-	  return;
-	}
+        if (game_cmd == "delete") {
+          arcade_main_self.deleteGame(app, mod, game_sig);
+          return;
+        }
 
-	if (game_cmd == "cancel") {
-	  arcade_main_self.cancelGame(app, mod, game_sig);
-	  return;
-	}
+        if (game_cmd == "cancel") {
+          arcade_main_self.cancelGame(app, mod, game_sig);
+          return;
+        }
 
-	if (game_cmd == "join") {
-	  arcade_main_self.joinGame(app, mod, game_sig);
-	  return;
-	}
+        if (game_cmd == "join") {
+          arcade_main_self.joinGame(app, mod, game_sig);
+          return;
+        }
 
-	if (game_cmd == "continue") {
-	  arcade_main_self.continueGame(app, mod, game_sig);
-	  return;
-	}
+        if (game_cmd == "continue") {
+          arcade_main_self.continueGame(app, mod, game_sig);
+          return;
+        }
 
         //ArcadeGameDetails.render(app, mod, invite);
         //ArcadeGameDetails.attachEvents(app, mod);
@@ -107,9 +129,9 @@ module.exports = ArcadeMain = {
 
     ArcadePosts.render(app, mod);
     ArcadeInfobox.render(app, mod);
-    if (mod.games.length == 0){
+    if (mod.games.length == 0) {
       let carousel = new SaitoCarousel(app);
-      carousel.render(app, mod, "arcade", "arcade-hero");  
+      carousel.render(app, mod, "arcade", "arcade-hero");
     }
   },
 
@@ -130,7 +152,7 @@ module.exports = ArcadeMain = {
     //
     let players_needed = parseInt(accepted_game.msg.players_needed);
     let players_available = accepted_game.msg.players.length;
-    if ( players_needed > (players_available+1) ) {
+    if (players_needed > (players_available + 1)) {
       let newtx = mod.createJoinTransaction(accepted_game);
       app.network.propagateTransaction(newtx);
       mod.joinGameOnOpenList(newtx);
@@ -188,11 +210,11 @@ module.exports = ArcadeMain = {
 
         () => {
           let msg = {};
-              msg.request = 'rawSQL';
-              msg.data = {};
-              msg.data.module = "Arcade";
-              msg.data.sql = `SELECT is_game_already_accepted FROM games WHERE game_id = "${game_id}"`;
-              msg.data.game_id = game_id;
+          msg.request = 'rawSQL';
+          msg.data = {};
+          msg.data.module = "Arcade";
+          msg.data.sql = `SELECT is_game_already_accepted FROM games WHERE game_id = "${game_id}"`;
+          msg.data.game_id = game_id;
           return msg;
         },
 
@@ -273,9 +295,9 @@ module.exports = ArcadeMain = {
 
     if (app.options.games) {
       for (let i = 0; i < app.options.games.length; i++) {
-        if (typeof(app.options.games[i].transaction) != 'undefined') {
+        if (typeof (app.options.games[i].transaction) != 'undefined') {
           testsig = app.options.games[i].transaction.sig;
-        } else if (typeof(app.options.games[i].id) != 'undefined') {
+        } else if (typeof (app.options.games[i].id) != 'undefined') {
           testsig = app.options.games[i].id;
         }
         if (testsig == sig) {
