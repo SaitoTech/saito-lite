@@ -328,6 +328,13 @@ a {
   overflow-y: auto;
 }
 
+.arcade-posts-add {
+  position: relative;
+  top: 0;
+  right: 0;
+  float: right;
+}
+
 .arcade-post {
   margin-bottom: 40px;
 }

@@ -55,9 +55,14 @@ class Post extends ModTemplate {
       return obj;
     }
 
+    if (type == "header-dropdown") {
+      return {};
+    }
+
     return null;
 
   }
+
 
   returnServices() {
     let services = [];

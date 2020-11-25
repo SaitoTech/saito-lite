@@ -1,5 +1,7 @@
 const ArcadePostsTemplate = require('./arcade-posts.template');
 const PostTeaserTemplate = require('./post-teaser.template');
+const PostView = require('./../post-overlay/post-view');
+const PostCreate = require('./../post-overlay/post-create');
 
 module.exports = ArcadePosts = {
 
@@ -32,6 +34,14 @@ module.exports = ArcadePosts = {
         PostView.attachEvents(app, mod, sig);
       }
     });
+
+    try {
+      document.querySelector('.arcade-posts-add').onclick = (e) => {
+        PostCreate.render(app, mod);
+        PostCreate.attachEvents(app, mod);
+      }
+    } catch (err) {
+    }
 
   },
 

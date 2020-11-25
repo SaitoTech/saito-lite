@@ -68,12 +68,13 @@ module.exports = ArcadeSidebar = {
         // not registered
         //
         if (app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey()) == "") {
-	  mod.modal_register_username = new ModalRegisterUsername(app);
-	  mod.modal_register_username.render(app, mod);
-	  mod.modal_register_username.attachEvents(app, mod);
-	  return;
+	  if (app.options.wallet.anonymous != 1) {
+	    mod.modal_register_username = new ModalRegisterUsername(app);
+	    mod.modal_register_username.render(app, mod);
+	    mod.modal_register_username.attachEvents(app, mod);
+	    return;
+	  }
         }
-
 
 	let tx = new saito.transaction();
 	tx.msg.game = e.currentTarget.id;

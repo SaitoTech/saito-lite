@@ -18,5 +18,10 @@ module.exports = ArcadePosts = {
 
   attachEvents(app, mod) {
 
+    app.modules.respondTo("arcade-posts").forEach(module => {
+      if (module != null) {
+        module.respondTo('arcade-posts').attachEvents(app, module);
+      }
+    });
   },
 }
