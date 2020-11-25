@@ -6,7 +6,7 @@ const mysteryEndpointFoundOnPolkaStatsIO = 'wss://polkastats.io/api/v3';
 
 class DOTCrypto4 extends SubstrateBasedCrypto {
   constructor(app) {
-    super(app, 'DOT', 'wss://localhost:9931', "Polkadot's Existential Deposit is 1 DOT, be sure not to send less than 1 DOT or leave less than 1 DOT in your wallet.");
+    super(app, 'DOT', 'ws://localhost:9931', "Polkadot's Existential Deposit is 1 DOT, be sure not to send less than 1 DOT or leave less than 1 DOT in your wallet.");
     this.name = 'DOTCrypto4';
     this.description = 'Polkadot thru local SSH tunnel';
   }
