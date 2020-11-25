@@ -33,11 +33,16 @@ class SuperWallet extends ModTemplate {
     if (!this.rendered) {
       this.rendered = true;
       app.browser.addElementToDom('<div id="superwallet-container" class="superwallet-container"></div>'); 
-      app.browser.addElementToDom(`<div>19700000000</div>`, "superwallet-container");
       app.modules.requestInterfaces("is_cryptocurrency").forEach(async(responseInterface, i) => {
+        let infoHtml = '';
+        if (responseInterface.info) {
+          infoHtml = `<div class="crypto-info">${responseInterface.info}</div>`;
+        }
         app.browser.addElementToDom(`<div id="crypto-${responseInterface.modname}" class="crypto-container">
-          <div class="crypto-title">${responseInterface.description}</div>
           <div class="ticker">${responseInterface.ticker}</div>
+          <div class="crypto-title">${responseInterface.description}</div>
+          ${infoHtml}
+          
           <div>
             Address: <span class="address">loading...</span>
           </div>
