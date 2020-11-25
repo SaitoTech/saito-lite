@@ -16,6 +16,9 @@ body {
 .crypto-container .crypto-title {
   font-size: 1.5em;
 }
+.crypto-container .ticker {
+  font-size: 2.5em;
+}
 
 .crypto-container input {
   padding: 0;
