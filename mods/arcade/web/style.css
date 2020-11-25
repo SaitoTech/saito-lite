@@ -53,8 +53,15 @@ a {
 }
 
 .arcade-main {
-  display: grid;
-  grid-template-rows: 40px 45vh calc(100vh - 40px - 5em - 45vh);
+  height: calc(100vh - 5em);
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+}
+
+#arcade-tabs {
+  max-height: 45vh;
+  overflow-y: auto;
 }
 
 #arcade-tab-buttons {
@@ -113,7 +120,6 @@ a {
 }
 
 .arcade-hero {
-  height: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -169,6 +175,19 @@ a {
   height: 100%;
   max-width: 140px;
   padding: 5px;
+}
+
+.hero-intro {
+  height: 32vh;
+  width: 100%;
+  background-image: url(/arcade/img/dreamscape-logo.png);
+  background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-intro.thin {
+  height: 20vh;
 }
 
 .arcade-tile {
@@ -293,6 +312,7 @@ a {
   background-position: top;
   background-size: contain;
   margin: 0.5em 0;
+  flex-grow: 1;
 }
 
 .arcade-infobox {
