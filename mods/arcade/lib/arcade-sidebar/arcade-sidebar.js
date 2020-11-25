@@ -2,6 +2,7 @@ const saito = require('./../../../../lib/saito/saito');
 const ArcadeSidebarTemplate = require('./arcade-sidebar.template');
 const ArcadeGamesFullListOverlayTemplate = require('./arcade-games-full-list-overlay.template');
 const SaitoOverlay = require('./../../../../lib/saito/ui/saito-overlay/saito-overlay');
+const ModalRegisterUsername = require('./../../../../lib/saito/ui/modal-register-username/modal-register-username');
 const ArcadeGameDetails = require('../arcade-game/arcade-game-details');
 
 module.exports = ArcadeSidebar = {
@@ -62,6 +63,18 @@ module.exports = ArcadeSidebar = {
 
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
       game.addEventListener('click', (e) => {
+
+        //
+        // not registered
+        //
+        if (app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey()) == "") {
+	  mod.modal_register_username = new ModalRegisterUsername(app);
+	  mod.modal_register_username.render(app, mod);
+	  mod.modal_register_username.attachEvents(app, mod);
+	  return;
+        }
+
+
 	let tx = new saito.transaction();
 	tx.msg.game = e.currentTarget.id;
         ArcadeGameDetails.render(app, mod, tx);
