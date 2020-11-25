@@ -34,14 +34,22 @@ class SuperWallet extends ModTemplate {
       this.rendered = true;
       app.browser.addElementToDom('<div id="superwallet-container" class="superwallet-container"></div>'); 
       app.browser.addElementToDom(`<div>19700000000</div>`, "superwallet-container");
-      
       app.modules.requestInterfaces("is_cryptocurrency").forEach(async(responseInterface, i) => {
         app.browser.addElementToDom(`<div id="crypto-${responseInterface.modname}" class="crypto-container">
+          <div class="crypto-title">${responseInterface.description}</div>
           <div class="ticker">${responseInterface.ticker}</div>
-          <div class="address">loading...</div>
-          <div class="balance">loading...</div>
-          <input class="howmuch" type="text"></input>
-          <input class="pubkeyto" type="text"></input>
+          <div>
+            Address: <span class="address">loading...</span>
+          </div>
+          <div>
+            Balance: <span class="balance">loading...</span>
+          </div>
+          <div>
+            Amount: <input class="howmuch" type="text"></input>
+          </div>
+          <div>
+            To: <input class="pubkeyto" type="text"></input>
+          </div>
           <input class="sendbutton" type="button" value="send"></input>
         </div>`, "superwallet-container");
         this.loadBalance(responseInterface);
@@ -49,8 +57,6 @@ class SuperWallet extends ModTemplate {
         document.querySelector(`#crypto-${responseInterface.modname} .sendbutton`).onclick = () => {
           let howMuch = document.querySelector(`#crypto-${responseInterface.modname} .howmuch`).value;
           let toAddress = document.querySelector(`#crypto-${responseInterface.modname} .pubkeyto`).value;
-          console.log(howMuch);
-          console.log(toAddress);
           responseInterface.transfer(howMuch, toAddress);
         }
       });
