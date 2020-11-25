@@ -64,7 +64,9 @@ module.exports = ArcadeMain = {
     //
     // add games
     //
+    
     if (document.querySelector('.arcade-hero')) {
+/*
       if (mod.games.length < 3) {
         var html = `<div class="hero-invite-wrapper">
           <div class="hero-invite-title">Create Game</div>
@@ -87,10 +89,17 @@ module.exports = ArcadeMain = {
         html += `</div></div>`;
         app.browser.addElementToElement(html, document.querySelector('.arcade-hero'));
       }
+      */
       mod.games.forEach((invite, i) => {
         app.browser.addElementToElement(ArcadeInviteTemplate(app, mod, invite, i), document.querySelector('.arcade-hero'));
       });
-    }
+      /*
+      let html = `
+      <div class="hero-intro"></div>
+      `;
+      app.browser.addElementToElement(html, document.querySelector('.arcade-hero'));
+    */
+     }
 
     //
     // enable join buttons
