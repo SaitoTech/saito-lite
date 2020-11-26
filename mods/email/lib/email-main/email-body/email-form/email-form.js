@@ -9,8 +9,8 @@ module.exports = EmailForm = {
     render(app, mod) {
         this.app = app;
         this.saito = this.app;
-
-        document.querySelector(".email-body").innerHTML = EmailFormTemplate();
+        let address = mod.parseHash(window.location.hash).toaddress
+        document.querySelector(".email-body").innerHTML = EmailFormTemplate(address);
 
         if (document.querySelector('.create-button')) { document.querySelector('.create-button').classList.add("mobile-hide"); }
 
@@ -99,10 +99,8 @@ module.exports = EmailForm = {
 
         app.network.propagateTransaction(newtx);
 
-        mod.active = "email_list";
-        mod.main.render(app, mod);
-        mod.main.attachEvents(app, mod);
-
+        window.location.hash = "#page=email_list&subpage=inbox"
+        
         salert("Your message has been sent");
 
     },

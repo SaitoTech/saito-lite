@@ -9,38 +9,18 @@ module.exports = EmailDetailHeader = {
 
   attachEvents(app, mod) {
 
-    document.getElementById('email-form-back-button')
-            .onclick = (e) => {
-
-              mod.previous_state = null;
-              mod.active = "email_list";
-              mod.selected_email = {};
-
-              mod.main.render(app, mod);
-              mod.main.attachEvents(app, mod);
-            };
-
     document.getElementById('email-delete-icon')
             .onclick = (e) => {
               // delete the email from the emaillist
               mod.deleteTransaction(mod.selected_email);
-
-              mod.emails.active = "inbox";
-              mod.emails.active = "email_list";
-              mod.selected_email = {};
-
-              mod.main.render(app, mod);
-              mod.main.attachEvents(app, mod);
+              window.location.hash = `#page=email_list&subpage=inbox`;
             };
 
     document.getElementById('email-detail-reply')
             .onclick = (e) => {
-
-              mod.previous_state = mod.active;
-              mod.active = "email_form";
-              mod.main.render(app, mod);
-              mod.main.attachEvents(app, mod);
-
+              window.location.hash = `#page=email_form`;
+// ################ TODO #############
+// ################ Fix this ################
               let original = mod.selected_email;
               document.getElementById('email-to-address').value = original.transaction.from[0].add;
               document.querySelector('.email-title').value = "Re: " + original.msg.title;
@@ -52,10 +32,9 @@ module.exports = EmailDetailHeader = {
     document.getElementById('email-detail-forward')
             .onclick = (e) => {
               let original = mod.selected_email;
-              mod.previous_state = mod.active;
-              mod.active = "email_form";
-              mod.main.render(app, mod);
-              mod.main.attachEvents(app, mod);
+              window.location.hash = `#page=email_form`;
+// ################ TODO #############
+// ################ Fix this ################
 
               document.querySelector('.email-title').value = `Fwd: ${original.msg.title}`;
               document.querySelector('.email-text').value = original.msg.message;
