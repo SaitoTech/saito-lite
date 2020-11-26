@@ -29,20 +29,12 @@ class Email extends ModTemplate {
     this.emails.inbox = [];
     this.emails.sent = [];
     this.emails.trash = [];
-    this.emails.active = "inbox";
-    // inbox
-    // outbox
-    // trash
 
     this.mods = [];
-    this.active = "email_list";
     this.header_title = "";
 
-    this.selected_email = null;
-
+    // is this.appspace needed??? 
     this.appspace = 0;	// print email-body with appspace
-    this.appspace_mod = null;
-    this.appspace_mod_idx = -1; // index in mods of appspace module
 
 //    this.uidata = {};
 //    this.uidata.mods = [];
@@ -54,7 +46,7 @@ class Email extends ModTemplate {
   }
 
   render(app) {
-
+    console.log("Email Render");
     super.render(app);
 
     let html = `
@@ -69,13 +61,10 @@ class Email extends ModTemplate {
 
     this.header.render(app, this);
     this.header.attachEvents(app, this);
-
-    EmailSidebar.render(app, this);
-    EmailSidebar.attachEvents(app, this);
-
-    EmailMain.render(app, this);
-    EmailMain.attachEvents(app, this);
-
+    
+    this.renderSidebar(app);
+    this.renderMain(app);
+    
     // make visible
     document.getElementById('content').style.visibility = "visible";
 
@@ -109,20 +98,69 @@ class Email extends ModTemplate {
     EmailMain.render(app, this);
     EmailMain.attachEvents(app, this);
   }
-
+  // TODO WRITE COMMENT HERE
+  goToPage(page, subPage) {
+    this.stateStack.push(window.location.hash);
+    window.location.hash = `#loc=${page}|${subPage}`;
+  }
+  goBack() {
+    
+  }
+  locationErrorFallback(){
+    // error. Reset state and return to inbox.
+    window.location.hash = `#page=email_list&subpage=inbox`;
+  }
+  parseHash(hash) {
+    return hash.substr(1).split('&').reduce(function (result, item) {
+      var parts = item.split('=');
+      result[parts[0]] = parts[1];
+      return result;
+    }, {});
+  }
   initialize(app) {
-
     super.initialize(app);
+    if(app.BROWSER && this.browser_active) {
+      console.log("email initilaize");
+      //
+      // add an email
+      //
+      let tx = app.wallet.createUnsignedTransaction();
+      tx.msg.module = "Email";
+      tx.msg.title = "Sent Message Folder";
+      tx.msg.message = "This folder is where your sent messages are stored...";
+      tx = this.app.wallet.signTransaction(tx);
+      this.emails.sent.push(tx);
+      
+      window.addEventListener("hashchange", () => {
 
-    //
-    // add an email
-    //
-    let tx = app.wallet.createUnsignedTransaction();
-    tx.msg.module = "Email";
-    tx.msg.title = "Sent Message Folder";
-    tx.msg.message = "This folder is where your sent messages are stored...";
-    tx = this.app.wallet.signTransaction(tx);
-    this.emails.sent.push(tx);
+        if (this.parseHash(window.location.hash).selectedemail) {
+          let selected_email = this.emails[subPage].filter(tx => {
+              return tx.transaction.sig === this.parseHash(window.location.hash).selectedemail
+          })[0];
+          this.header_title = selected_email.msg.title;
+        } else if(this.parseHash(window.location.hash).subpage) {
+          this.header_title = this.parseHash(window.location.hash).subpage;  
+        } else if(this.parseHash(window.location.hash).page === "email_form") {
+          this.header_title = "Compose Email";
+        }
+        
+        // document.querySelector('.email-navigator-item, .email-apps-item, .crypto-apps-item').forEach((elem, i) => {
+        //   if (elem.classList.contains("active-navigator-item")) {
+        //     elem.classList.remove("active-navigator-item");
+        //   } 
+        //   if(elem.)
+        //     item2.classList.remove("active-navigator-item");
+        //     e.currentTarget.classList.add("active-navigator-item");
+        // });
+        
+        this.renderSidebar(app);
+        this.renderMain(app);
+      });
+      // set the hash to match the state we want and force a hashchange event
+      let oldHash = window.location.hash;
+      window.location.hash = `#`;
+      window.location.hash = oldHash;
+    }
 
   }
 
@@ -283,11 +321,12 @@ class Email extends ModTemplate {
       'send-email': {
         name: 'Send Email',
         callback: (address) => {
-          this.previous_state = this.active;
-          this.active = "email_form";
-
-          this.main.render(this.app, this.uidata);
-          this.main.attachEvents(this.app, this.uidata);
+          window.location.hash = `#page=email_form&toaddress=${address}`;
+          // this.previous_state = this.active;
+          // this.active = "email_form";
+          // 
+          // this.main.render(this.app, this.uidata);
+          // this.main.attachEvents(this.app, this.uidata);
 
           document.getElementById('email-to-address').value = address;
         }

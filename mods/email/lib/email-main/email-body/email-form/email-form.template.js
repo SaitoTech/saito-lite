@@ -1,4 +1,4 @@
-module.exports = EmailFormTemplate = () => {
+module.exports = EmailFormTemplate = (address) => {
   return `
   <div class="email-compose">
   <div class="grid-2" style="grid-template-columns:6em 1fr">
@@ -8,7 +8,7 @@ module.exports = EmailFormTemplate = () => {
     </div>
     <div>To:</div>
     <div>
-      <input id="email-to-address" class="email-address" type="text" placeholder="Address">
+      <input id="email-to-address" class="email-address" type="text" placeholder="Address" value="${address}">
     </div>
     <div class="amount-label tip">
       SAITO:

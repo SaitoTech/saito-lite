@@ -14,13 +14,7 @@ module.exports = EmailControls = {
 
         let compose_button = document.getElementById('email-compose-btn');
             compose_button.addEventListener('click', (e) => {
-
-                mod.active = "email_form";
-                mod.previous_state = "email_list";
-                mod.header_title = "Compose Email";
-
-                mod.main.render(app, mod);
-                mod.main.attachEvents(app, mod);
+              window.location.hash = `#page=email_form`;
             });
     }
 
