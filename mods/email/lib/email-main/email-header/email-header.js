@@ -6,7 +6,6 @@ const EmailAppspaceHeader = require('./email-appspace-header/email-appspace-head
 module.exports = EmailHeader = {
 
   render(app, mod) {
-
     mod.header = this;
 
     switch(mod.active) {
@@ -23,6 +22,10 @@ module.exports = EmailHeader = {
         EmailFormHeader.attachEvents(app, mod);
         break;
       case "email_appspace":
+        EmailAppspaceHeader.render(app, mod);
+        EmailAppspaceHeader.attachEvents(app, mod);
+        break;
+      case "crypto_mod":
         EmailAppspaceHeader.render(app, mod);
         EmailAppspaceHeader.attachEvents(app, mod);
         break;
