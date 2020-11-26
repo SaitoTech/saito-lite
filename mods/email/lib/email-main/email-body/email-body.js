@@ -1,7 +1,8 @@
 const EmailForm          = require('./email-form/email-form');
 const EmailDetail        = require('./email-detail/email-detail');
 const EmailAppspace         = require('./email-appspace/email-appspace');
-const EmailAppspaceTemplate = require('./email-appspace/email-appspace.template.js');
+const EmailCryptoAppspace         = require('./email-cryptoappspace/email-cryptoappspace');
+//const EmailAppspaceTemplate = require('./email-appspace/email-appspace.template.js');
 const EmailListTemplate     = require('./email-list/email-list.template.js');
 
 
@@ -27,9 +28,12 @@ module.exports = EmailBody = {
                 EmailDetail.attachEvents(app, mod);
                 break;
             case "email_appspace":
-                document.querySelector('.email-body').innerHTML = EmailAppspaceTemplate();
+                //document.querySelector('.email-body').innerHTML = EmailAppspaceTemplate();
                 EmailAppspace.render(app, mod);
                 EmailAppspace.attachEvents(app, mod);
+                break;
+            case "crypto_mod":
+                EmailCryptoAppspace.render(app, mod);
                 break;
             default:
                 break;

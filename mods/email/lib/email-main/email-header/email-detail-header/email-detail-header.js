@@ -12,7 +12,7 @@ module.exports = EmailDetailHeader = {
     document.getElementById('email-form-back-button')
             .onclick = (e) => {
 
-              // mod.emails.active = "inbox";
+              mod.previous_state = null;
               mod.active = "email_list";
               mod.selected_email = {};
 

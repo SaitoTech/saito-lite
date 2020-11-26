@@ -11,6 +11,9 @@ module.exports = EmailBarsMenuTemplate = () => {
   <div>
     <ul class="email-apps" id="email-apps"></ul>
   </div>
+  <div>
+    <ul class="crypto-apps" id="crypto-apps"></ul>
+  </div>
   </div>
   `;
 }
