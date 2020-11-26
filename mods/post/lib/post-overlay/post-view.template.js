@@ -7,8 +7,6 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
   }
   if (tx == null) { return; }
 
-console.log("Found Post to View: " + JSON.stringify(tx));
-
   let html = `
   <div id="post-view-container" class="post-view-container">
     <div id="post-view-overview" class="post-view-overview">

@@ -98,16 +98,18 @@ class Post extends ModTemplate {
           if (tx.msg.type == "comment") {
             post_self.receiveCommentTransaction(tx);
           }
+          if (tx.msg.type == "edit") {
+            post_self.receiveEditTransaction(tx);
+          }
           if (tx.msg.type == "report") {
             post_self.receiveReportTransaction(tx);
           }
-          if (tx.msg.type == "update") {
-            post_self.updatePostTransaction(tx);
-          }
+/*
           if (tx.msg.type == "delete") {
             post_self.deletePostTransaction(tx);
             post_self.deleteCommentCountPostTransaction(tx);
           }
+*/
         }
       }
     }
@@ -119,7 +121,7 @@ class Post extends ModTemplate {
     //
     // fetch posts from server
     //
-    let sql = `SELECT id, children, tx FROM posts WHERE parent_id = "" ORDER BY ts DESC`;
+    let sql = `SELECT id, children, img, tx FROM posts WHERE parent_id = "" ORDER BY ts DESC`;
     this.sendPeerDatabaseRequestWithFilter(
 
         "Post" ,
@@ -132,6 +134,7 @@ class Post extends ModTemplate {
               for (let i = 0; i < res.rows.length; i++) {
 		this.posts.push(new saito.transaction(JSON.parse(res.rows[i].tx)));
 		this.posts[this.posts.length-1].children = res.rows[i].children;
+		this.posts[this.posts.length-1].img = res.rows[i].img;
               }
             }
           }
@@ -167,8 +170,6 @@ class Post extends ModTemplate {
 
   grabImage(link, post_sig) {
 
-console.log("grabbing image!");
-
     const ImageResolver = require('image-resolver');
     var resolver = new ImageResolver();
 
@@ -177,18 +178,10 @@ console.log("grabbing image!");
     resolver.register(new ImageResolver.Opengraph());
     resolver.register(new ImageResolver.Webpage());
 
-console.log("grabbing image 2: " + link);
-
     resolver.resolve(link, (result) => {
-
-console.log("resolving with result!");
-
       if (result) {
-        let sql = "UPDATE posts SET img = '$img' WHERE id = '$id';"
+        let sql = "UPDATE posts SET img = $img WHERE id = $id;"
         let params = { $img : result.image , $id : post_sig };
-
-console.log(sql + " -- " + params);
-
         this.app.storage.executeDatabase(sql, params, "post");
       } else {
         console.log("No image found");
@@ -281,6 +274,54 @@ console.log(sql + " -- " + params);
     //
     if (txmsg.link != "") { this.grabImage(txmsg.link, tx.transaction.sig); }
 
+  }
+
+
+  createEditTransaction(sig, comment) {
+
+      let newtx = this.app.wallet.createUnsignedTransaction();
+
+      newtx.msg.module = "Post";
+      newtx.msg.type = "edit";
+      newtx.msg.sig = sig;
+      newtx.msg.comment = comment;
+      
+      return this.app.wallet.signTransaction(newtx);
+      
+  }
+  async receiveEditTransaction(tx) {
+
+    let txmsg = tx.returnMessage();
+
+    //
+    // check if permitted to edit
+    //
+    let sql = `SELECT publickey FROM posts WHERE id = $id`;
+    let params = { $id : txmsg.sig }
+    let rows = await this.app.storage.queryDatabase(sql, params, 'post');
+    if (rows) {
+      if (rows.length > 0) {
+	if (rows[0].publickey === tx.transaction.from[0].add) {
+
+          sql = `UPDATE posts SET text = $text, tx = $tx WHERE publickey = $author AND id = $id`;
+          params = {
+            $text	: txmsg.comment ,
+            $tx		: JSON.stringify(tx.transaction) ,
+            $author	: tx.transaction.from[0].add ,
+            $id		: txmsg.sig
+          };
+          await this.app.storage.executeDatabase(sql, params, "post");
+
+          sql = `UPDATE posts SET parent_id = $new_parent_id WHERE parent_id = $old_parent_id`;
+          params = {
+            $new_parent_id	: tx.transaction.sig ,
+            $old_parent_id	: txmsg.sig
+          };
+          await this.app.storage.executeDatabase(sql, params, "post");
+
+	}
+      }
+    }
   }
 
 

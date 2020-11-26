@@ -2611,11 +2611,12 @@ console.log("CARD: " + card);
             //
             // DISCARD CARD
             //
-            let html  = "<span>US may discard a card: (Eagle Has Landed)</span><ul>";
-            if (bonus_player == 1) { html  = "<span>USSR may discard a card: (Bear Has Landed)</span><ul>"; }
+            let html  = '<div class="status_message">US may discard a card: (Eagle Has Landed)<ul>';
+            if (bonus_player == 1) { html  = '<div class="status_message">USSR may discard a card: (Bear Has Landed)<ul>'; }
                 html += '<li class="card" id="discard">discard card</li>';
                 html += '<li class="card" id="nope">do not discard</li>';
                 html += '</ul>';
+                html += '</div>';
             this.updateStatus(html);
 
             let twilight_self = this;

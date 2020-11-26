@@ -40,7 +40,7 @@ module.exports = PostView = {
     	  for (let i = 0; i < mod.comments.length; i++) {
     	    this.addComment(app, mod, mod.comments[i]);
     	  }
-
+	  this.attachEvents(app, mod, sig);
         }
     );
 
@@ -65,6 +65,50 @@ module.exports = PostView = {
 
     }
 
+
+try {
+    document.querySelectorAll('.post-view-comment-edit').forEach(el => {
+      el.onclick = (e) => {
+
+        let comment_sig = el.getAttribute("data-id");
+
+        document.querySelectorAll('.post-view-comment-text').forEach(el2 => {	
+
+	  if (el2.getAttribute("data-id") === comment_sig) {
+
+	     let replacement_html = `<textarea data-id="${comment_sig}" id="textedit-field-${comment_sig}">${el2.innerHTML}</textarea><button id="edit-button-${comment_sig}" data-id="${comment_sig}" type="button" class="comment-edit-button" value="Edit Comment" />`;
+	    el2.innerHTML = replacement_html;
+	    document.getElementById(`edit-button-${comment_sig}`).onclick = (e) => {
+
+	      let revised_text = document.querySelector(`#textedit-field-${comment_sig}`).value;
+	      let newtx = mod.createEditTransaction(comment_sig, revised_text);   
+	      app.network.propagateTransaction(newtx);
+
+	      for (let i = 0; i < mod.comments.length; i++) {
+		if (mod.comments[i].transaction.sig === comment_sig) {
+		  newtx.children = mod.comments[i].children;
+		  mod.comments[i] = newtx;
+		}
+	      }
+	      for (let i = 0; i < mod.posts.length; i++) {
+		if (mod.posts[i].transaction.sig === comment_sig) {
+		  newtx.children = mod.posts[i].children;
+		  mod.comments[i] = newtx;
+		}
+	      }
+
+	      el2.innerHTML = revised_text;
+
+	      mod.render();
+
+	    };
+	  }
+	});
+
+
+      }
+    });
+} catch (err) {}
 
     document.querySelector('.post-view-report').onclick = async (e) => {
 

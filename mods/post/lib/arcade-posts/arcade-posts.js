@@ -51,6 +51,12 @@ module.exports = ArcadePosts = {
   },
 
   addPost(app, mod, post) {
+    let post_this = 1;
+    document.querySelectorAll('.arcade-post').forEach(el => {
+      let sig = el.getAttribute("data-id");
+      if (sig === post.transaction.sig) { post_this = 0; }
+    });
+    if (post_this == 0) { return; }
     app.browser.addElementToDom(PostTeaserTemplate(app, mod, post), "arcade-posts");
   }
 

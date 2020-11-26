@@ -39,7 +39,7 @@ module.exports = PostCreate = {
 
       this.new_post.title = document.querySelector('.post-create-title').value;
       this.new_post.comment = document.querySelector('.post-create-textarea').innerHTML;
-      this.new_post.link = document.querySelector('.post-create-link').value;
+      this.new_post.link = document.querySelector('.post-create-link-input').value;
       this.new_post.forum = document.querySelector('.post-create-forum').value;
 
       let newtx = mod.createPostTransaction(this.new_post.title, this.new_post.comment, this.new_post.link, this.new_post.forum, this.new_post.images);

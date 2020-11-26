@@ -39,6 +39,8 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-teaser {
   margin-bottom: 40px;
+  display: grid;
+  grid-template-columns: 3em auto;
 }
 
 .post-teaser-thumbnail {
@@ -80,6 +82,14 @@ module.exports = PostStyleTemplate = (app, mod) => {
   font-weight: bold;
   margin-left: 1em;
   text-decoration: underline;
+  cursor: pointer;
+}
+
+.post-view-comment-edit {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+  cursor: pointer;
 }
 
 /*** Create ***/
@@ -284,6 +294,17 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 100%;
 }
 
+.post-teaser-thumbnail {
+  background-image: url(/post/img/post-logo.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 5px;
+}
+
+
 .arcade-posts-add {
   position: relative;
   top: 0;
@@ -292,7 +313,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 }
 
 .arcade-post {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   display: grid;
   grid-template-columns: 3em auto;
 }
@@ -301,6 +322,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   background-image: url(/post/img/post-logo.png);
   background-size: contain;
   background-repeat: no-repeat;
+  background-position-y: center;
   width: 100%;
   height: 100%;
   margin-top: 5px;
@@ -348,6 +370,12 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 3em;
 }
 .arcade-post-back {
+}
+
+.post-teaser-front {
+  width: 3em;
+}
+.post-teaser-back {
 }
 
 </style>
