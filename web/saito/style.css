@@ -176,6 +176,7 @@ hr {
   background-color: #444;
   opacity: 0.4;
   z-index: 100;
+  min-width: 350px;
 }
 .saito-overlay, .game-overlay {
   position: absolute;
