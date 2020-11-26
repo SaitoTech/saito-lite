@@ -164,6 +164,43 @@ class Post extends ModTemplate {
   }
 
 
+
+  grabImage(link, post_sig) {
+
+console.log("grabbing image!");
+
+    const ImageResolver = require('image-resolver');
+    var resolver = new ImageResolver();
+
+    resolver.register(new ImageResolver.FileExtension());
+    resolver.register(new ImageResolver.MimeType());
+    resolver.register(new ImageResolver.Opengraph());
+    resolver.register(new ImageResolver.Webpage());
+
+console.log("grabbing image 2: " + link);
+
+    resolver.resolve(link, (result) => {
+
+console.log("resolving with result!");
+
+      if (result) {
+        let sql = "UPDATE posts SET img = '$img' WHERE id = '$id';"
+        let params = { $img : result.image , $id : post_sig };
+
+console.log(sql + " -- " + params);
+
+        this.app.storage.executeDatabase(sql, params, "post");
+      } else {
+        console.log("No image found");
+      }
+    });
+
+  }
+
+
+
+
+
   createPostTransaction(title, comment, link, forum, images) {
 
       let newtx = this.app.wallet.createUnsignedTransaction();
@@ -191,6 +228,7 @@ class Post extends ModTemplate {
                 type,
 		publickey,
                 title,
+                img,
                 text,
 		forum,
 		link,
@@ -207,6 +245,7 @@ class Post extends ModTemplate {
                 $ptype ,
 		$ppublickey ,
 		$ptitle ,
+		$pimg ,
 		$ptext ,
 		$pforum ,
 		$plink ,
@@ -224,6 +263,7 @@ class Post extends ModTemplate {
 	$ptype		: 'post' ,
 	$ppublickey	: tx.transaction.from[0].add ,
 	$ptitle		: txmsg.title ,
+	$pimg		: "" ,
 	$ptext		: txmsg.comment ,
 	$pforum		: txmsg.forum ,
 	$plink		: txmsg.link ,
@@ -235,6 +275,11 @@ class Post extends ModTemplate {
     };
 
     await this.app.storage.executeDatabase(sql, params, "post");
+
+    //
+    // fetch image if needed
+    //
+    if (txmsg.link != "") { this.grabImage(txmsg.link, tx.transaction.sig); }
 
   }
 
@@ -272,6 +317,7 @@ class Post extends ModTemplate {
                 text,
 		forum,
 		link,
+		img,
                 tx, 
                 ts,
                 children,
@@ -287,6 +333,7 @@ class Post extends ModTemplate {
 		$ptitle ,
 		$ptext ,
 		$pforum ,
+		$pimg ,
 		$plink ,
 		$ptx ,
 		$pts ,
@@ -304,6 +351,7 @@ class Post extends ModTemplate {
 	$ptitle		: '' ,
 	$ptext		: txmsg.comment ,
 	$pforum		: '' ,
+	$pimg		: '' ,
 	$plink		: '' ,
 	$ptx		: JSON.stringify(tx.transaction) ,
 	$pts		: tx.transaction.ts ,
@@ -343,6 +391,20 @@ class Post extends ModTemplate {
     await this.app.storage.executeDatabase(sql, params, "post");
 
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   async updatePostTransaction(tx) {

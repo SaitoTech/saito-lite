@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS posts (
       text TEXT,
       forum TEXT,
       link TEXT,
+      img TEXT,
       tx TEXT,
       ts INTEGER,
       children INTEGER,

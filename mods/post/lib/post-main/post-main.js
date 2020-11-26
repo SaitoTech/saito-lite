@@ -1,6 +1,7 @@
 const PostMainTemplate = require('./post-main.template');
 const PostTeaserTemplate = require('./post-teaser.template');
 const PostView = require('./../post-overlay/post-view');
+const PostStyle = require('./../style.template');
 
 module.exports = PostMain = {
 
@@ -20,6 +21,11 @@ module.exports = PostMain = {
     for (let i = 0; i < mod.posts.length; i++) {
       this.addPost(app, mod, mod.posts[i]);
     }
+
+    //
+    // add css
+    //
+    app.browser.addElementToDom(PostStyle());
 
   },
 

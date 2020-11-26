@@ -2,6 +2,7 @@ const ArcadePostsTemplate = require('./arcade-posts.template');
 const PostTeaserTemplate = require('./post-teaser.template');
 const PostView = require('./../post-overlay/post-view');
 const PostCreate = require('./../post-overlay/post-create');
+const PostStyle = require('./../style.template.js');
 
 module.exports = ArcadePosts = {
 
@@ -15,6 +16,8 @@ module.exports = ArcadePosts = {
     }
 
     mod.renderMethod = "arcade";
+
+    app.browser.addElementToDom(PostStyle());
 
   },
 
