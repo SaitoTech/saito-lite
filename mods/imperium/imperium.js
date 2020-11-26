@@ -15457,6 +15457,8 @@ console.log("Z Index: " + JSON.stringify(z[z_index]));
               <option value="faction5">Brotherhood of Yin</option>
             </select>
 
+            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
     `;
 
   }

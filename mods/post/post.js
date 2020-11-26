@@ -98,6 +98,9 @@ class Post extends ModTemplate {
           if (tx.msg.type == "comment") {
             post_self.receiveCommentTransaction(tx);
           }
+          if (tx.msg.type == "report") {
+            post_self.receiveReportTransaction(tx);
+          }
           if (tx.msg.type == "update") {
             post_self.updatePostTransaction(tx);
           }
@@ -105,9 +108,6 @@ class Post extends ModTemplate {
             post_self.deletePostTransaction(tx);
             post_self.deleteCommentCountPostTransaction(tx);
           }
-          //if (tx.msg.type == "report") {
-          //  post_self.receiveReportTransaction(tx);
-          //}
         }
       }
     }
@@ -310,6 +310,34 @@ class Post extends ModTemplate {
 	$pchildren	: 0 ,
 	$pflagged 	: 0 ,
 	$pdeleted	: 0 ,
+    };
+
+    await this.app.storage.executeDatabase(sql, params, "post");
+
+  }
+
+
+
+  createReportTransaction(post_id, comment) {
+
+      let newtx = this.app.wallet.createUnsignedTransaction();
+
+      newtx.msg.module = "Post";
+      newtx.msg.type = "report";
+      newtx.msg.post_id = post_id;
+
+      return this.app.wallet.signTransaction(newtx);
+      
+  }
+
+  async receiveReportTransaction(tx) {
+
+    let txmsg = tx.returnMessage();
+    let sql = `
+        UPDATE posts SET flagged = 1 WHERE id = $pid
+    `;
+    let params = {
+	$pid 		: txmsg.post_id 
     };
 
     await this.app.storage.executeDatabase(sql, params, "post");

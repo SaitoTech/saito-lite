@@ -14,6 +14,8 @@ module.exports = ArcadePosts = {
       this.addPost(app, mod, mod.posts[i]);
     }
 
+    mod.renderMethod = "arcade";
+
   },
 
 

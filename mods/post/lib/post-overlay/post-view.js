@@ -66,6 +66,36 @@ module.exports = PostView = {
     }
 
 
+    document.querySelector('.post-view-report').onclick = async (e) => {
+
+      let reportit = await sconfirm("Report this post or comments to the mods?");
+      if (reportit) {
+
+        let sig = document.querySelector('.post-view-report').getAttribute("data-id");
+
+	await salert("Thank you for flagging this");
+
+	for (let i = 0; i < mod.posts.length; i++) {
+	  if (mod.posts[i].transaction.sig === sig) {
+	    mod.posts.splice(i, 1);
+	  }
+	}
+	for (let i = 0; i < mod.comments.length; i++) {
+	  if (mod.comments[i].transaction.sig === sig) {
+	    mod.comments.splice(i, 1);
+	  }
+	}
+
+	mod.render();
+	mod.overlay.hideOverlay();
+
+        let newtx = mod.createReportTransaction(sig);
+        app.network.propagateTransaction(newtx);
+      }
+
+    }
+
+
 
   },
 
