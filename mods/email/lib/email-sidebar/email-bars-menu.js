@@ -141,11 +141,11 @@ module.exports = EmailBarsMenu = {
                 }
               }
           });
-
-	  let mods = app.modules.respondTo("email-appspace");
+          console.log("email apps item");
+          console.log(mod.active);
+          let mods = app.modules.respondTo("email-appspace");
           mod.previous_state = mod.active;
           mod.active = "email_appspace";
-          //mod.previous_state = "email_list";
           mod.appspace_mod = mods[e.currentTarget.id];
           mod.appspace_mod_idx = e.currentTarget.id;
           mod.header_title = mod.appspace_mod.name;
