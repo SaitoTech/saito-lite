@@ -40,10 +40,5 @@ module.exports = EmailInboxHeader = {
 
               });
             });
-
-    document.getElementById('email-bars-icon').addEventListener('click', (e) => {
-      let email_bars_menu = document.querySelector('#mobile.email-bars-menu');
-      email_bars_menu.style.display = email_bars_menu.style.display == "block" ? "none" : "block";
-    });
   },
 }

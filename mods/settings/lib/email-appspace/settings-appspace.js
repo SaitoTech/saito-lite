@@ -101,14 +101,8 @@ module.exports = SettingsAppspace = {
       });
 
 
-    document.getElementById('restore-account-btn')
-      .addEventListener('click', (e) => {
-        document.getElementById("settings-restore-account").click();
-      });
-
-
-    document.getElementById('settings-restore-account')
-      .onchange = async function (e) {
+    document.getElementById('restore-account-btn').onclick = async(e) => {
+      
 
         //let confirm_password = await sconfirm("Did you encrypt this backup with a password. Click cancel if not:");
         let password_prompt = "";
@@ -182,38 +176,38 @@ module.exports = SettingsAppspace = {
 
     document.getElementById('reset-account-btn')
       .onclick = (e) => {
-
+    
         app.wallet.resetWallet();
         app.modules.returnModule('Arcade').onResetWallet();
         app.storage.saveOptions();
-
+    
         salert("Wallet reset!");
-
+    
         data.email.emails.inbox = [];
         data.email.emails.sent = [];
         data.email.emails.trash = [];
-
+    
         data.email.body.render(app, data);
         data.email.body.attachEvents(app, data);
-
+    
         app.blockchain.resetBlockchain();
-
+    
     };
 
-    document.getElementById('delete-account-btn')
-      .onclick = async (e) => {
-
-        await app.storage.resetOptions();
-        await salert("Account deleted!");
-
-        data.email.emails.inbox = [];
-        data.email.emails.sent = [];
-        data.email.emails.trash = [];
-
-        app.blockchain.resetBlockchain();
-
-        window.location = window.location;
-    };
+    // document.getElementById('delete-account-btn')
+    //   .onclick = async (e) => {
+    // 
+    //     await app.storage.resetOptions();
+    //     await salert("Account deleted!");
+    // 
+    //     data.email.emails.inbox = [];
+    //     data.email.emails.sent = [];
+    //     data.email.emails.trash = [];
+    // 
+    //     app.blockchain.resetBlockchain();
+    // 
+    //     window.location = window.location;
+    // };
 
     document.getElementById('restore-privatekey-btn').onclick = async (e) => {
 

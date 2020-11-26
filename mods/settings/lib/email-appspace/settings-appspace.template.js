@@ -96,7 +96,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
       </div>
 
       <div style="padding-bottom:40px;">
-        Having trouble? Try clearing your browser cache or <span style="border-bottom: 1px dashed id="reset-account-btn" class="">resetting your account</span>. If that doesn't fix things, write us at info@saito.tech.
+        Having trouble? Try clearing your browser cache or <span style="border-bottom: 1px dashed" id="reset-account-btn" class="">resetting your account</span>. If that doesn't fix things, write us at info@saito.tech.
       </div>
 
     </div>

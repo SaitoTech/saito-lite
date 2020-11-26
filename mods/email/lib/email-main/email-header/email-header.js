@@ -37,6 +37,14 @@ module.exports = EmailHeader = {
 
   },
 
-  attachEvents(app, mod) {},
+  attachEvents(app, mod) {
+    let hamburgerIcon = document.getElementById('email-bars-icon');
+    if (hamburgerIcon){
+      hamburgerIcon.addEventListener('click', (e) => {
+        let email_bars_menu = document.querySelector('#mobile.email-bars-menu');
+        email_bars_menu.style.display = email_bars_menu.style.display == "block" ? "none" : "block";
+      });  
+    }
+  },
 
 }
