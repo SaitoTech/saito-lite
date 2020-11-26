@@ -168,7 +168,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   padding: 1em;
   min-height: 12em;
   margin-bottom: 20px;
-  background-color: whitesmoke;
+  background-color: white;
 }
 
 .post-submit-btn {
@@ -252,7 +252,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   padding: 1em;
   min-height: 12em;
   margin-bottom: 10px;
-  background-color: whitesmoke;
+  background-color: white;
 }
 
 .post-view-leave-comment {
@@ -338,6 +338,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   font-weight: bold;
   float: left;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .arcade-post-user {

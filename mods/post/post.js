@@ -88,28 +88,27 @@ class Post extends ModTemplate {
     if (app.BROWSER == 0) {
       if (conf == 0) {
 
-	if (tx.msg.module === "Post") {
+	let txmsg = tx.returnMessage();
+
+	if (txmsg.module === "Post") {
 
           let post_self = app.modules.returnModule("Post");
 
-          if (tx.msg.type == "post") {
+          if (txmsg.type == "post") {
             post_self.receivePostTransaction(tx);
           }
-          if (tx.msg.type == "comment") {
+          if (txmsg.type == "comment") {
             post_self.receiveCommentTransaction(tx);
           }
-          if (tx.msg.type == "edit") {
+          if (txmsg.type == "edit") {
             post_self.receiveEditTransaction(tx);
           }
-          if (tx.msg.type == "report") {
+          if (txmsg.type == "report") {
             post_self.receiveReportTransaction(tx);
           }
-/*
-          if (tx.msg.type == "delete") {
-            post_self.deletePostTransaction(tx);
-            post_self.deleteCommentCountPostTransaction(tx);
+          if (txmsg.type == "delete") {
+            post_self.receiveDeleteTransaction(tx);
           }
-*/
         }
       }
     }
@@ -212,6 +211,9 @@ class Post extends ModTemplate {
   async receivePostTransaction(tx) {
 
     let txmsg = tx.returnMessage();
+
+    if (txmsg.title == "") { return; }
+
     let sql = `
         INSERT INTO 
             posts (
@@ -403,6 +405,11 @@ class Post extends ModTemplate {
 
     await this.app.storage.executeDatabase(sql, params, "post");
 
+
+    sql = "UPDATE posts SET children = children+1 WHERE id = $pid";
+    params = { $pid : txmsg.thread_id }
+    await this.app.storage.executeDatabase(sql, params, "post");
+
   }
 
 
@@ -434,61 +441,37 @@ class Post extends ModTemplate {
   }
 
 
+  createDeleteTransaction(post_id) {
 
+      let newtx = this.app.wallet.createUnsignedTransaction();
 
+      newtx.msg.module = "Post";
+      newtx.msg.type = "delete";
+      newtx.msg.post_id = post_id;
 
-
-
-
-
-
-
-
-
-
-
-
-  async updatePostTransaction(tx) {
-
-    let txmsg = tx.returnMessage();
-
-    let sql = `
-        UPDATE 
-          posts
-        SET
-          content = '${txmsg.content}'
-        WHERE
-          id = '${txmsg.parent_id};
-      `;
+      return this.app.wallet.signTransaction(newtx);
+      
   }
 
-  async deletePostTransaction(tx) {
+  async receiveDeleteTransaction(tx) {
 
     let txmsg = tx.returnMessage();
-
     let sql = `
         UPDATE 
           posts
         SET
           deleted = 1
         WHERE
-          id = '${txmsg.parent_id};
+          id = $post_id
+	AND
+	  publickey = $author 
       `;
+    let params = { $post_id : txmsg.post_id , $author : tx.transaction.from[0].add }
+    await this.app.storage.executeDatabase(sql, params, "post");
+
   }
 
-  async reportPostTransaction(tx) {
 
-    let txmsg = tx.returnMessage();
-
-    let sql = `
-        UPDATE 
-          posts
-        SET
-          ts = ${tx.transaction.ts}
-        WHERE
-          id = '${txmsg.parent_id};
-      `;
-  }
 
   returnPosts(count) { }
 

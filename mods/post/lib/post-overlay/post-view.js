@@ -76,7 +76,7 @@ try {
 
 	  if (el2.getAttribute("data-id") === comment_sig) {
 
-	     let replacement_html = `<textarea data-id="${comment_sig}" id="textedit-field-${comment_sig}">${el2.innerHTML}</textarea><button id="edit-button-${comment_sig}" data-id="${comment_sig}" type="button" class="comment-edit-button" value="Edit Comment" />`;
+	     let replacement_html = `<textarea data-id="${comment_sig}" id="textedit-field-${comment_sig}">${el2.innerHTML}</textarea><button id="edit-button-${comment_sig}" data-id="${comment_sig}" type="button" class="comment-edit-button" value="Edit Comment">edit comment</button>`;
 	    el2.innerHTML = replacement_html;
 	    document.getElementById(`edit-button-${comment_sig}`).onclick = (e) => {
 
