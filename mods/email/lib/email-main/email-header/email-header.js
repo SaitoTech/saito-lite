@@ -8,7 +8,9 @@ module.exports = EmailHeader = {
   render(app, mod) {
     mod.header = this;
 
-    switch(mod.active) {
+    
+    let page = mod.parseHash(window.location.hash).page
+    switch(page) {
       case "email_list":
         EmailInboxHeader.render(app, mod);
         EmailInboxHeader.attachEvents(app, mod);
@@ -25,11 +27,12 @@ module.exports = EmailHeader = {
         EmailAppspaceHeader.render(app, mod);
         EmailAppspaceHeader.attachEvents(app, mod);
         break;
-      case "crypto_mod":
+      case "crypto_page":
         EmailAppspaceHeader.render(app, mod);
         EmailAppspaceHeader.attachEvents(app, mod);
         break;
       default:
+        // errors here are handled in email-body.js
         break;
     }
 

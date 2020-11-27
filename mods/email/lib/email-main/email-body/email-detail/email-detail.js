@@ -4,7 +4,6 @@ module.exports = EmailDetail = {
 
   render(app, mod) {
     let email_body = document.querySelector('.email-body')
-    //email_body.innerHTML = EmailDetailTemplate(app, mod, mod.selected_email);
     email_body.innerHTML = EmailDetailTemplate(app, mod);
   },
 
