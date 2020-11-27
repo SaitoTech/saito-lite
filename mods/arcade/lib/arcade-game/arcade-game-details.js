@@ -27,7 +27,14 @@ module.exports = ArcadeGameDetails = {
       app.browser.addElementToDom(`<div id="background-shim" class="background-shim" style=""><div id="background-shim-cover" class="background-shim-cover"></div></div>`); 
     }
 
-    mod.overlay.showOverlay(app, mod, ArcadeGameDetailsTemplate(app, mod, invite));
+    mod.overlay.showOverlay(app, mod, ArcadeGameDetailsTemplate(app, mod, invite), function() {
+
+      //
+      // on close, hide the shim
+      //
+      document.querySelector('.background-shim').destroy();
+
+    });
     mod.meta_overlay = new AdvancedOverlay(app, mod);
     mod.meta_overlay.render(app, mod);
     mod.meta_overlay.attachEvents(app, mod);

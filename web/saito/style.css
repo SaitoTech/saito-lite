@@ -208,8 +208,7 @@ hr {
   font-size: 31px;
 }
 .saito-overlay-closebox-btn:hover {
-  height: 32px;
-  width: 32px;
+  transform: scale(1.0);
 }
 .game-overlay {
   z-index:9010;
