@@ -103,6 +103,9 @@ class Post extends ModTemplate {
           if (txmsg.type == "edit") {
             post_self.receiveEditTransaction(tx);
           }
+          if (txmsg.type == "editpost") {
+            post_self.receiveEditPostTransaction(tx);
+          }
           if (txmsg.type == "report") {
             post_self.receiveReportTransaction(tx);
           }
@@ -279,6 +282,152 @@ class Post extends ModTemplate {
   }
 
 
+  createEditPostTransaction(title, comment, link, forum, images, post_id) {
+
+      let newtx = this.app.wallet.createUnsignedTransaction();
+
+      newtx.msg.module = "Post";
+      newtx.msg.type = "editpost";
+      newtx.msg.title = title;
+      newtx.msg.comment = comment;
+      newtx.msg.link = link;
+      newtx.msg.forum = forum;
+      newtx.msg.images = images;
+      newtx.msg.post_id = post_id;
+      
+      return this.app.wallet.signTransaction(newtx);
+      
+  }
+  async receiveEditPostTransaction(tx) {
+
+    let txmsg = tx.returnMessage();
+
+    if (txmsg.title == "") { return; }
+
+    let is_parent_id = 0;
+    let sql = `SELECT parent_id FROM posts WHERE id = $id`;
+    let params = { $id : txmsg.post_id }
+    let rows = await this.app.storage.queryDatabase(sql, params, 'post');
+    if (rows) {
+console.log("ROWS: " + JSON.stringify(rows));
+      if (rows.length > 0) {
+	if (rows[0].parent_id === "") { 
+	  is_parent_id = 1;
+	}
+      }
+    }
+
+console.log("IS THIS THE TOP POST: " + is_parent_id);
+
+    //
+    // check if permitted to edit
+    //
+    sql = `SELECT publickey FROM posts WHERE id = $id`;
+    params = { $id : txmsg.post_id }
+    rows = await this.app.storage.queryDatabase(sql, params, 'post');
+    if (rows) {
+      if (rows.length > 0) {
+	if (rows[0].publickey === tx.transaction.from[0].add) {
+
+          sql = `DELETE FROM posts WHERE publickey = $author AND id = $id`;
+          params = {
+            $author	: tx.transaction.from[0].add ,
+            $id		: txmsg.post_id
+          };
+
+console.log(sql + " -- " + JSON.stringify(params));
+          await this.app.storage.executeDatabase(sql, params, "post");
+
+
+        sql = `
+        INSERT INTO 
+            posts (
+                id,
+                thread_id,
+                parent_id, 
+                type,
+		publickey,
+                title,
+                img,
+                text,
+		forum,
+		link,
+                tx, 
+                ts,
+                children,
+                flagged,
+                deleted
+                ) 
+            VALUES (
+                $pid ,
+	        $pthread_id ,
+                $pparent_id ,
+                $ptype ,
+		$ppublickey ,
+		$ptitle ,
+		$pimg ,
+		$ptext ,
+		$pforum ,
+		$plink ,
+		$ptx ,
+		$pts ,
+		$pchildren ,
+		$pflagged ,
+		$pdeleted
+            );
+        `;
+     params = {
+	$pid 		: tx.transaction.sig ,
+	$pthread_id 	: tx.transaction.sig ,
+	$pparent_id	: '' ,
+	$ptype		: 'post' ,
+	$ppublickey	: tx.transaction.from[0].add ,
+	$ptitle		: txmsg.title ,
+	$pimg		: "" ,
+	$ptext		: txmsg.comment ,
+	$pforum		: txmsg.forum ,
+	$plink		: txmsg.link ,
+	$ptx		: JSON.stringify(tx.transaction) ,
+	$pts		: tx.transaction.ts ,
+	$pchildren	: 0 ,
+	$pflagged 	: 0 ,
+	$pdeleted	: 0 ,
+    };
+
+    await this.app.storage.executeDatabase(sql, params, "post");
+
+    //
+    // fetch image if needed
+    //
+    if (txmsg.link != "") { this.grabImage(txmsg.link, tx.transaction.sig); }
+
+
+
+          sql = `UPDATE posts SET parent_id = $new_parent_id WHERE parent_id = $old_parent_id`;
+          params = {
+            $new_parent_id	: tx.transaction.sig ,
+            $old_parent_id	: txmsg.post_id
+          };
+          await this.app.storage.executeDatabase(sql, params, "post");
+
+
+	  if (is_parent_id == 1) {
+            sql = `UPDATE posts SET thread_id = $new_parent_id WHERE thread_id = $old_parent_id`;
+            params = {
+              $new_parent_id	: tx.transaction.sig ,
+              $old_parent_id	: txmsg.post_id
+            };
+            await this.app.storage.executeDatabase(sql, params, "post");
+	  }
+
+
+
+	}
+      }
+    }
+  }
+
+
   createEditTransaction(sig, comment) {
 
       let newtx = this.app.wallet.createUnsignedTransaction();
@@ -295,12 +444,24 @@ class Post extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
+    let is_parent_id = 0;
+    let sql = `SELECT parent_id FROM posts WHERE id = $id`;
+    let params = { $id : txmsg.sig }
+    let rows = await this.app.storage.queryDatabase(sql, params, 'post');
+    if (rows) {
+      if (rows.length > 0) {
+	if (rows[0].parent_id === "") { 
+	  is_parent_id = 1;
+	}
+      }
+    }
+
     //
     // check if permitted to edit
     //
-    let sql = `SELECT publickey FROM posts WHERE id = $id`;
-    let params = { $id : txmsg.sig }
-    let rows = await this.app.storage.queryDatabase(sql, params, 'post');
+    sql = `SELECT publickey FROM posts WHERE id = $id`;
+    params = { $id : txmsg.sig }
+    rows = await this.app.storage.queryDatabase(sql, params, 'post');
     if (rows) {
       if (rows.length > 0) {
 	if (rows[0].publickey === tx.transaction.from[0].add) {
@@ -320,6 +481,16 @@ class Post extends ModTemplate {
             $old_parent_id	: txmsg.sig
           };
           await this.app.storage.executeDatabase(sql, params, "post");
+
+
+	  if (is_parent_id == 1) {
+            sql = `UPDATE posts SET thread_id = $new_parent_id WHERE thread_id = $old_parent_id`;
+            params = {
+              $new_parent_id	: tx.transaction.sig ,
+              $old_parent_id	: txmsg.sig
+            };
+            await this.app.storage.executeDatabase(sql, params, "post");
+	  }
 
 	}
       }

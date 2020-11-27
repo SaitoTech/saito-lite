@@ -85,6 +85,18 @@ module.exports = PostStyleTemplate = (app, mod) => {
   cursor: pointer;
 }
 
+.post-view-edit {
+  color: #888;
+  float: left;
+  margin-left: 1em;
+  cursor: pointer;
+}
+
+.post-view-edit:hover {
+  color: #444;
+  text-decoration: underline;
+}
+
 .post-view-comment-edit {
   float: left;
   font-weight: bold;

@@ -29,6 +29,7 @@ module.exports = PostCreate = {
     app.browser.addDragAndDropFileUploadToElement("post-create-image", (file) => {
       console.log(file);
       this.new_post.images.push(file);
+      app.browser.addElementToDom(`<img src="${file}" style="top: -90px; position: relative; float: left; height: 190px; width: auto; margin-left: auto; margin-right: auto;width: auto;" />`, "post-create-image");
     });
 
   },

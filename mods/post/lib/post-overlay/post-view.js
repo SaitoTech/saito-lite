@@ -66,6 +66,53 @@ module.exports = PostView = {
     }
 
 
+
+    document.querySelectorAll('.post-view-edit').forEach(el => {
+      el.onclick = (e) => {
+
+        let post_sig = el.getAttribute("data-id");
+
+        document.querySelectorAll('.post-view-parent-comment').forEach(el2 => {	
+
+	  if (el2.getAttribute("data-id") === post_sig) {
+
+	    let replacement_html = `<textarea data-id="${post_sig}" id="textedit-field-${post_sig}">${el2.innerHTML}</textarea><button id="edit-button-${post_sig}" data-id="${post_sig}" type="button" class="comment-edit-button" value="Edit Comment">edit comment</button>`;
+
+	    el2.innerHTML = replacement_html;
+	    document.getElementById(`edit-button-${post_sig}`).onclick = (e) => {
+
+	      let revised_text = document.querySelector(`#textedit-field-${post_sig}`).value;
+	      let this_post = null;
+
+	      for (let i = 0; i < mod.posts.length; i++) {
+	        if (mod.posts[i].transaction.sig === post_sig) {
+	          this_post = mod.posts[i];
+  	        }
+	      }
+
+console.log("EDITED POST: " + revised_text);
+
+              let newtx = mod.createEditPostTransaction(this_post.msg.title, revised_text, this_post.msg.link, this_post.msg.forum, this_post.msg.images, post_sig);
+	      app.network.propagateTransaction(newtx);
+
+console.log("X: " + JSON.stringify(newtx));
+
+	      for (let i = 0; i < mod.posts.length; i++) {
+		if (mod.posts[i].transaction.sig === post_sig) {
+		  newtx.children = mod.posts[i].children;
+		  mod.posts[i] = newtx;
+		}
+	      }
+
+	      el2.innerHTML = revised_text;
+	      mod.render();
+	    };
+	  }
+	});
+      }
+    });
+
+
 try {
     document.querySelectorAll('.post-view-comment-edit').forEach(el => {
       el.onclick = (e) => {
@@ -104,8 +151,6 @@ try {
 	    };
 	  }
 	});
-
-
       }
     });
 } catch (err) {}

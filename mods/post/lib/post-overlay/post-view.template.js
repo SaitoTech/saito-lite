@@ -15,10 +15,17 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
       <div id="post-view-sublinks" class="post-view-sublinks">
         <div id="post-view-posted-by" class="post-view-posted-by">posted by </div>
         <div id="post-view-user" class="post-view-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
+  `;
+
+  if (tx.transaction.from[0].add === app.wallet.returnPublicKey()) {
+    html += `<div data-id="${sig}" id="post-view-edit" class="post-view-edit">edit</div>`;
+  }
+
+   html += `
         <div data-id="${sig}" id="post-view-report" class="post-view-report">report</div>
       </div>
   
-      <div id="post-view-parent-comment" class="post-view-parent-comment">${tx.msg.comment}</div>
+      <div data-id="${sig}" id="post-view-parent-comment" class="post-view-parent-comment">${tx.msg.comment}</div>
     </div>
     `;
 
