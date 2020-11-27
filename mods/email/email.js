@@ -140,7 +140,7 @@ class Email extends ModTemplate {
         // Set header_title
         let page = this.parseHash(window.location.hash).page;
         let subPage = this.parseHash(window.location.hash).subpage;
-        let selectedemailSig = this.parseHash(window.location.hash).selectedemail
+        let selectedemailSig = this.parseHash(window.location.hash).selectedemail;
         if (selectedemailSig && subPage) {
           try {
             let selected_email = this.getSelectedEmail(selectedemailSig, subPage);
@@ -201,13 +201,13 @@ class Email extends ModTemplate {
 
 
 
-  deleteTransaction(tx) {
+  deleteTransaction(tx, subPage) {
 
-    for (let i = 0; i < this.emails[this.emails.active].length; i++) {
-      let mytx = this.emails[this.emails.active][i];
+    for (let i = 0; i < this.emails[subPage].length; i++) {
+      let mytx = this.emails[subPage][i];
       if (mytx.transaction.sig == tx.transaction.sig) {
         this.app.storage.deleteTransaction(tx);
-        this.emails[this.emails.active].splice(i, 1);
+        this.emails[subPage].splice(i, 1);
         this.emails['trash'].unshift(tx);
       }
     }

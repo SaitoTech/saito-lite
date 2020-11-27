@@ -18,22 +18,18 @@ module.exports = EmailInboxHeader = {
     document.getElementById('email-delete-icon')
             .addEventListener('click', (e) => {
               let email_list = document.querySelector('.email-list');
+              let subPage = mod.parseHash(window.location.hash).subpage
+              
               Array.from(document.getElementsByClassName('email-message')).forEach(mail => {
                 let is_checked = mail.children[0].checked;
-
-                // remove from DOM
+                
                 if (is_checked) {
                   email_list.removeChild(mail);
                   //
                   // tell our email to purge this transaction
                   //
-                  let mysig = mail.id;
-                  for (let i = 0; i < mod.emails[mod.emails.active].length; i++) {
-                    let mytx = mod.emails[mod.emails.active][i];
-                    if (mytx.transaction.sig == mysig) {
-                      mod.deleteTransaction(mytx);
-                    }
-                  }
+                  let selected_email = mod.getSelectedEmail(mail.id, subPage);
+                  mod.deleteTransaction(selected_email, subPage);
                 }
 
               });
