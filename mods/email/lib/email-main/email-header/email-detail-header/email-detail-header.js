@@ -12,36 +12,27 @@ module.exports = EmailDetailHeader = {
     document.getElementById('email-delete-icon')
             .onclick = (e) => {
               // delete the email from the emaillist
-              mod.deleteTransaction(mod.selected_email);
-              window.location.hash = `#page=email_list&subpage=inbox`;
+              try {
+                let selectedemailSig = this.parseHash(window.location.hash).selectedemail
+                let subPage = this.parseHash(window.location.hash).subpage
+                let selected_email = mod.getSelectedEmail(selectedemailSig, subPage);
+                mod.deleteTransaction(selected_email);
+                window.location.hash = `#page=email_list&subpage=inbox`;  
+              } catch(error) {
+                // TODO: tell the user something went wrong....
+              }
             };
 
     document.getElementById('email-detail-reply')
             .onclick = (e) => {
-              window.location.hash = `#page=email_form`;
-// ################ TODO #############
-// ################ Fix this ################
-              let original = mod.selected_email;
-              document.getElementById('email-to-address').value = original.transaction.from[0].add;
-              document.querySelector('.email-title').value = "Re: " + original.msg.title;
-              let body = "<br /><hr /><i>Quoted Text: </i> <br />" + original.msg.message;
-              document.getElementById('email-text').innerHTML = body;
-              document.querySelector('.email-text').focus();
+              let selectedemailSig = mod.parseHash(window.location.hash).selectedemail
+              window.location.hash = `#page=email_form&original=${selectedemailSig}&type=reply`;
             };
 
     document.getElementById('email-detail-forward')
             .onclick = (e) => {
-              let original = mod.selected_email;
-              window.location.hash = `#page=email_form`;
-// ################ TODO #############
-// ################ Fix this ################
-
-              document.querySelector('.email-title').value = `Fwd: ${original.msg.title}`;
-              document.querySelector('.email-text').value = original.msg.message;
-              let body = "<br/><hr/><i>Forwarded Text: </i><br/>\n";
-              body += `Forwarded from: ${original.transaction.from[0].add}\n\n${original.msg.message}`;
-              document.getElementById('email-text').innerHTML = body;
-              document.getElementById('email-to-address').focus();
+              let selectedemailSig = mod.parseHash(window.location.hash).selectedemail
+              window.location.hash = `#page=email_form&original=${selectedemailSig}&type=fwd`;
             };
   }
 }

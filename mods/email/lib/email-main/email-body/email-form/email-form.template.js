@@ -1,4 +1,4 @@
-module.exports = EmailFormTemplate = (address) => {
+module.exports = EmailFormTemplate = (address, title, msg) => {
   return `
   <div class="email-compose">
   <div class="grid-2" style="grid-template-columns:6em 1fr">
@@ -30,9 +30,9 @@ module.exports = EmailFormTemplate = (address) => {
     </div-->
   </div>
   <div>
-      <input class="email-title" type="text" placeholder="Subject">
+      <input class="email-title" type="text" placeholder="Subject" value="${title}">
   </div>
-  <div id="email-text" class="email-text markdown" placeholder="Message"></div>
+  <div id="email-text" class="email-text markdown" placeholder="Message">${msg}</div>
   </div>
   <div>
     <button class="email-submit">Send</button>

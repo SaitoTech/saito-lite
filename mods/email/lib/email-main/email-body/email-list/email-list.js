@@ -5,7 +5,8 @@ const helpers = require('./../../../../../../lib/helpers/index');
 module.exports = EmailList = {
 
     render(app, mod) {
-
+      console.log("email list render");
+      console.log(mod.emails);
       document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
       let subPage = mod.parseHash(window.location.hash).subpage;
@@ -23,9 +24,11 @@ module.exports = EmailList = {
     attachEvents(app, mod) {
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.onclick = (e) => {
-                if (e.srcElement.nodeName == "INPUT") { return; }
-                let subPage = mod.parseHash(window.location.hash).subpage;
-                window.location.hash = `#page=email_detail&subpage=${subPage}&selected_email=${e.currentTarget.id}`
+              console.log("email message onclick...");
+              console.log(e.srcElement.nodeName);
+              if (e.srcElement.nodeName == "INPUT") { return; }
+              let subPage = mod.parseHash(window.location.hash).subpage;
+              window.location.hash = `#page=email_detail&subpage=${subPage}&selectedemail=${e.currentTarget.id}`
             };
         });
 

@@ -1,24 +1,19 @@
 
 module.exports = EmailDetailTemplate = (app, mod) => {
-  let selectedEmailSig = mod.parseHash(window.location.hash).selected_email;
-  console.log(selectedEmailSig);
-  console.log(mod.emails);
-  let emails = null;
-  let subPage = mod.parseHash(window.location.hash).subpage;
-  console.log(subPage);
-  if(subPage === "inbox" || subPage === "sent" || subPage === "trash") {
-    emails = mod.emails[subPage];
-  } else {
-    console.log("wtf?");
+  console.log("EmailDetailTemplate");
+  let selected_email = null;
+  try {
+    let subPage = mod.parseHash(window.location.hash).subpage;
+    console.log(subPage);
+    let selectedEmailSig = mod.parseHash(window.location.hash).selectedemail;
+    console.log(selectedEmailSig);
+    selected_email = mod.getSelectedEmail(selectedEmailSig, subPage);  
+  } catch(error){
+    console.log(error);
     //mod.locationErrorFallback();
   }
-  console.log(emails);
-  if (selectedEmailSig) {
-    let selected_email = emails.filter(tx => {
-        return tx.transaction.sig === selectedEmailSig
-    })[0];
-    
-    
+  console.log(selected_email);
+  if (selected_email) {
     let from  	= selected_email.transaction.from[0].add;
     let to  	= selected_email.transaction.to[0].add;
     let amt  	= selected_email.transaction.to[0].amt;
@@ -59,7 +54,9 @@ module.exports = EmailDetailTemplate = (app, mod) => {
         </div>
       </div>
     `;
-
+  } else {
+    console.log("no email...?");
+    //mod.locationErrorFallback();
   }
 }
 

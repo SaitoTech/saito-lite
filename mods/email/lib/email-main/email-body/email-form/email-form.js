@@ -9,8 +9,25 @@ module.exports = EmailForm = {
     render(app, mod) {
         this.app = app;
         this.saito = this.app;
-        let address = mod.parseHash(window.location.hash).toaddress
-        document.querySelector(".email-body").innerHTML = EmailFormTemplate(address);
+        let address, title, msg = "";
+        let original = null;
+        address = mod.parseHash(window.location.hash).toaddress;
+        address = address ? address : "";
+        let originalSig = mod.parseHash(window.location.hash).original;
+        let type = mod.parseHash(window.location.hash).type;
+        if (originalSig) {
+          original = mod.getSelectedEmail(originalSig, "inbox");
+        }
+        if(original && type == "reply") {
+          address = original.transaction.from[0].add;
+          title = "Re: " + original.msg.title;
+          msg = "<br /><hr /><i>Quoted Text: </i> <br />" + original.msg.message;
+        } else if(original && type == "fwd") {
+          address = original.transaction.from[0].add;
+          title = `Fwd: ${original.msg.title}`;
+          msg = `<br/><hr/><i>Forwarded Text: </i><br/>\nForwarded from: ${original.transaction.from[0].add}\n\n${original.msg.message}`;
+        }
+        document.querySelector(".email-body").innerHTML = EmailFormTemplate(address, title, msg);
 
         if (document.querySelector('.create-button')) { document.querySelector('.create-button').classList.add("mobile-hide"); }
 
@@ -67,13 +84,12 @@ module.exports = EmailForm = {
         let email_amount_elem = document.querySelector('.email-amount');
         let email_amount = 0.0;
 
-	//
-	// easy copy and paste error
-	//
-	if (email_to.indexOf(' (me)') > 0) {
-	  email_to = email_to.substring(0, email_to.indexOf(' (me)'));
-	}
-
+        //
+        // easy copy and paste error
+        //
+        if (email_to.indexOf(' (me)') > 0) {
+          email_to = email_to.substring(0, email_to.indexOf(' (me)'));
+        }
 
         if (email_amount_elem)  {
             if (email_amount_elem.value > 0) {
@@ -89,7 +105,7 @@ module.exports = EmailForm = {
 
         if (!newtx) {
           salert("Unable to send email. You appear to need more tokens");
-	      return;
+          return;
         }
 
         newtx.msg.module   = "Email";
