@@ -2621,6 +2621,10 @@ console.log("H: " + h);
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
       </select>
+
+      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
+
     `;
 
   }

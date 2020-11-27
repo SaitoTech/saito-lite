@@ -155,8 +155,9 @@
 }
 
 .post-submit-btn {
-  position: absolute;
-  bottom: 2em;
+  position: relative;
+  clear: both;
+  bottom: 0;
 }
 
 /* Post View */
@@ -267,3 +268,12 @@
   clear: both;
   margin-bottom: 5px;
 }
+
+.post-view-gallery {
+  max-width:70%;
+}
+
+.post-view-gallery-image {
+  width: 100%;
+}
+

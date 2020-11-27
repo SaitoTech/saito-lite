@@ -5,34 +5,30 @@ const helpers = require('./../../../../../../lib/helpers/index');
 module.exports = EmailList = {
 
     render(app, mod) {
-
+      console.log("email list render");
+      console.log(mod.emails);
       document.querySelector('.email-body').innerHTML = EmailListTemplate();
-      let inbox_emails = mod.emails[mod.emails.active]; //.reverse();
-      inbox_emails.forEach(tx => {
-        document.querySelector('.email-list').innerHTML +=
-            EmailListRowTemplate(tx, mod.addrController.returnAddressHTML(tx.transaction.from[0].add), helpers);
-      });
 
+      let subPage = mod.parseHash(window.location.hash).subpage;
+      let inbox_emails = mod.emails[subPage]; //.reverse();
+      if(inbox_emails){
+        inbox_emails.forEach(tx => {
+          document.querySelector('.email-list').innerHTML +=
+              EmailListRowTemplate(tx, mod.addrController.returnAddressHTML(tx.transaction.from[0].add), helpers);
+        });
+      } else {
+        mod.locationErrorFallback();
+      }
     },
 
     attachEvents(app, mod) {
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.onclick = (e) => {
-                if (e.srcElement.nodeName == "INPUT") { return; }
-
-                let sig = e.currentTarget.id;
-                let selected_email = mod.emails[mod.emails.active].filter(tx => {
-                    return tx.transaction.sig === sig
-                });
-
-                mod.selected_email = selected_email[0];
-                mod.header_title = mod.selected_email.msg.title;
-
-                mod.active = "email_detail";
-
-                mod.main.render(app, mod);
-                mod.main.attachEvents(app, mod);
-
+              console.log("email message onclick...");
+              console.log(e.srcElement.nodeName);
+              if (e.srcElement.nodeName == "INPUT") { return; }
+              let subPage = mod.parseHash(window.location.hash).subpage;
+              window.location.hash = `#page=email_detail&subpage=${subPage}&selectedemail=${e.currentTarget.id}`
             };
         });
 

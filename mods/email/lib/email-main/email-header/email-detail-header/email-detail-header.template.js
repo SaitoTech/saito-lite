@@ -8,6 +8,7 @@ module.exports = EmailDetailHeaderTempkate = (app, mod) => {
       <i id="email-delete-icon" class="icon-med far fa-trash-alt"></i>
       <i id="email-detail-reply" class="icon-med fas fa-reply"></i>
       <i id="email-detail-forward" class="icon-med fas fa-share"></i>
+      <i id="email-bars-icon" class="icon-med fas fa-bars"></i>
     </div>
     <div class="email-balance"></div>
     </div>

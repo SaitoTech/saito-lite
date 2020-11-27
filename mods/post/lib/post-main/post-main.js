@@ -1,6 +1,7 @@
 const PostMainTemplate = require('./post-main.template');
 const PostTeaserTemplate = require('./post-teaser.template');
 const PostView = require('./../post-overlay/post-view');
+const PostStyle = require('./../style.template');
 
 module.exports = PostMain = {
 
@@ -20,6 +21,11 @@ module.exports = PostMain = {
     for (let i = 0; i < mod.posts.length; i++) {
       this.addPost(app, mod, mod.posts[i]);
     }
+
+    //
+    // add css
+    //
+    app.browser.addElementToDom(PostStyle());
 
   },
 
@@ -46,6 +52,12 @@ module.exports = PostMain = {
   },
 
   addPost(app, mod, post) {
+    let post_this = 1;
+    document.querySelectorAll('.post-teaser').forEach(el => {
+      let sig = el.getAttribute("data-id");
+      if (sig === post.transaction.sig) { post_this = 0; }
+    });
+    if (post_this == 0) { return; }
     app.browser.addElementToDom(PostTeaserTemplate(app, mod, post), "post-posts");
   }
 

@@ -29,20 +29,12 @@ class Email extends ModTemplate {
     this.emails.inbox = [];
     this.emails.sent = [];
     this.emails.trash = [];
-    this.emails.active = "inbox";
-    // inbox
-    // outbox
-    // trash
 
     this.mods = [];
-    this.active = "email_list";
     this.header_title = "";
 
-    this.selected_email = null;
-
+    // is this.appspace needed??? 
     this.appspace = 0;	// print email-body with appspace
-    this.appspace_mod = null;
-    this.appspace_mod_idx = -1; // index in mods of appspace module
 
 //    this.uidata = {};
 //    this.uidata.mods = [];
@@ -54,7 +46,6 @@ class Email extends ModTemplate {
   }
 
   render(app) {
-
     super.render(app);
 
     let html = `
@@ -69,17 +60,14 @@ class Email extends ModTemplate {
 
     this.header.render(app, this);
     this.header.attachEvents(app, this);
-
-    EmailSidebar.render(app, this);
-    EmailSidebar.attachEvents(app, this);
-
-    EmailMain.render(app, this);
-    EmailMain.attachEvents(app, this);
-
+    
+    this.renderSidebar(app);
+    //this.renderMain(app);
+    
     // make visible
     document.getElementById('content').style.visibility = "visible";
 
-    console.log("TODO - fark mode in email is cross-module");
+    //console.log("TODO - fark mode in email is cross-module");
     if (getPreference('darkmode')) { addStyleSheet("/forum/dark.css"); }
 
 /***
@@ -109,20 +97,79 @@ class Email extends ModTemplate {
     EmailMain.render(app, this);
     EmailMain.attachEvents(app, this);
   }
-
+  // ###### TODO ########
+  // put messages everywhere
+  locationErrorFallback(msg = "There was an unknown error..."){
+    // error. Reset state and return to inbox.
+    window.location.hash = `#page=email_list&subpage=inbox`;
+    salert(msg);
+  }
+  parseHash(hash) {
+    return hash.substr(1).split('&').reduce(function (result, item) {
+      var parts = item.split('=');
+      result[parts[0]] = parts[1];
+      return result;
+    }, {});
+  }
+  getSelectedEmail(selectedemailSig, subPage){
+    console.log("getSelectedEmail");
+    console.log(this.emails);
+    console.log(this.emails[subPage]);
+    let selected_email = this.emails[subPage].filter(tx => {
+        return tx.transaction.sig === selectedemailSig
+    })[0];
+    return selected_email;
+  }
   initialize(app) {
-
     super.initialize(app);
-
-    //
-    // add an email
-    //
-    let tx = app.wallet.createUnsignedTransaction();
-    tx.msg.module = "Email";
-    tx.msg.title = "Sent Message Folder";
-    tx.msg.message = "This folder is where your sent messages are stored...";
-    tx = this.app.wallet.signTransaction(tx);
-    this.emails.sent.push(tx);
+    if(app.BROWSER && this.browser_active) {
+      console.log("email initilaize");
+      //
+      // add an email
+      //
+      let tx = app.wallet.createUnsignedTransaction();
+      tx.msg.module = "Email";
+      tx.msg.title = "Sent Message Folder";
+      tx.msg.message = "This folder is where your sent messages are stored...";
+      tx = this.app.wallet.signTransaction(tx);
+      this.emails.sent.push(tx);
+      
+      window.addEventListener("hashchange", () => {
+        // Set header_title
+        let page = this.parseHash(window.location.hash).page;
+        let subPage = this.parseHash(window.location.hash).subpage;
+        let selectedemailSig = this.parseHash(window.location.hash).selectedemail
+        if (selectedemailSig && subPage) {
+          try {
+            let selected_email = this.getSelectedEmail(selectedemailSig, subPage);
+            this.header_title = selected_email.msg.title;  
+          } catch (error) { 
+            // This type of error will be handled in email-detail.js
+          }
+        } else if(page === "email_form") {
+          this.header_title = "Compose Email";
+        } else if(subPage) {
+          this.header_title = subPage;  
+        }
+        // Change active-navigator-item"
+        document.querySelectorAll(`.active-navigator-item`).forEach((activeElem, i) => {
+          activeElem.classList.remove("active-navigator-item");
+        });
+        console.log(`#email-nav-${subPage}.email-navigator-item, #email-nav-${subPage}.email-apps-item, #email-nav-${subPage}.crypto-apps-item`);
+        document.querySelectorAll(`#email-nav-${subPage}.email-navigator-item, #email-nav-${subPage}.email-apps-item, #email-nav-${subPage}.crypto-apps-item`).forEach((newActiveNavItem, i) => {  
+          newActiveNavItem.classList.add("active-navigator-item");
+        });
+        // Render
+        this.renderSidebar(app);
+        this.renderMain(app);
+        this.header.render(app, this);
+        this.header.attachEvents(app, this);
+      });
+      // set the hash to match the state we want and force a hashchange event
+      let oldHash = window.location.hash;
+      window.location.hash = `#`;
+      window.location.hash = oldHash;
+    }
 
   }
 
@@ -279,15 +326,19 @@ class Email extends ModTemplate {
   }
 
   returnMenuItems() {
+    console.log("------- return Menu Items --------");
+    // ######## TODO ######
+    // make sure this works....
     return {
       'send-email': {
         name: 'Send Email',
         callback: (address) => {
-          this.previous_state = this.active;
-          this.active = "email_form";
-
-          this.main.render(this.app, this.uidata);
-          this.main.attachEvents(this.app, this.uidata);
+          window.location.hash = `#page=email_form&toaddress=${address}`;
+          // this.previous_state = this.active;
+          // this.active = "email_form";
+          // 
+          // this.main.render(this.app, this.uidata);
+          // this.main.attachEvents(this.app, this.uidata);
 
           document.getElementById('email-to-address').value = address;
         }

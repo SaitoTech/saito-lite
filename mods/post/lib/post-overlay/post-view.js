@@ -40,7 +40,7 @@ module.exports = PostView = {
     	  for (let i = 0; i < mod.comments.length; i++) {
     	    this.addComment(app, mod, mod.comments[i]);
     	  }
-
+	  this.attachEvents(app, mod, sig);
         }
     );
 
@@ -62,6 +62,125 @@ module.exports = PostView = {
       newtx.children = 0;
       mod.comments.push(newtx);
       this.addComment(app, mod, newtx);
+
+    }
+
+
+
+    document.querySelectorAll('.post-view-edit').forEach(el => {
+      el.onclick = (e) => {
+
+        let post_sig = el.getAttribute("data-id");
+
+        document.querySelectorAll('.post-view-parent-comment').forEach(el2 => {	
+
+	  if (el2.getAttribute("data-id") === post_sig) {
+
+	    let replacement_html = `<textarea data-id="${post_sig}" id="textedit-field-${post_sig}">${el2.innerHTML}</textarea><button id="edit-button-${post_sig}" data-id="${post_sig}" type="button" class="comment-edit-button" value="Edit Comment">edit comment</button>`;
+
+	    el2.innerHTML = replacement_html;
+	    document.getElementById(`edit-button-${post_sig}`).onclick = (e) => {
+
+	      let revised_text = document.querySelector(`#textedit-field-${post_sig}`).value;
+	      let this_post = null;
+
+	      for (let i = 0; i < mod.posts.length; i++) {
+	        if (mod.posts[i].transaction.sig === post_sig) {
+	          this_post = mod.posts[i];
+  	        }
+	      }
+
+console.log("EDITED POST: " + revised_text);
+
+              let newtx = mod.createEditPostTransaction(this_post.msg.title, revised_text, this_post.msg.link, this_post.msg.forum, this_post.msg.images, post_sig);
+	      app.network.propagateTransaction(newtx);
+
+console.log("X: " + JSON.stringify(newtx));
+
+	      for (let i = 0; i < mod.posts.length; i++) {
+		if (mod.posts[i].transaction.sig === post_sig) {
+		  newtx.children = mod.posts[i].children;
+		  mod.posts[i] = newtx;
+		}
+	      }
+
+	      el2.innerHTML = revised_text;
+	      mod.render();
+	    };
+	  }
+	});
+      }
+    });
+
+
+try {
+    document.querySelectorAll('.post-view-comment-edit').forEach(el => {
+      el.onclick = (e) => {
+
+        let comment_sig = el.getAttribute("data-id");
+
+        document.querySelectorAll('.post-view-comment-text').forEach(el2 => {	
+
+	  if (el2.getAttribute("data-id") === comment_sig) {
+
+	     let replacement_html = `<textarea data-id="${comment_sig}" id="textedit-field-${comment_sig}">${el2.innerHTML}</textarea><button id="edit-button-${comment_sig}" data-id="${comment_sig}" type="button" class="comment-edit-button" value="Edit Comment">edit comment</button>`;
+	    el2.innerHTML = replacement_html;
+	    document.getElementById(`edit-button-${comment_sig}`).onclick = (e) => {
+
+	      let revised_text = document.querySelector(`#textedit-field-${comment_sig}`).value;
+	      let newtx = mod.createEditTransaction(comment_sig, revised_text);   
+	      app.network.propagateTransaction(newtx);
+
+	      for (let i = 0; i < mod.comments.length; i++) {
+		if (mod.comments[i].transaction.sig === comment_sig) {
+		  newtx.children = mod.comments[i].children;
+		  mod.comments[i] = newtx;
+		}
+	      }
+	      for (let i = 0; i < mod.posts.length; i++) {
+		if (mod.posts[i].transaction.sig === comment_sig) {
+		  newtx.children = mod.posts[i].children;
+		  mod.comments[i] = newtx;
+		}
+	      }
+
+	      el2.innerHTML = revised_text;
+
+	      mod.render();
+
+	    };
+	  }
+	});
+      }
+    });
+} catch (err) {}
+
+    document.querySelector('.post-view-report').onclick = async (e) => {
+
+      let reportit = await sconfirm("Report this post or comments to the mods?");
+      if (reportit) {
+
+        let sig = document.querySelector('.post-view-report').getAttribute("data-id");
+
+	await salert("Thank you for flagging this");
+
+	for (let i = 0; i < mod.posts.length; i++) {
+	  if (mod.posts[i].transaction.sig === sig) {
+	    mod.posts.splice(i, 1);
+	  }
+	}
+	for (let i = 0; i < mod.comments.length; i++) {
+	  if (mod.comments[i].transaction.sig === sig) {
+	    mod.comments.splice(i, 1);
+	  }
+	}
+
+	mod.render();
+	mod.overlay.hideOverlay();
+
+        let newtx = mod.createReportTransaction(sig);
+        app.network.propagateTransaction(newtx);
+      }
 
     }
 

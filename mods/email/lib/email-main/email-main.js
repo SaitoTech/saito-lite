@@ -20,6 +20,7 @@ module.exports = EmailMain = {
   attachEvents(app, mod) {
     EmailHeader.attachEvents(app, mod);
     EmailBody.attachEvents(app, mod);
-  }
+  },
+
 
 }

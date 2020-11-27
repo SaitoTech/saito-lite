@@ -612,10 +612,14 @@ class Chessgame extends GameTemplate {
         <label for="clock">Time Limit:</label>
         <select name="clock">
           <option value="0" default>no limit</option>
+          <option value="2">2 minutes</option>
+          <option value="10">10 minutes</option>
           <option value="30">30 minutes</option>
           <option value="60">60 minutes</option>
           <option value="90">90 minutes</option>
         </select>
+
+        <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 
     `;
   }

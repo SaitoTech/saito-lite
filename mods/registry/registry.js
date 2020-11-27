@@ -104,8 +104,6 @@ class Registry extends ModTemplate {
       if (typeof identifier === 'string' || identifier instanceof String) {
         var regex=/^[0-9A-Za-z]+$/;
         if (!regex.test(identifier)) {
-          //salert("Alphanumeric Characters only"); 
-          //return false;
           throw Error("Alphanumeric Characters only");
         }
 
@@ -171,7 +169,9 @@ class Registry extends ModTemplate {
 
     if (conf == 0) {
       if (txmsg.module === "Registry") {
-        if (tx.isTo(registry_self.publickey) && app.wallet.returnPublicKey() == registry_self.publickey) {
+        if (tx.isTo(registry_self.publickey) && app.wallet.returnPublicKey() === registry_self.publickey) {
+
+console.log(registry_self.publickey + " -- " + app.wallet.returnPublicKey());
 
           let request = txmsg.request;
           let identifier = txmsg.identifier;
@@ -237,10 +237,18 @@ class Registry extends ModTemplate {
               let signed_message = tx.msg.signed_message;
               let sig		 = tx.msg.sig;
 
+console.log("X:");
+console.log(JSON.stringify(signed_message));
+console.log(sig + " -- " + registry_self.publickey);
+
+	      try {
               if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
                 registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
                 registry_self.app.modules.updateIdentifier();
               }
+	      } catch (err) {
+		console.log("ERROR verifying username registration message");
+	      }
             }
           }
         }

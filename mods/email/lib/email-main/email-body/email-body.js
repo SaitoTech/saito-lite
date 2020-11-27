@@ -1,7 +1,8 @@
 const EmailForm          = require('./email-form/email-form');
 const EmailDetail        = require('./email-detail/email-detail');
 const EmailAppspace         = require('./email-appspace/email-appspace');
-const EmailAppspaceTemplate = require('./email-appspace/email-appspace.template.js');
+const EmailCryptoAppspace         = require('./email-cryptoappspace/email-cryptoappspace');
+//const EmailAppspaceTemplate = require('./email-appspace/email-appspace.template.js');
 const EmailListTemplate     = require('./email-list/email-list.template.js');
 
 
@@ -12,8 +13,8 @@ module.exports = EmailBody = {
     render(app, mod) {
 
         mod.body = this;
-
-        switch(mod.active) {
+        let page = mod.parseHash(window.location.hash).page
+        switch(page) {
             case "email_list":
                 EmailList.render(app, mod);
                 EmailList.attachEvents(app, mod);
@@ -27,11 +28,15 @@ module.exports = EmailBody = {
                 EmailDetail.attachEvents(app, mod);
                 break;
             case "email_appspace":
-                document.querySelector('.email-body').innerHTML = EmailAppspaceTemplate();
+                //document.querySelector('.email-body').innerHTML = EmailAppspaceTemplate();
                 EmailAppspace.render(app, mod);
-                EmailAppspace.attachEvents(app, mod);
+                //EmailAppspace.attachEvents(app, mod);
+                break;
+            case "crypto_mod":
+                EmailCryptoAppspace.render(app, mod);
                 break;
             default:
+                mod.locationErrorFallback();
                 break;
         }
     },
@@ -40,10 +45,7 @@ module.exports = EmailBody = {
         if (document.querySelector('#email.create-button')) {
             document.querySelector('#email.create-button')
             .addEventListener('click', (e) => {
-                mod.active = "email_form";
-                mod.previous_state = "email_list";
-                mod.main.render(app, mod);
-                mod.main.attachEvents(app, mod);
+              window.location.hash = `#page=email_form`;
             });
         }
     }

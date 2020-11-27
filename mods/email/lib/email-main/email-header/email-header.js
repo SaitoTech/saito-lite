@@ -6,10 +6,11 @@ const EmailAppspaceHeader = require('./email-appspace-header/email-appspace-head
 module.exports = EmailHeader = {
 
   render(app, mod) {
-
     mod.header = this;
 
-    switch(mod.active) {
+    
+    let page = mod.parseHash(window.location.hash).page
+    switch(page) {
       case "email_list":
         EmailInboxHeader.render(app, mod);
         EmailInboxHeader.attachEvents(app, mod);
@@ -26,7 +27,12 @@ module.exports = EmailHeader = {
         EmailAppspaceHeader.render(app, mod);
         EmailAppspaceHeader.attachEvents(app, mod);
         break;
+      case "crypto_mod":
+        EmailAppspaceHeader.render(app, mod);
+        EmailAppspaceHeader.attachEvents(app, mod);
+        break;
       default:
+        // errors here are handled in email-body.js
         break;
     }
 
@@ -34,6 +40,14 @@ module.exports = EmailHeader = {
 
   },
 
-  attachEvents(app, mod) {},
+  attachEvents(app, mod) {
+    let hamburgerIcon = document.getElementById('email-bars-icon');
+    if (hamburgerIcon){
+      hamburgerIcon.addEventListener('click', (e) => {
+        let email_bars_menu = document.querySelector('#mobile.email-bars-menu');
+        email_bars_menu.style.display = email_bars_menu.style.display == "block" ? "none" : "block";
+      });  
+    }
+  },
 
 }

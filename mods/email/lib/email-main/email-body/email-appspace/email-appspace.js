@@ -5,21 +5,14 @@ module.exports = EmailAppspace = {
   render(app, mod) {
 
     document.querySelector(".email-body").innerHTML = EmailAppspaceTemplate();
-
-    if (mod.appspace_mod == null) { return; }
-    let modobj = mod.appspace_mod.respondTo("email-appspace");
-    if (modobj == null) { return; }
-    modobj.render(app, mod);
-
+    try {
+      let subPage = mod.parseHash(window.location.hash).subpage;  
+      let submod = app.modules.returnModule(subPage);
+      let modobj = submod.respondTo("email-appspace");
+      modobj.render(app, mod);
+      modobj.attachEvents(app, mod);
+    } catch(error) {
+      mod.locationErrorFallback();
+    }
   },
-
-  attachEvents(app, mod) {
-
-    if (mod.appspace_mod == null) { return; }
-    let modobj = mod.appspace_mod.respondTo("email-appspace");
-    if (modobj == null) { return; }
-    modobj.attachEvents(app, mod);
-
-  },
-
 }

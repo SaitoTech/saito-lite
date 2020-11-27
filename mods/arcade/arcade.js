@@ -175,14 +175,14 @@ console.log("X: "+JSON.stringify(gametx));
     // the overlay. To support deep linking, we set and reset the location hash
     // to trigger those event listeners
     // 
-    let locationHash = window.location.hash;
-    window.location.hash = "#";
-    window.location.hash = locationHash;
-    window.addEventListener("hashchange", () => {
-      if (!(window.location.hash.startsWith("#creategame") || window.location.hash.startsWith("#viewgame"))) {
-        this.overlay.hideOverlay();
-      }
-    });
+    // let locationHash = window.location.hash;
+    // window.location.hash = "#";
+    // window.location.hash = locationHash;
+    // window.addEventListener("hashchange", () => {
+    //   if (!(window.location.hash.startsWith("#creategame") || window.location.hash.startsWith("#viewgame"))) {
+    //     this.overlay.hideOverlay();
+    //   }
+    // });
 
   }
   isMyGame(invite, app) {

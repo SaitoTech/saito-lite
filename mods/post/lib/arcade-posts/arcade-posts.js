@@ -1,5 +1,8 @@
 const ArcadePostsTemplate = require('./arcade-posts.template');
 const PostTeaserTemplate = require('./post-teaser.template');
+const PostView = require('./../post-overlay/post-view');
+const PostCreate = require('./../post-overlay/post-create');
+const PostStyle = require('./../style.template.js');
 
 module.exports = ArcadePosts = {
 
@@ -11,6 +14,10 @@ module.exports = ArcadePosts = {
     for (let i = 0; i < mod.posts.length; i++) {
       this.addPost(app, mod, mod.posts[i]);
     }
+
+    mod.renderMethod = "arcade";
+
+    app.browser.addElementToDom(PostStyle());
 
   },
 
@@ -33,9 +40,23 @@ module.exports = ArcadePosts = {
       }
     });
 
+    try {
+      document.querySelector('.arcade-posts-add').onclick = (e) => {
+        PostCreate.render(app, mod);
+        PostCreate.attachEvents(app, mod);
+      }
+    } catch (err) {
+    }
+
   },
 
   addPost(app, mod, post) {
+    let post_this = 1;
+    document.querySelectorAll('.arcade-post').forEach(el => {
+      let sig = el.getAttribute("data-id");
+      if (sig === post.transaction.sig) { post_this = 0; }
+    });
+    if (post_this == 0) { return; }
     app.browser.addElementToDom(PostTeaserTemplate(app, mod, post), "arcade-posts");
   }
 

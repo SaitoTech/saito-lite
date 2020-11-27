@@ -1690,6 +1690,8 @@ class Wordblocks extends GameTemplate {
             <option value="tagalog">Tagalog</option>
           </select>
 
+          <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
           `;
   }
 
