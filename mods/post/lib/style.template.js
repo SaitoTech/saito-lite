@@ -166,13 +166,29 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-create-image {
   width: 100%;
-  height: 200px;
+  height: 50px;
   text-align: center;
   padding: 90px;
   border-radius: 5px;
   border: 4px dashed #ddd;
   margin-bottom: 20px;
   background-color: whitesmoke;
+}
+
+.post-create-image-preview-container {
+  float: right;
+  height: 30px;
+  max-width: 100%;
+}
+
+.post-create-image-preview {
+  float: right;
+  margin-left: 10px;
+  border: 1px solid #888;
+}
+
+.post-create-image-preview:hover {
+  opacity: 0.5;
 }
 
 .post-create-textarea {
