@@ -12,7 +12,7 @@ module.exports = EmailAppspace = {
       modobj.render(app, mod);
       modobj.attachEvents(app, mod);
     } catch(error) {
-      mod.locationErrorFallback();
+      mod.locationErrorFallback(`Error fetching module.<br/>${error}`);
     }
   },
 }

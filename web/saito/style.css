@@ -190,6 +190,26 @@ hr {
   z-index: 1000;
   padding: 10px;
 }
+.saito-overlay-closebox {
+  display: none;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: 0px;
+  border-radius: 50%;
+  top: 0px;
+  background-color: white;
+}
+.saito-overlay-closebox-btn {
+  display: block;
+  height: 32px;
+  width: 32px;
+  color: red;
+  font-size: 31px;
+}
+.saito-overlay-closebox-btn:hover {
+  transform: scale(1.0);
+}
 .game-overlay {
   z-index:9010;
 }

@@ -27,7 +27,7 @@ module.exports = EmailHeader = {
         EmailAppspaceHeader.render(app, mod);
         EmailAppspaceHeader.attachEvents(app, mod);
         break;
-      case "crypto_mod":
+      case "crypto_page":
         EmailAppspaceHeader.render(app, mod);
         EmailAppspaceHeader.attachEvents(app, mod);
         break;

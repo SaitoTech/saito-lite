@@ -39,18 +39,18 @@ module.exports = EmailBarsMenu = {
     Array.from(document.getElementsByClassName('crypto-apps-item')).forEach((cryptoAppButton, i) => {
       cryptoAppButton.onclick = (e) => {
         // Set the state of email mod to something here so email-body.js does the right thing.
-        window.location.hash = `#page=crypto_page&subpage=${e.currentTarget.id}`
+        window.location.hash = `#page=crypto_page&subpage=${e.currentTarget.id.replace('email-nav-','').replace('mobile-','')}`
       }
     });
 
     Array.from(document.getElementsByClassName('email-navigator-item'))
       .forEach(item => item.addEventListener('click', (e) => {
-        window.location.hash = `#page=email_list&subpage=${e.currentTarget.id.replace('email-nav-','')}`
+        window.location.hash = `#page=email_list&subpage=${e.currentTarget.id.replace('email-nav-','').replace('mobile-','')}`
     }));
 
     Array.from(document.getElementsByClassName('email-apps-item'))
       .forEach(item => item.addEventListener('click', (e) => {
-        window.location.hash = `#page=email_appspace&subpage=${e.currentTarget.id.replace('email-nav-','')}`
+        window.location.hash = `#page=email_appspace&subpage=${e.currentTarget.id.replace('email-nav-','').replace('mobile-','')}`
     }));
     
     // Hide the menu bar if user clicks off of it or on a button in it

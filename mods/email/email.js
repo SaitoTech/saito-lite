@@ -97,12 +97,18 @@ class Email extends ModTemplate {
     EmailMain.render(app, this);
     EmailMain.attachEvents(app, this);
   }
-  // ###### TODO ########
-  // put messages everywhere
   locationErrorFallback(msg = "There was an unknown error..."){
     // error. Reset state and return to inbox.
     window.location.hash = `#page=email_list&subpage=inbox`;
-    salert(msg);
+    // ######################## TODO ########################
+    // Refreshing the module while viewing, replying, or forwarding an email
+    // will cause this to fire with msg="Email not found...". Fix this by
+    // perhaps triggering the hash event in onConfirmation and disabling 
+    // the hach change event until onConfimation has fired. Once fixed, delete
+    // the conditional check here:
+    if(msg != "Email not found...") {
+      salert(msg);
+    }
   }
   parseHash(hash) {
     return hash.substr(1).split('&').reduce(function (result, item) {
@@ -112,9 +118,6 @@ class Email extends ModTemplate {
     }, {});
   }
   getSelectedEmail(selectedemailSig, subPage){
-    console.log("getSelectedEmail");
-    console.log(this.emails);
-    console.log(this.emails[subPage]);
     let selected_email = this.emails[subPage].filter(tx => {
         return tx.transaction.sig === selectedemailSig
     })[0];
@@ -123,7 +126,6 @@ class Email extends ModTemplate {
   initialize(app) {
     super.initialize(app);
     if(app.BROWSER && this.browser_active) {
-      console.log("email initilaize");
       //
       // add an email
       //
@@ -138,7 +140,7 @@ class Email extends ModTemplate {
         // Set header_title
         let page = this.parseHash(window.location.hash).page;
         let subPage = this.parseHash(window.location.hash).subpage;
-        let selectedemailSig = this.parseHash(window.location.hash).selectedemail
+        let selectedemailSig = this.parseHash(window.location.hash).selectedemail;
         if (selectedemailSig && subPage) {
           try {
             let selected_email = this.getSelectedEmail(selectedemailSig, subPage);
@@ -155,7 +157,6 @@ class Email extends ModTemplate {
         document.querySelectorAll(`.active-navigator-item`).forEach((activeElem, i) => {
           activeElem.classList.remove("active-navigator-item");
         });
-        console.log(`#email-nav-${subPage}.email-navigator-item, #email-nav-${subPage}.email-apps-item, #email-nav-${subPage}.crypto-apps-item`);
         document.querySelectorAll(`#email-nav-${subPage}.email-navigator-item, #email-nav-${subPage}.email-apps-item, #email-nav-${subPage}.crypto-apps-item`).forEach((newActiveNavItem, i) => {  
           newActiveNavItem.classList.add("active-navigator-item");
         });
@@ -200,13 +201,13 @@ class Email extends ModTemplate {
 
 
 
-  deleteTransaction(tx) {
+  deleteTransaction(tx, subPage) {
 
-    for (let i = 0; i < this.emails[this.emails.active].length; i++) {
-      let mytx = this.emails[this.emails.active][i];
+    for (let i = 0; i < this.emails[subPage].length; i++) {
+      let mytx = this.emails[subPage][i];
       if (mytx.transaction.sig == tx.transaction.sig) {
         this.app.storage.deleteTransaction(tx);
-        this.emails[this.emails.active].splice(i, 1);
+        this.emails[subPage].splice(i, 1);
         this.emails['trash'].unshift(tx);
       }
     }
@@ -334,13 +335,6 @@ class Email extends ModTemplate {
         name: 'Send Email',
         callback: (address) => {
           window.location.hash = `#page=email_form&toaddress=${address}`;
-          // this.previous_state = this.active;
-          // this.active = "email_form";
-          // 
-          // this.main.render(this.app, this.uidata);
-          // this.main.attachEvents(this.app, this.uidata);
-
-          document.getElementById('email-to-address').value = address;
         }
       }
     }

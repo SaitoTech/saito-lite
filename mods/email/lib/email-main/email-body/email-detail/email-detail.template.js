@@ -1,18 +1,13 @@
 
 module.exports = EmailDetailTemplate = (app, mod) => {
-  console.log("EmailDetailTemplate");
   let selected_email = null;
   try {
     let subPage = mod.parseHash(window.location.hash).subpage;
-    console.log(subPage);
     let selectedEmailSig = mod.parseHash(window.location.hash).selectedemail;
-    console.log(selectedEmailSig);
     selected_email = mod.getSelectedEmail(selectedEmailSig, subPage);  
   } catch(error){
-    console.log(error);
-    //mod.locationErrorFallback();
+    mod.locationErrorFallback(`Error fetching module.<br/>${error}`);
   }
-  console.log(selected_email);
   if (selected_email) {
     let from  	= selected_email.transaction.from[0].add;
     let to  	= selected_email.transaction.to[0].add;
@@ -55,8 +50,7 @@ module.exports = EmailDetailTemplate = (app, mod) => {
       </div>
     `;
   } else {
-    console.log("no email...?");
-    //mod.locationErrorFallback();
+    mod.locationErrorFallback("Email not found...");
   }
 }
 

@@ -13,13 +13,13 @@ module.exports = EmailDetailHeader = {
             .onclick = (e) => {
               // delete the email from the emaillist
               try {
-                let selectedemailSig = this.parseHash(window.location.hash).selectedemail
-                let subPage = this.parseHash(window.location.hash).subpage
+                let selectedemailSig = mod.parseHash(window.location.hash).selectedemail
+                let subPage = mod.parseHash(window.location.hash).subpage
                 let selected_email = mod.getSelectedEmail(selectedemailSig, subPage);
-                mod.deleteTransaction(selected_email);
+                mod.deleteTransaction(selected_email, subPage);
                 window.location.hash = `#page=email_list&subpage=inbox`;  
               } catch(error) {
-                // TODO: tell the user something went wrong....
+                salert(`Error deleting email<br/>${error}`)
               }
             };
 
