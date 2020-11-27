@@ -44,6 +44,8 @@ module.exports = PostCreate = {
       this.new_post.link = document.querySelector('.post-create-link-input').value;
       this.new_post.forum = document.querySelector('.post-create-forum').value;
 
+console.log("Submitted Title-->" + this.new_post.title + "<---");
+
       if (this.new_post.title == "") {
 	salert("Please provide a title for your post!");
 	return;

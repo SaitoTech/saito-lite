@@ -189,6 +189,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-create-image-preview:hover {
   opacity: 0.5;
+  border: 1px solid #9c1010;
 }
 
 .post-create-textarea {
@@ -312,6 +313,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   font-size: 0.9em;
   clear: both;
   margin-bottom: 5px;
+  height: 1em;
 }
 
 .post-view-gallery {
