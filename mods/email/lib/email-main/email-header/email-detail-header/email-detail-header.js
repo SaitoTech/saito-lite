@@ -19,7 +19,7 @@ module.exports = EmailDetailHeader = {
                 mod.deleteTransaction(selected_email);
                 window.location.hash = `#page=email_list&subpage=inbox`;  
               } catch(error) {
-                // TODO: tell the user something went wrong....
+                salert(`Error deleting email<br/>${error}`)
               }
             };
 

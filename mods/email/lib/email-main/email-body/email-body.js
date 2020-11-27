@@ -36,7 +36,7 @@ module.exports = EmailBody = {
                 EmailCryptoAppspace.render(app, mod);
                 break;
             default:
-                mod.locationErrorFallback();
+                mod.locationErrorFallback(`Page not found: ${page}`);
                 break;
         }
     },
