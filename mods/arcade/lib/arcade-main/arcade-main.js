@@ -64,6 +64,8 @@ module.exports = ArcadeMain = {
       }
     });
 
+console.log("OBSERVER GAMES: " + JSON.stringify(mod.observer));
+
     //
     // add games
     //
@@ -72,13 +74,33 @@ module.exports = ArcadeMain = {
         app.browser.addElementToElement(ArcadeInviteTemplate(app, mod, invite, i), document.querySelector('.arcade-hero'));
       });
       mod.observer.forEach((observe, i) => {
-        app.browser.addElementToElement(ArcadeObserveTemplate(app, mod, observe, i), document.querySelector('.observables-hero'));
+        app.browser.addElementToElement(ArcadeObserveTemplate(app, mod, observe, i, app.crypto.stringToBase64(JSON.stringify(observe))), document.querySelector('.observables-hero'));
       });
-     }
+    }
+
+    //
+    // observer mode actions
+    //
+    document.querySelectorAll(`.observe-game-btn`).forEach((el, i) => {
+        el.onclick = function (e) {
+
+          let game_sig = e.currentTarget.getAttribute("data-sig");
+          let game_cmd = e.currentTarget.getAttribute("data-cmd");
+
+console.log(game_sig + " -- " + game_cmd);
+
+          if (game_cmd === "watch") {
+            arcade_main_self.observeGame(app, mod, game_sig);
+            return;
+          }
+
+        }
+    });	
+
 
 
     //
-    // enable join buttons
+    // game invitation actions
     //
     let arcade_main_self = this;
     mod.games.forEach((invite, i) => {
@@ -108,8 +130,6 @@ module.exports = ArcadeMain = {
             return;
           }
 
-          //ArcadeGameDetails.render(app, mod, invite);
-          //ArcadeGameDetails.attachEvents(app, mod);
         }
       });	
     });
@@ -343,6 +363,12 @@ module.exports = ArcadeMain = {
       }
       this.removeGameFromList(game_id);
     }
+  },
+
+
+  observeGame(app, mod, encryptedgamejson) {
+console.log("ABOUT TO JOIN GAME");
+    mod.observeGame(encryptedgamejson);
   },
 
 

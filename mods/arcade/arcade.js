@@ -8,6 +8,8 @@ const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const getMockGames = require('./mockinvites.js');
 // const ArcadeCreateGameOverlay = require('./lib/arcade-create-game-overlay/arcade-create-game-overlay');
 
+fetch = require("node-fetch");
+
 class Arcade extends ModTemplate {
 
   constructor(app) {
@@ -147,23 +149,27 @@ class Arcade extends ModTemplate {
               let tx = new saito.transaction(gametx.transaction);
               this.addGameToOpenList(tx);
             });
+
 	    ArcadeMain.render(app, this);
 	    ArcadeMain.attachEvents(app, this);
           }
         }
     );
 
+
     //
     // load observer games (active)
+      //`SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
     //
     let current_timestamp = new Date().getTime() - 1200000;
     this.sendPeerDatabaseRequestWithFilter(
 
       "Arcade" ,
 
-      `SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE (1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
+      `SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
 
       (res) => {
+
         if (res.rows) {
           res.rows.forEach(row => {
             let { game_id, module, players_array, player } = row;
@@ -585,12 +591,12 @@ class Arcade extends ModTemplate {
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
-//console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
+console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
     //
     // this code doubles onConfirmation
     //
-    if (message.request == 'arcade spv update') {
+    if (message.request === 'arcade spv update') {
 
       let tx = new saito.transaction(message.data.tx.transaction);
       let txmsg = tx.returnMessage();
@@ -722,12 +728,15 @@ class Arcade extends ModTemplate {
           res.rows.push({ game_still_open: 1 });
         }
 
+console.log("returning!");
         mycallback(res);
         return;
 
       }
 
+    }
 
+/*** DELETED NOV 28 **** now handled in lib files through peer DB request ****
       let sql = `SELECT * FROM games WHERE status = "open"`;
       let rows = await this.app.storage.queryDatabase(sql, {}, 'arcade');
 
@@ -760,6 +769,7 @@ class Arcade extends ModTemplate {
 
       mycallback({ rows });
 
+
       if (Math.random() < 0.05) {
 
         let current_timestamp = new Date().getTime() - 1200000;
@@ -774,8 +784,12 @@ class Arcade extends ModTemplate {
 
       }
 
-      return;
+
+//      return;
     }
+
+****/
+console.log("going into super handle peer request...");
 
     super.handlePeerRequest(app, message, peer, mycallback);
   }
@@ -1209,7 +1223,6 @@ class Arcade extends ModTemplate {
         clearInterval(arcade_self.initialization_timer);
 
         if (window.location.pathname.split('/')[2] == "invite") {
-alert("Invite Needs Processing!");
           GameLoader.render(this.app, this, game_id);
           GameLoader.attachEvents(this.app, this);
           this.viewing_arcade_initialization_page = 1;
@@ -1240,6 +1253,11 @@ alert("Invite Needs Processing!");
 
         let sql = "SELECT * FROM gamestate WHERE game_id = $game_id ORDER BY id DESC LIMIT 1";
         let params = { $game_id: req.params.game_id }
+
+console.log("\n\n\nREQUESTED OBSERVER MODE");
+console.log(sql);
+console.log(params);
+
         let games = await app.storage.queryDatabase(sql, params, "arcade");
 
         if (games.length > 0) {
@@ -1481,6 +1499,7 @@ alert("Invite Needs Processing!");
         return;
       }
     }
+console.log("ADDING TO OBSERVER LIST: " + JSON.stringify(msg));
     this.observer.push(msg);
 
     if (this.browser_active == 1) {
@@ -1576,6 +1595,9 @@ console.log("PARAMS: " + JSON.stringify(params));
     let game_id = msgobj.game_id;
     let arcade_self = this;
 
+console.log("Here we are in observe game!");
+console.log(JSON.stringify(msgobj));
+
     //
     // already watching game... load it
     //
@@ -1602,9 +1624,9 @@ console.log("PARAMS: " + JSON.stringify(params));
     }
 
 
-    fetch(`/arcade/observer/${game_id}`)
-      .then(response => {
+    fetch(`/arcade/observer/${game_id}`).then(response => {
         response.json().then(data => {
+
           let game = data;
           //
           // tell peers to forward this address transactions

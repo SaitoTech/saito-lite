@@ -1,7 +1,7 @@
 
-module.exports = ArcadeObserveTemplate = (app, mod, msg, idx) => {
+module.exports = ArcadeObserveTemplate = (app, mod, msg, idx, msgjson) => {
 
-  let inviteHtml = `<div data-id="${msg.game_id}" class="button invite-tile-button">WATCH</div>`;
+  let inviteHtml = `<button data-sig="${msgjson}" data-cmd="watch" class="button observe-game-btn invite-tile-button">WATCH</div>`;
 
 /*
   let inviteHtml = `
