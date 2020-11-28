@@ -4,6 +4,9 @@ const ArcadeInfobox = require('./arcade-infobox');
 const GameLoader = require('./../arcade-game/game-loader');
 const SaitoCarousel = require('./../../../../lib/saito/ui/saito-carousel/saito-carousel');
 const ArcadeGameDetails = require('./../arcade-game/arcade-game-details');
+const ArcadeInviteTemplate = require('./templates/arcade-invite.template');
+const ArcadeObserveTemplate = require('./templates/arcade-observe.template');
+
 
 let tabNames = ["arcade", "observables", "tournaments"];
 module.exports = ArcadeMain = {
@@ -64,76 +67,51 @@ module.exports = ArcadeMain = {
     //
     // add games
     //
-    
     if (document.querySelector('.arcade-hero')) {
-/*
-      if (mod.games.length < 3) {
-        var html = `<div class="hero-invite-wrapper">
-          <div class="hero-invite-title">Create Game</div>
-            <div class="hero-invites">
-        `;
-        app.modules.respondTo("arcade-games").forEach(module => {
-          let title = module.name;
-          if (module.respondTo("arcade-carousel") != null) {
-            if (module.respondTo("arcade-carousel").title) {
-              title = module.respondTo("arcade-carousel").title;
-            }
-          }
-  
-          
-            html += `<div class="hero-game-create">
-            <div class="hero-game-create-img" style="background-image: url(/${module.slug}/img/arcade.jpg)" id="hero-${module.slug}"></div>
-            <div class="hero-game-create-title">${title}</div></div>`;
-          
-        });
-        html += `</div></div>`;
-        app.browser.addElementToElement(html, document.querySelector('.arcade-hero'));
-      }
-      */
       mod.games.forEach((invite, i) => {
         app.browser.addElementToElement(ArcadeInviteTemplate(app, mod, invite, i), document.querySelector('.arcade-hero'));
       });
-      /*
-      let html = `
-      <div class="hero-intro"></div>
-      `;
-      app.browser.addElementToElement(html, document.querySelector('.arcade-hero'));
-    */
+      mod.observer.forEach((observe, i) => {
+        app.browser.addElementToElement(ArcadeObserveTemplate(app, mod, observe, i), document.querySelector('.observables-hero'));
+      });
      }
+
 
     //
     // enable join buttons
     //
     let arcade_main_self = this;
     mod.games.forEach((invite, i) => {
-      document.querySelector(`#invite-${invite.transaction.sig} .invite-tile-button`).onclick = function (e) {
+      document.querySelectorAll(`#invite-${invite.transaction.sig} .invite-tile-button`).forEach((el, i) => {
+        el.onclick = function (e) {
 
-        let game_sig = e.currentTarget.getAttribute("data-sig");
-        let game_cmd = e.currentTarget.getAttribute("data-cmd");
+          let game_sig = e.currentTarget.getAttribute("data-sig");
+          let game_cmd = e.currentTarget.getAttribute("data-cmd");
 
-        if (game_cmd == "delete") {
-          arcade_main_self.deleteGame(app, mod, game_sig);
-          return;
+          if (game_cmd === "delete") {
+            arcade_main_self.deleteGame(app, mod, game_sig);
+            return;
+          }
+
+          if (game_cmd === "cancel") {
+            arcade_main_self.cancelGame(app, mod, game_sig);
+            return;
+          }
+
+          if (game_cmd === "join") {
+            arcade_main_self.joinGame(app, mod, game_sig);
+            return;
+          }
+
+          if (game_cmd === "continue") {
+            arcade_main_self.continueGame(app, mod, game_sig);
+            return;
+          }
+
+          //ArcadeGameDetails.render(app, mod, invite);
+          //ArcadeGameDetails.attachEvents(app, mod);
         }
-
-        if (game_cmd == "cancel") {
-          arcade_main_self.cancelGame(app, mod, game_sig);
-          return;
-        }
-
-        if (game_cmd == "join") {
-          arcade_main_self.joinGame(app, mod, game_sig);
-          return;
-        }
-
-        if (game_cmd == "continue") {
-          arcade_main_self.continueGame(app, mod, game_sig);
-          return;
-        }
-
-        //ArcadeGameDetails.render(app, mod, invite);
-        //ArcadeGameDetails.attachEvents(app, mod);
-      }
+      });	
     });
 
     ArcadePosts.render(app, mod);

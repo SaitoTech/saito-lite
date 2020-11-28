@@ -54,6 +54,16 @@ class Arcade extends ModTemplate {
     }
   }
 
+
+  handleUrlParams(urlParams) {
+    let i = urlParams.get('i');
+    if (i == "watch") {
+      let msg = urlParams.get('msg');
+      this.observeGame(msg);
+    }
+  }
+
+
   renderArcadeMain(app, mod) {
     ArcadeMain.render(this.app, this);
     ArcadeMain.attachEvents(this.app, this);
@@ -133,7 +143,6 @@ class Arcade extends ModTemplate {
         (res) => {
           if (res.rows) {
             res.rows.forEach(row => {
-console.log("X: "+JSON.stringify(gametx));
               let gametx = JSON.parse(row.tx);
               let tx = new saito.transaction(gametx.transaction);
               this.addGameToOpenList(tx);
@@ -143,6 +152,33 @@ console.log("X: "+JSON.stringify(gametx));
           }
         }
     );
+
+    //
+    // load observer games (active)
+    //
+    let current_timestamp = new Date().getTime() - 1200000;
+    this.sendPeerDatabaseRequestWithFilter(
+
+      "Arcade" ,
+
+      `SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE (1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
+
+      (res) => {
+        if (res.rows) {
+          res.rows.forEach(row => {
+            let { game_id, module, players_array, player } = row;
+            this.addGameToObserverList({
+              game_id,
+              module,
+              players_array,
+              player,
+            });
+          });
+        }
+      }
+    );
+
+
   }
 
 
@@ -316,7 +352,8 @@ console.log("X: "+JSON.stringify(gametx));
 
       this.purgeBadGames(app)
 
-console.log("RECEIVED GAME TX: " + JSON.stringify(tx));
+
+//console.log("RECEIVED GAME TX: " + JSON.stringify(tx));
 
       //
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
@@ -548,7 +585,7 @@ console.log("RECEIVED GAME TX: " + JSON.stringify(tx));
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
-console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
+//console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
     //
     // this code doubles onConfirmation
@@ -1232,7 +1269,7 @@ alert("Invite Needs Processing!");
           let game = games[0];
           res.setHeader('Content-type', 'text/html');
           res.charset = 'UTF-8';
-          res.write(game.key_state.toString());
+          res.write(game.game_state.toString());
           res.end();
           return;
 
@@ -1435,6 +1472,188 @@ alert("Invite Needs Processing!");
       }
     }
   }
+
+
+  addGameToObserverList(msg) {
+
+    for (let i = 0; i < this.observer.length; i++) {
+      if (msg.game_id == this.observer[i].game_id) {
+        return;
+      }
+    }
+    this.observer.push(msg);
+
+    if (this.browser_active == 1) {
+      ArcadeMain.render(this.app, this);
+      ArcadeMain.attachEvents(this.app, this);
+    }
+  }
+
+
+
+
+  async saveGameState(blk, tx, conf, app) {
+
+    let txmsg = tx.returnMessage();
+
+    let game_state = "";
+
+    if (txmsg.game_state != "") { game_state = txmsg.game_state; }
+
+
+    let sql = `INSERT INTO gamestate (
+                game_id ,
+                player ,
+                players_array ,
+                module ,
+                bid ,
+                tid ,
+                lc ,
+                sharekey ,
+                game_state ,
+                last_move
+       ) VALUES (
+                $game_id,
+                $player,
+                $players_array,
+                $module,
+                $bid,
+                $tid,
+                $lc,
+                "",
+                $game_state,
+                $last_move
+        )`;
+    let x = [];
+    let txto = tx.transaction.to;
+    for (let z = 0; z < txto.length; z++) {
+      if (!x.includes(txto[z].add)) { x.push(txto[z].add); }
+    }
+
+    //
+    // add any move associated with this tx to the
+    // gamestate so that it can be executed to pull
+    // us up-to-date on what happened in preparation
+    // for the next turn / broadcast
+    //
+    game_state.last_turn = txmsg.turn;
+
+
+    //
+    // do not save 1-player games
+    //
+    if (x.length == 1) { return; }
+
+    let players_array = x.join("_");
+
+    let params = {
+      $game_id: txmsg.game_id,
+      $player: tx.transaction.from[0].add,
+      $players_array: players_array,
+      $module: txmsg.module,
+      $bid: blk.block.id,
+      $tid: tx.transaction.id,
+      $lc: 1,
+      $game_state: JSON.stringify(game_state),
+      $last_move: (new Date().getTime())
+    };
+
+console.log("SAVING GAME STATE: " + sql);
+console.log("PARAMS: " + JSON.stringify(params));
+
+    await app.storage.executeDatabase(sql, params, "arcade");
+
+  }
+
+
+
+
+
+  observeGame(msg) {
+
+    let msgobj = JSON.parse(this.app.crypto.base64ToString(msg));
+    let address_to_watch = msgobj.player;
+    let game_id = msgobj.game_id;
+    let arcade_self = this;
+
+    //
+    // already watching game... load it
+    //
+    if (this.app.options.games) {
+      let { games } = this.app.options;
+      for (let i = 0; i < games.length; i++) {
+        if (games[i].id === game_id) {
+          games[i].observer_mode = 1;
+          games[i].observer_mode_active = 0;
+          for (let z = 0; z < games[i].players.length; z++) {
+            if (games[i].players[z] == address_to_watch) {
+              games[i].observer_mode_player = (z+1);
+            }
+          }
+          games[i].ts = new Date().getTime();
+          arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+          arcade_self.app.options.games = games;
+          arcade_self.app.storage.saveOptions();
+          let slug = arcade_self.app.modules.returnModule(msgobj.module).returnSlug();
+          window.location = '/' + slug;
+          return;
+        }
+      }
+    }
+
+
+    fetch(`/arcade/observer/${game_id}`)
+      .then(response => {
+        response.json().then(data => {
+          let game = data;
+          //
+          // tell peers to forward this address transactions
+          //
+          arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+          let { games } = arcade_self.app.options;
+
+          //
+          // specify observer mode only
+          //
+          game.player = 0;
+          if (games == undefined) {
+            games = [];
+          }
+
+          for (let i = 0; i < games.length; i++) {
+            if (games[i].id == game.id) {
+              games.splice(i, 1);
+            }
+          }
+
+          game.observer_mode = 1;
+          game.observer_mode_active = 0;
+
+          //
+          // and we add this stuff to our queue....
+          //
+          for (let z = 0; z < game.last_turn.length; z++) {
+            game.queue.push(game.last_turn[z]);
+          }
+
+          games.push(game);
+
+          arcade_self.app.options.games = games;
+          arcade_self.app.storage.saveOptions();
+
+          //
+          // move into game
+          //
+          let slug = arcade_self.app.modules.returnModule(msgobj.module).returnSlug();
+          window.location = '/' + slug;
+        })
+      })
+      .catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
+  }
+
+
+
+
 
 
 

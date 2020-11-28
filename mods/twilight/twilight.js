@@ -9463,8 +9463,8 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
             <label for="player1">Play as:</label>
             <select name="player1">
-              <option value="random">random</option>
-              <option value="ussr" default>USSR</option>
+              <option value="random" selected>random</option>
+              <option value="ussr">USSR</option>
               <option value="us">US</option>
             </select>
 
@@ -9508,7 +9508,7 @@ alert("end of history!");
             <select name="usbonus">
               <option value="0">0</option>
               <option value="1">1</option>
-              <option value="2">2</option>
+              <option value="2" selected>2</option>
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
@@ -9526,6 +9526,12 @@ alert("end of history!");
               <option value="60">60 minutes</option>
               <option value="90">90 minutes</option>
               <option value="120">120 minutes</option>
+            </select>
+
+            <label for="observer_mode">Observer Mode:</label>
+            <select name="observer">
+              <option value="enable" selected>enable</option>
+              <option value="disable">disable</option>
             </select>
 
 	    <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
@@ -9671,6 +9677,7 @@ alert("end of history!");
               <li><input class="remove_card coldwarcrazies_edition" type="checkbox" name="communistrevolution" /> Communist Revolution (Early-War)</li>
             </div>
 
+      </div>
     </div>
           `;
 

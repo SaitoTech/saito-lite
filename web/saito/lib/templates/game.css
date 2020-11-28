@@ -47,17 +47,6 @@ body {
   background-color: whitesmoke;
   border-bottom: 1px solid var(--saito-skyline-grey);
 }
-.game-overlay-backdrop {
-  position: absolute;
-  display: none;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #444;
-  opacity: 0.4;
-  z-index: 100;
-}
 .game-overlay-menu {
   padding: 10px;
   background-color: whitesmoke;
@@ -77,20 +66,6 @@ body {
 .game-overlay-menu ul li:hover {
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75), -2px -2px 5px #eee;
   background: #0001;
-}
-
-.game-overlay {
-  position: absolute;
-  display: inlie-block;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  margin-left: auto;
-  margin-right: auto;
-  background-color: transparent;
-  z-index: 1000;
-  font-size: 2em;
-  padding: 10px;
 }
 .game-cardbox {
   position:absolute;

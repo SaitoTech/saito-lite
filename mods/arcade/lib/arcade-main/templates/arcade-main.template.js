@@ -11,11 +11,10 @@ module.exports = ArcadeMainTemplate = (app, mod) => {
         <div id="arcade-hero" class="arcade-hero">
           
         </div>
-        <div id="observables-hero" class="arcade-tab-hidden">
-          Coming Soon!
+        <div id="observables-hero" class="observables-hero arcade-tab-hidden">
         </div>
-        <div id="tournaments-hero" class="arcade-tab-hidden">
-          Tournaments coming soon!
+        <div id="tournaments-hero" class="tournaments-hero arcade-tab-hidden">
+          coming soon
         </div>
       </div>
       <div id="arcade-sub" class="arcade-sub">
