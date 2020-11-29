@@ -26,7 +26,7 @@ module.exports = EmailCryptoAppspace = {
       document.querySelectorAll(`.crypto-container .fa-star`).forEach((elem, i) => {
         elem.onclick = (event) => {
           if (event.currentTarget.classList.contains("fa")) {
-            app.wallet.setPreferredCrypto("SaitoCrypt")
+            app.wallet.setPreferredCrypto("SaitoCrypto")
           } else {
             app.wallet.setPreferredCrypto(cryptoMod.name)
           }
