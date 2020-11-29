@@ -108,7 +108,7 @@ class Email extends ModTemplate {
     }
   }
   goToLocation(newHash){
-    window.location.hash = app.browser.buildHashAndPreserve(newHash, window.location.hash, "ready");
+    return this.app.browser.buildHashAndPreserve(newHash, window.location.hash, "ready");
   }
   getSelectedEmail(selectedemailSig, subPage){
     let selected_email = this.emails[subPage].filter(tx => {
