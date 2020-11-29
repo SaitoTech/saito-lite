@@ -35,19 +35,20 @@ module.exports = ArcadeGameDetails = {
       document.querySelector('.background-shim').destroy();
 
     });
-    mod.meta_overlay = new AdvancedOverlay(app, mod);
-    mod.meta_overlay.render(app, mod);
-    mod.meta_overlay.attachEvents(app, mod);
+    mod.meta_overlay = new AdvancedOverlay(app, gamemod);
+    mod.meta_overlay.render(app, gamemod);
+    mod.meta_overlay.attachEvents(app, gamemod);
 
     let gamemod_url = "/" + gamemod.returnSlug() + "/img/arcade.jpg";
     document.querySelector('.game-image').src = gamemod_url;
     document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';
+    document.querySelector('.game-wizard-advanced-options-overlay').style.display = "none";
 
     //
     // move into advanced menu
     //
     document.querySelector('.game-wizard-options-toggle').onclick = (e) => {
-      if (!document.querySelector('.game-wizard-advanced-return-btn')) { mod.meta_overlay.showOverlay(app, mod, gamemod.returnGameOptionsHTML()); }
+      mod.meta_overlay.showOverlay(app, gamemod, gamemod.returnGameOptionsHTML());
       document.querySelector('.game-wizard-advanced-options-overlay').style.display = "block";
       try {
         if (document.getElementById("game-wizard-advanced-return-btn")) {

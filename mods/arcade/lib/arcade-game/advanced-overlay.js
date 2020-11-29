@@ -8,6 +8,14 @@ class AdvancedOverlay {
 
     render(app, mod) {
       if (!document.querySelector(".game-overlay-backdrop")) { app.browser.addElementToDom(AdvancedOverlayTemplate(), "game-wizard-advanced-options-overlay"); }
+
+      //
+      // advanced options loaded, even if never shown
+      //
+      let overlay_el = document.querySelector(".game-overlay");
+      overlay_el.style.display = "none";
+      overlay_el.innerHTML = mod.returnGameOptionsHTML();     
+
     }
 
     attachEvents(app, game_mod) {

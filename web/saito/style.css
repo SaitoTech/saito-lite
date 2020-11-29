@@ -1003,7 +1003,7 @@ div#message-wrapper {
 
 .header {
   height: 5em;
-  padding: 0 1em;
+  
   background-image: url(/saito/img/dreamscape.png);
   background-position: 0em;
   background-size: cover;
@@ -1022,7 +1022,7 @@ div#message-wrapper {
   grid-template-columns: 12em auto;
   align-items: center;
   height: 100%;
-  padding: 0 1.1em;
+  
 }
 
 .header-balance {
@@ -1071,6 +1071,9 @@ div#message-wrapper {
   overflow: hidden;
 }
 .header-username {
+  padding-right: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
   width: 10em;
   overflow: hidden;
   text-overflow: ellipsis;  

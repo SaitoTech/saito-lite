@@ -1,3 +1,39 @@
+
+
+/******* START CRYPTO MODS ********/
+.superwallet-container {
+padding: 10em;
+overflow-y: scroll;
+height: 100%;
+}
+
+.crypto-container {
+margin: 2em 0em;
+border: solid 2px black;
+padding: 1.5em;
+}
+
+.crypto-container .crypto-title {
+font-size: 1.5em;
+}
+.crypto-container .ticker {
+font-size: 3.5em;
+}
+
+.crypto-container input {
+padding: 0;
+border: solid 1px black;
+margin-bottom: 0.2em;
+}
+
+.crypto-container input.sendbutton {
+padding: 0.3em 0.6em;
+font-size: 1.0em;
+border: solid 1px black;
+}
+
+
+/******* END CRYPTO MODS ********/
 /** Email **/
 
 .footer {
@@ -14,6 +50,7 @@ hr {
 }
 
 .email-container {
+  max-width: var(--saito-width);
   display: grid;
   grid-column-gap: 1.5em;
   grid-template-columns: 15em auto;
@@ -518,13 +555,8 @@ hr {
   .email-header h3 {
     padding-top: 7px;
   }
-  
 
-  @media only screen and (min-width: 600px) {
-    #email.create-button {
-      display: none;
-    }
-    #email-bars-icon {
-      display: block;
-    }
+  #email-bars-icon {
+    display: block;
   }
+}

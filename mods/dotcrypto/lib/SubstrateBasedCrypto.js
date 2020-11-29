@@ -3,6 +3,7 @@ const ModTemplate = require('../../../lib/templates/modtemplate');
 const { Keyring, decodeAddress, encodeAddress, createPair } = require('@polkadot/keyring');
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { randomBytes } = require('crypto');
+const EventEmitter = require('events');
 
 // A Module to support KSM, DOT, or any other Substrate-based crypto
 class SubstrateBasedCrypto extends ModTemplate {
@@ -12,14 +13,14 @@ class SubstrateBasedCrypto extends ModTemplate {
     this.ticker = ticker;
     this.endpoint = endpoint;
     this.info = info;
-    this.categories = "Crptocurrency";
+    this.categories = "Cryptocurrency";
     this.optionsStorage = {};
     this.app = app;
     this._api = null; // treat as private, please use getApi to access
     this.mods = [];
     this.keypair = null;
     this.keyring = null;
-    
+    this.eventEmitter = new EventEmitter();
   }
   
   requestInterface(type = "") {
@@ -32,7 +33,7 @@ class SubstrateBasedCrypto extends ModTemplate {
         getBalance: this.getBal.bind(this),
         transfer: this.transfer.bind(this),
         getAddress: this.getAddress.bind(this),
-        subscribe: null,
+        eventEmitter: this.eventEmitter,
         estimateFee: null,
       }
     }
@@ -87,16 +88,16 @@ class SubstrateBasedCrypto extends ModTemplate {
       const wsProvider = new WsProvider(this.endpoint);
       this._api = new ApiPromise({ provider: wsProvider });
       this._api.on('connected', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider connected');
+        //console.log(this.description + ' Polkadot Socket Provider connected');
       });
       this._api.on('disconnected', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider disconnected');
+        //console.log(this.description + ' Polkadot Socket Provider disconnected');
       });
       this._api.on('ready', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider ready');
+        //console.log(this.description + ' Polkadot Socket Provider ready');
       });
       this._api.on('error', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider error');
+        //console.log(this.description + ' Polkadot Socket Provider error');
       });
       this.keyring = new Keyring({ type: 'ed25519'});
       this.keyring.setSS58Format(0);

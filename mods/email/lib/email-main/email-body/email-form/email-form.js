@@ -9,12 +9,14 @@ module.exports = EmailForm = {
     render(app, mod) {
         this.app = app;
         this.saito = this.app;
-        let address, title, msg = "";
+        let address = "";
+        let title = "";
+        let msg = "";
         let original = null;
-        address = mod.parseHash(window.location.hash).toaddress;
+        address = app.browser.parseHash(window.location.hash).toaddress;
         address = address ? address : "";
-        let originalSig = mod.parseHash(window.location.hash).original;
-        let type = mod.parseHash(window.location.hash).type;
+        let originalSig = app.browser.parseHash(window.location.hash).original;
+        let type = app.browser.parseHash(window.location.hash).type;
         if (originalSig) {
           original = mod.getSelectedEmail(originalSig, "inbox");
         }
@@ -114,8 +116,7 @@ module.exports = EmailForm = {
         newtx = app.wallet.signTransaction(newtx);
 
         app.network.propagateTransaction(newtx);
-
-        window.location.hash = "#page=email_list&subpage=inbox"
+        window.location.hash = this.goToLocation("#page=email_list&subpage=inbox");
         
         salert("Your message has been sent");
 
