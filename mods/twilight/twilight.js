@@ -1078,6 +1078,7 @@ console.log("QUEUE: " + this.game.queue);
             //
             this.removeCardFromHand(mv[2]);
 
+
             //
             // missile envy is an exception, non-player triggers
             //
@@ -1085,6 +1086,8 @@ console.log("QUEUE: " + this.game.queue);
               this.game.state.events.missile_envy = 0;
               this.game.state.events.missileenvy = 0;
             }
+
+console.log("DECK SD: " + JSON.stringify(this.game.deck));
 
             for (var i in this.game.deck[0].cards) {
               if (mv[2] == i) {
@@ -1917,6 +1920,7 @@ console.log("CARD: " + card);
         if (mv[0] === "ops") {
 
           if (this.game.deck[0].cards[mv[2]] != undefined) { this.game.state.event_name = this.game.deck[0].cards[mv[2]].name; }
+
           this.updateLog("<span>" + mv[1].toUpperCase() + " plays </span><span class=\"logcard\" id=\""+mv[2]+"\">" + this.game.state.event_name + "</span> <span>for " + mv[3] + " OPS</span>");
 
           // stats
@@ -2183,6 +2187,7 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "place") {
+console.log("HERE: "+ JSON.stringify(mv));
           if (player != mv[1]) { this.placeInfluence(mv[3], parseInt(mv[4]), mv[2]); }
           this.game.queue.splice(qe, 1);
         }
@@ -2451,7 +2456,10 @@ console.log("CARD: " + card);
 	  // china card is face-up
 	  //
           this.game.state.events.china_card_facedown = 0;
-	  this.displayChinaCard();
+	  if (this.game.player != 0) {
+	    this.displayChinaCard();
+	  }
+
 
           //
           // END OF HISTORY
@@ -5425,9 +5433,11 @@ this.startClock();
   // PLACE INFLUENCE //
   /////////////////////
   addCardToHand(card) {
+    if (this.game.player == 0) { return; }
     this.game.deck[0].hand.push(card);
   }
   removeCardFromHand(card) {
+    if (this.game.player == 0) { return; }
     for (i = 0; i < this.game.deck[0].hand.length; i++) {
       if (this.game.deck[0].hand[i] == card) {
         this.game.deck[0].hand.splice(i, 1);
@@ -6438,12 +6448,14 @@ console.log("CONTROL IS: " + control);
     if (this.game.state.round > 1) {
       for (let i = 0 ; i < this.game.deck[0].hand.length; i++) {
         if (this.game.deck[0].hand[i] != "china") {
-          if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
-            let player = "us";
-            let winner = "ussr";
-            if (this.game.player == 1) { player = "ussr"; winner = "us"; this.game.winner = 2; }
-            this.endGame(winner, "opponent held scoring card");
-          }
+	  try {
+            if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
+              let player = "us";
+              let winner = "ussr";
+              if (this.game.player == 1) { player = "ussr"; winner = "us"; this.game.winner = 2; }
+                this.endGame(winner, "opponent held scoring card");
+            }
+          } catch (err) {}
 	}
       }
     }
@@ -6516,9 +6528,11 @@ console.log("CONTROL IS: " + control);
     this.updateMilitaryOperations();
     this.updateRound();
 
+
     //
-    // give me the china card if needed
+    // give me the china card if needed -- OBSERVER
     //
+    if (this.game.player != 0) {
     let do_i_have_the_china_card = 0;
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
       if (this.game.deck[0].hand[i] == "china") {
@@ -6541,6 +6555,7 @@ console.log("CONTROL IS: " + control);
         }
       }
     }
+    }
     this.game.state.events.china_card = 0;
     this.game.state.events.china_card_eligible = 0;
 
@@ -6551,6 +6566,13 @@ console.log("CONTROL IS: " + control);
 
 
   whoHasTheChinaCard() {
+
+    //
+    // the observer has no clue
+    //
+    if (this.game.player == 0) {
+      return "ussr";
+    }
 
     let do_i_have_the_china_card = 0;
 

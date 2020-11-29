@@ -159,8 +159,8 @@ class Arcade extends ModTemplate {
 
     //
     // load observer games (active)
-      //`SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
     //
+      //`SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
     let current_timestamp = new Date().getTime() - 1200000;
     this.sendPeerDatabaseRequestWithFilter(
 
@@ -1577,9 +1577,6 @@ console.log("ADDING TO OBSERVER LIST: " + JSON.stringify(msg));
       $last_move: (new Date().getTime())
     };
 
-console.log("SAVING GAME STATE: " + sql);
-console.log("PARAMS: " + JSON.stringify(params));
-
     await app.storage.executeDatabase(sql, params, "arcade");
 
   }
@@ -1594,9 +1591,6 @@ console.log("PARAMS: " + JSON.stringify(params));
     let address_to_watch = msgobj.player;
     let game_id = msgobj.game_id;
     let arcade_self = this;
-
-console.log("Here we are in observe game!");
-console.log(JSON.stringify(msgobj));
 
     //
     // already watching game... load it
