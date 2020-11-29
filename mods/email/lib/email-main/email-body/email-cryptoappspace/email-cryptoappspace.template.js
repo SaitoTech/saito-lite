@@ -7,8 +7,9 @@ module.exports = EmailCryptoAppspaceTemplate = (responseInterface) => {
   return `
     <div class="email-appspace">
       <div class="crypto-container">
-      
-        <div class="ticker"><i class="fa fa-star" aria-hidden="true"></i>${responseInterface.ticker}</div>
+        <div class="ticker">
+          <i class="far fa-star"></i>${responseInterface.ticker}
+        </div>
         <div class="crypto-title">${responseInterface.description}</div>
         ${infoHtml}
         

@@ -9,7 +9,9 @@ module.exports = EmailForm = {
     render(app, mod) {
         this.app = app;
         this.saito = this.app;
-        let address, title, msg = "";
+        let address = "";
+        let title = "";
+        let msg = "";
         let original = null;
         address = app.browser.parseHash(window.location.hash).toaddress;
         address = address ? address : "";

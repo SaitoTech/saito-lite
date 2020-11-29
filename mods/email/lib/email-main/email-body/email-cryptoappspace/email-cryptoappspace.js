@@ -1,7 +1,5 @@
 const EmailCryptoAppspaceTemplate = require('./email-cryptoappspace.template.js');
-
 module.exports = EmailCryptoAppspace = {
-  
   render(app, mod) {
     let loadBalance = async(responseInterface) => {
       let balance = await responseInterface.getBalance();
@@ -12,9 +10,6 @@ module.exports = EmailCryptoAppspace = {
       document.querySelector(`.crypto-container .address`).innerHTML = address;
     }      
     
-    // let page = mod.parseHash(window.location.hash).page;
-    console.log("EmailCryptoAppspace render");
-    console.log(this);
     try {
       let subPage = app.browser.parseHash(window.location.hash).subpage;
       let cryptoMod = app.modules.returnModule(subPage);
@@ -28,11 +23,16 @@ module.exports = EmailCryptoAppspace = {
         let toAddress = document.querySelector(`.crypto-container .pubkeyto`).value;
         modInterface.transfer(howMuch, toAddress);
       }
-      document.querySelector(`.crypto-container .fa-star`).onclick = (event) => {
-        console.log("clickity~");
-        console.log(event.currentTarget.getAttribute('aria-hidden'));
-        event.currentTarget.setAttribute('aria-hidden','true');
-      }
+      document.querySelectorAll(`.crypto-container .fa-star`).forEach((elem, i) => {
+        elem.onclick = (event) => {
+          if (event.currentTarget.classList.contains("fa")) {
+            app.wallet.setPreferredCrypto("SaitoCrypt")
+          } else {
+            app.wallet.setPreferredCrypto(cryptoMod.name)
+          }
+          event.currentTarget.classList.toggle('fa');
+        }
+      });
     } catch(error) {
       mod.locationErrorFallback(`Error loading Crypto Module.<br/>${error}`, error)
     }

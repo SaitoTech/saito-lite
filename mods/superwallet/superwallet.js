@@ -42,7 +42,6 @@ class SuperWallet extends ModTemplate {
           <div class="ticker">${responseInterface.ticker}</div>
           <div class="crypto-title">${responseInterface.description}</div>
           ${infoHtml}
-          
           <div>
             Address: <span class="address">loading...</span>
           </div>

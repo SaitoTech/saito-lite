@@ -3,6 +3,7 @@ const ModTemplate = require('../../../lib/templates/modtemplate');
 const { Keyring, decodeAddress, encodeAddress, createPair } = require('@polkadot/keyring');
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { randomBytes } = require('crypto');
+const EventEmitter = require('events');
 
 // A Module to support KSM, DOT, or any other Substrate-based crypto
 class SubstrateBasedCrypto extends ModTemplate {
@@ -19,7 +20,7 @@ class SubstrateBasedCrypto extends ModTemplate {
     this.mods = [];
     this.keypair = null;
     this.keyring = null;
-    
+    this.eventEmitter = new EventEmitter();
   }
   
   requestInterface(type = "") {
@@ -32,7 +33,7 @@ class SubstrateBasedCrypto extends ModTemplate {
         getBalance: this.getBal.bind(this),
         transfer: this.transfer.bind(this),
         getAddress: this.getAddress.bind(this),
-        subscribe: null,
+        eventEmitter: this.eventEmitter,
         estimateFee: null,
       }
     }

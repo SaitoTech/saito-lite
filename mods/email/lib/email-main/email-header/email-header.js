@@ -5,7 +5,7 @@ const EmailAppspaceHeader = require('./email-appspace-header/email-appspace-head
 const EmailCryptoAppspaceHeader = require('./email-cryptoappspace-header/email-cryptoappspace-header');
 
 module.exports = EmailHeader = {
-
+  
   render(app, mod) {
     mod.header = this;
     let page = app.browser.parseHash(window.location.hash).page
@@ -27,8 +27,8 @@ module.exports = EmailHeader = {
         EmailAppspaceHeader.attachEvents(app, mod);
         break;
       case "crypto_page":
-        EmailCryptoAppspaceHeader.render(app, mod);
-        EmailCryptoAppspaceHeader.attachEvents(app, mod);
+        EmailAppspaceHeader.render(app, mod);
+        EmailAppspaceHeader.attachEvents(app, mod);
         break;
       default:
         // errors here are handled in email-body.js

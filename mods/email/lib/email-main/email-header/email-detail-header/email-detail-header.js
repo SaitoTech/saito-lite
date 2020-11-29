@@ -13,8 +13,8 @@ module.exports = EmailDetailHeader = {
             .onclick = (e) => {
               // delete the email from the emaillist
               try {
-                let selectedemailSig = mod.parseHash(window.location.hash).selectedemail
-                let subPage = mod.parseHash(window.location.hash).subpage
+                let selectedemailSig = app.browser.parseHash(window.location.hash).selectedemail
+                let subPage = app.browser.parseHash(window.location.hash).subpage
                 let selected_email = mod.getSelectedEmail(selectedemailSig, subPage);
                 mod.deleteTransaction(selected_email, subPage);
                 window.location.hash = mod.goToLocation(`#page=email_list&subpage=inbox`);
@@ -25,13 +25,13 @@ module.exports = EmailDetailHeader = {
 
     document.getElementById('email-detail-reply')
             .onclick = (e) => {
-              let selectedemailSig = mod.parseHash(window.location.hash).selectedemail;
+              let selectedemailSig = app.browser.parseHash(window.location.hash).selectedemail;
               window.location.hash = mod.goToLocation(`#page=email_form&original=${selectedemailSig}&type=reply`);
             };
 
     document.getElementById('email-detail-forward')
             .onclick = (e) => {
-              let selectedemailSig = mod.parseHash(window.location.hash).selectedemail;
+              let selectedemailSig = app.browser.parseHash(window.location.hash).selectedemail;
               window.location.hash = mod.goToLocation(`#page=email_form&original=${selectedemailSig}&type=fwd`);
             };
   }

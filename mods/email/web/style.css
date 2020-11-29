@@ -31,6 +31,8 @@ padding: 0.3em 0.6em;
 font-size: 1.0em;
 border: solid 1px black;
 }
+
+
 /******* END CRYPTO MODS ********/
 /** Email **/
 
@@ -48,6 +50,7 @@ hr {
 }
 
 .email-container {
+  max-width: var(--saito-width);
   display: grid;
   grid-column-gap: 1.5em;
   grid-template-columns: 15em auto;
@@ -552,13 +555,8 @@ hr {
   .email-header h3 {
     padding-top: 7px;
   }
-  
 
-  @media only screen and (min-width: 600px) {
-    #email.create-button {
-      display: none;
-    }
-    #email-bars-icon {
-      display: block;
-    }
+  #email-bars-icon {
+    display: block;
   }
+}

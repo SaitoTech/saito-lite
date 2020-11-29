@@ -58,8 +58,8 @@ class Email extends ModTemplate {
     `;
     app.browser.addElementToDom(html);
 
-    // this.header.render(app, this);
-    // this.header.attachEvents(app, this);
+    this.header.render(app, this);
+    this.header.attachEvents(app, this);
     // 
     // this.renderSidebar(app);
     //this.renderMain(app);
@@ -145,8 +145,8 @@ class Email extends ModTemplate {
       // Render
       this.renderSidebar(app);
       this.renderMain(app);
-      this.header.render(app, this);
-      this.header.attachEvents(app, this);
+      // this.header.render(app, this);
+      // this.header.attachEvents(app, this);
     }
   }
   initialize(app) {
