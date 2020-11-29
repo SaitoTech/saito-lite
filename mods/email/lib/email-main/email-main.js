@@ -4,22 +4,23 @@ const EmailBody = require('./email-body/email-body');
 
 module.exports = EmailMain = {
 
-  render(app, data) {
+  render(app, mod) {
 
     let email_main = document.querySelector(".email-main");
     if (!email_main) { return; }
-    email_main.innerHTML = EmailMainTemplate(app, data);
+    email_main.innerHTML = EmailMainTemplate(app, mod);
 
-    data.email.main = this;
+    mod.main = this;
 
-    EmailHeader.render(app, data);
-    EmailBody.render(app, data);
+    EmailHeader.render(app, mod);
+    EmailBody.render(app, mod);
 
   },
 
-  attachEvents(app, data) {
-    EmailHeader.attachEvents(app, data);
-    EmailBody.attachEvents(app, data);
-  }
+  attachEvents(app, mod) {
+    EmailHeader.attachEvents(app, mod);
+    EmailBody.attachEvents(app, mod);
+  },
+
 
 }

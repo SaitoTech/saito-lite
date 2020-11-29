@@ -1,37 +1,36 @@
 const EmailListTemplate = require('./email-list.template.js');
 const EmailListRowTemplate = require('./email-list-row.template.js');
+const helpers = require('./../../../../../../lib/helpers/index');
 
 module.exports = EmailList = {
 
-    render(app, data) {
-
-      document.querySelector('.email-body').innerHTML = EmailListTemplate();
-      let inbox_emails = data.email.emails[data.email.emails.active]; //.reverse();
-      inbox_emails.forEach(tx => {
-        document.querySelector('.email-list').innerHTML +=
-            EmailListRowTemplate(tx, data.email.addrController.returnAddressHTML(tx.transaction.from[0].add), data.helpers);
-      });
-
+    render(app, mod) {
+      try {
+        document.querySelector('.email-body').innerHTML = EmailListTemplate();
+        let inbox_emails;
+        try {
+          let subPage = mod.parseHash(window.location.hash).subpage;
+          inbox_emails = mod.emails[subPage]; //.reverse();  
+        } catch(error) {
+          mod.locationErrorFallback(`Error fetching emails.<br/>${error}`);
+        }
+      
+        if (inbox_emails){
+          inbox_emails.forEach(tx => {
+            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(tx, mod.addrController.returnAddressHTML(tx.transaction.from[0].add), helpers);
+          });
+        } else {
+          mod.locationErrorFallback(`No emails found.`);
+        }
+      } catch (err) {}
     },
 
-    attachEvents(app, data) {
+    attachEvents(app, mod) {
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.onclick = (e) => {
-                if (e.srcElement.nodeName == "INPUT") { return; }
-
-                let sig = e.currentTarget.id;
-                let selected_email = data.email.emails[data.email.emails.active].filter(tx => {
-                    return tx.transaction.sig === sig
-                });
-
-                data.email.selected_email = selected_email[0];
-                data.email.header_title = data.email.selected_email.msg.title;
-
-                data.email.active = "email_detail";
-
-                data.email.main.render(app, data);
-                data.email.main.attachEvents(app, data);
-
+              if (e.srcElement.nodeName == "INPUT") { return; }
+              let subPage = mod.parseHash(window.location.hash).subpage;
+              window.location.hash = `#page=email_detail&subpage=${subPage}&selectedemail=${e.currentTarget.id}`
             };
         });
 

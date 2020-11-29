@@ -9463,9 +9463,23 @@ try {
     }
   }
 
-
-
-
+  requestInterface(type) {
+    if (type == "arcade-create-game") {
+      return {
+        slug: this.slug,
+        title: this.name,
+        description: this.description,
+        publisher_message: this.publisher_message,
+        returnGameOptionsHTML: this.returnGameOptionsHTML.bind(this),
+        minPlayers: this.minPlayers,
+        maxPlayers: this.maxPlayers,
+      }
+    }
+    if (type == "arcade-sidebar") {
+      return { title: this.name };
+    }
+    return null;
+  }
 
 //
 // manually add arcade banner support
@@ -15442,6 +15456,8 @@ console.log("Z Index: " + JSON.stringify(z[z_index]));
               <option value="faction4">Sardakk N'Orr</option>
               <option value="faction5">Brotherhood of Yin</option>
             </select>
+
+            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 
     `;
 

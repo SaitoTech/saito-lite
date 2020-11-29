@@ -37,11 +37,23 @@ class Pandemic extends GameTemplate {
   
   }
   
-  
-  
-  
-  
-  
+  requestInterface(type) {
+    if (type == "arcade-create-game") {
+      return {
+        slug: this.slug,
+        title: this.name,
+        description: this.description,
+        publisher_message: this.publisher_message,
+        returnGameOptionsHTML: this.returnGameOptionsHTML.bind(this),
+        minPlayers: this.minPlayers,
+        maxPlayers: this.maxPlayers,
+      }
+    }
+    if (type == "arcade-sidebar") {
+      return { title: this.name };
+    }
+    return null;
+  }
   
   showPlayerCards(player_num) {
 
@@ -2874,6 +2886,8 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
               <option value="operationsexpert">operations expert</option>
             </select>
   
+            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
   	`;
   
   }

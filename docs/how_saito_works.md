@@ -4,28 +4,24 @@ This document is divided into four parts. The first discusses the Saito mechanis
 
 ## 1. TRANSACTION REBROADCASTING
 
-Saito divides the blockchain into "epochs" of roughly 100,000 blocks. If the latest block is 500,000, the current epoch streches from block 400,001 onwards.
+Saito divides the blockchain into "epochs" of N blocks. Once a block falls out of the current epoch, its unspent transaction outputs (UTXO) are no longer spendable. But any UTXO which contains enough tokens to pay a rebroadcasting fee must be re-included in the very next block. A rebroadcasting fee is deducted from each rebroadcast UTXO of double the average fee per byte paid by new transactions over the genesis period.
 
-Once a block falls out of the current epoch, its unspent transaction outputs (UTXO) are no longer spendable. Any UTXO which contains enough tokens to pay a rebroadcasting fee must be re-included in the very next block however. The rebroadcasting fee is twice the average fee per byte paid by new transactions over a smoothing period.
-
-Block producers rebroadcast UTXO by creating special "automatic transaction rebroadcasting" (ATR) transactions. These ATR transactions include the original transaction within an associated data field but have new UTXO. The rebroadcasting fee is deducted from these new UTXO and added to the block reward. Any blocks not containing all necessary ATR transactions are invalid by consensus rules. After two epochs block producers may delete old transactions, keeping only the 32-byte header hash to prove the connection with the genesis block.
+Block producers handle rebroadcasting by creating special "automatic transaction rebroadcasting" (ATR) transactions. These ATR transactions include the original transaction within an associated data field but have new UTXO. The rebroadcasting fee that is deducted from ATR is added to the block reward. Any blocks not containing all necessary ATR transactions are invalid by consensus rules. After two epochs block producers may delete old transactions, keeping only the 32-byte header hash to prove the connection with the genesis block.
 
 
 ## 2. PRODUCING BLOCKS
 
-Saito adds cryptographic signatures to the network layer. These create an unforgeable record of the path each transaction has taken into the network and permit nodes to measure the "routing work" contained in any transaction. At every point in its journey the routing work in a transaction is the value of the transaction fee halved with each additional hop beyond the first that the transaction has taken into the network.
+Saito adds cryptographic signatures to network routing: all transactions accrue an unforgeable record of how they were routed. This allows nodes to calculate the "routing work" the transaction represents. This "routing work" is the value of its transaction fee halved with each additional hop beyond the first that the transaction has taken into the network. A transaction with a 10 SAITO fee is worth 10 units of routing work at its first hop into the network, and 5 units of routing work at its second.
 
-The blockchain sets a "difficulty" for block production. This difficulty is met by including transactions containing adequate "routing work" into blocks. Consensus rules specify that nodes cannot use "routing work" from transactions if they are not included in the routing path. A bonus payment may be issued to block producers if there is more "routing work" in their blocks than required by consensus. All other fees are collected into the network treasury (i.e. not paid out to the block producer)
-
+The blockchain sets a "difficulty" for block production. This difficulty is met by block producers including transactions which provide them with adequate "routing work". Nodes cannot use "routing work" from transactions if they are not included in the routing path. This creates a dynamic where honest nodes will generate routing work naturally in the course of serving users but attackers must spend their own money to generate it.
 
 ## 3. THE PAYMENT LOTTERY
 
-Each block contains a proof-of-work challenge in its block hash. This proof-of-work puzzle is not used to produce blocks since (section 2) Saito does not using hashing to regulate block production. Instead, miners solve these challenges in order to hold a payment lottery. Miners begin hashing on receipt of a block and once a solution is found broadcast it into the network in the form of a normal, fee-paying transaction.
+When a block is produced the block reward is not paid out. This ensures attackers who spend their own money to produce blocks must burn their money: like renting hashpower but without any income. To prevent a deflationary crash a proof-of-work puzzle is then used to bring the funds back to the network. Miners begin hashing on receipt of a block and once a solution is found broadcast it into the network in the form of a normal, fee-paying transaction.
 
-If a solution is not found by the time the next block is produced, the block reward is not paid out. Uncollected funds will eventually fall off the chain (when the block containing them passes out of the current epoch) whereupon they are collected by the consensus layer for eventual re-inclusion in a future block reward. If exactly one solution is found and included in the next block, the block reward for its predecessor is split between the lucky miner and a routing node selected randomly from the previous block. Each routing node has a chance of winning proportional to the amount of routing work it contributed to that block.
+If a solution is not included in the very next block, the block reward is not paid out. Uncollected funds will eventually fall off the chain (when the block containing them passes out of the current epoch) whereupon they are collected by the consensus layer for eventual re-inclusion in a future block reward. If exactly one solution is found, the block reward is split between the lucky miner and a routing node selected randomly from the previous block. Each routing node has a chance of winning proportional to the amount of routing work it contributed to that block.
 
 Mining difficulty auto-adjusts until the network produces one golden ticket on average per block. 
-
 
 
 ## 4. ADVANCED SAITO

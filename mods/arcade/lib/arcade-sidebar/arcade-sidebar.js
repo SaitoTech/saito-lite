@@ -1,0 +1,96 @@
+const saito = require('./../../../../lib/saito/saito');
+const ArcadeSidebarTemplate = require('./arcade-sidebar.template');
+const ArcadeGamesFullListOverlayTemplate = require('./arcade-games-full-list-overlay.template');
+const SaitoOverlay = require('./../../../../lib/saito/ui/saito-overlay/saito-overlay');
+const ModalRegisterUsername = require('./../../../../lib/saito/ui/modal-register-username/modal-register-username');
+const ArcadeGameDetails = require('../arcade-game/arcade-game-details');
+
+module.exports = ArcadeSidebar = {
+
+
+  render(app, mod) {
+
+    if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
+    if (!document.querySelector(".arcade-sidebar")) { app.browser.addElementToDom(ArcadeSidebarTemplate(), "arcade-container"); }
+
+
+    app.modules.respondTo("email-chat").forEach(module => {
+      if (module != null) {
+        module.respondTo('email-chat').render(app, module);
+      }
+    });
+
+
+    let arcade_sidebar_apps_loaded = 0;
+    app.modules.respondTo("arcade-sidebar").forEach(module => {
+      if (module != null) {
+        module.respondTo('arcade-sidebar').render(app, module);
+        arcade_sidebar_apps_loaded = 1;
+      }
+    });
+    if (arcade_sidebar_apps_loaded == 0) {
+      document.getElementById("arcade-sidebar-apps").style.display = "none";
+    }
+
+    let games_menu = document.querySelector(".arcade-apps");
+    app.modules.respondTo("arcade-games").forEach(module => {
+      let title = mod.name;
+      if (!document.getElementById(module.name)) {
+        if (module.respondTo("arcade-carousel") != null) {
+          if (module.respondTo("arcade-carousel").title) {
+            title = module.respondTo("arcade-carousel").title;
+          }
+        }
+        games_menu.innerHTML += `<li class="arcade-navigator-item" id="${module.name}">${title}</li>`;
+      }
+    });
+  },
+
+  
+  attachEvents(app, mod) {
+
+    if (!document.getElementById("games-add-game")) { return; }
+
+    if (app.modules.returnModule("AppStore") != null) {
+      document.getElementById("games-add-game").onclick = () => {
+        let appstore_mod = app.modules.returnModule("AppStore");
+        if (appstore_mod) {
+	  let options = { search : "" , category : "Entertainment" , featured : 1 };
+          appstore_mod.openAppstoreOverlay(options);
+        }
+      };
+    }
+
+    Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
+      game.addEventListener('click', (e) => {
+
+        //
+        // not registered
+        //
+        if (app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey()) == "") {
+	  if (app.options.wallet.anonymous != 1) {
+	    mod.modal_register_username = new ModalRegisterUsername(app);
+	    mod.modal_register_username.render(app, mod);
+	    mod.modal_register_username.attachEvents(app, mod);
+	    return;
+	  }
+        }
+
+	let tx = new saito.transaction();
+	tx.msg.game = e.currentTarget.id;
+        ArcadeGameDetails.render(app, mod, tx);
+        ArcadeGameDetails.attachEvents(app, mod, tx);
+      });
+    });
+
+
+    app.modules.respondTo("email-chat").forEach(module => {
+      module.respondTo('email-chat').attachEvents(app, mod);
+    });
+
+  }
+
+}
+
+
+

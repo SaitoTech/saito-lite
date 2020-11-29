@@ -6,11 +6,28 @@ module.exports = EmailForm = {
     saito: {},
     emailList: {},
 
-    render(app, data={ emailList: {} }) {
+    render(app, mod) {
         this.app = app;
         this.saito = this.app;
-
-        document.querySelector(".email-body").innerHTML = EmailFormTemplate();
+        let address, title, msg = "";
+        let original = null;
+        address = mod.parseHash(window.location.hash).toaddress;
+        address = address ? address : "";
+        let originalSig = mod.parseHash(window.location.hash).original;
+        let type = mod.parseHash(window.location.hash).type;
+        if (originalSig) {
+          original = mod.getSelectedEmail(originalSig, "inbox");
+        }
+        if(original && type == "reply") {
+          address = original.transaction.from[0].add;
+          title = "Re: " + original.msg.title;
+          msg = "<br /><hr /><i>Quoted Text: </i> <br />" + original.msg.message;
+        } else if(original && type == "fwd") {
+          address = original.transaction.from[0].add;
+          title = `Fwd: ${original.msg.title}`;
+          msg = `<br/><hr/><i>Forwarded Text: </i><br/>\nForwarded from: ${original.transaction.from[0].add}\n\n${original.msg.message}`;
+        }
+        document.querySelector(".email-body").innerHTML = EmailFormTemplate(address, title, msg);
 
         if (document.querySelector('.create-button')) { document.querySelector('.create-button').classList.add("mobile-hide"); }
 
@@ -43,9 +60,9 @@ module.exports = EmailForm = {
     
     },
 
-    attachEvents(app, data) {
+    attachEvents(app, mod) {
         document.querySelector('.email-submit')
-            .addEventListener('click', (e) => this.sendEmailTransaction(app, data));
+            .addEventListener('click', (e) => this.sendEmailTransaction(app, mod));
 
         /*document.querySelector('.fa-dollar-sign')
             .addEventListener('click', (e) => {
@@ -59,7 +76,7 @@ module.exports = EmailForm = {
         document.getElementById('email-from-address').value = `${this.saito.wallet.returnPublicKey()} (me)`;
     },
 
-    async sendEmailTransaction(app, data) {
+    async sendEmailTransaction(app, mod) {
 
         let email_title = document.querySelector('.email-title').value;
         let email_to = document.getElementById('email-to-address').value;
@@ -67,13 +84,12 @@ module.exports = EmailForm = {
         let email_amount_elem = document.querySelector('.email-amount');
         let email_amount = 0.0;
 
-	//
-	// easy copy and paste error
-	//
-	if (email_to.indexOf(' (me)') > 0) {
-	  email_to = email_to.substring(0, email_to.indexOf(' (me)'));
-	}
-
+        //
+        // easy copy and paste error
+        //
+        if (email_to.indexOf(' (me)') > 0) {
+          email_to = email_to.substring(0, email_to.indexOf(' (me)'));
+        }
 
         if (email_amount_elem)  {
             if (email_amount_elem.value > 0) {
@@ -81,7 +97,7 @@ module.exports = EmailForm = {
             }
         }
 
-        email_to = await data.email.addrController.returnPublicKey(email_to);
+        email_to = await mod.addrController.returnPublicKey(email_to);
 
         let newtx = app.wallet.returnBalance() > 0 ?
             app.wallet.createUnsignedTransactionWithDefaultFee(email_to, email_amount) :
@@ -89,7 +105,7 @@ module.exports = EmailForm = {
 
         if (!newtx) {
           salert("Unable to send email. You appear to need more tokens");
-	      return;
+          return;
         }
 
         newtx.msg.module   = "Email";
@@ -99,10 +115,8 @@ module.exports = EmailForm = {
 
         app.network.propagateTransaction(newtx);
 
-        data.email.active = "email_list";
-        data.email.main.render(app, data);
-        data.email.main.attachEvents(app, data);
-
+        window.location.hash = "#page=email_list&subpage=inbox"
+        
         salert("Your message has been sent");
 
     },

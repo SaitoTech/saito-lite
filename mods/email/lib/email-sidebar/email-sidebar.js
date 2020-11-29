@@ -5,15 +5,16 @@ const EmailChat 		= require('./email-chat.js');
 
 module.exports = EmailSidebar = {
 
-    render(app, data) {
+    render(app, mod) {
+      if(document.querySelector(".email-controls")) { return; }
       document.querySelector(".email-sidebar").innerHTML = EmailSidebarTemplate();
-      EmailControls.render(app, data);
-      EmailChat.render(app, data);
+      EmailControls.render(app, mod);
+      EmailChat.render(app, mod);
     },
 
-    attachEvents(app, data) {
-      EmailControls.attachEvents(app, data);
-      EmailChat.attachEvents(app, data);
+    attachEvents(app, mod) {
+      EmailControls.attachEvents(app, mod);
+      EmailChat.attachEvents(app, mod);
     }
 
 }

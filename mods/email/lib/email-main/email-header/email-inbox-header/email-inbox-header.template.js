@@ -1,4 +1,4 @@
-module.exports = EmailInboxHeaderTemplate = (app, data) => {
+module.exports = EmailInboxHeaderTemplate = (app, mod) => {
   return `
     <div class="email-icons">
       <input id="email-select-icon" type="checkbox">

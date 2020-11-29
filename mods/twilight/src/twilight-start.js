@@ -1078,6 +1078,7 @@ console.log("QUEUE: " + this.game.queue);
             //
             this.removeCardFromHand(mv[2]);
 
+
             //
             // missile envy is an exception, non-player triggers
             //
@@ -1085,6 +1086,8 @@ console.log("QUEUE: " + this.game.queue);
               this.game.state.events.missile_envy = 0;
               this.game.state.events.missileenvy = 0;
             }
+
+console.log("DECK SD: " + JSON.stringify(this.game.deck));
 
             for (var i in this.game.deck[0].cards) {
               if (mv[2] == i) {
@@ -1917,6 +1920,7 @@ console.log("CARD: " + card);
         if (mv[0] === "ops") {
 
           if (this.game.deck[0].cards[mv[2]] != undefined) { this.game.state.event_name = this.game.deck[0].cards[mv[2]].name; }
+
           this.updateLog("<span>" + mv[1].toUpperCase() + " plays </span><span class=\"logcard\" id=\""+mv[2]+"\">" + this.game.state.event_name + "</span> <span>for " + mv[3] + " OPS</span>");
 
           // stats
@@ -2183,6 +2187,7 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "place") {
+console.log("HERE: "+ JSON.stringify(mv));
           if (player != mv[1]) { this.placeInfluence(mv[3], parseInt(mv[4]), mv[2]); }
           this.game.queue.splice(qe, 1);
         }
@@ -2451,7 +2456,10 @@ console.log("CARD: " + card);
 	  // china card is face-up
 	  //
           this.game.state.events.china_card_facedown = 0;
-	  this.displayChinaCard();
+	  if (this.game.player != 0) {
+	    this.displayChinaCard();
+	  }
+
 
           //
           // END OF HISTORY
@@ -2803,8 +2811,8 @@ console.log("CARD: " + card);
 		// shuttle diplomacy
 		//
        		if (this.game.state.events.shuttlediplomacy == 1) {
-		  if (discarded_cards['shuttlediplomacy'] != undefined) {
-		    delete discarded_cards['shuttlediplomacy'];
+		  if (discarded_cards['shuttle'] != undefined) {
+		    delete discarded_cards['shuttle'];
 		  }
 		}
 
@@ -5060,8 +5068,8 @@ console.log("SELECTED CARD NOT NULL: bbc");
 	// shuttle diplomacy
 	//
        	if (this.game.state.events.shuttlediplomacy == 1) {
-	  if (discarded_cards['shuttlediplomacy'] != undefined) {
-	    delete discarded_cards['shuttlediplomacy'];
+	  if (discarded_cards['shuttle'] != undefined) {
+	    delete discarded_cards['shuttle'];
 	  }
 	}
 
@@ -5226,6 +5234,7 @@ console.log("SELECTED CARD NOT NULL: bbc");
 
   playerPlaceInitialInfluence(player) {
 
+    try {
 this.startClock();
 
     let twilight_self = this;
@@ -5276,7 +5285,7 @@ this.startClock();
             twilight_self.displayModal("Invalid Influence Placement", `You cannot place there...: ${j} influence left`);
           }
         });
-      }
+      } 
     }
 
 
@@ -5332,6 +5341,7 @@ this.startClock();
         });
       }
     }
+    } catch (err) {}
   }
 
 
@@ -5423,9 +5433,11 @@ this.startClock();
   // PLACE INFLUENCE //
   /////////////////////
   addCardToHand(card) {
+    if (this.game.player == 0) { return; }
     this.game.deck[0].hand.push(card);
   }
   removeCardFromHand(card) {
+    if (this.game.player == 0) { return; }
     for (i = 0; i < this.game.deck[0].hand.length; i++) {
       if (this.game.deck[0].hand[i] == card) {
         this.game.deck[0].hand.splice(i, 1);
@@ -6318,8 +6330,10 @@ console.log("CONTROL IS: " + control);
     //
     // remove events from board to prevent "Doug Corley" gameplay
     //
+    try {
     $(".card").off();
     $(".country").off();
+    } catch (err) {}
 
     //
     // we will bury you scores first!
@@ -6434,12 +6448,14 @@ console.log("CONTROL IS: " + control);
     if (this.game.state.round > 1) {
       for (let i = 0 ; i < this.game.deck[0].hand.length; i++) {
         if (this.game.deck[0].hand[i] != "china") {
-          if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
-            let player = "us";
-            let winner = "ussr";
-            if (this.game.player == 1) { player = "ussr"; winner = "us"; this.game.winner = 2; }
-            this.endGame(winner, "opponent held scoring card");
-          }
+	  try {
+            if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
+              let player = "us";
+              let winner = "ussr";
+              if (this.game.player == 1) { player = "ussr"; winner = "us"; this.game.winner = 2; }
+                this.endGame(winner, "opponent held scoring card");
+            }
+          } catch (err) {}
 	}
       }
     }
@@ -6512,9 +6528,11 @@ console.log("CONTROL IS: " + control);
     this.updateMilitaryOperations();
     this.updateRound();
 
+
     //
-    // give me the china card if needed
+    // give me the china card if needed -- OBSERVER
     //
+    if (this.game.player != 0) {
     let do_i_have_the_china_card = 0;
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
       if (this.game.deck[0].hand[i] == "china") {
@@ -6537,6 +6555,7 @@ console.log("CONTROL IS: " + control);
         }
       }
     }
+    }
     this.game.state.events.china_card = 0;
     this.game.state.events.china_card_eligible = 0;
 
@@ -6547,6 +6566,13 @@ console.log("CONTROL IS: " + control);
 
 
   whoHasTheChinaCard() {
+
+    //
+    // the observer has no clue
+    //
+    if (this.game.player == 0) {
+      return "ussr";
+    }
 
     let do_i_have_the_china_card = 0;
 
@@ -7835,8 +7861,9 @@ console.log("SCORING: " + JSON.stringify(scoring));
           if (scoring.ussr.bg > 0) {
             scoring.ussr.bg--;
             scoring.ussr.total--;
-          }          
+          }
 	  if (mouseover_preview == 0) {
+
             this.game.state.events.shuttlediplomacy = 0;
 
 	    //
@@ -8896,6 +8923,8 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
   updateEventTiles() {
 
+    try {
+
     if (this.game.state.events.warsawpact == 0) {
       $('#eventtile_warsaw').css('display','none');
     } else {
@@ -9030,6 +9059,8 @@ console.log("SCORING: " + JSON.stringify(scoring));
     } else {
       $('#eventtile_awacs').css('display','block');
     }
+
+    } catch (err) {}
 
   }
 
@@ -9448,10 +9479,14 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
     return `
 
+      <div style="padding:40px;width:100vw;height:100vh;overflow-y:scroll;display:grid;grid-template-columns: 200px auto">
+
+	<div style="top:0;left:0;">
+
             <label for="player1">Play as:</label>
             <select name="player1">
-              <option value="random">random</option>
-              <option value="ussr" default>USSR</option>
+              <option value="random" selected>random</option>
+              <option value="ussr">USSR</option>
               <option value="us">US</option>
             </select>
 
@@ -9495,7 +9530,7 @@ alert("end of history!");
             <select name="usbonus">
               <option value="0">0</option>
               <option value="1">1</option>
-              <option value="2">2</option>
+              <option value="2" selected>2</option>
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
@@ -9515,11 +9550,21 @@ alert("end of history!");
               <option value="120">120 minutes</option>
             </select>
 
+            <label for="observer_mode">Observer Mode:</label>
+            <select name="observer">
+              <option value="enable" selected>enable</option>
+              <option value="disable">disable</option>
+            </select>
 
-            <div onclick='$(".remove_cards_box").show();$(this).html(" ");' style="font-size:0.80em;cursor:pointer;">&gt; advanced...</div>
-            <div id="remove_cards_box" class="remove_cards_box" style="display:none">
-              <div style="font-size:0.85em;font-weight:bold">remove cards from play: </div>
-             <ul id="removecards" class="removecards">
+	    <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
+	</div>
+
+            <div id="game-wizard-advanced-box" class="game-wizard-advanced-box" style="display:block;padding-left:20px;">
+
+	      <style type="text/css">li { list-style: none; } .saito-select { margin-bottom: 10px; margin-top:5px; } label { text-transform: uppercase; } .removecards { grid-gap: 0.1em; } .list-header { font-weight: bold; font-size:1.5em; margin-top:0px; margin-bottom:10px; margin-left: 15px; text-transform: uppercase; } </style>
+              <div class="list-header">remove cards:</div>
+              <ul id="removecards" class="removecards">
               <li><input class="remove_card" type="checkbox" name="asia" /> Asia Scoring</li>
               <li><input class="remove_card" type="checkbox" name="europe" /> Europe Scoring</li>
               <li><input class="remove_card" type="checkbox" name="mideast" /> Middle-East Scoring</li>
@@ -9559,7 +9604,7 @@ alert("end of history!");
               <li><input class="remove_card optional_edition" type="checkbox" name="cambridge" /> The Cambridge Five</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="norad" /> NORAD</li>
             </ul>
-           <ul class="removecards" style="clear:both;margin-top:13px">
+            <ul class="removecards" style="clear:both;margin-top:13px">
               <li><input class="remove_card" type="checkbox" name="brushwar" /> Brush War</li>
               <li><input class="remove_card" type="checkbox" name="centralamerica" /> Central America Scoring</li>
               <li><input class="remove_card" type="checkbox" name="seasia" /> Southeast Asia Scoring</li>
@@ -9609,7 +9654,7 @@ alert("end of history!");
               <li><input class="remove_card optional_edition" type="checkbox" name="che" /> Che</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="tehran" /> Our Man in Tehran</li>
             </ul>
-           <ul class="removecards" style="clear:both;margin-top:13px">
+            <ul class="removecards" style="clear:both;margin-top:13px">
               <li><input class="remove_card" type="checkbox" name="iranianhostage" /> Iranian Hostage Crisis</li>
               <li><input class="remove_card" type="checkbox" name="ironlady" /> The Iron Lady</li>
               <li><input class="remove_card" type="checkbox" name="reagan" /> Reagan Bombs Libya</li>
@@ -9635,8 +9680,8 @@ alert("end of history!");
               <li><input class="remove_card optional_edition" type="checkbox" name="awacs" /> AWACS Sale to Saudis</li>
             </ul>
 
-            <div style="font-size:0.85em;font-weight:bold;clear:both;margin-top:10px;">add cards to game: </div>
-           <ul id="removecards" class="removecards">
+            <div class="list-header">add cards:</div>
+            <ul id="removecards" class="removecards">
               <li><input class="remove_card saito_edition" type="checkbox" name="culturaldiplomacy" /> Cultural Diplomacy (Early-War)</li>
               <li><input class="remove_card saito_edition" type="checkbox" name="handshake" /> Handshake in Space (Mid-War)</li>
               <li><input class="remove_card saito_edition" type="checkbox" name="rustinredsquare" /> Rust Lands in Red Square (Late-War)</li>
@@ -9654,6 +9699,8 @@ alert("end of history!");
               <li><input class="remove_card coldwarcrazies_edition" type="checkbox" name="communistrevolution" /> Communist Revolution (Early-War)</li>
             </div>
 
+      </div>
+    </div>
           `;
 
   }

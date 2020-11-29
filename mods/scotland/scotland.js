@@ -19,7 +19,7 @@ class Scotland extends GameTemplate {
     this.name  		 = "Scotland";
     this.slug		 = "scotland";
     this.description     = `Scotland Yard is a cat-and-mouse detective game set in London, England. Criminal mastermind Mister X must wind his way through the city while hiding from Scotland Yard.<p></p>The Saito edition of Scotland Yard is modified slightly to improve the balance of gameplay over the traditional version. If played with less than six players, the players controlling the detectives will control multiple detectives to increase the effectiveness of surround-and-capture strategies.`;
-    this.type       	 = "strategy boardgame";
+    this.type       	 = "Strategy Boardgame";
     this.categories      = "Games Arcade Entertainment";
     //
     // this sets the ratio used for determining
@@ -77,8 +77,23 @@ class Scotland extends GameTemplate {
 
   }
 
-
-
+  requestInterface(type) {
+    if (type == "arcade-create-game") {
+      return {
+        slug: this.slug,
+        title: this.name,
+        description: this.description,
+        publisher_message: this.publisher_message,
+        returnGameOptionsHTML: this.returnGameOptionsHTML.bind(this),
+        minPlayers: this.minPlayers,
+        maxPlayers: this.maxPlayers,
+      }
+    }
+    if (type == "arcade-sidebar") {
+      return { title: this.name };
+    }
+    return null;
+  }
   //
   // manually announce arcade banner support
   //

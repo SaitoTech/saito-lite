@@ -1,69 +1,520 @@
-/** Email **/
+/**
+.button {
+  background: var(--saito-red);
+  color: #fefefe;
+}
+.button:hover {
+  background: #fefefe;
+  color: var(--saito-red);
+}
+**/
 
 :root {
   --saito-red: #639;
   --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
   --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
+  --tile-height: 8em;
+  --saito-width: 1500px;
+  --sidebar-width: 15em;
+  --identicon-height: 1em;
 }
 
+.saito-carousel {}
+
 body {
+  height: 100vh;
   font-size: 1.0em;
   color: var(--saito-skyline-grey);
   background: var(--saito-nightscape);
+  overflow: hidden;
+  justify-content: center;
 }
 
 a {
   color: #BCF;
 }
 
-.arcade-announcement {
-  cursor: pointer;
+.arcade-container {
+  height: 100%;
+  margin: 5em auto;
+  padding: 0 1em;
+  display: grid;
+  gap: 1em;
+  grid-template-columns: var(--sidebar-width) auto;
   font-size: 1em;
+  width: 100vw;
+  max-width: var(--saito-width);
+}
+
+.arcade-sidebar {
+  display: flex;
+  flex-flow: column;
+  z-index: 999;
+}
+
+.arcade-main {
+  height: calc(100vh - 5em);
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+}
+
+#arcade-tabs {
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+#arcade-tab-buttons {
   width: 100%;
-  padding: 10px 5px 5px;
-  background: #66339910;
-  border: 2px solid var(--saito-red);
-  color: var(--saito-skyline-grey);
-  letter-spacing: 1px;
-  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  overflow: hidden;
+  border-left: solid 2px var(--saito-red);
+  font-size: 1.3em;
+  line-height: 2.3em;
+  cursor: pointer;
+}
+
+#arcade-tab-buttons .tab-button {
+  border: solid 2px var(--saito-red);
+  font-weight: bold;
+  border-left: none;
+  border-bottom: none;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  transform: skew(20deg) translateX(-0.35em);
+}
+
+#arcade-tab-buttons .tab-button span {
+  transform: skew(-20deg);
+}
+
+#arcade-tab-buttons .tab-button:nth-child(1) {
+  border-left: solid 1px var(--saito-red);
+}
+
+#arcade-tab-buttons .tab-button.active-tab-button {
+  background: var(--saito-jester);
+}
+
+#observables-hero {
+  font-size: 4em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: solid 1px var(--saito-red);
+}
+
+#tournaments-hero {
+  font-size: 4em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: solid 1px var(--saito-red);
+}
+
+.arcade-tab-hidden {
+  display: none !important;
+}
+
+.arcade-hero {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  overflow-y: auto;
+  background: linear-gradient(-45deg, #0002, #0004);
+  border: 1px solid var(--saito-red);
+}
+
+.hero-invite-wrapper {
+  width: 100%;
+  min-height: 30vh;
+}
+
+.hero-invite-title {
+  padding: 10px 0 0;
+  font-size: 2em;
   text-align: center;
-  box-shadow: 0 0 2px #efefef;
+}
+
+.hero-invites {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-evenly;
+}
+
+.hero-game-create {
+  min-width: 30%;
+  max-width: 40%;
+  height: 10vh;
+  margin: 1vh;
+  transition: all ease 0.33s;
+  padding: 5px;
+  cursor: pointer;
+  display: grid;
+  gap: 1em;
+  grid-template-columns: 5fr 4fr;
+  border: 1px solid var(--saito-red);
+}
+
+.hero-game-create:hover {
+  transform: scale(1.05);
+}
+
+.hero-game-create-img {
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-game-create-title {
+  font-size: x-large;
+  white-space: break-spaces;
+  height: 100%;
+  max-width: 140px;
+  padding: 5px;
+}
+
+.hero-intro {
+  height: 32vh;
+  width: 100%;
+  background-image: url(/arcade/img/dreamscape-logo.png);
+  background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-intro.thin {
+  height: 20vh;
+}
+
+.arcade-tile {
+  width: calc(100% - 1em);
+  overflow-y: hidden;
+  border: solid 1px #c89af6;
+  background-size: cover;
+  background-position: center;
+  margin: 0.25em;
+  min-height: 7em;
+}
+
+.invite-tile-wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 12em auto auto 12em;
+  background: linear-gradient(45deg, #444a 38%, #0002 100%);
+  height: 7em;
+  overflow: hidden;
+  position: relative;
+  text-shadow: 1px 0 2px black, 0 1px 2px black, -1px 0 2px black, 0 -1px 2px black;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  align-items: center;
+}
+
+.game-inset-img {
+  background-size: cover;
+  background-position: center;
+  border: 1px solid darkorange;
+  height: 6em;
+  margin: 0.5em;
+}
+
+.arcade-tile .invite-row-2 {
+  display: grid;
+  grid-template-columns: 20em auto;
+  align-items: center;
+  height: 7em;
+}
+
+.arcade-tile .gameName {
+  margin-top: 0.2em;
+  margin-left: 0.2em;
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.arcade-tile .gameShortDescription {
+  display: grid;
+  place-items: center;
+  margin-top: 0.2em;
+  margin-bottom: 0.4em;
+  font-size: 2.2em;
+}
+
+.invite-description {
+  background-color: #0009;
+  padding: 1em 2em 0.65em;
+  font-size: 0.55em;
+  font-weight: bold;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.arcade-tile .playerInfo {
+  display: grid;
+  justify-self: start;
+  position: relative;
+  border-radius: 3px;
+}
+
+.arcade-tile .playerName {
+  display: grid;
+  place-items: center;
+  width: 8em;
+  text-overflow: ellipsis;
   overflow: hidden;
 }
 
-.play-now {
-  cursor: pointer;
-  font-size: 1em;
+.arcade-tile .identicon {
+  border: 1px solid indigo;
   width: 100%;
-  padding: 10px 6px;
-  background: var(--saito-jester);
-  border: 1px solid var(--saito-red);
-  border-bottom: 0px;
-  color: var(--saito-skyline-grey);
-  letter-spacing: 1px;
-  transition: transform .25s;
-  margin: 0;
+  max-width: 2em;
+  min-width: 2em;
 }
 
-button, .button, .file-label {
+.arcade-tile .player-slot {
+  background-color: #8884;
+  font-size: 1.2em;
+  box-shadow: 1px 1px #ccc, 1px 1px #333 inset;
+  width: 2em;
+  height: 2em;
+  margin: 0.2em 0.3em;
+}
+
+.arcade-tile .player-slot-ellipsis {
+  align-self: end;
+}
+
+.arcade-tile .button {
+  background: linear-gradient(45deg, #540e81, #b539e8) !important;
+  font-size: 1.2em;
   border-radius: 5px;
+  flex-grow: 1;
+}
+
+.invite-tile-wrapper .tiptext {
+  top: -1em;
+  left: 2.5em;
+  background-color: #444a;
+  color: #efefef !important;
+}
+
+.arcade-sub {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 0.5em;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: contain;
+  margin: 0.5em 0;
+  flex-grow: 1;
+}
+
+.arcade-infobox {
+  border: 1px solid var(--saito-red);
+  padding: 1em;
+  overflow-y: auto;
+}
+
+.arcade-posts {
+  border: 1px solid var(--saito-red);
+  padding: 1em;
+  background-color: #4444;
+  overflow-y: auto;
+}
+
+/*** AppStore Loader ***/
+
+.appstore-overlay-container {
+  background-color: #171c40;
+}
+
+.appstore-overlay-app {
+  background-color: #c2cdde;
+}
+
+@media only screen and (max-width: 1000px) {
+  .main {
+    margin-left: 1em;
+  }
+  .arcade-container {
+    grid-template-columns: auto;
+  }
+  .arcade-sidebar {
+    position: absolute;
+    width: 15em;
+    top: 5em;
+    left: -14em;
+    height: calc(100vh - 5em);
+    transition: all ease-in-out 1s;
+    background-color: darkslateblue;
+  }
+  .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
+    left: 0;
+  }
+  .arcade-sub {
+    margin: 1em 0 0 0;
+    grid-template-columns: auto;
+    grid-template-rows: 20vh auto;
+  }
+  /* .arcade-main {
+    overflow-y: scroll;
+    display: grid;
+    gap: 1.5em;
+    height: 100vh;
+    grid-template-rows: 1fr 3fr;
+  }
+  .arcade-hero {
+    display: grid;
+    gap: 1em;
+    overflow-y: scroll;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-auto-flow: row;
+    justify-items: stretch;
+    align-items: stretch;
+  }
+  .arcade-tile {
+    width: 15em;
+    height: 10em;
+  } */
+  .arcade-sub {
+    /* display: none; */
+  }
+}
+
+/* 
+.hero-list {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-around;
+} */
+
+/* .game-tile {
   cursor: pointer;
-  font-size: 1em;
-  min-width: 10em;
-  padding: 10px 6px;
+  position: relative;
+  transition: all ease-in-out 0.5s;
+  transform-origin: center center;
+  width: 30vh;
+  max-width: 250px;
+  height: 30vh;
+  max-height: 250px;
+  margin: 1vh;
+}
+
+.game-tile-name {
+  background-color: #0008;
+  height: 20%;
+  font-size: 3vh;
+  text-align: center;
+  line-height: 6vh;
+  text-transform: uppercase;
+  position: absolute;
+  width: 100%;
+  top: 25%;
+}
+
+.game-tile-action {
+  background-color: #0008;
+  height: 20%;
+  font-size: 2vh;
+  text-align: center;
+  line-height: 7vh;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+} */
+
+/* 
+.hero-action {
+  display: grid;
+  gap: 1em;
+  grid-template-rows: 5vh auto;
+}
+
+.game-tile:hover {
+  transform: scale(1.1) translateZ(1em);
+}
+
+.game-title {
+  font-size: 3em;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 8vh;
+  display: flex;
+  justify-content: center;
+} */
+
+/* @media only screen and (min-height: 1000px) {
+  .game-tile {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .game-tile-name {
+    font-size: 2.25em;
+    line-height: 56px;
+  }
+  
+  .game-tile-action {
+    font-size: 2em;
+    line-height: 56px;
+  }
+  
+
+} */
+
+/* @media only screen and (max-width: 750px) {} */
+
+/* @media only screen and (max-width: 600px) {
+  .arcade-container {
+    padding: 0;
+  }
+  .arcade-main {
+    grid-template-columns: auto;
+    overflow-y: auto;
+  }
+  .game-tile:hover {
+    transform: none;
+  }
+  .arcade-sub {
+    gap: 0.5em;
+    grid-template-columns: auto;
+    grid-template-rows: auto 3em;
+  }
+  .arcade-infobox {
+    position: absolute;
+    transition: all ease-in-out 0.5s;
+    background-color: darkorange;
+    height: calc(100vh - 5em);
+    width: 100vw;
+    top: calc(100vh - 1em);
+  }
+  .arcade-infobox:hover, .arcade-infobox:active, .arcade-infobox.active {
+    top: 5em;
+  }
+
+} */
+
+/* controls */
+
+button, .button, .file-label {
   background: var(--saito-jester);
   border: 1px solid var(--saito-red);
   color: var(--saito-skyline-grey);
-  letter-spacing: 1px;
-  transition: transform .25s;
-  margin: 0.2em 0;
-  min-width: 180px;
 }
 
 button:hover, .button:hover {
   background: linear-gradient(-45deg, #537 50%, #324 100%);
 }
 
+/*
 select {
   border: 1px solid var(--saito-red);
   border-radius: 5px;
@@ -80,7 +531,7 @@ select {
 input {
   background: #55555555;
   color: var(--saito-skyline-grey);
-}
+} */
 
 .background-shim {
   position: fixed;
@@ -98,31 +549,8 @@ input {
   background-color: #00000099;
 }
 
-.main {
-  height: calc(100vh - 5em);
-  width: 100vw;
-  overflow-x: hidden;
-  /* 90.5vh; */
-}
-
 .footer {
   display: none;
-}
-
-.arcade-container {
-  display: grid;
-  grid-column-gap: 1.5em;
-  grid-template-columns: 15em auto 20em;
-  grid-template-areas: "arcade-left-sidebar arcade-main arcade-right-sidebar";
-  font-size: 1em;
-}
-
-.arcade-sidebar {
-  margin: 10px 10px;
-}
-
-.sidebar>div {
-  margin: 0 0 2em 0;
 }
 
 button.add-games {
@@ -200,15 +628,6 @@ button.add-games {
   background: #1e1e1f50;
 }
 
-/** MAIN **/
-
-.arcade-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
 .arcade-gamelist {
   width: 100%;
 }
@@ -252,14 +671,6 @@ button.add-games {
   cursor: pointer;
 }
 
-/** Game Carousel **/
-
-#arcade-carousel {
-  width: 100%;
-  max-width: 1100px;
-  justify-self: center;
-}
-
 .glide__arrows {
   display: flex;
   justify-content: space-between;
@@ -284,56 +695,119 @@ button.add-games {
   cursor: pointer;
 }
 
+/* GAME WIZARD */
+
+.game-wizard {
+  padding: 1em;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-size: 1em;
+  background-color: #0009;
+  width: 60vw;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+
+.game-wizard-advanced-box {
+  display: block;
+  text-align: left;
+}
+
+.game-wizard-main {
+  padding: 50px;
+}
+
+.game-wizard-header {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+}
+
+.game-wizard-intro {
+  padding: 10px;
+}
+
+.game-wizard-title {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+
+.game-wizard-description {
+  font-size: 1.2em;
+  line-height: 1.5em;
+}
+
+.game-wizard-image {
+  padding: 10px;
+}
+
 .game-image {
   width: 100%;
 }
 
-.game-title {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-top: 6px;
-  text-align: center;
+.game-wizard-controls {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+}
+
+.game-wizard-players {
+  padding: 10px;
+  width: 100%;
+}
+
+.game-wizard-options-toggle {
+  padding-top: 10px;
+}
+
+.game-wizard-options-toggle-text {
+  border-bottom: 1px dashed;
   cursor: pointer;
 }
 
-/* GAME WIZARD */
-
-.create-game-wizard, .escrow-game-wizard {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  width: 80%;
-  margin: 1em auto;
-  background-color: #0009;
-  padding: 1em;
-  z-index: 5;
-  max-width: 900px;
-  max-height: 67vh;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
+.game-wizard-invite {
+  padding: 10px;
+  width: 100%;
+  height: 90px;
 }
 
-.escrow-game-wizard div {
-  margin: 1em 0;
+.game-invite-btn {
+  width: 100%;
+  min-height: 80px;
+  font-weight: bold;
+  margin: 0px;
 }
 
-.game-wizard-content {
-  overflow-y: scroll;
-  padding: 1em;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+.game-wizard-players-select {}
+
+.game-wizard-publisher-message {
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.9em;
 }
 
-.game-wizard-content::-webkit-scrollbar {
-  /* WebKit */
-  width: 3;
+.game-wizard-advanced-options-overlay {}
+
+.game-wizard-advanced-options {
+  display: none;
+}
+
+.game-wizard-basic-options {
+  display: none;
+}
+
+.game-buttons {
+  padding-top: 20px;
+  margin-left: 10%;
 }
 
 .game-wizard-form {
   display: grid;
   grid-gap: 1em;
+  grid-template-columns: 1fr;
+}
+
+.game-wizard-content::-webkit-scrollbar {
+  /* WebKit */
+  width: 3;
 }
 
 .game-info-container {
@@ -348,7 +822,7 @@ button.add-games {
   grid-template-columns: 1fr 4fr;
 }
 
-@media only screen and (max-width: 650px) {
+/* @media only screen and (max-width: 650px) {
   .create-game-wizard, .escrow-game-wizard {
     width: 85%;
     height: 70%;
@@ -359,7 +833,7 @@ button.add-games {
   .game-start-controls {
     grid-template-columns: 1fr;
   }
-}
+} */
 
 /* .game-image-wizard {
   max-width: 500px;
@@ -379,7 +853,7 @@ button.add-games {
   text-align: justify;
 }
 
-.game-details form#options {
+.game-details form_options {
   display: grid;
   grid-template-columns: 6em auto;
   grid-gap: 1em;
@@ -496,13 +970,6 @@ button.add-games {
   border: 1px solid grey;
 }
 
-.identicon {
-  width: 100%;
-  max-width: 2em;
-  min-width: 2em;
-  margin: 0 3px;
-}
-
 .arcade-game-invitation {
   clear: both;
 }
@@ -561,58 +1028,6 @@ button.add-games {
 .arcade-apps-item:hover, .arcade-navigator-item:hover {
   background-color: #33669999;
 }
-
-@media only screen and (max-width: 600px) {
-  .main {
-    max-width: unset;
-  }
-  .arcade-container {
-    grid-template-columns: 1fr;
-    grid-template-areas: "arcade-left-sidebar" "arcade-main";
-  }
-  .arcade-left-sidebar {
-    display: none;
-  }
-  .arcade-right-sidebar {
-    display: none;
-  }
-  #arcade-carousel {
-    max-width: 90vw;
-  }
-  .arcade-gamelist {
-    width: 100%;
-  }
-  .arcade-game-invitation {
-    grid-template-rows: 1fr auto 1fr;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "id title" "options options" "buttons buttons";
-    grid-gap: 0.5em;
-  }
-  .arcade-game-row-options {
-    margin-left: unset;
-  }
-  .arcade-game-row-name {
-    padding: unset;
-    font-size: 1.5em;
-  }
-  .arcade-game-row-options {
-    grid-area: options;
-  }
-  .arcade-game-row-buttons {
-    grid-area: buttons;
-  }
-  .arcade-game-row-buttons button {
-    min-width: 40vw;
-  }
-  .arcade-game-row-cancel {
-    grid-column: 1/3;
-  }
-  .identicon {
-    float: right;
-  }
-}
-
-@media only screen and (min-width: 600px) {}
 
 .remove_cards_box {
   max-height: 400px;
@@ -686,27 +1101,8 @@ select {
   color: var(--saito-red);
 }
 
-.game-details label {
-  align-self: center;
-  font-weight: bold;
-}
-
 option {
   background: var(--saito-cyber-black);
-}
-
-.play-now-holder {
-  width: 100%;
-}
-
-.play-now {
-  font-size: 1.6em;
-  padding: 0.5em;
-  width: 100%;
-  background: var(--saito-red);
-  border-radius: 5px;
-  text-align: center;
-  margin-bottom: 1em;
 }
 
 .start-game-list {
@@ -733,27 +1129,6 @@ option {
   cursor: pointer;
   right: 45px;
   top: 13%;
-}
-
-@media only screen and (max-width: 1000px) {
-  .start-game-list {
-    grid-template-columns: 1fr 1fr;
-  }
-  .big-create-game {
-    margin: 1em 0;
-    display: block;
-    width: 100%;
-  }
-}
-
-@media only screen and (max-width: 750px) {
-  .start-game-list {
-    grid-template-columns: 1fr;
-  }
-  .start-game-list .return-to-arcade {
-    right: 10px;
-    top: 25px;
-  }
 }
 
 .arcade-game-list-item {
@@ -796,6 +1171,7 @@ option {
 .header {
   background: none;
 }
+
 .header-icon-disabled {
   color: #B8E;
   text-shadow: #444 2px 1px, #666 3px 2px;
@@ -826,7 +1202,7 @@ option {
 
 #invite-game-spinner {
   margin: unset;
-  display: none;
+  display: block;
   justify-self: center;
   width: 6em;
   height: 6em;
@@ -954,6 +1330,11 @@ span.rewards-row-name {
 
 .game-details {
   margin: 2em 0;
+  text-align: left;
+}
+
+.game-details label {
+  font-weight: bold;
 }
 
 #game-invite-controls div {
@@ -967,14 +1348,84 @@ span.rewards-row-name {
   width: 100%;
 }
 
-#game-publisher-message {
-  margin: 2em 1em 0;
+.game-loader {
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  z-index: 1000;
+  padding: 10px;
+  background-color: whitesmoke;
+}
+
+.game-loader-backdrop {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #444;
+  opacity: 0.4;
+  z-index: 100;
+}
+
+.game-loader-spinner {
+  display: none;
+  justify-self: center;
+  width: 6em;
+  height: 6em;
+  margin: 25%;
+}
+
+@media only screen and (max-width: 1000px) {
+  .game-inset-img {
+    display: none;
+  }
+  .invite-tile-wrapper {
+    grid-template-columns: 4fr 3fr 1fr;
+  }
+  .arcade-tile .invite-row-2 {
+    grid-template-columns: 3fr 2fr;
+  }
+  .arcade-tile .gameName {
+    font-size: 2.2em;
+  }
+  .arcade-tile .gameShortDescription {
+    font-size: 2.2em;
+  }
+  .playerInfo {
+    transform: scale(0.8);
+  }
+  .saito-overlay, game-overlay {
+    width: 90%;
+  }
+  .game-wizard {
+    width: 100%;
+    max-height: calc(100vh - 7em);
+  }
 }
 
 @media only screen and (max-width: 600px) {
-  #game-invite-controls div {
-    grid-template-columns: 1fr;
-    grid-gap: 5px;
-    margin: 0 0 1em 0;
+  .arcade-tile {
+    min-height: 10em;
+  }
+  .invite-tile-wrapper {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 12em;
+    height: unset;
+  }
+  .arcade-tile .invite-row-2 {
+    grid-column: 1 / span 2;
+  }
+  .tab-button {
+    font-size: smaller;
+  }
+  .saito-overlay, .game-overlay {
+    width: 100%;
+  }
+  .game-wizard-controls {
+    grid-template-columns: auto;
   }
 }

@@ -1,7 +1,8 @@
+const saito = require('../../lib/saito/saito');
 const helpers = require('../../lib/helpers/index');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
-const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
+const AppStoreOverlay = require('./lib/appstore-overlay/appstore-overlay');
+const AppStoreBundleConfirm = require('./lib/appstore-overlay/appstore-bundle-confirm');
 const fs = require('fs');
 const path = require('path');
 
@@ -17,34 +18,8 @@ class AppStore extends ModTemplate {
     this.name          = "AppStore";
     this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
     this.categories    = "Utilities Dev";
-    this.featured_apps = ['Email', 'Testing', 'Escrow', 'Design'];
+    this.featured_apps = ['Imperium', 'Debug', 'Scotland', 'Escrow'];
   }
-
-
-  //
-  // appstore displays in email
-  //
-  respondTo(type) {
-    if (type == 'email-appspace') {
-      let obj = {};
-      obj.render = this.renderEmail;
-      obj.attachEvents = this.attachEventsEmail;
-      obj.script = '<link ref="stylesheet" href="/appstore/css/email-appspace.css" />';
-      return obj;
-    }
-    return null;
-  }
-  renderEmail(app, data) {
-    data.appstore = app.modules.returnModule("AppStore");
-    data.helpers = helpers;
-    AppStoreAppspace.render(app, data);
-  }
-  attachEventsEmail(app, data) {
-    data.appstore = app.modules.returnModule("AppStore");
-    data.helpers = helpers;
-    AppStoreAppspace.attachEvents(app, data);
-  }
-
 
 
   //
@@ -155,6 +130,8 @@ console.log("processing: " + dir);
           let mod_path = path.resolve(__dirname, `mods/${mod_zip_filename}`);
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
+
+console.log("sending tx");
 
 
 
@@ -440,6 +417,8 @@ console.log("ZIP LEN: " + zip.length);
 
     if (this.app.BROWSER == 1) { return; }
 
+console.log("SERVER REQUEST BUNDLE");
+
     let sql = '';
     let params = '';
     let txmsg = tx.returnMessage();
@@ -480,11 +459,12 @@ console.log("ZIP LEN: " + zip.length);
 
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
+        let { module_zip } = new saito.transaction(tx).returnMessage();
         modules_selected.push(
           {
             name: rows[i].name,
             description: rows[i].description,
-            zip: tx.msg.module_zip
+            zip: module_zip
           }
         );
       }
@@ -500,16 +480,16 @@ console.log("ZIP LEN: " + zip.length);
 
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
+        let { module_zip } = new saito.transaction(tx).returnMessage();
         modules_selected.push(
           {
             name: rows[i].name,
             description: rows[i].description,
-            zip: tx.msg.module_zip
+            zip: module_zip
           }
         );
       }
     }
-
 
     //
     // WEBPACK
@@ -542,7 +522,6 @@ console.log("ZIP LEN: " + zip.length);
     //
     //
     let online_version = this.app.options.server.endpoint.protocol + "://" + this.app.options.server.endpoint.host + ":" + this.app.options.server.endpoint.port + "/appstore/bundle/" + bundle_filename;
-
 
     //
     // send our filename back at our person of interest
@@ -578,7 +557,6 @@ console.log("ZIP LEN: " + zip.length);
     const path = require('path');
     const unzipper = require('unzipper');
 
-
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
 
@@ -600,7 +578,6 @@ console.log("ZIP LEN: " + zip.length);
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/mods" + "\n";
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/dist" + "\n";
 
-
     fs.writeFileSync(path.resolve(__dirname, bash_script_create), bash_script_create_dirs, { encoding: 'binary' });
     try {
       let cwdir = __dirname;
@@ -609,7 +586,6 @@ console.log("ZIP LEN: " + zip.length);
     } catch (err) {
       console.log(err);
     }
-
 
     bash_script_content += 'cd ' + __dirname + '/mods' + "\n";
     bash_script_delete  += 'cd ' + __dirname + '/mods' + "\n";
@@ -622,7 +598,7 @@ console.log("ZIP LEN: " + zip.length);
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
 
 
-      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
+      bash_script_content += `unzip -o ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/web` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/www` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/sql` + "\n";
@@ -642,10 +618,8 @@ console.log("ZIP LEN: " + zip.length);
       return `${returnSlug(mod.name)}/${returnSlug(mod.name)}.js`;
     });
 
-
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}-create` + "\n";
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}` + "\n";
-
 
     //
     // write our modules config file
@@ -669,7 +643,6 @@ console.log("ZIP LEN: " + zip.length);
       IndexTemplate(modules_config_filename)
     );
 
-
     //
     // execute bundling process
     //
@@ -682,13 +655,10 @@ console.log("ZIP LEN: " + zip.length);
     bash_script_content += "\n";
     //bash_script_content += bash_script_delete;
 
-
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
     try {
       let cwdir = __dirname;
       let bash_command = 'sh ' + bash_script;
-//console.log("running bash command: " + bash_command);
-//console.log(" with: " + bash_script_content);
       const { stdout, stderr } = await exec(bash_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
     } catch (err) {
       console.log(err);
@@ -704,15 +674,12 @@ console.log("ZIP LEN: " + zip.length);
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-
-
     //
     // cleanup
     //
-// tmp disabled
-//    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
-//      console.log("Appstore Compilation Files Removed!");
-//    });
+    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
+      console.log("Appstore Compilation Files Removed!");
+    });
 
     return bundle_filename;
   }
@@ -777,6 +744,20 @@ console.log("ZIP LEN: " + zip.length);
       });
     }
   }
+
+
+
+  //////////////////
+  // UI Functions //
+  //////////////////
+  openAppstoreOverlay(options) {
+
+    AppStoreOverlay.render(this.app, this, options);
+    AppStoreOverlay.attachEvents(this.app, this);
+
+  }
+
+
 }
 module.exports = AppStore;
 

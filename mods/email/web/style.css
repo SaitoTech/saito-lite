@@ -237,6 +237,7 @@ hr {
 .email-message-timestamp {
   text-align: right;
   font-family: monospace, 'Courier New', Courier;
+  padding-top: 10px;
 }
 
 .email-text {
@@ -259,7 +260,7 @@ hr {
   grid-gap: 0.5em;
 }
 
-.email-navigator, .email-apps {
+.email-navigator, .email-apps, .crypto-apps {
   list-style: none;
   list-style-type: none;
   font-size: 1.2em;
@@ -267,11 +268,11 @@ hr {
   padding: 10px 0px;
 }
 
-.email-navigator {
+.email-navigator, .email-apps {
   border-bottom: 1px solid grey;
 }
 
-.email-navigator-item, .email-apps-item {
+.email-navigator-item, .email-apps-item, .crypto-apps-item {
   cursor: pointer;
   border-bottom: 1px solid transparent;
   padding: 5px 0 2px 10px;
@@ -370,7 +371,9 @@ hr {
 #email-detail-forward {
   cursor: pointer;
 }
-
+#email-bars-icon {
+  display: none;
+}
 @media only screen and (max-width: 900px) {
   input[type=checkbox] {
     margin: 0 0.65em;
@@ -515,11 +518,13 @@ hr {
   .email-header h3 {
     padding-top: 7px;
   }
+  
+
   @media only screen and (min-width: 600px) {
     #email.create-button {
       display: none;
     }
     #email-bars-icon {
-      display: none;
+      display: block;
     }
   }

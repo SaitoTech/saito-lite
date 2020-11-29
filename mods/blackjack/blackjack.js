@@ -17,6 +17,7 @@ class Blackjack extends GameTemplate {
     this.name = "Blackjack";
     this.description = 'BETA version of Blackjack. This game is a playable demo under active development!';
     this.categories = "Games Arcade Entertainment";
+    this.type            = "Classic Cardgame";
 
     this.card_img_dir = '/poker/img/cards';
     this.useHUD = 0;
@@ -1031,12 +1032,16 @@ console.log("score is: " + total);
   returnGameOptionsHTML() {
 
     return `
-            <label for="stake">Initial Stake:</label>
-            <select name="stake">
+      <label for="stake">Initial Stake:</label>
+      <select name="stake">
               <option value="1000" selected="selected">1000</option>
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
       </select>
+
+      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
+
     `;
 
   }

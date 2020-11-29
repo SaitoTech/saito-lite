@@ -16,6 +16,7 @@ class Poker extends GameTemplate {
     this.name = "Poker";
     this.description = 'BETA version of Texas Hold\'em Poker for the Saito Arcade. With five cards on the table and two in your hand, can you bet and bluff your way to victory? This game is a playable demo under active development!';
     this.categories = "Games Arcade Entertainment";
+    this.type            = "Classic Cardgame";
     this.card_img_dir = '/poker/img/cards';
     this.useHUD = 0;
 
@@ -52,7 +53,31 @@ class Poker extends GameTemplate {
     return null;
 
   }
-
+  
+  requestInterface(type) {
+    if (type == "arcade-create-game") {
+      return {
+        slug: this.slug,
+        title: this.name,
+        description: this.description,
+        publisher_message: this.publisher_message,
+        returnGameOptionsHTML: this.returnGameOptionsHTML.bind(this),
+        minPlayers: this.minPlayers,
+        maxPlayers: this.maxPlayers,
+      }
+    }
+    if (type == "make-invite-description") {
+      return {
+        makeDescription: (txMsg) => {
+          return "Hold 'em";
+        }    
+      }
+    }
+    if (type == "arcade-sidebar") {
+      return { title: this.name };
+    }
+    return null;
+  }
 
 
 
@@ -2596,6 +2621,10 @@ console.log("H: " + h);
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
       </select>
+
+      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
+
     `;
 
   }

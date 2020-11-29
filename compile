@@ -56,6 +56,7 @@ function reset_nonpersistent {
   # we explicitly don't delete registry/balance databases
   rm -f ./data/appstore.sq3
   #rm -f ./data/covid19.sq3
+  rm -f ./data/post.sq3
   rm -f ./data/hospital.sq3
   rm -f ./data/records.sq3
   rm -f ./data/archive.sq3
@@ -106,6 +107,7 @@ function reset_nonpersistent {
 function reset_persistent {
 
   rm -f ./data/forum.sq3
+  rm -f ./data/post.sq3
   rm -f ./data/registry.sq3
   rm -f ./data/rewards.sq3
   rm -f ./data/forum.sq3

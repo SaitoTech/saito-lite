@@ -31,7 +31,23 @@ class Settlers extends GameTemplate {
 
   }
 
-
+  requestInterface(type) {
+    if (type == "arcade-create-game") {
+      return {
+        slug: this.slug,
+        title: this.name,
+        description: this.description,
+        publisher_message: this.publisher_message,
+        returnGameOptionsHTML: this.returnGameOptionsHTML.bind(this),
+        minPlayers: this.minPlayers,
+        maxPlayers: this.maxPlayers,
+      }
+    }
+    if (type == "arcade-sidebar") {
+      return { title: this.name };
+    }
+    return null;
+  }
   //
   // manually announce arcade banner support
   //
@@ -52,6 +68,15 @@ class Settlers extends GameTemplate {
  
   }
 
+
+
+  returnGameOptionsHTML() {
+
+    return `
+            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+    `;
+
+  }
 
 
 

@@ -140,6 +140,12 @@ p {
   padding: 4px 0 0 0;
 }
 
+.chat-header {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+}
+
 .chat-last-message {
   color: grey;
   margin-top: 2px;
@@ -279,15 +285,10 @@ p {
   font-size: 1em;
 }
 
-.chat-manager {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  z-index: 90;
-}
-
 .chat-box {
+  bottom: 0px;
+  right: 0px;
+  position: absolute;
   display: grid;
   margin-left: 1em;
   background-color: white;
@@ -299,6 +300,7 @@ p {
   width: 32em;
   height: 38em;
   font-family: visuelt-light;
+  z-index: 100;
 }
 
 .chat-box .chat-box-header {
@@ -383,7 +385,7 @@ p {
 }
 
 .chat-box-input {
-  position: fixed;
+  position: absolute;
   bottom: 0%;
   width: 32em;
   height: 3em;

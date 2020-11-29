@@ -4,7 +4,7 @@
   "description": "scalable blockchain with proper economics",
   "main": "start.js",
   "scripts": {
-    "start": "NODE_ENV=prod node --max_old_space_size=4144 start.js",
+    "start": "NODE_ENV=prod node --max_old_space_size=8144 start.js",
     "nuke": " ./compile nuke",
     "reset": " ./compile reset",
     "compile": " ./compile recompile",
@@ -16,6 +16,9 @@
   "license": "SAITO",
   "homepage": "https://saito.io",
   "dependencies": {
+    "@polkadot/api": "2.7.1",
+    "@polkadot/keyring": "4.1.1",
+    "@polkadot/util-crypto": "4.1.1",
     "adm-zip": "^0.4.16",
     "archiver": "^3.1.1",
     "babel": "^6.23.0",
