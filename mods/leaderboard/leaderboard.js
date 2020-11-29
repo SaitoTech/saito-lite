@@ -122,7 +122,9 @@ class Leaderboard extends ModTemplate {
                 html += `<div class="${entry.player} playername saito-address saito-address-${entry.address}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
               }
               if (shown == 0) {
-                document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
+		try {
+                  document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
+                } catch (err) {}
               }
               shown = 1;
               this.carousel_idx = loop;
@@ -329,16 +331,18 @@ console.log(" ... update ranking");
       //
       // update leaderboard with mod at this.carousel_idx
       //
-      for (let i = 0; i < this.mods.length; i++) {
-        let classn = '.leaderboard_' + this.mods[i].name;
-        let obj = document.querySelector(classn);
-        if (obj) { obj.style.display = 'none'; }
-      }
-      let classn = '.leaderboard_' + this.mods[this.carousel_idx].name;
-      if(document.querySelector(classn)){
-        document.querySelector(classn).style.display = 'grid';
-      }
-      document.querySelector('.leaderboard-game-module').innerHTML = (this.mods[this.carousel_idx].name + ' Leaderboard:');
+      try {
+        for (let i = 0; i < this.mods.length; i++) {
+          let classn = '.leaderboard_' + this.mods[i].name;
+          let obj = document.querySelector(classn);
+          if (obj) { obj.style.display = 'none'; }
+        }
+        let classn = '.leaderboard_' + this.mods[this.carousel_idx].name;
+        if (document.querySelector(classn)){
+          document.querySelector(classn).style.display = 'grid';
+        }
+        document.querySelector('.leaderboard-game-module').innerHTML = (this.mods[this.carousel_idx].name + ' Leaderboard:');
+      } catch (err) {}
 
     }, this.carousel_speed);
   }

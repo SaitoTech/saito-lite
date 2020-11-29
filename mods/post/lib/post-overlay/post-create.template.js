@@ -21,6 +21,9 @@ module.exports = PostCreateTemplate = (app, mod) => {
 
       <input type="hidden" class="post-create-forum" name="post-create-forum" />
 
+      <div id="post-create-image-preview-container" class="post-create-image-preview-container">
+      </div>
+
       <button class="post-submit-btn">Submit</button>
 
     </div>
