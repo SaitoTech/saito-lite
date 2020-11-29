@@ -12,7 +12,7 @@ class SubstrateBasedCrypto extends ModTemplate {
     this.ticker = ticker;
     this.endpoint = endpoint;
     this.info = info;
-    this.categories = "Crptocurrency";
+    this.categories = "Cryptocurrency";
     this.optionsStorage = {};
     this.app = app;
     this._api = null; // treat as private, please use getApi to access
@@ -87,16 +87,16 @@ class SubstrateBasedCrypto extends ModTemplate {
       const wsProvider = new WsProvider(this.endpoint);
       this._api = new ApiPromise({ provider: wsProvider });
       this._api.on('connected', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider connected');
+        //console.log(this.description + ' Polkadot Socket Provider connected');
       });
       this._api.on('disconnected', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider disconnected');
+        //console.log(this.description + ' Polkadot Socket Provider disconnected');
       });
       this._api.on('ready', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider ready');
+        //console.log(this.description + ' Polkadot Socket Provider ready');
       });
       this._api.on('error', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider error');
+        //console.log(this.description + ' Polkadot Socket Provider error');
       });
       this.keyring = new Keyring({ type: 'ed25519'});
       this.keyring.setSS58Format(0);

@@ -1,3 +1,37 @@
+
+
+/******* START CRYPTO MODS ********/
+.superwallet-container {
+padding: 10em;
+overflow-y: scroll;
+height: 100%;
+}
+
+.crypto-container {
+margin: 2em 0em;
+border: solid 2px black;
+padding: 1.5em;
+}
+
+.crypto-container .crypto-title {
+font-size: 1.5em;
+}
+.crypto-container .ticker {
+font-size: 3.5em;
+}
+
+.crypto-container input {
+padding: 0;
+border: solid 1px black;
+margin-bottom: 0.2em;
+}
+
+.crypto-container input.sendbutton {
+padding: 0.3em 0.6em;
+font-size: 1.0em;
+border: solid 1px black;
+}
+/******* END CRYPTO MODS ********/
 /** Email **/
 
 .footer {

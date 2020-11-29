@@ -12,7 +12,7 @@ class SaitoCrypto extends ModTemplate {
     super(app);
     this.name = "SaitoCrypto";
     this.description = "Saito";
-    this.categories = "Crptocurrency";
+    this.categories = "Cryptocurrency";
     this.ticker = "SAITO";
     this.mods = [];
     this.app = app;
