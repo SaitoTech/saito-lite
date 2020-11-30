@@ -66,6 +66,33 @@ class Twilight extends GameTemplate {
 
 
 
+  updateLogSwapInfluence(msg) {
+
+    //
+    // update influence placing message and log before submission
+    //
+    if (msg.indexOf("places") > -1 && msg.indexOf("in") > -1) {
+
+      if (this.game.log.length > 0) {
+
+	let last_msg = this.game.log[0];
+        if (last_msg.indexOf("places") > -1 && msg.indexOf("in") > -1) {
+
+	  let newar = msg.split(" ");
+	  let oldar = last_msg.split(" ");
+
+	  let revisedmsg = `${newar[0]} ${newar[1]} ${(parseInt(oldar[2])+parseInt(newar[2]))} ${newar[3]} ${newar[4]}`;
+	  this.game.log.splice(0, 1);
+	  msg = revisedmsg;
+
+	}
+      }
+    }
+    super.updateLog(msg);
+  }
+
+
+
 
   //
   // manually announce arcade banner support
@@ -5470,7 +5497,7 @@ this.startClock();
       this.countries[country].ussr = parseInt(this.countries[country].ussr) + parseInt(inf);
     }
 
-    this.updateLog(player.toUpperCase() + "</span> <span>places</span> " + inf + " <span>in</span> <span>" + this.countries[country].name, this.log_length, 1);
+    this.updateLogSwapInfluence(player.toUpperCase() + "</span> <span>places</span> " + inf + " <span>in</span> <span>" + this.countries[country].name, this.log_length, 1);
 
     this.showInfluence(country, player, mycallback);
 
@@ -8351,6 +8378,15 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
 
   updateStatusAndListCards(message, cards=null) {
+
+    //
+    // OBSERVER MODE
+    //
+    if (this.game.player == 0) {
+      this.updateStatus(`<div id="status-message" class="status-message">${message}</div>`);
+      //this.addShowCardEvents();
+      return;
+    }
 
     if (cards == null) {
       cards = this.game.deck[0].hand;
