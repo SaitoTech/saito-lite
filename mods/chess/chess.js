@@ -60,13 +60,13 @@ class Chessgame extends GameTemplate {
         maxPlayers: this.maxPlayers,
       }
     }
-    if (type == "make-invite-description") {
-      return {
-        makeDescription: (txMsg) => {
-          return txMsg.options.color;
-        }    
-      }
-    }
+    // if (type == "make-invite-description") {
+    //   return {
+    //     makeDescription: (txMsg) => {
+    //       return txMsg.options.color;
+    //     }    
+    //   }
+    // }
     return null;
 
   }

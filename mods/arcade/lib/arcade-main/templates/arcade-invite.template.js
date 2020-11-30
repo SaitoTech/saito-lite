@@ -11,8 +11,8 @@ console.log(JSON.stringify(invite.transaction));
       game_initialized = 1;
     }
   }
-
-  let playersHtml = `<div class="playerInfo" style="grid-template-columns: repeat(${invite.msg.players_needed}, 1fr);">`;
+  let playersNeeded = invite.msg.players_needed > 4 ? 5: invite.msg.players_needed;
+  let playersHtml = `<div class="playerInfo" style="grid-template-columns: repeat(${playersNeeded}, 1fr);">`;
   for (let i = 0; i < invite.msg.players_needed; i++) {
     if (i < 4) {
       if (i < invite.msg.players.length) {
