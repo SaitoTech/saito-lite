@@ -70,7 +70,7 @@ a {
   overflow: hidden;
   border-left: solid 2px var(--saito-red);
   font-size: 1.3em;
-  line-height: 2.3em;
+  line-height: 2em;
   cursor: pointer;
 }
 
