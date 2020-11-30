@@ -175,26 +175,25 @@ class Email extends ModTemplate {
   }
 
 
-/****
-  respondTo(type = "") {
-    if (type == "header-dropdown") {
-      return {};
-    }
-    return null;
-  }
-  
-  requestInterface(type = "", interfaceBuilder = null) {
-    if (type == "header-dropdown") {        
-      return {
-        name: this.appname ? this.appname : this.name,
-        icon_fa: this.icon_fa,
-        browser_active: this.browser_active,
-        slug: this.returnSlug()
-      };
-    }
-    return null;
-  }
-****/
+
+  // respondTo(type = "") {
+  //   if (type == "header-dropdown") {
+  //     return {};
+  //   }
+  //   return null;
+  // }
+  // 
+  // requestInterface(type = "", interfaceBuilder = null) {
+  //   if (type == "header-dropdown") {        
+  //     return {
+  //       name: this.appname ? this.appname : this.name,
+  //       icon_fa: this.icon_fa,
+  //       browser_active: this.browser_active,
+  //       slug: this.returnSlug()
+  //     };
+  //   }
+  //   return null;
+  // }
 
 
 

@@ -46,25 +46,16 @@ class Chat extends ModTemplate {
           attachEvents: this.attachEventsEmailChat,
         }
       case 'header-dropdown':
-        return {}
+        return {
+          name: this.appname ? this.appname : this.name,
+          icon_fa: this.icon_fa,
+          browser_active: this.browser_active,
+          slug: this.returnSlug()
+        };
       default:
         return null;
     }
   }
-  
-  
-  requestInterface(type = "") {
-    if (type == "header-dropdown") {        
-      return {
-        name: this.appname ? this.appname : this.name,
-        icon_fa: this.icon_fa,
-        browser_active: this.browser_active,
-        slug: this.returnSlug()
-      };
-    }
-    return null;
-  }
-
 
   //
   // email-chat -- mod should be email since refernece is not "this"

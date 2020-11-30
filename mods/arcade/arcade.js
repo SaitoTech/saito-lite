@@ -79,13 +79,6 @@ class Arcade extends ModTemplate {
 
   respondTo(type = "") {
     if (type == "header-dropdown") {
-      return {};
-    }
-    return null;
-  }
-  
-  requestInterface(type = "", interfaceBuilder = null) {
-    if (type == "header-dropdown") {        
       return {
         name: this.appname ? this.appname : this.name,
         icon_fa: this.icon_fa,

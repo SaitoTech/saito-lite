@@ -21,16 +21,16 @@ module.exports = ArcadeSidebar = {
     });
 
 
-    let arcade_sidebar_apps_loaded = 0;
-    app.modules.respondTo("arcade-sidebar").forEach(module => {
-      if (module != null) {
-        module.respondTo('arcade-sidebar').render(app, module);
-        arcade_sidebar_apps_loaded = 1;
-      }
-    });
-    if (arcade_sidebar_apps_loaded == 0) {
-      document.getElementById("arcade-sidebar-apps").style.display = "none";
-    }
+    // let arcade_sidebar_apps_loaded = 0;
+    // app.modules.respondTo("arcade-sidebar").forEach(module => {
+    //   if (module != null) {
+    //     module.respondTo('arcade-sidebar').render(app, module);
+    //     arcade_sidebar_apps_loaded = 1;
+    //   }
+    // });
+    // if (arcade_sidebar_apps_loaded == 0) {
+    //   document.getElementById("arcade-sidebar-apps").style.display = "none";
+    // }
 
     let games_menu = document.querySelector(".arcade-apps");
     app.modules.respondTo("arcade-games").forEach(module => {

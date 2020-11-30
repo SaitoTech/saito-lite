@@ -43,7 +43,7 @@ class Tutorial2 extends ModTemplate {
     super.webServer(app, expressapp, express);
     expressapp.get('/gimme', function (req, res) {
       // "interface" is a reserved word :P
-      app.modules.requestInterfaces("send-reward").forEach((itnerface, i) => {
+      app.modules.getRespondTos("send-reward").forEach((itnerface, i) => {
         itnerface.makePayout(req.query.pubkey, 10000);
         res.type('application/json');
         res.status(200);

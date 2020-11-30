@@ -60,6 +60,9 @@ class Rewards extends ModTemplate {
       obj.attachEvents = this.attachEventsEmail;
       return obj;
     }
+    if (type == 'send-reward') {
+      return {makePayout: this.makePayoutRateLimited.bind(this)};
+    }
 /***
     if (type == 'arcade-sidebar') {
       let obj = {};
@@ -70,14 +73,6 @@ class Rewards extends ModTemplate {
     return null;
 ***/
   }
-
-  requestInterface(type) {
-    if (type == 'send-reward') {
-      return {makePayout: this.makePayoutRateLimited.bind(this)};
-    }
-    return null;
-  }
-
 
   async onPeerHandshakeComplete(app, peer) {
 

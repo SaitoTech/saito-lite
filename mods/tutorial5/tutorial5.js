@@ -57,7 +57,7 @@ class Tutorial5 extends ModTemplate {
 
   webServer(app, expressapp, express) {
     expressapp.get('/gimme', function (req, res) {
-      app.modules.requestInterfaces("send-reward").forEach((itnerface, i) => {
+      app.modules.getRespondTos("send-reward").forEach((itnerface, i) => {
         itnerface.makePayout(req.query.pubkey, 10000);
         res.type('application/json');
         res.status(200);

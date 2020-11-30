@@ -49,11 +49,6 @@ class Chessgame extends GameTemplate {
       obj.title = "Chess";
       return obj;
     }
-
-    return null;
-
-  }
-  requestInterface(type) {
     if (type == "arcade-create-game") {
       return {
         slug: this.slug,
@@ -72,11 +67,16 @@ class Chessgame extends GameTemplate {
         }    
       }
     }
-    if (type == "arcade-sidebar") {
-      return { title: this.name };
-    }
     return null;
+
   }
+  // requestInterface(type) {
+  // 
+  //   if (type == "arcade-sidebar") {
+  //     return { title: this.name };
+  //   }
+  //   return null;
+  // }
 
   initializeHTML(app) {
 

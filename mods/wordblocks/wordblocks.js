@@ -39,7 +39,20 @@ class Wordblocks extends GameTemplate {
     return this;
 
   }
-  requestInterface(type) {
+  // requestInterface(type) {
+  // 
+  //   if (type == "arcade-sidebar") {
+  //     return { title: this.name };
+  //   }
+  //   return null;
+  // }
+  //
+  // manually announce arcade banner support
+  //
+  respondTo(type) {
+    if (super.respondTo(type) != null) {
+      return super.respondTo(type);
+    }
     if (type == "arcade-create-game") {
       return {
         slug: this.slug,
@@ -50,19 +63,6 @@ class Wordblocks extends GameTemplate {
         minPlayers: this.minPlayers,
         maxPlayers: this.maxPlayers,
       }
-    }
-    if (type == "arcade-sidebar") {
-      return { title: this.name };
-    }
-    return null;
-  }
-  //
-  // manually announce arcade banner support
-  //
-  respondTo(type) {
-
-    if (super.respondTo(type) != null) {
-      return super.respondTo(type);
     }
 
     if (type == "arcade-carousel") {

@@ -63,7 +63,7 @@ let makeDescription = (app, invite) => {
   let defaultDescription = "";
   let gameModule = app.modules.returnModule(invite.msg.game);
   if (gameModule) {
-    let moduleDescriptionMaker = gameModule.requestInterface("make-invite-description");  
+    let moduleDescriptionMaker = gameModule.respondTo("make-invite-description");  
     if (moduleDescriptionMaker) {
       defaultDescription = moduleDescriptionMaker.makeDescription(invite.msg);
       if (defaultDescription === undefined) { defaultDescription = ""; }

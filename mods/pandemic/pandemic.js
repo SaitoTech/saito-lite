@@ -37,7 +37,7 @@ class Pandemic extends GameTemplate {
   
   }
   
-  requestInterface(type) {
+  respondTo(type) {
     if (type == "arcade-create-game") {
       return {
         slug: this.slug,
@@ -49,9 +49,9 @@ class Pandemic extends GameTemplate {
         maxPlayers: this.maxPlayers,
       }
     }
-    if (type == "arcade-sidebar") {
-      return { title: this.name };
-    }
+    // if (type == "arcade-sidebar") {
+    //   return { title: this.name };
+    // }
     return null;
   }
   

@@ -49,12 +49,7 @@ class Poker extends GameTemplate {
       obj.title = "Poker";
       return obj;
     }
-
-    return null;
-
-  }
-  
-  requestInterface(type) {
+    
     if (type == "arcade-create-game") {
       return {
         slug: this.slug,
@@ -73,11 +68,16 @@ class Poker extends GameTemplate {
         }    
       }
     }
-    if (type == "arcade-sidebar") {
-      return { title: this.name };
-    }
     return null;
+
   }
+  
+  // requestInterface(type) {
+  //   if (type == "arcade-sidebar") {
+  //     return { title: this.name };
+  //   }
+  //   return null;
+  // }
 
 
 

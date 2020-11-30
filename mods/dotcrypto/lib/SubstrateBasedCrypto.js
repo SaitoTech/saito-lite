@@ -23,7 +23,7 @@ class SubstrateBasedCrypto extends ModTemplate {
     this.eventEmitter = new EventEmitter();
   }
   
-  requestInterface(type = "") {
+  respondTo(type = "") {
     if (type == "is_cryptocurrency") {
       return {
         name: this.name,

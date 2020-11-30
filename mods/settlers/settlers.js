@@ -30,8 +30,22 @@ class Settlers extends GameTemplate {
     this.maxPlayers 	 = 2;
 
   }
+  // 
+  // requestInterface(type) {
+  // 
+  //   if (type == "arcade-sidebar") {
+  //     return { title: this.name };
+  //   }
+  //   return null;
+  // }
+  //
+  // manually announce arcade banner support
+  //
+  respondTo(type) {
 
-  requestInterface(type) {
+    if (super.respondTo(type) != null) {
+      return super.respondTo(type);
+    }
     if (type == "arcade-create-game") {
       return {
         slug: this.slug,
@@ -43,20 +57,6 @@ class Settlers extends GameTemplate {
         maxPlayers: this.maxPlayers,
       }
     }
-    if (type == "arcade-sidebar") {
-      return { title: this.name };
-    }
-    return null;
-  }
-  //
-  // manually announce arcade banner support
-  //
-  respondTo(type) {
-
-    if (super.respondTo(type) != null) {
-      return super.respondTo(type);
-    }
-
     if (type == "arcade-carousel") {
       let obj = {};
       obj.background = "/settlers/img/arcade/arcade-banner-background.png";

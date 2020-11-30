@@ -33,7 +33,7 @@ class Registry extends ModTemplate {
     return services;
   }
   
-  requestInterface(type = "") {
+  respondTo(type = "") {
     if (type == "do-registry-prompt") {        
       return {
         doRegistryPrompt: async() => {
@@ -66,26 +66,24 @@ class Registry extends ModTemplate {
     return null;
   }
 
-/*******
-  respondTo(type) {
-    if (type == 'email-appspace') {
-      let obj = {};
-          obj.render = this.renderEmail;
-          obj.attachEvents = this.attachEventsEmail;
-      return obj;
-    }
-    return null;
-  }
-  renderEmail(app, data) {
-     data.registry = app.modules.returnModule("Registry");
-     let RegistryAppspace = require('./lib/email-appspace/registry-appspace');
-     RegistryAppspace.render(app, data);
-  }
-  attachEventsEmail(app, data) {
-     data.registry = app.modules.returnModule("Registry");
-     RegistryAppspace.attachEvents(app, data);
-  }
-*******/
+  // respondTo(type) {
+  //   if (type == 'email-appspace') {
+  //     let obj = {};
+  //         obj.render = this.renderEmail;
+  //         obj.attachEvents = this.attachEventsEmail;
+  //     return obj;
+  //   }
+  //   return null;
+  // }
+  // renderEmail(app, data) {
+  //    data.registry = app.modules.returnModule("Registry");
+  //    let RegistryAppspace = require('./lib/email-appspace/registry-appspace');
+  //    RegistryAppspace.render(app, data);
+  // }
+  // attachEventsEmail(app, data) {
+  //    data.registry = app.modules.returnModule("Registry");
+  //    RegistryAppspace.attachEvents(app, data);
+  // }
 
 
   showModal() {
