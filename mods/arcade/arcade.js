@@ -146,12 +146,9 @@ class Arcade extends ModTemplate {
           if (res.rows) {
             res.rows.forEach(row => {
               let gametx = JSON.parse(row.tx);
-              let tx = new saito.transaction(gametx.transaction);
+              let tx = new saito.transaction(gametx);
               this.addGameToOpenList(tx);
             });
-
-	    ArcadeMain.render(app, this);
-	    ArcadeMain.attachEvents(app, this);
           }
         }
     );
@@ -1479,7 +1476,6 @@ console.log(params);
 
     this.removeOldGames();
 
-
     if (for_us) {
 
       this.games.unshift(tx);
@@ -1501,7 +1497,6 @@ console.log(params);
         return;
       }
     }
-console.log("ADDING TO OBSERVER LIST: " + JSON.stringify(msg));
     this.observer.push(msg);
 
     if (this.browser_active == 1) {

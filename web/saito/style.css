@@ -199,6 +199,7 @@ hr {
   border-radius: 50%;
   top: 0px;
   background-color: white;
+  z-index: 100;
 }
 .saito-overlay-closebox-btn {
   display: block;
