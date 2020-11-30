@@ -238,9 +238,8 @@ a {
 
 .arcade-tile .gameShortDescription {
   display: grid;
-  place-items: center;
-  margin-top: 0.2em;
-  margin-bottom: 0.4em;
+  justify-items: end;
+  margin: 0.2em 0.2em 0.4em 0em;
   font-size: 2.2em;
 }
 

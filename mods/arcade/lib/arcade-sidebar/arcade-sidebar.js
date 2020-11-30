@@ -64,22 +64,26 @@ module.exports = ArcadeSidebar = {
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
       game.addEventListener('click', (e) => {
 
+        
+        let gameName = e.currentTarget.id;
+        let doGameDetails = () => {
+          let tx = new saito.transaction();
+          tx.msg.game = gameName;
+          ArcadeGameDetails.render(app, mod, tx);
+          ArcadeGameDetails.attachEvents(app, mod, tx);
+        }
         //
         // not registered
         //
         if (app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey()) == "") {
-	  if (app.options.wallet.anonymous != 1) {
-	    mod.modal_register_username = new ModalRegisterUsername(app);
-	    mod.modal_register_username.render(app, mod);
-	    mod.modal_register_username.attachEvents(app, mod);
-	    return;
-	  }
+          if (app.options.wallet.anonymous != 1) {
+            mod.modal_register_username = new ModalRegisterUsername(app, doGameDetails);
+            mod.modal_register_username.render(app, mod);
+            mod.modal_register_username.attachEvents(app, mod);
+            return;
+          }
         }
-
-	let tx = new saito.transaction();
-	tx.msg.game = e.currentTarget.id;
-        ArcadeGameDetails.render(app, mod, tx);
-        ArcadeGameDetails.attachEvents(app, mod, tx);
+        doGameDetails();
       });
     });
 
