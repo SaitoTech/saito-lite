@@ -1690,6 +1690,13 @@ class Wordblocks extends GameTemplate {
             <option value="tagalog">Tagalog</option>
           </select>
 
+          <label for="observer_mode">Observer Mode:</label>
+          <select name="observer">
+            <option value="enable" selected>enable</option>
+            <option value="disable">disable</option>
+          </select>
+
+
           <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 
           `;
