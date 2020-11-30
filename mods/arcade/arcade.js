@@ -1649,6 +1649,12 @@ console.log(params);
             game.queue.push(game.last_turn[z]);
           }
 
+	  //
+	  // increment the step by 1, as returnPreGameMove will have unincremented
+	  // ( i.e. not including the step that broadcast it )
+          //
+	  game.step.game++;
+
           games.push(game);
 
           arcade_self.app.options.games = games;
