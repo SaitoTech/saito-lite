@@ -12,9 +12,9 @@ module.exports = EmailCryptoAppspace = {
     
     try {
       let subPage = app.browser.parseHash(window.location.hash).subpage;
-      let cryptoMod = app.modules.returnModule(subPage);
-      let modInterface = cryptoMod.requestInterface("is_cryptocurrency");
-      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(modInterface);  
+      let modInterface = app.wallet.getCryptoModuleInterfaceByName(subPage);
+      let preferredCrpytoName = app.wallet.getPreferredCryptoName(); 
+      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(modInterface, preferredCrpytoName);  
       loadBalance(modInterface);
       loadPubkey(modInterface);  
 
@@ -26,11 +26,12 @@ module.exports = EmailCryptoAppspace = {
       document.querySelectorAll(`.crypto-container .fa-star`).forEach((elem, i) => {
         elem.onclick = (event) => {
           if (event.currentTarget.classList.contains("fa")) {
-            app.wallet.setPreferredCrypto("SaitoCrypto")
+            event.currentTarget.classList.remove('fa');
+            app.wallet.setPreferredCrypto("SaitoCrypto");
           } else {
-            app.wallet.setPreferredCrypto(cryptoMod.name)
+            event.currentTarget.classList.add('fa');
+            app.wallet.setPreferredCrypto(modInterface.name);
           }
-          event.currentTarget.classList.toggle('fa');
         }
       });
     } catch(error) {

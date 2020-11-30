@@ -7,6 +7,10 @@ const { randomBytes }   = require('crypto');
 const EventEmitter = require('events');
 
 // Stub module for future integration if we want Saito to do is_cryptocurrency
+// ############################## DEPRECATED!!!!! ##############################
+// ############################## DEPRECATED!!!!! ##############################
+// ############################## DEPRECATED!!!!! ##############################
+// ############################## DEPRECATED!!!!! ##############################
 class SaitoCrypto extends ModTemplate {
   constructor(app) {
 

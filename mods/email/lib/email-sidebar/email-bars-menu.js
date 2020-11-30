@@ -16,8 +16,9 @@ module.exports = EmailBarsMenu = {
         email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" id="email-nav-${module.name}">${module.name}</li>`;
       }
     }
-    app.modules.requestInterfaces("is_cryptocurrency").forEach(async(responseInterface, i) => {
-      app.browser.addElementToDom(`<li id="email-nav-${responseInterface.modname}" class="crypto-apps-item">
+    
+    app.wallet.getSupportedCryptos().forEach(async(responseInterface, i) => {
+      app.browser.addElementToDom(`<li id="email-nav-${responseInterface.name}" class="crypto-apps-item">
         ${responseInterface.ticker}
       </li>`, "crypto-apps");
     });

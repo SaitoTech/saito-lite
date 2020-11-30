@@ -35,6 +35,7 @@ class SubstrateBasedCrypto extends ModTemplate {
         getAddress: this.getAddress.bind(this),
         eventEmitter: this.eventEmitter,
         estimateFee: null,
+        setConfirmationThreshold: null, // TODO: Implement me!
       }
     }
     return null;
