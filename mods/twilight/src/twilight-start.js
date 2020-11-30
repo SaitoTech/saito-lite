@@ -943,6 +943,7 @@ try {
         let shd_continue = 1;
 
 console.log("QUEUE: " + this.game.queue);
+console.log("POLAND: " + this.game.countries['poland'].ussr + " -- " + JSON.stringify(this.game.step));
 
         //
         // cambridge region
@@ -2187,7 +2188,6 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "place") {
-console.log("HERE: "+ JSON.stringify(mv));
           if (player != mv[1]) { this.placeInfluence(mv[3], parseInt(mv[4]), mv[2]); }
           this.game.queue.splice(qe, 1);
         }

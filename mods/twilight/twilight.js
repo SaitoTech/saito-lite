@@ -943,6 +943,7 @@ try {
         let shd_continue = 1;
 
 console.log("QUEUE: " + this.game.queue);
+console.log("POLAND: " + this.game.countries['poland'].ussr + " -- " + JSON.stringify(this.game.step));
 
         //
         // cambridge region
@@ -2187,7 +2188,6 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "place") {
-console.log("HERE: "+ JSON.stringify(mv));
           if (player != mv[1]) { this.placeInfluence(mv[3], parseInt(mv[4]), mv[2]); }
           this.game.queue.splice(qe, 1);
         }
@@ -2356,7 +2356,7 @@ console.log("HERE: "+ JSON.stringify(mv));
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["willybrandt","unintervention","abmtreaty","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["greatsociety","unintervention","abmtreaty","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
               this.game.deck[0].hand = ["campdavid", "olympic", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
@@ -9544,7 +9544,6 @@ alert("end of history!");
             <label for="clock">Player Time Limit:</label>
             <select name="clock">
               <option value="0" default>no limit</option>
-              <option value="20">20 minutes</option>
               <option value="30">30 minutes</option>
               <option value="60">60 minutes</option>
               <option value="90">90 minutes</option>
@@ -10858,7 +10857,6 @@ alert("end of history!");
 
             if (do_i_have_cc == 1) {
               this.game.state.vp -= 1;
-              this.updateLog("USSR gains 1 VP from Cultural Revolution");
               this.updateVictoryPoints();
             } else {
               if (! this.game.deck[0].hand.includes("china")) {
@@ -11287,7 +11285,6 @@ alert("end of history!");
       this.game.state.events.flowerpower = 0;
 
       this.game.state.vp += 1;
-      this.updateLog("US gains 1 VP from An Evil Empire");
       this.updateVictoryPoints();
 
       return 1;
@@ -11917,7 +11914,6 @@ console.log("card: " + card);
     if (card == "ironlady") {
 
       this.game.state.vp += 1;
-      this.updateLog("US gains 1 VP from The Iron Lady");
       this.updateVictoryPoints();
 
       //
@@ -14212,7 +14208,6 @@ console.log("card: " + card);
 
       this.game.state.events.u2 = 1;
       this.game.state.vp -= 1;
-      this.updateLog("USSR gains 1 VP from U2 Incident");
       this.updateVictoryPoints();
 
       return 1;
@@ -14678,7 +14673,6 @@ console.log("card: " + card);
       }
 
       this.game.state.vp -= 1;
-      this.updateLog("USSR gains 1 VP from Willy Brandt");
       this.updateVictoryPoints();
 
       this.countries["westgermany"].ussr += 1;

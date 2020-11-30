@@ -358,9 +358,6 @@ class Arcade extends ModTemplate {
 
       this.purgeBadGames(app)
 
-
-//console.log("RECEIVED GAME TX: " + JSON.stringify(tx));
-
       //
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
       //
@@ -590,8 +587,6 @@ class Arcade extends ModTemplate {
 
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
-
-console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
     //
     // this code doubles onConfirmation
@@ -1134,6 +1129,13 @@ console.log("going into super handle peer request...");
         GameLoader.render(app, this);
         GameLoader.attachEvents(app, this);
         this.viewing_arcade_initialization_page = 1;
+      } else {
+
+	//
+	// observers might get these when reloading the chain
+	//
+	if (this.game.player == 0) { return; }
+
       }
     }
 
@@ -1631,7 +1633,6 @@ console.log("ADDING TO OBSERVER LIST: " + JSON.stringify(msg));
           //
           // specify observer mode only
           //
-          game.player = 0;
           if (games == undefined) {
             games = [];
           }
@@ -1644,6 +1645,7 @@ console.log("ADDING TO OBSERVER LIST: " + JSON.stringify(msg));
 
           game.observer_mode = 1;
           game.observer_mode_active = 0;
+          game.player = 0;
 
           //
           // and we add this stuff to our queue....
