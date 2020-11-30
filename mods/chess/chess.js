@@ -28,7 +28,7 @@ class Chessgame extends GameTemplate {
     this.minPlayers = 2;
     this.maxPlayers = 2;
     this.type       = "Classic Boardgame";
-    this.description = "An implimentation of Chess for the Saito Blockchain";
+    this.description = "An implementation of Chess for the Saito Blockchain";
     this.categories  = "Boardgame Game";
     return this;
 
