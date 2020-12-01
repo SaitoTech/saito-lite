@@ -169,7 +169,7 @@ class Email extends ModTemplate {
       // set the hash to match the state we want and force a hashchange event
       let oldHash = window.location.hash;
       window.location.hash = `#`;
-      window.location.hash = app.browser.modifyHash(oldHash, {ready: ""});
+      window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: ""});
     }
 
   }
