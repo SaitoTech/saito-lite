@@ -5,6 +5,8 @@ module.exports = EmailChat = {
 
     render(app, mod) {
 
+      mod.renderMethod = "email";
+
       ChatSidebar.render(app, mod);
       ChatSidebar.attachEvents(app, mod);
 
