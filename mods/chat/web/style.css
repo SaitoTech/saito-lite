@@ -5,6 +5,10 @@
   padding: unset;
 }
 
+.chat-main {
+  margin-top: 6em;
+}
+
 .chat {
   display: flex;
   flex-direction: column;

@@ -19,8 +19,6 @@
   --identicon-height: 1em;
 }
 
-.saito-carousel {}
-
 body {
   height: 100vh;
   font-size: 1.0em;
@@ -49,7 +47,7 @@ a {
 .arcade-sidebar {
   display: flex;
   flex-flow: column;
-  z-index: 999;
+  z-index: 10;
 }
 
 .arcade-main {
@@ -61,6 +59,7 @@ a {
 
 #arcade-tabs {
   max-height: 45vh;
+  min-height: 25vh;
   overflow-y: auto;
 }
 
@@ -72,7 +71,8 @@ a {
   overflow: hidden;
   border-left: solid 2px var(--saito-red);
   font-size: 1.3em;
-  line-height: 2.3em;
+  line-height: 2em;
+  min-height: 2em;
   cursor: pointer;
 }
 
@@ -182,8 +182,8 @@ a {
   width: 100%;
   background-image: url(/arcade/img/dreamscape-logo.png);
   background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-intro.thin {
@@ -318,6 +318,7 @@ a {
   border: 1px solid var(--saito-red);
   padding: 1em;
   overflow-y: auto;
+  max-height: calc(70vh - 7em);
 }
 
 .arcade-posts {
@@ -325,6 +326,7 @@ a {
   padding: 1em;
   background-color: #4444;
   overflow-y: auto;
+  max-height: calc(70vh - 7em);
 }
 
 /*** AppStore Loader ***/
@@ -348,10 +350,10 @@ a {
     position: absolute;
     width: 15em;
     top: 5em;
-    left: -14em;
+    left: -15em;
     height: calc(100vh - 5em);
     transition: all ease-in-out 1s;
-    background-color: darkslateblue;
+    background: var(--saito-nightscape);
   }
   .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
     left: 0;
@@ -733,6 +735,8 @@ button.add-games {
 .game-wizard-description {
   font-size: 1.2em;
   line-height: 1.5em;
+  max-height: 33vh;
+  overflow-y: auto;
 }
 
 .game-wizard-image {
@@ -1407,6 +1411,9 @@ span.rewards-row-name {
 }
 
 @media only screen and (max-width: 600px) {
+  .arcade-container {
+    padding: 0;
+  }
   .arcade-tile {
     min-height: 10em;
   }
@@ -1426,5 +1433,25 @@ span.rewards-row-name {
   }
   .game-wizard-controls {
     grid-template-columns: auto;
+  }
+  .arcade-sidebar::after {
+    content: "›";
+    position: absolute;
+    right: -32px;
+    font-size: 3em;
+    border-radius: 0 30px 30px 0;
+    width: 25px;
+    height: 1em;
+    letter-spacing: 43px;
+    font-weight: bolder;
+    background: #000a;
+    line-height: 1.2em;
+    margin: 0.5em 0 0 0;
+    transition: ease 1s all;
+    z-index: 9;
+    padding-left: 7px;
+  }
+  .arcade-sidebar:hover::after {
+    opacity: 0;
   }
 }

@@ -17,7 +17,7 @@ class Rewards extends ModTemplate {
     this.description = "Quick reference for earning Saito tokens from the Saito faucet.";
     this.categories = "Core Utilities Finance";
     this.initial = 10;
-    this.payoutRatio = 0.75;
+    this.payoutRatio = 0.95;
     this.rewards_publickey = "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
 
 
@@ -343,6 +343,9 @@ class Rewards extends ModTemplate {
     let sql = "";
     let params = {};
     var payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.payoutRatio);
+    if (row.total_spend > 100) {
+      payout = (row.total_spend % 100) > tx.returnFees();
+    }
     var newPayout = Math.ceil(row.last_payout_amt / this.payoutRatio);
     var isGame = 0;
     if (typeof tx.msg.game_id != "undefined") { isGame = 1 };
@@ -565,6 +568,8 @@ class Rewards extends ModTemplate {
   }
 
   makePayout(address, amount, event = "") {
+    //tamping down on rewards growth
+    if (amount > 100) {amount = 100}
     if (this.app.wallet.returnPublicKey() != this.rewards_publickey) { return; }
     //send the user a little something.
 

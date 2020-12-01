@@ -94,9 +94,7 @@ a:hover {
   text-align: justify;
 }
 
-
 body {
-  
   background-color: var(--backround-general);
   color: var(--text-color-normal);
   font-family: visuelt-light;
@@ -114,12 +112,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--thumbBG) ;
+  background-color: var(--thumbBG);
   border-radius: 6px;
   border: 3px solid var(--scrollbarBG);
 }
 
 /* SAITO ANIMATION CSS */
+
 #content {
   visibility: hidden;
 }
@@ -166,6 +165,7 @@ hr {
 }
 
 /* Overlay */
+
 .saito-overlay-backdrop, .game-overlay-backdrop {
   position: absolute;
   display: none;
@@ -178,6 +178,7 @@ hr {
   z-index: 100;
   min-width: 350px;
 }
+
 .saito-overlay, .game-overlay {
   position: absolute;
   display: inline-block;
@@ -190,6 +191,7 @@ hr {
   z-index: 1000;
   padding: 10px;
 }
+
 .saito-overlay-closebox {
   display: none;
   position: absolute;
@@ -199,7 +201,9 @@ hr {
   border-radius: 50%;
   top: 0px;
   background-color: white;
+  z-index: 100;
 }
+
 .saito-overlay-closebox-btn {
   display: block;
   height: 32px;
@@ -207,14 +211,17 @@ hr {
   color: red;
   font-size: 31px;
 }
+
 .saito-overlay-closebox-btn:hover {
   transform: scale(1.0);
 }
+
 .game-overlay {
-  z-index:9010;
+  z-index: 9010;
 }
+
 .game-overlay-backdrop {
-  z-index:9000;
+  z-index: 9000;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -224,8 +231,9 @@ hr {
   padding: 10px;
   background-color: whitesmoke;
   opacity: 0.8;
-  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
 }
+
 .saito-overlay-menu ul li {
   width: 100%;
   line-height: 3.5em;
@@ -236,8 +244,9 @@ hr {
   list-style: none;
   padding: 0 1em;
 }
+
 .saito-overlay-menu ul li:hover {
-  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75), -2px -2px 5px #eee;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75), -2px -2px 5px #eee;
   background: #0001;
 }
 
@@ -410,7 +419,6 @@ button i {
   grid-template-columns: 1fr 3fr;
 }
 
-
 .appstore-app-install-version {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -434,7 +442,7 @@ button i {
   margin: 0;
 }
 
-.appstore-app-istall-details.grid-2 div{
+.appstore-app-istall-details.grid-2 div {
   padding: 0;
   margin: 0;
 }
@@ -461,25 +469,26 @@ button i {
 .appstore-search-box {
   width: 300px;
   float: right;
-  font-size:0.8em;
+  font-size: 0.8em;
 }
 
 .appstore-overlay-developers {
-  font-size:0.5em;
+  font-size: 0.5em;
 }
-  
+
 .appstore-overlay-container {
   background-color: whitesmoke;
-  width: 80vw; 
+  width: 80vw;
   height: 80vh;
   padding: 20px;
   overflow-y: scroll;
-} 
+}
+
 .appstore-overlay-grid {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: 1fr 1fr 1fr;
-  margin-bottom:20px;
+  margin-bottom: 20px;
 }
 
 .appstore-overlay-app {
@@ -488,18 +497,18 @@ button i {
   grid-template-columns: 2fr 3fr;
   cursor: pointer;
   border: 1px solid var(--saito-red);
-  font-size:20px;
+  font-size: 20px;
   padding: 10px;
   background-color: whitesmoke;
   color: #444;
   height: 90px;
   min-height: 90px;
-} 
+}
+
 .appstore-overlay-app:hover {
   background-color: var(--saito-red);
   color: whitesmoke;
-} 
-
+}
 
 .appstore-overlay-app-image {
   background-size: cover;
@@ -511,9 +520,10 @@ button i {
 .appstore-overlay-app-details {
   font-size: 1em;
 }
+
 .appstore-overlay-app-title {
   font-weight: bold;
-} 
+}
 
 .appstore-overlay-app-type {
   font-size: 0.9em;
@@ -546,7 +556,6 @@ button i {
 .appstore-header-featured {
   grid-template-columns: 1fr auto;
 }
-
 
 .app-category-all {
   margin: 0 1em;
@@ -645,8 +654,8 @@ fieldset {
   font-family: visuelt-medium;
   text-transform: capitalize;
   padding: 10px 0;
-    font-size: 20px;
-    line-height: 38px;
+  font-size: 20px;
+  line-height: 38px;
 }
 
 .grid-4 div, .grid-2 div {
@@ -769,9 +778,12 @@ input[type=text].red-bottom-border {
 /* way too much stuff to clean up range sliders */
 
 input[type=range] {
-  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-  width: 100%; /* Specific width is required for Firefox. */
-  background: transparent; /* Otherwise white in Chrome */
+  -webkit-appearance: none;
+  /* Hides the slider so that custom slider can be made */
+  width: 100%;
+  /* Specific width is required for Firefox. */
+  background: transparent;
+  /* Otherwise white in Chrome */
   border: 1px solid var(--saito-red);
   padding: 3px;
   border-radius: 5px;
@@ -782,15 +794,15 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 input[type=range]:focus {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+  outline: none;
+  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
 }
 
 input[type=range]::-ms-track {
   width: 100%;
   cursor: pointer;
-
   /* Hides the slider so custom styles can be added */
-  background: transparent; 
+  background: transparent;
   border-color: transparent;
   color: transparent;
 }
@@ -802,12 +814,14 @@ input[type=range]::-webkit-slider-thumb {
   width: 8px;
   border-radius: 3px;
   cursor: pointer;
-  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  margin-top: -14px;
+  /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
   border: 1px solid var(--saito-red);
   margin: 0;
 }
 
 /* All the same stuff for Firefox */
+
 input[type=range]::-moz-range-thumb {
   background-color: var(--saito-red);
   height: 16px;
@@ -815,12 +829,7 @@ input[type=range]::-moz-range-thumb {
   border-radius: 3px;
   cursor: pointer;
   border: 1px solid var(--saito-red);
-
 }
-
-
-
-
 
 select {
   -webkit-appearance: none;
@@ -991,9 +1000,7 @@ div#message-wrapper {
   max-width: 90%;
   max-height: 80vh;
   box-shadow: 0 0 3px 1px #8888;
-
 }
-
 
 .top-0 {
   top: 0 !important;
@@ -1003,7 +1010,6 @@ div#message-wrapper {
 
 .header {
   height: 5em;
-  
   background-image: url(/saito/img/dreamscape.png);
   background-position: 0em;
   background-size: cover;
@@ -1022,25 +1028,23 @@ div#message-wrapper {
   grid-template-columns: 12em auto;
   align-items: center;
   height: 100%;
-  
+  padding: 0 1em;
 }
 
 .header-balance {
   font-weight: normal;
   margin: 0 3px 0 0;
 }
+
 .header-token {
   font-weight: normal;
 }
+
 .header-mini-wallet {
-  height: 3.2em;
-  padding: 0.6em 1.0em 0em 1.0em;
-  /* border: solid 1px var(--saito-white); */
-  text-align: right;
+  padding: 0.5em 0 0 0;
+  height: 1.7em;
   color: white;
-  display: inline-block;
-  justify-self: end;
-  text-align: left;
+  margin: 0 1em 0 0;
   cursor: pointer;
 }
 
@@ -1052,8 +1056,6 @@ div#message-wrapper {
 }
 
 .header-token {
-  text-align: right;
-  display: inline-block;
   padding-left: 0em;
   height: 1em;
   font-size: 1.2em;
@@ -1062,44 +1064,42 @@ div#message-wrapper {
 }
 
 .header-balance {
-  text-align: left;
-  display: inline-block;
   padding-left: 0em;
   height: 1em;
   font-size: 1.2em;
   font-weight: bold;
   overflow: hidden;
 }
+
 .header-username {
   padding-right: 1em;
   font-size: 1.2em;
   font-weight: bold;
   width: 10em;
   overflow: hidden;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
 }
+
 .profile-public-key {
   width: 275px;
   margin: 0 9em 0 0;
 }
-.header-mini-wallet .header-profile-photo {
-  
-}
-.header-mini-wallet .header-balance {
-  
-}
-.header-mini-wallet .header-username {
-  
-}
-.header-mini-wallet .header-icon {
-  
-}
+
+.header-mini-wallet .header-profile-photo {}
+
+.header-mini-wallet .header-balance {}
+
+.header-mini-wallet .header-username {}
+
+.header-mini-wallet .header-icon {}
+
 /*
 .header-home {
   grid-template-columns: 12em auto;
   align-items: center;
 }
 */
+
 .header-icon {
   color: white;
   align-self: center;
@@ -1110,9 +1110,10 @@ div#message-wrapper {
 }
 
 .header-icon-links {
-  display: inline;
-  text-align: right;
-  height: 44px;
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .header-icon-links i {
@@ -1124,6 +1125,7 @@ div#message-wrapper {
   color: #ddd;
   text-shadow: #444 1px 2px, #aaa 3px 2px;
 }
+
 .header-dropdown {
   position: absolute;
   right: 0;
@@ -1305,7 +1307,6 @@ div#message-wrapper {
   /* Optional: just make scrollbar invisible 
 }
 */
-
 
 .container {
   display: grid;
@@ -1516,8 +1517,25 @@ div#message-wrapper {
     font-size: 1em;
   }
   .header-wrapper {
-    padding: 0;
+    padding: 0 3px;
     grid-template-columns: 5em auto;
+  }
+  .logo {
+    height: 2.5em;
+  }
+  .header-mini-wallet {
+    width: 50vw;
+    margin: 0 3px 0 0;
+    text-align: right;
+    padding-right: 8px;
+  }
+  .header-username {
+    width: 40vw;
+    white-space: nowrap;
+  }
+  .header-icon-links {
+    align-items: start;
+    height: 3em;
   }
 }
 

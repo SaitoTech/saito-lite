@@ -28,7 +28,7 @@ class Chessgame extends GameTemplate {
     this.minPlayers = 2;
     this.maxPlayers = 2;
     this.type       = "Classic Boardgame";
-    this.description = "An implimentation of Chess for the Saito Blockchain";
+    this.description = "An implementation of Chess for the Saito Blockchain";
     this.categories  = "Boardgame Game";
     return this;
 
@@ -617,6 +617,12 @@ class Chessgame extends GameTemplate {
           <option value="30">30 minutes</option>
           <option value="60">60 minutes</option>
           <option value="90">90 minutes</option>
+        </select>
+
+        <label for="observer_mode">Observer Mode:</label>
+        <select name="observer">
+          <option value="enable" selected>enable</option>
+          <option value="disable">disable</option>
         </select>
 
         <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>

@@ -15,7 +15,7 @@ info@saito.tech
 ### System Preparation
 ```
 apt upate
-apt uprade
+apt upgrade
 apt install npm
 ```
 
