@@ -352,10 +352,9 @@ module.exports = PostStyleTemplate = (app, mod) => {
   background-image: url(/post/img/post-logo.png);
   background-size: contain;
   background-repeat: no-repeat;
-  background-position-y: center;
+  background-position-y: top;
   width: 100%;
   height: 100%;
-  margin-top: 5px;
 }
 
 .arcade-post-sublinks {
@@ -407,6 +406,17 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 3em;
 }
 .post-teaser-back {
+}
+
+@media only screen and (max-width: 600px) {
+  .post-create-header {
+    flex-direction: column;
+    flex-flow: column;
+  }
+  .post-create-container, .post-view-container {
+    min-height: 70vh;
+    max-height: 70vh;
+  }
 }
 
 </style>

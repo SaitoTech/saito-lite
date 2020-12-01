@@ -7,7 +7,7 @@ console.log("TX: " + JSON.stringify(tx));
   if (tx.children == 1) { cmt = "1 comment"; }
   if (tx.children > 1)  { cmt = (tx.children+" comments"); }
 
-  let img = tx.img;
+  let img = tx.msg.images[0];
   if (img == undefined) { img = '/post/img/post-logo.png'; }
   if (img == "")        { img = '/post/img/post-logo.png'; }
 
@@ -31,4 +31,6 @@ console.log("TX: " + JSON.stringify(tx));
   return html;
 
 }
+
+
 
