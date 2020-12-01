@@ -103,6 +103,7 @@ a {
   background: var(--saito-jester);
 }
 
+/*
 #observables-hero {
   font-size: 4em;
   height: 100%;
@@ -110,7 +111,7 @@ a {
   place-items: center;
   border: solid 1px var(--saito-red);
 }
-
+*/
 #tournaments-hero {
   font-size: 4em;
   height: 100%;
@@ -123,7 +124,7 @@ a {
   display: none !important;
 }
 
-.arcade-hero {
+.arcade-hero, .observables-hero {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
