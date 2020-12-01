@@ -47,8 +47,8 @@ module.exports = PostCreate = {
 console.log("Submitted Title-->" + this.new_post.title + "<---");
 
       if (this.new_post.title == "") {
-	salert("Please provide a title for your post!");
-	return;
+        salert("Please provide a title for your post!");
+        return;
       }
 
       let newtx = mod.createPostTransaction(this.new_post.title, this.new_post.comment, this.new_post.link, this.new_post.forum, this.new_post.images);
@@ -65,18 +65,18 @@ console.log("Submitted Title-->" + this.new_post.title + "<---");
 
     document.querySelectorAll('.post-create-image-preview').forEach(el => {
       el.onclick = async (e) => {
-	let confirm_this = await sconfirm("Do you want to delete this image?");
+        let confirm_this = await sconfirm("Do you want to delete this image?");
         if (confirm_this) {
-	  let array_position = el.getAttribute("data-id");
-	  el.destroy();
-	  this.new_post.images.splice(array_position, 1);
+          let array_position = el.getAttribute("data-id");
+          el.destroy();
+          this.new_post.images.splice(array_position, 1);
           document.querySelectorAll('.post-create-image-preview').forEach(el2 => {
-	    let array_position2 = el2.getAttribute("data-id");
-	    if (array_position2 > array_position) {
-	      el2.setAttribute("data-id", (array_position2-1));
-	    }
-	  });
-	}
+            let array_position2 = el2.getAttribute("data-id");
+            if (array_position2 > array_position) {
+              el2.setAttribute("data-id", (array_position2-1));
+            }
+          });
+        }
       }
     });     
 

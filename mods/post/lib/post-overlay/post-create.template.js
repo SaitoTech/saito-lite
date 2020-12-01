@@ -15,7 +15,7 @@ module.exports = PostCreateTemplate = (app, mod) => {
         <input type="text" class="post-create-link-input" name="post-create-link-input" placeholder="https://...">
       </div>
 
-      <div id="post-create-image" class="post-create-image" name="post-create-image" >drag-and-drop image</div>
+      <div id="post-create-image" class="post-create-image" name="post-create-image" tabindex="0">drag-and-drop, click or paste image</div>
 
       <div id="post-create" class="post-create-textarea markdown medium-editor-element" placeholder="Your post..." contenteditable="true" spellcheck="true" data-medium-editor-element="true" role="textbox" aria-multiline="true" data-medium-editor-editor-index="1" medium-editor-index="37877e4c-7415-e298-1409-7dca41eed3b8"></div>
 
