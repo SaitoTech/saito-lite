@@ -10,10 +10,13 @@
 
     super.initializeHTML(app);
 
+    try {
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
     $('.content').css('visibility', 'visible');
     $('.hud_menu_game-status').css('display', 'none');
 
@@ -245,6 +248,8 @@ try {
 
     this.hud.addCardType("textchoice", "", null);
 
+    } catch (err) {}
+
   }
 
 
@@ -362,23 +367,25 @@ try {
       // remove tiles in 3 player game
       //
       if (this.totalPlayers <= 3) {
-        $('#1_3').attr('id', '');
+        try {
+          $('#1_3').attr('id', '');
+          $('#1_4').attr('id', '');
+          $('#2_5').attr('id', '');
+          $('#3_1').attr('id', '');
+          $('#4_1').attr('id', '');
+          $('#5_1').attr('id', '');
+          $('#6_5').attr('id', '');
+          $('#7_3').attr('id', '');
+          $('#7_4').attr('id', '');
+        } catch (err) {}
         delete this.game.board["1_3"];
-        $('#1_4').attr('id', '');
         delete this.game.board["1_4"];
-        $('#2_5').attr('id', '');
         delete this.game.board["2_5"];
-        $('#3_1').attr('id', '');
         delete this.game.board["3_1"];
-        $('#4_1').attr('id', '');
         delete this.game.board["4_1"];
-        $('#5_1').attr('id', '');
         delete this.game.board["5_1"];
-        $('#6_5').attr('id', '');
         delete this.game.board["6_5"];
-        $('#7_3').attr('id', '');
         delete this.game.board["7_3"];
-        $('#7_4').attr('id', '');
         delete this.game.board["7_4"];
       }
   
@@ -579,9 +586,10 @@ try {
     //
     // HIDE HUD LOG
     //
-    $('.hud-body > .log').remove();
-    $('.status').css('display','block');
-
+    try {
+      $('.hud-body > .log').remove();
+      $('.status').css('display','block');
+    } catch (err) {}
 
     //
     // display board
@@ -590,6 +598,8 @@ try {
   
       // add html to index
       let boardslot = "#" + i;
+
+try {
       $(boardslot).html(
         ' \
           <div class="hexIn" id="hexIn_'+i+'"> \
@@ -618,7 +628,7 @@ try {
       // add planet info
   
       this.updateSectorGraphics(i);
-
+} catch (err) {}
         
           
     }

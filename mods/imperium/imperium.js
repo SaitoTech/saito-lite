@@ -7,7 +7,7 @@ class Imperium extends GameTemplate {
   
     this.name             = "Imperium";
     this.slug		  = "imperium";
-    this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.`;
+    this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of a galaxy in the waning days of a dying Empire.`;
     this.categories	  = "Arcade Games Entertainment";
     this.minPlayers       = 2;
     this.maxPlayers       = 4; 
@@ -8818,10 +8818,13 @@ ACTION CARD - types
 
     super.initializeHTML(app);
 
+    try {
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
     $('.content').css('visibility', 'visible');
     $('.hud_menu_game-status').css('display', 'none');
 
@@ -9053,6 +9056,8 @@ try {
 
     this.hud.addCardType("textchoice", "", null);
 
+    } catch (err) {}
+
   }
 
 
@@ -9170,23 +9175,25 @@ try {
       // remove tiles in 3 player game
       //
       if (this.totalPlayers <= 3) {
-        $('#1_3').attr('id', '');
+        try {
+          $('#1_3').attr('id', '');
+          $('#1_4').attr('id', '');
+          $('#2_5').attr('id', '');
+          $('#3_1').attr('id', '');
+          $('#4_1').attr('id', '');
+          $('#5_1').attr('id', '');
+          $('#6_5').attr('id', '');
+          $('#7_3').attr('id', '');
+          $('#7_4').attr('id', '');
+        } catch (err) {}
         delete this.game.board["1_3"];
-        $('#1_4').attr('id', '');
         delete this.game.board["1_4"];
-        $('#2_5').attr('id', '');
         delete this.game.board["2_5"];
-        $('#3_1').attr('id', '');
         delete this.game.board["3_1"];
-        $('#4_1').attr('id', '');
         delete this.game.board["4_1"];
-        $('#5_1').attr('id', '');
         delete this.game.board["5_1"];
-        $('#6_5').attr('id', '');
         delete this.game.board["6_5"];
-        $('#7_3').attr('id', '');
         delete this.game.board["7_3"];
-        $('#7_4').attr('id', '');
         delete this.game.board["7_4"];
       }
   
@@ -9387,9 +9394,10 @@ try {
     //
     // HIDE HUD LOG
     //
-    $('.hud-body > .log').remove();
-    $('.status').css('display','block');
-
+    try {
+      $('.hud-body > .log').remove();
+      $('.status').css('display','block');
+    } catch (err) {}
 
     //
     // display board
@@ -9398,6 +9406,8 @@ try {
   
       // add html to index
       let boardslot = "#" + i;
+
+try {
       $(boardslot).html(
         ' \
           <div class="hexIn" id="hexIn_'+i+'"> \
@@ -9426,7 +9436,7 @@ try {
       // add planet info
   
       this.updateSectorGraphics(i);
-
+} catch (err) {}
         
           
     }
@@ -9463,23 +9473,9 @@ try {
     }
   }
 
-  requestInterface(type) {
-    if (type == "arcade-create-game") {
-      return {
-        slug: this.slug,
-        title: this.name,
-        description: this.description,
-        publisher_message: this.publisher_message,
-        returnGameOptionsHTML: this.returnGameOptionsHTML.bind(this),
-        minPlayers: this.minPlayers,
-        maxPlayers: this.maxPlayers,
-      }
-    }
-    if (type == "arcade-sidebar") {
-      return { title: this.name };
-    }
-    return null;
-  }
+
+
+
 
 //
 // manually add arcade banner support
@@ -15456,8 +15452,6 @@ console.log("Z Index: " + JSON.stringify(z[z_index]));
               <option value="faction4">Sardakk N'Orr</option>
               <option value="faction5">Brotherhood of Yin</option>
             </select>
-
-            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 
     `;
 
@@ -24951,6 +24945,10 @@ addEventsToBoard() {
   let imperium_self = this;
   let pid = "";
 
+//
+// TODO remove jquery dependency
+//
+try {
   $('.sector').off();
   $('.sector').on('mouseenter', function () {
     pid = $(this).attr("id");
@@ -24963,6 +24961,7 @@ addEventsToBoard() {
     pid = $(this).attr("id");
     imperium_self.updateLog(imperium_self.returnSectorInformationHTML(pid));
   });
+} catch (err) {}
 }
 
 returnTechOverlay() {

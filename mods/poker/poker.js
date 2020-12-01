@@ -1077,6 +1077,8 @@ class Poker extends GameTemplate {
 
   playerTurn() {
 
+    if (this.browser_active == 0) { return; }
+
     let poker_self = this;
 
     this.displayBoard();
@@ -1588,7 +1590,9 @@ console.log("this raise: " + this_raise);
 
     this.updateStatus("Waiting for information from peers....");
 
-    $(".menu_option").off();
+    try {
+      $(".menu_option").off();
+    } catch (err) {}
 
     let extra = {};
     extra.target = this.returnNextPlayer(this.game.player);
