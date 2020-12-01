@@ -59,13 +59,17 @@ module.exports = EmailBarsMenu = {
     
     // Hide the menu bar if user clicks off of it or on a button in it
     let email_bars_menu = document.querySelector('#mobile.email-bars-menu');
-    email_bars_menu.addEventListener('click', () => {
+    let emailSidebarHideCallback = () => {
         email_bars_menu.style.display = "none";
-    });
-    window.addEventListener('click', (e) => {
+    }
+    email_bars_menu.removeEventListener('click', emailSidebarHideCallback);
+    email_bars_menu.addEventListener('click', emailSidebarHideCallback);
+    let emailSidebarHideCallbackGlobal = (e) => {
         if (e.target.id !== "email-bars-icon") {
             email_bars_menu.style.display = "none";
         }
-    });
+    }
+    window.removeEventListener('click', emailSidebarHideCallbackGlobal);
+    window.addEventListener('click', emailSidebarHideCallbackGlobal);
   }
 }
