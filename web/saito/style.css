@@ -1516,8 +1516,25 @@ div#message-wrapper {
     font-size: 1em;
   }
   .header-wrapper {
-    padding: 0;
+    padding: 0 3px;
     grid-template-columns: 5em auto;
+  }
+  .logo {
+    height: 2.5em;
+  }
+  .header-mini-wallet {
+    width: 50vw;
+    margin: 0 3px 0 0;
+    text-align: right;
+    padding-right: 8px;
+  }
+  .header-username {
+    width: 40vw;
+    white-space: nowrap;
+  }
+  .header-icon-links {
+    align-items: start;
+    height: 3em;
   }
 }
 
