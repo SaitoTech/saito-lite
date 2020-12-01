@@ -173,6 +173,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   border: 4px dashed #ddd;
   margin-bottom: 20px;
   background-color: whitesmoke;
+  cursor:pointer;
 }
 
 .post-create-image-preview-container {

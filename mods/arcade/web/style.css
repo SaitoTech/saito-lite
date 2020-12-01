@@ -1046,7 +1046,6 @@ a {
     z-index: 100;
   }
   .game-loader-spinner {
-    display: none;
     justify-self: center;
     width: 6em;
     height: 6em;
