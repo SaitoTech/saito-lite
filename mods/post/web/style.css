@@ -144,6 +144,7 @@
   border: 4px dashed #ddd;
   margin-bottom: 20px;
   background-color: whitesmoke;
+  cursor: pointer;
 }
 
 .post-create-textarea {
@@ -277,3 +278,9 @@
   width: 100%;
 }
 
+@media only screen and (max-width: 600px) {
+  .post-create-header {
+    flex-direction: column;
+    flex-flow: column;
+  }
+}
