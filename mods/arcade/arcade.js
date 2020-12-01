@@ -1123,9 +1123,26 @@ console.log("going into super handle peer request...");
 
     if (this.browser_active == 1) {
       if (tx.isTo(app.wallet.returnPublicKey())) {
+
+        //
+        // if game already initialized, skip loeader
+        //
+        let txmsg = tx.returnMessage();
+	let game_id = txmsg.game_id;
+	if (app.options.games) {
+	  for (let i = 0; i < app.options.games.length; i++) {
+console.log(app.options.games[i].id + " ---- " + game_id);
+	    if (app.options.games[i].id == tx.transaction.sig) {
+	      // game already accepted
+	      return;
+	    }
+	  }
+	}
+
         GameLoader.render(app, this);
         GameLoader.attachEvents(app, this);
         this.viewing_arcade_initialization_page = 1;
+
       } else {
 
 	//
