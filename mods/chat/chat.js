@@ -16,7 +16,7 @@ class Chat extends ModTemplate {
 
     this.header = new SaitoHeader(app, this);
 
-    this.renderMethod = "main";
+    this.renderMode = "main";
     this.relay_moves_onchain_if_possible = 1;
 
   }
@@ -78,7 +78,7 @@ class Chat extends ModTemplate {
 
   initializeHTML(app) {
 
-    if (this.renderMethod == "main") {
+    if (this.renderMode == "main") {
 
       this.header.render(app, this);
       this.header.attachEvents(app, this);
@@ -181,7 +181,7 @@ class Chat extends ModTemplate {
     this.sendEvent('chat-render-box-request', {});
 
 
-    if (this.renderMethod == "main") {
+    if (this.renderMode == "main") {
       ChatMain.render(app, this);
       ChatMain.attachEvents(app, this);
     }

@@ -305,6 +305,8 @@ a {
   left: 2.5em;
   background-color: #444a;
   color: #efefef !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .arcade-sub {
