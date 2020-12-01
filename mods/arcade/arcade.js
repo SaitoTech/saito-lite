@@ -139,12 +139,9 @@ class Arcade extends ModTemplate {
           if (res.rows) {
             res.rows.forEach(row => {
               let gametx = JSON.parse(row.tx);
-              let tx = new saito.transaction(gametx.transaction);
+              let tx = new saito.transaction(gametx);
               this.addGameToOpenList(tx);
             });
-
-	    ArcadeMain.render(app, this);
-	    ArcadeMain.attachEvents(app, this);
           }
         }
     );
@@ -152,8 +149,8 @@ class Arcade extends ModTemplate {
 
     //
     // load observer games (active)
-      //`SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
     //
+      //`SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
     let current_timestamp = new Date().getTime() - 1200000;
     this.sendPeerDatabaseRequestWithFilter(
 
@@ -350,9 +347,6 @@ class Arcade extends ModTemplate {
     if (conf == 0) {
 
       this.purgeBadGames(app)
-
-
-//console.log("RECEIVED GAME TX: " + JSON.stringify(tx));
 
       //
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
@@ -583,8 +577,6 @@ class Arcade extends ModTemplate {
 
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
-
-console.log("RECEIVED PEER REQ: " + JSON.stringify(message));
 
     //
     // this code doubles onConfirmation
@@ -1124,9 +1116,33 @@ console.log("going into super handle peer request...");
 
     if (this.browser_active == 1) {
       if (tx.isTo(app.wallet.returnPublicKey())) {
+
+        //
+        // if game already initialized, skip loeader
+        //
+        let txmsg = tx.returnMessage();
+	let game_id = txmsg.game_id;
+	if (app.options.games) {
+	  for (let i = 0; i < app.options.games.length; i++) {
+console.log(app.options.games[i].id + " ---- " + game_id);
+	    if (app.options.games[i].id == tx.transaction.sig) {
+	      // game already accepted
+	      return;
+	    }
+	  }
+	}
+
         GameLoader.render(app, this);
         GameLoader.attachEvents(app, this);
         this.viewing_arcade_initialization_page = 1;
+
+      } else {
+
+	//
+	// observers might get these when reloading the chain
+	//
+	if (this.game.player == 0) { return; }
+
       }
     }
 
@@ -1470,7 +1486,6 @@ console.log(params);
 
     this.removeOldGames();
 
-
     if (for_us) {
 
       this.games.unshift(tx);
@@ -1492,7 +1507,6 @@ console.log(params);
         return;
       }
     }
-console.log("ADDING TO OBSERVER LIST: " + JSON.stringify(msg));
     this.observer.push(msg);
 
     if (this.browser_active == 1) {
@@ -1570,9 +1584,6 @@ console.log("ADDING TO OBSERVER LIST: " + JSON.stringify(msg));
       $last_move: (new Date().getTime())
     };
 
-console.log("SAVING GAME STATE: " + sql);
-console.log("PARAMS: " + JSON.stringify(params));
-
     await app.storage.executeDatabase(sql, params, "arcade");
 
   }
@@ -1587,9 +1598,6 @@ console.log("PARAMS: " + JSON.stringify(params));
     let address_to_watch = msgobj.player;
     let game_id = msgobj.game_id;
     let arcade_self = this;
-
-console.log("Here we are in observe game!");
-console.log(JSON.stringify(msgobj));
 
     //
     // already watching game... load it
@@ -1630,7 +1638,6 @@ console.log(JSON.stringify(msgobj));
           //
           // specify observer mode only
           //
-          game.player = 0;
           if (games == undefined) {
             games = [];
           }
@@ -1643,6 +1650,7 @@ console.log(JSON.stringify(msgobj));
 
           game.observer_mode = 1;
           game.observer_mode_active = 0;
+          game.player = 0;
 
           //
           // and we add this stuff to our queue....
@@ -1650,6 +1658,12 @@ console.log(JSON.stringify(msgobj));
           for (let z = 0; z < game.last_turn.length; z++) {
             game.queue.push(game.last_turn[z]);
           }
+
+	  //
+	  // increment the step by 1, as returnPreGameMove will have unincremented
+	  // ( i.e. not including the step that broadcast it )
+          //
+	  game.step.game++;
 
           games.push(game);
 

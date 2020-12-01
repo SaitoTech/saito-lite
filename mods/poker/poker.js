@@ -2620,7 +2620,13 @@ console.log("H: " + h);
               <option value="1000" selected="selected">1000</option>
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
-      </select>
+            </select>
+
+            <label for="observer_mode">Observer Mode:</label>
+            <select name="observer">
+              <option value="enable" selected>enable</option>
+              <option value="disable">disable</option>
+            </select>
 
       <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 

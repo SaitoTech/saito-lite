@@ -78,6 +78,7 @@ class Wordblocks extends GameTemplate {
 
 
   showTiles() {
+
     if (this.game.deck.length == 0) {
       return;
     }
@@ -85,7 +86,10 @@ class Wordblocks extends GameTemplate {
     let html = "";
 
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-      html += this.returnTileHTML(this.game.deck[0].cards[this.game.deck[0].hand[i]].name);
+        let thiscard = this.game.deck[0].cards[this.game.deck[0].hand[i]];
+        if (thiscard != undefined) {
+          html += this.returnTileHTML(thiscard);
+        }
     }
 
     $('.tiles').html(html);
@@ -124,6 +128,9 @@ class Wordblocks extends GameTemplate {
   }
 
   initializeGame(game_id) {
+
+    // OBSERVER MODE
+    if (this.game.player == 0) { return; }
 
     this.updateStatus("loading game...");
     this.loadGame(game_id);
@@ -208,11 +215,6 @@ class Wordblocks extends GameTemplate {
     if (this.game.initializing == 1) { return; }
 
 
-
-
-
-
-
     resizeBoard = function resizeBoard(app) {}
     responsive = function responsive() {};
 
@@ -268,7 +270,9 @@ class Wordblocks extends GameTemplate {
     }
 
     if (this.browser_active == 1) {
-      $('.score').html(html);
+      try {
+        $('.score').html(html);
+      } catch (err) {}
     }
 
     if (this.game.target == this.game.player) {
@@ -306,7 +310,9 @@ class Wordblocks extends GameTemplate {
         let letter = this.game.board[i].letter; // $(divname).html(this.returnTile(letter));
         this.addTile($(divname), letter);
         if (!(letter == "_") && !(letter == "")) {
-          $(divname).addClass("set");
+	  try {
+            $(divname).addClass("set");
+          } catch (err) {}
         }
       }
     }
@@ -331,41 +337,42 @@ class Wordblocks extends GameTemplate {
       this.addEventsToBoard();
     }
 
-    $('#shuffle').on('click', function () {
-      for (var i = $('#tiles').children.length; i >= 0; i--) {
-        $('#tiles')[0].appendChild($('#tiles')[0].childNodes[Math.random() * i | 0]);
-      }
-    });
-    $('#tiles').sortable();
-    $('#tiles').disableSelection();
-    $(window).resize(function () {
-      resizeBoard();
-    });
+    try {
 
-    var element = document.getElementById('gameboard');
+      $('#shuffle').on('click', function () {
+        for (var i = $('#tiles').children.length; i >= 0; i--) {
+          $('#tiles')[0].appendChild($('#tiles')[0].childNodes[Math.random() * i | 0]);
+        }
+      });
+      $('#tiles').sortable();
+      $('#tiles').disableSelection();
+      $(window).resize(function () {
+        resizeBoard();
+      });
 
-    if (element !== null) {
+      var element = document.getElementById('gameboard');
+  
+      $('#game_status').on('click', () => {
+        $('.log').hide();
+        if (this.app.browser.isMobileBrowser(navigator.userAgent) && window.matchMedia("(orientation: portrait)").matches || window.innerHeight > 700) {
+          $("#sizer").switchClass("fa-caret-up", "fa-caret-down");
+          $("#hud").switchClass("short", "tall", 150);
+        } else {
+          $("#sizer").switchClass("fa-caret-left", "fa-caret-right");
+          $("#hud").switchClass("narrow", "wide", 150);
+        }
 
-    }
+        $('.hud_menu_overlay').hide();
+        $('.status').show();
+      });
 
-    $('#game_status').on('click', () => {
-      $('.log').hide();
-      if (this.app.browser.isMobileBrowser(navigator.userAgent) && window.matchMedia("(orientation: portrait)").matches || window.innerHeight > 700) {
-        $("#sizer").switchClass("fa-caret-up", "fa-caret-down");
-        $("#hud").switchClass("short", "tall", 150);
-      } else {
-        $("#sizer").switchClass("fa-caret-left", "fa-caret-right");
-        $("#hud").switchClass("narrow", "wide", 150);
-      }
-
-      $('.hud_menu_overlay').hide();
-      $('.status').show();
-    });
+    } catch (err) {}
 
   }
 
 
   updateStatusWithTiles(status) {
+    try {
     let tile_html = '';
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
       tile_html += this.returnTileHTML(this.game.deck[0].cards[this.game.deck[0].hand[i]].name);
@@ -390,10 +397,11 @@ class Wordblocks extends GameTemplate {
         </div>
         <div class="score" id="score">loading...</div>
       </div
-    `
-    $('.status').html(html);
+    `;
+    this.updateStatus(html);
     this.calculateScore();
     this.enableEvents();
+    } catch (err) {}
   }
 
 
@@ -451,7 +459,9 @@ class Wordblocks extends GameTemplate {
   returnTileHTML(letter) {
     let html = "";
     let letterScore = this.returnLetters();
-    html = '<div class="tile ' + letter + ' sc'+ letterScore[letter].score + '">' + letter + '</div>';
+    if (letterScore[letter]) {
+      html = '<div class="tile ' + letter + ' sc'+ letterScore[letter].score + '">' + letter + '</div>';
+    }
     return html;
   }
 
@@ -482,6 +492,9 @@ class Wordblocks extends GameTemplate {
   async addEventsToBoard() {
     if (this.browser_active == 0) { return; }
     let wordblocks_self = this;
+
+    try {
+
     $('.tosstiles').off();
     $('.tosstiles').on('click', async function () {
       tiles = await sprompt("Which tiles do you want to discard? Tossed tiles count against your score:");
@@ -659,6 +672,8 @@ class Wordblocks extends GameTemplate {
     $('#tiles').sortable();
     $('#tiles').disableSelection();
     //$(window).resize(function () { resizeBoard(); });
+
+    } catch (err) {}
   }
 
 
@@ -1689,6 +1704,13 @@ class Wordblocks extends GameTemplate {
             <option value="fise">Spanish: FISE</option>
             <option value="tagalog">Tagalog</option>
           </select>
+
+          <label for="observer_mode">Observer Mode:</label>
+          <select name="observer">
+            <option value="enable" selected>enable</option>
+            <option value="disable">disable</option>
+          </select>
+
 
           <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 

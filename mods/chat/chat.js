@@ -1,9 +1,9 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailChat = require('./lib/email-chat/email-chat');
+const ChatMain = require('./lib/chat-main/chat-main');
+const SaitoHeader = require('./../../lib/saito/ui/saito-header/saito-header');
 
-const AddressController = require('../../lib/ui/menu/address-controller');
-const helpers = require('../../lib/helpers/index');
 
 class Chat extends ModTemplate {
 
@@ -14,14 +14,13 @@ class Chat extends ModTemplate {
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
 
+    this.header = new SaitoHeader(app, this);
+
+    this.renderMethod = "main";
     this.relay_moves_onchain_if_possible = 1;
 
-    // legacy requires purging
-    this.addrController = new AddressController(app);
-    this.helpers = helpers;
-
-
   }
+
 
   receiveEvent(type, data) {
 
@@ -77,7 +76,18 @@ class Chat extends ModTemplate {
 
 
 
+  initializeHTML(app) {
 
+    if (this.renderMethod == "main") {
+
+      this.header.render(app, this);
+      this.header.attachEvents(app, this);
+
+      ChatMain.render(app, this);
+      ChatMain.attachEvents(app, this);
+    }
+
+  }
 
 
   initialize(app) {
@@ -169,6 +179,12 @@ class Chat extends ModTemplate {
 
     this.sendEvent('chat-render-request', {});
     this.sendEvent('chat-render-box-request', {});
+
+
+    if (this.renderMethod == "main") {
+      ChatMain.render(app, this);
+      ChatMain.attachEvents(app, this);
+    }
 
     this.saveChat();
   }
