@@ -61,13 +61,6 @@ class Poker extends GameTemplate {
         maxPlayers: this.maxPlayers,
       }
     }
-    if (type == "make-invite-description") {
-      return {
-        makeDescription: (txMsg) => {
-          return "Hold 'em";
-        }    
-      }
-    }
     return null;
 
   }
