@@ -11,16 +11,11 @@ module.exports = ChatSidebar = {
 
       if (!document.querySelector('.chat-header')) { app.browser.addElementToDom(ChatSidebarTemplate(), "email-chat" ); } 
 
-console.log("GROUPS: " + JSON.stringify(mod.groups));
-
       for (let i = 0; i < mod.groups.length; i++) {
-console.log("i: " + i);
         if (!document.getElementById(mod.groups[i].id)) { 
-console.log("adding to dom " + mod.groups[i].id);
 	  app.browser.addElementToDom(ChatSidebarContactTemplate(app, mod.groups[i]), "chat-list" );
 	}
       }
-console.log("done rendering!");
 
     },
 

@@ -10,8 +10,6 @@ module.exports = ChatSidebarContactTemplate = (app, group) => {
     message = group.messages[group.messages.length-1];
   }
 
-console.log("A 1");
-
   if (message) {
     if (message.message) {
       ts = message.timestamp;
@@ -25,11 +23,7 @@ console.log("A 1");
     }
   }
 
-console.log("A 2");
-
   let datetime = app.browser.formatDate(ts);
-
-console.log("A 3");
 
   return `
     <div id="${group.id}" class="chat-row">

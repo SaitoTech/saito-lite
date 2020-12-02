@@ -30,6 +30,7 @@ module.exports = ChatBox = {
         let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
 
         chat_self.message_blocks = chat_self.createMessageBlocks(app, mod, group.messages);
+
         if (chat_self.message_blocks.length == 0) {
           chat_box_main.innerHTML = 
             `<p id="chat-box-default-message-${group.id}" style="text-align:center">
@@ -40,10 +41,15 @@ module.exports = ChatBox = {
         }
 
         chat_self.message_blocks.forEach(message_block => {
-          message_block = Object.assign({}, message_block, {
-            type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
-          });
-          chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);
+          if (!document.getElementById(message_block.sig)) {
+            message_block = Object.assign({}, message_block, {
+              type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
+            });
+	    let new_html = ChatBoxMessageBlockTemplate(message_block, mod);
+            if (new_html != "") {
+	      chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);
+	    }
+	  }
         });
 
         chat_self.scrollToBottom(group.id);

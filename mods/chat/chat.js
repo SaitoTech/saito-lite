@@ -296,48 +296,34 @@ console.log("RENDER MODE: " + this.renderMode);
       }
     } catch (err) {
     }
-console.log("HERE WE ARE1");
-    if (chat_on_page == 0 && this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
-      let default_chat = this.returnDefaultChat();
-      let message2 = JSON.parse(JSON.stringify(txmsg));
-      message2.group_id = default_chat.id;
-      message2.sig = this.app.crypto.hash(tx.transaction.sig);
-      message2.identicon = this.app.keys.returnIdenticon();
-      message2.type = "others";
-      message2.message = this.app.crypto.stringToBase64("<i>you have received a private message</i>");
-      default_chat.messages.push(message2);
-      this.sendEvent('chat_receive_message', message2);
-    } else {
-      this.openChatBox(txmsg.group_id);
-    }
 
-console.log("HERE WE ARE2");
+console.log("MESSAGE RECEIVED: is chat showing? " + chat_on_page);
+
+    if (chat_on_page == 0) {
+      if (this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
+        this.openChatBox(txmsg.group_id);
+        this.sendEvent('chat_receive_message', message2);
+      }
+    }
 
     this.groups.forEach(group => {
 
       try {
 
-console.log("looping in groups! 1");
-
         if (group.id == txmsg.group_id) {
-console.log("looping in groups! 2");
 
           let from_add = tx.transaction.from[0].add;
           let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-console.log("looping in groups! 3");
 
           app.browser.addIdentifiersToDom([from_add]);
-console.log("looping in groups! 4");
           let message = Object.assign(txmsg, {
             sig: tx.transaction.sig,
             type: msg_type,
             identicon: this.app.keys.returnIdenticon()
           });
-console.log("HERE WE ARE3");
 
           group.messages.push(message);
 
-console.log("looping in groups! 342");
           if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
             let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
             let title =  identifier ? identifier : message.publickey;
@@ -347,18 +333,11 @@ console.log("looping in groups! 342");
             app.browser.sendNotification(title, clean_message, 'chat-message-notification');
             this.sendEvent('chat_receive_message', message);
           }
-console.log("HERE WE ARE4");
 
           this.sendEvent('chat-render-request', {});
 
-console.log("HERE WE ARE5");
-
         }
-
-console.log("HERE WE ARE5");
-
       } catch (err) {
-console.log("TESTING HERE AND GOT ERROR: " + err);
       }
 
     });
