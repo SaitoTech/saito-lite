@@ -28,7 +28,7 @@ module.exports = ArcadeObserveTemplate = (app, mod, msg, idx, msgjson) => {
         </div>
         <div class="gameShortDescription">${makeDescription(app, msg)}</div>
 	<div class="gameButtons">
-          <button data-sig="${msg.game_id}" data-cmd="watch" class="button invite-tile-button">WATCH</button>
+          <button data-sig="${msg.game_id}" data-gameobj="${msgjson}" data-cmd="watch" class="button observe-game-btn">WATCH</button>
         </div>
       </div>
     </div>

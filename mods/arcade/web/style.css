@@ -33,8 +33,7 @@ a {
 }
 
 .arcade-container {
-  height: 100%;
-  margin: 5em auto;
+  margin: 0 auto;
   padding: 0 1em;
   display: grid;
   gap: 1em;
@@ -42,6 +41,8 @@ a {
   font-size: 1em;
   width: 100vw;
   max-width: var(--saito-width);
+  position: relative;
+  top: 5em;
 }
 
 .arcade-sidebar {
@@ -1053,6 +1054,9 @@ a {
     margin: 25%;
   }
   @media only screen and (max-width: 1000px) {
+    .arcade-container {
+      padding: 0;
+    }
     .game-inset-img {
       display: none;
     }
@@ -1078,12 +1082,30 @@ a {
       width: 100%;
       max-height: calc(100vh - 7em);
     }
+    .arcade-sidebar::after {
+      content: "›";
+      position: absolute;
+      right: -32px;
+      font-size: 3em;
+      border-radius: 0 30px 30px 0;
+      width: 25px;
+      height: 1em;
+      letter-spacing: 43px;
+      font-weight: bolder;
+      background: #000a;
+      line-height: 1.2em;
+      margin: 0.5em 0 0 0;
+      transition: ease 1s all;
+      z-index: 9;
+      padding-left: 7px;
+      cursor: ew-resize;
+    }
+    .arcade-sidebar:hover::after {
+      opacity: 0;
+    }
   }
   @media only screen and (max-width: 600px) {
-    .arcade-container {
-      padding: 0;
-    }
-    .arcade-tile {
+        .arcade-tile {
       min-height: 10em;
     }
     .invite-tile-wrapper {
@@ -1102,25 +1124,5 @@ a {
     }
     .game-wizard-controls {
       grid-template-columns: auto;
-    }
-    .arcade-sidebar::after {
-      content: "›";
-      position: absolute;
-      right: -32px;
-      font-size: 3em;
-      border-radius: 0 30px 30px 0;
-      width: 25px;
-      height: 1em;
-      letter-spacing: 43px;
-      font-weight: bolder;
-      background: #000a;
-      line-height: 1.2em;
-      margin: 0.5em 0 0 0;
-      transition: ease 1s all;
-      z-index: 9;
-      padding-left: 7px;
-    }
-    .arcade-sidebar:hover::after {
-      opacity: 0;
     }
   }
