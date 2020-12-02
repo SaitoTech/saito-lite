@@ -117,8 +117,6 @@ class Email extends ModTemplate {
     return selected_email;
   }
   rerender(app) {
-    // usage: buildHashAndPreserve("#foo=1&bar=2","#foo=3&bar=4","bar") --> "#foo=1&bar=4"
-    // or more commonly: buildHashAndPreserve("#foo=1&bar=2","#XXXXXXXXXXXXXX&baz=5","baz") --> "#foo=1&bar=2&baz=5"
     let page = app.browser.parseHash(window.location.hash).page;
     if(page) {
       let subPage = app.browser.parseHash(window.location.hash).subpage;

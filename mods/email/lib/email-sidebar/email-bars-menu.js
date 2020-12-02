@@ -33,7 +33,8 @@ module.exports = EmailBarsMenu = {
       // These IDs are also present but I guess they serve no functional purpose:
       // email-nav-inbox email-nav-sent email-nav-trash email-apps crypto-apps
       emailBarsMenuInnerHTML = emailBarsMenuInnerHTML.replaceAll("email-nav-", "mobile-email-nav-");
-      app.browser.addElementToDom(`<div id="mobile" class="email-bars-menu" style="display:none;">${emailBarsMenuInnerHTML}</div>`)
+      
+      app.browser.addElementToDom(`<div id="mobile" class="email-bars-menu" style="display:none;"><button class="super" id="mobile-email-compose-btn">SEND</button>${emailBarsMenuInnerHTML}</div>`)
     }
     
   },
