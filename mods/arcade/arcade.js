@@ -194,12 +194,9 @@ class Arcade extends ModTemplate {
 
     ArcadeSidebar.render(app, this);
     ArcadeSidebar.attachEvents(app, this);
-
+ 
     ArcadeMain.render(app, this);
     ArcadeMain.attachEvents(app, this);
-
-    
-
 
    
     //
