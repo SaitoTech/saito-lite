@@ -35,7 +35,7 @@ module.exports = EmailHeader = {
         break;
     }
     
-    mod.updateBalance();
+    mod.rerenderBalance();
 
   },
 

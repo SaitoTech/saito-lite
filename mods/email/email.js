@@ -324,7 +324,7 @@ class Email extends ModTemplate {
     }, 1000);
   }
 
-  updateBalance() {
+  rerenderBalance() {
     let renderBalance = async () => {
       document.getElementById("email-token").innerHTML = " " + this.app.wallet.getPreferredCryptoTicker();
       document.getElementById("email-balance").innerHTML = "loading...";
