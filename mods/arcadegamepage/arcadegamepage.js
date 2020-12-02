@@ -79,9 +79,6 @@ class ArcadeGamePage extends ModTemplate {
   shouldAffixCallbackToModule(modname) {
   }
 
-  updateBalance() {
-  }
-
   updateIdentifier() {
   }
 

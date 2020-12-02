@@ -117,8 +117,6 @@ class Email extends ModTemplate {
     return selected_email;
   }
   rerender(app) {
-    // usage: buildHashAndPreserve("#foo=1&bar=2","#foo=3&bar=4","bar") --> "#foo=1&bar=4"
-    // or more commonly: buildHashAndPreserve("#foo=1&bar=2","#XXXXXXXXXXXXXX&baz=5","baz") --> "#foo=1&bar=2&baz=5"
     let page = app.browser.parseHash(window.location.hash).page;
     if(page) {
       let subPage = app.browser.parseHash(window.location.hash).subpage;
@@ -169,7 +167,7 @@ class Email extends ModTemplate {
       // set the hash to match the state we want and force a hashchange event
       let oldHash = window.location.hash;
       window.location.hash = `#`;
-      window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: ""});
+      window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: "0"});
     }
 
   }
@@ -237,7 +235,8 @@ class Email extends ModTemplate {
           keys.push(txs[i].transaction.from[0].add);
         }
       }
-      window.location.hash = app.browser.modifyHash(window.location.hash, {ready: "1"});
+      let readyCount = app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
+      window.location.hash = app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
       this.addrController.fetchIdentifiers(keys);
     });
 
@@ -289,22 +288,20 @@ class Email extends ModTemplate {
       if (addtx) {
         this.emails.inbox.unshift(tx);
         this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
-        this.rerender(this.app);
+        let readyCount = this.app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
+        window.location.hash = this.app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
       }
     } catch (err) {
       console.error(err);
     }
   }
-
-
-
+ 
   receiveEvent(type, data) {
     if (type == 'chat-render-request') {
       if (this.browser_active) {
         this.renderSidebar(this.app, this.uidata);
       }
     }
-
   }
 
   returnMenuItems() {
@@ -321,23 +318,28 @@ class Email extends ModTemplate {
   }
 
   getTokens() {
-
     let msg = {};
     msg.data = { address: this.app.wallet.returnPublicKey() };
     msg.request = 'get tokens';
     setTimeout(() => {
-      //console.log("sending request for funds...");
       this.app.network.sendRequest(msg.request, msg.data);
     }, 1000);
   }
 
-  updateBalance() {
-    if (this.browser_active) {
-      if (document.querySelector('.email-balance')) {
-        let balance = this.app.wallet.returnBalance();
-        document.querySelector('.email-balance').innerHTML = balance + " SAITO";
-      }
+  rerenderBalance() {
+    let renderBalance = async () => {
+      document.getElementById("email-token").innerHTML = " " + this.app.wallet.getPreferredCryptoTicker();
+      document.getElementById("email-balance").innerHTML = "loading...";
+      document.getElementById("email-balance").innerHTML = await this.app.wallet.getPreferredCryptoBalance();
     }
+    this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(renderBalance);
+    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(renderBalance);
+    this.app.wallet.subscribeToPreferredCryptoChangeEvent(() => {
+      this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(renderBalance);
+      this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(renderBalance);
+      renderBalance();
+    });
+    renderBalance();  
   }
 
 }

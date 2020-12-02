@@ -12,7 +12,6 @@ class Tutorial1 extends ModTemplate {
     // this.appify(this);
     this.initialize = this.onlyOnActiveBrowser(this.initialize.bind(this));
     this.initializeHTML = this.onlyOnActiveBrowser(this.initializeHTML.bind(this));
-    this.updateBalance = this.onlyOnActiveBrowser(this.updateBalance.bind(this));
     this.render = this.onlyOnActiveBrowser(this.render.bind(this));
     return this;
   }
@@ -29,11 +28,6 @@ class Tutorial1 extends ModTemplate {
 
   render(app) {
     document.querySelector("#content .main").innerHTML = makeHTML(this);
-  }
-
-  updateBalance(app) {
-    this.balance = app.wallet.returnBalance();
-    this.render(app);
   }
 }
 function addCss() {

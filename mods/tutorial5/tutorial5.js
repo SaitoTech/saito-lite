@@ -12,7 +12,10 @@ class Tutorial5 extends ModTemplate {
     this.balance         = null;
     this.serverkey       = null;
     this.default_html = 1;
-    this.appify(this);
+    
+    this.initialize = this.onlyOnActiveBrowser(this.initialize.bind(this));
+    this.initializeHTML = this.onlyOnActiveBrowser(this.initializeHTML.bind(this));
+    this.attachEvents = this.onlyOnActiveBrowser(this.attachEvents.bind(this));
     return this;
   }
 
@@ -48,11 +51,6 @@ class Tutorial5 extends ModTemplate {
       let amount = parseInt(document.getElementById("amount").value, 10);
       this.sendSaito(toAddress, amount, 2);
     };
-  }
-
-  updateBalance(app) {
-    this.balance = app.wallet.returnBalance();
-    this.render(app);
   }
 
   webServer(app, expressapp, express) {

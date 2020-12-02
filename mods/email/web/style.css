@@ -69,11 +69,6 @@ hr {
   border-bottom: 1px solid var(--saito-cyber-black);
 }
 
-.email-header-title {
-  font-family: visuelt-medium;
-  font-size: 1.2em;
-}
-
 .email-icons {
   display: grid;
   grid-auto-flow: column;
@@ -415,6 +410,9 @@ hr {
   input[type=checkbox] {
     margin: 0 0.65em;
   }
+  button.super {
+    padding: 0;
+  }
   .mobile-hide {
     display: none;
   }
@@ -448,8 +446,9 @@ hr {
   .email-header {
     grid-template-columns: 3em auto;
   }
-  .email-balance, .email-header-title {
+  .email-balance {
     font-size: 2em;
+    margin-right: 0.4em;
   }
   .email-balance.detail {
     display: none;
@@ -502,10 +501,11 @@ hr {
     position: absolute;
     z-index: 10000;
     top: 9em;
-    width: 100%;
     padding: 0 1em;
     background: white;
     font-family: visuelt-light;
+    display: block;
+    box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
   }
   .email-navigator, .email-apps {
     justify-content: left;

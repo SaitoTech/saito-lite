@@ -34,8 +34,8 @@ module.exports = EmailHeader = {
         // errors here are handled in email-body.js
         break;
     }
-
-    mod.updateBalance();
+    
+    mod.rerenderBalance();
 
   },
 

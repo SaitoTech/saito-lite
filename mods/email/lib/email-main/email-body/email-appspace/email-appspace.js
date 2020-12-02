@@ -10,7 +10,9 @@ module.exports = EmailAppspace = {
       let submod = app.modules.returnModule(subPage);
       let modobj = submod.respondTo("email-appspace");
       modobj.render(app, mod);
-      modobj.attachEvents(app, mod);
+      if (modobj.attachEvents) {
+        modobj.attachEvents(app, mod);
+      }
     } catch(error) {
       mod.locationErrorFallback(`Error fetching module.<br/>${error}`, error);
     }

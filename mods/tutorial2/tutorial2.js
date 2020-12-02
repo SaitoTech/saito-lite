@@ -9,7 +9,10 @@ class Tutorial2 extends ModTemplate {
     this.categories      = "Tutorials";
     this.default_html    = 1;
     this.balance         = null;
-    this.appify(this);
+    //this.appify(this);
+    this.initialize = this.onlyOnActiveBrowser(this.initialize.bind(this));
+    this.initializeHTML = this.onlyOnActiveBrowser(this.initializeHTML.bind(this));
+    this.attachEvents = this.onlyOnActiveBrowser(this.attachEvents.bind(this));
     return this;
   }
 
@@ -34,10 +37,10 @@ class Tutorial2 extends ModTemplate {
     };
   }
 
-  updateBalance(app) {
-    this.balance = app.wallet.returnBalance();
-    this.render(app);
-  }
+  // updateBalance(app) {
+  //   this.balance = app.wallet.returnBalance();
+  //   this.render(app);
+  // }
 
   webServer(app, expressapp, express) {
     super.webServer(app, expressapp, express);

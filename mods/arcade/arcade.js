@@ -182,7 +182,6 @@ class Arcade extends ModTemplate {
 
 
   async render(app) {
-
     if (!document.getElementById("arcade-container")) { 
       app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); 
     }
@@ -198,8 +197,6 @@ class Arcade extends ModTemplate {
  
     ArcadeMain.render(app, this);
     ArcadeMain.attachEvents(app, this);
-
-
 
    
     //
@@ -1697,9 +1694,6 @@ console.log(params);
       }
     }
     return 0;
-  }
-
-  updateBalance() {
   }
 
   updateIdentifier() {
