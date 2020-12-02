@@ -46,7 +46,7 @@ module.exports = ChatRoom = {
                 identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
             }); 
 
-            message.message = app.crypto.base64ToString(message.message);
+            //message.message = app.crypto.base64ToString(message.message);
 
             if (idx == 0) {
                 let new_message_block = Object.assign({}, {

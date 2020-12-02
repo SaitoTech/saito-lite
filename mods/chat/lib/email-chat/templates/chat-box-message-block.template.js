@@ -11,12 +11,12 @@ module.exports = ChatBoxMessageBlockTemplate = (message_block, mod) => {
   let messages_html = "";
   let sigs = [];
   messages.forEach(message => {
-     if (!sigs.includes(message.sig) && !document.getElementById(message.sig)) {
-       sigs.push(message.sig);
-       messages_html += ChatBoxMessageTemplate(message, mod);
-       messages_unknown++;
-     }
-   });
+    if (!sigs.includes(message.sig) && !document.getElementById(message.sig)) {
+      sigs.push(message.sig);
+      messages_html += ChatBoxMessageTemplate(message, mod);
+      messages_unknown++;
+    }
+  });
 
   if (messages_html === "") { return ''; }
 

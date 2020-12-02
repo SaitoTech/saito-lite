@@ -79,8 +79,6 @@ class Chat extends ModTemplate {
   //
   render(app) {
 
-console.log("RENDER MODE: " + this.renderMode);
-
     if (this.renderMode == "main") {
       ChatMain.render(app, this);
       ChatMain.attachEvents(app, this);
@@ -155,7 +153,6 @@ console.log("RENDER MODE: " + this.renderMode);
       }
     }
 
-
     //
     // create mastodon server
     //
@@ -210,9 +207,6 @@ console.log("RENDER MODE: " + this.renderMode);
 
 
 
-
-
-
   //
   // onchain messages --> receiveMessage()
   //
@@ -225,6 +219,7 @@ console.log("RENDER MODE: " + this.renderMode);
       }
     }
   }
+
 
   //
   // peer messages --< receiveMessage() 
@@ -276,7 +271,10 @@ console.log("RENDER MODE: " + this.renderMode);
     relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
   }
 
+
   receiveMessage(app, tx) {
+
+console.log("tx received!");
 
     let txmsg = tx.returnMessage();
 
@@ -286,6 +284,8 @@ console.log("RENDER MODE: " + this.renderMode);
         this.showAlert();
       }
     }
+
+console.log("RECEIVED AND DECRYPTED: " + JSON.stringify(txmsg));
 
     //
     // create msg object
@@ -319,16 +319,28 @@ console.log("MESSAGE RECEIVED: is chat showing? " + chat_on_page);
 
         if (group.id == txmsg.group_id) {
 
-          group.messages.push(message);
+console.log("WE HAVE FOUND THE CHAT GROUP!");
 
+	  //
+	  // only add if not from me, otherwise will be encrypted for others
+	  //
           if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
             let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
             let title =  identifier ? identifier : message.publickey;
-	    let clean_message = "";
-	    clean_message = this.app.crypto.base64ToString(message.message);
-	    clean_message = clean_message.replace(/<[^>]*>?/gm, '');
-            app.browser.sendNotification(title, clean_message, 'chat-message-notification');
-          }
+
+	    // clean message only used for alert
+	    //let clean_message = "";
+	    //clean_message = this.app.crypto.base64ToString(message.message);
+	    //clean_message = clean_message.replace(/<[^>]*>?/gm, '');
+	    //if (clean_message != "") { message.message = clean_message; }
+
+            app.browser.sendNotification(title, message, 'chat-message-notification');
+
+console.log("PUSHING BACK: " + JSON.stringify(message));
+            group.messages.push(message);
+         }
+
+
         }
       } catch (err) {
 console.log("ERROR 113234: chat error receiving message: " + err);
@@ -343,6 +355,7 @@ console.log("ERROR 113234: chat error receiving message: " + err);
       }
     }
 
+console.log("announcing: " +JSON.stringify(message));
     this.sendEvent('chat_receive_message', message);
 
   }
