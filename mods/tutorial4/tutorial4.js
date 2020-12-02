@@ -17,7 +17,6 @@ class Tutorial4 extends ModTemplate {
     
     //this.initialize = this.onlyOnActiveBrowser(this.initialize.bind(this));
     this.initializeHTML = this.onlyOnActiveBrowser(this.initializeHTML.bind(this));
-    this.updateBalance = this.onlyOnActiveBrowser(this.updateBalance.bind(this));
     this.render = this.onlyOnActiveBrowser(this.render.bind(this));
     this.write = this.onlyOnServer(this.write.bind(this));
     this.readTxId = this.onlyOnServer(this.readTxId.bind(this));
@@ -52,11 +51,6 @@ class Tutorial4 extends ModTemplate {
        console.log(err)
      });
     };
-  }
-
-  updateBalance(app) {
-    this.balance = app.wallet.returnBalance();
-    this.render(app);
   }
 
   async onConfirmation(blk, tx, confnum, app) {

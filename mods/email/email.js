@@ -167,7 +167,7 @@ class Email extends ModTemplate {
       // set the hash to match the state we want and force a hashchange event
       let oldHash = window.location.hash;
       window.location.hash = `#`;
-      window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: ""});
+      window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: "0"});
     }
 
   }
@@ -235,7 +235,8 @@ class Email extends ModTemplate {
           keys.push(txs[i].transaction.from[0].add);
         }
       }
-      window.location.hash = app.browser.modifyHash(window.location.hash, {ready: "1"});
+      let readyCount = app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
+      window.location.hash = app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
       this.addrController.fetchIdentifiers(keys);
     });
 
@@ -287,7 +288,8 @@ class Email extends ModTemplate {
       if (addtx) {
         this.emails.inbox.unshift(tx);
         this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
-        this.rerender(this.app);
+        let readyCount = app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
+        window.location.hash = app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
       }
     } catch (err) {
       console.error(err);
@@ -330,8 +332,10 @@ class Email extends ModTemplate {
       document.getElementById("email-balance").innerHTML = "loading...";
       document.getElementById("email-balance").innerHTML = await this.app.wallet.getPreferredCryptoBalance();
     }
+    this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(renderBalance);
     this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(renderBalance);
     this.app.wallet.subscribeToPreferredCryptoChangeEvent(() => {
+      this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(renderBalance);
       this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(renderBalance);
       renderBalance();
     });
