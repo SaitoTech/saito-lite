@@ -7,7 +7,7 @@ module.exports = EmailList = {
     render(app, mod) {
       document.querySelector('.email-body').innerHTML = EmailListTemplate();
       let inbox_emails;
-      let ready = app.browser.parseHash(window.location.hash).ready;  try {
+      try {
         let subPage = app.browser.parseHash(window.location.hash).subpage;
         inbox_emails = mod.emails[subPage]; //.reverse();  
       } catch(error) {
