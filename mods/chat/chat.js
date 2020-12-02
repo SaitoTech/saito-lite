@@ -300,7 +300,7 @@ class Chat extends ModTemplate {
           let from_add = tx.transaction.from[0].add;
           let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
 
-          this.addrController.fetchIdentifiers([from_add]);
+          app.browser.addIdentifiersToDom([from_add]);
           let message = Object.assign(txmsg, {
             sig: tx.transaction.sig,
             type: msg_type,

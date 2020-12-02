@@ -229,7 +229,7 @@ module.exports = ChatBox = {
       try {
         if (document.getElementById(msg.sig)) { return };
         let message = Object.assign({}, msg, {
-          keyHTML: mod.addrController.returnAddressHTML(msg.publickey),
+          keyHTML: app.browser.returnAddressHTML(msg.publickey),
           identicon: app.keys.returnIdenticon(msg.publickey),
           identicon_color: app.keys.returnIdenticonColor(msg.publickey),
         });
@@ -310,7 +310,7 @@ module.exports = ChatBox = {
 
       while (idx < messages.length) {
         let message = Object.assign({}, messages[idx], {
-          keyHTML: mod.addrController.returnAddressHTML(messages[idx].publickey),
+          keyHTML: app.browser.returnAddressHTML(messages[idx].publickey),
           identicon: app.keys.returnIdenticon(messages[idx].publickey),
           identicon_color: app.keys.returnIdenticonColor(messages[idx].publickey),
         });
