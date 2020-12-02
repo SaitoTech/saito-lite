@@ -977,6 +977,7 @@ div#message-wrapper {
   bottom: 1em;
   left: 1em;
   color: #FFF;
+  z-index: 200;
 }
 
 .promptval {

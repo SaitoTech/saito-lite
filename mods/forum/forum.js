@@ -637,7 +637,7 @@ if (post_ids.length > 0) {
           //
           // fetch identifiers
           //
-          forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+          forum_self.app.browser.addIdentifiersToDom(identifiers_to_fetch);
 
         }
       }

@@ -31,6 +31,11 @@ class Chat extends ModTemplate {
         this.addNewGroup(newgroup);
         this.sendEvent('chat-render-request', {});
         this.saveChat();
+
+	//
+	//
+	//
+	this.render(app);
       }
     }
 
@@ -72,6 +77,17 @@ class Chat extends ModTemplate {
   //
   render(app) {
     console.log("RENDERING MAIN CHAT IN SIDEBAR AND STUFF!");
+
+    if (this.renderMode == "main") {
+      ChatMain.render(app, this);
+      ChatMain.attachEvents(app, this);
+    }
+
+    if (this.renderMode == "email") {
+      EmailChat.render(app, this);
+      EmailChat.attachEvents(app, this);
+    }
+
   }
 
 
@@ -289,6 +305,9 @@ class Chat extends ModTemplate {
       message2.message = this.app.crypto.stringToBase64("<i>you have received a private message</i>");
       default_chat.messages.push(message2);
       this.sendEvent('chat_receive_message', message2);
+    } else {
+alert("You have received a chat message!");
+      this.openChatBox(txmsg.group_id);
     }
 
     this.groups.forEach(group => {
