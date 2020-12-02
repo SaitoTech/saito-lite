@@ -25,9 +25,11 @@ class Chat extends ModTemplate {
   receiveEvent(type, data) {
 
     if (type === "encrypt-key-exchange-confirm") {
+
       if (data.members === undefined) { return; }
       let newgroup = this.createChatGroup(data.members);
       if (newgroup) {
+
         this.addNewGroup(newgroup);
         this.sendEvent('chat-render-request', {});
         this.saveChat();
@@ -286,6 +288,18 @@ console.log("RENDER MODE: " + this.renderMode);
     }
 
     //
+    // create msg object
+    //
+    let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+    app.browser.addIdentifiersToDom([tx.transaction.from[0].add]);
+    let message = Object.assign(txmsg, {
+      sig: tx.transaction.sig,
+      type: msg_type,
+      identicon: this.app.keys.returnIdenticon()
+    });
+
+
+    //
     // notify group chat if not-on-page
     //
     let chat_on_page = 1;
@@ -299,28 +313,11 @@ console.log("RENDER MODE: " + this.renderMode);
 
 console.log("MESSAGE RECEIVED: is chat showing? " + chat_on_page);
 
-    if (chat_on_page == 0) {
-      if (this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
-        this.openChatBox(txmsg.group_id);
-        this.sendEvent('chat_receive_message', message2);
-      }
-    }
-
     this.groups.forEach(group => {
 
       try {
 
         if (group.id == txmsg.group_id) {
-
-          let from_add = tx.transaction.from[0].add;
-          let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-
-          app.browser.addIdentifiersToDom([from_add]);
-          let message = Object.assign(txmsg, {
-            sig: tx.transaction.sig,
-            type: msg_type,
-            identicon: this.app.keys.returnIdenticon()
-          });
 
           group.messages.push(message);
 
@@ -331,16 +328,23 @@ console.log("MESSAGE RECEIVED: is chat showing? " + chat_on_page);
 	    clean_message = this.app.crypto.base64ToString(message.message);
 	    clean_message = clean_message.replace(/<[^>]*>?/gm, '');
             app.browser.sendNotification(title, clean_message, 'chat-message-notification');
-            this.sendEvent('chat_receive_message', message);
           }
-
-          this.sendEvent('chat-render-request', {});
-
         }
       } catch (err) {
+console.log("ERROR 113234: chat error receiving message: " + err);
       }
 
     });
+
+
+    if (chat_on_page == 0) {
+      if (this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
+        this.openChatBox(txmsg.group_id);
+      }
+    }
+
+    this.sendEvent('chat_receive_message', message);
+
   }
 
 
@@ -383,8 +387,9 @@ console.log("MESSAGE RECEIVED: is chat showing? " + chat_on_page);
       }
     }
 
-  }
+    this.render(this.app);
 
+  }
 
 
   ///////////////////
