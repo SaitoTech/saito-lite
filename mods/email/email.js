@@ -295,16 +295,13 @@ class Email extends ModTemplate {
       console.error(err);
     }
   }
-
-
-
+ 
   receiveEvent(type, data) {
     if (type == 'chat-render-request') {
       if (this.browser_active) {
         this.renderSidebar(this.app, this.uidata);
       }
     }
-
   }
 
   returnMenuItems() {
@@ -321,23 +318,26 @@ class Email extends ModTemplate {
   }
 
   getTokens() {
-
     let msg = {};
     msg.data = { address: this.app.wallet.returnPublicKey() };
     msg.request = 'get tokens';
     setTimeout(() => {
-      //console.log("sending request for funds...");
       this.app.network.sendRequest(msg.request, msg.data);
     }, 1000);
   }
 
   updateBalance() {
-    if (this.browser_active) {
-      if (document.querySelector('.email-balance')) {
-        let balance = this.app.wallet.returnBalance();
-        document.querySelector('.email-balance').innerHTML = balance + " SAITO";
-      }
+    let renderBalance = async () => {
+      document.getElementById("email-token").innerHTML = " " + this.app.wallet.getPreferredCryptoTicker();
+      document.getElementById("email-balance").innerHTML = "loading...";
+      document.getElementById("email-balance").innerHTML = await this.app.wallet.getPreferredCryptoBalance();
     }
+    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(renderBalance);
+    this.app.wallet.subscribeToPreferredCryptoChangeEvent(() => {
+      this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(renderBalance);
+      renderBalance();
+    });
+    renderBalance();  
   }
 
 }

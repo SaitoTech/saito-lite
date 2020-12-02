@@ -18,9 +18,11 @@ module.exports = EmailBarsMenu = {
     }
     
     app.wallet.getSupportedCryptos().forEach(async(responseInterface, i) => {
-      app.browser.addElementToDom(`<li id="email-nav-${responseInterface.name}" class="crypto-apps-item">
-        ${responseInterface.ticker}
-      </li>`, "crypto-apps");
+      if(responseInterface.name !== "SaitoCrypto") {
+        app.browser.addElementToDom(`<li id="email-nav-${responseInterface.name}" class="crypto-apps-item">
+          ${responseInterface.ticker}
+        </li>`, "crypto-apps");  
+      }
     });
     // copy the content of .email-bars-menu into #mobile.email-bars-menu
     // ############### TODO #############
