@@ -33,8 +33,7 @@ a {
 }
 
 .arcade-container {
-  height: 100%;
-  margin: 5em auto;
+  margin: 0 auto;
   padding: 0 1em;
   display: grid;
   gap: 1em;
@@ -42,6 +41,8 @@ a {
   font-size: 1em;
   width: 100vw;
   max-width: var(--saito-width);
+  position: relative;
+  top: 5em;
 }
 
 .arcade-sidebar {
