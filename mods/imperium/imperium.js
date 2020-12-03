@@ -8963,21 +8963,15 @@ try {
 
             if (community_menu_added == 0) {
               this.menu.addSubMenuOption("game-chat", {
-                text : "Community",
-                id : "game-chat-community",
-                class : "game-chat-community",
+                text : name,
+                id : "game-chat-"+(ii+1),
+                class : "game-chat-"+(ii+1),
                 callback : function(app, game_mod) {
                   game_mod.menu.hideSubMenus();
-                  // load the chat window
-                  let newgroup = chatmod.returnDefaultChat();
-                  if (newgroup) {
-                    chatmod.addNewGroup(newgroup);
-                    chatmod.sendEvent('chat-render-request', {});
-                    chatmod.openChatBox(newgroup.id);
-                  } else {
-                    chatmod.sendEvent('chat-render-request', {});
-                    chatmod.openChatBox(newgroup.id);
-                  }
+                  chatmod.createChatGroup(members, name);
+                  chatmod.openChatBox(gid);
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.saveChat();
                 }
               });
               community_menu_added = 1;
@@ -8996,19 +8990,13 @@ try {
               class : "game-chat-"+(ii+1),
               callback : function(app, game_mod) {
                 game_mod.menu.hideSubMenus();
-                // load the chat window
-                let newgroup = chatmod.createChatGroup(members);
-                if (newgroup) {
-                  chatmod.addNewGroup(newgroup);
-                  chatmod.sendEvent('chat-render-request', {});
-                  chatmod.saveChat();
-                  chatmod.openChatBox(newgroup.id);
-                } else {
-                  chatmod.sendEvent('chat-render-request', {});
-                  chatmod.openChatBox(gid);
-                }
+                chatmod.createChatGroup(members, name);
+                chatmod.openChatBox(gid);
+                chatmod.sendEvent('chat-render-request', {});
+                chatmod.saveChat();
               }
             });
+
           }
         }
       }
