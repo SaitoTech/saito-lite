@@ -1017,6 +1017,10 @@ button:focus {
 }
 
 @media only screen and (max-width: 800px) {
+  .project-components {
+    gap: 1em;
+    grid-template-columns: 1fr;
+  }
   .mobile {
     display: block;
   }
