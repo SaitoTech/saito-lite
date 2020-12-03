@@ -13,18 +13,27 @@ module.exports = ChatBox = {
 
       document.querySelectorAll(".chat-box").forEach(box => {    
 
+console.log("1");
+
         let group_id = box.getAttribute("data-id");
 
         let idx = -1;
         for (let i = 0; i < mod.groups.length; i++) { if (mod.groups[i].id == group_id) { idx = i; } }
         if (idx == -1) { alert("could not find chat group..."); return; }
 
+console.log("2");
+
         if (mod.groups[idx].txs.length == 0) {
           let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
           chat_box_main.innerHTML = `<p id="chat-box-default-message-${group.id}" style="text-align:center">No messages in this group :(</p>`;
         }
 
+console.log("3");
 	let message_blocks = chat_self.createMessageBlocks(app, mod, mod.groups[idx]);
+
+console.log("-----------");
+console.log(JSON.stringify(message_blocks));
+console.log("-----------");
 
 	let html = "";
         for (let i = 0; i < message_blocks.length; i++) {
@@ -32,7 +41,6 @@ module.exports = ChatBox = {
 	}
 
         chat_self.scrollToBottom(group.id);
-
      });
 
     },
@@ -40,16 +48,20 @@ module.exports = ChatBox = {
 
     attachEvents(app, mod) {
 
+/***
       let chat_self = this;
 
+console.log("HERE WE ARE 1");
       //
       // foreach chat box
       //
       document.querySelectorAll(".chat-box").forEach(box => {    
 
-        let group_id = box.id.split('chat-box-')[1];
+        let group_id = box.getAttribute("data-id");
         let group = null;
         let msg_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
+
+alert("This is the test!");
 
         //
         // paste image into comment-box
@@ -69,7 +81,7 @@ module.exports = ChatBox = {
 
         });
 
-
+console.log("HERE WE ARE 2");
         //
         // submit on enter
         //
@@ -92,7 +104,7 @@ module.exports = ChatBox = {
           }
         });
       });
-
+console.log("HERE WE ARE 3");
 
 
       //
@@ -121,6 +133,7 @@ module.exports = ChatBox = {
 
 	};
       });
+console.log("HERE WE ARE 4");
 
 
       //
@@ -135,6 +148,7 @@ module.exports = ChatBox = {
         };
       });
 
+console.log("HERE WE ARE 5");
 
       //
       // close chat window
@@ -147,6 +161,8 @@ module.exports = ChatBox = {
           chat_box.parentNode.removeChild(chat_box);
         };
       });
+
+console.log("HERE WE ARE 6");
 
 
       //
@@ -189,11 +205,13 @@ module.exports = ChatBox = {
 	});
       });
 
+***/
 
 
     },
 
     showChatBox(app, mod, group) {
+alert("Show Chat Box!");
       if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
       this.attachEvents(app, mod);
     },
@@ -329,9 +347,10 @@ module.exports = ChatBox = {
             last_message_sender = txs[idx].transaction.from[0].add;
 	  }
 	}
+	idx++;
       }
 
-      blocks.push(message);
+      blocks.push(block);
 
       return blocks;
 

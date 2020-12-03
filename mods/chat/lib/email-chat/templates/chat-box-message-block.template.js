@@ -1,7 +1,7 @@
 const ChatBoxMessageTemplate = require('./chat-box-message.template');
 const emoji = require('node-emoji');
 
-module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_blocks) => {
+module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) => {
 
   //
   // the message_block is just an array of transactions that have
@@ -11,44 +11,36 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_blocks)
   let address = "";
   let identicon = "";
   let identicon_color = "";
+  let type = "others";
+  let last_message_timestamp = new Date().getTime();
 
-  group.members.length == 2) {
-    address = members[0] != this.app.wallet.returnPublicKey() ? members[0] : members[1];
+  //
+  // key data
+  //
+  if (group.members.length == 2) {
+    address = group.members[0] != this.app.wallet.returnPublicKey() ? group.members[0] : group.members[1];
   } else {
     address = "Group " + id.substring(0, 10);
   }
-  identicon = this.app.keys.returnIdenticon(address);
+  identicon = app.keys.returnIdenticon(address);
+  identicon_color = app.keys.returnIdenticonColor(address),
+  keyHTML = app.browser.returnAddressHTML(address);
 
-
-cahat_self.message_blocks.forEach(message_block => {
-          if (!document.getElementById(message_block.sig)) { 
-            message_block = Object.assign({}, message_block, {
-              type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
-            }); 
-            if (new_html != "") {
-              chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);
-            }
-          }
-        });
-        
-
-
-  let { identicon, identicon_color, messages, publickey, keyHTML, last_message_timestamp, type } = message_block;
-
-  let datetime = mod.app.browser.formatDate(last_message_timestamp);
-
-  let messages_unknown = 0;
-  let messages_html = "";
-  let sigs = [];
-  messages.forEach(message => {
-    if (!sigs.includes(message.sig) && !document.getElementById(message.sig)) {
-      sigs.push(message.sig);
-      messages_html += ChatBoxMessageTemplate(message, mod);
-      messages_unknown++;
+  //
+  // generate internal messages
+  //
+  for (let i = 0; i < message_block.length; i++) {
+    let tx = message_block[i];
+    if (type == "others") {
+      if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
+	type = "myself";
+      }
     }
-  });
-
-  if (messages_html === "") { return ''; }
+    let txmsg = tx.returnMessage();
+    messages_html += ChatBoxMessageTemplate(app, mod, txmsg.msg);
+    last_message_timestamp = tx.transaction.ts;
+  }
+  let datetime = mod.app.browser.formatDate(last_message_timestamp);
 
   return `
     <div class="chat-message-set chat-message-set-${type}" id="chat-message-set-${publickey}-${last_message_timestamp}">

@@ -11,7 +11,7 @@ module.exports = EmailChat = {
       ChatSidebar.attachEvents(app, mod);
 
       ChatBox.render(app, mod);
-      ChatBox.attachEvents(app, mod);
+//      ChatBox.attachEvents(app, mod);
 
     },
 
