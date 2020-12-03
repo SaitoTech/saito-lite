@@ -14,6 +14,7 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
   let last_message_timestamp = new Date().getTime();
   let type = "others";
   let first_comment_sig = "";
+  let comments_to_add = 0;
 
   //
   // key data
@@ -41,6 +42,7 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
   //
   // generate internal messages
   //
+  let sigs = [];
   let messages_html = "";
   for (let i = 0; i < message_block.length; i++) {
     let tx = message_block[i];
@@ -54,17 +56,21 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
     }
     let txmsg = tx.returnMessage();
 
-    if (!document.getElementById(tx.transaction.sig)) {
+    if (!document.getElementById(tx.transaction.sig) && !sigs.includes(tx.transaction.sig)) {
       messages_html += ChatBoxMessageTemplate(app, mod, txmsg.message, tx.transaction.sig, type);
       last_message_timestamp = tx.transaction.ts;
       publickey = tx.transaction.from[0].add;
       identicon = app.keys.returnIdenticon(publickey);
       identicon_color = app.keys.returnIdenticonColor(publickey),
       keyHTML = app.browser.returnAddressHTML(publickey);
+      sigs.push(tx.transaction.sig);
+      comments_to_add++;
     }
   }
 
   let datetime = mod.app.browser.formatDate(last_message_timestamp);
+
+  if (comments_to_add == 0) { return ''; }
 
 
   return `

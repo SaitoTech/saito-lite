@@ -267,9 +267,35 @@ class Chat extends ModTemplate {
 
   createMessage(group_id, msg) {
 
-    let publickey = this.app.network.peers[0].peer.publickey;
-    let newtx = this.app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
+    let members = [];
+
+console.log("Here in Create Message!");
+
+    for (let i = 0; i < this.groups.length; i++) {
+console.log("ID: " + this.groups[i].id + " versus " + group_id);
+      if (group_id === this.groups[i].id) {
+console.log("FOUND GROUP: " + JSON.stringify(this.groups[i].members));
+        for (let z = 0; z < this.groups[i].members.length; z++) {
+	  if (!members.includes(this.groups[i].members[z])) {
+	    members.push(this.groups[i].members[z]);
+	  }
+	}
+      }
+    }
+
+    //
+    // rearrange if needed so we are not first
+    //
+    if (members[0] === this.app.wallet.returnPublicKey()) {
+      members.splice(0, 1);
+      members.push(this.app.wallet.returnPublicKey());
+    }
+    
+    let newtx = this.app.wallet.createUnsignedTransaction(members[0], 0.0, 0.0);
     if (newtx == null) { return; }
+    for (let i = 1; i < members.length; i++) {
+      newtx.transaction.to.push(this.app.wallet.createSlip(members[i]));
+    }
 
     newtx.msg = {
       module: "Chat",
@@ -296,13 +322,13 @@ class Chat extends ModTemplate {
 
     while (idx < txs.length) {
       if (blocks.length == 0) {
-        if (txs[idx].transaction.from[0].add != last_message_sender && last_message_sender != "") {
+        if (txs[idx].isFrom(last_message_sender) && last_message_sender != "") {
           blocks.push(block);
         }
         block.push(txs[idx]);
         last_message_sender = txs[idx].transaction.from[0].add;
       } else {
-        if (txs[idx].transaction.from[0].add == last_message_sender) {
+        if (txs[idx].isFrom(last_message_sender)) {
           block.push(txs[idx]);
         } else {
           blocks.push(block);
@@ -361,6 +387,31 @@ class Chat extends ModTemplate {
     }
 
     //
+    // if direct message, add group
+    //
+    if (tx.isTo(app.wallet.returnPublicKey())) {
+      let add_new_group = 1;
+      let members = [];
+      for (let x = 0; x < tx.transaction.to.length; x++) { 
+        if (!members.includes(tx.transaction.to[x].add)) {
+	  members.push(tx.transaction.to[x].add); 
+	}
+      }
+      members.sort();
+      let group_id = this.app.crypto.hash(members.join('_'));
+      for (let i = 0; i < this.groups.length; i++) {
+        if (this.groups[i].id == group_id) { add_new_group = 0; }
+      }
+      if (add_new_group == 1) {
+console.log("adding a new chat group");
+        this.createChatGroup(members);
+      }
+    }
+
+   
+
+
+    //
     // create msg object
     //
     let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
@@ -384,25 +435,34 @@ class Chat extends ModTemplate {
     } catch (err) {
     }
 
+
+
     this.groups.forEach(group => {
-
       try {
-
+console.log("comparing: " + group.id + " -- with -- " + txmsg.group_id);
         if (group.id == txmsg.group_id) {
+
+console.log("identified proper group!");
 
 	  //
 	  // only add if not from me, otherwise will be encrypted for others
 	  //
-          if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
-
+          if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
+console.log("tx is not from me!");
             let identifier = app.keys.returnIdentifierByPublicKey(tx.transaction.from[0].add);
             let title =  identifier ? identifier : tx.transaction.from[0].add;
 	    let message = txmsg.message;
-
-            app.browser.sendNotification(title, message, 'chat-message-notification');
-
+console.log("pushing the tx");
             group.txs.push(tx);
-          }
+            app.browser.sendNotification(title, message, 'chat-message-notification');
+          } else {
+            let identifier = app.keys.returnIdentifierByPublicKey(this.app.wallet.returnPublicKey());
+            let title =  identifier ? identifier : this.app.wallet.returnPublicKey();
+	    let message = txmsg.message;
+console.log("pushing the tx");
+            group.txs.push(tx);
+            app.browser.sendNotification(title, message, 'chat-message-notification');
+	  }
         }
       } catch (err) {
 console.log("ERROR 113234: chat error receiving message: " + err);
@@ -410,7 +470,7 @@ console.log("ERROR 113234: chat error receiving message: " + err);
     });
 
     if (chat_on_page == 0) {
-      if (this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
+      if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
         this.openChatBox(txmsg.group_id);
       }
     }
@@ -422,6 +482,7 @@ console.log("ERROR 113234: chat error receiving message: " + err);
 
     this.sendEvent('chat_receive_message', message);
     this.render(this.app);
+console.log("rendered the chat");
 
   }
 
@@ -476,6 +537,7 @@ console.log("ERROR 113234: chat error receiving message: " + err);
   createChatGroup(members=null, name=null) {
 
     if (members == null) { return; } members.sort();
+console.log("MEMZBERS: " + JSON.stringify(members));
     if (name == null) {
       for (let i = 0; i < members.length; i++) {
         if (members[i] != this.app.wallet.returnPublicKey()) {

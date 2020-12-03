@@ -19,6 +19,7 @@ module.exports = EmailChat = {
     },
 
     showChatBox(app, mod, group) {
+      mod.renderMode = "email";
       ChatBox.showChatBox(app, mod, group);
     }
 

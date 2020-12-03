@@ -33,14 +33,12 @@ module.exports = ChatBox = {
 	  let html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
 
 	  if (i == message_blocks.length-1) {
+	
+	    let first_comment_sig = "first_comment_sig";
+	    if (message_blocks[i].length > 0) { first_comment_sig = app.crypto.hash(message_blocks[i][0].transaction.sig); }
 
-for (let z = 0; z < message_blocks[i].length; z++) {
-  let txmsg2 = message_blocks[i][z].returnMessage();
-  console.log("FINAL / LAST: " + txmsg2.message);
-}
-	    let first_comment_sig = app.crypto.hash(message_blocks[i][0].transaction.sig);
-	    console.log("DESTROYING: " + `chat-message-set-${first_comment_sig}`);
-	    try{document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){ console.log("ERROR DESTROYING: " + err);}
+	    // recreate html after destroying so existing entries are output (template checks to avoid dupes)
+	    try{document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){};
 	    html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
 	    chat_box_main.innerHTML += html;
 
@@ -81,8 +79,10 @@ for (let z = 0; z < message_blocks[i].length; z++) {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
             e.preventDefault();
             if (msg_input.value == '') { return; }
+console.log("group id: " + group_id + " -- " + msg_input.value);
             let newtx = mod.createMessage(group_id, msg_input.value);
-            app.modules.returnModule("Chat").sendMessage(app, newtx);
+console.log("done mod create message");
+            mod.sendMessage(app, newtx);
             chat_self.addMessage(app, mod, newtx);
             msg_input.value = '';
           }
