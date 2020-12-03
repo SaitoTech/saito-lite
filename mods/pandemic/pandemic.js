@@ -41,12 +41,6 @@ class Pandemic extends GameTemplate {
     if (super.respondTo(type) != null) {
       return super.respondTo(type);
     }
-    if (type == "arcade-carousel") {
-      let obj = {};
-      obj.background = "";
-      obj.title = "Pandemic";
-      return obj;
-    }
     return null;
   }
   

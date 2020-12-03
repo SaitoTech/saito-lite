@@ -32,15 +32,13 @@ module.exports = ArcadeSidebar = {
     //   document.getElementById("arcade-sidebar-apps").style.display = "none";
     // }
 
+
     let games_menu = document.querySelector(".arcade-apps");
     app.modules.respondTo("arcade-games").forEach(module => {
-      let title = mod.name;
+      let title = module.name;
+      
+      
       if (!document.getElementById(module.name)) {
-        if (module.respondTo("arcade-carousel") != null) {
-          if (module.respondTo("arcade-carousel").title) {
-            title = module.respondTo("arcade-carousel").title;
-          }
-        }
         games_menu.innerHTML += `<li class="arcade-navigator-item" id="${module.name}">${title}</li>`;
       }
     });
