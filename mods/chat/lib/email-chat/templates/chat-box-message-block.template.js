@@ -13,6 +13,7 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
   let identicon_color = "";
   let last_message_timestamp = new Date().getTime();
   let type = "others";
+  let first_comment_sig = "";
 
   //
   // key data
@@ -37,13 +38,15 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
   }
 
 
-
   //
   // generate internal messages
   //
   let messages_html = "";
   for (let i = 0; i < message_block.length; i++) {
     let tx = message_block[i];
+    if (i == 0) {
+      first_comment_sig = app.crypto.hash(tx.transaction.sig);
+    }
     if (type == "others") {
       if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
 	type = "myself";
@@ -65,7 +68,7 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
 
 
   return `
-    <div class="chat-message-set chat-message-set-${type}" id="chat-message-set-${publickey}-${last_message_timestamp}">
+    <div class="chat-message-set chat-message-set-${type} chat-message-set-${first_comment_sig}" id="chat-message-set-${first_comment_sig}">
       <img src="${identicon}" class="chat-room-message-identicon"/>
       <div class="chat-message-set-content chat-message-set-content-${type}">
         <div class="chat-message-header">

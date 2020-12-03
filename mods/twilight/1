@@ -26,24 +26,26 @@ module.exports = ChatBox = {
        }
 
 	let message_blocks = mod.createMessageBlocks(mod.groups[idx]);
-	let first_comment_sig = "";
+
+console.log("MBL: " + message_blocks.length);
 
         for (let i = 0; i < message_blocks.length; i++) {
-
 	  let html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
-
-	  if (i == message_blocks.length-1) {
-
-for (let z = 0; z < message_blocks[i].length; z++) {
-  let txmsg2 = message_blocks[i][z].returnMessage();
-  console.log("FINAL / LAST: " + txmsg2.message);
-}
-	    let first_comment_sig = app.crypto.hash(message_blocks[i][0].transaction.sig);
-	    console.log("DESTROYING: " + `chat-message-set-${first_comment_sig}`);
-	    try{document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){ console.log("ERROR DESTROYING: " + err);}
-	    html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
+          if (i == message_blocks.length-1) {
+console.log("-----------");
+console.log("ADDING: " + html);
+console.log("-----------");
+	    try{document.getElementById(`chat-message-set-${mod.groups[idx]}`).destroy();}catch(err){}
 	    chat_box_main.innerHTML += html;
-
+	  } else {
+            if (i == message_blocks.length-2) {
+console.log("SECOND LAST: ");
+console.log(JSON.stringify(message_blocks[i]));
+for (let z = 0; z < message_blocks[i].block.length; z++) {
+  let txmsg2 = message_blocks[i].block[z].returnMessage();
+  console.log("tx2msg: " + txmsg2.message);
+}
+	    }
 	  }
 	}
         chat_self.scrollToBottom(group_id);
