@@ -13,7 +13,7 @@ module.exports = ChatSidebarContactTemplate = (app, group) => {
   if (message) {
     if (message.message) {
       ts = message.timestamp;
-      msg = app.crypto.base64ToString(message.message);
+      msg = message.message;
       let tmp = document.createElement("DIV");
       tmp.innerHTML = msg;
       msg = tmp.innerText;
@@ -38,4 +38,3 @@ module.exports = ChatSidebarContactTemplate = (app, group) => {
     </div>
   `;
 }
-
