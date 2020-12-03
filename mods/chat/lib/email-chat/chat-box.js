@@ -16,15 +16,18 @@ module.exports = ChatBox = {
         let group_id = box.getAttribute("data-id");
 
         let idx = -1;
+        let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
+
         for (let i = 0; i < mod.groups.length; i++) { if (mod.groups[i].id == group_id) { idx = i; } }
         if (idx == -1) { alert("could not find chat group..."); return; }
 
         if (mod.groups[idx].txs.length == 0) {
-          let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
           chat_box_main.innerHTML = `<p id="chat-box-default-message-${group_id}" style="text-align:center">No messages in this group :(</p>`;
-        }
+       }
 
-	let message_blocks = chat_self.createMessageBlocks(app, mod, mod.groups[idx]);
+console.log("GROUP: " + JSON.stringify(mod.groups[idx]));
+
+	let message_blocks = mod.createMessageBlocks(mod.groups[idx]);
 
 console.log("-----------");
 console.log(JSON.stringify(message_blocks));
@@ -34,9 +37,7 @@ console.log("-----------");
         for (let i = 0; i < message_blocks.length; i++) {
 	  html += ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
 	}
-
-
-          chat_box_main.innerHTML = `<p id="chat-box-default-message-${group_id}" style="text-align:center">No messages in this group :(</p>`;
+        chat_box_main.innerHTML = html;
 
         chat_self.scrollToBottom(group_id);
      });
@@ -256,9 +257,11 @@ console.log("-----------");
       let txs = group.txs;
       let last_message_sender = "";
 
-
       while (idx < txs.length) {
 	if (blocks.length == 0) {
+	  if (txs[idx].transaction.from[0].add != last_message_sender && last_message_sender != "") {
+	    blocks.push(block);
+	  }
 	  block.push(txs[idx]);
 	  last_message_sender = txs[idx].transaction.from[0].add;
 	} else {

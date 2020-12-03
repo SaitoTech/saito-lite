@@ -32,18 +32,12 @@ class Chat extends ModTemplate {
     if (type === "encrypt-key-exchange-confirm") {
 
       if (data.members === undefined) { return; }
+
       let newgroup = this.createChatGroup(data.members);
-      if (newgroup) {
 
-        this.addNewGroup(newgroup);
-        this.sendEvent('chat-render-request', {});
-        this.saveChat();
-
-	//
-	// rendering
-	//
-	this.render(this.app);
-      }
+      this.sendEvent('chat-render-request', {});
+      this.saveChat();
+      this.render(this.app);
     }
 
   }
@@ -164,10 +158,25 @@ class Chat extends ModTemplate {
       let txmsg = txs[i].returnMessage();
       for (let z = 0; z < this.groups.length; z++) {
 	if (this.groups[z].id === txmsg.group_id) {
-	  this.groups[z].txs.push(txs[i]);
+          app.blockchain.binaryInsert(this.groups[z].txs, txs[i], (a, b) => { return a.transaction.ts - b.transaction.ts; })
 	}
       }
     }
+
+
+    //
+    // update last message
+    //
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.renderMode == "email") {
+	if (this.groups[i].txs.length > 0) {
+	  this.updateLastMessage(this.groups[i].id, this.groups[i].txs[this.groups[i].txs.length-1].returnMessage().message);
+        } else {
+	  this.updateLastMessage(this.groups[i].id, "new chat");
+	}
+      }
+    }
+
 
     //
     // render loaded messages
@@ -177,6 +186,15 @@ class Chat extends ModTemplate {
 
     this.render(this.app);
 
+  }
+
+
+  updateLastMessage(group_id, msg) {
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].id === group_id) {
+        try{document.querySelector(`#chat-last-message-${this.groups[i].id}`).innerHTML=msg;}catch(e){}
+      }
+    }
   }
 
 
@@ -247,10 +265,6 @@ class Chat extends ModTemplate {
 
 
 
-
-
-
-
   createMessage(group_id, msg) {
 
     let publickey = this.app.network.peers[0].peer.publickey;
@@ -266,20 +280,47 @@ class Chat extends ModTemplate {
       timestamp: new Date().getTime()
     };
     newtx.msg.sig = this.app.wallet.signMessage(JSON.stringify(newtx.msg));
-
-    //
-    // submit to group manually (no decrypt)
-    //
-    for (let i = 0; i < this.groups.length; i++) {
-      if (this.groups[i].id == group_id) {
-        this.groups[i].txs.push(newtx);
-      }
-    }
-
     newtx = this.app.wallet.signTransaction(newtx);
     return newtx;
 
   }
+
+
+  createMessageBlocks(group) {
+
+    let idx = 0;
+    let blocks = [];
+    let block = [];
+    let txs = group.txs;
+    let last_message_sender = "";
+
+    while (idx < txs.length) {
+      if (blocks.length == 0) {
+        if (txs[idx].transaction.from[0].add != last_message_sender && last_message_sender != "") {
+          blocks.push(block);
+        }
+        block.push(txs[idx]);
+        last_message_sender = txs[idx].transaction.from[0].add;
+      } else {
+        if (txs[idx].transaction.from[0].add == last_message_sender) {
+          block.push(txs[idx]);
+        } else {
+          blocks.push(block);
+          block = [];
+          block.push(txs[idx]);
+          last_message_sender = txs[idx].transaction.from[0].add;
+        }
+      }
+      idx++;
+    }
+
+    blocks.push(block);
+
+    return blocks;
+
+  }
+
+
 
   formatMessage(msg) {
     msg = linkifyHtml(msg, { target: { url: '_self' } });
@@ -309,8 +350,6 @@ class Chat extends ModTemplate {
 
 
   receiveMessage(app, tx) {
-
-console.log("tx received!");
 
     let txmsg = tx.returnMessage();
 
@@ -355,18 +394,14 @@ console.log("tx received!");
 	  // only add if not from me, otherwise will be encrypted for others
 	  //
           if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
-            let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
-            let title =  identifier ? identifier : message.publickey;
 
-	    // clean message only used for alert
-	    //let clean_message = "";
-	    //clean_message = this.app.crypto.base64ToString(message.message);
-	    //clean_message = clean_message.replace(/<[^>]*>?/gm, '');
-	    //if (clean_message != "") { message.message = clean_message; }
+            let identifier = app.keys.returnIdentifierByPublicKey(tx.transaction.from[0].add);
+            let title =  identifier ? identifier : tx.transaction.from[0].add;
+	    let message = txmsg.message;
 
             app.browser.sendNotification(title, message, 'chat-message-notification');
 
-            group.messages.push(message);
+            group.txs.push(tx);
           }
         }
       } catch (err) {
@@ -379,6 +414,11 @@ console.log("ERROR 113234: chat error receiving message: " + err);
         this.openChatBox(txmsg.group_id);
       }
     }
+
+    //
+    // update sidebar if possible
+    //
+    this.updateLastMessage(txmsg.group_id, message);
 
     this.sendEvent('chat_receive_message', message);
     this.render(this.app);
@@ -433,9 +473,16 @@ console.log("ERROR 113234: chat error receiving message: " + err);
   ///////////////////
   // CHAT SPECIFIC //
   ///////////////////
-  createChatGroup(members=null) {
+  createChatGroup(members=null, name=null) {
 
     if (members == null) { return; } members.sort();
+    if (name == null) {
+      for (let i = 0; i < members.length; i++) {
+        if (members[i] != this.app.wallet.returnPublicKey()) {
+	  name = members[i];
+	}
+      }
+    }
 
     let id = this.app.crypto.hash(`${members.join('_')}`)
     for (let i = 0; i < this.groups.length; i++) {
@@ -444,8 +491,9 @@ console.log("ERROR 113234: chat error receiving message: " + err);
 
     this.groups.push({
       id : id ,
-      members: members,
-      txs: [],
+      members : members ,
+      name : name ,
+      txs : [] ,
     });
 
   }
