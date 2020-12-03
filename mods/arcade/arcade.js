@@ -1036,6 +1036,11 @@ console.log("going into super handle peer request...");
 
   }
 
+  launchSinglePlayerGame(app, data, gameobj) {
+    window.location = '/' + gameobj.slug;
+    return;
+  }
+  
   createAcceptTransaction(gametx) {
 
     let txmsg = gametx.returnMessage();

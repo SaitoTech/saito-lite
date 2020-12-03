@@ -115,7 +115,7 @@ console.log("OPTIONS: " + JSON.stringify(options));
       let players_needed = document.querySelector('.game-wizard-players-select').value;
 
       if (players_needed == 1) {
-        data.arcade.launchSinglePlayerGame(app, data, gamedata);
+        mod.launchSinglePlayerGame(app, data, gamedata);
         return;
       } else {
         mod.overlay.hideOverlay();
