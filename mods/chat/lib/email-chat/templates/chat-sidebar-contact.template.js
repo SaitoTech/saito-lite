@@ -1,38 +1,24 @@
 module.exports = ChatSidebarContactTemplate = (app, group) => {
 
-  let ts = new Date().getTime();
-  let msg = '';
-  let message = '';
+  let datetime = app.browser.formatDate(new Date().getTime());
+  let description = "";
 
-  if (group.messages.length == 0) {
-    message = "New Chat Room Created";
+  if (group.txs.length == 0) {
+    description = "New Chat Room";
   } else {
-    message = group.messages[group.messages.length-1];
+    let txmsg = group.txs[group.txs.length-1].returnMessage();
+    description = txmsg.message;
+    description = description.substring(0, 40);
   }
-
-  if (message) {
-    if (message.message) {
-      ts = message.timestamp;
-      msg = app.crypto.base64ToString(message.message);
-      let tmp = document.createElement("DIV");
-      tmp.innerHTML = msg;
-      msg = tmp.innerText;
-      msg = msg.substring(0, 48);
-    } else {
-      msg = "New Chat Room Created";
-    }
-  }
-
-  let datetime = app.browser.formatDate(ts);
 
   return `
     <div id="${group.id}" class="chat-row">
-      <img class="chat-row-image" src="${group.identicon}">
+      <img class="chat-row-image" src="${app.keys.returnIdenticon(group.members[0])}">
       <div class="chat-content">
-          <div class="chat-group-name">${group.name}</div>
-          <div class="chat-last-message">${msg}</div>
+          <div class="chat-group-name">${group.address}</div>
+          <div class="chat-last-message">${description}</div>
       </div>
-      <div style="disaply; grid;">
+      <div style="dispaly; grid;">
         <div class="chat-last-message-timestamp">${datetime.hours}:${datetime.minutes}</div>
       </div>
     </div>

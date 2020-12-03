@@ -1,6 +1,6 @@
 module.exports = ChatBoxTemplate = (group) => {
   return `
-      <div id="chat-box-${group.id}" class="chat-box">
+      <div data-id="${group.id}" id="chat-box-${group.id}" class="chat-box">
 	<div id="chat-box-header-${group.id}" class="chat-box-header">
           <span><h2 class="chat-box-header-title">${group.name}</h2></span>
           <span class="chat-box-close" id="chat-box-close-${group.id}" style="justify-self:end;font-size: 0.75em">&#x2715</span>

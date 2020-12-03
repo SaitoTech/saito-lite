@@ -1,7 +1,28 @@
 const ChatBoxMessageTemplate = require('./chat-box-message.template');
 const emoji = require('node-emoji');
 
-module.exports = ChatBoxMessageBlockTemplate = (message_block, mod) => {
+module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_blocks) => {
+
+  //
+  // the message_block is just an array of transactions that have
+  // arrived for us for chat... so we need to extract the information
+  // we want to add to the HTML here and then display it.
+  //
+  let identicon = "";
+  let identicon_color = "";
+
+cahat_self.message_blocks.forEach(message_block => {
+          if (!document.getElementById(message_block.sig)) { 
+            message_block = Object.assign({}, message_block, {
+              type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
+            }); 
+            if (new_html != "") {
+              chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);
+            }
+          }
+        });
+        
+
 
   let { identicon, identicon_color, messages, publickey, keyHTML, last_message_timestamp, type } = message_block;
 

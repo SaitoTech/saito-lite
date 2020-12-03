@@ -13,48 +13,23 @@ module.exports = ChatBox = {
 
       document.querySelectorAll(".chat-box").forEach(box => {    
 
-        let group_id = box.id.split('chat-box-')[1];
-        let group = null;
+        let group_id = box.getAttribute("data-id");
 
-        for (let i = 0; i < mod.groups.length; i++) {
-  	  if (mod.groups[i].id == group_id) {
-	    group = mod.groups[i];
-	  }
+        let idx = -1;
+        for (let i = 0; i < mod.groups.length; i++) { if (mod.groups[i].id == group_id) { idx = i; } }
+        if (idx == -1) { alert("could not find chat group..."); return; }
+
+        if (mod.groups[idx].txs.length == 0) {
+          let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
+          chat_box_main.innerHTML = `<p id="chat-box-default-message-${group.id}" style="text-align:center">No messages in this group :(</p>`;
         }
 
-        if (!group) {
-  	  alert("could not find chat group...");
-	  return;
-        }
+	let message_blocks = chat_self.createMessageBlocks(app, mod, mod.groups[idx]);
 
-        let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
-        chat_self.message_blocks = chat_self.createMessageBlocks(app, mod, group.messages);
-
-        if (chat_self.message_blocks.length == 0) {
-          chat_box_main.innerHTML = 
-            `<p id="chat-box-default-message-${group.id}" style="text-align:center">
-               No messages in this group :(
-             </p>`;
-        } else {
-	  if (group.messages[0].message === "no messages in this group...") {
-	    group.messages[0].splice(0, 1);
-	  }
-          chat_self.removeDefaultMessage(group.id);
-        }
-
-
-
-        chat_self.message_blocks.forEach(message_block => {
-          if (!document.getElementById(message_block.sig)) {
-            message_block = Object.assign({}, message_block, {
-              type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
-            });
-	    let new_html = ChatBoxMessageBlockTemplate(message_block, mod);
-            if (new_html != "") {
-	      chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);
-	    }
-	  }
-        });
+	let html = "";
+        for (let i = 0; i < message_blocks.length; i++) {
+	  html += ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
+	}
 
         chat_self.scrollToBottom(group.id);
 
@@ -329,64 +304,37 @@ module.exports = ChatBox = {
 
     },
 
-    createMessageBlocks(app, mod, messages) {
+
+
+    createMessageBlocks(app, mod, group) {
 
       let idx = 0;
-      let message_blocks = [];
+      let blocks = [];
+      let block = [];
+      let txs = group.txs;
+      let last_message_sender = "";
 
-      while (idx < messages.length) {
-        if (messages[idx].publickey != undefined) {
-        try {
-        let message = Object.assign({}, messages[idx], {
-          keyHTML: app.browser.returnAddressHTML(messages[idx].publickey),
-          identicon: app.keys.returnIdenticon(messages[idx].publickey),
-          identicon_color: app.keys.returnIdenticonColor(messages[idx].publickey),
-        });
 
-        // decode - now done message-wide 
-        //message.message = app.crypto.base64ToString(message.message);
-        //message.message = this.formatMessage(message.message);
-
-        if (message_blocks.length == 0) {
-          let new_message_block = Object.assign({}, {
-            publickey: message.publickey,
-            group_id: message.group_id,
-            last_message_timestamp: message.timestamp,
-            last_message_sig: message.sig,
-            keyHTML: message.keyHTML,
-            identicon: message.identicon,
-            identicon_color: message.identicon_color,
-            messages: [message]
-          });
-          message_blocks.push(new_message_block);
-        } else {
-          if (messages[idx - 1].publickey == message.publickey) {
-            let latest_message_block = message_blocks[message_blocks.length - 1];
-            let updated_message_block = Object.assign({}, latest_message_block, {
-              last_message_timestamp: message.timestamp,
-              last_message_sig: message.sig,
-              messages: [...latest_message_block.messages, message],
-            });
-            message_blocks[message_blocks.length - 1] = updated_message_block;
-          } else {
-            let new_message_block = Object.assign({}, {
-              publickey: message.publickey,
-              group_id: message.group_id,
-              last_message_timestamp: message.timestamp,
-              last_message_sig: message.sig,
-              keyHTML: message.keyHTML,
-              identicon: message.identicon,
-              identicon_color: message.identicon_color,
-              messages: [message]
-            });
-            message_blocks.push(new_message_block);
-          }
-        }
-        } catch (err) {}
-        }
-        idx++;
+      while (idx < txs.length) {
+	if (blocks.length == 0) {
+	  block.push(txs[idx]);
+	  last_message_sender = txs[idx].transaction.from[0].add;
+	} else {
+	  if (txs[idx].transaction.from[0].add == last_message_sender) {
+	    block.push(txs[idx]);
+	  } else {
+	    blocks.push(block);
+	    block = [];
+            block.push(txs[idx]);
+            last_message_sender = txs[idx].transaction.from[0].add;
+	  }
+	}
       }
-      return message_blocks;
+
+      blocks.push(message);
+
+      return blocks;
+
     },
 
 
