@@ -27,12 +27,8 @@ module.exports = ChatBox = {
 	  return;
         }
 
-console.log("SAVED: " + JSON.stringify(group));
-
         let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
         chat_self.message_blocks = chat_self.createMessageBlocks(app, mod, group.messages);
-
-console.log("CMB: " + JSON.stringify(chat_self.message_blocks));
 
         if (chat_self.message_blocks.length == 0) {
           chat_box_main.innerHTML = 
@@ -47,13 +43,12 @@ console.log("CMB: " + JSON.stringify(chat_self.message_blocks));
         }
 
 
-console.log("CMB 2: " + JSON.stringify(chat_self.message_blocks));
+
         chat_self.message_blocks.forEach(message_block => {
           if (!document.getElementById(message_block.sig)) {
             message_block = Object.assign({}, message_block, {
               type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
             });
-console.log("MB 1: " + JSON.stringify(message_block));
 	    let new_html = ChatBoxMessageBlockTemplate(message_block, mod);
             if (new_html != "") {
 	      chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);

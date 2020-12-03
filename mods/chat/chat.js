@@ -285,8 +285,6 @@ console.log("tx received!");
       }
     }
 
-console.log("RECEIVED AND DECRYPTED: " + JSON.stringify(txmsg));
-
     //
     // create msg object
     //
@@ -311,15 +309,11 @@ console.log("RECEIVED AND DECRYPTED: " + JSON.stringify(txmsg));
     } catch (err) {
     }
 
-console.log("MESSAGE RECEIVED: is chat showing? " + chat_on_page);
-
     this.groups.forEach(group => {
 
       try {
 
         if (group.id == txmsg.group_id) {
-
-console.log("WE HAVE FOUND THE CHAT GROUP!");
 
 	  //
 	  // only add if not from me, otherwise will be encrypted for others
@@ -336,7 +330,6 @@ console.log("WE HAVE FOUND THE CHAT GROUP!");
 
             app.browser.sendNotification(title, message, 'chat-message-notification');
 
-console.log("PUSHING BACK: " + JSON.stringify(message));
             group.messages.push(message);
          }
 
@@ -355,8 +348,11 @@ console.log("ERROR 113234: chat error receiving message: " + err);
       }
     }
 
-console.log("announcing: " +JSON.stringify(message));
+console.log("announcing sending of message: " +JSON.stringify(message.message));
     this.sendEvent('chat_receive_message', message);
+
+console.log(" ... and render");
+    this.render(this.app);
 
   }
 
