@@ -21,14 +21,21 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
     address = group.members[0] != app.wallet.returnPublicKey() ? group.members[0] : group.members[1];
     publickey = address;
   } else {
-    address = "Group " + id.substring(0, 10);
-    publickey = id;
+    address = group.id;
+    publickey = group.members[0];
   }
 
   identicon = app.keys.returnIdenticon(address);
   identicon_color = app.keys.returnIdenticonColor(address),
   keyHTML = app.browser.returnAddressHTML(address);
-console.log("OTHER ADDRESS: " + address);
+
+  //
+  // duck out if no messages
+  //
+  if (message_block.length == 0) {
+    return '';
+  }
+
 
 
   //
@@ -44,12 +51,14 @@ console.log("OTHER ADDRESS: " + address);
     }
     let txmsg = tx.returnMessage();
 
-    messages_html += ChatBoxMessageTemplate(app, mod, txmsg.message, tx.transaction.sig, type);
-    last_message_timestamp = tx.transaction.ts;
-    publickey = tx.transaction.from[0].add;
-    identicon = app.keys.returnIdenticon(publickey);
-    identicon_color = app.keys.returnIdenticonColor(publickey),
-    keyHTML = app.browser.returnAddressHTML(publickey);
+    if (!document.getElementById(tx.transaction.sig)) {
+      messages_html += ChatBoxMessageTemplate(app, mod, txmsg.message, tx.transaction.sig, type);
+      last_message_timestamp = tx.transaction.ts;
+      publickey = tx.transaction.from[0].add;
+      identicon = app.keys.returnIdenticon(publickey);
+      identicon_color = app.keys.returnIdenticonColor(publickey),
+      keyHTML = app.browser.returnAddressHTML(publickey);
+    }
   }
 
   let datetime = mod.app.browser.formatDate(last_message_timestamp);

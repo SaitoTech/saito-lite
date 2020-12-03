@@ -140,7 +140,7 @@ class Chat extends ModTemplate {
     //
     // create mastodon server
     //
-    console.log("Create Group Server Chat Here");
+    this.createChatGroup([peer.peer.publickey], "Community Server");
 
 
     //
