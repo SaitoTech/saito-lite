@@ -117,9 +117,7 @@ class Chat extends ModTemplate {
     let keys = this.app.keys.returnKeys();
     for (let i = 0; i < keys.length; i++) {
       if (keys[i].aes_publickey == "") { return; }
-      let members = [keys[i].publickey, this.app.wallet.returnPublicKey()];
-      let newgroup = this.createChatGroup(members);
-      this.addNewGroup(newgroup);
+      this.createChatGroup( [ keys[i].publickey , this.app.wallet.returnPublicKey() ] );
     }
 
     //
@@ -127,9 +125,7 @@ class Chat extends ModTemplate {
     //
     let g = this.app.keys.returnGroups();
     for (let i = 0; i < g.length; i++) {
-      let members = g[i].members;
-      let newgroup = this.createChatGroup(members);
-      this.addNewGroup(newgroup);
+      this.createChatGroup(g[i].members);
     }
 
     //
@@ -143,66 +139,39 @@ class Chat extends ModTemplate {
   async onPeerHandshakeComplete(app, peer) {
 
     //
-    // add group server
+    // create mastodon server
     //
-    if (peer.peer.endpoint) {
-      if (app.options.peers) {
-        if (app.options.peers.length) {
-          if (peer.peer.endpoint.host != app.options.peers[0].host) { return; }
-        }
+    console.log("Create Group Server Chat Here");
+
+
+    //
+    // load transactions from server
+    //
+    let group_ids = this.groups.map(group => group.id);
+    let txs = new Promise((resolve, reject) => { app.storage.loadTransactionsByKeys(group_ids, "Chat", 25, (txs) => { resolve(txs); }); });
+    txs = await txs;
+
+
+    //
+    // TODO - make more efficient
+    //
+    for (let i = 0; i < txs.length; i++) {
+      let txmsg = txs[i].returnMessage();
+      for (let z = 0; z < this.groups.length; z++) {
+	if (this.groups[z].id === txmsg.group_id) {
+	  this.groups[z].txs.push(txs[i]);
+	}
       }
     }
 
     //
-    // create mastodon server
+    // render loaded messages
     //
-
-    let members = [peer.peer.publickey];
-    let newgroup = this.createChatGroup(members);
-
-    if (newgroup) {
-      newgroup.name = peer.peer.name ? peer.peer.name : newgroup.name;
-      if (newgroup.name == "") { newgroup.name = "Community Server"; }
-      this.addNewGroup(newgroup);
-    }
-
-    let group_ids = this.groups.map(group => group.id);
-
-    let txs = new Promise((resolve, reject) => {
-      app.storage.loadTransactionsByKeys(group_ids, "Chat", 25, (txs) => {
-        resolve(txs);
-      });
-    });
-
-    let tx_messages = {} ;
-
-    txs = await txs;
-
-
-    if (txs.length > 0) {
-      txs.forEach(tx => {
-        let txmsg = tx.returnMessage();
-        let msg_type = tx.transaction.from[0].add == app.wallet.returnPublicKey() ? 'myself' : 'others';
-        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
-        (tx_messages[tx.msg.group_id] = tx_messages[tx.msg.group_id] || []).unshift(msg);
-      });
-
-      this.groups = this.groups.map(group => {
-        group.messages = tx_messages[group.id] || [];
-        return group;
-      });
-    }
-
     this.sendEvent('chat-render-request', {});
     this.sendEvent('chat-render-box-request', {});
 
+    this.render(this.app);
 
-    if (this.renderMode == "main") {
-      ChatMain.render(app, this);
-      ChatMain.attachEvents(app, this);
-    }
-
-    this.saveChat();
   }
 
 
@@ -331,16 +300,12 @@ console.log("tx received!");
             app.browser.sendNotification(title, message, 'chat-message-notification');
 
             group.messages.push(message);
-         }
-
-
+          }
         }
       } catch (err) {
 console.log("ERROR 113234: chat error receiving message: " + err);
       }
-
     });
-
 
     if (chat_on_page == 0) {
       if (this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
@@ -348,10 +313,7 @@ console.log("ERROR 113234: chat error receiving message: " + err);
       }
     }
 
-console.log("announcing sending of message: " +JSON.stringify(message.message));
     this.sendEvent('chat_receive_message', message);
-
-console.log(" ... and render");
     this.render(this.app);
 
   }
@@ -406,93 +368,23 @@ console.log(" ... and render");
   ///////////////////
   createChatGroup(members=null) {
 
-    if (members == null) { return; }
-    members.sort();
+    if (members == null) { return; } members.sort();
 
     let id = this.app.crypto.hash(`${members.join('_')}`)
-    let identicon = "";
-    let address = "";
-
-    if (members.length == 2) {
-      address = members[0] != this.app.wallet.returnPublicKey() ? members[0] : members[1];
-    } else {
-      address = "Group " + id.substring(0, 10);
-    }
-    identicon = this.app.keys.returnIdenticon(address);
-
     for (let i = 0; i < this.groups.length; i++) {
       if (this.groups[i].id == id) { return null; }
     }
 
-    return {
+    this.groups.push({
       id : id ,
-      active : 0,
-      name: address.substring(0, 16),
       members: members,
-      messages: [],
-      identicon: identicon,
-    };
-  }
-
-  addNewGroup(chatgroup) {
-
-    let cg = {};
-	cg.id = "";
-	cg.name = "";
-	cg.members = [];
-	cg.messages = [];
-	cg.identicon = "";
-	cg.active_group = 0;
-	cg.is_encrypted = false;
-	cg.unread_messages = 0;
-	if (chatgroup.members)  { cg.members = chatgroup.members; }
-	if (chatgroup.messages) { cg.messages = chatgroup.messages; }
-	if (chatgroup.id)       { cg.id = chatgroup.id; }
-	if (chatgroup.name)       { cg.name = chatgroup.name; }
-	cg.identicon = this.app.keys.returnIdenticon(JSON.stringify(cg.members));
-        if (cg.messages.length == 0) { cg.messages.push("no messages in this group..."); }
-
-    if (this.app.options.chat) {
-      if (this.app.options.chat.groups) {
-        this.app.options.chat.groups.forEach(group => {
-          if (group.id == cg.id) {
-            cg.messages = group.messages || [];
-          }
-        });
-      }
-    }
-
-
-    //
-    // main server mastadon is always #1
-    //
-    let prepend_group = 0;
-    if (cg.members) {
-      if (cg.members.length >= 1) {
-	if (this.app.options.peers) {
-	  if (this.app.options.peers.length > 0) {
-  	    if (cg.members[0] === this.app.options.peers[0].publickey) {
-	      prepend_group = 1;
-	    }
-  	    if (this.app.network.peers.length > 0) {
-  	      if (this.app.network.peers[0].publickey) {
-	        prepend_group = 1;
-	      }
-	    }
-          }
-        }
-      }
-    }
-
-    if (prepend_group == 0) {
-      this.groups.push(cg);
-    } else {
-      this.groups.unshift(cg);
-    }
-
-console.log("ADDED GROUP: " + JSON.stringify(cg));
+      txs: [],
+    });
 
   }
+
+
+
 
   returnDefaultChat() {
     for (let i = 0; i < this.groups.length; i++) {
