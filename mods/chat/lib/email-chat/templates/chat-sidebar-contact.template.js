@@ -8,14 +8,13 @@ module.exports = ChatSidebarContactTemplate = (app, group) => {
   } else {
     let txmsg = group.txs[group.txs.length-1].returnMessage();
     description = txmsg.message;
-    description = description.substring(0, 40);
   }
 
   return `
     <div id="${group.id}" class="chat-row">
       <img class="chat-row-image" src="${app.keys.returnIdenticon(group.members[0])}">
       <div class="chat-content">
-          <div class="chat-group-name">${group.address}</div>
+          <div class="chat-group-name">${group.name}</div>
           <div class="chat-last-message">${description}</div>
       </div>
       <div style="dispaly; grid;">

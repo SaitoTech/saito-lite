@@ -18,9 +18,11 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
   // key data
   //
   if (group.members.length == 2) {
-    address = group.members[0] != this.app.wallet.returnPublicKey() ? group.members[0] : group.members[1];
+    address = group.members[0] != app.wallet.returnPublicKey() ? group.members[0] : group.members[1];
+    publickey = address;
   } else {
     address = "Group " + id.substring(0, 10);
+    publickey = id;
   }
   identicon = app.keys.returnIdenticon(address);
   identicon_color = app.keys.returnIdenticonColor(address),
@@ -29,6 +31,7 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
   //
   // generate internal messages
   //
+  let messages_html = "";
   for (let i = 0; i < message_block.length; i++) {
     let tx = message_block[i];
     if (type == "others") {
@@ -37,7 +40,9 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_block) 
       }
     }
     let txmsg = tx.returnMessage();
-    messages_html += ChatBoxMessageTemplate(app, mod, txmsg.msg);
+
+console.log("TXMSG: " + JSON.stringify(txmsg));
+    messages_html += ChatBoxMessageTemplate(app, mod, txmsg.message, tx.transaction.sig, type);
     last_message_timestamp = tx.transaction.ts;
   }
   let datetime = mod.app.browser.formatDate(last_message_timestamp);

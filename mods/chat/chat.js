@@ -4,6 +4,11 @@ const EmailChat = require('./lib/email-chat/email-chat');
 const ChatMain = require('./lib/chat-main/chat-main');
 const SaitoHeader = require('./../../lib/saito/ui/saito-header/saito-header');
 
+var marked = require('marked');
+var sanitizeHtml = require('sanitize-html');
+const linkifyHtml = require('markdown-linkify');
+
+
 
 class Chat extends ModTemplate {
 
@@ -117,7 +122,7 @@ class Chat extends ModTemplate {
     let keys = this.app.keys.returnKeys();
     for (let i = 0; i < keys.length; i++) {
       if (keys[i].aes_publickey == "") { return; }
-      this.createChatGroup( [ keys[i].publickey , this.app.wallet.returnPublicKey() ] );
+      this.createChatGroup( [ keys[i].publickey , this.app.wallet.returnPublicKey() ] , keys[i].name );
     }
 
     //
@@ -125,7 +130,7 @@ class Chat extends ModTemplate {
     //
     let g = this.app.keys.returnGroups();
     for (let i = 0; i < g.length; i++) {
-      this.createChatGroup(g[i].members);
+      this.createChatGroup(g[i].members, g[i].name );
     }
 
     //
@@ -238,6 +243,68 @@ class Chat extends ModTemplate {
       this.app.network.propagateTransaction(tx);
     }
     relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
+  }
+
+
+
+
+
+
+
+  createMessage(group_id, msg) {
+
+    let publickey = this.app.network.peers[0].peer.publickey;
+    let newtx = this.app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
+    if (newtx == null) { return; }
+
+    newtx.msg = {
+      module: "Chat",
+      request: "chat message",
+      group_id: group_id,
+      message: this.formatMessage(msg),
+      type: "myself" ,
+      timestamp: new Date().getTime()
+    };
+    newtx.msg.sig = this.app.wallet.signMessage(JSON.stringify(newtx.msg));
+
+    //
+    // submit to group manually (no decrypt)
+    //
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].id == group_id) {
+        this.groups[i].txs.push(newtx);
+      }
+    }
+
+    newtx = this.app.wallet.signTransaction(newtx);
+    return newtx;
+
+  }
+
+  formatMessage(msg) {
+    msg = linkifyHtml(msg, { target: { url: '_self' } });
+    msg = marked(msg);
+    msg = sanitizeHtml(msg, {
+      allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img', 'marquee', 'pre'
+      ],
+      allowedAttributes: {
+        div: ['class', 'id'],
+        a: ['href', 'name', 'target', 'class', 'id'],
+        img: ['src', 'class']
+      },
+      selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
+      allowedSchemes: ['http', 'https', 'ftp', 'mailto'],
+      allowedSchemesByTag: {},
+      allowedSchemesAppliedToAttributes: ['href', 'cite'],
+      allowProtocolRelative: true,
+      transformTags: {
+        'a': sanitizeHtml.simpleTransform('a', { target: '_blank' })
+      }
+    });
+
+    return msg;
   }
 
 

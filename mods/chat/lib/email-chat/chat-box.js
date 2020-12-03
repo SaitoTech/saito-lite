@@ -13,22 +13,17 @@ module.exports = ChatBox = {
 
       document.querySelectorAll(".chat-box").forEach(box => {    
 
-console.log("1");
-
         let group_id = box.getAttribute("data-id");
 
         let idx = -1;
         for (let i = 0; i < mod.groups.length; i++) { if (mod.groups[i].id == group_id) { idx = i; } }
         if (idx == -1) { alert("could not find chat group..."); return; }
 
-console.log("2");
-
         if (mod.groups[idx].txs.length == 0) {
           let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
-          chat_box_main.innerHTML = `<p id="chat-box-default-message-${group.id}" style="text-align:center">No messages in this group :(</p>`;
+          chat_box_main.innerHTML = `<p id="chat-box-default-message-${group_id}" style="text-align:center">No messages in this group :(</p>`;
         }
 
-console.log("3");
 	let message_blocks = chat_self.createMessageBlocks(app, mod, mod.groups[idx]);
 
 console.log("-----------");
@@ -40,7 +35,10 @@ console.log("-----------");
 	  html += ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
 	}
 
-        chat_self.scrollToBottom(group.id);
+
+          chat_box_main.innerHTML = `<p id="chat-box-default-message-${group_id}" style="text-align:center">No messages in this group :(</p>`;
+
+        chat_self.scrollToBottom(group_id);
      });
 
     },
@@ -48,10 +46,8 @@ console.log("-----------");
 
     attachEvents(app, mod) {
 
-/***
       let chat_self = this;
 
-console.log("HERE WE ARE 1");
       //
       // foreach chat box
       //
@@ -61,27 +57,15 @@ console.log("HERE WE ARE 1");
         let group = null;
         let msg_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
 
-alert("This is the test!");
-
         //
         // paste image into comment-box
         //
         window.handlePasteImage(msg_input, (img) => {
-
-          let msg_data = {
-            message: img,
-            group_id: group_id,
-            publickey: app.wallet.returnPublicKey(),
-            timestamp: new Date().getTime()
-          };
-
-          let newtx = chat_self.createMessage(app, mod, msg_data);
+          let newtx = mod.createMessage(group_id, img);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
           chat_self.addMessage(app, mod, newtx);
-
         });
 
-console.log("HERE WE ARE 2");
         //
         // submit on enter
         //
@@ -89,22 +73,13 @@ console.log("HERE WE ARE 2");
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
             e.preventDefault();
             if (msg_input.value == '') { return; }
-
-            let msg_data = {
-              message: msg_input.value,
-              group_id: group_id,
-              publickey: app.wallet.returnPublicKey(),
-              timestamp: new Date().getTime()
-            };
-
-            let newtx = chat_self.createMessage(app, mod, msg_data);
+            let newtx = mod.createMessage(group_id, msg_input.value);
             app.modules.returnModule("Chat").sendMessage(app, newtx);
             chat_self.addMessage(app, mod, newtx);
             msg_input.value = '';
           }
         });
       });
-console.log("HERE WE ARE 3");
 
 
       //
@@ -124,7 +99,7 @@ console.log("HERE WE ARE 3");
             timestamp: new Date().getTime()
           };
 
-          let newtx = chat_self.createMessage(app, mod, msg_data);
+          let newtx = mod.createMessage(group_id, msg_data);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
 
 	  alert("sending chat message!");
@@ -133,7 +108,6 @@ console.log("HERE WE ARE 3");
 
 	};
       });
-console.log("HERE WE ARE 4");
 
 
       //
@@ -148,7 +122,6 @@ console.log("HERE WE ARE 4");
         };
       });
 
-console.log("HERE WE ARE 5");
 
       //
       // close chat window
@@ -162,7 +135,6 @@ console.log("HERE WE ARE 5");
         };
       });
 
-console.log("HERE WE ARE 6");
 
 
       //
@@ -182,8 +154,8 @@ console.log("HERE WE ARE 6");
             timestamp: new Date().getTime()
           };
 
-          let newtx = chat_self.createMessage(app, mod, msg_data);
-          app.modules.returnModule("Chat").sendMessage(app, newtx);
+          let newtx = mod.createMessage(group_id, msg_data);
+          mod.sendMessage(app, newtx);
           chat_self.addMessage(app, mod, newtx);
 
 	});
@@ -204,14 +176,10 @@ console.log("HERE WE ARE 6");
 
 	});
       });
-
-***/
-
-
     },
 
+
     showChatBox(app, mod, group) {
-alert("Show Chat Box!");
       if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
       this.attachEvents(app, mod);
     },
@@ -276,50 +244,6 @@ alert("Show Chat Box!");
         });
         this.scrollToBottom(message.group_id);
       } catch (err) { }
-    },
-
-
-    createMessage(app, mod, msg_data) {
-
-      let publickey = app.network.peers[0].peer.publickey;
-      let identicon = app.keys.returnIdenticon(msg_data.publickey);
-      let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
-      if (newtx == null) { return; }
-      msg_data.message = this.formatMessage(msg_data.message);
-      //msg_data.message = app.crypto.stringToBase64(msg_data.message);
-      newtx.msg = {
-          module: "Chat",
-          request: "chat message",
-          publickey: msg_data.publickey,
-          group_id: msg_data.group_id,
-          message: msg_data.message,
-          //
-          // in future will possibly encrypt
-          // this.saito.keys.encryptMessage(this.saito.wallet.returnPublicKey(), msg),
-          //
-          timestamp: msg_data.timestamp,
-      };
-      newtx.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.msg));
-
-      //
-      // submit to group manually (no decrypt)
-      //
-      for (let i = 0; i < mod.groups.length; i++) {
-	if (mod.groups[i].id == msg_data.group_id) {
-
-          let message = Object.assign(newtx.msg, {
-            //sig: tx.transaction.sig,
-            type: "myself" ,
-            identicon: app.keys.returnIdenticon(app.wallet.returnPublicKey())
-          });
-
-	  mod.groups[i].messages.push(message);
-	} 
-      }
-
-      newtx = app.wallet.signTransaction(newtx);
-      return newtx;
-
     },
 
 
