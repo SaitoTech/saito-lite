@@ -36,8 +36,6 @@ module.exports = ChatSidebar = {
 	mod.modal_add_user.attachEvents(app, mod);
       };
 
-
-
     },
 
 }

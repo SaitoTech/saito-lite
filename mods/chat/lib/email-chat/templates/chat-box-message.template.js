@@ -1,5 +1,5 @@
 
-module.exports = ChatMessageTemplate = ({ message, sig, type }, mod) => {
+module.exports = ChatMessageTemplate = (app, mod, message, sig, type) => {
 
 console.log("in template we got: " + message);
 
