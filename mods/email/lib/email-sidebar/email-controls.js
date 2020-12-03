@@ -11,11 +11,10 @@ module.exports = EmailControls = {
 
     attachEvents(app, mod) {
         EmailBarsMenu.attachEvents(app, mod);
-
-        let compose_button = document.getElementById('email-compose-btn');
-            compose_button.addEventListener('click', (e) => {
-              window.location.hash = `#page=email_form`;
-            });
+        document.querySelectorAll("#email-compose-btn, #mobile-email-compose-btn").forEach((elem, i) => {
+          elem.addEventListener('click', (e) => {
+            window.location.hash = mod.goToLocation(`#page=email_form`);
+          });
+        });
     }
-
 }

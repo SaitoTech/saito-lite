@@ -6,6 +6,8 @@ module.exports = ChatMain = {
 
     render(app, mod) {
 
+      if (app.BROWSER == 0) { return; }
+
       if (!document.getElementById("chat-main")) {
 	app.browser.addElementToDom(ChatMainTemplate());
       }

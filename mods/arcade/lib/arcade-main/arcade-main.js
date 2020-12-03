@@ -84,18 +84,18 @@ console.log("OBSERVER GAMES: " + JSON.stringify(mod.observer));
     document.querySelectorAll(`.observe-game-btn`).forEach((el, i) => {
         el.onclick = function (e) {
 
-          let game_sig = e.currentTarget.getAttribute("data-sig");
+          let game_obj = e.currentTarget.getAttribute("data-gameobj");
           let game_cmd = e.currentTarget.getAttribute("data-cmd");
 
-console.log(game_sig + " -- " + game_cmd);
+console.log(game_obj + " -- " + game_cmd);
 
           if (game_cmd === "watch") {
-            arcade_main_self.observeGame(app, mod, game_sig);
+            arcade_main_self.observeGame(app, mod, game_obj);
             return;
           }
 
         }
-    });	
+    });
 
 
 

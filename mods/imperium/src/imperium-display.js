@@ -21,6 +21,10 @@ addEventsToBoard() {
   let imperium_self = this;
   let pid = "";
 
+//
+// TODO remove jquery dependency
+//
+try {
   $('.sector').off();
   $('.sector').on('mouseenter', function () {
     pid = $(this).attr("id");
@@ -33,6 +37,7 @@ addEventsToBoard() {
     pid = $(this).attr("id");
     imperium_self.updateLog(imperium_self.returnSectorInformationHTML(pid));
   });
+} catch (err) {}
 }
 
 returnTechOverlay() {

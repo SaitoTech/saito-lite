@@ -111,7 +111,7 @@ h2, h5 {
   display: none;
 }
 
-.can-build {
+.theproject {
   margin-top: 800px;
 }
 
@@ -223,6 +223,52 @@ img.banner-logo {
 .build-grid div:hover {
   transform: scale(1.1);
   position: relative;
+}
+
+.theprojectxx {
+  border: 1px solid #ccc;
+  background-color: #fff8;
+}
+
+.project-components {
+  display: grid;
+  gap: 2em;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.component {
+  box-shadow: 0 70px 63px -60px #444;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  padding: 1em;
+  border-radius: 3px;
+  transition: ease-in-out 0.2s all;
+}
+
+.component:hover {
+  transform: scale(1.03);
+}
+
+.component-title {
+  font-size: 2em;
+}
+
+.component-subtitle {
+  font-size: 1.35em;
+  color: var(--saito-red);
+}
+
+.component-content {
+  font-size: 1.2em;
+  line-height: 1.3em;
+}
+
+.component div {
+  margin: 0 0 0.5em 0;
+}
+
+.component-content p {
+  margin: 0 0 1em;
 }
 
 .roadmap-row {
@@ -608,6 +654,9 @@ img.banner-logo {
   column-count: auto;
   column-fill: balance;
   text-align: center;
+  box-shadow: 0 70px 90px -50px #444;
+  border: 1px solid #dddd;
+  border-radius: 5px;
 }
 
 .supporter-list img {
@@ -962,133 +1011,134 @@ button:focus {
   .about-saito {
     clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
   }
-  .can-build {
+  .theproject {
     margin-top: 1100px;
   }
 }
-  @media only screen and (max-width: 800px) {
-    .mobile {
-      display: block;
-    }
-    .background-logo {
-      width: 90%;
-      margin: auto;
-      padding: 2em 0;
-    }
-    .desktop {
-      display: none;
-    }
-    .main {
-      display: block;
-      padding: 0px;
-      height: unset;
-      overflow: hidden;
-    }
-    .site-main {
-      height: 5px;
-      z-index: -1;
-    }
-    .mobile-banner {
-      display: block;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-    .arcade-banner {
-      border: 1px solid #4444;
-    }
-    .intro-box-mobile {
-      border: 1px solid #888;
-      background-color: #fffd;
-      padding: 1em;
-      width: calc(100vw - 2em);
-      height: 240px;
-      display: flex;
-      flex-flow: column;
-      justify-content: space-around;
-    }
-    .featured-app-inner-mobile {
-      width: calc(100vw - 2em);
-      margin: 1em auto;
-      display: block;
-    }
-    .roadmap-wrapper {
-      padding: 1em 0;
-    }
-    .featured-app-back-inner {
-      padding: 0 1em;
-      text-align: center;
-      color: #fff;
-    }
-    .banner {
-      clip-path: polygon(100% 0, 100% 56%, -10% 100%, 0 38%, 0 0);
-    }
-    .banner-logo {
-      display: none;
-    }
-    .featured-app-back-inner p {
-      margin: 1em;
-    }
-    .fundamentals-grid {
-      grid-template-columns: 1fr;
-      grid-gap: 1em;
-    }
-    .splash-row {
-      display: none;
-    }
-    .slider-content_grid {
-      font-size: 18px;
-    }
-    .can-build {
-      margin-top: calc(475px + 57.15vw);
-    }
-    .can-build-img-tall {
-      height: 250px;
-    }
-    .love-tools p {
-      font-size: 25px;
-    }
-    .roadmap-row {
-      display: flex;
-      flex-flow: column;
-      margin: 0;
-    }
-    .roadmap-row .content {
-      padding: 0;
-      clip-path: unset;
-      background: transparent;
-      margin: 0 0 1em 0;
-      width: 100%;
-    }
-    section {
-      padding: 0 1em;
-    }
-    section.roadmap {
-      background: linear-gradient(0deg, #DDD 50%, #CCC 100%);
-    }
 
-    section.supporters {
-      padding: 1em 2em;
-    }
-    .join-us {
-      overflow: auto;
-    }
-    .compare-grid {
-      overflow: auto;
-      padding: 0;
-      grid-template-columns: 7em repeat(5, auto);
-    }
-    .compare-grid-header, .compare-grid .label {
-      font-size: medium;
-    }
+@media only screen and (max-width: 800px) {
+  .mobile {
+    display: block;
   }
-  @media only screen and (max-width: 600px) {
-    body {
-      font-size: 0.8em;
-    }
-    .intro-title {
-      font-size: 1.7em;
-    }
-    .can-build {
-      margin-top: calc(435px + 57.15vw);
-    }
+  .background-logo {
+    width: 90%;
+    margin: auto;
+    padding: 2em 0;
   }
+  .desktop {
+    display: none;
+  }
+  .main {
+    display: block;
+    padding: 0px;
+    height: unset;
+    overflow: hidden;
+  }
+  .site-main {
+    height: 5px;
+    z-index: -1;
+  }
+  .mobile-banner {
+    display: block;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .arcade-banner {
+    border: 1px solid #4444;
+  }
+  .intro-box-mobile {
+    border: 1px solid #888;
+    background-color: #fffd;
+    padding: 1em;
+    width: calc(100vw - 2em);
+    height: 240px;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+  }
+  .featured-app-inner-mobile {
+    width: calc(100vw - 2em);
+    margin: 1em auto;
+    display: block;
+  }
+  .roadmap-wrapper {
+    padding: 1em 0;
+  }
+  .featured-app-back-inner {
+    padding: 0 1em;
+    text-align: center;
+    color: #fff;
+  }
+  .banner {
+    clip-path: polygon(100% 0, 100% 56%, -10% 100%, 0 38%, 0 0);
+  }
+  .banner-logo {
+    display: none;
+  }
+  .featured-app-back-inner p {
+    margin: 1em;
+  }
+  .fundamentals-grid {
+    grid-template-columns: 1fr;
+    grid-gap: 1em;
+  }
+  .splash-row {
+    display: none;
+  }
+  .slider-content_grid {
+    font-size: 18px;
+  }
+  .theproject {
+    margin-top: calc(475px + 57.15vw);
+  }
+  .can-build-img-tall {
+    height: 250px;
+  }
+  .love-tools p {
+    font-size: 25px;
+  }
+  .roadmap-row {
+    display: flex;
+    flex-flow: column;
+    margin: 0;
+  }
+  .roadmap-row .content {
+    padding: 0;
+    clip-path: unset;
+    background: transparent;
+    margin: 0 0 1em 0;
+    width: 100%;
+  }
+  section {
+    padding: 0 1em;
+  }
+  section.roadmap {
+    background: linear-gradient(0deg, #DDD 50%, #CCC 100%);
+  }
+  section.supporters {
+    padding: 1em 2em;
+  }
+  .join-us {
+    overflow: auto;
+  }
+  .compare-grid {
+    overflow: auto;
+    padding: 0;
+    grid-template-columns: 7em repeat(5, auto);
+  }
+  .compare-grid-header, .compare-grid .label {
+    font-size: medium;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    font-size: 0.8em;
+  }
+  .intro-title {
+    font-size: 1.7em;
+  }
+  .theproject {
+    margin-top: calc(435px + 57.15vw);
+  }
+}

@@ -7,14 +7,18 @@ module.exports = ChatBoxMessageBlockTemplate = (message_block, mod) => {
 
   let datetime = mod.app.browser.formatDate(last_message_timestamp);
 
+  let messages_unknown = 0;
   let messages_html = "";
   let sigs = [];
-   messages.forEach(message => {
-     if (!sigs.includes(message.sig) && !document.getElementById(message.sig)) {
-       sigs.push(message.sig);
-       messages_html += ChatBoxMessageTemplate(message, mod);
-     }
-   });
+  messages.forEach(message => {
+    if (!sigs.includes(message.sig) && !document.getElementById(message.sig)) {
+      sigs.push(message.sig);
+      messages_html += ChatBoxMessageTemplate(message, mod);
+      messages_unknown++;
+    }
+  });
+
+  if (messages_html === "") { return ''; }
 
   return `
     <div class="chat-message-set chat-message-set-${type}" id="chat-message-set-${publickey}-${last_message_timestamp}">

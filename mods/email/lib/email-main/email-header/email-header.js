@@ -2,14 +2,13 @@ const EmailInboxHeader = require('./email-inbox-header/email-inbox-header');
 const EmailDetailHeader = require('./email-detail-header/email-detail-header');
 const EmailFormHeader = require('./email-form-header/email-form-header');
 const EmailAppspaceHeader = require('./email-appspace-header/email-appspace-header');
+const EmailCryptoAppspaceHeader = require('./email-cryptoappspace-header/email-cryptoappspace-header');
 
 module.exports = EmailHeader = {
-
+  
   render(app, mod) {
     mod.header = this;
-
-    
-    let page = mod.parseHash(window.location.hash).page
+    let page = app.browser.parseHash(window.location.hash).page
     switch(page) {
       case "email_list":
         EmailInboxHeader.render(app, mod);
@@ -35,8 +34,8 @@ module.exports = EmailHeader = {
         // errors here are handled in email-body.js
         break;
     }
-
-    mod.updateBalance();
+    
+    mod.rerenderBalance();
 
   },
 
@@ -48,6 +47,11 @@ module.exports = EmailHeader = {
         email_bars_menu.style.display = email_bars_menu.style.display == "block" ? "none" : "block";
       });  
     }
+    document.querySelectorAll('#email-form-back-button').forEach((backButton, i) => {
+      backButton.onclick = () => {
+        window.history.back();
+      }
+    });
   },
 
 }

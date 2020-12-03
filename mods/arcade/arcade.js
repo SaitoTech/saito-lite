@@ -79,13 +79,6 @@ class Arcade extends ModTemplate {
 
   respondTo(type = "") {
     if (type == "header-dropdown") {
-      return {};
-    }
-    return null;
-  }
-  
-  requestInterface(type = "", interfaceBuilder = null) {
-    if (type == "header-dropdown") {        
       return {
         name: this.appname ? this.appname : this.name,
         icon_fa: this.icon_fa,
@@ -189,7 +182,6 @@ class Arcade extends ModTemplate {
 
 
   async render(app) {
-
     if (!document.getElementById("arcade-container")) { 
       app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); 
     }
@@ -200,13 +192,11 @@ class Arcade extends ModTemplate {
     this.overlay.render(app, this);
     this.overlay.attachEvents(app, this);
 
-    ArcadeMain.render(app, this);
-    ArcadeMain.attachEvents(app, this);
-
     ArcadeSidebar.render(app, this);
     ArcadeSidebar.attachEvents(app, this);
  
-
+    ArcadeMain.render(app, this);
+    ArcadeMain.attachEvents(app, this);
 
    
     //
@@ -1046,6 +1036,11 @@ console.log("going into super handle peer request...");
 
   }
 
+  launchSinglePlayerGame(app, data, gameobj) {
+    window.location = '/' + gameobj.slug;
+    return;
+  }
+  
   createAcceptTransaction(gametx) {
 
     let txmsg = gametx.returnMessage();
@@ -1704,9 +1699,6 @@ console.log(params);
       }
     }
     return 0;
-  }
-
-  updateBalance() {
   }
 
   updateIdentifier() {

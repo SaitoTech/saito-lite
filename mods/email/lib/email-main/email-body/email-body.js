@@ -2,7 +2,6 @@ const EmailForm          = require('./email-form/email-form');
 const EmailDetail        = require('./email-detail/email-detail');
 const EmailAppspace         = require('./email-appspace/email-appspace');
 const EmailCryptoAppspace         = require('./email-cryptoappspace/email-cryptoappspace');
-//const EmailAppspaceTemplate = require('./email-appspace/email-appspace.template.js');
 const EmailListTemplate     = require('./email-list/email-list.template.js');
 
 
@@ -13,7 +12,7 @@ module.exports = EmailBody = {
     render(app, mod) {
 
         mod.body = this;
-        let page = mod.parseHash(window.location.hash).page
+        let page = app.browser.parseHash(window.location.hash).page
         switch(page) {
             case "email_list":
                 EmailList.render(app, mod);
@@ -36,7 +35,7 @@ module.exports = EmailBody = {
                 EmailCryptoAppspace.render(app, mod);
                 break;
             default:
-                mod.locationErrorFallback(`Page not found: ${page}`);
+                mod.locationErrorFallback();
                 break;
         }
     },
@@ -45,7 +44,7 @@ module.exports = EmailBody = {
         if (document.querySelector('#email.create-button')) {
             document.querySelector('#email.create-button')
             .addEventListener('click', (e) => {
-              window.location.hash = `#page=email_form`;
+              window.location.hash = mod.goToLocation("#page=email_form");
             });
         }
     }

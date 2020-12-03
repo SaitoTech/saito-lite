@@ -141,8 +141,8 @@ p {
 }
 
 .chat-header {
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -490,10 +490,8 @@ p {
     display: none;
   }
   .chat-box {
-        display: none; 
     height: calc(100vh - 5em);
-    
-    width: calc(100vw -1px);
+    width: calc(100vw - 1px);
     max-height: 50vh;
   }
   .chat-manager.min-chat {
@@ -513,6 +511,6 @@ p {
 
 @media screen and (orientation:landscape) and (max-height: 600px) {
   .chat-manager {
-      display: none;
+    display: none;
   }
 }

@@ -1,6 +1,8 @@
 
 module.exports = ChatMessageTemplate = ({ message, sig, type }, mod) => {
 
+console.log("in template we got: " + message);
+
   // if (document.getElementById(sig)) { return ""; }
   // Preview common path/to/file.ext URL images
   var imgs = [".apng",".gif",".ico",".cur",".jpg",".jpeg",".jfif",".pjpeg",".pjp",".png",".svg"];

@@ -49,12 +49,7 @@ class Poker extends GameTemplate {
       obj.title = "Poker";
       return obj;
     }
-
-    return null;
-
-  }
-  
-  requestInterface(type) {
+    
     if (type == "arcade-create-game") {
       return {
         slug: this.slug,
@@ -66,18 +61,16 @@ class Poker extends GameTemplate {
         maxPlayers: this.maxPlayers,
       }
     }
-    if (type == "make-invite-description") {
-      return {
-        makeDescription: (txMsg) => {
-          return "Hold 'em";
-        }    
-      }
-    }
-    if (type == "arcade-sidebar") {
-      return { title: this.name };
-    }
     return null;
+
   }
+  
+  // requestInterface(type) {
+  //   if (type == "arcade-sidebar") {
+  //     return { title: this.name };
+  //   }
+  //   return null;
+  // }
 
 
 
@@ -1084,6 +1077,8 @@ class Poker extends GameTemplate {
 
   playerTurn() {
 
+    if (this.browser_active == 0) { return; }
+
     let poker_self = this;
 
     this.displayBoard();
@@ -1595,7 +1590,9 @@ console.log("this raise: " + this_raise);
 
     this.updateStatus("Waiting for information from peers....");
 
-    $(".menu_option").off();
+    try {
+      $(".menu_option").off();
+    } catch (err) {}
 
     let extra = {};
     extra.target = this.returnNextPlayer(this.game.player);

@@ -1,12 +1,12 @@
-const ChatRoomMessageBubbleTemplate = require('./chat-room-message-bubble.template');
+const ChatMessageBubbleTemplate = require('./chat-message-bubble.template');
 const emoji = require('node-emoji');
 
-module.exports = ChatMessageContainerTemplate = (message_block, data) => {
-  let { identicon, messages, publickey, keyHTML, last_message_timestamp, type } = message_block;
-  let { datetime_formatter } = data.chat.helpers;
+module.exports = ChatMessageContainerTemplate = (message_block, group) => {
 
-  let datetime = datetime_formatter(last_message_timestamp);
-  let messages_html = messages.map(message => ChatRoomMessageBubbleTemplate(message, data)).join('');
+  let { identicon, messages, publickey, keyHTML, last_message_timestamp, type } = message_block;
+
+  let datetime = app.browser.formatDate(last_message_timestamp);
+  let messages_html = messages.map(message => ChatRoomMessageBubbleTemplate(message, group)).join('');
   return `
     <div class="chat-message-container chat-message-${type}" id="chat-message-container-${publickey}-${last_message_timestamp}">
       <div style="display: grid; grid-gap: 6px;">

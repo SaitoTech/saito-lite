@@ -9,7 +9,10 @@ class Tutorial2 extends ModTemplate {
     this.categories      = "Tutorials";
     this.default_html    = 1;
     this.balance         = null;
-    this.appify(this);
+    //this.appify(this);
+    this.initialize = this.onlyOnActiveBrowser(this.initialize.bind(this));
+    this.initializeHTML = this.onlyOnActiveBrowser(this.initializeHTML.bind(this));
+    this.attachEvents = this.onlyOnActiveBrowser(this.attachEvents.bind(this));
     return this;
   }
 
@@ -34,16 +37,16 @@ class Tutorial2 extends ModTemplate {
     };
   }
 
-  updateBalance(app) {
-    this.balance = app.wallet.returnBalance();
-    this.render(app);
-  }
+  // updateBalance(app) {
+  //   this.balance = app.wallet.returnBalance();
+  //   this.render(app);
+  // }
 
   webServer(app, expressapp, express) {
     super.webServer(app, expressapp, express);
     expressapp.get('/gimme', function (req, res) {
       // "interface" is a reserved word :P
-      app.modules.requestInterfaces("send-reward").forEach((itnerface, i) => {
+      app.modules.getRespondTos("send-reward").forEach((itnerface, i) => {
         itnerface.makePayout(req.query.pubkey, 10000);
         res.type('application/json');
         res.status(200);

@@ -16,8 +16,9 @@ module.exports = ArcadePosts = {
     }
 
     mod.renderMethod = "arcade";
-
-    app.browser.addElementToDom(PostStyle());
+    if (!document.getElementById("posts-stylesheet")) {
+      app.browser.addElementToDom(PostStyle());  
+    }
 
   },
 
@@ -57,7 +58,7 @@ module.exports = ArcadePosts = {
       if (sig === post.transaction.sig) { post_this = 0; }
     });
     if (post_this == 0) { return; }
-    app.browser.addElementToDom(PostTeaserTemplate(app, mod, post), "arcade-posts");
+    app.browser.prependElementToDom(PostTeaserTemplate(app, mod, post), document.getElementById("arcade-posts"));
   }
 
 

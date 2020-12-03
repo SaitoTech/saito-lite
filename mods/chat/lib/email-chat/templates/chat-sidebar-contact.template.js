@@ -2,16 +2,25 @@ module.exports = ChatSidebarContactTemplate = (app, group) => {
 
   let ts = new Date().getTime();
   let msg = '';
-  let message = group.messages[group.messages.length-1];
+  let message = '';
+
+  if (group.messages.length == 0) {
+    message = "New Chat Room Created";
+  } else {
+    message = group.messages[group.messages.length-1];
+  }
 
   if (message) {
-    if (!message.message) { return ''; }
-    ts = message.timestamp;
-    msg = app.crypto.base64ToString(message.message);
-    let tmp = document.createElement("DIV");
-    tmp.innerHTML = msg;
-    msg = tmp.innerText;
-    msg = msg.substring(0, 48);
+    if (message.message) {
+      ts = message.timestamp;
+      msg = message.message;
+      let tmp = document.createElement("DIV");
+      tmp.innerHTML = msg;
+      msg = tmp.innerText;
+      msg = msg.substring(0, 48);
+    } else {
+      msg = "New Chat Room Created";
+    }
   }
 
   let datetime = app.browser.formatDate(ts);
@@ -29,4 +38,3 @@ module.exports = ChatSidebarContactTemplate = (app, group) => {
     </div>
   `;
 }
-

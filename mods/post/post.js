@@ -56,7 +56,12 @@ class Post extends ModTemplate {
     }
 
     if (type == "header-dropdown") {
-      return {};
+      return {
+        name: this.appname ? this.appname : this.name,
+        icon_fa: this.icon_fa,
+        browser_active: this.browser_active,
+        slug: this.returnSlug()
+      };
     }
 
     return null;
@@ -134,7 +139,7 @@ class Post extends ModTemplate {
           if (res) {
             if (res.rows) {
               for (let i = 0; i < res.rows.length; i++) {
-		this.posts.push(new saito.transaction(JSON.parse(res.rows[i].tx)));
+		this.posts.unshift(new saito.transaction(JSON.parse(res.rows[i].tx)));
 		this.posts[this.posts.length-1].children = res.rows[i].children;
 		this.posts[this.posts.length-1].img = res.rows[i].img;
               }

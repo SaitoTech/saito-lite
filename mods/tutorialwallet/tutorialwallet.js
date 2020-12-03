@@ -23,7 +23,10 @@ class TutorialWallet extends ModTemplate {
     this.serverkey       = null;
     
     this.default_html = 1;
-    this.appify(this);
+    
+    this.initialize = this.onlyOnActiveBrowser(this.initialize.bind(this));
+    this.initializeHTML = this.onlyOnActiveBrowser(this.initializeHTML.bind(this));
+    this.attachEvents = this.onlyOnActiveBrowser(this.attachEvents.bind(this));
     return this;
   }
 
@@ -71,18 +74,12 @@ class TutorialWallet extends ModTemplate {
     };
   }
 
-  updateBalance(app) {
-    console.log("****** tutorial updateBalance");
-    this.balance = app.wallet.returnBalance();
-    this.render(app);
-  }
-
   onConfirmation(app) {
     console.log("****** tutorial walletonConfirmation");
   }
   webServer(app, expressapp, express) {
     expressapp.get('/gimme', function (req, res) {
-      app.modules.requestInterfaces("send-reward").forEach((itnerface, i) => {
+      app.modules.getRespondTos("send-reward").forEach((itnerface, i) => {
         itnerface.makePayout(req.query.pubkey, 10000);
         res.type('application/json');
         res.status(200);

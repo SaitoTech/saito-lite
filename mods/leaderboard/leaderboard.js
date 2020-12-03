@@ -134,7 +134,7 @@ class Leaderboard extends ModTemplate {
             loop++;
           }
 
-          leaderboard_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+          leaderboard_self.app.browser.addIdentifiersToDom(identifiers_to_fetch);
 
           try {
             document.querySelector(".leaderboard-container").innerHTML = html;

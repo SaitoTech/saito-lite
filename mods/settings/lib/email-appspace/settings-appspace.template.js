@@ -88,6 +88,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
       <div id="settings-appspace" class="settings-appspace"></div>
 
+      <hr />
       <div class="grid-4">
         <div>Code Version:</div>
         <div>${app.wallet.wallet.version}</div>

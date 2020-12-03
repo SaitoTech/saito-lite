@@ -4,21 +4,27 @@ const { Keyring }  = require('@polkadot/keyring');
 const { mnemonicGenerate } = require('@polkadot/util-crypto');
 const { ApiPromise, WsProvider }  = require('@polkadot/api');
 const { randomBytes }   = require('crypto');
+const EventEmitter = require('events');
 
 // Stub module for future integration if we want Saito to do is_cryptocurrency
+// ############################## DEPRECATED!!!!! ##############################
+// ############################## DEPRECATED!!!!! ##############################
+// ############################## DEPRECATED!!!!! ##############################
+// ############################## DEPRECATED!!!!! ##############################
 class SaitoCrypto extends ModTemplate {
   constructor(app) {
 
     super(app);
     this.name = "SaitoCrypto";
     this.description = "Saito";
-    this.categories = "Crptocurrency";
+    this.categories = "Cryptocurrency";
     this.ticker = "SAITO";
     this.mods = [];
     this.app = app;
+    this.eventEmitter = new EventEmitter();
   }
   
-  requestInterface(type = "") {
+  respondTo(type = "") {
     if (type == "is_cryptocurrency") {
       return {
         name: this.name,
@@ -33,7 +39,7 @@ class SaitoCrypto extends ModTemplate {
         getAddress: async() => {
           return this.app.wallet.returnPublicKey();
         },
-        subscribe: null,
+        eventEmitter: this.eventEmitter,
         //https://polkadot.js.org/docs/api/cookbook/tx/
         estimateFee: null,
       }

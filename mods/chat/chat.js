@@ -17,6 +17,7 @@ class Chat extends ModTemplate {
     this.header = new SaitoHeader(app, this);
 
     this.renderMethod = "none";
+
     this.relay_moves_onchain_if_possible = 1;
 
   }
@@ -25,12 +26,19 @@ class Chat extends ModTemplate {
   receiveEvent(type, data) {
 
     if (type === "encrypt-key-exchange-confirm") {
+
       if (data.members === undefined) { return; }
       let newgroup = this.createChatGroup(data.members);
       if (newgroup) {
+
         this.addNewGroup(newgroup);
         this.sendEvent('chat-render-request', {});
         this.saveChat();
+
+	//
+	// rendering
+	//
+	this.render(this.app);
       }
     }
 
@@ -45,25 +53,16 @@ class Chat extends ModTemplate {
           attachEvents: this.attachEventsEmailChat,
         }
       case 'header-dropdown':
-        return {}
+        return {
+          name: this.appname ? this.appname : this.name,
+          icon_fa: this.icon_fa,
+          browser_active: this.browser_active,
+          slug: this.returnSlug()
+        };
       default:
         return null;
     }
   }
-
-  
-  requestInterface(type = "") {
-    if (type == "header-dropdown") {        
-      return {
-        name: this.appname ? this.appname : this.name,
-        icon_fa: this.icon_fa,
-        browser_active: this.browser_active,
-        slug: this.returnSlug()
-      };
-    }
-    return null;
-  }
-
 
   //
   // email-chat -- mod should be email since refernece is not "this"
@@ -80,14 +79,24 @@ class Chat extends ModTemplate {
   // main module render
   //
   render(app) {
-    console.log("RENDERING MAIN CHAT IN SIDEBAR AND STUFF!");
+
+    if (this.renderMode == "main") {
+      ChatMain.render(app, this);
+      ChatMain.attachEvents(app, this);
+    }
+
+    if (this.renderMode == "email") {
+      EmailChat.render(app, this);
+      EmailChat.attachEvents(app, this);
+    }
+
   }
 
 
 
   initializeHTML(app) {
 
-    if (this.renderMethod == "main") {
+    if (this.renderMode == "main") {
 
       this.header.render(app, this);
       this.header.attachEvents(app, this);
@@ -145,7 +154,6 @@ class Chat extends ModTemplate {
       }
     }
 
-
     //
     // create mastodon server
     //
@@ -190,16 +198,13 @@ class Chat extends ModTemplate {
     this.sendEvent('chat-render-box-request', {});
 
 
-    if (this.renderMethod == "main") {
+    if (this.renderMode == "main") {
       ChatMain.render(app, this);
       ChatMain.attachEvents(app, this);
     }
 
     this.saveChat();
   }
-
-
-
 
 
 
@@ -215,6 +220,7 @@ class Chat extends ModTemplate {
       }
     }
   }
+
 
   //
   // peer messages --< receiveMessage() 
@@ -266,7 +272,10 @@ class Chat extends ModTemplate {
     relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
   }
 
+
   receiveMessage(app, tx) {
+
+console.log("tx received!");
 
     let txmsg = tx.returnMessage();
 
@@ -276,6 +285,18 @@ class Chat extends ModTemplate {
         this.showAlert();
       }
     }
+
+    //
+    // create msg object
+    //
+    let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+    app.browser.addIdentifiersToDom([tx.transaction.from[0].add]);
+    let message = Object.assign(txmsg, {
+      sig: tx.transaction.sig,
+      type: msg_type,
+      identicon: this.app.keys.returnIdenticon()
+    });
+
 
     //
     // notify group chat if not-on-page
@@ -288,17 +309,6 @@ class Chat extends ModTemplate {
       }
     } catch (err) {
     }
-    if (chat_on_page == 0 && this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
-      let default_chat = this.returnDefaultChat();
-      let message2 = JSON.parse(JSON.stringify(txmsg));
-      message2.group_id = default_chat.id;
-      message2.sig = this.app.crypto.hash(tx.transaction.sig);
-      message2.identicon = this.app.keys.returnIdenticon();
-      message2.type = "others";
-      message2.message = this.app.crypto.stringToBase64("<i>you have received a private message</i>");
-      default_chat.messages.push(message2);
-      this.sendEvent('chat_receive_message', message2);
-    }
 
     this.groups.forEach(group => {
 
@@ -306,36 +316,45 @@ class Chat extends ModTemplate {
 
         if (group.id == txmsg.group_id) {
 
-          let from_add = tx.transaction.from[0].add;
-          let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-
-          this.addrController.fetchIdentifiers([from_add]);
-          let message = Object.assign(txmsg, {
-            sig: tx.transaction.sig,
-            type: msg_type,
-            identicon: this.app.keys.returnIdenticon()
-          });
-
-          group.messages.push(message);
-
+	  //
+	  // only add if not from me, otherwise will be encrypted for others
+	  //
           if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
             let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
             let title =  identifier ? identifier : message.publickey;
-	    let clean_message = "";
-	    clean_message = this.app.crypto.base64ToString(message.message);
-	    clean_message = clean_message.replace(/<[^>]*>?/gm, '');
-            app.browser.sendNotification(title, clean_message, 'chat-message-notification');
-            this.sendEvent('chat_receive_message', message);
-          }
 
-          this.sendEvent('chat-render-request', {});
+	    // clean message only used for alert
+	    //let clean_message = "";
+	    //clean_message = this.app.crypto.base64ToString(message.message);
+	    //clean_message = clean_message.replace(/<[^>]*>?/gm, '');
+	    //if (clean_message != "") { message.message = clean_message; }
+
+            app.browser.sendNotification(title, message, 'chat-message-notification');
+
+            group.messages.push(message);
+         }
+
+
         }
-
       } catch (err) {
-console.log("TESTING HERE AND GOT ERROR: " + err);
+console.log("ERROR 113234: chat error receiving message: " + err);
       }
 
     });
+
+
+    if (chat_on_page == 0) {
+      if (this.app.wallet.returnPublicKey() != tx.transaction.from[0].add) {
+        this.openChatBox(txmsg.group_id);
+      }
+    }
+
+console.log("announcing sending of message: " +JSON.stringify(message.message));
+    this.sendEvent('chat_receive_message', message);
+
+console.log(" ... and render");
+    this.render(this.app);
+
   }
 
 
@@ -378,8 +397,9 @@ console.log("TESTING HERE AND GOT ERROR: " + err);
       }
     }
 
-  }
+    this.render(this.app);
 
+  }
 
 
   ///////////////////
@@ -470,6 +490,8 @@ console.log("TESTING HERE AND GOT ERROR: " + err);
     } else {
       this.groups.unshift(cg);
     }
+
+console.log("ADDED GROUP: " + JSON.stringify(cg));
 
   }
 

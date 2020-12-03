@@ -1,3 +1,39 @@
+
+
+/******* START CRYPTO MODS ********/
+.superwallet-container {
+padding: 10em;
+overflow-y: scroll;
+height: 100%;
+}
+
+.crypto-container {
+margin: 2em 0em;
+border: solid 2px black;
+padding: 1.5em;
+}
+
+.crypto-container .crypto-title {
+font-size: 1.5em;
+}
+.crypto-container .ticker {
+font-size: 3.5em;
+}
+
+.crypto-container input {
+padding: 0;
+border: solid 1px black;
+margin-bottom: 0.2em;
+}
+
+.crypto-container input.sendbutton {
+padding: 0.3em 0.6em;
+font-size: 1.0em;
+border: solid 1px black;
+}
+
+
+/******* END CRYPTO MODS ********/
 /** Email **/
 
 .footer {
@@ -14,6 +50,7 @@ hr {
 }
 
 .email-container {
+  max-width: var(--saito-width);
   display: grid;
   grid-column-gap: 1.5em;
   grid-template-columns: 15em auto;
@@ -30,11 +67,6 @@ hr {
   align-items: center;
   grid-template-columns: 60% 40%;
   border-bottom: 1px solid var(--saito-cyber-black);
-}
-
-.email-header-title {
-  font-family: visuelt-medium;
-  font-size: 1.2em;
 }
 
 .email-icons {
@@ -378,6 +410,9 @@ hr {
   input[type=checkbox] {
     margin: 0 0.65em;
   }
+  button.super {
+    padding: 0;
+  }
   .mobile-hide {
     display: none;
   }
@@ -411,8 +446,9 @@ hr {
   .email-header {
     grid-template-columns: 3em auto;
   }
-  .email-balance, .email-header-title {
+  .email-balance {
     font-size: 2em;
+    margin-right: 0.4em;
   }
   .email-balance.detail {
     display: none;
@@ -465,10 +501,11 @@ hr {
     position: absolute;
     z-index: 10000;
     top: 9em;
-    width: 100%;
     padding: 0 1em;
     background: white;
     font-family: visuelt-light;
+    display: block;
+    box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
   }
   .email-navigator, .email-apps {
     justify-content: left;
@@ -518,13 +555,8 @@ hr {
   .email-header h3 {
     padding-top: 7px;
   }
-  
 
-  @media only screen and (min-width: 600px) {
-    #email.create-button {
-      display: none;
-    }
-    #email-bars-icon {
-      display: block;
-    }
+  #email-bars-icon {
+    display: block;
   }
+}

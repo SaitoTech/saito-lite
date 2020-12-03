@@ -33,7 +33,7 @@ class SuperWallet extends ModTemplate {
     if (!this.rendered) {
       this.rendered = true;
       app.browser.addElementToDom('<div id="superwallet-container" class="superwallet-container"></div>'); 
-      app.modules.requestInterfaces("is_cryptocurrency").forEach(async(responseInterface, i) => {
+      app.wallet.getSupportedCryptos().forEach(async(responseInterface, i) => {
         let infoHtml = '';
         if (responseInterface.info) {
           infoHtml = `<div class="crypto-info">${responseInterface.info}</div>`;
@@ -42,7 +42,6 @@ class SuperWallet extends ModTemplate {
           <div class="ticker">${responseInterface.ticker}</div>
           <div class="crypto-title">${responseInterface.description}</div>
           ${infoHtml}
-          
           <div>
             Address: <span class="address">loading...</span>
           </div>

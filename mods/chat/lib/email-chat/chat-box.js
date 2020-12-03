@@ -28,22 +28,32 @@ module.exports = ChatBox = {
         }
 
         let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
-
         chat_self.message_blocks = chat_self.createMessageBlocks(app, mod, group.messages);
+
         if (chat_self.message_blocks.length == 0) {
           chat_box_main.innerHTML = 
             `<p id="chat-box-default-message-${group.id}" style="text-align:center">
                No messages in this group :(
              </p>`;
         } else {
+	  if (group.messages[0].message === "no messages in this group...") {
+	    group.messages[0].splice(0, 1);
+	  }
           chat_self.removeDefaultMessage(group.id);
         }
 
+
+
         chat_self.message_blocks.forEach(message_block => {
-          message_block = Object.assign({}, message_block, {
-            type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
-          });
-          chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);
+          if (!document.getElementById(message_block.sig)) {
+            message_block = Object.assign({}, message_block, {
+              type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
+            });
+	    let new_html = ChatBoxMessageBlockTemplate(message_block, mod);
+            if (new_html != "") {
+	      chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);
+	    }
+	  }
         });
 
         chat_self.scrollToBottom(group.id);
@@ -229,12 +239,12 @@ module.exports = ChatBox = {
       try {
         if (document.getElementById(msg.sig)) { return };
         let message = Object.assign({}, msg, {
-          keyHTML: mod.addrController.returnAddressHTML(msg.publickey),
+          keyHTML: app.browser.returnAddressHTML(msg.publickey),
           identicon: app.keys.returnIdenticon(msg.publickey),
           identicon_color: app.keys.returnIdenticonColor(msg.publickey),
         });
         //remove safety base64 encoding.
-        message.message = app.crypto.base64ToString(message.message);
+        //message.message = app.crypto.base64ToString(message.message);
 
         let chat_box_main = document.getElementById(`chat-box-main-${message.group_id}`);
 
@@ -283,7 +293,7 @@ module.exports = ChatBox = {
       let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
       if (newtx == null) { return; }
       msg_data.message = this.formatMessage(msg_data.message);
-      msg_data.message = app.crypto.stringToBase64(msg_data.message);
+      //msg_data.message = app.crypto.stringToBase64(msg_data.message);
       newtx.msg = {
           module: "Chat",
           request: "chat message",
@@ -297,6 +307,23 @@ module.exports = ChatBox = {
           timestamp: msg_data.timestamp,
       };
       newtx.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.msg));
+
+      //
+      // submit to group manually (no decrypt)
+      //
+      for (let i = 0; i < mod.groups.length; i++) {
+	if (mod.groups[i].id == msg_data.group_id) {
+
+          let message = Object.assign(newtx.msg, {
+            //sig: tx.transaction.sig,
+            type: "myself" ,
+            identicon: app.keys.returnIdenticon(app.wallet.returnPublicKey())
+          });
+
+	  mod.groups[i].messages.push(message);
+	} 
+      }
+
       newtx = app.wallet.signTransaction(newtx);
       return newtx;
 
@@ -307,17 +334,20 @@ module.exports = ChatBox = {
       let idx = 0;
       let message_blocks = [];
 
-
       while (idx < messages.length) {
+        if (messages[idx].publickey != undefined) {
+        try {
         let message = Object.assign({}, messages[idx], {
-          keyHTML: mod.addrController.returnAddressHTML(messages[idx].publickey),
+          keyHTML: app.browser.returnAddressHTML(messages[idx].publickey),
           identicon: app.keys.returnIdenticon(messages[idx].publickey),
           identicon_color: app.keys.returnIdenticonColor(messages[idx].publickey),
         });
-        // decode
-        message.message = app.crypto.base64ToString(message.message);
-        // message.message = this.formatMessage(message.message);
-        if (idx == 0) {
+
+        // decode - now done message-wide 
+        //message.message = app.crypto.base64ToString(message.message);
+        //message.message = this.formatMessage(message.message);
+
+        if (message_blocks.length == 0) {
           let new_message_block = Object.assign({}, {
             publickey: message.publickey,
             group_id: message.group_id,
@@ -351,6 +381,8 @@ module.exports = ChatBox = {
             });
             message_blocks.push(new_message_block);
           }
+        }
+        } catch (err) {}
         }
         idx++;
       }

@@ -49,34 +49,23 @@ class Chessgame extends GameTemplate {
       obj.title = "Chess";
       return obj;
     }
-
+    // if (type == "make-invite-description") {
+    //   return {
+    //     makeDescription: (txMsg) => {
+    //       return txMsg.options.color;
+    //     }    
+    //   }
+    // }
     return null;
 
   }
-  requestInterface(type) {
-    if (type == "arcade-create-game") {
-      return {
-        slug: this.slug,
-        title: this.name,
-        description: this.description,
-        publisher_message: this.publisher_message,
-        returnGameOptionsHTML: this.returnGameOptionsHTML.bind(this),
-        minPlayers: this.minPlayers,
-        maxPlayers: this.maxPlayers,
-      }
-    }
-    if (type == "make-invite-description") {
-      return {
-        makeDescription: (txMsg) => {
-          return txMsg.options.color;
-        }    
-      }
-    }
-    if (type == "arcade-sidebar") {
-      return { title: this.name };
-    }
-    return null;
-  }
+  // requestInterface(type) {
+  // 
+  //   if (type == "arcade-sidebar") {
+  //     return { title: this.name };
+  //   }
+  //   return null;
+  // }
 
   initializeHTML(app) {
 

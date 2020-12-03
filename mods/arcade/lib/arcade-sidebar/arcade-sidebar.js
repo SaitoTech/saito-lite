@@ -21,26 +21,24 @@ module.exports = ArcadeSidebar = {
     });
 
 
-    let arcade_sidebar_apps_loaded = 0;
-    app.modules.respondTo("arcade-sidebar").forEach(module => {
-      if (module != null) {
-        module.respondTo('arcade-sidebar').render(app, module);
-        arcade_sidebar_apps_loaded = 1;
-      }
-    });
-    if (arcade_sidebar_apps_loaded == 0) {
-      document.getElementById("arcade-sidebar-apps").style.display = "none";
-    }
+    // let arcade_sidebar_apps_loaded = 0;
+    // app.modules.respondTo("arcade-sidebar").forEach(module => {
+    //   if (module != null) {
+    //     module.respondTo('arcade-sidebar').render(app, module);
+    //     arcade_sidebar_apps_loaded = 1;
+    //   }
+    // });
+    // if (arcade_sidebar_apps_loaded == 0) {
+    //   document.getElementById("arcade-sidebar-apps").style.display = "none";
+    // }
+
 
     let games_menu = document.querySelector(".arcade-apps");
     app.modules.respondTo("arcade-games").forEach(module => {
-      let title = mod.name;
+      let title = module.name;
+      
+      
       if (!document.getElementById(module.name)) {
-        if (module.respondTo("arcade-carousel") != null) {
-          if (module.respondTo("arcade-carousel").title) {
-            title = module.respondTo("arcade-carousel").title;
-          }
-        }
         games_menu.innerHTML += `<li class="arcade-navigator-item" id="${module.name}">${title}</li>`;
       }
     });
@@ -64,22 +62,26 @@ module.exports = ArcadeSidebar = {
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
       game.addEventListener('click', (e) => {
 
+        
+        let gameName = e.currentTarget.id;
+        let doGameDetails = () => {
+          let tx = new saito.transaction();
+          tx.msg.game = gameName;
+          ArcadeGameDetails.render(app, mod, tx);
+          ArcadeGameDetails.attachEvents(app, mod, tx);
+        }
         //
         // not registered
         //
         if (app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey()) == "") {
-	  if (app.options.wallet.anonymous != 1) {
-	    mod.modal_register_username = new ModalRegisterUsername(app);
-	    mod.modal_register_username.render(app, mod);
-	    mod.modal_register_username.attachEvents(app, mod);
-	    return;
-	  }
+          if (app.options.wallet.anonymous != 1) {
+            mod.modal_register_username = new ModalRegisterUsername(app, doGameDetails);
+            mod.modal_register_username.render(app, mod);
+            mod.modal_register_username.attachEvents(app, mod);
+            return;
+          }
         }
-
-	let tx = new saito.transaction();
-	tx.msg.game = e.currentTarget.id;
-        ArcadeGameDetails.render(app, mod, tx);
-        ArcadeGameDetails.attachEvents(app, mod, tx);
+        doGameDetails();
       });
     });
 

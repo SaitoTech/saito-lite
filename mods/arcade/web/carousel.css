@@ -21,9 +21,10 @@
 
 .saito-carousel {
     width: 100%;
+    min-height: 33vh;
     position: relative;
     background-image: url(/arcade/img/dreamscape-logo.png);
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
 }
