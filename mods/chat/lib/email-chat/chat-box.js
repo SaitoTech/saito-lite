@@ -33,12 +33,13 @@ console.log("-----------");
 console.log(JSON.stringify(message_blocks));
 console.log("-----------");
 
-	let html = "";
         for (let i = 0; i < message_blocks.length; i++) {
-	  html += ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
+	  let html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
+          if (i == message_blocks.length-1) {
+	    try{document.getElementById(`chat-message-set-${mod.groups[idx]}`).destroy();}catch(err){}
+	    chat_box_main.innerHTML += html;
+	  }
 	}
-        chat_box_main.innerHTML = html;
-
         chat_self.scrollToBottom(group_id);
      });
 
