@@ -16,7 +16,7 @@ class Chat extends ModTemplate {
 
     this.header = new SaitoHeader(app, this);
 
-    this.renderMode = "main";
+    this.renderMode = "none";
     this.relay_moves_onchain_if_possible = 1;
 
   }
@@ -78,8 +78,6 @@ class Chat extends ModTemplate {
   // main module render
   //
   render(app) {
-
-console.log("RENDER IN MAIN");
 
     if (this.renderMode == "main") {
       ChatMain.render(app, this);
