@@ -287,7 +287,6 @@ class Email extends ModTemplate {
       }
       if (addtx) {
         this.emails.inbox.unshift(tx);
-        this.app.browser.fetchIdentifiers([tx.transaction.from[0].add]);
         let readyCount = this.app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
         window.location.hash = this.app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
       }
