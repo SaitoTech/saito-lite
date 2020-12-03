@@ -79,6 +79,8 @@ class Chat extends ModTemplate {
   //
   render(app) {
 
+console.log("RENDER IN MAIN");
+
     if (this.renderMode == "main") {
       ChatMain.render(app, this);
       ChatMain.attachEvents(app, this);
