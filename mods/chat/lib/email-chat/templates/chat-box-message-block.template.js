@@ -8,8 +8,17 @@ module.exports = ChatBoxMessageBlockTemplate = (app, mod, group, message_blocks)
   // arrived for us for chat... so we need to extract the information
   // we want to add to the HTML here and then display it.
   //
+  let address = "";
   let identicon = "";
   let identicon_color = "";
+
+  group.members.length == 2) {
+    address = members[0] != this.app.wallet.returnPublicKey() ? members[0] : members[1];
+  } else {
+    address = "Group " + id.substring(0, 10);
+  }
+  identicon = this.app.keys.returnIdenticon(address);
+
 
 cahat_self.message_blocks.forEach(message_block => {
           if (!document.getElementById(message_block.sig)) { 
