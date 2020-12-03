@@ -16,8 +16,9 @@ module.exports = ArcadePosts = {
     }
 
     mod.renderMethod = "arcade";
-
-    app.browser.addElementToDom(PostStyle());
+    if (!document.getElementById("posts-stylesheet")) {
+      app.browser.addElementToDom(PostStyle());  
+    }
 
   },
 

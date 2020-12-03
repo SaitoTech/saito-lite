@@ -2,7 +2,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
   return `
 
-<style type="text/css">
+<style id="posts-stylesheet" type="text/css">
 
 :root {
   --saito-red: #639;

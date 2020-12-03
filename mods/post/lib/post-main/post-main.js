@@ -25,7 +25,10 @@ module.exports = PostMain = {
     //
     // add css
     //
-    app.browser.addElementToDom(PostStyle());
+    if (!document.getElementById("posts-stylesheet")) {
+      app.browser.addElementToDom(PostStyle());  
+    }
+    
 
   },
 
