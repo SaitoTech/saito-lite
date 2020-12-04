@@ -270,7 +270,6 @@ p {
 }
 
 .chat-list {
-  height: 255px;
   overflow-y: scroll;
   border: 1px solid #ddd;
 }

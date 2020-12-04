@@ -6,6 +6,9 @@ const { randomBytes } = require('crypto');
 const EventEmitter = require('events');
 
 // A Module to support KSM, DOT, or any other Substrate-based crypto
+// TODO subscribe to and fire balance_change events in the eventEmitter
+// TODO support of setting confirmations
+// TODO esitmate fees
 class SubstrateBasedCrypto extends ModTemplate {
 
   constructor(app, ticker, endpoint, info = '') {

@@ -1,14 +1,8 @@
 
 module.exports = EmailDetailTemplate = (app, mod) => {
-  let selected_email = null;
-  let selectedEmailSig = null;
-  try {
-    let subPage = app.browser.parseHash(window.location.hash).subpage;
-    selectedEmailSig = app.browser.parseHash(window.location.hash).selectedemail;
-    selected_email = mod.getSelectedEmail(selectedEmailSig, subPage);  
-  } catch(error){
-    mod.locationErrorFallback(`Error fetching module.<br/>${error}`, error);
-  }
+  let subPage = app.browser.parseHash(window.location.hash).subpage;
+  let selectedEmailSig = app.browser.parseHash(window.location.hash).selectedemail;
+  let selected_email = mod.getSelectedEmail(selectedEmailSig, subPage);  
   if (selected_email) {
     let from  	= selected_email.transaction.from[0].add;
     let to  	= selected_email.transaction.to[0].add;
@@ -50,6 +44,16 @@ module.exports = EmailDetailTemplate = (app, mod) => {
         </div>
       </div>
     `;
-  } 
+  } else {
+    return `
+      <div>
+        <div class="email-detail-addresses">
+          <div>
+            <h4 class="email-detail-subject">Loading...</h4>
+          </div>
+          </div>
+        </div>
+      `;
+  }
 }
 
