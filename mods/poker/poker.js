@@ -317,16 +317,10 @@ class Poker extends GameTemplate {
               class : "game-chat-"+(ii+1),
               callback : function(app, game_mod) {
                 game_mod.menu.hideSubMenus();
-                let newgroup = chatmod.createChatGroup(members);
-                if (newgroup) {
-                  chatmod.addNewGroup(newgroup);
-                  chatmod.sendEvent('chat-render-request', {});
-                  chatmod.saveChat();
-                  chatmod.openChatBox(newgroup.id);
-                } else {
-                  chatmod.sendEvent('chat-render-request', {});
-                  chatmod.openChatBox(gid);
-                }
+                chatmod.createChatGroup(members, name);
+                chatmod.openChatBox(gid);
+                chatmod.sendEvent('chat-render-request', {});
+                chatmod.saveChat();
               }
             });
           }

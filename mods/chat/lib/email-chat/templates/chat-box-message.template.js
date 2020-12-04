@@ -1,7 +1,5 @@
 
-module.exports = ChatMessageTemplate = ({ message, sig, type }, mod) => {
-
-console.log("in template we got: " + message);
+module.exports = ChatMessageTemplate = (app, mod, message, sig, type) => {
 
   // if (document.getElementById(sig)) { return ""; }
   // Preview common path/to/file.ext URL images

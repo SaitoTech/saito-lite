@@ -13,51 +13,38 @@ module.exports = ChatBox = {
 
       document.querySelectorAll(".chat-box").forEach(box => {    
 
-        let group_id = box.id.split('chat-box-')[1];
-        let group = null;
+        let group_id = box.getAttribute("data-id");
 
-        for (let i = 0; i < mod.groups.length; i++) {
-  	  if (mod.groups[i].id == group_id) {
-	    group = mod.groups[i];
-	  }
-        }
-
-        if (!group) {
-  	  alert("could not find chat group...");
-	  return;
-        }
-
+        let idx = -1;
         let chat_box_main = document.getElementById(`chat-box-main-${group_id}`);
-        chat_self.message_blocks = chat_self.createMessageBlocks(app, mod, group.messages);
 
-        if (chat_self.message_blocks.length == 0) {
-          chat_box_main.innerHTML = 
-            `<p id="chat-box-default-message-${group.id}" style="text-align:center">
-               No messages in this group :(
-             </p>`;
-        } else {
-	  if (group.messages[0].message === "no messages in this group...") {
-	    group.messages[0].splice(0, 1);
+        for (let i = 0; i < mod.groups.length; i++) { if (mod.groups[i].id == group_id) { idx = i; } }
+        if (idx == -1) { alert("could not find chat group..."); return; }
+
+        if (mod.groups[idx].txs.length == 0) {
+          chat_box_main.innerHTML = `<p id="chat-box-default-message-${group_id}" style="text-align:center">No messages in this group :(</p>`;
+       }
+
+	let message_blocks = mod.createMessageBlocks(mod.groups[idx]);
+	let first_comment_sig = "";
+
+        for (let i = 0; i < message_blocks.length; i++) {
+
+	  let html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
+
+	  if (i == message_blocks.length-1) {
+	
+	    let first_comment_sig = "first_comment_sig";
+	    if (message_blocks[i].length > 0) { first_comment_sig = app.crypto.hash(message_blocks[i][0].transaction.sig); }
+
+	    // recreate html after destroying so existing entries are output (template checks to avoid dupes)
+	    try{document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){};
+	    html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
+	    chat_box_main.innerHTML += html;
+
 	  }
-          chat_self.removeDefaultMessage(group.id);
-        }
-
-
-
-        chat_self.message_blocks.forEach(message_block => {
-          if (!document.getElementById(message_block.sig)) {
-            message_block = Object.assign({}, message_block, {
-              type: app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
-            });
-	    let new_html = ChatBoxMessageBlockTemplate(message_block, mod);
-            if (new_html != "") {
-	      chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, mod);
-	    }
-	  }
-        });
-
-        chat_self.scrollToBottom(group.id);
-
+	}
+        chat_self.scrollToBottom(group_id);
      });
 
     },
@@ -72,7 +59,7 @@ module.exports = ChatBox = {
       //
       document.querySelectorAll(".chat-box").forEach(box => {    
 
-        let group_id = box.id.split('chat-box-')[1];
+        let group_id = box.getAttribute("data-id");
         let group = null;
         let msg_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
 
@@ -80,20 +67,10 @@ module.exports = ChatBox = {
         // paste image into comment-box
         //
         window.handlePasteImage(msg_input, (img) => {
-
-          let msg_data = {
-            message: img,
-            group_id: group_id,
-            publickey: app.wallet.returnPublicKey(),
-            timestamp: new Date().getTime()
-          };
-
-          let newtx = chat_self.createMessage(app, mod, msg_data);
+          let newtx = mod.createMessage(group_id, img);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
           chat_self.addMessage(app, mod, newtx);
-
         });
-
 
         //
         // submit on enter
@@ -102,22 +79,15 @@ module.exports = ChatBox = {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
             e.preventDefault();
             if (msg_input.value == '') { return; }
-
-            let msg_data = {
-              message: msg_input.value,
-              group_id: group_id,
-              publickey: app.wallet.returnPublicKey(),
-              timestamp: new Date().getTime()
-            };
-
-            let newtx = chat_self.createMessage(app, mod, msg_data);
-            app.modules.returnModule("Chat").sendMessage(app, newtx);
+console.log("group id: " + group_id + " -- " + msg_input.value);
+            let newtx = mod.createMessage(group_id, msg_input.value);
+console.log("done mod create message");
+            mod.sendMessage(app, newtx);
             chat_self.addMessage(app, mod, newtx);
             msg_input.value = '';
           }
         });
       });
-
 
 
       //
@@ -137,7 +107,7 @@ module.exports = ChatBox = {
             timestamp: new Date().getTime()
           };
 
-          let newtx = chat_self.createMessage(app, mod, msg_data);
+          let newtx = mod.createMessage(group_id, msg_data);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
 
 	  alert("sending chat message!");
@@ -174,6 +144,7 @@ module.exports = ChatBox = {
       });
 
 
+
       //
       // drag and drop images into chat window
       //
@@ -191,8 +162,8 @@ module.exports = ChatBox = {
             timestamp: new Date().getTime()
           };
 
-          let newtx = chat_self.createMessage(app, mod, msg_data);
-          app.modules.returnModule("Chat").sendMessage(app, newtx);
+          let newtx = mod.createMessage(group_id, msg_data);
+          mod.sendMessage(app, newtx);
           chat_self.addMessage(app, mod, newtx);
 
 	});
@@ -213,10 +184,8 @@ module.exports = ChatBox = {
 
 	});
       });
-
-
-
     },
+
 
     showChatBox(app, mod, group) {
       if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
@@ -286,107 +255,39 @@ module.exports = ChatBox = {
     },
 
 
-    createMessage(app, mod, msg_data) {
 
-      let publickey = app.network.peers[0].peer.publickey;
-      let identicon = app.keys.returnIdenticon(msg_data.publickey);
-      let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
-      if (newtx == null) { return; }
-      msg_data.message = this.formatMessage(msg_data.message);
-      //msg_data.message = app.crypto.stringToBase64(msg_data.message);
-      newtx.msg = {
-          module: "Chat",
-          request: "chat message",
-          publickey: msg_data.publickey,
-          group_id: msg_data.group_id,
-          message: msg_data.message,
-          //
-          // in future will possibly encrypt
-          // this.saito.keys.encryptMessage(this.saito.wallet.returnPublicKey(), msg),
-          //
-          timestamp: msg_data.timestamp,
-      };
-      newtx.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.msg));
-
-      //
-      // submit to group manually (no decrypt)
-      //
-      for (let i = 0; i < mod.groups.length; i++) {
-	if (mod.groups[i].id == msg_data.group_id) {
-
-          let message = Object.assign(newtx.msg, {
-            //sig: tx.transaction.sig,
-            type: "myself" ,
-            identicon: app.keys.returnIdenticon(app.wallet.returnPublicKey())
-          });
-
-	  mod.groups[i].messages.push(message);
-	} 
-      }
-
-      newtx = app.wallet.signTransaction(newtx);
-      return newtx;
-
-    },
-
-    createMessageBlocks(app, mod, messages) {
+    createMessageBlocks(app, mod, group) {
 
       let idx = 0;
-      let message_blocks = [];
+      let blocks = [];
+      let block = [];
+      let txs = group.txs;
+      let last_message_sender = "";
 
-      while (idx < messages.length) {
-        if (messages[idx].publickey != undefined) {
-        try {
-        let message = Object.assign({}, messages[idx], {
-          keyHTML: app.browser.returnAddressHTML(messages[idx].publickey),
-          identicon: app.keys.returnIdenticon(messages[idx].publickey),
-          identicon_color: app.keys.returnIdenticonColor(messages[idx].publickey),
-        });
-
-        // decode - now done message-wide 
-        //message.message = app.crypto.base64ToString(message.message);
-        //message.message = this.formatMessage(message.message);
-
-        if (message_blocks.length == 0) {
-          let new_message_block = Object.assign({}, {
-            publickey: message.publickey,
-            group_id: message.group_id,
-            last_message_timestamp: message.timestamp,
-            last_message_sig: message.sig,
-            keyHTML: message.keyHTML,
-            identicon: message.identicon,
-            identicon_color: message.identicon_color,
-            messages: [message]
-          });
-          message_blocks.push(new_message_block);
-        } else {
-          if (messages[idx - 1].publickey == message.publickey) {
-            let latest_message_block = message_blocks[message_blocks.length - 1];
-            let updated_message_block = Object.assign({}, latest_message_block, {
-              last_message_timestamp: message.timestamp,
-              last_message_sig: message.sig,
-              messages: [...latest_message_block.messages, message],
-            });
-            message_blocks[message_blocks.length - 1] = updated_message_block;
-          } else {
-            let new_message_block = Object.assign({}, {
-              publickey: message.publickey,
-              group_id: message.group_id,
-              last_message_timestamp: message.timestamp,
-              last_message_sig: message.sig,
-              keyHTML: message.keyHTML,
-              identicon: message.identicon,
-              identicon_color: message.identicon_color,
-              messages: [message]
-            });
-            message_blocks.push(new_message_block);
-          }
-        }
-        } catch (err) {}
-        }
-        idx++;
+      while (idx < txs.length) {
+	if (blocks.length == 0) {
+	  if (txs[idx].transaction.from[0].add != last_message_sender && last_message_sender != "") {
+	    blocks.push(block);
+	  }
+	  block.push(txs[idx]);
+	  last_message_sender = txs[idx].transaction.from[0].add;
+	} else {
+	  if (txs[idx].transaction.from[0].add == last_message_sender) {
+	    block.push(txs[idx]);
+	  } else {
+	    blocks.push(block);
+	    block = [];
+            block.push(txs[idx]);
+            last_message_sender = txs[idx].transaction.from[0].add;
+	  }
+	}
+	idx++;
       }
-      return message_blocks;
+
+      blocks.push(block);
+
+      return blocks;
+
     },
 
 

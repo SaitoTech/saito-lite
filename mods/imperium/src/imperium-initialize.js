@@ -153,15 +153,17 @@ try {
               main_menu_added = 1;
             }
 
-            if (community_menu_added == 0) {
+            if (ommunity_menu_added == 0) {
               this.menu.addSubMenuOption("game-chat", {
                 text : "Community",
                 id : "game-chat-community",
                 class : "game-chat-community",
                 callback : function(app, game_mod) {
                   game_mod.menu.hideSubMenus();
+
                   // load the chat window
                   let newgroup = chatmod.returnDefaultChat();
+
                   if (newgroup) {
                     chatmod.addNewGroup(newgroup);
                     chatmod.sendEvent('chat-render-request', {});
@@ -174,6 +176,7 @@ try {
               });
               community_menu_added = 1;
             }
+
 
             // add peer chat
             let data = {};
@@ -188,19 +191,13 @@ try {
               class : "game-chat-"+(ii+1),
               callback : function(app, game_mod) {
                 game_mod.menu.hideSubMenus();
-                // load the chat window
-                let newgroup = chatmod.createChatGroup(members);
-                if (newgroup) {
-                  chatmod.addNewGroup(newgroup);
-                  chatmod.sendEvent('chat-render-request', {});
-                  chatmod.saveChat();
-                  chatmod.openChatBox(newgroup.id);
-                } else {
-                  chatmod.sendEvent('chat-render-request', {});
-                  chatmod.openChatBox(gid);
-                }
+                chatmod.createChatGroup(members, name);
+                chatmod.openChatBox(gid);
+                chatmod.sendEvent('chat-render-request', {});
+                chatmod.saveChat();
               }
             });
+
           }
         }
       }
