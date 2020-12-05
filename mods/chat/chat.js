@@ -150,7 +150,6 @@ class Chat extends ModTemplate {
     let txs = new Promise((resolve, reject) => { app.storage.loadTransactionsByKeys(group_ids, "Chat", 25, (txs) => { resolve(txs); }); });
     txs = await txs;
 
-
     //
     // TODO - make more efficient
     //
@@ -233,8 +232,13 @@ class Chat extends ModTemplate {
           break;
 
         case "chat broadcast message":
+
+          let routed_tx = new saito.transaction(tx.transaction);
+	  let routed_tx_msg = routed_tx.returnMessage();
+
           let archive = this.app.modules.returnModule("Archive");
-          archive.saveTransactionByKey(tx.msg.group_id, tx);
+          archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx);
+
           this.app.network.peers.forEach(p => {
             if (p.peer.publickey !== peer.peer.publickey) {
               p.sendRequest("chat message", tx);
@@ -407,7 +411,6 @@ class Chat extends ModTemplate {
         if (this.groups[i].id == group_id) { add_new_group = 0; }
       }
       if (add_new_group == 1) {
-console.log("adding a new chat group");
         this.createChatGroup(members);
       }
     }
@@ -443,27 +446,20 @@ console.log("adding a new chat group");
 
     this.groups.forEach(group => {
       try {
-console.log("comparing: " + group.id + " -- with -- " + txmsg.group_id);
         if (group.id == txmsg.group_id) {
-
-console.log("identified proper group!");
-
 	  //
 	  // only add if not from me, otherwise will be encrypted for others
 	  //
           if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
-console.log("tx is not from me!");
             let identifier = app.keys.returnIdentifierByPublicKey(tx.transaction.from[0].add);
             let title =  identifier ? identifier : tx.transaction.from[0].add;
 	    let message = txmsg.message;
-console.log("pushing the tx");
             group.txs.push(tx);
             app.browser.sendNotification(title, message, 'chat-message-notification');
           } else {
             let identifier = app.keys.returnIdentifierByPublicKey(this.app.wallet.returnPublicKey());
             let title =  identifier ? identifier : this.app.wallet.returnPublicKey();
 	    let message = txmsg.message;
-console.log("pushing the tx");
             group.txs.push(tx);
             app.browser.sendNotification(title, message, 'chat-message-notification');
 	  }
@@ -486,7 +482,6 @@ console.log("ERROR 113234: chat error receiving message: " + err);
 
     this.sendEvent('chat_receive_message', message);
     this.render(this.app);
-console.log("rendered the chat");
 
   }
 
@@ -541,7 +536,6 @@ console.log("rendered the chat");
   createChatGroup(members=null, name=null) {
 
     if (members == null) { return; } members.sort();
-console.log("MEMZBERS: " + JSON.stringify(members));
     if (name == null) {
       for (let i = 0; i < members.length; i++) {
         if (members[i] != this.app.wallet.returnPublicKey()) {
