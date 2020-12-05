@@ -10,13 +10,14 @@ module.exports = PhoneApp = {
   },
 
   attachEvents(app, data) {
-
+    console.log('attaching event to scan button');
     //set the callback we want for this scan
     data.scanCallback = this.handleScanPayload;
 
     //add event to tell the scaner what to do
     //with the call back attached
-    document.querySelector(".scan-now").attachEventListerner("click", () =>{
+    document.querySelector("#scan-now").addEventListener("click", () =>{
+        //alert('imma gunna scan');
         //bring up scaner
         PhoneScanner.render(app, data);
         PhoneScanner.attachEvents(app, data);
@@ -25,6 +26,7 @@ module.exports = PhoneApp = {
   },
   //the relevant callback
   handleScanPayload(p) {
+    //alert("handleScanPayload");
     if(document.querySelector('.results')) {
         document.querySelector('.results').innerHTML = p;
     }
