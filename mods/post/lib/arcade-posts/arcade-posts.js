@@ -25,15 +25,7 @@ module.exports = ArcadePosts = {
 
   attachEvents(app, mod) {
 
-    document.querySelectorAll('.arcade-post-title').forEach(el => {
-      el.onclick = (e) => {
-        let sig = e.currentTarget.getAttribute("data-id");
-        PostView.render(app, mod, sig);
-        PostView.attachEvents(app, mod, sig);
-      }
-    });
-
-    document.querySelectorAll('.arcade-post-comments').forEach(el => {
+    document.querySelectorAll('.arcade-post-title, .arcade-post-comments').forEach(el => {
       el.onclick = (e) => {
         let sig = e.currentTarget.getAttribute("data-id");
         PostView.render(app, mod, sig);
@@ -58,7 +50,8 @@ module.exports = ArcadePosts = {
       if (sig === post.transaction.sig) { post_this = 0; }
     });
     if (post_this == 0) { return; }
-    app.browser.addElementToDom(PostTeaserTemplate(app, mod, post), "arcade-posts");
+    app.browser.prependElementToDom(PostTeaserTemplate(app, mod, post), document.getElementById("arcade-posts"));
+    //app.browser.addElementToDom(PostTeaserTemplate(app, mod, post), "arcade-posts");
   }
 
 
