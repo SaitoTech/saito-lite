@@ -12,7 +12,7 @@ module.exports = ChatRoomTemplate = (group) => {
 
             <div class="chat-room-footer">
               <div class="chat-room-input">
-                <textarea id="input" class="chat-room-input">${group.msg}</textarea>
+                <textarea data-id="${group.id}" id="input" class="chat-room-input"></textarea>
                 <div class="chat-room-submit-button"><i class="icon-small fas fa-arrow-right"></i></div>
               </div>
 	    </div>

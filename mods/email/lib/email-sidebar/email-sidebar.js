@@ -16,12 +16,9 @@ module.exports = EmailSidebar = {
       });
 
       if (!document.querySelector(".email-controls")) {
-console.log("Loading Email Controls and Chat!");
         document.querySelector(".email-sidebar").innerHTML = EmailSidebarTemplate();
         EmailControls.render(app, mod);
-console.log("RENDER EMAIL CHAT");
         EmailChat.render(app, mod);
-console.log("POST RENDER EMAIL CHAT");
       }
     },
 
