@@ -269,12 +269,8 @@ class Chat extends ModTemplate {
 
     let members = [];
 
-console.log("Here in Create Message!");
-
     for (let i = 0; i < this.groups.length; i++) {
-console.log("ID: " + this.groups[i].id + " versus " + group_id);
       if (group_id === this.groups[i].id) {
-console.log("FOUND GROUP: " + JSON.stringify(this.groups[i].members));
         for (let z = 0; z < this.groups[i].members.length; z++) {
 	  if (!members.includes(this.groups[i].members[z])) {
 	    members.push(this.groups[i].members[z]);
@@ -320,12 +316,20 @@ console.log("FOUND GROUP: " + JSON.stringify(this.groups[i].members));
     let txs = group.txs;
     let last_message_sender = "";
 
+
     while (idx < txs.length) {
       if (blocks.length == 0) {
-        if (txs[idx].isFrom(last_message_sender) && last_message_sender != "") {
-          blocks.push(block);
-        }
-        block.push(txs[idx]);
+        if (last_message_sender == "") {
+          block.push(txs[idx]);
+	} else {
+          if (txs[idx].isFrom(last_message_sender)) {
+	    block.push(txs[idx]);
+          } else {
+	    blocks.push(block);
+	    block = [];
+	    block.push(txs[idx]);
+	  }
+	}
         last_message_sender = txs[idx].transaction.from[0].add;
       } else {
         if (txs[idx].isFrom(last_message_sender)) {

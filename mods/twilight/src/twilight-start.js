@@ -601,15 +601,8 @@ console.log(err);
 
           	  // load the chat window
 	          let newgroup = chatmod.returnDefaultChat();
-
-	          if (newgroup) {
-        	    chatmod.addNewGroup(newgroup);
-        	    chatmod.sendEvent('chat-render-request', {});
-		    chatmod.openChatBox(newgroup.id);
-    	          } else {
-        	    chatmod.sendEvent('chat-render-request', {});
-		    chatmod.openChatBox(newgroup.id);
-	          }
+        	  chatmod.sendEvent('chat-render-request', {});
+		  chatmod.openChatBox(newgroup.id);
     	        }
               });
 	      community_menu_added = 1;

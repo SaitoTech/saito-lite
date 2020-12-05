@@ -79,9 +79,7 @@ module.exports = ChatBox = {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
             e.preventDefault();
             if (msg_input.value == '') { return; }
-console.log("group id: " + group_id + " -- " + msg_input.value);
             let newtx = mod.createMessage(group_id, msg_input.value);
-console.log("done mod create message");
             mod.sendMessage(app, newtx);
             chat_self.addMessage(app, mod, newtx);
             msg_input.value = '';
@@ -124,13 +122,9 @@ console.log("done mod create message");
       document.querySelectorAll(".chat-box-header").forEach(hdr => {
         hdr.onclick = (e) => {
 	  let group_id = e.currentTarget.id.split('chat-box-header-')[1];
-console.log("1: " + group_id);
           let chat_box = document.getElementById(`chat-box-${group_id}`);
-console.log("2: " + group_id);
           chat_box.classList.toggle('chat-box-hide');
-console.log("3: " + group_id);
           chat_box.parentNode.classList.toggle('min-chat');
-console.log("4: " + group_id);
         };
       });
 
