@@ -494,7 +494,7 @@ p {
     width: calc(100vw - 1px);
     max-height: 50vh;
   }
-  .chat-manager.min-chat {
+  .min-chat {
     left: -14px;
     width: 5em;
   }

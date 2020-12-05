@@ -11,7 +11,7 @@ module.exports = ArcadePosts = {
     if (!document.getElementById("arcade-posts-container")) {
       app.browser.addElementToDom(ArcadePostsTemplate());
     }
-    for (let i = 0; i < mod.posts.length; i++) {
+    for (let i = mod.posts.length-1; i >= 0; i--) {
       this.addPost(app, mod, mod.posts[i]);
     }
 
@@ -58,7 +58,7 @@ module.exports = ArcadePosts = {
       if (sig === post.transaction.sig) { post_this = 0; }
     });
     if (post_this == 0) { return; }
-    app.browser.prependElementToDom(PostTeaserTemplate(app, mod, post), document.getElementById("arcade-posts"));
+    app.browser.addElementToDom(PostTeaserTemplate(app, mod, post), "arcade-posts");
   }
 
 

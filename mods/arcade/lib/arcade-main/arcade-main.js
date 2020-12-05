@@ -64,7 +64,6 @@ module.exports = ArcadeMain = {
       }
     });
 
-console.log("OBSERVER GAMES: " + JSON.stringify(mod.observer));
 
     //
     // add games
@@ -86,8 +85,6 @@ console.log("OBSERVER GAMES: " + JSON.stringify(mod.observer));
 
           let game_obj = e.currentTarget.getAttribute("data-gameobj");
           let game_cmd = e.currentTarget.getAttribute("data-cmd");
-
-console.log(game_obj + " -- " + game_cmd);
 
           if (game_cmd === "watch") {
             arcade_main_self.observeGame(app, mod, game_obj);
