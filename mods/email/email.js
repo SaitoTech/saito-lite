@@ -29,27 +29,50 @@ class Email extends ModTemplate {
     this.emails.inbox = [];
     this.emails.sent = [];
     this.emails.trash = [];
-
+    // Need to bind to this so it can be used in callbacks
+    this.preferredCryptoChangeCallback = this.preferredCryptoChangeCallback.bind(this);
+    this.cacheAndRenderPreferredCryptoBalance = this.cacheAndRenderPreferredCryptoBalance.bind(this);
+    
+    this.preferredCryptoBalance = "loading...";
     this.mods = [];
-    this.header_title = "";
-
-    // is this.appspace needed??? 
     this.appspace = 0;	// print email-body with appspace
 
-//    this.uidata = {};
-//    this.uidata.mods = [];
     this.count = 0;
 
     // add our address controller
     this.addrController = new AddressController(app, this.returnMenuItems());
 
   }
+  initialize(app) {
+    super.initialize(app);
+    if(app.BROWSER && this.browser_active) {
+      //
+      // add an email
+      //
+      let tx = app.wallet.createUnsignedTransaction();
+      tx.msg.module = "Email";
+      tx.msg.title = "Sent Message Folder";
+      tx.msg.message = "This folder is where your sent messages are stored...";
+      tx = this.app.wallet.signTransaction(tx);
+      this.emails.sent.push(tx);
+    }
 
+  }
+  rerender(app) {
+    let page = app.browser.parseHash(window.location.hash).page;
+    if(page) {
+      // Render
+      this.renderSidebar(app);
+      this.renderMain(app);
+    } else {
+      this.locationErrorFallback();
+    }
+  }
   render(app) {
     super.render(app);
 
     let html = `
-      <div id="content">
+      <div id="content__">
         <div class="email-container main">
           <div class="email-sidebar"></div>
           <div class="email-main"></div>
@@ -60,33 +83,29 @@ class Email extends ModTemplate {
 
     this.header.render(app, this);
     this.header.attachEvents(app, this);
-    // 
-    // this.renderSidebar(app);
-    //this.renderMain(app);
     
-    // make visible
-    document.getElementById('content').style.visibility = "visible";
+    // this.renderMain(app);
+    // this.renderSidebar(app);
+    // 
+    this.app.wallet.subscribeToPreferredCryptoChangeEvent(this.preferredCryptoChangeCallback);
+    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
+    this.cacheAndRenderPreferredCryptoBalance();
+    
+    window.addEventListener("hashchange", () => {
+      this.rerender(app);
+    });
+    // set the hash to match the state we want and force a hashchange event
+    let oldHash = window.location.hash;
+    window.location.hash = `#`;
+    window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: "0"});
+    
+    
+    // // make visible
+    //document.getElementById('content').style.visibility = "visible";
 
     //console.log("TODO - fark mode in email is cross-module");
     if (getPreference('darkmode')) { addStyleSheet("/forum/dark.css"); }
 
-/***
-    let x = [];
-    x = this.app.modules.respondTo("email-appspace");
-    for (let i = 0; i < x.length; i++) {
-      this.mods.push(x[i]);
-    }
-    x = this.app.modules.respondTo("email-chat");
-    for (let i = 0; i < x.length; i++) {
-      this.mods.push(x[i]);
-    }
-
-    this.uidata.mods = this.mods;
-    this.uidata.email = this;
-    this.uidata.helpers = helpers;
-
-    this.render(app, this.uidata);
-***/
   }
   renderSidebar(app) {
     EmailSidebar.render(app, this);
@@ -115,61 +134,6 @@ class Email extends ModTemplate {
         return tx.transaction.sig === selectedemailSig
     })[0];
     return selected_email;
-  }
-  rerender(app) {
-    let page = app.browser.parseHash(window.location.hash).page;
-    if(page) {
-      let subPage = app.browser.parseHash(window.location.hash).subpage;
-      let selectedemailSig = app.browser.parseHash(window.location.hash).selectedemail;
-      if (selectedemailSig && subPage) {
-        try {
-          let selected_email = this.getSelectedEmail(selectedemailSig, subPage);
-          this.header_title = selected_email.msg.title;  
-        } catch (error) { 
-          // This type of error will be handled in email-detail.js
-        }
-      } else if(page === "email_form") {
-        this.header_title = "Compose Email";
-      } else if(subPage) {
-        this.header_title = subPage;  
-      }
-      // Change active-navigator-item"
-      document.querySelectorAll(`.active-navigator-item`).forEach((activeElem, i) => {
-        activeElem.classList.remove("active-navigator-item");
-      });
-      document.querySelectorAll(`#email-nav-${subPage}.email-navigator-item, #email-nav-${subPage}.email-apps-item, #email-nav-${subPage}.crypto-apps-item`).forEach((newActiveNavItem, i) => {  
-        newActiveNavItem.classList.add("active-navigator-item");
-      });
-      // Render
-      this.renderSidebar(app);
-      this.renderMain(app);
-      // this.header.render(app, this);
-      // this.header.attachEvents(app, this);
-    }
-  }
-  initialize(app) {
-    super.initialize(app);
-    if(app.BROWSER && this.browser_active) {
-      //
-      // add an email
-      //
-      let tx = app.wallet.createUnsignedTransaction();
-      tx.msg.module = "Email";
-      tx.msg.title = "Sent Message Folder";
-      tx.msg.message = "This folder is where your sent messages are stored...";
-      tx = this.app.wallet.signTransaction(tx);
-      this.emails.sent.push(tx);
-      
-      window.addEventListener("hashchange", () => {
-        // Set header_title
-        this.rerender(app);
-      });
-      // set the hash to match the state we want and force a hashchange event
-      let oldHash = window.location.hash;
-      window.location.hash = `#`;
-      window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: "0"});
-    }
-
   }
 
   respondTo(type = "") {
@@ -204,18 +168,6 @@ class Email extends ModTemplate {
   onPeerHandshakeComplete(app, peer) {
 
     if (this.browser_active == 0) { return; }
-
-    //
-    // leaving this here for the short term,
-    // token manager can be a separate module
-    // in the long-term, as the email client
-    // should just handle emails
-    //
-    // this.getTokens();
-
-    //
-    //
-    //
     url = new URL(window.location.href);
     if (url.searchParams.get('module') != null) { return; }
 
@@ -295,13 +247,13 @@ class Email extends ModTemplate {
     }
   }
  
-  receiveEvent(type, data) {
-    if (type == 'chat-render-request') {
-      if (this.browser_active) {
-        this.renderSidebar(this.app, this.uidata);
-      }
-    }
-  }
+  // receiveEvent(type, data) {
+  //   if (type == 'chat-render-request') {
+  //     if (this.browser_active) {
+  //       this.renderSidebar(this.app, this.uidata);
+  //     }
+  //   }
+  // }
 
   returnMenuItems() {
     // ######## TODO ######
@@ -316,31 +268,25 @@ class Email extends ModTemplate {
     }
   }
 
-  getTokens() {
-    let msg = {};
-    msg.data = { address: this.app.wallet.returnPublicKey() };
-    msg.request = 'get tokens';
-    setTimeout(() => {
-      this.app.network.sendRequest(msg.request, msg.data);
-    }, 1000);
-  }
-
-  rerenderBalance() {
-    let renderBalance = async () => {
-      document.getElementById("email-token").innerHTML = " " + this.app.wallet.getPreferredCryptoTicker();
-      document.getElementById("email-balance").innerHTML = "loading...";
-      document.getElementById("email-balance").innerHTML = await this.app.wallet.getPreferredCryptoBalance();
-    }
-    this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(renderBalance);
-    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(renderBalance);
-    this.app.wallet.subscribeToPreferredCryptoChangeEvent(() => {
-      this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(renderBalance);
-      this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(renderBalance);
-      renderBalance();
+  cacheAndRenderPreferredCryptoBalance() {
+    this.preferredCryptoBalance = "loading...";
+    this.app.wallet.getPreferredCryptoBalance().then((value) => {
+      this.preferredCryptoBalance = value;
+      this.renderBalance();
     });
-    renderBalance();  
+    this.renderBalance();
   }
-
+  async renderBalance() {
+    if(document.getElementById("email-token")){ /// might not have rendered yet, no problem.
+      document.getElementById("email-token").innerHTML = " " + this.app.wallet.getPreferredCryptoTicker();
+      document.getElementById("email-balance").innerHTML = this.preferredCryptoBalance;  
+    }
+  }
+  preferredCryptoChangeCallback() {
+    this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
+    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
+    this.cacheAndRenderPreferredCryptoBalance();
+  }
 }
 
 module.exports = Email;
