@@ -121,10 +121,15 @@ module.exports = ChatBox = {
       //
       document.querySelectorAll(".chat-box-header").forEach(hdr => {
         hdr.onclick = (e) => {
+
 	  let group_id = e.currentTarget.id.split('chat-box-header-')[1];
           let chat_box = document.getElementById(`chat-box-${group_id}`);
           chat_box.classList.toggle('chat-box-hide');
           chat_box.parentNode.classList.toggle('min-chat');
+
+	  e.stopPropagation();
+	  e.preventDefault();
+	  return;
         };
       });
 
@@ -175,10 +180,14 @@ module.exports = ChatBox = {
 	let group_id = el.id.split('chat-box-')[1];
         app.browser.makeDraggable(el.id, `chat-box-header-${group_id}`, function() {
 
-	  // toggle height
+	  // toggle height -- DRAG triggers click too
           let chat_box = document.getElementById(`chat-box-${group_id}`);
-          chat_box.classList.toggle('chat-box-hide');
-          chat_box.parentNode.classList.toggle('min-chat');
+//	  if (chat_box.classList.contains("chat-box-hide")) {
+            chat_box.classList.toggle('chat-box-hide');
+//	  }
+//	  if (chat_box.parentNode.classList.contains("min-chat")) {
+            chat_box.parentNode.classList.toggle('min-chat');
+//	  }
 
 	})
       });
