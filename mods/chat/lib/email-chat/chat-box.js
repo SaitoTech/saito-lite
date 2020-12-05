@@ -42,7 +42,12 @@ module.exports = ChatBox = {
 	    html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
 	    chat_box_main.innerHTML += html;
 
+	  } else {
+
+	    chat_box_main.innerHTML += html;
+
 	  }
+
 	}
         chat_self.scrollToBottom(group_id);
      });
