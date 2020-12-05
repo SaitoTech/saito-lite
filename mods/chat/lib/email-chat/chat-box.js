@@ -200,7 +200,30 @@ module.exports = ChatBox = {
 
 
     showChatBox(app, mod, group) {
-      if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
+
+alert("Trying to open a chat box");
+
+      let chatboxen_open = 0;
+      let pixen_consumed = 0;
+      let width_of_boxen = 0;
+
+      for (let i = 0; i < mod.groups.length; i++) {
+        if (document.getElementById(`chat-box-${mod.groups[i].id}`)) { 
+	  chatboxen_open++;
+	  pixen_consumed += document.getElementById(`chat-box-${mod.groups[i].id}`).getBoundingClientRect().width;
+	}
+      }
+
+      if (chatboxen_open == 0) {
+        if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
+      } else {
+
+          app.browser.addElementToDom(ChatBoxTemplate(group));
+	  let newchatbox = document.getElementById(`chat-box-${group.id}`);
+	  newchatbox.style.right = pixen_consumed + (20*chatboxen_open) + "px";
+
+      }
+
       this.attachEvents(app, mod);
     },
 

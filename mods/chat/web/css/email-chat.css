@@ -317,6 +317,7 @@ p {
 
 .chat-box-close {
   cursor: pointer;
+  margin-right: 8px;
 }
 
 .chat-box-header {
