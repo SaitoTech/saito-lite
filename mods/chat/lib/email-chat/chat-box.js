@@ -49,7 +49,7 @@ module.exports = ChatBox = {
 	  }
 
 	}
-        chat_self.scrollToBottom(group_id);
+        yhat_self.scrollToBottom(group_id);
      });
 
     },
@@ -200,8 +200,6 @@ module.exports = ChatBox = {
 
 
     showChatBox(app, mod, group) {
-
-alert("Trying to open a chat box");
 
       let chatboxen_open = 0;
       let pixen_consumed = 0;
