@@ -139,16 +139,16 @@ class Post extends ModTemplate {
           if (res) {
             if (res.rows) {
               for (let i = 0; i < res.rows.length; i++) {
-		this.posts.unshift(new saito.transaction(JSON.parse(res.rows[i].tx)));
-		//this.posts[this.posts.length-1].children = res.rows[i].children;
-		//this.posts[this.posts.length-1].img = res.rows[i].img;
-		this.posts[0].children = res.rows[i].children;
-		this.posts[0].img = res.rows[i].img;
+                this.posts.push(new saito.transaction(JSON.parse(res.rows[i].tx)));
+                this.posts[this.posts.length-1].children = res.rows[i].children;
+                this.posts[this.posts.length-1].img = res.rows[i].img;
+                // this.posts[i].children = res.rows[i].children;
+                // this.posts[i].img = res.rows[i].img;
               }
             }
           }
 
-	  this.render();
+          this.render();
 
         }
     );
@@ -533,12 +533,12 @@ console.log(sql + " -- " + JSON.stringify(params));
                 thread_id,
                 parent_id, 
                 type,
-		publickey,
+                publickey,
                 title,
                 text,
-		forum,
-		link,
-		img,
+                forum,
+                link,
+                img,
                 tx, 
                 ts,
                 children,
@@ -547,20 +547,20 @@ console.log(sql + " -- " + JSON.stringify(params));
                 ) 
             VALUES (
                 $pid ,
-	        $pthread_id ,
+                $pthread_id ,
                 $pparent_id ,
                 $ptype ,
-		$ppublickey ,
-		$ptitle ,
-		$ptext ,
-		$pforum ,
-		$pimg ,
-		$plink ,
-		$ptx ,
-		$pts ,
-		$pchildren ,
-		$pflagged ,
-		$pdeleted
+                $ppublickey ,
+                $ptitle ,
+                $ptext ,
+                $pforum ,
+                $pimg ,
+                $plink ,
+                $ptx ,
+                $pts ,
+                $pchildren ,
+                $pflagged ,
+                $pdeleted
             );
         `;
     let params = {

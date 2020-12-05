@@ -1,7 +1,8 @@
 module.exports = ArcadePostsTemplate = () => {
   return `
-    <div id="arcade-posts" class="arcade-posts">
+    <div class="arcade-posts">
       <div id="arcade-posts-add" class="arcade-posts-add"><i id="arcade-posts-insert-add-contact" class="icon-med fas fa-plus"></i></div>
+      <div id="arcade-posts"></div>
     </div>
   `;
 }
