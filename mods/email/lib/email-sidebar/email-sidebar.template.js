@@ -1,8 +1,8 @@
 module.exports = EmailSidebarTemplate = () => {
   return `
-    <div class="email-controls">
+    <div id="email-controls" class="email-controls">
     </div>
-    <div class="email-chat">
+    <div id="email-chat" class="email-chat">
     </div>
   `;
 }

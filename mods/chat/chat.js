@@ -66,10 +66,12 @@ class Chat extends ModTemplate {
   // email-chat -- mod should be email since refernece is not "this"
   //
   renderEmailChat(app, mod) {
-    EmailChat.render(app, mod);
-    EmailChat.attachEvents(app, mod);
+    let chatmod = app.modules.returnModule("Chat");
+    EmailChat.render(app, chatmod);
+    EmailChat.attachEvents(app, chatmod);
   }
   attachEventsEmailChat(app, mod) {
+    let chatmod = app.modules.returnModule("Chat");
   }
 
 
