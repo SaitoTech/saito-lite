@@ -1,19 +1,25 @@
 /** Email **/
 
 :root {
-  --saito-red: #639;
-  --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
-  --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
+  --CA: #9F2EE8;
+  --CB: #6630F2;
+  --CC: #373fDB;
+  --CD: #30F8F2;
+  --CE: #29ACEB;
+  --saito-red: var(--CB);
+  --saito-nightscape: linear-gradient(-45deg, var(--CC) 50%, var(--CD) 100%);
+  --saito-jester: var(--CE);
 }
 
 body {
   font-size: 1.0em;
-  color: var(--saito-skyline-grey);
-  background: var(--saito-nightscape);
+  color: var(--saito-cyber-black);
+  background: var(--saito-skyline-grey);
+  background: linear-gradient(-45deg, #e2e2e2 50%, #efefef 100%)
 }
 
 a {
-  color: #BCF;
+  color: var(--CA);
 }
 
 .arcade-announcement {
@@ -46,27 +52,27 @@ a {
 }
 
 button, .button, .file-label {
-  border-radius: 5px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 1em;
   min-width: 10em;
   padding: 10px 6px;
   background: var(--saito-jester);
-  border: 1px solid var(--saito-red);
+  border: 1px solid var(--saito-jester);
   color: var(--saito-skyline-grey);
   letter-spacing: 1px;
-  transition: transform .25s;
+  transition: all .25s;
   margin: 0.2em 0;
   min-width: 180px;
 }
 
 button:hover, .button:hover {
-  background: linear-gradient(-45deg, #537 50%, #324 100%);
+  background: var(--CD);
 }
 
 select {
   border: 1px solid var(--saito-red);
-  border-radius: 5px;
+  border-radius: 0;
   font-size: 1em;
   padding: 10px 6px;
   background: linear-gradient(-45deg, #222 50%, #1e1e1f 100%);
@@ -980,17 +986,17 @@ span.rewards-row-name {
   width: 100px;
   text-align: center;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 0;
   display: inline-block;
   margin: 0 5px 5px 0;
   background: var(--saito-jester);
-  border: 1px solid var(--saito-red);
+  border: 1px solid var(--saito-jester);
   color: var(--saito-skyline-grey);
 }
 
 .fullview_product:hover, .edit_product:hover, .delete_product:hover, .add_cert:hover, .inquire_product:hover, .grid-action:hover {
   color: #FFF;
-  background: linear-gradient(-45deg, #537 50%, #324 100%);
+  background: var(--CD);
 }
 
 input[type=text], input[type=number], input[type=password], input[type=date] {

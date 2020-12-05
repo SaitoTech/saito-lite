@@ -9,7 +9,7 @@ const AdminHome = require('./lib/admin/admin-home');
 const ProductManager = require('./lib/products/product-manager');
 const ScanManager = require('./lib/scan/scan-manager');
 const ScanReturn = require('./lib/user/scan-return');
-
+const UserApp = require('./lib/user/phone-app');
 
 
 class Camel extends ModTemplate {
@@ -44,6 +44,10 @@ class Camel extends ModTemplate {
     Header.render(app, data);
     Header.attachEvents(app, data);
 
+    window.addEventListener('message', (e) => {
+      console.info(e.data);
+    });
+
   }
 
 
@@ -61,7 +65,12 @@ class Camel extends ModTemplate {
 
     if (this.app.BROWSER == 0) { return; }
 
+    //salert(this.mode);
     switch (this.mode) {
+      case "user":
+        UserApp.render(app, data);
+        UserApp.attachEvents(app, data);
+        break;
       case "scan":
         ScanManager.render(app, data);
         ScanManager.attachEvents(app, data);
@@ -104,11 +113,18 @@ class Camel extends ModTemplate {
         return;
                 
       });
-    }
+      expressapp.get('/camel/a/', async (req, res) => {
 
-  
+        data.query = req.query;
 
-    
+        res.setHeader('Content-type', 'text/html');
+        res.charset = 'UTF-8';
+        res.write(await UserApp.render(app, data));
+        res.end();
+        return;
+                
+      });
+    }    
   }
 
 }
