@@ -1,6 +1,6 @@
 const ChatList = require('./chat-list');
 const ChatRoom = require('./chat-room');
-const ChatMainTemplate = require('./templates/chat-main.template');
+const ChatMainTemplate = require('./../templates/chat-main.template');
 
 module.exports = ChatMain = {
 

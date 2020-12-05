@@ -239,6 +239,7 @@ p {
   /* grid-template-columns: 2em auto; */
   grid-gap: 0em 0.5em;
   /* min-width: 10vw; */
+  margin-bottom: 10px;
 }
 
 .chat-message-text {

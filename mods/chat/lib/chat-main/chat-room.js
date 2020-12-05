@@ -1,5 +1,6 @@
-const ChatRoomTemplate = require('./templates/chat-room.template');
-const ChatRoomMessageBlockTemplate = require('./templates/chat-room-message-block.template');
+const ChatRoomTemplate = require('./../templates/chat-room.template');
+const ChatBoxMessageBlockTemplate = require('./../templates/chat-box-message-block.template');
+
 
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
@@ -33,7 +34,7 @@ module.exports = ChatRoom = {
         }
       }
 
-      this.scrollToBottom();
+      this.scrollToBottom(group.id);
 
     },
 
@@ -52,82 +53,37 @@ module.exports = ChatRoom = {
           if (msg_input.value == '') { return; }
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
-          chat_self.addMessage(app, mod, newtx);
+          chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
         }
       });
 
 
+      document.getElementById("back-button").onclick = (e) => {
+	mod.renderMode = "main";
+	mod.render(app);
+      }
+
+
+
     },
 
 
 
 
-    addMessage(app, mod, tx) {
+    addMessage(app, mod, group_id, tx) {
       app.modules.returnModule("Chat").receiveMessage(app, tx);
-      this.addTXToDOM(app, mod, tx);
+      for (let i = 0; i < mod.groups.length; i++) {
+	if (mod.groups[i].id === group_id) {
+          this.render(app, mod, mod.groups[i]);
+          this.attachEvents(app, mod);
+          this.scrollToBottom(group_id);
+	}
+      }
     },
-
-    addTXToDOM(app, mod, tx) {
-      let message = Object.assign({}, tx.returnMessage(), { type: 'myself' });
-      this.addMessageToDOM(app, mod, message);
-    },
-
-    addMessageToDOM(app, mod, msg) {
-      try {
-        if (document.getElementById(msg.sig)) { return };
-        let message = Object.assign({}, msg, {
-          keyHTML: app.browser.returnAddressHTML(msg.publickey),
-          identicon: app.keys.returnIdenticon(msg.publickey),
-          identicon_color: app.keys.returnIdenticonColor(msg.publickey),
-        });
-        //remove safety base64 encoding.
-        //message.message = app.crypto.base64ToString(message.message);
-
-        let chat_box_main = document.getElementById(`chat-box-main-${message.group_id}`);
-
-        let last_message_block = Object.assign({ messages: [] }, this.message_blocks[this.message_blocks.length - 1]);
-        let last_message = Object.assign({}, last_message_block.messages[last_message_block.messages.length - 1]);
-
-        if (last_message.publickey == message.publickey) {
-          last_message_block = Object.assign({}, last_message_block, {
-            last_message_timestamp: message.timestamp,
-            last_message_sig: message.sig,
-            messages: [...last_message_block.messages, message],
-            type: app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others',
-          });
-          chat_box_main.removeChild(chat_box_main.lastElementChild);
-          chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(last_message_block, mod);
-          this.message_blocks[this.message_blocks.length - 1] = last_message_block;
-        } else {
-          let new_message_block = Object.assign({}, {
-            publickey: message.publickey,
-            group_id: message.group_id,
-            last_message_timestamp: message.timestamp,
-            last_message_sig: message.sig,
-            keyHTML: message.keyHTML,
-            identicon: message.identicon,
-            identicon_color: message.identicon_color,
-            type: app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others',
-            messages: [message]
-          });
-          this.message_blocks.push(new_message_block);
-          chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(new_message_block, mod);
-        }
-        // add window.imgPoP to all images in chat_box_main ...
-
-        document.querySelectorAll('.chat-box-main .img-prev').forEach(img => {
-          img.addEventListener('click', window.imgPop(img));
-        });
-        this.scrollToBottom(message.group_id);
-      } catch (err) { }
-    },
-
-
-
 
     scrollToBottom(group_id) {
-      let chat_box_main = document.getElementById(`chat-room-content`);
+      let chat_box_main = document.getElementById(`chat-room-content-${group_id}`);
       if (chat_box_main) { chat_box_main.scrollTop = chat_box_main.scrollHeight; }
     },
 

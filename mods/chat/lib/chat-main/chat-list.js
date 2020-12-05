@@ -1,5 +1,5 @@
-const ChatListTemplate = require('./templates/chat-list.template');
-const ChatListHeaderTemplate = require('./templates/chat-list-header.template');
+const ChatListTemplate = require('./../templates/chat-list.template');
+const ChatListHeaderTemplate = require('./../templates/chat-list-header.template');
 const ChatRoom = require('./chat-room');
 
 module.exports = ChatList = {

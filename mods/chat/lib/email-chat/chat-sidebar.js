@@ -1,5 +1,5 @@
-const ChatSidebarTemplate = require('./templates/chat-sidebar.template');
-const ChatSidebarContactTemplate = require('./templates/chat-sidebar-contact.template');
+const ChatSidebarTemplate = require('./../templates/chat-sidebar.template');
+const ChatSidebarContactTemplate = require('./../templates/chat-sidebar-contact.template');
 const ModalAddUser = require('./../../../../lib/saito/ui/modal-add-user/modal-add-user');
 
 
