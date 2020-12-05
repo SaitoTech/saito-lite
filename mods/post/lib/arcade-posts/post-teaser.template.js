@@ -1,8 +1,6 @@
 
 module.exports = PostTeaserTemplate = (app, mod, tx) => {
 
-console.log("TX: " + JSON.stringify(tx));
-
   let cmt = "0 comments";
   if (tx.children == 1) { cmt = "1 comment"; }
   if (tx.children > 1)  { cmt = (tx.children+" comments"); }
