@@ -10,7 +10,7 @@ module.exports = ChatMessageTemplate = (app, mod, message, sig, type) => {
       if (link.toLowerCase().includes(img)){
         return `
         <div id="${sig}" class="chat-room-message chat-room-message-${type}">
-          <div class="chat-message-text">${message}</div>
+          <div class="chat-message-text">${mod.formatMessage(message)}</div>
         </div>
         <div id="${sig}" class="chat-room-message chat-room-message-${type}">
           <div class="chat-message-text">

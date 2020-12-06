@@ -1,10 +1,14 @@
-const ChatListTemplate = require('./templates/chat-list.template');
-const ChatListHeaderTemplate = require('./templates/chat-list-header.template');
+const ChatListTemplate = require('./../templates/chat-list.template');
+const ChatListHeaderTemplate = require('./../templates/chat-list-header.template');
 const ChatRoom = require('./chat-room');
+const ModalAddUser = require('./../../../../lib/saito/ui/modal-add-user/modal-add-user');
+
 
 module.exports = ChatList = {
 
     render(app, mod) {
+
+      mod.add_user_modal = new ModalAddUser();
 
       document.getElementById("chat-main").innerHTML = "";
       app.browser.addElementToDom(ChatListTemplate(), "chat-main");      
@@ -35,6 +39,24 @@ module.exports = ChatList = {
 	}
       });
 
+
+      document.getElementById('chat-nav-add-contact').onclick = () => {
+	mod.add_user_modal.render(app, mod);
+	mod.add_user_modal.attachEvents(app, mod);
+      };
+
+      app.modules.respondTo("chat-navbar").forEach(mod => {
+        mod.respondTo("chat-navbar").render(app, mod);
+        mod.respondTo("chat-navbar").attachEvents(app, mod);
+      });
+
+      document.querySelector('#chat.create-button').onclick = () => this.toggleChatNav();
+
     },
+
+    toggleChatNav() {
+        let chat_nav = document.getElementById('chat-nav');
+        chat_nav.style.display = chat_nav.style.display == 'none' ? 'flex' : 'none';
+    }
 
 }

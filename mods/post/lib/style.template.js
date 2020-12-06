@@ -351,11 +351,11 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .arcade-post-thumbnail {
   background-image: url(/post/img/post-logo.png);
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position-y: top;
-  width: 100%;
-  height: 100%;
+  width: 2.5em;
+  height: 2.5em;
 }
 
 .arcade-post-sublinks {

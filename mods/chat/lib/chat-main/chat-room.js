@@ -1,5 +1,6 @@
-const ChatRoomTemplate = require('./templates/chat-room.template');
-const ChatMessageTemplate = require('./templates/chat-message-container.template');
+const ChatRoomTemplate = require('./../templates/chat-room.template');
+const ChatBoxMessageBlockTemplate = require('./../templates/chat-box-message-block.template');
+
 
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
@@ -15,79 +16,76 @@ module.exports = ChatRoom = {
       let message_input = document.querySelector('#input.chat-room-input');
       let msg = message_input == null ? '' : message_input.value;
 
-      this.room_message_blocks = this.createRoomMessageBlocks(app, mod, group.messages);
-      this.room_message_blocks.forEach(message_block => {
-        message_block = Object.assign({}, message_block, {
-          type : app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
-        });
-        document.querySelector('.chat-room-content').innerHTML += ChatMessageContainerTemplate(message_block, group);
-      });
+      let message_blocks = mod.createMessageBlocks(group); 
+      let chat_box_main = document.getElementById(`chat-room-content-${group.id}`);
 
-      this.scrollToBottom();
+      let first_comment_sig = "";
+      for (let i = 0; i < message_blocks.length; i++) {
+        let html = ChatBoxMessageBlockTemplate(app, mod, group, message_blocks[i]);
+        if (i == message_blocks.length-1) {
+          let first_comment_sig = "first_comment_sig";
+          if (message_blocks[i].length > 0) { first_comment_sig = app.crypto.hash(message_blocks[i][0].transaction.sig); }
+          // recreate html after destroying so existing entries are output (template checks to avoid dupes)
+          try{document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){};
+          html = ChatBoxMessageBlockTemplate(app, mod, group, message_blocks[i]);
+          chat_box_main.innerHTML += html;
+        } else {
+          chat_box_main.innerHTML += html;
+        }
+      }
+
+      this.scrollToBottom(group.id);
 
     },
 
     attachEvents(app, mod) {
 
+      let chat_self = this;
+      let msg_input = document.getElementById(`input`);
+      let group_id = msg_input.getAttribute("data-id");
+
+      //
+      // submit on enter
+      //
+      msg_input.addEventListener("keypress", (e) => {
+        if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
+          e.preventDefault();
+          if (msg_input.value == '') { return; }
+          let newtx = mod.createMessage(group_id, msg_input.value);
+          mod.sendMessage(app, newtx);
+          chat_self.addMessage(app, mod, group_id, newtx);
+          msg_input.value = '';
+        }
+      });
+
+
+      document.getElementById("back-button").onclick = (e) => {
+	mod.renderMode = "main";
+	mod.render(app);
+      }
+
+
+
     },
 
 
 
-    createRoomMessageBlocks(app, mod, messages) {
 
-        let idx = 0;
-        let room_message_blocks = [];
-        
-        while (idx < messages.length) {
+    addMessage(app, mod, group_id, tx) {
+      app.modules.returnModule("Chat").receiveMessage(app, tx);
+      for (let i = 0; i < mod.groups.length; i++) {
+	if (mod.groups[i].id === group_id) {
+          this.render(app, mod, mod.groups[i]);
+          this.attachEvents(app, mod);
+          this.scrollToBottom(group_id);
+	}
+      }
+    },
 
-            let message = Object.assign({}, messages[idx], {
-                keyHTML: app.browser.returnAddressHTML(messages[idx].publickey),
-                identicon : app.keys.returnIdenticon(messages[idx].publickey),
-                identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
-            }); 
-
-            //message.message = app.crypto.base64ToString(message.message);
-
-            if (idx == 0) {
-                let new_message_block = Object.assign({}, {
-                    publickey: message.publickey,
-                    group_id: message.group_id,
-                    last_message_timestamp: message.timestamp,
-                    last_message_sig: message.sig,
-                    keyHTML: message.keyHTML,
-                    identicon : message.identicon,
-                    identicon_color : message.identicon_color,
-                    messages: [message]
-                }); 
-                room_message_blocks.push(new_message_block);
-            } else {
-                if (messages[idx - 1].publickey == message.publickey) {
-                    let latest_message_block = room_message_blocks[room_message_blocks.length - 1];
-                    let updated_message_block = Object.assign({}, latest_message_block, {
-                        last_message_timestamp: message.timestamp,
-                        last_message_sig: message.sig,
-                        messages: [...latest_message_block.messages, message],
-                    }); 
-                    room_message_blocks[room_message_blocks.length - 1] = updated_message_block;
-                } else {
-                    let new_message_block = Object.assign({}, {
-                        publickey: message.publickey,
-                        group_id: message.group_id,
-                        last_message_timestamp: message.timestamp,
-                        last_message_sig: message.sig,
-                        keyHTML: message.keyHTML,
-                        identicon : message.identicon,
-                        identicon_color : message.identicon_color,
-                        messages: [message]
-                    }); 
-                    room_message_blocks.push(new_message_block);
-                }   
-            }   
-            idx++;
-        }   
-        return room_message_blocks;
-    },  
-
+    scrollToBottom(group_id) {
+      let chat_box_main = document.getElementById(`chat-room-content-${group_id}`);
+      if (chat_box_main) { chat_box_main.scrollTop = chat_box_main.scrollHeight; }
+    },
 
 
 

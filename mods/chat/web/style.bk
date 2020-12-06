@@ -78,6 +78,11 @@ p {
 
 /** CHAT ROOM **/
 
+.chat-room {
+  display: grid;
+  grid-template-rows: 3.5em auto 7vh;
+}
+
 .chat-room-header {
   grid-template-columns: 5.2em auto 2em 3.2em;
   align-items: center;
@@ -96,6 +101,19 @@ p {
   text-align: center;
   font-size: 1.25em;
   margin-top: 3px;
+}
+
+.chat-room-content {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  padding: 1em 1em 0 1em;
+  /* padding: 1em 1em 0.5em 1em; */
+  flex-direction: column;
+  overflow-y: scroll;
+  /* height: calc(100vh - 12.7em); */
+  height: calc(100vh - 12em);
+  margin-top: 3.5em;
 }
 
 .chat-message-container {

@@ -1,5 +1,5 @@
-const ChatBoxTemplate = require('./templates/chat-box.template');
-const ChatBoxMessageBlockTemplate = require('./templates/chat-box-message-block.template');
+const ChatBoxTemplate = require('./../templates/chat-box.template');
+const ChatBoxMessageBlockTemplate = require('./../templates/chat-box-message-block.template');
 
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
@@ -163,14 +163,7 @@ module.exports = ChatBox = {
 	  let img = document.createElement('img'); 
               img.src = filesrc;
 
-          let msg_data = {
-            message: img.outerHTML, 
-            group_id: group_id,
-            publickey: app.wallet.returnPublicKey(),
-            timestamp: new Date().getTime()
-          };
-
-          let newtx = mod.createMessage(group_id, msg_data);
+          let newtx = mod.createMessage(group_id, img.outerHTML);
           mod.sendMessage(app, newtx);
           chat_self.addMessage(app, mod, newtx);
 
@@ -200,7 +193,28 @@ module.exports = ChatBox = {
 
 
     showChatBox(app, mod, group) {
-      if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
+
+      let chatboxen_open = 0;
+      let pixen_consumed = 0;
+      let width_of_boxen = 0;
+
+      for (let i = 0; i < mod.groups.length; i++) {
+        if (document.getElementById(`chat-box-${mod.groups[i].id}`)) { 
+	  chatboxen_open++;
+	  pixen_consumed += document.getElementById(`chat-box-${mod.groups[i].id}`).getBoundingClientRect().width;
+	}
+      }
+
+      if (chatboxen_open == 0) {
+        if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
+      } else {
+
+          app.browser.addElementToDom(ChatBoxTemplate(group));
+	  let newchatbox = document.getElementById(`chat-box-${group.id}`);
+	  newchatbox.style.right = pixen_consumed + (20*chatboxen_open) + "px";
+
+      }
+
       this.attachEvents(app, mod);
     },
 
