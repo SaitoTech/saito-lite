@@ -12,7 +12,7 @@ console.log(JSON.stringify(invite.transaction));
     }
   }
   let playersNeeded = invite.msg.players_needed > 4 ? 5: invite.msg.players_needed;
-  let playersHtml = `<div class="playerInfo" style="grid-template-columns: repeat(${playersNeeded}, 1fr);">`;
+  let playersHtml = `<div class="playerInfo" style="">`;
   for (let i = 0; i < invite.msg.players_needed; i++) {
     if (i < 4) {
       if (i < invite.msg.players.length) {
@@ -42,9 +42,9 @@ console.log(JSON.stringify(invite.transaction));
     <div id="invite-${invite.transaction.sig}" class="arcade-tile i_${idx} ${inviteTypeClass}" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);">
       <div class="invite-tile-wrapper">
         <div class="game-inset-img" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);"></div>
-        <div class="invite-row-2">
+        <div class="invite-col-2">
           <div class="gameName">${invite.msg.game}</div>
-          ${playersHtml}
+          <div class="gamePlayers">${playersHtml}</div>
         </div>
         <div class="gameShortDescription">${makeDescription(app, invite)}</div>
 	<div class="gameButtons">
