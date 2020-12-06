@@ -17,7 +17,7 @@ module.exports = PostTeaserTemplate = (app, mod, tx) => {
         <div id="arcade-post-thumbnail" class="arcade-post-thumbnail" style="background-image: url('${img}')"></div>
       </div>
       <div class="arcade-post-back">
-      <div  data-id="${tx.transaction.sig}" id="arcade-post-title" class="arcade-post-title"><a href="${tx.msg.link"}>${tx.msg.title}</a></div>
+      <div  data-id="${tx.transaction.sig}" id="arcade-post-title" class="arcade-post-title"><a href="${tx.msg.link}">${tx.msg.title}</a></div>
         <div id="arcade-post-sublinks"  class="arcade-post-sublinks">
           <div id="arcade-post-posted-by" class="arcade-post-posted-by">posted by </div>
           <div id="arcade-post-user" class="arcade-post-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
