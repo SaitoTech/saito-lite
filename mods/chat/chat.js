@@ -308,7 +308,7 @@ class Chat extends ModTemplate {
       module: "Chat",
       request: "chat message",
       group_id: group_id,
-      message: this.formatMessage(msg),
+      message: msg ,
       type: "myself" ,
       timestamp: new Date().getTime()
     };
@@ -428,13 +428,13 @@ class Chat extends ModTemplate {
     //
     // create msg object
     //
-    let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-    app.browser.addIdentifiersToDom([tx.transaction.from[0].add]);
-    let message = Object.assign(txmsg, {
-      sig: tx.transaction.sig,
-      type: msg_type,
-      identicon: this.app.keys.returnIdenticon()
-    });
+    //let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+    //app.browser.addIdentifiersToDom([tx.transaction.from[0].add]);
+    //let message = Object.assign(txmsg, {
+    //  sig: tx.transaction.sig,
+    //  type: msg_type,
+    //  identicon: this.app.keys.returnIdenticon()
+    //});
 
 
     //
@@ -451,6 +451,7 @@ class Chat extends ModTemplate {
 
 
 
+    let message = txmsg.message;
     this.groups.forEach(group => {
       try {
         if (group.id == txmsg.group_id) {
@@ -460,13 +461,11 @@ class Chat extends ModTemplate {
           if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
             let identifier = app.keys.returnIdentifierByPublicKey(tx.transaction.from[0].add);
             let title =  identifier ? identifier : tx.transaction.from[0].add;
-	    let message = txmsg.message;
             group.txs.push(tx);
             app.browser.sendNotification(title, message, 'chat-message-notification');
           } else {
             let identifier = app.keys.returnIdentifierByPublicKey(this.app.wallet.returnPublicKey());
             let title =  identifier ? identifier : this.app.wallet.returnPublicKey();
-	    let message = txmsg.message;
             group.txs.push(tx);
             app.browser.sendNotification(title, message, 'chat-message-notification');
 	  }

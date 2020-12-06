@@ -49,7 +49,7 @@ module.exports = ChatBox = {
 	  }
 
 	}
-        yhat_self.scrollToBottom(group_id);
+        chat_self.scrollToBottom(group_id);
      });
 
     },
@@ -163,14 +163,7 @@ module.exports = ChatBox = {
 	  let img = document.createElement('img'); 
               img.src = filesrc;
 
-          let msg_data = {
-            message: img.outerHTML, 
-            group_id: group_id,
-            publickey: app.wallet.returnPublicKey(),
-            timestamp: new Date().getTime()
-          };
-
-          let newtx = mod.createMessage(group_id, msg_data);
+          let newtx = mod.createMessage(group_id, img.outerHTML);
           mod.sendMessage(app, newtx);
           chat_self.addMessage(app, mod, newtx);
 
