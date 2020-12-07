@@ -122,6 +122,7 @@ class Arcade extends ModTemplate {
     if (this.browser_active == 0) { return; }
 
     let arcade_self = this;
+    let cutoff = new Date().getTime() - this.old_game_removal_delay;
 
     //
     // load open games from server
@@ -130,7 +131,7 @@ class Arcade extends ModTemplate {
 
         "Arcade",
 
-        `SELECT * FROM games WHERE status = "open"`,
+        `SELECT * FROM games WHERE status = "open" AND created_at > ${cutoff}`,
 
         (res) => {
           if (res.rows) {
