@@ -1364,6 +1364,7 @@ console.log(params);
 
     game_tx.transaction.sig = game.id;
     game_tx.msg = msg;
+    game_tx = this.app.wallet.signTransaction(game_tx);
 
     return game_tx;
   }
@@ -1413,8 +1414,15 @@ console.log(params);
   }
 
   isForUs(tx) {
-    var for_us = true;
-    if (tx.returnMessage().options.players_invited) {
+
+    if (!tx) { return false; }
+
+    let for_us = true;
+    let txmsg = tx.returnMessage();
+
+    if (!txmsg) { return false; }
+
+    if (txmsg.options.players_invited) {
       for_us = false;
       if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) {
         for_us = true;
@@ -1428,9 +1436,12 @@ console.log(params);
     }
     return for_us;
   }
-  validateGame(tx){
+  validateGame(tx) {
+
     if (!tx.transaction) {
+
       return false;
+
     } else {
       if (!tx.transaction.sig) { return false; }
       if (tx.msg.over == 1) { return false; }
