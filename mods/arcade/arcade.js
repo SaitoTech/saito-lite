@@ -101,7 +101,7 @@ class Arcade extends ModTemplate {
     // add my own games (as fake txs)
     //
     if (this.app.options.games != null) {
-      //this.addGamesToOpenList(this.app.options.games.map((game) => { return this.createGameTXFromOptionsGame(game);}));
+      this.addGamesToOpenList(this.app.options.games.map((game) => { return this.createGameTXFromOptionsGame(game);}));
     }
 
     //
@@ -1382,11 +1382,7 @@ console.log(params);
         i--;
       }
     }
-
-    if (removed_old_games == 1) {
-      this.renderArcadeMain(this.app, this);
-    }
-
+    return removed_old_games;
   }
 
 
@@ -1455,10 +1451,14 @@ console.log(params);
     let for_us = this.isForUs(tx);
     if (for_us) {
       this.games.unshift(tx);
+    }
+    let removed_game = this.removeOldGames();
+    if(for_us || removed_game){
       this.renderArcadeMain(this.app, this);
     }
   }
   addGamesToOpenList(txs) {
+    
     let for_us = false;
     txs.forEach((tx, i) => {
       this.validateGame(tx);
@@ -1466,9 +1466,10 @@ console.log(params);
       if (this_game_is_for_us) {
         this.games.unshift(tx);
       }
-      for_us = for_us | this_game_is_for_us;
+      for_us = for_us || this_game_is_for_us;
     });
-    if (for_us) {
+    let removed_game = this.removeOldGames();
+    if(for_us || removed_game){
       this.renderArcadeMain(this.app, this);
     }
     
