@@ -24,7 +24,6 @@ module.exports = ArcadeMain = {
     //
     if (document.getElementById("arcade-main")) { document.getElementById("arcade-main").destroy(); }
 
-
     //
     // put active games first
     //
