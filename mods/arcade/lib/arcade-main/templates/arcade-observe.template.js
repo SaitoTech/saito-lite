@@ -8,13 +8,7 @@ module.exports = ArcadeObserveTemplate = (app, mod, msg, idx, msgjson) => {
 
   msg.players_array.split("_").forEach((player) => {
     let identicon = app.keys.returnIdenticon(player);
-    let username = player;
-    app.keys.fetchIdentifier(player, (fetchedId) => {
-      if (fetchedId[player]) {
-        username = fetchedId[player];
-      }
-    });
-    playersHtml += `<div class="player-slot tip id-${player}"><img class="identicon" src="${identicon}"><div class="tiptext">${username}</div></div>`;
+    playersHtml += `<div class="player-slot tip id-${player}"><img class="identicon" src="${identicon}"><div class="tiptext">${app.browser.returnAddressHTML(player)}</div></div>`;
   });
   playersHtml += '</div>';
 

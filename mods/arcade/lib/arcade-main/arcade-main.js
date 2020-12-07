@@ -24,7 +24,6 @@ module.exports = ArcadeMain = {
     //
     if (document.getElementById("arcade-main")) { document.getElementById("arcade-main").destroy(); }
 
-
     //
     // put active games first
     //
@@ -137,6 +136,13 @@ module.exports = ArcadeMain = {
       let carousel = new SaitoCarousel(app);
       carousel.render(app, mod, "arcade", "arcade-hero");
     }
+
+
+    //
+    // fetch any usernames needed
+    //
+    app.browser.addIdentifiersToDom();
+
   },
 
   attachEvents(app, mod) {

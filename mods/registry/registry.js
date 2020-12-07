@@ -241,6 +241,7 @@ console.log(sig + " -- " + registry_self.publickey);
 
 	      try {
               if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
+console.log("ADD KEY IN REGISTRY");
                 registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
                 registry_self.app.modules.updateIdentifier();
               }
