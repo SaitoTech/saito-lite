@@ -28,6 +28,8 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
   }
   playersHtml += '</div>';
 
+  if (document.getElementById(`invite-${invite.transaction.sig}`)) { return ''; }
+
   let inviteHtml = `
     <div id="invite-${invite.transaction.sig}" class="arcade-tile i_${idx} ${inviteTypeClass}" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);">
       <div class="invite-tile-wrapper">
