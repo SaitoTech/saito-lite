@@ -10,6 +10,7 @@ module.exports = PostView = {
     mod.overlay = new SaitoOverlay(app, mod);
     mod.overlay.render(app, mod);
     mod.overlay.attachEvents(app, mod);
+    mod.comments = [];
 
     //
     // fetch comments from server
