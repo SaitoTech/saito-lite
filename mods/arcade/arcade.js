@@ -1438,6 +1438,8 @@ console.log(params);
   }
   validateGame(tx) {
 
+    if (!tx) { return false; }
+
     if (!tx.transaction) {
 
       return false;
@@ -1473,12 +1475,9 @@ console.log(params);
     }
   }
   addGamesToOpenList(txs) {
-    
+
     let for_us = false;
     txs.forEach((tx, i) => {
-      
-      
-      
       let valid_game = this.validateGame(tx);
       if (valid_game){
         let this_game_is_for_us = this.isForUs(tx);
