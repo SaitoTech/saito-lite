@@ -1,5 +1,6 @@
 const PhoneAppTemplate = require('./phone-app.template');
 const PhoneScanner = require('../phone-scanner/phone-scanner');
+const PhoneScanReturn = require('./phone-scan-return');
 
 
 module.exports = PhoneApp = {
@@ -16,20 +17,23 @@ module.exports = PhoneApp = {
 
     //add event to tell the scaner what to do
     //with the call back attached
-    document.querySelector("#scan-now").addEventListener("click", () =>{
-        //alert('imma gunna scan');
-        //bring up scaner
-        PhoneScanner.render(app, data);
-        PhoneScanner.attachEvents(app, data);
+    document.querySelector("#scan-now").addEventListener("click", () => {
+      //alert('imma gunna scan');
+      //bring up scaner
+      PhoneScanner.render(app, data);
+      PhoneScanner.attachEvents(app, data);
     });
 
   },
   //the relevant callback
-  handleScanPayload(p) {
-    //alert("handleScanPayload");
-    if(document.querySelector('.results')) {
-        document.querySelector('.results').innerHTML = p;
+  handleScanPayload(app, data, p) {
+    //alert("handleScanPayload running");
+    if (document.querySelector('.results')) {
+      document.querySelector('.results').innerHTML = p;
+      data.query = JSON.parse('{"' + p.split("?")[1].replace(/&/g, '","').replace(/=/g, '":"') + '"}', function (key, value) { return key === "" ? value : decodeURIComponent(value) });
+      alert("rendering: " + JSON.stringify(data.query));
+      PhoneScanReturn.render(app, data);
+      PhoneScanReturn.attachEvents(app, data);
     }
   }
-
 }

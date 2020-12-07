@@ -1448,26 +1448,35 @@ console.log(params);
     return true;
   }
   addGameToOpenList(tx) {
-    this.validateGame(tx);
-    let for_us = this.isForUs(tx);
-    if (for_us) {
-      this.games.unshift(tx);
-    }
-    let removed_game = this.removeOldGames();
-    if(for_us || removed_game){
-      this.renderArcadeMain(this.app, this);
+    console.log("addGameToOpenList");
+    let valid_game = this.validateGame(tx);
+    if (valid_game) {
+      let for_us = this.isForUs(tx);
+      if (for_us) {
+        this.games.unshift(tx);
+      }
+      let removed_game = this.removeOldGames();
+      if(for_us || removed_game){
+        this.renderArcadeMain(this.app, this);
+      }
     }
   }
   addGamesToOpenList(txs) {
     
     let for_us = false;
     txs.forEach((tx, i) => {
-      this.validateGame(tx);
-      let this_game_is_for_us = this.isForUs(tx);
-      if (this_game_is_for_us) {
-        this.games.unshift(tx);
+      
+      
+      
+      let valid_game = this.validateGame(tx);
+      if (valid_game){
+        let this_game_is_for_us = this.isForUs(tx);
+        if (this_game_is_for_us) {
+          this.games.unshift(tx);
+        }
+        for_us = for_us || this_game_is_for_us;
       }
-      for_us = for_us || this_game_is_for_us;
+      
     });
     let removed_game = this.removeOldGames();
     if(for_us || removed_game){

@@ -12,22 +12,14 @@ module.exports = PhoneScanner = {
   },
 
   attachEvents(app, data) {
-    alert("Callback = " + data.scanCallback);
-    
-    /*
     try {
-      document.querySelector('.phone-scanner').addEventListener('message', function(e) {
-        data.scanCallback(e);
+      document.querySelector('.phone-scanner').addEventListener('change', () => {
+//        alert('callback triggered');
+//        alert("Callback = " + data.scanCallback);
+        data.scanCallback(app, data, document.querySelector('.phone-scanner').value);
       });
     } catch (err) {
       alert(err);
-    }*/
-    
-    window.addEventListener('message', function(e) {
-      //alert("message is: " + e.data);
-      data.scanCallback(JSON.stringify(e.data));
-    }, false);
-    
+    }
   }
-
 }

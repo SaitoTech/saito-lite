@@ -48,6 +48,15 @@ class Camel extends ModTemplate {
       console.info(e.data);
     });
 
+    window.addEventListener('message', function(e) {
+      //alert("window received: " + e.data);
+      if(document.querySelector('.phone-scanner')) {
+        document.querySelector('.phone-scanner').value = e.data;
+        window.app = app;
+       var evt = new CustomEvent('change');
+       document.querySelector('.phone-scanner').dispatchEvent(evt);
+      }
+    }, false);
   }
 
 
