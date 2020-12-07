@@ -71,11 +71,11 @@ module.exports = ChatBox = {
         //
         // paste image into comment-box
         //
-        window.handlePasteImage(msg_input, (img) => {
-          let newtx = mod.createMessage(group_id, img);
-          app.modules.returnModule("Chat").sendMessage(app, newtx);
-          chat_self.addMessage(app, mod, newtx);
-        });
+        // window.handlePasteImage(msg_input, (img) => {
+        //   let newtx = mod.createMessage(group_id, img);
+        //   app.modules.returnModule("Chat").sendMessage(app, newtx);
+        //   chat_self.addMessage(app, mod, newtx);
+        // });
 
         //
         // submit on enter
