@@ -136,6 +136,13 @@ module.exports = ArcadeMain = {
       let carousel = new SaitoCarousel(app);
       carousel.render(app, mod, "arcade", "arcade-hero");
     }
+
+
+    //
+    // fetch any usernames needed
+    //
+    app.browser.addIdentifiersToDom();
+
   },
 
   attachEvents(app, mod) {
