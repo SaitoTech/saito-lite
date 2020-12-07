@@ -17,17 +17,7 @@ console.log(JSON.stringify(invite.returnMessage()));
     if (i < 4) {
       if (i < invite.msg.players.length) {
         let identicon = app.keys.returnIdenticon(invite.msg.players[i]);
-        app.keys.fetchIdentifier(invite.msg.players[i], (fetchedId) => {
-          let username = invite.msg.players[i];
-          if (fetchedId[invite.msg.players[i]]) {
-            username = fetchedId[invite.msg.players[i]];
-          }
-          document.querySelectorAll(`.id-${invite.msg.players[i]}`).forEach((item, i) => {
-            app.browser.addElementToElement(`<div class="tiptext">${username}</div>`, item);
-          });
-        });
-        
-        playersHtml += `<div class="player-slot tip id-${invite.msg.players[i]}"><img class="identicon" src="${identicon}"></div>`;
+        playersHtml += `<div class="player-slot tip id-${invite.msg.players[i]}"><img class="identicon" src="${identicon}"><div class="tiptext">${app.browser.returnAddressHTML(invite.msg.players[i])}</div></div>`;
       } else {
         playersHtml += `<div class="player-slot identicon-empty"></div>`;  
       }
