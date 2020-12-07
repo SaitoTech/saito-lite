@@ -370,6 +370,11 @@ module.exports = PostStyleTemplate = (app, mod) => {
   font-weight: bold;
   cursor: pointer;
 }
+.arcade-post-title > a {
+  text-decoration: none;
+  color: inherit;
+}
+
 
 .arcade-post-user {
   float: left;

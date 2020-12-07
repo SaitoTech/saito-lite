@@ -33,6 +33,10 @@ a {
   color: #BCF;
 }
 
+.invite-tile-button-join {
+  height: 5em;
+}
+
 .arcade-container {
   margin: 0 auto;
   padding: 0 1em;
@@ -332,6 +336,7 @@ a {
   font-size: 1.2em;
   border-radius: 5px;
   flex-grow: 1;
+  margin-right: 5px;
 }
 
 .invite-tile-wrapper .tiptext {
@@ -1135,13 +1140,17 @@ a {
     }
   }
   @media only screen and (max-width: 600px) {
-        .arcade-tile {
-      min-height: 10em;
+    .arcade-tile {
+      min-height: 7em;
     }
     .invite-tile-wrapper {
-      grid-template-rows: 1fr 1fr;
+      grid-template-rows: 1fr;
       grid-template-columns: 1fr 12em;
+      min-height: 7em;
       height: unset;
+    }
+    .arcade-tile .gameShortDescription {
+      display: none;
     }
     .arcade-tile .invite-row-2 {
       grid-column: 1 / span 2;
