@@ -1146,6 +1146,9 @@ a {
     .arcade-tile {
       min-height: 4.3em;
     }
+    .arcade-main {
+      grid-template-rows: 1.3em auto 1fr;
+    }
     .invite-tile-wrapper {
       grid-template-rows: 1fr;
       grid-template-columns: 1fr 9em;
