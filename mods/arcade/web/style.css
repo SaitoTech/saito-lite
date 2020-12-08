@@ -1148,9 +1148,15 @@ a {
     }
     .invite-tile-wrapper {
       grid-template-rows: 1fr;
-      grid-template-columns: 1fr 12em;
+      grid-template-columns: 1fr 9em;
       min-height: 7em;
       height: unset;
+      font-size:0.6em;
+    }
+    .invite-tile-button {
+      min-width: 8em;
+      max-width: 8em;
+      font-size:0.8em;
     }
     .arcade-tile .gameShortDescription {
       display: none;
