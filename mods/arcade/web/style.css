@@ -1192,4 +1192,7 @@ a {
     .arcade-post {
       margin-bottom: 20px;
     }
+    .arcade-post-title {
+      font-size: 1em;
+    }
   }
