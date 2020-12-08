@@ -500,7 +500,7 @@ p {
     width: 5em;
   }
   .chat-box.chat-box-hide {
-    width: 5em;
+    height: 3.5em;
   }
   .chat-manager {
     bottom: 1px;

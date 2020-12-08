@@ -572,11 +572,8 @@ console.log(err);
       	        class : "game-chat-community",
       	        callback : function(app, game_mod) {
 	  	  game_mod.menu.hideSubMenus();
-
-          	  // load the chat window
-	          let newgroup = chatmod.returnDefaultChat();
         	  chatmod.sendEvent('chat-render-request', {});
-		  chatmod.openChatBox(newgroup.id);
+		  chatmod.openChatBox();
     	        }
               });
 	      community_menu_added = 1;

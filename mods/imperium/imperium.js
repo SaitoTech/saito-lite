@@ -8961,21 +8961,20 @@ try {
               main_menu_added = 1;
             }
 
-            if (community_menu_added == 0) {
+            if (ommunity_menu_added == 0) {
               this.menu.addSubMenuOption("game-chat", {
-                text : name,
-                id : "game-chat-"+(ii+1),
-                class : "game-chat-"+(ii+1),
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
                 callback : function(app, game_mod) {
                   game_mod.menu.hideSubMenus();
-                  chatmod.createChatGroup(members, name);
-                  chatmod.openChatBox(gid);
                   chatmod.sendEvent('chat-render-request', {});
-                  chatmod.saveChat();
+                  chatmod.openChatBox();
                 }
               });
               community_menu_added = 1;
             }
+
 
             // add peer chat
             let data = {};

@@ -21,6 +21,12 @@ class Relay extends ModTemplate {
   }
 
 
+  returnServices() {
+    let services = [];
+    services.push({ service: "relay" });
+    return services;
+  }
+
 
   //
   // currently a 1-hop function, should abstract to take an array of
