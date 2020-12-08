@@ -229,10 +229,15 @@ class Chessgame extends GameTemplate {
 
   attachEvents() {
 
+    let chat_icon = document.getElementById('chat_icon');
     let resign_icon = document.getElementById('resign_icon');
     let move_accept = document.getElementById('move_accept');
     let move_reject = document.getElementById('move_reject');
     if (!move_accept) return;
+
+    let chatmod = this.app.modules.returnModule("Chat");
+    if (!chatmod) { chat_icon.style.display = "none"; }
+
 
     resign_icon.onclick = () => {
       let c = confirm("Do you really want to resign?");
@@ -243,6 +248,16 @@ class Chessgame extends GameTemplate {
 	return;
       }
     }
+
+    if (chatmod) {
+    chat_icon.onclick = () => {
+      if (chatmod) {
+	chatmod.openChatBox();
+	return;
+      }
+    }
+    }
+
 
     move_accept.onclick = () => {
       console.log('send move transaction and wait for reply.');
