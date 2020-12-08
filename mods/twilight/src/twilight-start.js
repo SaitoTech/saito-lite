@@ -638,9 +638,14 @@ console.log(err);
     try {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
+      //if (1 == 1) {
 
-        GameHammerMobile.render(this.app, this);
-        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '.gameboard');
+
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '.gameboard');
+
 
       } else {
 
