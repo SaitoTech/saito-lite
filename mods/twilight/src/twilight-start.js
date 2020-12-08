@@ -643,8 +643,8 @@ console.log(err);
         this.hammer.render(this.app, this);
         this.hammer.attachEvents(this.app, this, '.gameboard');
 
-        this.sizer.render(this.app, this);
-        this.sizer.attachEvents(this.app, this, '.gameboard');
+        //this.sizer.render(this.app, this);
+        //this.sizer.attachEvents(this.app, this, '.gameboard');
 
       } else {
 
