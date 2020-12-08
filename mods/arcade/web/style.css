@@ -55,7 +55,9 @@ a {
   display: flex;
   flex-flow: column;
   z-index: 10;
-  overflow: hidden;
+}
+.arcade-sidebar>div {
+  overflow-x: hidden;
 }
 .arcade-controls {
   height: var(--arcade-games-sidebar-height);
@@ -388,7 +390,6 @@ a {
   .arcade-sidebar {
     position: absolute;
     width: 15em;
-    top: 5em;
     left: -15em;
     height: calc(100vh - 5em);
     transition: all ease-in-out 1s;
@@ -1123,13 +1124,15 @@ a {
       right: -32px;
       font-size: 3em;
       border-radius: 0 30px 30px 0;
+      border: 1px solid var(--saito-orange);
+      border-left: 0px;
       width: 25px;
       height: 1em;
       letter-spacing: 43px;
       font-weight: bolder;
       background: #000a;
-      line-height: 1.2em;
-      margin: 0.5em 0 0 0;
+      line-height: 1.12em;
+      margin: 0;
       transition: ease 1s all;
       z-index: 9;
       padding-left: 7px;
