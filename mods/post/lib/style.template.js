@@ -405,6 +405,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 3em;
 }
 .arcade-post-back {
+  padding-bottom: 15px;
 }
 
 .post-teaser-front {
