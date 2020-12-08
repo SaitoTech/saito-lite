@@ -398,9 +398,9 @@ a {
     left: 0;
   }
   .arcade-sub {
+    overflow-y: scroll;
+    display: block;
     margin: 1em 0 0 0;
-    grid-template-columns: auto;
-    grid-template-rows: 20vh auto;
   }
 }
 
