@@ -1171,6 +1171,8 @@ a {
       font-size: 0.8em;
       line-height: 1.3em;
       text-transform: uppercase;
+      max-height: 1.3em;
+      height: 1.3em;
     }
     .tab-button {
       font-size: smaller;
