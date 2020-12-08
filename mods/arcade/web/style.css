@@ -1144,7 +1144,7 @@ a {
   }
   @media only screen and (max-width: 600px) {
     .arcade-tile {
-      min-height: 7em;
+      min-height: 4.3em;
     }
     .invite-tile-wrapper {
       grid-template-rows: 1fr;
@@ -1156,7 +1156,10 @@ a {
     .invite-tile-button {
       min-width: 8em;
       max-width: 8em;
-      font-size:0.8em;
+      font-size: 0.8em;
+    }
+    .arcade-tile .button {
+      font-size: 1em;
     }
     .arcade-tile .gameShortDescription {
       display: none;
@@ -1172,5 +1175,11 @@ a {
     }
     .game-wizard-controls {
       grid-template-columns: auto;
+    }
+    .arcade-posts {
+      font-size: 0.85em;
+    }
+    .arcade-post {
+      margin-bottom: 20px;
     }
   }
