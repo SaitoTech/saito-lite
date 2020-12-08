@@ -50,7 +50,7 @@ class Post extends ModTemplate {
 
     if (type == "arcade-posts") {
       let obj = {};
-      obj.render = this.renderArcade;;
+      obj.render = this.renderArcade;
       obj.attachEvents = function() {};
       return obj;
     }
@@ -89,33 +89,38 @@ class Post extends ModTemplate {
 
 
   onConfirmation(blk, tx, conf, app) {
-
     if (app.BROWSER == 0) {
       if (conf == 0) {
 
-	let txmsg = tx.returnMessage();
+        let txmsg = tx.returnMessage();
 
-	if (txmsg.module === "Post") {
+        if (txmsg.module === "Post") {
 
           let post_self = app.modules.returnModule("Post");
 
           if (txmsg.type == "post") {
             post_self.receivePostTransaction(tx);
+            this.render();
           }
           if (txmsg.type == "comment") {
             post_self.receiveCommentTransaction(tx);
+            this.render();
           }
           if (txmsg.type == "edit") {
             post_self.receiveEditTransaction(tx);
+            this.render();
           }
           if (txmsg.type == "editpost") {
             post_self.receiveEditPostTransaction(tx);
+            this.render();
           }
           if (txmsg.type == "report") {
             post_self.receiveReportTransaction(tx);
+            this.render();
           }
           if (txmsg.type == "delete") {
             post_self.receiveDeleteTransaction(tx);
+            this.render();
           }
         }
       }
@@ -124,7 +129,6 @@ class Post extends ModTemplate {
 
 
   onPeerHandshakeComplete(app, peer) {
-
     //
     // fetch posts from server
     //
@@ -155,9 +159,7 @@ class Post extends ModTemplate {
   }
 
 
-
   render() {
-
     if (this.renderMethod === "main") {
       PostMain.render(this.app, this);
       PostMain.attachEvents(this.app, this);
@@ -306,7 +308,6 @@ class Post extends ModTemplate {
       
   }
   async receiveEditPostTransaction(tx) {
-
     let txmsg = tx.returnMessage();
 
     if (txmsg.title == "") { return; }
@@ -316,33 +317,30 @@ class Post extends ModTemplate {
     let params = { $id : txmsg.post_id }
     let rows = await this.app.storage.queryDatabase(sql, params, 'post');
     if (rows) {
-console.log("ROWS: " + JSON.stringify(rows));
       if (rows.length > 0) {
-	if (rows[0].parent_id === "") { 
-	  is_parent_id = 1;
-	}
+        if (rows[0].parent_id === "") { 
+          is_parent_id = 1;
+        }
       }
     }
 
-console.log("IS THIS THE TOP POST: " + is_parent_id);
 
     //
     // check if permitted to edit
     //
-    sql = `SELECT publickey FROM posts WHERE id = $id`;
+    sql = `SELECT publickey, children, flagged, deleted FROM posts WHERE id = $id`;
     params = { $id : txmsg.post_id }
     rows = await this.app.storage.queryDatabase(sql, params, 'post');
     if (rows) {
       if (rows.length > 0) {
-	if (rows[0].publickey === tx.transaction.from[0].add) {
-
+        let children = rows[0].children
+        if (rows[0].publickey === tx.transaction.from[0].add) {
           sql = `DELETE FROM posts WHERE publickey = $author AND id = $id`;
           params = {
             $author	: tx.transaction.from[0].add ,
             $id		: txmsg.post_id
           };
 
-console.log(sql + " -- " + JSON.stringify(params));
           await this.app.storage.executeDatabase(sql, params, "post");
 
 
@@ -396,9 +394,9 @@ console.log(sql + " -- " + JSON.stringify(params));
 	$plink		: txmsg.link ,
 	$ptx		: JSON.stringify(tx.transaction) ,
 	$pts		: tx.transaction.ts ,
-	$pchildren	: 0 ,
-	$pflagged 	: 0 ,
-	$pdeleted	: 0 ,
+	$pchildren	: rows[0].children ,
+	$pflagged 	: rows[0].flagged ,
+	$pdeleted	: rows[0].deleted ,
     };
 
     await this.app.storage.executeDatabase(sql, params, "post");
@@ -408,28 +406,22 @@ console.log(sql + " -- " + JSON.stringify(params));
     //
     if (txmsg.link != "") { this.grabImage(txmsg.link, tx.transaction.sig); }
 
+      sql = `UPDATE posts SET parent_id = $new_parent_id WHERE parent_id = $old_parent_id`;
+      params = {
+        $new_parent_id	: tx.transaction.sig ,
+        $old_parent_id	: txmsg.post_id
+      };
+      await this.app.storage.executeDatabase(sql, params, "post");
 
-
-          sql = `UPDATE posts SET parent_id = $new_parent_id WHERE parent_id = $old_parent_id`;
-          params = {
-            $new_parent_id	: tx.transaction.sig ,
-            $old_parent_id	: txmsg.post_id
-          };
-          await this.app.storage.executeDatabase(sql, params, "post");
-
-
-	  if (is_parent_id == 1) {
+      if (is_parent_id == 1) {
             sql = `UPDATE posts SET thread_id = $new_parent_id WHERE thread_id = $old_parent_id`;
             params = {
               $new_parent_id	: tx.transaction.sig ,
               $old_parent_id	: txmsg.post_id
             };
             await this.app.storage.executeDatabase(sql, params, "post");
-	  }
-
-
-
-	}
+          }
+        }
       }
     }
   }
@@ -448,18 +440,16 @@ console.log(sql + " -- " + JSON.stringify(params));
       
   }
   async receiveEditTransaction(tx) {
-
     let txmsg = tx.returnMessage();
-
     let is_parent_id = 0;
     let sql = `SELECT parent_id FROM posts WHERE id = $id`;
     let params = { $id : txmsg.sig }
     let rows = await this.app.storage.queryDatabase(sql, params, 'post');
     if (rows) {
       if (rows.length > 0) {
-	if (rows[0].parent_id === "") { 
-	  is_parent_id = 1;
-	}
+        if (rows[0].parent_id === "") { 
+          is_parent_id = 1;
+        }
       }
     }
 
@@ -471,10 +461,11 @@ console.log(sql + " -- " + JSON.stringify(params));
     rows = await this.app.storage.queryDatabase(sql, params, 'post');
     if (rows) {
       if (rows.length > 0) {
-	if (rows[0].publickey === tx.transaction.from[0].add) {
+        if (rows[0].publickey === tx.transaction.from[0].add) {
 
-          sql = `UPDATE posts SET text = $text, tx = $tx WHERE publickey = $author AND id = $id`;
+          sql = `UPDATE posts SET id = $newid, text = $text, tx = $tx WHERE publickey = $author AND id = $id`;
           params = {
+            $id		: txmsg.sig,
             $text	: txmsg.comment ,
             $tx		: JSON.stringify(tx.transaction) ,
             $author	: tx.transaction.from[0].add ,
@@ -490,16 +481,16 @@ console.log(sql + " -- " + JSON.stringify(params));
           await this.app.storage.executeDatabase(sql, params, "post");
 
 
-	  if (is_parent_id == 1) {
+          if (is_parent_id == 1) {
             sql = `UPDATE posts SET thread_id = $new_parent_id WHERE thread_id = $old_parent_id`;
             params = {
               $new_parent_id	: tx.transaction.sig ,
               $old_parent_id	: txmsg.sig
             };
             await this.app.storage.executeDatabase(sql, params, "post");
-	  }
+          }
 
-	}
+        }
       }
     }
   }
@@ -564,21 +555,21 @@ console.log(sql + " -- " + JSON.stringify(params));
             );
         `;
     let params = {
-	$pid 		: tx.transaction.sig ,
-	$pthread_id 	: txmsg.thread_id ,
-	$pparent_id	: txmsg.parent_id ,
-	$ptype		: 'comment' ,
-	$ppublickey	: tx.transaction.from[0].add ,
-	$ptitle		: '' ,
-	$ptext		: txmsg.comment ,
-	$pforum		: '' ,
-	$pimg		: '' ,
-	$plink		: '' ,
-	$ptx		: JSON.stringify(tx.transaction) ,
-	$pts		: tx.transaction.ts ,
-	$pchildren	: 0 ,
-	$pflagged 	: 0 ,
-	$pdeleted	: 0 ,
+      $pid 		: tx.transaction.sig ,
+      $pthread_id 	: txmsg.thread_id ,
+      $pparent_id	: txmsg.parent_id ,
+      $ptype		: 'comment' ,
+      $ppublickey	: tx.transaction.from[0].add ,
+      $ptitle		: '' ,
+      $ptext		: txmsg.comment ,
+      $pforum		: '' ,
+      $pimg		: '' ,
+      $plink		: '' ,
+      $ptx		: JSON.stringify(tx.transaction) ,
+      $pts		: tx.transaction.ts ,
+      $pchildren	: 0 ,
+      $pflagged 	: 0 ,
+      $pdeleted	: 0 ,
     };
 
     await this.app.storage.executeDatabase(sql, params, "post");
@@ -611,7 +602,7 @@ console.log(sql + " -- " + JSON.stringify(params));
         UPDATE posts SET flagged = 1 WHERE id = $pid
     `;
     let params = {
-	$pid 		: txmsg.post_id 
+      $pid 		: txmsg.post_id 
     };
 
     await this.app.storage.executeDatabase(sql, params, "post");
@@ -641,8 +632,8 @@ console.log(sql + " -- " + JSON.stringify(params));
           deleted = 1
         WHERE
           id = $post_id
-	AND
-	  publickey = $author 
+        AND
+          publickey = $author 
       `;
     let params = { $post_id : txmsg.post_id , $author : tx.transaction.from[0].add }
     await this.app.storage.executeDatabase(sql, params, "post");
