@@ -2,7 +2,7 @@ module.exports = PhoneScannerTemplate = () => {
 
     let html = '';
   
-    html = `<div class="phone-scanner">Scanner Should Be Open</div>
+    html = `<input type=text class="phone-scanner" />
     `;
   
     return html;

@@ -71,11 +71,11 @@ module.exports = ChatBox = {
         //
         // paste image into comment-box
         //
-        window.handlePasteImage(msg_input, (img) => {
-          let newtx = mod.createMessage(group_id, img);
-          app.modules.returnModule("Chat").sendMessage(app, newtx);
-          chat_self.addMessage(app, mod, newtx);
-        });
+        // window.handlePasteImage(msg_input, (img) => {
+        //   let newtx = mod.createMessage(group_id, img);
+        //   app.modules.returnModule("Chat").sendMessage(app, newtx);
+        //   chat_self.addMessage(app, mod, newtx);
+        // });
 
         //
         // submit on enter
@@ -103,17 +103,20 @@ module.exports = ChatBox = {
           let msg_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
 
           if (msg_input.value == '') { return; }
+
+          /*
           let msg_data = {
             message: msg_input.value,
             group_id: group_id,
             publickey: app.wallet.returnPublicKey(),
             timestamp: new Date().getTime()
           };
+          */
 
-          let newtx = mod.createMessage(group_id, msg_data);
+          let newtx = mod.createMessage(group_id, msg_input.value);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
 
-	  alert("sending chat message!");
+	  // alert("sending chat message!");
           chat_self.addMessage(app, mod, newtx);
           msg_input.value = '';
 

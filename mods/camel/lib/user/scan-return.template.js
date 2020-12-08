@@ -25,6 +25,11 @@ module.exports = ScanReturnTemplate = (content) => {
         <img class="logo powered-by" src="/camel/img/dreamscape-logo.png" />
       </div>
       <div class="main">
+      <div class="call-to-action">
+        <p>
+          Get the SkyePanda app not for great rewards and deals.
+        </p>
+      </div>
       ${content}
       </div>
     </body>

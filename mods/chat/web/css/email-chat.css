@@ -493,6 +493,7 @@ p {
     height: calc(100vh - 5em);
     width: calc(100vw - 1px);
     max-height: 50vh;
+    position: fixed;
   }
   .min-chat {
     left: -14px;

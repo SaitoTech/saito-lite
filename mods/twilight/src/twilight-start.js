@@ -9715,6 +9715,7 @@ alert("end of history!");
 
   addLogCardEvents() {
 
+    try {
     let twilight_self = this;
 
     if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
@@ -9745,7 +9746,7 @@ alert("end of history!");
       });
 
     }
-
+    } catch (err) {}
   }
 
   returnFormattedGameOptions(options) {

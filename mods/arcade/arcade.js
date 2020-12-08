@@ -122,6 +122,7 @@ class Arcade extends ModTemplate {
     if (this.browser_active == 0) { return; }
 
     let arcade_self = this;
+    let cutoff = new Date().getTime() - this.old_game_removal_delay;
 
     //
     // load open games from server
@@ -130,7 +131,7 @@ class Arcade extends ModTemplate {
 
         "Arcade",
 
-        `SELECT * FROM games WHERE status = "open"`,
+        `SELECT * FROM games WHERE status = "open" AND created_at > ${cutoff}`,
 
         (res) => {
           if (res.rows) {
@@ -1363,6 +1364,7 @@ console.log(params);
 
     game_tx.transaction.sig = game.id;
     game_tx.msg = msg;
+    game_tx = this.app.wallet.signTransaction(game_tx);
 
     return game_tx;
   }
@@ -1412,8 +1414,15 @@ console.log(params);
   }
 
   isForUs(tx) {
-    var for_us = true;
-    if (tx.returnMessage().options.players_invited) {
+
+    if (!tx) { return false; }
+
+    let for_us = true;
+    let txmsg = tx.returnMessage();
+
+    if (!txmsg) { return false; }
+
+    if (txmsg.options.players_invited) {
       for_us = false;
       if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) {
         for_us = true;
@@ -1427,9 +1436,14 @@ console.log(params);
     }
     return for_us;
   }
-  validateGame(tx){
+  validateGame(tx) {
+
+    if (!tx) { return false; }
+
     if (!tx.transaction) {
+
       return false;
+
     } else {
       if (!tx.transaction.sig) { return false; }
       if (tx.msg.over == 1) { return false; }
@@ -1461,12 +1475,9 @@ console.log(params);
     }
   }
   addGamesToOpenList(txs) {
-    
+
     let for_us = false;
     txs.forEach((tx, i) => {
-      
-      
-      
       let valid_game = this.validateGame(tx);
       if (valid_game){
         let this_game_is_for_us = this.isForUs(tx);
