@@ -1167,6 +1167,11 @@ a {
     .arcade-tile .invite-row-2 {
       grid-column: 1 / span 2;
     }
+    #arcade-tab-buttons {
+      font-size: 0.8em;
+      line-height: 1.3em;
+      text-transform: uppercase;
+    }
     .tab-button {
       font-size: smaller;
     }
