@@ -300,6 +300,7 @@ p {
   height: 38em;
   font-family: visuelt-light;
   z-index: 100;
+  max-height: 100vh;
 }
 
 .chat-box .chat-box-header {
