@@ -144,6 +144,8 @@ class Chat extends ModTemplate {
 
   async onPeerHandshakeComplete(app, peer) {
 
+console.log("PEER: " + JSON.stringify(peer.peer));
+
     //
     // create mastodon server
     //
