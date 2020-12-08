@@ -12,14 +12,14 @@ module.exports = PostViewCommentTemplate = (app, mod, tx) => {
 
   if (tx.transaction.from[0].add === app.wallet.returnPublicKey()) {
     html += `
-      <div data-id="${tx.transaction.sig}" id="post-view-comment-edit" class="post-view-comment-edit">edit</div>
+      <div data-id="${tx.originalSig}" id="post-view-comment-edit" class="post-view-comment-edit">edit</div>
     `;
   }
 
   html += `
       <div id="post-view-report" class="post-view-report">report</div>
     </div>
-    <div data-id="${tx.transaction.sig}" id="post-view-comment-text" class="post-view-comment-text">${txmsg.comment}</div>
+    <div data-id="${tx.originalSig}" id="post-view-comment-text" class="post-view-comment-text">${txmsg.comment}</div>
   </div>
   `;
 
