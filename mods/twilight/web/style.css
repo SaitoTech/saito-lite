@@ -594,7 +594,7 @@ status-message {
 }
 
 
-/****
+
 @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
   html {
     transform: rotate(-90deg) translate(-100vh, 0vw);
@@ -610,4 +610,36 @@ status-message {
     max-width: unset;
   }
 }
-***/
+
+
+
+@media screen and (orientation:portrait) and (max-width: 700px) {
+
+  .hud-long .hud-body .status .status-cardbox {
+    grid-template-columns: repeat( auto-fit, minmax(50px, 80px));
+    height: unset;
+  }
+
+  .hud-long {
+    grid-template-rows: 30px auto;
+  }
+
+  .hud-header {
+    height: 30px;
+  }
+
+  .cardbox-hud {
+    width: calc(80px * 0.811);
+    height: 80px;
+  }
+
+}
+
+
+
+
+
+
+
+
+
