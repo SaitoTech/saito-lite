@@ -612,27 +612,22 @@ status-message {
 }
 ***/
 
-
 @media screen and (orientation:portrait) and (max-width: 700px) {
 
   .hud-long .hud-body .status .status-cardbox {
     grid-template-columns: repeat( auto-fit, minmax(50px, 80px));
     height: unset;
   }
-
   .hud-long {
     grid-template-rows: 30px auto;
   }
-
   .hud-header {
     height: 30px;
   }
-
   .cardbox-hud {
     width: calc(80px * 0.811);
     height: 80px;
   }
-
   .game-cardbox {
     width: 80vw;
     height: calc(80vw * 1.36);
@@ -648,11 +643,62 @@ status-message {
     width: 98%;
   }
   .cardbox-exit-background {
-    /* top: -15px; */
+    top: -5px;
     left: 90%;
+  }
+  .log-lock {
+    width: 395px;
   }
 
 }
+
+
+@media screen and (orientation:landscape) and (max-height: 700px) {
+
+  .hud-long .hud-body .status .status-cardbox {
+    grid-template-columns: repeat( auto-fit, minmax(50px, 80px));
+    height: unset;
+  }
+  .hud-long {
+    grid-template-rows: 20px auto;
+    height: 140px;
+  }
+  .hud-header {
+    height: 20px;
+  }
+  .cardbox-hud {
+    width: calc(80px * 0.811);
+    height: 80px;
+  }
+  .game-cardbox {
+    z-index: 2000;
+    width: 20vw;
+    height: calc(20vw * 1.36);
+    left: 40vw;
+    top: 10vh;
+    display: block;
+  }
+  .cardbox-card {
+    width: 100%;
+    height: 100%;
+  }
+  .cardbox-menu {
+    width: 98%;
+    font-size:1.2em;
+    padding: 5px 20px;
+  }
+  .cardbox-exit-background {
+    top: -5px;
+    left: 85%;
+    width: 10vh;
+    height: 10vh;
+  }
+  .log-lock {
+    width: 395px;
+  }
+
+}
+
 
 
 

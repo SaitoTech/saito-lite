@@ -623,6 +623,8 @@ input#game_board_sizer {
   left: 85%;
   width: 5vh;
   height: 5vh;
+  max-width: 50px;
+  max-height: 50px;
   border: 3px black solid;
   border-radius: 100px;
   top: -1%;
