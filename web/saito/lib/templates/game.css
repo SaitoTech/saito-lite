@@ -866,6 +866,14 @@ input#game_board_sizer {
     font-size: 1.5em;
   }
 
+  .game-cardbox {
+    width: 80vw;
+    height: auto;
+    left: 10vw;
+    top: 15vh;
+    display: block;
+  }
+
 }
 
 
