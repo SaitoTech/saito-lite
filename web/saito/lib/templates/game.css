@@ -859,4 +859,8 @@ input#game_board_sizer {
 .hud-long .hud-header {
   height: 50px;
 }
+.cardbox {
+  background-color: red;
+}
+
 
