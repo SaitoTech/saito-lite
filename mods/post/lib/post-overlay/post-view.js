@@ -58,14 +58,15 @@ module.exports = PostView = {
 
       let comment = document.querySelector('.post-view-textarea').innerHTML;
       document.querySelector('.post-view-textarea').innerHTML = "";
+      if (comment != ""){
+        let newtx = mod.createCommentTransaction(sig, comment);
+        app.network.propagateTransaction(newtx);
 
-      let newtx = mod.createCommentTransaction(sig, comment);
-      app.network.propagateTransaction(newtx);
-
-      newtx.children = 0;
-      mod.comments.push(newtx);
-      this.addComment(app, mod, newtx);
-      this.attachEvents(app, mod, sig);
+        newtx.children = 0;
+        mod.comments.push(newtx);
+        this.addComment(app, mod, newtx);
+        this.attachEvents(app, mod, sig);  
+      }
     }
 
 
