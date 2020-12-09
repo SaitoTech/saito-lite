@@ -19,7 +19,8 @@ body {
   display: grid;
   grid-template-rows: 40px auto;
   font-family: visuelt-light;
-  position: fixed;
+  position: absolute;
+  /* position: fixed; -- messes with move/rotate mobile */
   left: 50%;
   bottom: 0%;
   float: none;
@@ -850,4 +851,12 @@ input#game_board_sizer {
 ***/
 
 
+
+
+.hud-long {
+  grid-template-rows: 50px auto;
+}
+.hud-long .hud-header {
+  height: 50px;
+}
 

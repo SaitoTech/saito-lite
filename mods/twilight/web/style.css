@@ -593,6 +593,8 @@ status-message {
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
 }
 
+
+/****
 @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
   html {
     transform: rotate(-90deg) translate(-100vh, 0vw);
@@ -608,3 +610,4 @@ status-message {
     max-width: unset;
   }
 }
+***/

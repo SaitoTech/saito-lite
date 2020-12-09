@@ -633,12 +633,12 @@ console.log(err);
       this.hud.card_width = 110;
     }
 
-    this.hud.render(app, this);
-
     try {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
       //if (1 == 1) {
+
+console.log("rendering hammer!");
 
         this.hammer.render(this.app, this);
         this.hammer.attachEvents(this.app, this, '.gameboard');
@@ -649,6 +649,8 @@ console.log(err);
       } else {
 
 	let twilight_self = this;
+
+console.log("adding sizer!");
 
         GameBoardSizer.render(this.app, this);
         GameBoardSizer.attachEvents(this.app, this, '.gameboard');
@@ -662,6 +664,10 @@ console.log(err);
       }
 
     } catch (err) {}
+
+    this.hud.render(app, this);
+    this.hud.attachEvents(app, this);
+
 
   }
 
@@ -832,15 +838,15 @@ try {
     let us_i   = 0;
     let ussr_i = 0;
 
-try {
-    $(divname).css('top', this.scale(this.countries[i].top)+"px");
-    $(divname).css('left', this.scale(this.countries[i].left)+"px");
-    $(divname_us).css('height', this.scale(100)+"px");
-    $(divname_ussr).css('height', this.scale(100)+"px");
+    try {
+      $(divname).css('top', this.scale(this.countries[i].top)+"px");
+      $(divname).css('left', this.scale(this.countries[i].left)+"px");
+      $(divname_us).css('height', this.scale(100)+"px");
+      $(divname_ussr).css('height', this.scale(100)+"px");
 
-    if (this.countries[i].us > 0) { this.showInfluence(i, "us"); }
-    if (this.countries[i].ussr > 0) { this.showInfluence(i, "ussr"); }
-} catch (err) {} // invite page
+      if (this.countries[i].us > 0) { this.showInfluence(i, "us"); }
+      if (this.countries[i].ussr > 0) { this.showInfluence(i, "ussr"); }
+    } catch (err) {} // invite page
 
   }
 
