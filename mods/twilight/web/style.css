@@ -633,6 +633,25 @@ status-message {
     height: 80px;
   }
 
+  .game-cardbox {
+    width: 80vw;
+    height: calc(80vw * 1.36);
+    left: 10vw;
+    top: 10vh;
+    display: block;
+  }
+  .cardbox-card {
+    width: 100%;
+    height: 100%;
+  }
+  .cardbox-menu {
+    width: 98%;
+  }
+  .cardbox-exit-background {
+    /* top: -15px; */
+    left: 90%;
+  }
+
 }
 
 
