@@ -853,9 +853,15 @@ input#game_board_sizer {
 }
 @media screen and (orientation:landscape) and (max-height: 700px) {
 }
-@media screen and (orientation:portrait) and (max-width: 700px) {
-}
 ***/
+
+@media screen and (orientation:portrait) and (max-width: 485px) {
+  .log {
+    right: -400px;
+    width: 415px;
+    max-width: 415px;
+  }
+}
 
 @media screen and (orientation:portrait) and (max-width: 700px) {
 
