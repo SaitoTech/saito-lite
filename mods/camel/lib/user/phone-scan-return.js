@@ -30,7 +30,7 @@ module.exports = PhoneScanReturn = {
           scan_type desc;
       `;
 
-    var html = `<h2>Scan Result</h2>`;
+    var html = ``;
 
     data.mod.sendPeerDatabaseRequestRaw("camel", sql, function (res) {
       rows = res.rows;
@@ -83,7 +83,7 @@ module.exports = PhoneScanReturn = {
 
           if (product.product_name) {
             html += `
-              <div><h3>${product.product_name}</h3></div>
+              <div><h1>${product.product_name}</h1></div>
               <div><img style='max-width:200px;max-height:200px' src='${product.product_photo}'/></div>
             `;
           } else {
