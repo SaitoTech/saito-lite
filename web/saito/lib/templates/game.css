@@ -19,16 +19,16 @@ body {
   display: grid;
   grid-template-rows: 40px auto;
   font-family: visuelt-light;
-  position: fixed;
-  left: 50%;
+  position: absolute;
+  left: 0%;
   bottom: 0%;
   float: none;
   z-index: 40;
   font-size: 1.2rem;
   border-bottom: 0px;
-  transform: translate(-50%, -0%);
   transition: height 0.2s ease, width 0.2s ease, right 0.2s ease;
   box-shadow: 0 0 3px 3px #BBB;
+  max-width: 100vw;
 }
 .hud-header {
   display: grid;
@@ -41,6 +41,7 @@ body {
 .hud-body {
   display: grid;
   width: 100%;
+  max-width: 100vw;
   height: 100%;
   overflow-y: scroll;
   cursor: move;
@@ -239,12 +240,12 @@ ul li a {
   font-size: 1.25em;
   font-family: courier, sans-serif;
   padding: 2px;
+  max-width:95vw;
 }
 
 .log-lock {
   right: 0;
   border-left: 1px solid var(--my-color);
-  width: 501px;
 }
 
 
@@ -277,7 +278,7 @@ ul li a {
 .hud-long {
   grid-template-rows: 20px auto;
   width: 1200px;
-  max-width: 1200px;
+  max-width: 100vw;
   height: 280px;
   max-height: 280px;
 }
@@ -295,13 +296,13 @@ ul li a {
   grid-template-rows: auto;
 }
 .hud-long .hud-body .status .status-cardbox {
-  grid-template-columns: repeat( auto-fit, minmax(80px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
 }
 .hud-vertical {
   width: 210px;
   max-width: 210px;
   height: 100%;
-  max-height: 100%;
+  max-height: 100vh;
   top: 50px;
   left: 105px;
   box-shadow: none;
@@ -622,6 +623,8 @@ input#game_board_sizer {
   left: 85%;
   width: 5vh;
   height: 5vh;
+  max-width: 50px;
+  max-height: 50px;
   border: 3px black solid;
   border-radius: 100px;
   top: -1%;
@@ -678,6 +681,10 @@ input#game_board_sizer {
   width: 500px;
   margin-left: auto;
   margin-right: auto;
+  max-width: 100vw;
+  padding-left: 5px;
+  padding-right: 5px;
+
 }
 .hud-long .hud-body .status .status-message ul li , .hud-long .hud-body .status-overlay .status-message ul li {
   background-color: whitesmoke;
@@ -718,21 +725,20 @@ input#game_board_sizer {
 @media screen and (orientation:landscape) and (max-width: 700px) {
 
   .hud-long .hud-body {
-    height: 120px;
+    height: 240px;
     min-height: 120px;
     width: 550px;
     min-width: 550px;
     max-width: 550px;
   }
 
-  .hud-long .hud-header {
-    visibility: hidden;
-  }
-
   .status {
     height: 100px;
   }
 
+  .hud-header {
+    width: 300px;
+  }
 
   /****************/
   /**** MODE 1 ****/
@@ -813,7 +819,6 @@ input#game_board_sizer {
   .log-lock {
     right: 0px;
     border-left: 1px solid var(--my-color);
-    width: 220px;
   }
 
 
@@ -840,14 +845,52 @@ input#game_board_sizer {
   }
 
 }
+
+
+
 /***
 @media screen and (orientation:landscape) and (max-height: 950px) {
 }
 @media screen and (orientation:landscape) and (max-height: 700px) {
 }
-@media screen and (orientation:portrait) and (max-width: 700px) {
-}
 ***/
+
+
+
+
+@media screen and (orientation:portrait) and (max-width: 485px) {
+  .log {
+    right: -400px;
+    width: 415px;
+    max-width: 415px;
+  }
+  .log-lock {
+    right: 0px;
+  }
+}
+
+@media screen and (orientation:portrait) and (max-width: 700px) {
+
+  .game-menu ul li {
+    font-size: 1em;
+    width: 80px;
+  }
+
+  .game-overlay-menu {
+    min-width: 300px;
+    font-size: 1.5em;
+  }
+
+  .game-cardbox {
+    width: 80vw;
+    height: auto;
+    left: 10vw;
+    top: 15vh;
+    display: block;
+  }
+
+}
+
 
 
 

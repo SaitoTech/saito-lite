@@ -191,21 +191,6 @@ class Arcade extends ModTemplate {
     
     this.renderArcadeMain(this.app, this);
 
-   
-    //
-    // Each overlay will manage it's own hashchange event listeners which hides/shows
-    // the overlay. To support deep linking, we set and reset the location hash
-    // to trigger those event listeners
-    // 
-    // let locationHash = window.location.hash;
-    // window.location.hash = "#";
-    // window.location.hash = locationHash;
-    // window.addEventListener("hashchange", () => {
-    //   if (!(window.location.hash.startsWith("#creategame") || window.location.hash.startsWith("#viewgame"))) {
-    //     this.overlay.hideOverlay();
-    //   }
-    // });
-
   }
   isMyGame(invite, app) {
     for(let i = 0; i < invite.msg.players.length; i++) {
@@ -215,6 +200,8 @@ class Arcade extends ModTemplate {
     }
     return false;
   }
+
+
   //
   // purge any bad games from options file
   //
@@ -264,12 +251,6 @@ class Arcade extends ModTemplate {
               }
             }
             if (existing_players_found < this.games[i].transaction.msg.players.length) {
-
-    //console.log("WE HAVE FOUND A GAME WITH A PLAYER IN IT WHO WAS NOT ACCEPTED...");
-    //console.log(JSON.stringify(this.games[i].transaction.msg.players));
-    //console.log("vs");
-    //console.log(JSON.stringify(tx.transaction.to));
-
 
             }
           }

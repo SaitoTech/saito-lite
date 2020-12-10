@@ -1482,6 +1482,9 @@ div#message-wrapper {
   .header-icon-fullscreen {
     display: none;
   }
+  .header-username {
+    display: none;
+  }
   #navigator {
     display: inline-block;
   }

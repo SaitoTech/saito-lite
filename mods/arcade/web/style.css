@@ -399,9 +399,9 @@ a {
     left: 0;
   }
   .arcade-sub {
+    overflow-y: scroll;
+    display: block;
     margin: 1em 0 0 0;
-    grid-template-columns: auto;
-    grid-template-rows: 20vh auto;
   }
 }
 
@@ -1136,6 +1136,7 @@ a {
       transition: ease 1s all;
       z-index: 9;
       padding-left: 7px;
+      padding-bottom: 7px;
       cursor: ew-resize;
     }
     .arcade-sidebar:hover::after {
@@ -1144,19 +1145,38 @@ a {
   }
   @media only screen and (max-width: 600px) {
     .arcade-tile {
-      min-height: 7em;
+      min-height: 4.3em;
+    }
+    .arcade-main {
+      grid-template-rows: 1.3em auto 1fr;
     }
     .invite-tile-wrapper {
       grid-template-rows: 1fr;
-      grid-template-columns: 1fr 12em;
+      grid-template-columns: 1fr 9em;
       min-height: 7em;
       height: unset;
+      font-size:0.6em;
+    }
+    .invite-tile-button {
+      min-width: 8em;
+      max-width: 8em;
+      font-size: 0.8em;
+    }
+    .arcade-tile .button {
+      font-size: 1em;
     }
     .arcade-tile .gameShortDescription {
       display: none;
     }
     .arcade-tile .invite-row-2 {
       grid-column: 1 / span 2;
+    }
+    #arcade-tab-buttons {
+      font-size: 0.8em;
+      line-height: 1.3em;
+      text-transform: uppercase;
+      max-height: 1.3em;
+      height: 1.3em;
     }
     .tab-button {
       font-size: smaller;
@@ -1166,5 +1186,14 @@ a {
     }
     .game-wizard-controls {
       grid-template-columns: auto;
+    }
+    .arcade-posts {
+      font-size: 0.85em;
+    }
+    .arcade-post {
+      margin-bottom: 0px;
+    }
+    .arcade-post-title {
+      font-size: 1em;
     }
   }

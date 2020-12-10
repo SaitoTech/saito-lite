@@ -344,7 +344,6 @@ module.exports = PostStyleTemplate = (app, mod) => {
 }
 
 .arcade-post {
-  margin-bottom: 30px;
   display: grid;
   grid-template-columns: 3em auto;
 }
@@ -406,6 +405,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 3em;
 }
 .arcade-post-back {
+  padding-bottom: 15px;
 }
 
 .post-teaser-front {

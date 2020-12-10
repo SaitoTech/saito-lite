@@ -300,6 +300,7 @@ p {
   height: 38em;
   font-family: visuelt-light;
   z-index: 100;
+  max-height: 100vh;
 }
 
 .chat-box .chat-box-header {
@@ -493,13 +494,14 @@ p {
     height: calc(100vh - 5em);
     width: calc(100vw - 1px);
     max-height: 50vh;
+    position: fixed;
   }
   .min-chat {
     left: -14px;
     width: 5em;
   }
   .chat-box.chat-box-hide {
-    width: 5em;
+    height: 3.5em;
   }
   .chat-manager {
     bottom: 1px;

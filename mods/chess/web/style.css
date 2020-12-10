@@ -205,6 +205,8 @@ img.captured {
     .module_container {
         margin-top: 0;
         width: 93vw;
+        margin-left: 3.5vw;
+	margin-right: auto;
     }
     #board {
         max-width: 500px;

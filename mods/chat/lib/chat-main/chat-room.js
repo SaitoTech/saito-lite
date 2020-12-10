@@ -64,6 +64,28 @@ module.exports = ChatRoom = {
 	mod.render(app);
       }
 
+      document.getElementById("back-button").ontouch = (e) => {
+	mod.renderMode = "main";
+	mod.render(app);
+      }
+
+      document.querySelector(".chat-room-submit-button").onclick = (e) => {
+          e.preventDefault();
+          if (msg_input.value == '') { return; }
+          let newtx = mod.createMessage(group_id, msg_input.value);
+          mod.sendMessage(app, newtx);
+          chat_self.addMessage(app, mod, group_id, newtx);
+          msg_input.value = '';
+      }
+
+      document.querySelector(".chat-room-submit-button").ontouch = (e) => {
+          e.preventDefault();
+          if (msg_input.value == '') { return; }
+          let newtx = mod.createMessage(group_id, msg_input.value);
+          mod.sendMessage(app, newtx);
+          chat_self.addMessage(app, mod, group_id, newtx);
+          msg_input.value = '';
+      }
 
 
     },

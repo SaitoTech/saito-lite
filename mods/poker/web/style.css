@@ -346,6 +346,11 @@ body {
 
 
 @media all and (max-aspect-ratio:13/9) {
+
+  .game-menu {
+    min-width: 220px;
+    width: 220px;
+  }
   .deal .card {
     width: 18vw;
     max-width: 9vh;
@@ -368,12 +373,12 @@ body {
   }
   .cardfan {
     position: absolute;
-    top: 80vh;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 40vh;
+    left: 40vw;
     padding: unset;
     width: 14vh;
     margin: auto;
+    height: unset;
   }
   .cardfan .card {
     width: 10vh;

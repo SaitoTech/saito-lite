@@ -117,17 +117,8 @@ class Settlers extends GameTemplate {
       	        class : "game-chat-community",
       	        callback : function(app, game_mod) {
 	  	  game_mod.menu.hideSubMenus();
-
-          	  // load the chat window
-	          let newgroup = chatmod.returnDefaultChat();
-	          if (newgroup) {
-        	    chatmod.addNewGroup(newgroup);
-        	    chatmod.sendEvent('chat-render-request', {});
-		    chatmod.openChatBox(newgroup.id);
-    	          } else {
-        	    chatmod.sendEvent('chat-render-request', {});
-		    chatmod.openChatBox(newgroup.id);
-	          }
+        	  chatmod.sendEvent('chat-render-request', {});
+		  chatmod.openChatBox();
     	        }
               });
 	      community_menu_added = 1;

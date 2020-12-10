@@ -62,6 +62,7 @@ class Chat extends ModTemplate {
     }
   }
 
+
   //
   // email-chat -- mod should be email since refernece is not "this"
   //
@@ -81,7 +82,6 @@ class Chat extends ModTemplate {
   render(app) {
 
     if (this.browser_active == 1) { this.renderMode = "main"; }
-
 
     if (this.renderMode == "main") {
       ChatMain.render(app, this);
@@ -144,11 +144,20 @@ class Chat extends ModTemplate {
 
   async onPeerHandshakeComplete(app, peer) {
 
+    let loaded_txs = 0;
+
     //
     // create mastodon server
     //
-    this.createChatGroup([peer.peer.publickey], "Community Server");
+    if (peer.isMainPeer()) {
+      this.createChatGroup([peer.peer.publickey], "Community Chat");
+    } else {
 
+      //
+      // if we have already loaded txs, nope out
+      //
+      if (loaded_txs == 1) { return; }
+    }
 
     //
     // load transactions from server
@@ -161,6 +170,7 @@ class Chat extends ModTemplate {
     // TODO - make more efficient
     //
     for (let i = 0; i < txs.length; i++) {
+      loaded_txs = 1;
       let txmsg = txs[i].returnMessage();
       for (let z = 0; z < this.groups.length; z++) {
 	if (this.groups[z].id === txmsg.group_id) {
@@ -478,7 +488,16 @@ console.log("ERROR 113234: chat error receiving message: " + err);
     if (chat_on_page == 0) {
       if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
         this.openChatBox(txmsg.group_id);
+	try {
+	  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+	  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+	} catch (err) {}
       }
+    } else {
+      try {
+        document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+        document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+      } catch (err) {}
     }
 
     //
@@ -510,7 +529,16 @@ console.log("ERROR 113234: chat error receiving message: " + err);
   //////////////////
   openChatBox(group_id=null) {
 
-    if (group_id == null) { return; }
+    if (group_id == null) {
+       //
+       // open community chat if possible
+       //
+       let group = this.returnCommunityChat();
+       if (group == undefined || group == null) { return; }
+       if (group.id == undefined || group.id == null) { return; }
+       this.openChatBox(group.id);
+       return; 
+    }
 
     if (document.getElementById(`chat-box-${group_id}`)) {
       let chat_box_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
@@ -566,6 +594,17 @@ console.log("ERROR 113234: chat error receiving message: " + err);
 
 
 
+
+  returnCommunityChat() {
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.app.options.peers.length > 0) {
+        if (this.groups[i].name === "Community Chat") {
+          return this.groups[i];
+        }
+      }
+    }
+    return this.groups[0];
+  }
 
   returnDefaultChat() {
     for (let i = 0; i < this.groups.length; i++) {
