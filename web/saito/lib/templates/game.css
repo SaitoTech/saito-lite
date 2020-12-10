@@ -246,7 +246,6 @@ ul li a {
 .log-lock {
   right: 0;
   border-left: 1px solid var(--my-color);
-  width: 501px;
 }
 
 
@@ -821,7 +820,6 @@ input#game_board_sizer {
   .log-lock {
     right: 0px;
     border-left: 1px solid var(--my-color);
-    width: 220px;
   }
 
 
