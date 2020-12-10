@@ -541,7 +541,6 @@ console.log("ERROR 113234: chat error receiving message: " + err);
     if (document.getElementById(`chat-box-${group_id}`)) {
       let chat_box_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
       chat_box_input.focus();
-      chat_box_input.select();
 
       // 
       // maximize if minimized
