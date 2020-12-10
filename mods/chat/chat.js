@@ -489,13 +489,11 @@ console.log("ERROR 113234: chat error receiving message: " + err);
       if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
         this.openChatBox(txmsg.group_id);
 	try {
-	  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
 	  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
 	} catch (err) {}
       }
     } else {
       try {
-        document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
         document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
       } catch (err) {}
     }
