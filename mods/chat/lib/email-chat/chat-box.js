@@ -275,11 +275,10 @@ return;
       if (chatboxen_open == 0) {
         if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
       } else {
-
-          app.browser.addElementToDom(ChatBoxTemplate(group));
-	  let newchatbox = document.getElementById(`chat-box-${group.id}`);
-	  newchatbox.style.right = pixen_consumed + (20*chatboxen_open) + "px";
-
+	let boxel = document.getElementById(`chat-box-${group.id}`);
+	if (!boxel) { app.browser.addElementToDom(ChatBoxTemplate(group)); }
+	let newchatbox = document.getElementById(`chat-box-${group.id}`);
+	newchatbox.style.right = pixen_consumed + (20*chatboxen_open) + "px";
       }
 
       this.attachEvents(app, mod);
