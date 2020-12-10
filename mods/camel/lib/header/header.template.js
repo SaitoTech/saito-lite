@@ -1,7 +1,7 @@
 module.exports = HeaderTemplate = (ddmods) => {
   html = `
     <a href="/camel">
-      <img class="logo major-logo" src="/camel/img/camel.png" />
+      <div class="logo major-logo"></div>
       <img class="logo powered-by" src="/camel/img/dreamscape-logo.png" />
     </a>
       <i id="settings" class="header-icon icon-med fas fa-cog"></i>
