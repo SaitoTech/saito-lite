@@ -1136,6 +1136,7 @@ a {
       transition: ease 1s all;
       z-index: 9;
       padding-left: 7px;
+      padding-bottom: 7px;
       cursor: ew-resize;
     }
     .arcade-sidebar:hover::after {
