@@ -519,60 +519,6 @@ body {
 
 
 
-@media screen and (orientation:landscape) and (max-width: 700px) {
-
-  .hud-long {
-    height: 120px;
-    min-height: 120px;
-    width: 550px;
-    min-width: 550px;
-    max-width: 550px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hud-long .hud-body {
-    height: 120px;
-    min-height: 120px;
-    width: 550px;
-    min-width: 550px;
-    max-width: 550px;
-  }
-
-  .hud-long .hud-header {
-    visibility: hidden;
-  }
-
-  .cardbox-hud {
-    width: calc(4em * 0.811);
-    height: 4em;
-  }
-
-  .game-menu {
-    width: 330px;
-  }
-  .game-cardbox {
-    width: 155px;
-    height: 215px;
-  }
-  .cardbox-card {
-    width: 155px;
-    height: 215px;
-  }
-
-  .status {
-    height: 100px;
-  }
-
-  .status-message {
-    width: 300px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 13px;
- }
-
-}
-
 
 /* color tweaks */
 
@@ -649,6 +595,7 @@ status-message {
 
 }
 
+/****
 
 @media screen and (orientation:landscape) and (max-height: 700px) {
 
@@ -691,13 +638,104 @@ status-message {
   }
 
 }
+***/
 
 
+@media screen and (orientation: landscape) and (max-height: 600px) {
 
+  .hud-long {
+    height: 240px;
+    min-height: 120px;
+    width: 550px;
+    min-width: 550px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
+  .hud-long .hud-body {
+    height: 240px;
+    min-height: 240px;
+    width: 550px;
+    min-width: 550px;
+    max-width: 800px;
+  }
 
+  .cardbox-hud {
+    width: calc(4em * 0.811);
+    height: 4em;
+  }
 
+  .game-menu {
+    width: 330px;
+  }
+  .game-cardbox {
+    width: 155px;
+    height: 215px;
+  }
+  .cardbox-card {
+    width: 155px;
+    height: 215px;
+  }
 
+  .status {
+    height: 100px;
+  }
 
+  .status-message {
+    width: 300px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 13px;
+  }
 
+  .hud-header {
+    width: 300px;
+  }
+
+}
+
+@media screen and (orientation: landscape) and (min-width: 1000px) and (max-width: 1200px) {
+
+  .hud-long {
+    height: 240px;
+    min-height: 120px;
+    width: 1000px;
+    min-width: 500px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hud-long .hud-body {
+    height: 240px;
+    min-height: 240px;
+    width: 1000px;
+    min-width: 500px;
+    max-width: 1000px;
+  }
+
+]
+
+@media screen and (orientation: landscape) and (max-width: 1200px) and (max-width: 1400px) {
+
+  .hud-long {
+    height: 240px;
+    min-height: 120px;
+    width: 1200px;
+    min-width: 500px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hud-long .hud-body {
+    height: 240px;
+    min-height: 240px;
+    width: 1200px;
+    min-width: 500px;
+    max-width: 1200px;
+  }
+
+}
 

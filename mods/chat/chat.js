@@ -83,7 +83,6 @@ class Chat extends ModTemplate {
 
     if (this.browser_active == 1) { this.renderMode = "main"; }
 
-
     if (this.renderMode == "main") {
       ChatMain.render(app, this);
       ChatMain.attachEvents(app, this);

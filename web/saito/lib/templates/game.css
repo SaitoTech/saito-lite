@@ -296,7 +296,7 @@ ul li a {
   grid-template-rows: auto;
 }
 .hud-long .hud-body .status .status-cardbox {
-  grid-template-columns: repeat( auto-fit, minmax(80px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
 }
 .hud-vertical {
   width: 210px;
@@ -725,21 +725,20 @@ input#game_board_sizer {
 @media screen and (orientation:landscape) and (max-width: 700px) {
 
   .hud-long .hud-body {
-    height: 120px;
+    height: 240px;
     min-height: 120px;
     width: 550px;
     min-width: 550px;
     max-width: 550px;
   }
 
-  .hud-long .hud-header {
-    visibility: hidden;
-  }
-
   .status {
     height: 100px;
   }
 
+  .hud-header {
+    width: 300px;
+  }
 
   /****************/
   /**** MODE 1 ****/
@@ -846,12 +845,18 @@ input#game_board_sizer {
   }
 
 }
+
+
+
 /***
 @media screen and (orientation:landscape) and (max-height: 950px) {
 }
 @media screen and (orientation:landscape) and (max-height: 700px) {
 }
 ***/
+
+
+
 
 @media screen and (orientation:portrait) and (max-width: 485px) {
   .log {
