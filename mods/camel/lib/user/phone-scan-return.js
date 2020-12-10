@@ -83,12 +83,8 @@ module.exports = PhoneScanReturn = {
 
           if (product.product_name) {
             html += `
-            <div class="scan-check-product grid-2">
-              <div class="table-head">Name</div>
-              <div>${product.product_name}</div>
-              <div class="table-head">Product Image</div>
+              <div><h3>${product.product_name}</h3></div>
               <div><img style='max-width:200px;max-height:200px' src='${product.product_photo}'/></div>
-            </div>
             `;
           } else {
             html += `<h3>Unknown Product</h3>
