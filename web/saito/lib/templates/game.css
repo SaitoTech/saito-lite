@@ -240,6 +240,7 @@ ul li a {
   font-size: 1.25em;
   font-family: courier, sans-serif;
   padding: 2px;
+  max-width:95vw;
 }
 
 .log-lock {
