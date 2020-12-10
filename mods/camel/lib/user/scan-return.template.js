@@ -21,7 +21,7 @@ module.exports = ScanReturnTemplate = (content) => {
       </head> 
     <body>
       <div class="header header-home">
-        <img class="logo major-logo" src="/camel/img/camel.png" />
+        <img class="logo major-logo" src="/camel/img/panda.svg" />
         <img class="logo powered-by" src="/camel/img/dreamscape-logo.png" />
       </div>
       <div class="main">
