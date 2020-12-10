@@ -859,6 +859,9 @@ input#game_board_sizer {
     width: 415px;
     max-width: 415px;
   }
+  .log-lock {
+    right: 0px;
+  }
 }
 
 @media screen and (orientation:portrait) and (max-width: 700px) {
