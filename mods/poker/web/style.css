@@ -346,6 +346,7 @@ body {
 
 
 @media all and (max-aspect-ratio:13/9) {
+
   .game-menu {
     min-width: 220px;
     width: 220px;
@@ -377,6 +378,7 @@ body {
     padding: unset;
     width: 14vh;
     margin: auto;
+    height: unset;
   }
   .cardfan .card {
     width: 10vh;
