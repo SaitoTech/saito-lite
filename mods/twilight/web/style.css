@@ -646,9 +646,6 @@ status-message {
     top: -5px;
     left: 90%;
   }
-  .log-lock {
-    width: 395px;
-  }
 
 }
 
@@ -671,7 +668,6 @@ status-message {
     height: 80px;
   }
   .game-cardbox {
-    z-index: 2000;
     width: 20vw;
     height: calc(20vw * 1.36);
     left: 40vw;
@@ -692,9 +688,6 @@ status-message {
     left: 85%;
     width: 10vh;
     height: 10vh;
-  }
-  .log-lock {
-    width: 395px;
   }
 
 }
