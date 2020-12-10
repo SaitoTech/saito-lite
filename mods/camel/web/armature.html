@@ -1,0 +1,18 @@
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<title>blah</title>
+</head>
+<body>
+    <div class="test" style="display: grid; gap: 3px; width: 580px;margin:auto;">
+        <button class='send-message'>Go</button>
+        <input type='text' class='message-content' value='https://c.saito.io/camel/u?uuid=9b10be49c64fp'></input>
+        <iframe id="saito" src="http://localhost:12101/camel/?mode=user" frameborder="0" width="580" height="900" scrolling="no" style="margin: auto;"></iframe>
+    </div>
+<script>
+    document.querySelector('.send-message').addEventListener('click', () => {
+        document.querySelector('#saito').contentWindow.postMessage(document.querySelector('.message-content').value, "*");
+    });
+</script>
+</body>
+</html>
