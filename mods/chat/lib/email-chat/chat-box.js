@@ -97,21 +97,27 @@ module.exports = ChatBox = {
       // send messages
       //
       document.querySelectorAll(".chat-room-submit-button").forEach(btn => {
-        btn.onclick = (e) => {
+        btn.ontouch = (e) => {
 
 	  let group_id = e.currentTarget.id.split('chat-room-submit-button-')[1];
           let msg_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
 
           if (msg_input.value == '') { return; }
 
-          /*
-          let msg_data = {
-            message: msg_input.value,
-            group_id: group_id,
-            publickey: app.wallet.returnPublicKey(),
-            timestamp: new Date().getTime()
-          };
-          */
+          let newtx = mod.createMessage(group_id, msg_input.value);
+          app.modules.returnModule("Chat").sendMessage(app, newtx);
+
+	  // alert("sending chat message!");
+          chat_self.addMessage(app, mod, newtx);
+          msg_input.value = '';
+
+	};
+        btn.onclick = (e) => {
+
+	  let group_id = e.currentTarget.id.split('chat-room-submit-button-')[1];
+          let msg_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
+
+          if (msg_input.value == '') { return; }
 
           let newtx = mod.createMessage(group_id, msg_input.value);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
@@ -128,16 +134,67 @@ module.exports = ChatBox = {
       // toggle chat window height
       //
       document.querySelectorAll(".chat-box-header").forEach(hdr => {
-        hdr.onclick = (e) => {
+        hdr.ontouch = (e) => {
 
 	  let group_id = e.currentTarget.id.split('chat-box-header-')[1];
           let chat_box = document.getElementById(`chat-box-${group_id}`);
+          let chat_box_header = document.getElementById(`chat-box-header-${group_id}`);
+
+	  //
+	  // don't minimize if moved
+	  //
+	  if (chat_box.style.left != 0 || chat_box.style.top != 0) {
+	    chat_box_header.style.cursor = "unset";
+	    // ... unless already minimized 
+	    if (!chat_box.classList.contains("min-chat")) {
+	      return;
+	    }
+	  }
+
           chat_box.classList.toggle('chat-box-hide');
-          chat_box.parentNode.classList.toggle('min-chat');
+          chat_box.classList.toggle('min-chat');
+
+	  if (chat_box.classList.contains("min-chat")) {
+	    chat_box.style.bottom = 0;
+	  } else {
+	    chat_box.style.bottom = 0;
+	  }
 
 	  e.stopPropagation();
 	  e.preventDefault();
 	  return;
+
+        };
+        hdr.onclick = (e) => {
+
+	  let group_id = e.currentTarget.id.split('chat-box-header-')[1];
+          let chat_box = document.getElementById(`chat-box-${group_id}`);
+          let chat_box_header = document.getElementById(`chat-box-header-${group_id}`);
+
+	  //
+	  // don't minimize if moved
+	  //
+	  if (chat_box.style.left != 0 || chat_box.style.top != 0) {
+	    chat_box_header.style.cursor = "unset";
+	    // ... unless already minimized 
+	    if (!chat_box.classList.contains("min-chat")) {
+	      return;
+	    }
+	  }
+
+          chat_box.classList.toggle('chat-box-hide');
+          chat_box.classList.toggle('min-chat');
+
+	  if (chat_box.classList.contains("min-chat")) {
+	    chat_box.style.bottom = 0;
+	  } else {
+	    chat_box.style.bottom = 0;
+	  }
+
+	  e.stopPropagation();
+	  e.preventDefault();
+	  return;
+
         };
       });
 
@@ -146,6 +203,12 @@ module.exports = ChatBox = {
       // close chat window
       //
       document.querySelectorAll(".chat-box-close").forEach(btn => {
+        btn.ontouch = (e) => {
+	  let group_id = e.currentTarget.id.split('chat-box-close-')[1];
+          e.stopPropagation();
+          let chat_box = document.getElementById(`chat-box-${group_id}`);
+          chat_box.parentNode.removeChild(chat_box);
+        };
         btn.onclick = (e) => {
 	  let group_id = e.currentTarget.id.split('chat-box-close-')[1];
           e.stopPropagation();
@@ -181,6 +244,7 @@ module.exports = ChatBox = {
 	let group_id = el.id.split('chat-box-')[1];
         app.browser.makeDraggable(el.id, `chat-box-header-${group_id}`, function() {
 
+return;
 	  // toggle height -- DRAG triggers click too
           let chat_box = document.getElementById(`chat-box-${group_id}`);
 //	  if (chat_box.classList.contains("chat-box-hide")) {
