@@ -3,6 +3,10 @@ body {
   font-size: 13px;
   padding: 0px;
   margin: 0px;
+  overflow: hidden; 
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
 }
 
 .game-menu {
@@ -357,7 +361,7 @@ body {
   }
   .deal {
     position: absolute;
-    top: 19vh;
+    top: calc(20vh + 4em);
     left: 50vw;
     transform: translateX(-50%);
     width: 92vw;
@@ -365,7 +369,7 @@ body {
     margin: 0 auto;
   }
   .pot {
-    top: 33vh;
+    top: calc(19vh + 4em);
     font-size: 6vh;
   }
   .player-info-hand .card {
@@ -373,7 +377,7 @@ body {
   }
   .cardfan {
     position: absolute;
-    top: 40vh;
+    top: calc(42vh + 4em);
     left: 40vw;
     padding: unset;
     width: 14vh;
@@ -407,7 +411,7 @@ body {
   }
   .player-info.p1 {
     width: 24vw;
-    height: 43vh;
+    height: calc(43vh -4em);
     bottom: 0;
     left: unset;
     right: 25vw;
@@ -429,17 +433,17 @@ body {
   }
   .player-info.p4 {
     left: 50vw;
-    top: 1em;
+    top: 5em;
     transform: translateX(-50%);
   }
   .player-info.p5 {
     left: 1em;
-    top: 1em;
+    top: 5em;
     transform: none;
   }
   .player-info.p3 {
     right: 1em;
-    top: 1em;
+    top: 5em;
     transform: none;
   }
   .player-info.p6 {
@@ -457,7 +461,7 @@ body {
     position: absolute;
     bottom: 0;
     left: 25vw;
-    height: 43vh;
+    height: calc(43vh -4em);
     background-color: #4448;
   }
 /**
