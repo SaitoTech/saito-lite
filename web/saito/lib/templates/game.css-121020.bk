@@ -12,11 +12,6 @@ body {
   padding: 0px;
   margin: 0px;
   background-color: #4e4e4e !important;
-
-  overflow: hidden; 
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
 }
 
 
@@ -58,8 +53,6 @@ body {
   background-color: whitesmoke;
   opacity: 0.8;
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
-  width: 450px;
-  max-width: 80vw;
 }
 .game-overlay-menu ul li {
   width: 100%;
@@ -72,28 +65,31 @@ body {
   padding: 0 1em;
 }
 .game-overlay-menu ul li:hover {
-  font-weight: bold;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75), -2px -2px 5px #eee;
   background: #0001;
 }
 .game-cardbox {
   position:absolute;
-  left: 15vw%;
+  left: 35%;
   top: 13vh;
   height: 55vh;
-  width: calc(55vh * 0.730);
-  transform: translate(calc((100vw - (55vh * 0.73)) / 2), 0);
+  width: calc(55vh * 0.72110);
   border: 0px;
+/*  -webkit-filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8); */
+/*  filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8); */
   z-index: -10; /* start behind the board */
 }
+
 
 .game-menu {
   position: fixed;
   top: 0px;
   left: 0px;
   display: block;
-  width: auto;
-  height: 40px;
+  width: 150px;
+  height: 50px;
   background-color: #f5f5f5cc;
+  /* background-color: whitesmoke; */
   border: 1px solid #444;
   border-radius: 5px;
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
@@ -114,8 +110,8 @@ body {
   width: 120px;
   max-width: 150px;
   border-bottom: none;
-  height: 40px;
-  line-height: 40px;
+  height: 50px;
+  line-height: 50px;
   font-size: 1.1rem;
   cursor: pointer;
   float: left;
@@ -124,7 +120,6 @@ body {
   width: 40px;
   margin-left: 10px;
   font-size: 2em;
-  line-height: 35px;
 }
 .game-menu-icon .fa-window-maximize {
   vertical-align: middle;
@@ -134,13 +129,12 @@ body {
   background-color: #f5f5f5cc;
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
   height: 50px;
-  line-height: 50px;
 }
 .game-menu-sub-options {
   display:none;
 }
 .game-menu-option:hover {
-  /* font-weight: bold; */
+  text-shadow: 1px 1px 0px #444, -1px -1px 0px #ddd;
   color: #222;
 }
 
@@ -150,9 +144,16 @@ body {
 }
 
 .game-menu-sub-option:hover {
-  font-weight: bold;
+  text-shadow: 1px 1px 0px #444, -1px -1px 0px #ddd;
   color: #222;
 }
+/*
+.game-menu-sub-option:hover {
+  background-color: #2228 !important;
+  color: #efefef;
+  border: 1px solid #efefef;
+}
+*/
 
 .hud-controls {
   position: relative;
@@ -248,10 +249,20 @@ ul li a {
 }
 
 
+.status {
+  padding: 5px;
+  text-align: center;
+}
 
-/**************/
-/** GAME HUD **/
-/**************/
+.status-overlay {
+  height: 100%;
+  padding: 5px;
+  text-align: center;
+}
+
+
+
+
 .hud-square {
   height: 410px;
   width: 510px;
@@ -263,6 +274,29 @@ ul li a {
 }
 .hud-square .hud-body .status .status-cardbox {
   grid-template-columns: 1fr 1fr 1fr;
+}
+.hud-long {
+  grid-template-rows: 20px auto;
+  width: 1200px;
+  max-width: 100vw;
+  height: 280px;
+  max-height: 280px;
+}
+.hud-long .hud-body {
+  min-height: 260px;
+  height: 260px;
+}
+.hud-long .hud-header {
+  opacity: 0.2;
+  background-color: #444;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 20px;
+  grid-template-rows: auto;
+}
+.hud-long .hud-body .status .status-cardbox {
+  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
 }
 .hud-vertical {
   width: 210px;
@@ -293,115 +327,27 @@ ul li a {
   border-right: 3px solid #bbb;
 }
 .hud-vertical .hud-body .status .status-cardbox {
+  /* grid-template-columns: 1fr; */
+  /* grid-template-rows: repeat( auto-fit, minmax(40px, 1fr) ); */
   grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
 }
 
-.hud-long {
-  grid-template-rows: 20px auto;
-  width: 1200px;
-  max-width: 100vw;
-  height: 280px;
-  max-height: 280px;
-  background-color: transparent;
-  border-bottom: 0px;
-  box-shadow: 0 0 0 0 #888;
+
+/**
+.hud-vertical:hover {
+  left: 105px;
 }
-.hud-body {
-  min-height: 260px;
-  height: 260px;
-  background-color: transparent;
-  border-bottom: 0px;
-  box-shadow: 0 0 0 0 #888;
+.hud-vertical-lock {
+  left: 105px;
 }
-.hud-header {
-  opacity: 0.2;
-  background-color: #444;
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  height: 20px;
-  grid-template-rows: auto;
-  border-bottom: 0px;
-  box-shadow: 0 0 0 0 #888;
-}
-.status-header i {
-  float: left;
-}
-.status-cardbox {
-  grid-template-columns: repeat( auto-fit, minmax(40px, 1fr) );
+***/
+
+
+
+.status-overlay .status-cardbox {
+  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
   overflow-y: scroll;
 }
-.status {
-  padding: 5px;
-  text-align: center;
-}
-.status-overlay {
-  height: 100%;
-  padding: 5px;
-  text-align: center;
-}
-.status-message {
-  background-color: whitesmoke;
-  box-shadow: 0 0 3px 1px #BBB
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 100vw;
-  padding-left: 5px;
-  padding-right: 5px;
-
-}
-.status-message ul li {
-  background-color: whitesmoke;
-  padding: 10px;
-}
-.status-message ul li:hover {
-  background-color: #e7e7e7;
-}
-.status-message ul {
-  background-color: whitesmoke;
-  list-style-type: none;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  padding-inline-start: 0px;
-}
-.status-header {
-  background-color: whitesmoke;
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top:10px;
-  padding-left:10px;
-  min-height: 40px;
-}
-
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-}
-.cardbox-hud {
-  display: block;
-  width: calc(10vw * 0.73);
-  height: 10vw;
-  background-image: url(/twilight/img/Base.svg);
-  background-size: cover;
-  z-index: 2;
-  transform: translate(0%, 0%);
-  justify-self: center;
-}
-.card {
-  float: left;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-
-
-
 
 
 
@@ -632,7 +578,7 @@ input#game_board_sizer {
   position: absolute;
   height: 48vh;
   max-height: 520px;
-  width: calc(48vh * 0.8110);
+  width: calc(48vh * 0.72110);
   max-width: 375px;
   z-index: 2;
   display: none;
@@ -641,23 +587,23 @@ input#game_board_sizer {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
 .cardbox-menu {
-    position: absolute;
-    bottom: -15px;
-    font-size: 2em;
-    font-weight: bold;
-    background-color: #eb2d2d;
-    border: 2px solid #111311;
-    cursor: pointer;
-    padding: 10px 25px;
-    text-decoration: none;
-    color: white;
-    border-radius: 10px;
-    z-index: 900009;
-    margin-left: 6%;
-    margin-right: auto;
-    width: 85%;
-    text-align: center;
+  position: relative;
+  left: 0%;
+  top: 0%;
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  background-color: #eb2d2d;
+  border: 2px solid #111311;
+  cursor: pointer;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: white;
+  border-radius: 10px;
+  z-index: 900009;
+
 }
 
 .cardbox-exit {
@@ -671,18 +617,6 @@ input#game_board_sizer {
   z-index: 9999999999;
   cursor: pointer;
 }
-.cardbox-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 48vh;
-  width: calc(48vh * 0.730);
-  z-index: 2;
-  display: none;
-}
-
-
-
 
 .cardbox-exit-background {
   position: absolute;
@@ -717,7 +651,7 @@ input#game_board_sizer {
 }
 
 .card {
-/*  width: 1000px; */
+  width: 200px;
   float:left;
   position: relative;
   margin-left: auto;
@@ -732,24 +666,201 @@ input#game_board_sizer {
 
 
 
+/******************/
+/** TRANSPARENCY **/
+/******************/
+.hud-long , .hud-long .hud-body {
+  background-color: transparent;
+}
+.hud-long , .hud-long .hud-body , .hud-long .hud-header {
+  /* background-color: transparent; */
+  border-bottom: 0px;
+  box-shadow: 0 0 0 0 #888;
+}
+.hud-long .hud-body .status .status-message , .hud-long .hud-body .status-overlay .status-message {
+  background-color: whitesmoke;
+  box-shadow: 0 0 3px 1px #BBB
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100vw;
+  padding-left: 5px;
+  padding-right: 5px;
+
+}
+.hud-long .hud-body .status .status-message ul li , .hud-long .hud-body .status-overlay .status-message ul li {
+  background-color: whitesmoke;
+  padding: 10px;
+}
+.hud-long .hud-body .status .status-message ul li:hover ,  .hud-long .hud-body .status-overlay .status-message ul li:hover {
+  background-color: #e7e7e7;
+}
+.hud-long .hud-body .status .status-message ul , .hud-long .hud-body .status-overlay .status-message ul {
+  background-color: whitesmoke;
+  list-style-type: none;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 0px;
+}
+.hud-long .hud-body .status .status-header , .hud-long .hud-body .status-overlay .status-header {
+  background-color: whitesmoke;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top:10px;
+  padding-left:10px;
+  min-height: 40px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+.status-header i {
+  float: left;
+}
 
 
 
+@media screen and (orientation:landscape) and (max-width: 700px) {
 
-/*********************************/
-/*** SCREEN SIZE MODIFICATIONS ***/
-/*********************************/
-@media screen and (orientation:portrait) and (min-width: 340px) {
-  .log {
-    right: -325px;
-    width: 340px;
-    max-width: 340px;
+  .hud-long .hud-body {
+    height: 240px;
+    min-height: 120px;
+    width: 550px;
+    min-width: 550px;
+    max-width: 550px;
   }
+
+  .status {
+    height: 100px;
+  }
+
+  .hud-header {
+    width: 300px;
+  }
+
+  /****************/
+  /**** MODE 1 ****/
+  /****************/
+  .hud-long .hud-body {
+    height: 120px;
+    min-height: 120px;
+    width: 550px;
+    min-width: 549px;
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cardbox-hud {
+    width: calc(4em * 0.811);
+    height: 4em;
+  }
+
+  .status {
+    height: 100px;
+  }
+
+  .status-message {
+    width: 300px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 13px;
+ }
+
+  .hud-long .hud-body .status .status-cardbox {
+    grid-template-columns: repeat( auto-fit, minmax(40px, 1fr) );
+  }
+
+  .game-menu {
+    height: 25px;
+  }
+  .game-menu ul .game-menu-icon {
+    width: 20px;
+    margin-left: 10px;
+    font-size: 1em;
+  }
+  .game-menu ul li {
+    line-height: 24px;
+    font-size: 12px;
+    height: 25px;
+    width: 70px;
+  }
+
+  .game-overlay-menu {
+    max-width: 80vw;
+    max-height: 80vh;
+    overflow-y: scroll;
+  }
+
+  .hud-controls {
+    font-size: 12px;
+  }
+  .hud-button {
+    padding-top: 5px; 
+  }
+  .game-menu ul li {
+    line-height: 24px;
+    font-size: 14px;
+    height: 25px;
+  }
+
+  .log {
+    right: -200px;
+    width: 220px;
+    font-size: 10px;
+  }
+
+  .log:hover {
+    right: none; /* undefine to fix mobile */
+  }
+
   .log-lock {
     right: 0px;
+    border-left: 1px solid var(--my-color);
   }
+
+
+  /****************/
+  /**** MODE 2 ****/
+  /****************/
+  .hud-vertical {
+    top: 25px;
+  }
+  .hud-vertical .hud-body .status .status-cardbox {
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+  }
+
+
+
+  /****************/
+  /**** MODE 2 ****/
+  /****************/
+  .game-cardbox {
+    width: calc(48vh * 0.72110);
+    height: 48vh;
+    top: 10vh;
+  }
+
 }
-@media screen and (orientation:portrait) and (min-width: 420px) {
+
+
+
+/***
+@media screen and (orientation:landscape) and (max-height: 950px) {
+}
+@media screen and (orientation:landscape) and (max-height: 700px) {
+}
+***/
+
+
+
+
+@media screen and (orientation:portrait) and (max-width: 485px) {
   .log {
     right: -400px;
     width: 415px;
@@ -759,99 +870,25 @@ input#game_board_sizer {
     right: 0px;
   }
 }
-@media screen and (orientation:portrait) and (min-width: 421px) {
-  .log {
-    right: -400px;
-    width: 420px;
-    max-width: 420px;
-  }
-  .log-lock {
-    right: 0px;
-  }
-}
 
-
-
-/*********************/
-/*** PORTRAIT MODE ***/
-/*********************/
-@media screen and (orientation:portrait) and (max-width: 400px) {
-
-  .cardbox-hud {
-    width: calc(18vw * 0.811);
-    height: 18vw;
-  }
-
-  .status-cardbox {
-    grid-template-columns: repeat( auto-fit, minmax(17vw, 1fr) );
-    grid-template-rows: repeat(auto-fit, 20vw);
-  }
-
-  .game-menu {
-     width: 100%;
-   }
+@media screen and (orientation:portrait) and (max-width: 700px) {
 
   .game-menu ul li {
-    max-width: 75px;
-    width: 75px;
-  }
-
-}
-
-@media screen and (orientation:portrait) and (min-width: 400px) and (max-width: 650px) {
-
-  .cardbox-hud {
-    width: calc(13vw * 0.811);
-    height: 13vw;
-  }
-  .status-cardbox {
-    grid-template-columns: repeat( auto-fit, minmax(12vw, 1fr) );
-    grid-template-rows: repeat(auto-fit, 15vw);
-
-  }
-
-}
-
-@media screen and (orientation:portrait) and (min-width: 650px) {
-
-  .cardbox-hud {
-    width: calc(10vw * 0.811);
-    height: 10vw;
-  }
-  .status-cardbox {
-    grid-template-columns: repeat( auto-fit, minmax(11vw, 1fr) );
-    grid-template-rows: repeat(auto-fit, 14vw);
-
-  }
-
-}
-
-
-
-
-/*****************/
-/*** LANDSCAPE ***/
-/*****************/
-@media screen and (orientation: landscape) and (max-height: 650px) {
-
-  .game-menu {
-    height: 30px;
-    line-height: 30px;
-  }
-
-  .game-menu ul li {
-    height; 30px;
-    width: 85px;
-    line-height: 30px;
-  }
-
-  .game-menu ul .game-menu-icon {
-    line-height: 25px;
-    font-size: 1.2em;
+    font-size: 1em;
+    width: 80px;
   }
 
   .game-overlay-menu {
-    font-size: 1.4em;
+    min-width: 300px;
+    font-size: 1.5em;
+  }
+
+  .game-cardbox {
+    width: 80vw;
+    height: auto;
+    left: 10vw;
+    top: 15vh;
+    display: block;
   }
 
 }

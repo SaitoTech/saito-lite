@@ -298,7 +298,6 @@ class Thirteen extends GameTemplate {
   ////////////////
   initializeGame(game_id) {
 
-
     if (this.game.status != "") { this.updateStatus(this.game.status); }
 
     //
@@ -362,12 +361,12 @@ class Thirteen extends GameTemplate {
     //
     // adjust screen ratio
     //
+    try {
     $('.country').css('width', this.scale(260)+"px");
     $('.us').css('width', this.scale(130)+"px");
     $('.ussr').css('width', this.scale(130)+"px");
     $('.us').css('height', this.scale(100)+"px");
     $('.ussr').css('height', this.scale(100)+"px");
-
 
 
     //
@@ -464,6 +463,7 @@ class Thirteen extends GameTemplate {
     $(".strategy_deck").css('height', this.scale(362)+"px");
     $(".strategy_deck").css('width', this.scale(264)+"px");
 
+    } catch (err) {}
 
     //
     // update defcon and milops and stuff
@@ -2612,6 +2612,8 @@ console.log("CARDS: "+JSON.stringify(cards));
 
   }
   showBoard() {
+
+    if (this.browser_active == 0) { return; }
 
     this.showArenas();
     this.showFlags();

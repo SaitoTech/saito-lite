@@ -5,10 +5,10 @@ body {
   margin: 0px;
 }
 
-
-.game-menu {
-  min-width: 300px;
-  width: 300px;
+.dealer-notice {
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  font-size: 1.1em;
 }
 .main {
   margin-top: unset;
@@ -167,11 +167,10 @@ body {
 }
 
 .cardfan {
-  position: absolute;
-  top: 70vh;
-  left: 20vw;
-  width: auto;
-  height: auto;
+  position: relative;
+  bottom: 20vh;
+  left: 45vw;
+  transform: translateX(-40vh);
 }
 
 .cardfan .card {
@@ -261,7 +260,6 @@ body {
   background: #ccc3;
 }
 
-/***
 .log {
   color: #fff;
   background: transparent;
@@ -275,7 +273,6 @@ body {
   height: 18vh;
   overflow-y: auto;
 }
-***/
 
 .player-info-log {
   font-size: 2vh;
@@ -340,20 +337,14 @@ body {
   min-width: 60px;
 }
 
-/**
 #log h2 {
   font-size: larger;
   margin: 8px 0 0px 0;
 }
-**/
+
 
 
 @media all and (max-aspect-ratio:13/9) {
-
-  .game-menu {
-    min-width: 220px;
-    width: 220px;
-  }
   .deal .card {
     width: 18vw;
     max-width: 9vh;
@@ -372,24 +363,21 @@ body {
     font-size: 6vh;
   }
   .player-info-hand .card {
-    width: 4vh;
+    width: 8vh;
   }
   .cardfan {
-    position: absolute;
-    top: 40vh;
-    left: 40vw;
-    padding: unset;
-    width: 14vh;
-    margin: auto;
-    height: unset;
+    position: relative;
+    bottom: 56vh;
+    transform: translateX(-50%);
+    width: 0px;
+    margin: 0;
   }
   .cardfan .card {
     width: 10vh;
   }
   .p4 .hand, .p5 .hand, .p3 .hand {
-    right: 3vh;
-    left: unset;
-    top: 9vh;
+    top: 15vh;
+    left: 6vw;
   }
   .p6 .hand {
     right: -3vw;
@@ -463,11 +451,9 @@ body {
     height: 43vh;
     background-color: #4448;
   }
-/**
   #log {
     height: 34vh;
   }
-**/
 }
 
 @media only screen and (max-width: 750px) {
@@ -481,11 +467,9 @@ body {
     left: unset;
     transform: unset;
   }
-/*
   .log {
     font-size: smaller;
   }
-*/
   .player-info-name {
     font-size: 4vw;
   }
