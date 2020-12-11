@@ -7,7 +7,7 @@
   --CD: #30F8F2;
   --CE: #29ACEB;
   --saito-red: var(--CB);
-  --saito-nightscape: linear-gradient(-45deg, var(--CD) 50%, var(--CC) 100%);
+  --saito-nightscape: linear-gradient(-45deg, var(--CE) 50%, var(--CB) 100%);
   --saito-jester: var(--CE);
 }
 
