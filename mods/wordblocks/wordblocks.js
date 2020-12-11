@@ -1,7 +1,5 @@
 var saito = require('../../lib/saito/saito');
 var GameTemplate = require('../../lib/templates/gametemplate');
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 
 class Wordblocks extends GameTemplate {
 
@@ -100,13 +98,13 @@ class Wordblocks extends GameTemplate {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
-        GameHammerMobile.render(this.app, this);
-        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '.gameboard');
 
       } else {
 
-        GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '.gameboard');
 
         $('#gameboard').draggable();
 

@@ -1,5 +1,3 @@
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const Cardfan = require('../../lib/templates/lib/game-cardfan/game-cardfan');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const saito = require('../../lib/saito/saito');
 
@@ -30,9 +28,9 @@ class President extends GameTemplate {
     this.updateHTML = "";
 
     //this.cardfan = new Cardfan(this.app, this);
-    this.hud = new GameHud(this.app, {});
+    //this.hud = new GameHud(this.app, {});
     this.hud.mode = 0;
-    this.hud.cardbox.cardfan = 1;
+    //this.hud.cardbox.cardfan = 1;
 
     return this;
 
@@ -80,6 +78,16 @@ class President extends GameTemplate {
 
 
   initializeHTML(app) {
+
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
+    this.log.render(app, this);
+    this.log.attachEvents(app, this);
+
+    this.cardbox.render(app, this);
+    this.cardbox.attachEvents(app, this);
+
 
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
