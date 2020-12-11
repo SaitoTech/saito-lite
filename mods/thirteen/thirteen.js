@@ -1,6 +1,4 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
 
 
 //////////////////
@@ -219,11 +217,11 @@ class Thirteen extends GameTemplate {
 
     try {
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
-        GameHammerMobile.render(this.app, this);
-        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '.gameboard');
       } else {
-        GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '.gameboard');
       }
     } catch (err) {}
 

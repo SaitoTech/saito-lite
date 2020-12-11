@@ -29,6 +29,7 @@
     "browserify": "^16.5.0",
     "crypto-browserify": "^3.12.0",
     "fastest-stable-stringify": "^2.0.2",
+    "hammerjs": "^2.0.8",
     "merkle-tree-gen": "^1.1.0",
     "node-cryptojs-aes": "^0.4.0",
     "secp256k1": "^3.7.1",
