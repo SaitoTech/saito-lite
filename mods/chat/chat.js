@@ -489,13 +489,11 @@ console.log("ERROR 113234: chat error receiving message: " + err);
       if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
         this.openChatBox(txmsg.group_id);
 	try {
-	  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
 	  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
 	} catch (err) {}
       }
     } else {
       try {
-        document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
         document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
       } catch (err) {}
     }
@@ -543,7 +541,6 @@ console.log("ERROR 113234: chat error receiving message: " + err);
     if (document.getElementById(`chat-box-${group_id}`)) {
       let chat_box_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
       chat_box_input.focus();
-      chat_box_input.select();
 
       // 
       // maximize if minimized
