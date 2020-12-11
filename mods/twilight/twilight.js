@@ -636,24 +636,21 @@ console.log(err);
     try {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
-      //if (1 == 1) {
-
-console.log("rendering hammer!");
 
         this.hammer.render(this.app, this);
         this.hammer.attachEvents(this.app, this, '.gameboard');
-
-        //this.sizer.render(this.app, this);
-        //this.sizer.attachEvents(this.app, this, '.gameboard');
 
       } else {
 
 	let twilight_self = this;
 
 console.log("adding sizer!");
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '.gameboard');
 
-        GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+
+        //GameBoardSizer.render(this.app, this);
+        //GameBoardSizer.attachEvents(this.app, this, '.gameboard');
 
         $('#gameboard').draggable({
 	  stop : function(event, ui) {
