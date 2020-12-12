@@ -324,8 +324,8 @@ class Poker extends GameTemplate {
     this.log.render(app, this);
     this.log.attachEvents(app, this);
 
-
   }
+
 
 
 
@@ -342,18 +342,16 @@ class Poker extends GameTemplate {
     // initialize
     //
     if (this.game.deck.length == 0) {
-
       this.game.state = this.returnState(this.game.players.length);
-
       this.updateStatus("Generating the Game");
       this.game.state.required_pot = this.game.state.big_blind;
       this.initializeQueue();
-
     }
 
     if (this.browser_active) {
       this.displayBoard();
     }
+
   }
 
 
@@ -392,8 +390,10 @@ class Poker extends GameTemplate {
     // if players are out-of-tokens, set as inactive
     //
 
+    //
     // only remove if there are more than two players
     // if two players - let victory play out.
+    //
     if (this.game.state.player_credit.length > 2) {
       for (let i = 0; i < this.game.state.player_credit.length; i++) {
         if (this.game.state.player_credit[i] <= 0) {
@@ -423,15 +423,10 @@ class Poker extends GameTemplate {
             this.game.state.small_blind_player = 1;
           }
 
-
-
           //
           // purge turns from queue -- force a re-issuing of turn order
           //
           this.game.queue = [];
-          //this.displayBoard();
-
-          // remove
           i--;
         }
       }
@@ -634,8 +629,7 @@ class Poker extends GameTemplate {
             return 0;
           } else {
             this.updateStatus("Waiting for " + this.game.state.player_names[mv[1] - 1]);
-
-
+            this.updatePlayerLog(parseInt(mv[1]), "player turn");
             return 0;
           }
 
@@ -1102,7 +1096,7 @@ console.log("LAST RAISE IS NOW RAISE REQUIRED: " + this.game.state.last_raise);
       return;
     }
 
-    html += '<div class="menu-player">Your move ';
+    html += '<div class="menu-player" style="text-align:left;width:100%">';
     /*
     if (this.game.player == this.game.state.big_blind_player) {
       html += " (big blind)";
@@ -1111,7 +1105,7 @@ console.log("LAST RAISE IS NOW RAISE REQUIRED: " + this.game.state.last_raise);
       html += " (small blind)";
     }
     */
-    html += '</div>';
+    html += `<div style="float:right;" class="saito-balance">${this.game.state.player_credit[this.game.player-1]} SAITO</div>Your move:</div>`;
     html += '<ul>';
 
     let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player - 1];
@@ -1127,7 +1121,7 @@ console.log("LAST RAISE IS NOW RAISE REQUIRED: " + this.game.state.last_raise);
       if (can_raise == 1 && cost_to_call <= 0) { html += '<li class="menu_option" id="raise">raise</li>'; }
       if (can_raise == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="raise">raise (' + cost_to_call + '+)</li>'; }
       html += '</ul>';
-      this.updateStatus(html);
+      this.updateStatus(html, 1);
     } else {
 
       //
@@ -1139,14 +1133,14 @@ console.log("LAST RAISE IS NOW RAISE REQUIRED: " + this.game.state.last_raise);
         if (can_fold == 1) { html += '<li class="menu_option" id="check">check</li>'; }
         if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; }
         html += '</ul>';
-        this.updateStatus(html);
+        this.updateStatus(html, 1);
 
       } else {
 
         if (can_fold == 1) { html += '<li class="menu_option" id="fold">fold</li>'; }
         if (can_fold == 1) { html += '<li class="menu_option" id="check">check</li>'; }
         html += '</ul>';
-        this.updateStatus(html);
+        this.updateStatus(html, 1);
 
       }
     }
@@ -2638,7 +2632,13 @@ console.log("H: " + h);
     });
   }
 
-  updateStatus(str) {
+  updateStatus(str, hide_info=0) {
+
+    if (hide_info == 0) {
+      document.querySelector(".p1 > .info").style.display = "block";
+    } else {
+      document.querySelector(".p1 > .info").style.display = "none";
+    }
 
     if (this.lock_interface == 1) { return; }
 
@@ -2646,7 +2646,7 @@ console.log("H: " + h);
 
     try {
       if (this.browser_active == 1) {
-        let status_obj = document.getElementById("status");
+        let status_obj = document.querySelector(".status");
         if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
           status_obj.innerHTML = str;
         }
