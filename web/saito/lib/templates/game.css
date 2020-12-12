@@ -809,6 +809,10 @@ input#game_board_sizer {
     grid-template-rows: repeat(auto-fit, 15vw);
 
   }
+  .game-menu ul li {
+    max-width: 85px;
+    width: 85px;
+  }
 
 }
 
@@ -821,7 +825,10 @@ input#game_board_sizer {
   .status-cardbox {
     grid-template-columns: repeat( auto-fit, minmax(11vw, 1fr) );
     grid-template-rows: repeat(auto-fit, 14vw);
-
+  }
+  .game-menu ul li {
+    max-width: 85px;
+    width: 85px;
   }
 
 }
