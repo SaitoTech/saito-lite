@@ -194,6 +194,10 @@ try {
     }
     } catch (err) {}
 
+    //
+    // duck out if in arcade
+    //
+    if (this.browser_active == 0) { return; }
 
     this.menu.addMenuIcon({
       text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
@@ -221,13 +225,13 @@ try {
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
-        GameHammerMobile.render(this.app, this);
-        GameHammerMobile.attachEvents(this.app, this, '#hexGrid');
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '#hexGrid');
 
       } else {
 
-        GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexgrid
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '#hexGrid'); // gameboard is hexgrid
 
       }
     } catch (err) {}

@@ -91,6 +91,8 @@ class Thirteen extends GameTemplate {
 
   initializeHTML(app) {
 
+    if (this.browser_active == 0) { return; }
+
     super.initializeHTML(app);
 
     this.app.modules.respondTo("chat-manager").forEach(mod => {

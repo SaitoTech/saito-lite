@@ -625,8 +625,10 @@ playerAcknowledgeNotice(msg, mycallback) {
 
   this.updateStatus(html);
 
+  try {
   $('.textchoice').off();
   $('.textchoice').on('click', function () { mycallback(); });
+  } catch (err) {}
 
   return 0;
 

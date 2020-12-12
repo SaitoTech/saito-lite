@@ -36,6 +36,8 @@
 }
 
 .game-menu {
+  width: 550px;
+  min-width: 550px;
   font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;
 }
 
@@ -912,13 +914,6 @@ body {
   border-color: #555;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
   line-height: 1.3em;
-}
-
-.hud-header {
-  height: 100%;
-  width: 100%;
-  opacity: 1;
-  visibility: visible;
 }
 
 #menu-container>ul>li:hover {
@@ -2045,28 +2040,3 @@ input[type=range] {
 .ship_selector b::before {
   content: " \1F5F9   ";
 }
-
-
-
-
-
-@media screen and (orientation: landscape) and (max-height: 650px) {
-
-  .turns {
-    transform: scale(0.4);
-    transform-origin: top right;
-  }
-
-  .dashboard {
-    transform: scale(0.4);
-    transform-origin: top left;
-  }
-
-}
-
-
-
-
-
-
-
