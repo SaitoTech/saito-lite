@@ -400,6 +400,48 @@ ul li a {
 
 
 
+/******************************/
+/*** Poker / Cardgame Boxes ***/
+/******************************/
+.p6 {
+  left: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.p5 {
+  left: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.p4 {
+  left: 50vw;
+  top: 1em;
+  transform: translateX(-50%);
+}
+
+.p3 {
+  right: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.p2 {
+  right: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.p1 {
+  min-width: 30vh;
+  height: 32vh;
+  bottom: 1vh;
+  left: 50vw;
+  transform: translateX(-50%);
+  width: 16vw;
+  overflow-y: scroll;
+}
 
 
 
@@ -501,15 +543,8 @@ ul li a {
   bottom: 0px;
   left: 0px;
   height: 100%;
-  width: 100%;
+  width: auto;
 }
-
-/*
-.cardfan .card {
-  position: relative;
-  width: 0px;
-}
- below changed for president cardbox */
 
 .cardfan .card {
   position: absolute;
@@ -786,10 +821,6 @@ input#game_board_sizer {
     grid-template-columns: repeat( auto-fit, minmax(17vw, 1fr) );
     grid-template-rows: repeat(auto-fit, 20vw);
   }
-
-  .game-menu {
-     width: 100%;
-   }
 
   .game-menu ul li {
     max-width: 75px;

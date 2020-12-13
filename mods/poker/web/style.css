@@ -9,10 +9,6 @@ body {
   height: 100vh;
 }
 
-.game-menu {
-  min-width: 300px;
-  width: 300px;
-}
 .main {
   margin-top: unset;
   padding: unset;
@@ -63,6 +59,7 @@ body {
 }
 
 .pot {
+  border: 1px solid #555;
   position: absolute;
   top: 54vh;
   left: 50vw;
@@ -89,6 +86,9 @@ body {
 
 .player-info.p1 {
   height: 30vh;
+}
+.player-info .status {
+  font-size: 1.25em;
 }
 
 .player-info-name {
@@ -202,14 +202,6 @@ body {
   border-radius: 6px;
 }
 
-.chat-box {
-  max-height: 30vh !important;
-}
-
-/* .chat-box-main {
-  max-height: 20vh !important;
-} */
-
 .hud {
   display: none;
 }
@@ -217,22 +209,6 @@ body {
 .status ul li:hover {
   background: #ccc3;
 }
-
-/***
-.log {
-  color: #fff;
-  background: transparent;
-  font-size: xlarge;
-  height: 23vh;
-  overflow-y: auto;
-}
-
-#log {
-  font-size: 1.5em;
-  height: 18vh;
-  overflow-y: auto;
-}
-***/
 
 .player-info-log {
   font-size: 2vh;
@@ -296,5 +272,157 @@ body {
   max-width: 8vh;
   min-width: 60px;
 }
+
+
+
+
+
+
+
+@media screen and (orientation: landscape) and (max-height: 450px) {
+
+  .player-info {
+    padding: 5px;
+  }
+
+  .deal .card {
+    width: 8vw;
+  }
+  .pot {
+    top: 50vh;
+    font-size: 1.4em;
+  }
+
+  .player-info.p1 {
+    height: 40vh;
+    width: 30vw;
+  }
+
+  .status ul li { 
+    line-height: 2.5em;
+    font-size: 1em;
+    width: 100%;
+  }
+
+  .cardfan {
+    left: 15vw;
+    top: 60vh;
+  }
+
+  .cardfan .card {
+    width: 14vw;
+  }
+
+  .shim-notice {
+    max-width: 100vw;
+    width: 80vw;
+    overflow-y: scroll;
+  }
+
+}
+
+
+@media screen and (orientation: portrait) and (max-width: 450px) {
+
+  .player-info {
+    padding: 5px;
+  }
+
+  .pot {
+    top: 50vh;
+    font-size: 1.4em;
+  }
+
+  .player-info.p1 {
+    height: 25vh;
+    width: 60vw;
+  }
+
+  .player-info-hand .card {
+    width: 16vw;
+  }
+
+  .status ul li { 
+    line-height: 2.5em;
+    font-size: 1em;
+    width: 100%;
+  }
+
+  .deal {
+    margin: 0 auto;
+    position: absolute;
+    top: 30vh;
+    left: 45vw;
+    transform: inherit;
+    width: 90vw;
+    margin-left: 5vw;
+    margin-right: auto;
+    transform: translate(-50%);
+  }
+
+  .deal .card {
+    width: 18vw;
+  }
+
+  .cardfan {
+    left: 25vw;
+    top: 46vh;
+  }
+
+  .cardfan .card {
+    width: 35vw;
+  }
+
+  .p4 .hand, .p3 .hand, .p2 .hand {
+    right: 15vw;
+    top: 10vh;
+  }
+
+  .shim-notice {
+    max-width: 100vw;
+    width: 80vw;
+    overflow-y: scroll;
+  }
+
+}
+
+
+
+
+@media screen and (orientation: portrait) and (max-width: 450px) {
+
+  .player-info.p2 {
+    display: none;
+    visibility: hidden;
+  }
+  .player-info.p3 {
+    display: none;
+    visibility: hidden;
+  }
+  .player-info.p4 {
+    display: none;
+    visibility: hidden;
+  }
+  .player-info.p5 {
+    display: none;
+    visibility: hidden;
+  }
+  .player-info.p6 {
+    display: none;
+    visibility: hidden;
+  }
+
+  .deal {
+    top: 10vh;
+  }
+
+  .cardfan {
+    top: 36vh;
+  }
+
+}
+
+
+
 
 

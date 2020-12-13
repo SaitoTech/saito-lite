@@ -1,3 +1,9 @@
+
+.hud-square .hud-body {
+  min-height: unset;
+  height: auto;
+}
+
 body {
   font-family: arial, helvetica, sans-serif;
   font-size: 13px;
@@ -55,14 +61,15 @@ body {
   text-align: center;
 }
 
-#remainder, #lastmove {
-  /* display: inline-block; */
+#remainder {
   font-size: 25px;
   padding: 10px 0;
-}
-
-#remainder {
   width: 33%;
+  float: right;
+  margin-right: 1.4em;
+}
+#lastmove {
+  clear: both;
 }
 
 .home {
@@ -126,7 +133,7 @@ body {
   border-style: solid;
   border-color: rgb(221, 221, 221);
   border-image: initial;
-  padding: 10px 0 0 0;
+  padding: 4px 0 6px 0;
   background: rgb(70, 70, 70);
   font-size: 36px;
   color: #efefec;
@@ -324,16 +331,15 @@ body {
   grid-template-areas: "hud-header hud-header" "hud-body hud-body";
   font-family: visuelt-light;
   position: fixed;
-  left: 50%;
+  left: 10vw;
   bottom: 0%;
   float: none;
   z-index: 40;
-  height: 420px;
-  width: 760px;
-  min-width: 760px;
-  max-width: 9.1em;
+  height: unset;
+  width: unset;
+  max-width: 760px;
+  max-height: 260px;
   border-bottom: 0px;
-  transform: translate(-50%, -0%);
   transition: height 0.2s ease;
 }
 
@@ -474,26 +480,30 @@ body {
 .hud-menu {
   border-right: 1px solid #555;
 }
-
+/**
 .status div {
   font-size: 24px;
-overflow-wrap: break-word;
-max-width: 95vw;
+  overflow-wrap: break-word;
+  max-width: 95vw;
 }
-
+**/
 .player span {
   line-height: 40px;
 }
 
-@media only screen and (max-width: 750px) {
-  .score {
-    font-size: 1em;
-  }
-  .hud div {
-    font-size: 1em;
+
+
+@media only screen and (max-width: 750px) and (orientation: portrait) {
+  .hud-status-update-message {
+    font-size: 0.8em;
   }
   #remainder {
     font-size: 1em;
+    width: unset;
+    padding-top: 0.75em;
+    padding-left: 1em;
+    float: right;
+    margin-right: 1.4em;
   }
   .hud {
     font-size: 22px;
@@ -501,16 +511,26 @@ max-width: 95vw;
     position: fixed;
     bottom: 0;
     left: 0;
-    height: calc(100vh - 100vw);
-    min-height: 350px;
+    height: unset;
+    min-height: unset;
     min-width: 100vw;
     transform: none;
     display: block;
-    z-index: -1;
+    z-index: 100;
   }
-  
   .hud-header, .hud-menu {
     display: none;
+  }
+  .hud-body {
+    height: unset;
+    max-height: unset;
+    height: 220px;
+  }
+  .tiles {
+    width: 100%;
+  }
+  #lastmove {
+    font-size: 0.7em;
   }
   .gameboard {
     display: grid;
@@ -555,6 +575,10 @@ max-width: 95vw;
     padding: 3px 0px;
     text-align: center;
   }
+  .rack {
+    width: auto;
+    clear: left;
+  }
   .starbk {
     padding: 1px 0px;
     font-size: 3.2vw !important;
@@ -570,9 +594,8 @@ max-width: 95vw;
   .status {
     margin: 0;
     grid-gap: 0.5em;
-  }
-  .status div {
-    overflow-wrap: unset;
+    padding: 4px;
+    padding-top: 6px;
   }
   .status_container {
     grid-template-rows: 1em auto;
@@ -588,7 +611,7 @@ max-width: 95vw;
   }
   .tiles {
     display: inline-block;
-    width: calc(100% - 3em);
+    width: auto;
     float: left;
   }
   .tiles div.tile {
@@ -603,15 +626,14 @@ max-width: 95vw;
     border-color: rgb(221, 221, 221);
     border-image: initial;
     background: rgb(70, 70, 70);
-    font-size: 1.2em;
-    width: 54px;
-    height: 54px;
-    padding: 15px 10px;
+    font-size: 7vw;
+    width: 12vw;
+    height: 12vw;
+    padding: 2vw;
   }
 }
 .rack {
-  width: calc(100vw - 2em);
-  max-width: 640px;
+  width: auto;
 }
 
 .tile-placement-controls {

@@ -2634,6 +2634,7 @@ console.log("H: " + h);
 
   updateStatus(str, hide_info=0) {
 
+    try {
     if (hide_info == 0) {
       document.querySelector(".p1 > .info").style.display = "block";
     } else {
@@ -2644,13 +2645,12 @@ console.log("H: " + h);
 
     this.game.status = str;
 
-    try {
-      if (this.browser_active == 1) {
-        let status_obj = document.querySelector(".status");
-        if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
-          status_obj.innerHTML = str;
-        }
+    if (this.browser_active == 1) {
+      let status_obj = document.querySelector(".status");
+      if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
+        status_obj.innerHTML = str;
       }
+    }
     } catch (err) { }
 
   }
