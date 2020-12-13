@@ -1,6 +1,7 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
+//const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
+//const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
+const helpers = require('../../lib/helpers/index');
 
 
 //////////////////
@@ -89,6 +90,8 @@ class Thirteen extends GameTemplate {
 
 
   initializeHTML(app) {
+
+    if (this.browser_active == 0) { return; }
 
     super.initializeHTML(app);
 
@@ -219,11 +222,11 @@ class Thirteen extends GameTemplate {
 
     try {
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
-        GameHammerMobile.render(this.app, this);
-        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '.gameboard');
       } else {
-        GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '.gameboard');
       }
     } catch (err) {}
 
@@ -298,7 +301,6 @@ class Thirteen extends GameTemplate {
   ////////////////
   initializeGame(game_id) {
 
-
     if (this.game.status != "") { this.updateStatus(this.game.status); }
 
     //
@@ -362,12 +364,12 @@ class Thirteen extends GameTemplate {
     //
     // adjust screen ratio
     //
+    try {
     $('.country').css('width', this.scale(260)+"px");
     $('.us').css('width', this.scale(130)+"px");
     $('.ussr').css('width', this.scale(130)+"px");
     $('.us').css('height', this.scale(100)+"px");
     $('.ussr').css('height', this.scale(100)+"px");
-
 
 
     //
@@ -464,6 +466,7 @@ class Thirteen extends GameTemplate {
     $(".strategy_deck").css('height', this.scale(362)+"px");
     $(".strategy_deck").css('width', this.scale(264)+"px");
 
+    } catch (err) {}
 
     //
     // update defcon and milops and stuff
@@ -2612,6 +2615,8 @@ console.log("CARDS: "+JSON.stringify(cards));
 
   }
   showBoard() {
+
+    if (this.browser_active == 0) { return; }
 
     this.showArenas();
     this.showFlags();

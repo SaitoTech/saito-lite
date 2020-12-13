@@ -191,6 +191,7 @@ class Blackjack extends GameTemplate {
   initializeHTML(app) {
 
     super.initializeHTML(app);
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
@@ -304,7 +305,7 @@ class Blackjack extends GameTemplate {
           this.playerTurn();
           return 0;
         } else {
-          this.updateStatus("Waiting for " + this.game.state.player_names[mv[1] - 1]);
+          this.updateStatus("Waiting for " + this.game.state.player_names[mv[1] - 1], 1);
           return 0;
         }
       }
@@ -339,7 +340,7 @@ class Blackjack extends GameTemplate {
           }
         }
 
-        let html = '<div class="">How much would you like to wager?';
+        let html = `<div class="">How much would you like to wager? (${this.game.state.player_credit[this.game.player-1]})`;
             html += '</div>';
             html += '<ul>';
             html += '<li class="menu_option" id="25">25</li>';
@@ -352,6 +353,7 @@ class Blackjack extends GameTemplate {
 
         this.lockInterface();
 
+	try {
         $('.menu_option').off();
         $('.menu_option').on('click', function () {
 
@@ -364,6 +366,7 @@ class Blackjack extends GameTemplate {
           blackjack_self.endTurn();
           return 0;
         });
+	} catch (err) {}
 
         return 0;
       }
@@ -491,11 +494,9 @@ class Blackjack extends GameTemplate {
         let total_losses = 0;
         let my_losses = 0;
         for (let i = 0; i < this.game.state.player_winner.length; i++) {
-console.log(this.game.state.player_wager[i] + " --- " + this.game.state.player_payout[i]);
           if (this.game.state.player_winner[i] == 0) {
             let losses = this.game.state.player_wager[i] * this.game.state.player_payout[i];
             my_losses = losses;
-console.log("PLAYER "+(i+1)+" loses "+my_losses);
             this.game.state.player_credit[i] -= Math.floor(losses);
           } else {
 
@@ -504,7 +505,6 @@ console.log("PLAYER "+(i+1)+" loses "+my_losses);
 // HACK CHECK TIES DEALER, ETC.
 //
             let gains = this.game.state.player_wager[i] * this.game.state.player_payout[i];
-console.log("PLAYER "+(i+1)+" gains "+gains);
             this.game.state.player_credit[i] += Math.floor(gains);
           }
         }
@@ -1059,6 +1059,36 @@ console.log("score is: " + total);
     }
     return new_options;
   }
+
+
+  updateStatus(str, hide_info=0) {
+
+    try {
+    if (hide_info == 0) {
+      document.querySelector(".p1 > .info").style.display = "block";
+    } else {
+      document.querySelector(".p1 > .info").style.display = "none";
+    }
+
+    if (this.lock_interface == 1) { return; }
+
+    this.game.status = str;
+
+    if (this.browser_active == 1) {
+      let status_obj = document.querySelector(".status");
+      if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
+        status_obj.innerHTML = str;
+      }
+    }
+    } catch (err) { 
+console.log("ERR: " + err);
+    }
+
+  }
+
+
+
+
 }
 
 module.exports = Blackjack;

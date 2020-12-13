@@ -3,75 +3,17 @@
   padding: 10px;
 }
 
-.cardfan {
-  position: unset;
-}
-
-.game-menu {
-  width: 550px;
-}
-.game-overlay-menu {
-  min-width: 450px;
-}
 .statistics-overlay {
   min-width:50vw;
   min-height: 50vh;
   padding: 10px;
   background-color: whitesmoke;
-//  background-image: url("/twilight/img/1963-06-17-Soviet-Tanks.jpg");
-//  background-size: cover;
 }
 .statistics-round-table {
   min-width:50vw;
   text-align: center;
 }
 
-.cardbox-card {
-  background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
-  width:24vw;
-  height: 34vw;
-}
-.game-cardbox {
-  width: 24vw;
-  height: 34vw;
-  left: 38%;
-  top: 15vh;
-}
-.hud-cardbox {
-  position: absolute;
-  height: 48vh;
-  max-height: 520px;
-  width: calc(48vh * 0.72110);
-  max-width: 375px;
-  background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
-  z-index: 2;
-  display: none;
-  top: 27%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-.cardlist-container {
-  height: 80vh;
-  width: 80vw;
-  overflow-y: scroll;
-}
-.cardlist-card {
-  position: relative;
-  float:left;
-  margin-right:10px;
-  margin-bottom: 10px;
-  height: 30vh;
-  max-height: 520px;
-  width: calc(30vh * 0.72110);
-  max-width: 375px;
-  background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
-  z-index: 2;
-  display: block;
-}
 .china_card_status_us_faceup {
   background-color: #3277de;
 }
@@ -249,8 +191,6 @@ body {
   transform: translate(-50%,-50%);
 }
 
-/** **/
-
 .connection_monitor {
   position: fixed;
   display: none;
@@ -382,20 +322,6 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
-.cardimg-hud {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-}
-.cardimg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-}
 
 .cardbox_event_blocker {
  position:absolute;
@@ -406,36 +332,6 @@ body {
  display:none;
  opacity: 0.4;
 }
-
-
-
-.cardbox {
-  position: absolute;
-  height: 48vh;
-  max-height: 520px;
-  width: calc(48vh * 0.72110);
-  max-width: 375px;
-  background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
-  z-index: 2;
-  display: none;
-  top: 27%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-
-.cardbox-hud {
-  display: block;
-  width: calc(9em * 0.811);
-  height: 10em;
-  background-image: url(/twilight/img/Base.svg);
-  background-size: cover;
-  z-index: 2;
-  transform: translate(0%, 0%);
-  justify-self: center;
-}
-
 
 .us {
   display: inline;
@@ -495,22 +391,27 @@ body {
 
 
 
-.cardbox-hud {
-  display: block; 
-  width: calc(9em * 0.811);
-  height: 10em;
-  background-image: url(/twilight/img/Base.svg);
-  background-size: cover;
-  z-index: 2;
-  transform: translate(0%, 0%);
-  justify-self: center;
-}
 .cardimg-hud {
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
   width: 100%;
+  height: auto;
+  top: 0px;
+  left: 0px;
+}
+
+.cardimg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.cardbox-hud {
+  background-image: url(/twilight/img/Base.svg);
+  background-size: cover;
+}
+.cardbox-card {
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
 }
 
 
@@ -518,224 +419,4 @@ body {
 
 
 
-
-
-/* color tweaks */
-
-.game-menu {
-  position: fixed;
-  top: 3px;
-  left: 3px;
-  background-color: #f5f5f5cc;
-  border: 1px solid #444;
-  border-radius: 5px;
-  margin: 3px;
-  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
-}
-
-
-status-message {
-  background-color: #f5f5f5DD;
-  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
-}
-
-
-/****
-@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
-  html {
-    transform: rotate(-90deg) translate(-100vh, 0vw);
-    transform-origin: top left;
-    height: 100vw;
-    width: 100vh;
-  }
-  .main {
-    width: 100vh;
-    height: 100vw;
-    margin: unset;
-    padding: 0;
-    max-width: unset;
-  }
-}
-***/
-
-@media screen and (orientation:portrait) and (max-width: 700px) {
-
-  .hud-long .hud-body .status .status-cardbox {
-    grid-template-columns: repeat( auto-fit, minmax(50px, 80px));
-    height: unset;
-  }
-  .hud-long {
-    grid-template-rows: 30px auto;
-  }
-  .hud-header {
-    height: 30px;
-  }
-  .cardbox-hud {
-    width: calc(80px * 0.811);
-    height: 80px;
-  }
-  .game-cardbox {
-    width: 80vw;
-    height: calc(80vw * 1.36);
-    left: 10vw;
-    top: 10vh;
-    display: block;
-  }
-  .cardbox-card {
-    width: 100%;
-    height: 100%;
-  }
-  .cardbox-menu {
-    width: 98%;
-  }
-  .cardbox-exit-background {
-    top: -5px;
-    left: 90%;
-  }
-
-}
-
-/****
-
-@media screen and (orientation:landscape) and (max-height: 700px) {
-
-  .hud-long .hud-body .status .status-cardbox {
-    grid-template-columns: repeat( auto-fit, minmax(50px, 80px));
-    height: unset;
-  }
-  .hud-long {
-    grid-template-rows: 20px auto;
-    height: 140px;
-  }
-  .hud-header {
-    height: 20px;
-  }
-  .cardbox-hud {
-    width: calc(80px * 0.811);
-    height: 80px;
-  }
-  .game-cardbox {
-    width: 20vw;
-    height: calc(20vw * 1.36);
-    left: 40vw;
-    top: 10vh;
-    display: block;
-  }
-  .cardbox-card {
-    width: 100%;
-    height: 100%;
-  }
-  .cardbox-menu {
-    width: 98%;
-    font-size:1.2em;
-    padding: 5px 20px;
-  }
-  .cardbox-exit-background {
-    top: -5px;
-    left: 85%;
-    width: 10vh;
-    height: 10vh;
-  }
-
-}
-***/
-
-
-@media screen and (orientation: landscape) and (max-height: 600px) {
-
-  .hud-long {
-    height: 240px;
-    min-height: 120px;
-    width: 550px;
-    min-width: 550px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hud-long .hud-body {
-    height: 240px;
-    min-height: 240px;
-    width: 550px;
-    min-width: 550px;
-    max-width: 800px;
-  }
-
-  .cardbox-hud {
-    width: calc(4em * 0.811);
-    height: 4em;
-  }
-
-  .game-menu {
-    width: 330px;
-  }
-  .game-cardbox {
-    width: 155px;
-    height: 215px;
-  }
-  .cardbox-card {
-    width: 155px;
-    height: 215px;
-  }
-
-  .status {
-    height: 100px;
-  }
-
-  .status-message {
-    width: 300px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 13px;
-  }
-
-  .hud-header {
-    width: 300px;
-  }
-
-}
-
-@media screen and (orientation: landscape) and (min-width: 1000px) and (max-width: 1200px) {
-
-  .hud-long {
-    height: 240px;
-    min-height: 120px;
-    width: 1000px;
-    min-width: 500px;
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hud-long .hud-body {
-    height: 240px;
-    min-height: 240px;
-    width: 1000px;
-    min-width: 500px;
-    max-width: 1000px;
-  }
-
-]
-
-@media screen and (orientation: landscape) and (max-width: 1200px) and (max-width: 1400px) {
-
-  .hud-long {
-    height: 240px;
-    min-height: 120px;
-    width: 1200px;
-    min-width: 500px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hud-long .hud-body {
-    height: 240px;
-    min-height: 240px;
-    width: 1200px;
-    min-width: 500px;
-    max-width: 1200px;
-  }
-
-}
 

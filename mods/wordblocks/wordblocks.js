@@ -81,7 +81,7 @@ class Wordblocks extends GameTemplate {
     }
 
     $('.tiles').html(html);
-    $('#remainder').html("Tiles left: " + this.game.deck[0].crypt.length);
+    $('#remainder').html("DECK: " + this.game.deck[0].crypt.length);
 
   }
 
@@ -264,7 +264,7 @@ class Wordblocks extends GameTemplate {
     }
 
     if (this.game.target == this.game.player) {
-      this.updateStatusWithTiles("YOUR TURN: click on the board to place tiles, or <span class=\"link tosstiles\">discard tiles</span>.");
+      this.updateStatusWithTiles("YOUR GO: click board to place or <span class=\"link tosstiles\">discard</span>.");
       this.enableEvents();
     } else {
       this.updateStatusWithTiles(`Waiting for Player ${this.game.target} to move.`);
@@ -360,30 +360,29 @@ class Wordblocks extends GameTemplate {
 
 
   updateStatusWithTiles(status) {
+
     try {
+
     let tile_html = '';
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
       tile_html += this.returnTileHTML(this.game.deck[0].cards[this.game.deck[0].hand[i]].name);
     }
     let { player, finalword, score } = this.last_played_word;
-    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${score} points.`;
+    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${score} points (total: ${this.game.score[player-1]})`;
     let html =
       `
-      <div>${status}</div>
+      <div class="hud-status-update-message">${status}</div>
       <div class="status_container">
-        <div>
-          <div id="remainder" class="remainder">Tiles left: ${this.game.deck[0].crypt.length}</div>
-          <div id="lastmove" class="lastmove">
-          ${last_move_html}
-          </div>
-        </div>
         <div class="rack" id="rack">
-        <img id="shuffle" class="shuffle" src="/wordblocks/img/reload.png">
           <div class="tiles" id="tiles">
             ${tile_html}
           </div>
         </div>
-        <div class="score" id="score">loading...</div>
+        <div class="subrack" id="subrack">
+          <img id="shuffle" class="shuffle" src="/wordblocks/img/reload.png">
+          <div id="remainder" class="remainder">DECK: ${this.game.deck[0].crypt.length}</div>
+          <div class="lastmove" id="lastmove">${last_move_html}</div>
+        </div>
       </div
     `;
     this.updateStatus(html);
@@ -414,6 +413,7 @@ class Wordblocks extends GameTemplate {
     }
 
     var op = 0;
+/***
     for (let i = 0; i < players; i++) {
       let this_player = i + 1;
 
@@ -436,6 +436,7 @@ class Wordblocks extends GameTemplate {
         `;
       }
     }
+***/
 
     if (this.browser_active == 1) {
       $('.score').html(html);
@@ -637,7 +638,7 @@ class Wordblocks extends GameTemplate {
                 return;
               }
 
-              $('#remainder').html("Tiles left: " + wordblocks_self.game.deck[0].crypt.length);
+              $('#remainder').html("DECK: " + wordblocks_self.game.deck[0].crypt.length);
               wordblocks_self.endTurn();
             };
 
@@ -1479,8 +1480,9 @@ class Wordblocks extends GameTemplate {
     }
 
     this.firstmove = 0;
-    $('#lastmove').html(`Player ${player} played ${finalword} for: ${score} points.`);
-    $('#remainder').html(`Tiles left: ${this.game.deck[0].crypt.length}`);
+    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${score} points (total: ${this.game.score[player-1]}))`;
+    $('.lastmove').html(last_move_html);
+    $('#remainder').html(`DECK: ${this.game.deck[0].crypt.length}`);
     this.last_played_word = { player, finalword, score };
     return score;
   }
@@ -1597,7 +1599,7 @@ class Wordblocks extends GameTemplate {
             return;
           }
 
-          wordblocks_self.updateStatusWithTiles("YOUR TURN: click on the board to place tiles, or <span class=\"link tosstiles\">discard tiles</span>.");
+          wordblocks_self.updateStatusWithTiles("YOUR GO: click board to place or <span class=\"link tosstiles\">discard</span>.");
           wordblocks_self.enableEvents();
         } else {
           wordblocks_self.updateStatusWithTiles("Player " + wordblocks_self.returnNextPlayer(player) + " turn");
@@ -1616,7 +1618,7 @@ class Wordblocks extends GameTemplate {
         let player = mv[1];
 
         if (wordblocks_self.game.player == wordblocks_self.returnNextPlayer(player)) {
-          wordblocks_self.updateStatusWithTiles("YOUR TURN: click on the board to place tiles, or <span class=\"link tosstiles\">discard tiles</span>.");
+          wordblocks_self.updateStatusWithTiles("YOUR GO: click on board to place tiles, or <span class=\"link tosstiles\">discard</span>.");
           wordblocks_self.enableEvents();
         } else {
           wordblocks_self.updateStatusWithTiles("Player " + wordblocks_self.returnNextPlayer(player) + " turn");
