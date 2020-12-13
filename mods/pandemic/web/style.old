@@ -79,7 +79,26 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+/***
 
+.cardbox-hud {
+  display: block;
+  width: calc(7.0em * 0.7211);
+  height: 7.0em;
+  z-index: 2;
+  transform: translate(0%, 0%);
+
+  justify-self: center;
+}
+
+.cardbox-hud-status {
+  margin-top: 0;
+}
+***/
+
+.game-menu {
+ width: 700px;
+}
 .cardbox_menu {
   position: absolute;
   display: none;
@@ -243,6 +262,7 @@ body {
   height: 243px;
 }
 .gameboard {
+  position: absolute;
   background-image: url("/pandemic/img/Board.jpg");
   background-size: cover;
   width: 2602px;

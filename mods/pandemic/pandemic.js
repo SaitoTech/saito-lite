@@ -1,6 +1,4 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-const GameBoardSizer = require('../../lib/saito/ui/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/saito/ui/game-hammer-mobile/game-hammer-mobile');
  
   
 //////////////////
@@ -143,9 +141,11 @@ class Pandemic extends GameTemplate {
   
       let divname      = '#'+i;
   
-      $(divname).css('top', this.scale(this.game.cities[i].top)+"px");
-      $(divname).css('left', this.scale(this.game.cities[i].left)+"px");
-  
+      try {
+        $(divname).css('top', this.scale(this.game.cities[i].top)+"px");
+        $(divname).css('left', this.scale(this.game.cities[i].left)+"px");
+      } catch (err) {}
+
     } 
   
     //
@@ -170,6 +170,10 @@ class Pandemic extends GameTemplate {
   
   
   initializeHTML(app) {
+
+    if (this.browser_active == 0) { return; }
+
+    let pandemic_self = this;
 
     super.initializeHTML(app);
 
@@ -318,17 +322,23 @@ class Pandemic extends GameTemplate {
 
     try {
 
-      //$('#hud').draggable();
-
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
-        GameHammerMobile.render(this.app, this);
-        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '.gameboard');
       } else {
-        GameBoardSizer.render(this.app, this);
-        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '.gameboard');
+
+        $('#gameboard').draggable({
+          stop : function(event, ui) {
+            pandemic_self.saveGamePreference((pandemic_self.returnSlug()+"-board-offset"), ui.offset);
+          }
+        });
+
       }
     } catch (err) {
-console.log("ERROR TRIGGERED: " + err);
+      console.log("ERROR TRIGGERED: " + err);
     }
 
   }
@@ -419,15 +429,18 @@ console.log("ERROR TRIGGERED: " + err);
 
   removeEvents() {
   
+    try {
     $('.card').off();
     $('.city').off();
-  
+    } catch (err) {}
   }
 
 
 
   playerMakeMove(moves=0) {
-  
+
+    if (this.browser_active == 0) { return; }  
+
     let pandemic_self = this;
     let player = this.game.players_info[this.game.player-1];
     let city = player.city;
@@ -436,7 +449,7 @@ console.log("ERROR TRIGGERED: " + err);
   
     this.active_moves = moves;
   
-    let html  = "<div class='status-message'>You are the " + player.role + " ("+this.game.cities[player.city].name+"). " + moves +' moves remaining. Choose an action:<ul>';
+    let html  = "<div class='status-message'>YOUR TURN: " + player.role + " in " + this.game.cities[player.city].name + " [" + moves +']:<ul>';
         html += '<li class="card" id="move">drive / ferry</li>';
         html += '<li class="card" id="flight">direct flight</li>';
     
@@ -1024,7 +1037,9 @@ console.log("ERROR TRIGGERED: " + err);
   }
   
   returnHopsToCityFromCity(fromcity, tocity) {
-  
+
+console.log("hops from: " + fromcity + " to " + tocity);  
+
     let hops = 0;
     let current_cities = [];
     let new_cities = [];
@@ -1042,6 +1057,7 @@ console.log("ERROR TRIGGERED: " + err);
         let neighbours = this.game.cities[current_cities[i]].neighbours;
         for (let k = 0; k < neighbours.length; k++) {
           if (neighbours[k] == tocity) {
+console.log("hops from: " + fromcity + " to " + tocity + " ---> " + hops);  
   	  return hops;
   	} else {
   	  if (!new_cities.includes(neighbours[k])) {
@@ -1054,6 +1070,8 @@ console.log("ERROR TRIGGERED: " + err);
       current_cities = new_cities;
   
     }
+
+console.log("hops not found!");
   
   }
   
@@ -1075,6 +1093,7 @@ console.log("ERROR TRIGGERED: " + err);
     $('.city').on('click', function() {
   
       let c = $(this).attr('id');
+      city = pandemic_self.game.players_info[pandemic_self.game.player-1].city;
       let hops = pandemic_self.returnHopsToCityFromCity(c, city);
   
       if (hops > pandemic_self.active_moves) { alert("Invalid Move -- too many hops"); }
@@ -1559,7 +1578,8 @@ console.log("ERROR TRIGGERED: " + err);
           this.playerTurn();
         } else {
   	this.removeEvents();
- 	this.updateStatusAndListCards("You are the "+this.game.players_info[this.game.player-1].role+" ("+this.game.cities[this.game.players_info[this.game.player-1].city].name+"). Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
+ 	//this.updateStatusAndListCards("You are the "+this.game.players_info[this.game.player-1].role+" ("+this.game.cities[this.game.players_info[this.game.player-1].city].name+"). Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
+ 	this.updateStatusAndListCards("Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
         }
   
   
@@ -2620,7 +2640,9 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   
   }
   showBoard() {
-  
+
+    if (this.browser_active == 0) { return; }  
+
     //
     //
     $('.back_player_card').css('top', this.scale(1390)+"px");
@@ -2730,7 +2752,9 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   
 
   addShowCardEvents() {
-  
+
+    if (this.browser_active == 0) { return; }  
+
     let pandemic_self = this;
 
     this.hud.attachCardEvents(this.app, this);
@@ -2750,7 +2774,9 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   
   }
   addLogCardEvents() {
-  
+
+    if (this.browser_active == 0) { return; }  
+
     let pandemic_self = this;
   
     if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
@@ -2784,7 +2810,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   
   showCard(cardname, cardtype="city") {
     let url = this.returnCardImage(cardname, cardtype);
-    this.cardbox.showCardBoxHTML(cardname, url);  
+    this.cardbox.showCardboxHTML(cardname, url);  
   }
   
   removeCardFromHand(plyr, card) {
