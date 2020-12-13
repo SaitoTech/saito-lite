@@ -1,4 +1,5 @@
 const PhoneScanReturnTemplate = require('./phone-scan-return.template');
+const UserApp = require('./phone-app');
 
 module.exports = PhoneScanReturn = {
 
@@ -129,6 +130,9 @@ module.exports = PhoneScanReturn = {
   },
 
   attachEvents(app, data) {
-
+    document.querySelector('.summary-exit').addEventListener('click', function() {
+      UserApp.render(app, data);
+      UserApp.attachEvents(app, data);
+    });
   }
 }

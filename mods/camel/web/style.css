@@ -26,6 +26,15 @@ a {
   display: none;
 }
 
+.splashlogo {
+  margin: 20vw;
+  width: 60vw;
+}
+
+.main center {
+  margin: 20vw 0;
+}
+
 button, .button, .file-label {
   border-radius: 0;
   cursor: pointer;
