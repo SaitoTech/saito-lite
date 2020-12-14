@@ -385,8 +385,6 @@ ul li a {
   display: block;
   width: calc(10vw * 0.73);
   height: 10vw;
-  background-image: url(/twilight/img/Base.svg);
-  background-size: cover;
   z-index: 2;
   transform: translate(0%, 0%);
   justify-self: center;

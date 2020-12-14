@@ -308,26 +308,74 @@
 
 .p1, .p1 .pc {
   color: var(--p1);
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  left: unset;
+  transform: unset;
+  translateX(-50%);
+  width: unset;
+  overflow-y: unset;
 }
 
 .p2, .p2 .pc {
   color: var(--p2);
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  left: unset;
+  transform: unset;
+  translateX(-50%);
+  width: unset;
+  overflow-y: unset;
 }
 
 .p3, .p3 .pc {
   color: var(--p3);
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  left: unset;
+  transform: unset;
+  translateX(-50%);
+  width: unset;
+  overflow-y: unset;
 }
 
 .p4, .p4 .pc {
   color: var(--p4);
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  left: unset;
+  transform: unset;
+  translateX(-50%);
+  width: unset;
+  overflow-y: unset;
 }
 
 .p5, .p5 .pc {
   color: var(--p5);
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  left: unset;
+  transform: unset;
+  translateX(-50%);
+  width: unset;
+  overflow-y: unset;
 }
 
 .p6, .p6 .pc {
   color: var(--p6);
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  left: unset;
+  transform: unset;
+  translateX(-50%);
+  width: unset;
+  overflow-y: unset;
 }
 
 .p1 .bc, .p1 .bc::before, .bc1 {
