@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS gamestate (
           lc INTEGER ,
           last_move INTEGER ,
           game_state TEXT ,
+          tx TEXT ,
           sharekey TEXT ,
           PRIMARY KEY (id ASC)
 );

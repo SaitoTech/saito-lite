@@ -61,7 +61,7 @@ class Arcade extends ModTemplate {
     let i = urlParams.get('i');
     if (i == "watch") {
       let msg = urlParams.get('msg');
-      this.observeGame(msg);
+      this.observeGame(msg, 0);
     }
   }
 
@@ -144,7 +144,6 @@ class Arcade extends ModTemplate {
     //
     // load observer games (active)
     //
-      //`SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
     let current_timestamp = new Date().getTime() - 1200000;
     this.sendPeerDatabaseRequestWithFilter(
 
@@ -1229,14 +1228,36 @@ class Arcade extends ModTemplate {
 
     if (fs != null) {
 
+      expressapp.get('/arcade/observer_multi/:game_id/:last_move', async (req, res) => {
+
+        let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND last_move > $last_move ORDER BY last_move ASC";
+        let params = { $game_id: req.params.game_id , $last_move : req.params.last_move }
+
+console.log(sql);
+console.log(params);
+
+        let games = await app.storage.queryDatabase(sql, params, "arcade");
+
+        if (games.length > 0) {
+          res.setHeader('Content-type', 'text/html');
+          res.charset = 'UTF-8';
+          res.write(JSON.stringify(games));
+          res.end();
+          return;
+        } else {
+          res.setHeader('Content-type', 'text/html');
+          res.charset = 'UTF-8';
+          res.write("{}");
+          res.end();
+          return;
+        }
+
+      });
+
       expressapp.get('/arcade/observer/:game_id', async (req, res) => {
 
         let sql = "SELECT * FROM gamestate WHERE game_id = $game_id ORDER BY id DESC LIMIT 1";
         let params = { $game_id: req.params.game_id }
-
-console.log("\n\n\nREQUESTED OBSERVER MODE");
-console.log(sql);
-console.log(params);
 
         let games = await app.storage.queryDatabase(sql, params, "arcade");
 
@@ -1244,7 +1265,6 @@ console.log(params);
           let game = games[0];
           res.setHeader('Content-type', 'text/html');
           res.charset = 'UTF-8';
-          //console.info(JSON.stringify(game));
           res.write(game.game_state);
           res.end();
           return;
@@ -1543,6 +1563,7 @@ console.log(params);
                 lc ,
                 sharekey ,
                 game_state ,
+                tx ,
                 last_move
        ) VALUES (
                 $game_id,
@@ -1554,6 +1575,7 @@ console.log(params);
                 $lc,
                 "",
                 $game_state,
+                $tx ,
                 $last_move
         )`;
     let x = [];
@@ -1587,6 +1609,7 @@ console.log(params);
       $tid: tx.transaction.id,
       $lc: 1,
       $game_state: JSON.stringify(game_state),
+      $tx: JSON.stringify(tx.transaction) ,
       $last_move: (new Date().getTime())
     };
 
@@ -1598,12 +1621,14 @@ console.log(params);
 
 
 
-  observeGame(msg) {
+  observeGame(msg, watch_live=0) {
+
+alert("WATCH LIVE? " + watch_live);
+    let arcade_self = this;
 
     let msgobj = JSON.parse(this.app.crypto.base64ToString(msg));
     let address_to_watch = msgobj.player;
     let game_id = msgobj.game_id;
-    let arcade_self = this;
 
     //
     // already watching game... load it
@@ -1631,7 +1656,11 @@ console.log(params);
     }
 
 
-    fetch(`/arcade/observer/${game_id}`).then(response => {
+    //
+    // watch live
+    //
+    if (watch_live) {
+      fetch(`/arcade/observer/${game_id}`).then(response => {
         response.json().then(data => {
 
           let game = data;
@@ -1682,12 +1711,115 @@ console.log(params);
           let slug = arcade_self.app.modules.returnModule(msgobj.module).returnSlug();
           window.location = '/' + slug;
         })
-      })
-      .catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
+      }).catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
+    } else {
+
+alert("WATCHING LIVE!");
+
+      arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+      let { games } = arcade_self.app.options;
+      if (games == undefined) { games = []; }
+      for (let i = 0; i < games.length; i++) {
+        if (games[i].id == game.id) {
+          games.splice(i, 1);
+        }
+      }
+      arcade_self.app.options.games = games;
+
+      arcade_self.fetchObserverMoves(game_id, watch_live);
+
+    }
   }
 
 
 
+
+
+
+  fetchObserverMoves(game_id, last_move, first_tx=null) {
+
+    let arcade_self = this;
+    let { games } = arcade_self.app.options;
+
+    let first_tx_fetched = 1;
+    if (first_tx == null) {
+      first_tx_fetched = 0;
+    }
+
+    fetch(`/arcade/observer_multi/${game_id}/${last_move}`).then(response => {
+      response.json().then(data => {
+
+	let did_we_add_a_move = 0;;
+
+	for (let i = 0; i < data.length; i++) {
+
+	  if (first_tx_fetched == 0) {
+	    first_tx = JSON.parse(data[i].game_state);
+	    first_tx_fetched = 1;
+	  } else {
+	    let future_tx = new saito.transaction(JSON.parse(data[i].tx));
+	    future_tx.msg = future_tx.returnMessage();
+	    future_tx.msg.game_state = {};
+	    future_tx = arcade_self.app.wallet.signTransaction(future_tx);
+            if (first_tx.future == undefined || first_tx.future == "undefined" || first_tx.future == null) { first_tx.future = []; }
+	    first_tx.future.push(JSON.stringify(future_tx.transaction));
+	  }
+
+	  did_we_add_a_move = 1;
+	  last_move = data[i].last_move;
+
+	}
+
+//        if (did_we_add_a_move == 1) {
+//          arcade_self.fetchObserverMoves(game_id, last_move, first_tx);	
+//	  return;
+//        } else {
+
+          //
+          // we did not add a move
+          //
+          let game = first_tx;
+          game.observer_mode = 1;
+          game.observer_mode_active = 0;
+          game.player = 0;
+
+          //
+          // and add game to queue....
+          //
+          for (let z = 0; z < game.last_turn.length; z++) {
+            game.queue.push(game.last_turn[z]);
+          }
+
+          //
+          // increment the step by 1, as returnPreGameMove will have unincremented
+          // ( i.e. not including the step that broadcast it )
+          //
+          game.step.game++;
+	  let idx = -1;
+	  for (let i = 0; i < games.length; i++) {
+	    if (games[i].id === first_tx.id) {
+	      idx = i;
+	    }
+	  }
+	  if (idx == -1) {
+            games.push(game);
+	  } else {
+	    games[idx] = game;
+	  }
+
+          arcade_self.app.options.games = games;
+          arcade_self.app.storage.saveOptions();
+
+          //
+          // move into game
+          //
+          let slug = arcade_self.app.modules.returnModule(first_tx.module).returnSlug();
+          window.location = '/' + slug;
+
+//        }
+      });
+    }).catch(err => console.info("ERROR 351232: error fetching queued games for observer mode", err));
+  }
 
 
 
@@ -1718,4 +1850,5 @@ console.log(params);
 }
 
 module.exports = Arcade;
+
 

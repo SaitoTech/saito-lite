@@ -2889,6 +2889,10 @@ console.log("CARD: " + card);
         }
         if (mv[0] === "play") {
 
+if (this.game.player == 0) {
+  console.log("processing move! "+JSON.stringify(this.game.state));
+}
+
           //
           // copy for reversion
           //
