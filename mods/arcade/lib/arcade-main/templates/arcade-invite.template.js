@@ -6,8 +6,12 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
   let inviteTypeClass = "open-invite";
   let game_initialized = 0;
   if (invite.isMine) { inviteTypeClass = "my-invite"; }
+console.log("msg: " + JSON.stringify(invite));
   if (invite.msg) {
-    if (invite.msg.options['game-wizard-players-select'] == invite.msg.players.length) {
+    if (invite.msg.options['game-wizard-players-select'] <= invite.msg.players.length) {
+      game_initialized = 1;
+    }
+    if (invite.msg.players_needed <= invite.msg.players.length) {
       game_initialized = 1;
     }
   }
