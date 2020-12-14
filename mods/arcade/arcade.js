@@ -231,9 +231,13 @@ class Arcade extends ModTemplate {
     }
   }
 
+
   joinGame(app, tx) {
+
     let txmsg = tx.returnMessage();
     let game_id = txmsg.game_id;
+    let blk = null;
+    let conf = 0;
 
     for (let i = 0; i < this.games; i++) {
       if (this.games[i].transaction) {
@@ -1440,6 +1444,35 @@ console.log(params);
       }
     }
     return true;
+  }
+  joinGameOnOpenList(tx) {
+
+    if (!tx.transaction) {
+      return;
+    } else {
+      if (!tx.transaction.sig) { return; }
+      if (tx.msg.over == 1) { return; }
+    }
+
+    let txmsg = tx.returnMessage();
+
+    for (let i = 0; i < this.games.length; i++) {
+      if (this.games[i].transaction.sig == txmsg.game_id) {
+        if (!this.games[i].msg.players.includes(tx.transaction.from[0].add)) {
+          if (txmsg.invite_sig != "") {
+            this.games[i].msg.players.push(tx.transaction.from[0].add);
+            if (!this.games[i].msg.players_sigs) { this.games[i].msg.players_sigs = []; }
+            this.games[i].msg.players_sigs.push(txmsg.invite_sig);
+          }
+        }
+      }
+    }
+
+    if (this.browser_active == 1) {
+      this.render(this.app);
+    }
+
+
   }
   addGameToOpenList(tx) {
     console.log("addGameToOpenList");
