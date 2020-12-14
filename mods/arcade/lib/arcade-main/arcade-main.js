@@ -100,34 +100,36 @@ module.exports = ArcadeMain = {
     //
     let arcade_main_self = this;
     mod.games.forEach((invite, i) => {
-      document.querySelectorAll(`#invite-${invite.transaction.sig} .invite-tile-button`).forEach((el, i) => {
-        el.onclick = function (e) {
+      try{
+        document.querySelectorAll(`#invite-${invite.transaction.sig} .invite-tile-button`).forEach((el, i) => {
+          el.onclick = function (e) {
 
-          let game_sig = e.currentTarget.getAttribute("data-sig");
-          let game_cmd = e.currentTarget.getAttribute("data-cmd");
+            let game_sig = e.currentTarget.getAttribute("data-sig");
+            let game_cmd = e.currentTarget.getAttribute("data-cmd");
 
-          if (game_cmd === "delete") {
-            arcade_main_self.deleteGame(app, mod, game_sig);
-            return;
+            if (game_cmd === "delete") {
+              arcade_main_self.deleteGame(app, mod, game_sig);
+              return;
+            }
+
+            if (game_cmd === "cancel") {
+              arcade_main_self.cancelGame(app, mod, game_sig);
+              return;
+            }
+
+            if (game_cmd === "join") {
+              arcade_main_self.joinGame(app, mod, game_sig);
+              return;
+            }
+
+            if (game_cmd === "continue") {
+              arcade_main_self.continueGame(app, mod, game_sig);
+              return;
+            }
+
           }
-
-          if (game_cmd === "cancel") {
-            arcade_main_self.cancelGame(app, mod, game_sig);
-            return;
-          }
-
-          if (game_cmd === "join") {
-            arcade_main_self.joinGame(app, mod, game_sig);
-            return;
-          }
-
-          if (game_cmd === "continue") {
-            arcade_main_self.continueGame(app, mod, game_sig);
-            return;
-          }
-
-        }
-      });	
+        });	
+      } catch(err){}
     });
 
     ArcadePosts.render(app, mod);
