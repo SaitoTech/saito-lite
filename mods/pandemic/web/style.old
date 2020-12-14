@@ -79,7 +79,26 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+/***
 
+.cardbox-hud {
+  display: block;
+  width: calc(7.0em * 0.7211);
+  height: 7.0em;
+  z-index: 2;
+  transform: translate(0%, 0%);
+
+  justify-self: center;
+}
+
+.cardbox-hud-status {
+  margin-top: 0;
+}
+***/
+
+.game-menu {
+ width: 700px;
+}
 .cardbox_menu {
   position: absolute;
   display: none;
@@ -162,8 +181,8 @@ body {
   width: 32px;
   height: 44px;
   /* too small -- double it */
-  width: 96px;
-  height: 132px;
+  width: 48px;
+  height: 66px;
   top: 50px;
   background-size: cover;
   z-index: 9000;
@@ -172,8 +191,8 @@ body {
   position: absolute;
   background-image: url("/pandemic/img/Marker%20Research%20Station.png");
   background-size: cover;
-  width: 90px;
-  height: 102px;
+  width: 45px;
+  height: 51px;
   z-index: 1000;
 }
 .research_station1 {
@@ -243,6 +262,7 @@ body {
   height: 243px;
 }
 .gameboard {
+  position: absolute;
   background-image: url("/pandemic/img/Board.jpg");
   background-size: cover;
   width: 2602px;

@@ -3,7 +3,7 @@ module.exports = PhoneAppTemplate = (content) => {
     var html = `
     
     <div class="phone_body">
-     <h1>SKYEPANDA</h1>
+     <img src="img/splashlogo.png" class="splashlogo" />
      <div class="homelogo"></div>
      <div class="homebody">
        <p>
