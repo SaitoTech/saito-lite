@@ -36,14 +36,13 @@ module.exports = SettingsAppspace = {
 
     document.getElementById("register-email-btn").onclick = function (e) {
       mod.modal_register_email = new ModalRegisterEmail(app, function() {
-// when closed
       });
       mod.modal_register_email.render(app, mod);
+      mod.modal_register_email.attachEvents(app, mod);
     }
 
     document.getElementById("register-identifier-btn").onclick = function (e) {
       mod.modal_register_username = new ModalRegisterUsername(app, function() {
-// when closed
       });
       mod.modal_register_username.render(app, mod);
       mod.modal_register_username.attachEvents(app, mod);
