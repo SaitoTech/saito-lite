@@ -1,6 +1,6 @@
 const ArcadeInfoboxTemplate = require('./arcade-infobox.template');
 
-module.exports = ArcadeInfobox = {
+module.exports = LeaderboardArcadeInfobox = {
 
   render(app, data) {
     if (!document.getElementById("leaderboard-container")) {
