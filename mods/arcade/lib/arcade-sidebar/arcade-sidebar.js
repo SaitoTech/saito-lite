@@ -4,13 +4,13 @@ const ArcadeGamesFullListOverlayTemplate = require('./arcade-games-full-list-ove
 const SaitoOverlay = require('./../../../../lib/saito/ui/saito-overlay/saito-overlay');
 const ModalRegisterUsername = require('./../../../../lib/saito/ui/modal-register-username/modal-register-username');
 const ArcadeGameDetails = require('../arcade-game/arcade-game-details');
-
+const ArcadeContainerTemplate = require('../arcade-main/templates/arcade-container.template');
 module.exports = ArcadeSidebar = {
 
 
   render(app, mod) {
 
-    if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
+    if (!document.getElementById("arcade-container")) { app.browser.addElementToDom(ArcadeContainerTemplate()); }
     if (!document.querySelector(".arcade-sidebar")) { app.browser.addElementToDom(ArcadeSidebarTemplate(), "arcade-container"); }
 
 

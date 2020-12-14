@@ -36,18 +36,19 @@ a {
 .invite-tile-button-join {
   height: 5em;
 }
-
+.header-shim {
+  height: 5em;
+}
 .arcade-container {
-  margin: 0 auto;
-  padding: 0 1em;
+  margin: 0em auto;
   display: grid;
   gap: 1em;
   grid-template-columns: var(--sidebar-width) auto;
   font-size: 1em;
   width: 100vw;
   max-width: var(--saito-width);
-  position: relative;
-  top: 5em;
+  /* position: relative;
+  top: 5em; */
 }
 
 .arcade-sidebar {
