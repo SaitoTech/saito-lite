@@ -1,11 +1,12 @@
 const SettingsAppspaceTemplate = require('./settings-appspace.template.js');
 const ModalRegisterUsername = require('./../../../../lib/saito/ui/modal-register-username/modal-register-username');
+const ModalRegisterEmail = require('./../../../../lib/saito/ui/modal-register-email/modal-register-email');
 
 module.exports = SettingsAppspace = {
 
   private_key_visible : 0,
 
-  render(app, data) {
+  render(app, mod) {
 
     document.querySelector(".email-appspace").innerHTML = SettingsAppspaceTemplate(app);
 
@@ -14,30 +15,36 @@ module.exports = SettingsAppspace = {
       for (let i = 0; i < app.modules.mods.length; i++) {
         if (app.modules.mods[i].respondTo("settings-appspace") != null) {
           let mod_settings_obj = app.modules.mods[i].respondTo("settings-appspace");
-          mod_settings_obj.render(app, data);
+          mod_settings_obj.render(app, mod);
         }
       }
     }
 
   },
 
-  attachEvents(app, data) {
+  attachEvents(app, mod) {
 
     let settings_appspace = document.querySelector(".settings-appspace");
     if (settings_appspace) {
       for (let i = 0; i < app.modules.mods.length; i++) {
         if (app.modules.mods[i].respondTo("settings-appspace") != null) {
           let mod_settings_obj = app.modules.mods[i].respondTo("settings-appspace");
-          mod_settings_obj.attachEvents(app, data);
+          mod_settings_obj.attachEvents(app, mod);
         }
       }
     }
 
     document.getElementById("register-email-btn").onclick = function (e) {
+      mod.modal_register_email = new ModalRegisterEmail(app, function() {
+// when closed
+      });
+      mod.modal_register_email.render(app, mod);
     }
 
     document.getElementById("register-identifier-btn").onclick = function (e) {
-      mod.modal_register_username = new ModalRegisterUsername(app, doGameDetails);
+      mod.modal_register_username = new ModalRegisterUsername(app, function() {
+// when closed
+      });
       mod.modal_register_username.render(app, mod);
       mod.modal_register_username.attachEvents(app, mod);
     }
@@ -195,12 +202,12 @@ module.exports = SettingsAppspace = {
     
         salert("Wallet reset!");
     
-        data.email.emails.inbox = [];
-        data.email.emails.sent = [];
-        data.email.emails.trash = [];
+        mod.emails.inbox = [];
+        mod.emails.sent = [];
+        mod.emails.trash = [];
     
-        data.email.body.render(app, data);
-        data.email.body.attachEvents(app, data);
+        mod.render(app, mod);
+        mod.attachEvents(app, mod);
     
         app.blockchain.resetBlockchain();
     
@@ -212,9 +219,9 @@ module.exports = SettingsAppspace = {
     //     await app.storage.resetOptions();
     //     await salert("Account deleted!");
     // 
-    //     data.email.emails.inbox = [];
-    //     data.email.emails.sent = [];
-    //     data.email.emails.trash = [];
+    //     mod.emails.inbox = [];
+    //     mod.emails.sent = [];
+    //     mod.emails.trash = [];
     // 
     //     app.blockchain.resetBlockchain();
     // 
