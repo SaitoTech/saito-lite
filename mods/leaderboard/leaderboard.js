@@ -58,11 +58,37 @@ class Leaderboard extends ModTemplate {
 
   }
 
-
+  rerender() {
+    
+    let html = '';
+    this.carousel_idx = 0;
+    let index = 0;
+    Object.keys(leaderboard_self.rankings).forEach((modnameKey, i) => {
+      let ranking = leaderboard_self.rankings[modnameKey];
+      if (ranking.length > 0) {
+        let classdata = index == 0 ? "shown" : "";
+        html += `<hr class="leaderboard_hrtop_${index} ${classdata}"/>`;
+        html += `<h3 class="leaderboard-game-module leaderboard_header_${index} ${classdata}">${modnameKey} Leaderboard:</h3>`;
+        html += `<div class="leaderboard-rankings leaderboard_${modnameKey} leaderboard_${index} ${classdata}" id="leaderboard_${modnameKey}">`;
+        for (let i = 0; i < ranking.length; i++) {
+          let entry = ranking[i];
+          html += `<div class="${entry.player} playername saito-address saito-address-${entry.address} ${classdata}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
+        }
+        html += '</div>';
+        html += `<hr class="leaderboard_hrbottom_${index} ${classdata}"/>`;
+        index++;
+      }
+    });
+    this.carousel_length = index;
+    leaderboard_self.app.browser.addIdentifiersToDom(identifiers_to_fetch);
+    let lbcontainer = document.querySelector(".leaderboard-container");
+    lbcontainer.innerHTML = html;
+    document.querySelector(".leaderboard-container").innerHTML = html;
+    leaderboard_self.startCarousel(leaderboard_self.mods);
+  }
 
 
   onPeerHandshakeComplete(app, peer) {
-
     let leaderboard_self = app.modules.returnModule("Leaderboard");
     let arcade_self = app.modules.returnModule("Arcade");
 
@@ -106,53 +132,8 @@ class Leaderboard extends ModTemplate {
 
           });
           }
-
-          let html = '';
-          this.carousel_idx = 0;
-          let index = 0;
-          console.log("****** leaderboard *******");
-          console.log(leaderboard_self.rankings);
-          Object.keys(leaderboard_self.rankings).forEach((modnameKey, i) => {
-            let ranking = leaderboard_self.rankings[modnameKey];
-            if (ranking.length > 0) {
-              let classdata = index == 0 ? "shown" : "";
-              html += `<hr class="leaderboard_hrtop_${index} ${classdata}"/>`;
-              html += `<h3 class="leaderboard-game-module leaderboard_header_${index} ${classdata}">${modnameKey} Leaderboard:</h3>`;
-              html += `<div class="leaderboard-rankings leaderboard_${modnameKey} leaderboard_${index} ${classdata}" id="leaderboard_${modnameKey}">`;
-              for (let i = 0; i < ranking.length; i++) {
-                let entry = ranking[i];
-                html += `<div class="${entry.player} playername saito-address saito-address-${entry.address} ${classdata}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
-              }
-              html += '</div>';
-              html += `<hr class="leaderboard_hrbottom_${index} ${classdata}"/>`;
-              index++;
-            }
-          });
-          this.carousel_length = index;
-          leaderboard_self.app.browser.addIdentifiersToDom(identifiers_to_fetch);
-          console.log(document.querySelector(".leaderboard-container"));
-          console.log(html);
-          console.log(document.querySelectorAll(".leaderboard-container").length);
-          let lbcontainer = document.querySelector(".leaderboard-container");
-          console.log(lbcontainer);
-          lbcontainer.innerHTML = html;
-          document.querySelector(".leaderboard-container").innerHTML = html;
-          leaderboard_self.startCarousel(leaderboard_self.mods);
-          // try {
-          // 
-          //   // console.log(".me.playername??????");
-          //   // document.querySelectorAll('.me.playername').forEach(el => {
-          //   //   console.log(".me.playername...");
-          //   //   console.log(el)
-          //   //   el.scrollIntoView();
-          //   // });
-          // 
-          // 
-          // } catch (err) {
-          //   console.log(err);
-          // }
+          this.rerender();
         }
-
       );
     }
   }
@@ -273,7 +254,8 @@ console.log(" ... update ranking");
     return null;
   }
   renderArcadeInfobox(app, mod) {
-    LeaderboardArcadeInfobox.render(app, app.modules.returnModule("Leaderboard"));
+    LeaderboardArcadeInfobox.render(app, app.modules.returnModule("Leaderboard"));  
+    this.rerender();
   }
   attachEventsArcadeInfobox(app, mod) {
     LeaderboardArcadeInfobox.attachEvents(app, app.modules.returnModule("Leaderboard"));
