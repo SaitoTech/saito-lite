@@ -369,6 +369,28 @@ a {
   padding: 1em;
   overflow-y: auto;
 }
+.leaderboard-rankings{
+  display:grid;
+}
+.leaderboard-container hr {
+  
+}
+.leaderboard-game-module, .leaderboard-rankings, .leaderboard-container hr {
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  transition: visibility 0s, transform 2.2s ease-out, opacity 2.2s linear;
+}
+.leaderboard-game-module.shown, .leaderboard-rankings.shown, .leaderboard-container hr.shown {
+  visibility: visible;
+  opacity: 1;
+  height: auto;
+  
+}
+.leaderboard-container hr.shown {
+  margin: 1em 0;
+}
 
 /*** AppStore Loader ***/
 

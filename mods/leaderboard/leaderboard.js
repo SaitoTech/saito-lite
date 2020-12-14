@@ -22,9 +22,10 @@ class Leaderboard extends ModTemplate {
     this.mods = [];
 
     this.carousel_idx = 0;
+    this.carousel_length = 0;
     this.carousel_active = 0;
     this.carousel_timer = null;
-    this.carousel_speed = 10000;
+    this.carousel_speed = 8000;
 
     this.addrController = new AddressController(app);
 
@@ -84,14 +85,10 @@ class Leaderboard extends ModTemplate {
       installed_games += ")";
 
       app.modules.returnModule("Leaderboard").sendPeerDatabaseRequestWithFilter(
-
-	"Leaderboard" ,
-
-	`SELECT * FROM leaderboard WHERE module IN ${installed_games} ORDER BY ranking desc, games desc LIMIT 100` ,
-
-	(res) => {
-
-	  if (res.rows) {
+      "Leaderboard" ,
+      `SELECT * FROM leaderboard WHERE module IN ${installed_games} ORDER BY ranking desc, games desc LIMIT 100` ,
+      (res) => {
+        if (res.rows) {
           res.rows.forEach(row => {
 
             let player = "other";
@@ -111,40 +108,49 @@ class Leaderboard extends ModTemplate {
           }
 
           let html = '';
-          let shown = 0;
-          let loop = 0;
-          let styledata = "display:grid";
-          for (var z in leaderboard_self.rankings) {
-            if (leaderboard_self.rankings[z].length > 0) {
-              html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
-              for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
-                let entry = leaderboard_self.rankings[z][i];
-                html += `<div class="${entry.player} playername saito-address saito-address-${entry.address}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
+          this.carousel_idx = 0;
+          let index = 0;
+          console.log("****** leaderboard *******");
+          console.log(leaderboard_self.rankings);
+          Object.keys(leaderboard_self.rankings).forEach((modnameKey, i) => {
+            let ranking = leaderboard_self.rankings[modnameKey];
+            if (ranking.length > 0) {
+              let classdata = index == 0 ? "shown" : "";
+              html += `<hr class="leaderboard_hrtop_${index} ${classdata}"/>`;
+              html += `<h3 class="leaderboard-game-module leaderboard_header_${index} ${classdata}">${modnameKey} Leaderboard:</h3>`;
+              html += `<div class="leaderboard-rankings leaderboard_${modnameKey} leaderboard_${index} ${classdata}" id="leaderboard_${modnameKey}">`;
+              for (let i = 0; i < ranking.length; i++) {
+                let entry = ranking[i];
+                html += `<div class="${entry.player} playername saito-address saito-address-${entry.address} ${classdata}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
               }
-              if (shown == 0) {
-		try {
-                  document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
-                } catch (err) {}
-              }
-              shown = 1;
-              this.carousel_idx = loop;
-              styledata = "display:none";
               html += '</div>';
+              html += `<hr class="leaderboard_hrbottom_${index} ${classdata}"/>`;
+              index++;
             }
-            loop++;
-          }
-
+          });
+          this.carousel_length = index;
           leaderboard_self.app.browser.addIdentifiersToDom(identifiers_to_fetch);
-
-          try {
-            document.querySelector(".leaderboard-container").innerHTML = html;
-            document.querySelectorAll('.me.playername').forEach(el => {
-              el.scrollIntoView();
-            });
-            leaderboard_self.startCarousel(leaderboard_self.mods);
-          } catch (err) {
-            console.log(err);
-          }
+          console.log(document.querySelector(".leaderboard-container"));
+          console.log(html);
+          console.log(document.querySelectorAll(".leaderboard-container").length);
+          let lbcontainer = document.querySelector(".leaderboard-container");
+          console.log(lbcontainer);
+          lbcontainer.innerHTML = html;
+          document.querySelector(".leaderboard-container").innerHTML = html;
+          leaderboard_self.startCarousel(leaderboard_self.mods);
+          // try {
+          // 
+          //   // console.log(".me.playername??????");
+          //   // document.querySelectorAll('.me.playername').forEach(el => {
+          //   //   console.log(".me.playername...");
+          //   //   console.log(el)
+          //   //   el.scrollIntoView();
+          //   // });
+          // 
+          // 
+          // } catch (err) {
+          //   console.log(err);
+          // }
         }
 
       );
@@ -286,65 +292,22 @@ console.log(" ... update ranking");
 
   }
 
-
-
   startCarousel(mods) {
-
     if (this.carousel_active == 1) { return; }
-
-    let leaderboard_presentable = 0;
-    for (let i in this.rankings) {
-      if (this.rankings[i] != null) {
-        if (this.rankings[i].length > 0) {
-          leaderboard_presentable = 1;
-        }
-      }
-    }
-
-    if (leaderboard_presentable == 0) { return; }
-
+    this.carousel_active = 1;
     this.carousel_timer = setInterval(() => {
-
-      let x = this.carousel_idx + 1;
-      let y = this.carousel_idx;
-      let found = 0;
-
-      for (; x < this.mods.length; x++) {
-        if (this.rankings[this.mods[x].name].length > 0) {
-          this.carousel_idx = x;
-          found = 1;
-          y = x;
-          x = this.mods.length + 100;
-        }
-      }
-      if (found == 0) {
-        for (x = 0; x < this.carousel_idx; x++) {
-          if (this.rankings[this.mods[x].name].length > 0) {
-            this.carousel_idx = x;
-            found = 1;
-            y = x;
-            x = this.mods.length + 100;
-          }
-        }
-      }
-
-      //
-      // update leaderboard with mod at this.carousel_idx
-      //
-      try {
-        for (let i = 0; i < this.mods.length; i++) {
-          let classn = '.leaderboard_' + this.mods[i].name;
-          let obj = document.querySelector(classn);
-          if (obj) { obj.style.display = 'none'; }
-        }
-        let classn = '.leaderboard_' + this.mods[this.carousel_idx].name;
-        if (document.querySelector(classn)){
-          document.querySelector(classn).style.display = 'grid';
-        }
-        document.querySelector('.leaderboard-game-module').innerHTML = (this.mods[this.carousel_idx].name + ' Leaderboard:');
-      } catch (err) {}
-
-    }, this.carousel_speed);
+      
+     document.querySelectorAll(`.leaderboard_${this.carousel_idx}, .leaderboard_header_${this.carousel_idx}, .leaderboard_hrtop_${this.carousel_idx}, .leaderboard_hrbottom_${this.carousel_idx}`).forEach((element, i) => {
+       element.classList.remove("shown");
+     });
+     this.carousel_idx++;
+     if(this.carousel_idx >= this.carousel_length) {
+       this.carousel_idx = 0;
+     }
+     document.querySelectorAll(`.leaderboard_${this.carousel_idx}, .leaderboard_header_${this.carousel_idx}, .leaderboard_hrtop_${this.carousel_idx}, .leaderboard_hrbottom_${this.carousel_idx}`).forEach((element, i) => {
+       element.classList.add("shown");
+     });
+   }, this.carousel_speed);
   }
 }
 
