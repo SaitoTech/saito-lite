@@ -162,8 +162,8 @@ body {
   width: 32px;
   height: 44px;
   /* too small -- double it */
-  width: 48px;
-  height: 66px;
+  width: 96px;
+  height: 132px;
   top: 50px;
   background-size: cover;
   z-index: 9000;
@@ -172,8 +172,8 @@ body {
   position: absolute;
   background-image: url("/pandemic/img/Marker%20Research%20Station.png");
   background-size: cover;
-  width: 45px;
-  height: 51px;
+  width: 90px;
+  height: 102px;
   z-index: 1000;
 }
 .research_station1 {

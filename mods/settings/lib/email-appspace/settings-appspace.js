@@ -1,4 +1,5 @@
 const SettingsAppspaceTemplate = require('./settings-appspace.template.js');
+const ModalRegisterUsername = require('./../../../../lib/saito/ui/modal-register-username/modal-register-username');
 
 module.exports = SettingsAppspace = {
 
@@ -31,6 +32,17 @@ module.exports = SettingsAppspace = {
         }
       }
     }
+
+    document.getElementById("register-email-btn").onclick = function (e) {
+    }
+
+    document.getElementById("register-identifier-btn").onclick = function (e) {
+      mod.modal_register_username = new ModalRegisterUsername(app, doGameDetails);
+      mod.modal_register_username.render(app, mod);
+      mod.modal_register_username.attachEvents(app, mod);
+    }
+
+
 
     document.getElementById("privatekey").onclick = function (e) {
       if (this.private_key_visible == 1) {
