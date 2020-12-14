@@ -1,4 +1,5 @@
 const ArcadeMainTemplate = require('./templates/arcade-main.template');
+const ArcadeContainerTemplate = require('./templates/arcade-container.template');
 const ArcadePosts = require('./arcade-posts');
 const ArcadeInfobox = require('./arcade-infobox');
 const GameLoader = require('./../arcade-game/game-loader');
@@ -43,7 +44,7 @@ module.exports = ArcadeMain = {
     //
     // add parent wrapping class
     //
-    if (!document.getElementById("arcade-container")) { app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); }
+    if (!document.getElementById("arcade-container")) { app.browser.addElementToDom(ArcadeContainerTemplate(app, mod)); }
     if (!document.querySelector(".arcade-main")) { app.browser.addElementToDom(ArcadeMainTemplate(app, mod), "arcade-container"); }
 
     //

@@ -28,7 +28,7 @@ class Leaderboard extends ModTemplate {
     this.carousel_speed = 8000;
 
     this.addrController = new AddressController(app);
-
+    this.identifiers_to_fetch = [];
   }
 
 
@@ -63,8 +63,8 @@ class Leaderboard extends ModTemplate {
     let html = '';
     this.carousel_idx = 0;
     let index = 0;
-    Object.keys(leaderboard_self.rankings).forEach((modnameKey, i) => {
-      let ranking = leaderboard_self.rankings[modnameKey];
+    Object.keys(this.rankings).forEach((modnameKey, i) => {
+      let ranking = this.rankings[modnameKey];
       if (ranking.length > 0) {
         let classdata = index == 0 ? "shown" : "";
         html += `<hr class="leaderboard_hrtop_${index} ${classdata}"/>`;
@@ -80,11 +80,11 @@ class Leaderboard extends ModTemplate {
       }
     });
     this.carousel_length = index;
-    leaderboard_self.app.browser.addIdentifiersToDom(identifiers_to_fetch);
+    this.app.browser.addIdentifiersToDom(this.identifiers_to_fetch);
     let lbcontainer = document.querySelector(".leaderboard-container");
     lbcontainer.innerHTML = html;
     document.querySelector(".leaderboard-container").innerHTML = html;
-    leaderboard_self.startCarousel(leaderboard_self.mods);
+    this.startCarousel(this.mods);
   }
 
 
@@ -102,7 +102,7 @@ class Leaderboard extends ModTemplate {
     if (arcade_self.browser_active == 1) {
 
       let installed_games = "(";
-      let identifiers_to_fetch = [];
+      
       for (let i = 0; i < this.mods.length; i++) {
         this.rankings[this.mods[i].name] = [];
         installed_games += "'" + this.mods[i].name + "'";
@@ -120,7 +120,7 @@ class Leaderboard extends ModTemplate {
             let player = "other";
             if (row.publickey == app.wallet.returnPublicKey()) { player = "me"; }
             let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
-            if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
+            if (app.crypto.isPublicKey(player_identifier)) { this.identifiers_to_fetch.push(player_identifier); }
 
             leaderboard_self.rankings[row.module].push({
               "address": row.publickey ,
@@ -247,8 +247,8 @@ console.log(" ... update ranking");
   respondTo(type = "") {
     if (type == "arcade-infobox") {
       let obj = {};
-      obj.render = this.renderArcadeInfobox;
-      obj.attachEvents = this.attachEventsArcadeInfobox;
+      obj.render = this.renderArcadeInfobox.bind(this);
+      obj.attachEvents = this.attachEventsArcadeInfobox.bind(this);
       return obj;
     }
     return null;

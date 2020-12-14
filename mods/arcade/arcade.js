@@ -6,6 +6,7 @@ const ArcadeSidebar = require('./lib/arcade-sidebar/arcade-sidebar');
 const AddressController = require('../../lib/ui/menu/address-controller');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const getMockGames = require('./mockinvites.js');
+const ArcadeContainerTemplate = require('./lib/arcade-main/templates/arcade-container.template');
 // const ArcadeCreateGameOverlay = require('./lib/arcade-create-game-overlay/arcade-create-game-overlay');
 
 fetch = require("node-fetch");
@@ -176,7 +177,7 @@ class Arcade extends ModTemplate {
 
   async render(app) {
     if (!document.getElementById("arcade-container")) { 
-      app.browser.addElementToDom('<div id="arcade-container" class="arcade-container"></div>'); 
+      app.browser.addElementToDom(ArcadeContainerTemplate()); 
     }
 
     this.header.render(app, this);
@@ -1193,23 +1194,17 @@ class Arcade extends ModTemplate {
             }
           }
         }
-
+        
         if (ready_to_go == 0) {
           console.log("transaction for this game still in pending...");
           return;
         }
-
+        
         clearInterval(arcade_self.initialization_timer);
 
-        if (window.location.pathname.split('/')[2] == "invite") {
-          GameLoader.render(this.app, this, game_id);
-          GameLoader.attachEvents(this.app, this);
-          this.viewing_arcade_initialization_page = 1;
-        } else {
-          GameLoader.render(this.app, this, game_id);
-          GameLoader.attachEvents(this.app, this);
-          this.viewing_arcade_initialization_page = 1;
-        }
+        GameLoader.render(this.app, this, game_id);
+        GameLoader.attachEvents(this.app, this);
+        this.viewing_arcade_initialization_page = 1;
 
       }
     }, 1000);
