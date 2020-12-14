@@ -2,8 +2,8 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
   let email_registered = app.keys.returnEmail(app.wallet.returnPublicKey());
   let identifier_registered = app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey());
-  if (email_registered == "") { email_registered = `<span class="register-email-btn">register an email address</span>`; }
-  if (identifier_registered == "") { identifier_registered = `<span class="register-identifier-btn">register a username</span>`; }
+  if (email_registered == "") { email_registered = `<span id="register-email-btn" style="cursor:pointer" class="register-email-btn">register an email address</span>`; }
+  if (identifier_registered == "") { identifier_registered = `<span id="register-identifier-btn" style="cursor:pointer" class="register-identifier-btn">register a username</span>`; }
 
   let modules_html = app.options.modules
     .map((mod, i) => {
