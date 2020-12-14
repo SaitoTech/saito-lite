@@ -490,11 +490,17 @@ console.log("ERROR 113234: chat error receiving message: " + err);
         this.openChatBox(txmsg.group_id);
 	try {
 	  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+	  if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
+            document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+	  }
 	} catch (err) {}
       }
     } else {
       try {
         document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+	if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
+          document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+	}
       } catch (err) {}
     }
 
@@ -557,6 +563,13 @@ console.log("ERROR 113234: chat error receiving message: " + err);
     }
 
     this.render(this.app);
+
+    try {
+      document.getElementById(`chat-box-new-message-input-${group_id}`).focus();
+      if (document.getElementById(`chat-box-new-message-input-${group_id}`).val === "") {
+        document.getElementById(`chat-box-new-message-input-${group_id}`).select();
+      }
+    } catch (err) {}
 
   }
 
