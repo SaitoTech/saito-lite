@@ -8,6 +8,7 @@ class Saito {
     this.BROWSER           = 1;
     this.SPVMODE           = 0;
     this.options           = config;
+    this.config            = require("../../apps/saito.io/config.js");
 
     this.newSaito();
 
