@@ -1,4 +1,4 @@
-const saito_lib = require('./saito/saito');
+const saito_lib = require('../../lib/saito/saito');
 const path = require('path');
 
 class Saito {
@@ -8,6 +8,7 @@ class Saito {
     this.BROWSER           = 1;
     this.SPVMODE           = 0;
     this.options           = config;
+    this.config            = require("../../apps/saito.io/config.js");
 
     this.newSaito();
 
@@ -17,7 +18,6 @@ class Saito {
   }
 
   newSaito() {
-
     this.crypto     = new saito_lib.crypto();
     this.connection = new saito_lib.connection();
     this.browser    = new saito_lib.browser(this);
@@ -42,7 +42,7 @@ class Saito {
       this.keys.initialize();
 
       this.modules.mods = this.modules.mods_list.map(mod_path => {
-        const Module = require(`../mods/${mod_path}`);
+        const Module = require(`../../mods/${mod_path}`);
         let x = new Module(this);
         x.dirname = path.dirname(mod_path);
         return x;

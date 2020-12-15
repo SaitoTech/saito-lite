@@ -243,7 +243,7 @@ class Poker extends GameTemplate {
       id : "game-log",
       class : "game-log",
       callback : function(app, game_mod) {
-	game_mod.menu.hideSubMenus();
+        game_mod.menu.hideSubMenus();
         game_mod.log.toggleLog();
       }
     });
@@ -645,19 +645,19 @@ class Poker extends GameTemplate {
         this.game.queue.splice(qe, 1);
 
         if (this.game.state.flipped === 0) {
-	  this.updateLog("*** HOLE CARDS *** ["+this.cardToHuman(this.game.deck[0].hand[0])+" "+this.cardToHuman(this.game.deck[0].hand[1])+"]");
-	}
-        if (this.game.state.flipped === 3) {
-	  this.updateLog("*** FLOP *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"]");
-	}
-        if (this.game.state.flipped === 4) {
-	  this.updateLog("*** TURN *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"] ["+this.cardToHuman(this.game.pool[0].hand[3])+"]");
-	}
-        if (this.game.state.flipped === 5) {
-	  this.updateLog("*** TURN *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"] ["+this.cardToHuman(this.game.pool[0].hand[3])+"] ["+this.cardToHuman(this.game.pool[0].hand[4])+"]");
-	}
+          this.updateLog("*** HOLE CARDS *** ["+this.cardToHuman(this.game.deck[0].hand[0])+" "+this.cardToHuman(this.game.deck[0].hand[1])+"]");
+        }
+              if (this.game.state.flipped === 3) {
+          this.updateLog("*** FLOP *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"]");
+        }
+              if (this.game.state.flipped === 4) {
+          this.updateLog("*** TURN *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"] ["+this.cardToHuman(this.game.pool[0].hand[3])+"]");
+        }
+              if (this.game.state.flipped === 5) {
+          this.updateLog("*** TURN *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"] ["+this.cardToHuman(this.game.pool[0].hand[3])+"] ["+this.cardToHuman(this.game.pool[0].hand[4])+"]");
+        }
 
-	return 1;
+        return 1;
 
       }
 
@@ -878,26 +878,26 @@ class Poker extends GameTemplate {
         this.updateStatus("Opponent is Speaking");
         // not -1 to start with small blind
 
-	// big blind last before the flop
+        // big blind last before the flop
         if (this.game.state.flipped == 0) {
           for (let i = this.game.state.big_blind_player; i <= (this.game.state.big_blind_player + this.game.players.length - 1); i++) {
             let player_to_go = (i % this.game.players.length);
             if (player_to_go == 0) { player_to_go = this.game.players.length; }
             this.game.queue.push("turn\t" + player_to_go);
           }
-	} else {
+        } else {
           for (let i = this.game.state.button_player; i <= (this.game.state.button_player + this.game.players.length - 1); i++) {
             let player_to_go = (i % this.game.players.length);
             if (player_to_go == 0) { player_to_go = this.game.players.length; }
             this.game.queue.push("turn\t" + player_to_go);
           }
-	}
+        }
 
 
-	// because just incremented, now at 1 first time
-	if (this.game.state.turn == 1) {
-	  this.game.queue.push("announce");
-	}
+        // because just incremented, now at 1 first time
+        if (this.game.state.turn == 1) {
+          this.game.queue.push("announce");
+        }
 
       }
 
@@ -1011,14 +1011,14 @@ class Poker extends GameTemplate {
           this.game.state.required_pot += raise_portion;
           this.game.state.pot += raise_portion;
 
-	  if (raise_portion > 0) {
+          if (raise_portion > 0) {
             this.game.state.last_raise = raise_portion;
-	  }
+          }
 
-	  if (raise_portion > 0) {
+          if (raise_portion > 0) {
             this.updateLog(this.game.state.player_names[player - 1] + " raises " + raise_portion + " to " + this.game.state.player_pot[player-1]);
             this.updatePlayerLog(player, "raises " + raise_portion);
-	  } else {
+          } else {
             this.updateLog(this.game.state.player_names[player - 1] + " calls " + call_portion + ".");
           }
 

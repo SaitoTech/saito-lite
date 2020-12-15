@@ -18,8 +18,7 @@ class Rewards extends ModTemplate {
     this.categories = "Core Utilities Finance";
     this.initial = 10;
     this.payoutRatio = 0.95;
-    this.rewards_publickey = "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
-
+    this.rewards_publickey = app.config.rewardsPubkey;
 
     this.backupPayout = 50;
     this.registryPayout = 50;

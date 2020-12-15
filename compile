@@ -23,6 +23,7 @@ echo ""
     mkdir -p data/blocks
     cp -rf ./lib bundler/default/lib
     cp -rf ./config bundler/default/config
+    cp -rf ./apps bundler/default/apps
 
     copy_lite_mods_to_bundler_directory
 
