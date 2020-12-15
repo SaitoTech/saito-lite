@@ -17,8 +17,6 @@ class Saito {
   }
 
   newSaito() {
-    console.log("new saito...");
-    console.log(saito_lib);
     this.crypto     = new saito_lib.crypto();
     this.connection = new saito_lib.connection();
     this.browser    = new saito_lib.browser(this);
@@ -43,7 +41,7 @@ class Saito {
       this.keys.initialize();
 
       this.modules.mods = this.modules.mods_list.map(mod_path => {
-        const Module = require(`../mods/${mod_path}`);
+        const Module = require(`../../mods/${mod_path}`);
         let x = new Module(this);
         x.dirname = path.dirname(mod_path);
         return x;
