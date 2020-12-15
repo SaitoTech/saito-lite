@@ -258,7 +258,7 @@ ul li a {
   display: block;
   top: 20vh;
   left: 10vw;
-  height: 40vh;
+  height: 60vh;
   width: 10vw;
   background-color: #4447;
   color: WHITE;
@@ -266,13 +266,14 @@ ul li a {
   text-align: center;
   vertical-align: middle;
   padding-top: 16vh;
+  cursor: pointer;
 }
 .game-observer-next {
   position: absolute;
   display: block;
   top: 20vh;
   left: 80vw;
-  height: 40vh;
+  height: 60vh;
   width: 10vw;
   background-color: #4447;
   color: WHITE;
@@ -280,6 +281,7 @@ ul li a {
   text-align: center;
   vertical-align: middle;
   padding-top: 16vh;
+  cursor: pointer;
 }
 
 

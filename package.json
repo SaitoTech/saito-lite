@@ -4,6 +4,7 @@
   "description": "scalable blockchain with proper economics",
   "main": "start.js",
   "scripts": {
+    "start dev": "NODE_ENV=prod node --max_old_space_size=8144 start.js",
     "start": "NODE_ENV=prod node --max_old_space_size=8144 start.js",
     "nuke": " ./compile nuke",
     "reset": " ./compile reset",

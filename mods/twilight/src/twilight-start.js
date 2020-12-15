@@ -2908,7 +2908,7 @@ console.log("place: " + mv[1] + " -- " + player);
         if (mv[0] === "play") {
 
 if (this.game.player == 0) {
-  console.log("processing move! "+JSON.stringify(this.game.state));
+  this.game.queue.push("OBSERVER_CHECKPOINT");
 }
 
           //

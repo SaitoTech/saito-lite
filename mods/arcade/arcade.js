@@ -1192,8 +1192,29 @@ class Arcade extends ModTemplate {
         let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND last_move > $last_move ORDER BY last_move ASC";
         let params = { $game_id: req.params.game_id , $last_move : req.params.last_move }
 
-console.log(sql);
-console.log(params);
+        let games = await app.storage.queryDatabase(sql, params, "arcade");
+
+        if (games.length > 0) {
+          res.setHeader('Content-type', 'text/html');
+          res.charset = 'UTF-8';
+          res.write(JSON.stringify(games));
+          res.end();
+          return;
+        } else {
+          res.setHeader('Content-type', 'text/html');
+          res.charset = 'UTF-8';
+          res.write("{}");
+          res.end();
+          return;
+        }
+
+      });
+
+
+      expressapp.get('/arcade/observer_prev/:game_id/:current_move', async (req, res) => {
+
+        let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND last_move < $last_move ORDER BY last_move DESC LIMIT 2";
+        let params = { $game_id: req.params.game_id , $last_move : req.params.current_move }
 
         let games = await app.storage.queryDatabase(sql, params, "arcade");
 
@@ -1582,7 +1603,6 @@ console.log(params);
 
   observeGame(msg, watch_live=0) {
 
-alert("WATCH LIVE? " + watch_live);
     let arcade_self = this;
 
     let msgobj = JSON.parse(this.app.crypto.base64ToString(msg));
@@ -1604,7 +1624,10 @@ alert("WATCH LIVE? " + watch_live);
             }
           }
           games[i].ts = new Date().getTime();
-          arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+//
+// DO NOT AUTO-WATCH GAME
+//
+//          arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
           arcade_self.app.options.games = games;
           arcade_self.app.storage.saveOptions();
           let slug = arcade_self.app.modules.returnModule(msgobj.module).returnSlug();
@@ -1673,7 +1696,10 @@ alert("WATCH LIVE? " + watch_live);
       }).catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
     } else {
 
-      arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+      // do not listen
+      //
+      //arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+      //
       let { games } = arcade_self.app.options;
       if (games == undefined) { games = []; }
       for (let i = 0; i < games.length; i++) {
@@ -1683,7 +1709,7 @@ alert("WATCH LIVE? " + watch_live);
       }
       arcade_self.app.options.games = games;
 
-      arcade_self.fetchObserverMoves(game_id, watch_live);
+      arcade_self.initializeObserverMode(game_id, watch_live);
 
     }
   }
@@ -1694,7 +1720,9 @@ alert("WATCH LIVE? " + watch_live);
 
     let arcade_self = this;
 
-    fetch(`/arcade/observer_multi/${game_mod.game.id}/${last_move}`).then(response => {
+    console.log("FETCHING FROM: " + `/arcade/observer_multi/${game_mod.game.id}/${game_mod.game.step.ts}`);
+
+    fetch(`/arcade/observer_multi/${game_mod.game.id}/${game_mod.game.step.ts}`).then(response => {
       response.json().then(data => {
 
 	for (let i = 0; i < data.length; i++) {
@@ -1702,12 +1730,20 @@ alert("WATCH LIVE? " + watch_live);
 	  let future_tx = new saito.transaction(JSON.parse(data[i].tx));
 	  future_tx.msg = future_tx.returnMessage();
 	  future_tx.msg.game_state = {};
+	  //
+	  // write this data into the tx
+	  //
+console.log("writing in last move with TS: " + data[i].last_move);
+	  future_tx.msg.last_move = data[i].last_move;
 	  future_tx = arcade_self.app.wallet.signTransaction(future_tx);
+
+console.log("future moves... " + game_mod.game.future.length);
 
 	  let already_contains_move = 0;
 	  for (let z = 0; z < game_mod.game.future.length; z++) {
 	    let tmptx = new saito.transaction(JSON.parse(game_mod.game.future[z]));
 	    if (tmptx.transaction.sig == future_tx.transaction.sig) {
+console.log("FUTURE ALREADY CONTAINS MOVE: " + future_tx.transaction.sig);
 	      already_contains_move = 1;
 	    }
 	  }
@@ -1717,8 +1753,7 @@ alert("WATCH LIVE? " + watch_live);
 	  }
 	}
 
-	game_mod.saveGame();
-	
+	game_mod.saveGame(game_mod.game.id);	
 	if (mycallback != null) { mycallback(); }
 
       });
@@ -1727,21 +1762,72 @@ alert("WATCH LIVE? " + watch_live);
 
 
 
-
-
-
-
-  fetchObserverMoves(game_id, last_move, first_tx=null) {
+  initializeObserverModePreviousStep(game_id, starting_move) {
 
     let arcade_self = this;
     let { games } = arcade_self.app.options;
 
-    let first_tx_fetched = 1;
-    if (first_tx == null) {
-      first_tx_fetched = 0;
-    }
+    let first_tx = null;;
 
-    fetch(`/arcade/observer_multi/${game_id}/${last_move}`).then(response => {
+    fetch(`/arcade/observer_prev/${game_id}/${starting_move}`).then(response => {
+      response.json().then(data => {
+
+        first_tx = JSON.parse(data[0].game_state);
+
+	//
+	// single transaction
+	//
+	let future_tx = new saito.transaction(JSON.parse(data[0].tx));
+	    future_tx.msg = future_tx.returnMessage();
+	    future_tx.msg.game_state = {};
+	    future_tx.msg.last_move = data[0].last_move;
+	    future_tx = arcade_self.app.wallet.signTransaction(future_tx);
+            if (first_tx.future == undefined || first_tx.future == "undefined" || first_tx.future == null) { first_tx.future = []; }
+	    first_tx.future.push(JSON.stringify(future_tx.transaction));
+
+        //
+        // we did not add a move
+        //
+        let game = first_tx;
+        game.observer_mode = 1;
+        game.observer_mode_active = 0;
+        game.player = 0;
+
+        let idx = -1;
+        for (let i = 0; i < games.length; i++) {
+          if (games[i].id === first_tx.id) {
+            idx = i;
+          }
+        }
+        if (idx == -1) {
+          games.push(game);
+        } else {
+          games[idx] = game;
+        }
+
+        arcade_self.app.options.games = games;
+        arcade_self.app.storage.saveOptions();
+
+        //
+        // move into or reload game
+        //
+        let slug = arcade_self.app.modules.returnModule(first_tx.module).returnSlug();
+        window.location = '/' + slug;
+
+      });
+    });
+  }
+
+
+  initializeObserverMode(game_id, starting_move) {
+
+    let arcade_self = this;
+    let { games } = arcade_self.app.options;
+
+    let first_tx = null;;
+    let first_tx_fetched = 0;
+
+    fetch(`/arcade/observer_multi/${game_id}/${starting_move}`).then(response => {
       response.json().then(data => {
 
 	let did_we_add_a_move = 0;;
@@ -1756,6 +1842,7 @@ alert("WATCH LIVE? " + watch_live);
 	    let future_tx = new saito.transaction(JSON.parse(data[i].tx));
 	    future_tx.msg = future_tx.returnMessage();
 	    future_tx.msg.game_state = {};
+	    future_tx.msg.last_move = data[i].last_move;
 	    future_tx = arcade_self.app.wallet.signTransaction(future_tx);
             if (first_tx.future == undefined || first_tx.future == "undefined" || first_tx.future == null) { first_tx.future = []; }
 	    first_tx.future.push(JSON.stringify(future_tx.transaction));
@@ -1765,6 +1852,7 @@ alert("WATCH LIVE? " + watch_live);
 	    let future_tx = new saito.transaction(JSON.parse(data[i].tx));
 	    future_tx.msg = future_tx.returnMessage();
 	    future_tx.msg.game_state = {};
+	    future_tx.msg.last_move = data[i].last_move;
 	    future_tx = arcade_self.app.wallet.signTransaction(future_tx);
             if (first_tx.future == undefined || first_tx.future == "undefined" || first_tx.future == null) { first_tx.future = []; }
 	    first_tx.future.push(JSON.stringify(future_tx.transaction));
@@ -1772,7 +1860,6 @@ alert("WATCH LIVE? " + watch_live);
 	  }
 
 	  did_we_add_a_move = 1;
-	  last_move = data[i].last_move;
 
 	}
 
@@ -1784,23 +1871,6 @@ alert("WATCH LIVE? " + watch_live);
         game.observer_mode_active = 0;
         game.player = 0;
 
-        //
-        // and add game to queue....
-        //
-        //for (let z = 0; z < game.last_turn.length; z++) {
-        //  game.queue.push(game.last_turn[z]);
-        //}
-
-console.log("GAME QUEUE SET TO: " + JSON.stringify(game.queue));
-
-        //
-        // increment the step by 1, as returnPreGameMove will have unincremented
-        // ( i.e. not including the step that broadcast it )
-        //
-        // do not increment step as first move is now future tx as well -- we just
-	// take the game state and move the rest of the tx (with turns) into future
-	//
-	// game.step.game++;
         let idx = -1;
         for (let i = 0; i < games.length; i++) {
           if (games[i].id === first_tx.id) {
@@ -1819,8 +1889,8 @@ console.log("GAME QUEUE SET TO: " + JSON.stringify(game.queue));
         //
         // move into game
         //
-        //let slug = arcade_self.app.modules.returnModule(first_tx.module).returnSlug();
-        //window.location = '/' + slug;
+        let slug = arcade_self.app.modules.returnModule(first_tx.module).returnSlug();
+        window.location = '/' + slug;
 
       });
     }).catch(err => console.info("ERROR 351232: error fetching queued games for observer mode", err));
