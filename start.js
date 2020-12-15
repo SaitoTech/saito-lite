@@ -2,7 +2,7 @@ const server = require('./lib/saito/core/server.js');
 const storage = require('./lib/saito/core/storage-core.js');
 const mods_config = require('./config/modules.config.js');
 
-const saito = require('./lib/index.js');
+const saito = require('./apps/saito.io/index.js');
 
 async function initSaito() {
   const app = new saito.Saito({

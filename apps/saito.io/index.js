@@ -1,4 +1,4 @@
-const saito_lib = require('./saito/saito');
+const saito_lib = require('../../lib/saito/saito');
 const path = require('path');
 
 class Saito {
@@ -17,7 +17,8 @@ class Saito {
   }
 
   newSaito() {
-
+    console.log("new saito...");
+    console.log(saito_lib);
     this.crypto     = new saito_lib.crypto();
     this.connection = new saito_lib.connection();
     this.browser    = new saito_lib.browser(this);
