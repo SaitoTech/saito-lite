@@ -709,13 +709,10 @@ initializeGame(game_id) {
   //
   // initialize
   //
-  if (this.game.countries == undefined) {
+  if (!this.game.state) {
+
     this.game.countries = this.returnCountries();
-  }
-  if (this.game.state == undefined) {
     this.game.state = this.returnState();
-  }
-  if (this.game.deck.length == 0) {
 
 console.log("\n\n\n\n");
 console.log("---------------------------");
@@ -886,7 +883,15 @@ try {
   handleGameLoop() {
 
     let twilight_self = this;
-    let player = "ussr"; if (this.game.player == 2) { player = "us"; }
+    let player = "ussr"; 
+    if (this.game.player === 2) { player = "us"; } 
+
+    //
+    // support observer mode
+    //
+    if (this.game.player === 0) { player = "observer"; }
+
+console.log("PLAYER: " + this.game.player + " ---> " + player);
 
     //
     // avoid China bug on reshuffle - sept 27
@@ -900,11 +905,6 @@ try {
     } catch (err) {}
 
 
-
-    //
-    // support observer mode
-    //
-    if (this.game.player == 0) { player = "observer"; }
 
     if (this.game.over == 1) {
       let winner = "ussr";
@@ -929,7 +929,7 @@ try {
         let shd_continue = 1;
 
 console.log("QUEUE: " + this.game.queue);
-console.log("POLAND: " + this.game.countries['poland'].ussr + " -- " + JSON.stringify(this.game.step));
+console.log("MOVE: " + JSON.stringify(mv));
 
         //
         // cambridge region
@@ -966,36 +966,53 @@ console.log("POLAND: " + this.game.countries['poland'].ussr + " -- " + JSON.stri
 	//
         if (mv[0] == "init") {
 
-            let tmpar = this.game.players[0];
-            if (this.game.options.player1 != undefined) {
-
-              //
-              // random pick
-              //
-              if (this.game.options.player1 == "random") {
+	    //
+	    // observer skips
+	    //
+	    let observer = 0;
+	    if (this.game.player === 0) { 
+	      if (!this.game.players.includes(this.app.wallet.returnPublicKey())) { 
+		observer = 1;
                 let roll = this.rollDice(6);
-                if (roll <= 3) {
-                  this.game.options.player1 = "us";
-                } else {
-                  this.game.options.player1 = "ussr";
-                }
-              }
+	      }
+	    } 
 
-	      // [1] should be creator 
-              if (this.game.players[1] === this.app.wallet.returnPublicKey()) {
-                if (this.game.options.player1 == "us") {
-                  this.game.player = 2;
-                } else {
-                  this.game.player = 1;
+
+	    if (observer === 0) {
+
+              let tmpar = this.game.players[0];
+              if (this.game.options.player1 != undefined) {
+
+                //
+                // random pick
+                //
+                if (this.game.options.player1 == "random") {
+                  let roll = this.rollDice(6);
+                  if (roll <= 3) {
+                    this.game.options.player1 = "us";
+                   } else {
+                   this.game.options.player1 = "ussr";
+                  }
                 }
-              } else {
-                if (this.game.options.player1 == "us") {
-                  this.game.player = 1;
-                } else {
-                  this.game.player = 2;
-                }
+
+	        // [1] should be creator 
+		if (observer == 0) {
+                  if (this.game.players[1] === this.app.wallet.returnPublicKey()) {
+                    if (this.game.options.player1 == "us") {
+                      this.game.player = 2;
+                    } else {
+                      this.game.player = 1;
+                    }
+                  } else {
+                    if (this.game.options.player1 == "us") {
+                      this.game.player = 1;
+                    } else {
+                      this.game.player = 2;
+                    }
+                  }
+	        }
               }
-            }
+	    }
 
             this.game.queue.splice(qe, 1);
 
@@ -2174,7 +2191,8 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "place") {
-          if (player != mv[1]) { this.placeInfluence(mv[3], parseInt(mv[4]), mv[2]); }
+console.log("place: " + mv[1] + " -- " + player);
+          if (player !== mv[1]) { this.placeInfluence(mv[3], parseInt(mv[4]), mv[2]); }
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "setvar") {
@@ -3014,6 +3032,12 @@ console.log("resetging bbc");
 
 
   playHeadlineModern(stage, player, hash="", xor="", card="") {
+
+    if (this.game.player === 0) {
+      this.updateLog("Processing Headline Cards...");
+      return;
+    }
+
 
     this.game.state.headline = 1;
 

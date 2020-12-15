@@ -249,6 +249,42 @@ ul li a {
 
 
 
+
+/*******************/
+/** GAME OBSERVER **/
+/*******************/
+.game-observer-last {
+  position: absolute;
+  display: block;
+  top: 20vh;
+  left: 10vw;
+  height: 40vh;
+  width: 10vw;
+  background-color: #4447;
+  color: WHITE;
+  font-size: 4vh;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 16vh;
+}
+.game-observer-next {
+  position: absolute;
+  display: block;
+  top: 20vh;
+  left: 80vw;
+  height: 40vh;
+  width: 10vw;
+  background-color: #4447;
+  color: WHITE;
+  font-size: 4vh;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 16vh;
+}
+
+
+
+
 /**************/
 /** GAME HUD **/
 /**************/
