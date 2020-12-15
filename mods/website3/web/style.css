@@ -1,0 +1,152 @@
+body {
+  background-color: var(--saito-skyline-grey);
+  font-size: 1em;
+  font-family: "visuelt-light";
+  overflow-x: hidden;
+  width: 100%;
+  position: fixed;
+}
+
+.header {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-image: url('/saito/img/dreamscape.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100px;
+}
+
+
+.intro-container {
+  width: 100%;
+  background-image: url('/saito/img/dreamscape.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.main {
+  display: block;
+  height: 900px;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+.featured-app {
+  background-color: transparent;
+  perspective: 1000px;
+  float: left;
+}
+
+.featured-app-inner {
+  position: relative;
+  width: 500px;
+  height: 278px;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.featured-app:hover .featured-app-inner {
+  transform: rotateY(180deg);
+}
+
+.featured-app-front, .featured-app-back {
+  position: absolute;
+  width: 500px;
+  height: 278px;
+  -webkit-backface-visibility: hidden;
+  /* Safari */
+  backface-visibility: hidden;
+}
+
+.featured-app-front {
+  background-color: #bbb;
+  color: black;
+}
+
+.featured-app-back {
+  transform: rotateY(180deg);
+  background-color: #fff;
+  color: white;
+  height: 320px;
+  padding: 1em;
+  border: 1px solid var(--saito-skyline-grey);
+}
+
+.featured-app-back-inner {
+  width: 500px;
+  height: 278px;
+  background-color: var(--saito-red);
+  font-size: 1.3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.featured-app-back-inner a {
+  color: #fff;
+  font-family: visuelt-medium;
+}
+
+.featured-app-back-inner a:hover {
+  color: #fffd;
+}
+
+.arcade-banner-link {
+  justify-self: right;
+  margin: 4em 0;
+}
+
+.arcade-banner {
+  /* width: 590px; */
+  width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.intro-box {
+  width: 580px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
+  padding: 2em 2em 0 2em;
+}
+
+.intro-title {
+  color: #f71e3d;
+  font-size: 2.1em;
+  font-weight: 700;
+  margin: 0 0 0.5em 0;
+}
+
+.intro-content {
+  font-size: 1.2em;
+  color: #000000;
+  line-height: 1.5em;
+}
+
+.intro-content p {
+  letter-spacing: 0.05em;
+  margin: 0 0 1em 0;
+}
+
