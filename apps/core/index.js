@@ -8,7 +8,7 @@ class Saito {
     this.BROWSER           = 1;
     this.SPVMODE           = 0;
     this.options           = config;
-    this.config            = require("../../apps/saito.io/config.js");
+    this.config            = {};
 
     this.newSaito();
 
@@ -35,7 +35,23 @@ class Saito {
 
   async init() {
     try {
+
       await this.storage.initialize();
+
+      let _self = this;
+console.log("OPT: " + JSON.stringify(this.options));
+
+      //
+      // having initialized storage, we permit command-line arguments to alter runtime variables
+      //
+      process.argv.forEach(function (val, index, array) {
+	let uvar = val.split("=")[0];
+	let uval = val.split("=")[1];
+        _self.options.config[uvar] = uval;
+      });
+
+console.log("RUNTIME: " + JSON.stringify(this.options.config));
+
 
       this.wallet.initialize();
       this.mempool.initialize();
@@ -64,6 +80,7 @@ class Saito {
       if (this.server) {
         this.server.initialize();
       }
+
     } catch(err) {
       console.log("Error occured initializing your Saito install. The most likely cause of this is a module that is throwing an error on initialization. You can debug this by removing modules from your config file to test which ones are causing the problem and restarting.");
       console.log(err);

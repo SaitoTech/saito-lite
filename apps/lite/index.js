@@ -1,4 +1,4 @@
-import { Saito } from '../saito.io/index'
+import { Saito } from '../core/index'
 import mods_config from '../../config/modules.config';
 
 async function init() {
