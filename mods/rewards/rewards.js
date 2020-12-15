@@ -7,6 +7,8 @@ const RewardsSidebar = require('./lib/arcade-sidebar/arcade-right-sidebar');
 const RewardsSidebarRow = require('./lib/arcade-sidebar/arcade-sidebar-row.template');
 const activities = require('./lib/email-appspace/activities');
 
+const config = require('../../apps/saito.io/config.js');
+
 class Rewards extends ModTemplate {
 
   constructor(app) {
@@ -18,8 +20,7 @@ class Rewards extends ModTemplate {
     this.categories = "Core Utilities Finance";
     this.initial = 10;
     this.payoutRatio = 0.95;
-    this.rewards_publickey = "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
-
+    this.rewards_publickey = config.rewardsPubkey;
 
     this.backupPayout = 50;
     this.registryPayout = 50;

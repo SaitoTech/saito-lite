@@ -50,7 +50,7 @@ webpack({
         /\/www\//
   ],
   // Path to your entry point. From this file Webpack will begin his work
-  entry: ["babel-polyfill", path.resolve(__dirname, './../bundler/default/lib/saito/lite/index.js')],
+  entry: ["babel-polyfill", path.resolve(__dirname, './../bundler/default/apps/lite/index.js')],
   output: {
     path: path.resolve(__dirname, './../web/saito'),
     filename: 'saito.js'
