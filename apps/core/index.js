@@ -8,7 +8,7 @@ class Saito {
     this.BROWSER           = 1;
     this.SPVMODE           = 0;
     this.options           = config;
-    this.config            = {};
+    this.config            = require("../../config/runtime.config.js");
 
     this.newSaito();
 
@@ -38,23 +38,7 @@ class Saito {
 
       await this.storage.initialize();
 
-console.log("DEVMODE? " + process.env.NODE_ENV);
-
-
       let _self = this;
-console.log("OPT: " + JSON.stringify(this.options));
-
-      //
-      // having initialized storage, we permit command-line arguments to alter runtime variables
-      //
-      process.argv.forEach(function (val, index, array) {
-	let uvar = val.split("=")[0];
-	let uval = val.split("=")[1];
-        _self.options.config[uvar] = uval;
-      });
-
-console.log("RUNTIME: " + JSON.stringify(this.options.config));
-
 
       this.wallet.initialize();
       this.mempool.initialize();
