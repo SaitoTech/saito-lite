@@ -1236,6 +1236,11 @@ class Arcade extends ModTemplate {
         let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND last_move < $last_move ORDER BY last_move DESC LIMIT 2";
         let params = { $game_id: req.params.game_id , $last_move : req.params.current_move }
 
+        if (req.params.current_move == 0 || req.params.current_move === "undefined") {
+          sql = "SELECT * FROM gamestate WHERE game_id = $game_id ORDER BY last_move ASC LIMIT 1";
+          params = { $game_id: req.params.game_id }
+	}
+
         let games = await app.storage.queryDatabase(sql, params, "arcade");
 
         if (games.length > 0) {
@@ -1838,6 +1843,8 @@ console.log("POST: " + game_mod.game.id);
     let { games } = arcade_self.app.options;
 
     let first_tx = null;;
+
+    console.log(`/arcade/observer_prev/${game_id}/${starting_move}`);
 
     fetch(`/arcade/observer_prev/${game_id}/${starting_move}`).then(response => {
       response.json().then(data => {
