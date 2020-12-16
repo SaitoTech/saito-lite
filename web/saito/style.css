@@ -1043,7 +1043,7 @@ div#message-wrapper {
 }
 
 #header-token-select{
-  width: 11.5em;
+  max-width: 11.5em;
   padding: 0;
 }
 
