@@ -159,14 +159,22 @@ class Chessgame extends GameTemplate {
   ////////////////
   handleGameLoop(msg={}) {
 
+console.log("QUEUE IN CHESS: " + JSON.stringify(this.game.queue));
+console.log(JSON.stringify(msg));
+alert("LOOP");
+
+    if (this.game.queue[this.game.queue.length-1] == "OBSERVER_CHECKPOINT") {
+      return;
+    }
+
     msg = {};
-    console.log("QUEUE 123123: " + this.game.queue);
     if (this.game.queue.length > 0) {
       msg.extra = JSON.parse(this.app.crypto.base64ToString(this.game.queue[this.game.queue.length-1]));
     } else {
       msg.extra = {};
     }
     this.game.queue.splice(this.game.queue.length-1, 1);
+
 
     if (msg.extra == undefined) {
       console.log("NO MESSAGE DEFINED!");
@@ -189,7 +197,6 @@ class Chessgame extends GameTemplate {
 
 
     if (msg.extra.target == this.game.player) {
-
       if (this.browser_active == 1) {
         this.setBoard(this.game.position);
         if (this.useClock) { this.startClock(); }
@@ -205,8 +212,14 @@ class Chessgame extends GameTemplate {
       }
     }
 
-    this.saveGame(this.game.id);
 
+
+    if (this.game.player == 0) {
+      this.game.queue.push("OBSERVER_CHECKPOINT");
+      return 1;
+    }
+
+    this.saveGame(this.game.id);
     return 0;
    
   }
