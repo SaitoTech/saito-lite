@@ -1044,7 +1044,11 @@ div#message-wrapper {
 
 #header-token-select{
   max-width: 11.5em;
-  padding: 0;
+  padding: 5px;
+}
+
+.personal-info .saito-select {
+  width: 14em;
 }
 
 .header-dropdown{
