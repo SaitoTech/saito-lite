@@ -50,10 +50,10 @@ console.log("OPT: " + JSON.stringify(this.options));
       process.argv.forEach(function (val, index, array) {
 	let uvar = val.split("=")[0];
 	let uval = val.split("=")[1];
-        _self.options.config[uvar] = uval;
+        _self.options.runtime[uvar] = uval;
       });
 
-console.log("RUNTIME: " + JSON.stringify(this.options.config));
+console.log("RUNTIME: " + JSON.stringify(this.options.runtime));
 
 
       this.wallet.initialize();
