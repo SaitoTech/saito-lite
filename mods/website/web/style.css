@@ -21,7 +21,7 @@ body {
 section {
   padding: 2em 7em;
   max-width: 1600px;
-  margin: 1em auto;
+  margin: 2em auto;
   width: 100%;
 }
 
@@ -111,7 +111,7 @@ h2, h5 {
 }
 
 section.first {
-  margin-top: 0px;
+  margin-top: 2em;
 }
 
 .can-build-img-small {
@@ -514,6 +514,7 @@ img.banner-logo {
 
 .intro {
   background-color: #fffc;
+  padding: 1em 0;
 }
 
 .intro-box {
@@ -965,6 +966,31 @@ button:focus {
   color: #fff;
 }
 
+
+.benefits-grid {
+  display: grid;
+  gap: 2em;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 1em;
+  background: linear-gradient(135deg, black, rgb(28 28 35 / 69%));
+  color: #fff;
+}
+
+.benefit {
+  padding: 5px 1em;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  border-left: 1px solid var(--saito-red);;
+}
+
+.benefit-title {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin: 0 0 1em;
+}
+
 .love-tools img {
   width: 30%;
   height: 30%;
@@ -1146,6 +1172,10 @@ button:focus {
     gap: 1em;
     grid-template-columns: auto;
   }
+
+  .benefits-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 
@@ -1269,6 +1299,8 @@ button:focus {
   .compare-grid-header, .compare-grid .label {
     font-size: medium;
   }
+
+
 }
 
 @media only screen and (max-width: 600px) {
@@ -1293,4 +1325,8 @@ button:focus {
   .header-nav:hover {
     right: 60px;
   }
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
 }
