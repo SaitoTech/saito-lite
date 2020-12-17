@@ -1042,6 +1042,21 @@ div#message-wrapper {
   font-weight: normal;
 }
 
+#header-token-select{
+  max-width: 11.5em;
+  padding: 5px;
+}
+
+.personal-info .saito-select {
+  width: 14em;
+}
+
+.header-dropdown{
+  border:  solid 1px;
+  padding: 0em 0.4em;
+  height: 1.35em;
+}
+
 .header-mini-wallet {
   padding: 0.5em 0 0 0;
   height: 1.7em;
