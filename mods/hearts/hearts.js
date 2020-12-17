@@ -52,7 +52,7 @@ class Hearts extends GameTemplate {
     if (type == "arcade-carousel") {
       let obj = {};
       obj.background = "/hearts/img/arcade/arcade-banner-background.png";
-      obj.title = "Poker";
+      obj.title = "Hearts";
       return obj;
     }
 
@@ -68,7 +68,23 @@ class Hearts extends GameTemplate {
   //
   initializeGame(game_id) {
 
+    if (!this.game.state) {
+
+      this.game.state = this.returnState();
+
+      this.initializeDice();
+
+      this.game.queue.push("newround");
+      this.game.queue.push("READY");
+      this.game.queue.push("init");
+
+    }
+
   }
+
+
+
+  
 
 
 
@@ -103,14 +119,38 @@ class Hearts extends GameTemplate {
       let qe = this.game.queue.length - 1;
       let mv = this.game.queue[qe].split("\t");
 
-      if (mv[0] === "round") {
-        this.displayBoard();
+      if (mv[0] === "newround") {
+	console.log("new round...");
+	this.game.queue.push("ACKNOWLEDGE\tThis is the start of a new Round");
+	this.game.queue.splice(qe, 1);
+	return 1;
       }
+
+      if (mv[0] === "init") {
+	console.log("sometimes we can handle init stuff in queue...");
+	this.game.queue.splice(qe, 1);
+	return 1;
+      }
+
+
+
     }
 
     return 1;
   }
 
+
+
+
+
+
+
+  returnState() {
+
+    let state = {};
+
+    return state;
+  }
 }
 
 
