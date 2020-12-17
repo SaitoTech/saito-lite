@@ -40,8 +40,7 @@ h2, h5 {
 
 .main {
   display: block;
-  height: 900px;
-  height: 100%;
+  height: unset;
   overflow: hidden;
 }
 
@@ -112,7 +111,7 @@ h2, h5 {
 }
 
 section.first {
-  margin-top: 600px;
+  margin-top: 0px;
 }
 
 .can-build-img-small {
@@ -124,7 +123,6 @@ section.first {
   margin: 0px;
   padding: 0px;
 }
-
 
 img.banner-logo {
   width: 39%;
@@ -178,13 +176,38 @@ img.banner-logo {
 }
 
 .calltoaction {
-  margin: 15em 0 0 0;
+  margin: 15em auto 0;
+  display: flex;
+  justify-content: center;
 }
 
 .action-components {
   display: grid;
-  gap: 2em;
-  grid-template-columns: 1fr 1fr;
+  gap: 5em;
+  grid-template-columns: 520px 520px;
+  cursor: pointer;
+}
+
+.component-text {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+
+.action-components .component {
+  display: grid;
+  grid-template-columns: 200px 320px;
+  padding: 0;
+}
+
+.calltoaction .component img {
+  width: 320px;
+  height: 180px;
+}
+
+.calltoaction a {
+  text-decoration: none;
 }
 
 .build-grid {
@@ -235,7 +258,6 @@ img.banner-logo {
   transform: scale(1.1);
   position: relative;
 }
-
 
 .project-components {
   display: grid;
@@ -490,6 +512,10 @@ img.banner-logo {
   border: 1px solid white;
 }
 
+.intro {
+  background-color: #fffc;
+}
+
 .intro-box {
   width: 580px;
   background-color: #f9f9f9;
@@ -502,12 +528,14 @@ img.banner-logo {
   font-size: 2.1em;
   font-weight: 700;
   margin: 0 0 0.5em 0;
+  text-align: center;
 }
 
 .intro-content {
   font-size: 1.2em;
   color: #000000;
   line-height: 1.5em;
+  padding: 1em 1em 0;
 }
 
 .intro-content p {
@@ -867,6 +895,38 @@ button:focus {
 
 /* Mods */
 
+.header-nav a, .header-nav i {
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin: 0 1em;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.header-nav i {
+  display: none;
+}
+
+.header-nav a:hover {
+  transform: scale(1.1);
+  transform-origin: center;
+  color: #FFF;
+}
+
+.header-nav {
+  position: absolute;
+  display: flex;
+  color: var(--saito-skyline-grey);
+  height: 5em;
+  z-index: 9;
+  right: 240px;
+  top: 0;
+  align-items: center;
+  transition: all ease-in 0.1s;
+}
+
 .disabled {
   background-color: #DCCFCF;
   color: #B0A8A8;
@@ -973,6 +1033,33 @@ button:focus {
   display: none;
 }
 
+.stats-container {
+  display: flex;
+  flex-direction: row;
+  flex-flow: row;
+  justify-content: space-around;
+}
+
+.stat {
+  width: 350px;
+  height: 150px;
+  border: 1px solid var(--saito-red);
+  text-align: center;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  background: linear-gradient(135deg, black, rgb(28 28 35 / 69%));
+  color: var(--saito-skyline-grey);
+  font-size: 1.5em;
+  padding: 1em;
+}
+
+.join-us h1 {
+  text-align: center;
+  font-size: 3em;
+  color: var(--saito-red);
+}
+
 @media only screen and (max-width: 1460px) {
   section {
     padding: 1em 2em;
@@ -1018,15 +1105,57 @@ button:focus {
   .about-saito {
     clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
   }
-  section.first {
-    margin-top: 1100px;
+
+  .stats-container {
+    display: grid;
+    justify-content: center;
+    gap: 1em;
   }
 }
+@media only screen and (max-width: 1200px) {
+  .header-nav i {
+    display: block;
+  }
+  .header-nav a {
+    display: none;
+  }
+
+  .header-nav:hover {
+    display: grid;
+    text-align: right;
+    gap: 1em;
+    grid-template-columns: auto;
+    margin: 2em 0;
+    border-right: 1px solid #fff;
+    right: 250px;
+    height: unset;
+    background: linear-gradient(90deg, rgb(247 31 61 / 50%), rgb(247 31 61 / 75%));
+    padding: 2em 1em;
+  }
+  .header-nav:hover a {
+    display: block;
+  }
+  .header-nav:hover i {
+    display: none;
+  }
+  .project-components {
+    gap: 1em;
+    grid-template-columns: 1fr 1fr;
+  }
+  .action-components {
+    gap: 1em;
+    grid-template-columns: auto;
+  }
+}
+
 
 @media only screen and (max-width: 800px) {
   .project-components {
     gap: 1em;
     grid-template-columns: 1fr;
+  }
+  .calltoaction {
+    margin: 2em auto 0;
   }
   .mobile {
     display: block;
@@ -1100,7 +1229,7 @@ button:focus {
     font-size: 18px;
   }
   section.first {
-    margin-top: calc(475px + 57.15vw);
+    margin-top: 50px;
   }
   .can-build-img-tall {
     height: 250px;
@@ -1149,7 +1278,19 @@ button:focus {
   .intro-title {
     font-size: 1.7em;
   }
+  .calltoaction {
+    transform: scale(0.65);
+  }
+  .main {
+    margin-top: 0;
+  }
   section.first {
-    margin-top: calc(435px + 57.15vw);
+    margin-top: -40px;
+  }
+  .header-nav {
+    right: 50px;
+  }
+  .header-nav:hover {
+    right: 60px;
   }
 }
