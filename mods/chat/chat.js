@@ -99,7 +99,11 @@ class Chat extends ModTemplate {
 
   initializeHTML(app) {
 
-    if (this.browser_active == 1) { this.renderMode = "main"; }
+    if (this.browser_active == 1) { 
+      if (this.renderMode != "other") {
+        this.renderMode = "main"; 
+      }
+    }
 
     if (this.renderMode == "main") {
 
