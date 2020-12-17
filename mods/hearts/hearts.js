@@ -212,6 +212,52 @@ class Hearts extends GameTemplate {
     this.menu.render(app, this);
     this.menu.attachEvents(app, this);
 
+    this.cardbox.render(app, this);
+    this.cardbox.attachEvents(app, this);
+
+    //
+    // we want hud to support cardbox, so re-render
+    //
+    this.hud.render(app, this);
+    this.hud.attachEvents(app, this);
+
+    //
+    // add card events -- for special hud treatment
+    //
+    // this means that if you click on an element tagged as class "card" 
+    // the cardbox will automatically handle the click events and the 
+    // card popup and menu options. set
+    //
+    //   this.cardbox.skip_card_prompt = 1;
+    //
+    // and you'll see what happens
+    //
+    this.hud.addCardType("card", "select", this.cardbox_callback);
+
+    //
+    // this prevents desktop users going creay
+    //
+    //if (!app.browser.isMobileBrowser(navigator.userAgent)) {
+    //   this.cardbox.skip_card_prompt = 1;
+    //}
+
+    try {
+
+      if (app.browser.isMobileBrowser(navigator.userAgent)) {
+
+        this.hammer.render(this.app, this);
+        this.hammer.attachEvents(this.app, this, '.gameboard');
+
+      } else {
+
+        let twilight_self = this;
+
+        this.sizer.render(this.app, this);
+        this.sizer.attachEvents(this.app, this, '.gameboard');
+
+      }
+
+    } catch (err) {}
 
   }
 
@@ -235,8 +281,49 @@ class Hearts extends GameTemplate {
 
       if (mv[0] === "newround") {
 	console.log("new round...");
+	this.game.queue.push("play\t2");
+	this.game.queue.push("play\t1");
 	this.game.queue.push("ACKNOWLEDGE\tThis is the start of a new Round");
-	this.game.queue.splice(qe, 1);
+
+	//
+	// if we don't splice, we'll loop endlessly
+	//
+	//this.game.queue.splice(qe, 1);
+
+	return 1;
+      }
+
+      if (mv[0] === "play") {
+
+	let player_to_go = parseInt(mv[1]);
+	let hearts_self = this;
+
+	if (this.game.player == player_to_go) {
+	  this.updateStatusAndListCards("Select a Card", this.game.deck[0].hand, function(card) {
+
+alert(`You picked: ${card}`);
+
+	    this.addMove("resolve");
+	    this.addMove(`NOTIFY\tPlayer ${this.game.player} picked card ${this.game.deck[0].cards[card].name}`);
+	    this.endTurn();
+	  });
+	} else {
+	  this.updateStatus(`Player ${player_to_go} is taking their turn`);
+	}
+
+	//
+	// STOP EXECUTION
+	//
+	return 0;
+      }
+
+      //
+      // WE RELOAD AND HIT PLAYER X moving, and pause again, so if we want
+      // to keep going deeper into the queue, PLAYER X should tell us to 
+      // remove their move.
+      //
+      if (mv[0] === "resolve") {
+	this.game.queue.splice(qe-1, 2);
 	return 1;
       }
 
@@ -316,7 +403,28 @@ class Hearts extends GameTemplate {
 
   }
 
+  returnCardImage(cardidx) {
 
+    let c = null;
+
+    for (let z = 0; c == undefined && z < this.game.deck.length; z++) {
+      c = this.game.deck[z].cards[cardidx];
+      if (c == undefined) { c = this.game.deck[z].discards[cardidx]; }
+      if (c == undefined) { c = this.game.deck[z].removed[cardidx]; }
+    }
+
+    //
+    // card not found
+    //
+    if (c == undefined) {
+      return '<div class="noncard">'+cardidx+'</div>';
+    }
+
+    return `<img class="cardimg showcard" id="${cardidx}" src="/${this.returnSlug()}/img/cards/${c.name}" />`;
+
+
+
+  }
 
 
 
