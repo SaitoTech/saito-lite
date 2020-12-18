@@ -49,7 +49,7 @@ module.exports = ChatBox = {
 	  }
 
   }
-        document.querySelectorAll('img.img-prev').forEach(img => { console.log('sucess');
+        document.querySelectorAll('img.img-prev').forEach(img => {
           img.addEventListener('click', window.imgPop(img));
         });
         chat_self.scrollToBottom(group_id);
@@ -342,7 +342,6 @@ return;
           chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(new_message_block, mod);
         }
         // add window.imgPoP to all images in chat_box_main ...
-        console.log('HERE === ' + message);
         document.querySelectorAll('.img-prev').forEach(img => {
           img.addEventListener('click', window.imgPop(img));
         });
