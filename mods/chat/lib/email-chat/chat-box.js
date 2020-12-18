@@ -338,12 +338,14 @@ return;
           chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(new_message_block, mod);
         }
         // add window.imgPoP to all images in chat_box_main ...
-
-        document.querySelectorAll('.chat-box-main .img-prev').forEach(img => {
+        console.log('HERE === ' + message);
+        document.querySelectorAll('.img-prev').forEach(img => {
           img.addEventListener('click', window.imgPop(img));
         });
         this.scrollToBottom(message.group_id);
-      } catch (err) { }
+      } catch (err) {
+        console.log('Error @ chat-box.js | addMessageToDOM\n ERROR: ' + err);
+      }
     },
 
 
