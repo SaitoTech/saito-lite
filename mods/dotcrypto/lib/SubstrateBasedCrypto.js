@@ -47,7 +47,8 @@ class SubstrateBasedCrypto extends ModTemplate {
     await this._api.isReady;
     return this._api;
   }
-  // address can be any format, DOT, KSM, or Substrate.
+  // Forces input address into the desired format.
+  // Input address can be any format, DOT, KSM, or Substrate.
   // https://polkadot.js.org/docs/api/start/create
   getFormattedAddress(address, format = "polkadot") {
     // https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)

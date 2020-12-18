@@ -23,40 +23,36 @@ module.exports = ChatList = {
     attachEvents(app, mod) {
 
       Array.from(document.getElementsByClassName('chat-row')).forEach(row => {
-	row.onclick = (e) => {
+        row.onclick = (e) => {
 
-	  let group_id = document.getElementById(e.currentTarget.id).getAttribute("data-id");
+          let group_id = document.getElementById(e.currentTarget.id).getAttribute("data-id");
 
-	  for (let i = 0; i < mod.groups.length; i++) {
-	    if (mod.groups[i].id === group_id) {
-	      let active_group = mod.groups[i];
-
-	      ChatRoom.render(app, mod, active_group);
-	      ChatRoom.attachEvents(app, mod);
-
-	    }
-	  }
-	}
+          for (let i = 0; i < mod.groups.length; i++) {
+            if (mod.groups[i].id === group_id) {
+              let active_group = mod.groups[i];
+              ChatRoom.render(app, mod, active_group);
+              ChatRoom.attachEvents(app, mod);
+            }
+          }
+        }
       });
 
-
       document.getElementById('chat-nav-add-contact').onclick = () => {
-	mod.add_user_modal.render(app, mod);
-	mod.add_user_modal.attachEvents(app, mod);
+        mod.add_user_modal.render(app, mod);
+        mod.add_user_modal.attachEvents(app, mod);
       };
 
       app.modules.respondTo("chat-navbar").forEach(mod => {
         mod.respondTo("chat-navbar").render(app, mod);
         mod.respondTo("chat-navbar").attachEvents(app, mod);
       });
-
+      
       document.querySelector('#chat.create-button').onclick = () => this.toggleChatNav();
-
     },
 
     toggleChatNav() {
-        let chat_nav = document.getElementById('chat-nav');
-        chat_nav.style.display = chat_nav.style.display == 'none' ? 'flex' : 'none';
+      let chat_nav = document.getElementById('chat-nav');
+      chat_nav.style.display = chat_nav.style.display == 'none' ? 'flex' : 'none';
     }
 
 }

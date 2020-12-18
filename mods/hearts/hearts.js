@@ -72,30 +72,30 @@ class Hearts extends GameTemplate {
 
       this.game.state = this.returnState();
 
-      this.initializeDice();
+      //this.initializeDice();
 
       this.game.queue.push("newround");
       this.game.queue.push("READY");
       this.game.queue.push("init");
 
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
+      this.game.queue.push("DEAL\t1\t4\t13");
+      this.game.queue.push("DEAL\t1\t3\t13");
+      this.game.queue.push("DEAL\t1\t2\t13");
+      this.game.queue.push("DEAL\t1\t1\t13");
+      this.game.queue.push("DECKENCRYPT\t1\t4");
+      this.game.queue.push("DECKENCRYPT\t1\t3");
       this.game.queue.push("DECKENCRYPT\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t1");
+      this.game.queue.push("DECKXOR\t1\t4");
+      this.game.queue.push("DECKXOR\t1\t3");
+      this.game.queue.push("DECKXOR\t1\t2");
+      this.game.queue.push("DECKXOR\t1\t3");
       this.game.queue.push("DECKXOR\t1\t2");
       this.game.queue.push("DECKXOR\t1\t1");
       this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
-
-
     }
 
   }
-
-
-
-  
-
-
 
   //
   // initialize HTML (overwrites game template stuff, so include...)
@@ -278,43 +278,48 @@ class Hearts extends GameTemplate {
 
       let qe = this.game.queue.length - 1;
       let mv = this.game.queue[qe].split("\t");
-
+      // TODO: make a cute little thing that as long as players are set up 
+      // we can restart the game without going thru arcade...
+      // if (mv[0) === "NEWGAME") {
+      //   this.game = this.newGame(game_id);
+      //   this.initializeGame();
+      // }
       if (mv[0] === "newround") {
-	console.log("new round...");
-	this.game.queue.push("play\t2");
-	this.game.queue.push("play\t1");
-	this.game.queue.push("ACKNOWLEDGE\tThis is the start of a new Round");
+        console.log("new round...");
+        this.game.queue.push("play\t2");
+        this.game.queue.push("play\t1");
+        this.game.queue.push("ACKNOWLEDGE\tThis is the start of a new Round");
 
-	//
-	// if we don't splice, we'll loop endlessly
-	//
-	//this.game.queue.splice(qe, 1);
+        //
+        // if we don't splice, we'll loop endlessly
+        //
+        //this.game.queue.splice(qe, 1);
 
-	return 1;
+        return 1;
       }
 
       if (mv[0] === "play") {
 
-	let player_to_go = parseInt(mv[1]);
-	let hearts_self = this;
+        let player_to_go = parseInt(mv[1]);
+        let hearts_self = this;
 
-	if (this.game.player == player_to_go) {
-	  this.updateStatusAndListCards("Select a Card", this.game.deck[0].hand, function(card) {
+        if (this.game.player == player_to_go) {
+          this.updateStatusAndListCards("Select a Card", this.game.deck[0].hand, function(card) {
 
 alert(`You picked: ${card}`);
 
-	    this.addMove("resolve");
-	    this.addMove(`NOTIFY\tPlayer ${this.game.player} picked card ${this.game.deck[0].cards[card].name}`);
-	    this.endTurn();
-	  });
-	} else {
-	  this.updateStatus(`Player ${player_to_go} is taking their turn`);
-	}
+            this.addMove("resolve");
+            this.addMove(`NOTIFY\tPlayer ${this.game.player} picked card ${this.game.deck[0].cards[card].name}`);
+            this.endTurn();
+          });
+        } else {
+          this.updateStatus(`Player ${player_to_go} is taking their turn`);
+        }
 
-	//
-	// STOP EXECUTION
-	//
-	return 0;
+        //
+        // STOP EXECUTION
+        //
+        return 0;
       }
 
       //
@@ -323,14 +328,14 @@ alert(`You picked: ${card}`);
       // remove their move.
       //
       if (mv[0] === "resolve") {
-	this.game.queue.splice(qe-1, 2);
-	return 1;
+        this.game.queue.splice(qe-1, 2);
+        return 1;
       }
 
       if (mv[0] === "init") {
-	console.log("sometimes we can handle init stuff in queue...");
-	this.game.queue.splice(qe, 1);
-	return 1;
+        console.log("sometimes we can handle init stuff in queue...");
+        this.game.queue.splice(qe, 1);
+        return 1;
       }
 
 
