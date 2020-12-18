@@ -514,7 +514,7 @@ img.banner-logo {
 
 .intro {
   background-color: #fffc;
-  padding: 1em 0;
+  padding: 1em 7em 0;
 }
 
 .intro-box {
@@ -922,7 +922,7 @@ button:focus {
   color: var(--saito-skyline-grey);
   height: 5em;
   z-index: 9;
-  right: 240px;
+  left: calc(50% - 400px);
   top: 0;
   align-items: center;
   transition: all ease-in 0.1s;
@@ -1098,6 +1098,15 @@ button:focus {
     display: flex;
     flex-direction: column-reverse;
   }
+
+  .intro {
+    background-color: #fffc;
+    padding: 1em 0;
+  }
+
+  .header-nav {
+    left: 200px;
+  }
   .title-container {
     justify-self: center;
     margin: 0 auto;
@@ -1139,31 +1148,7 @@ button:focus {
   }
 }
 @media only screen and (max-width: 1200px) {
-  .header-nav i {
-    display: block;
-  }
-  .header-nav a {
-    display: none;
-  }
 
-  .header-nav:hover {
-    display: grid;
-    text-align: right;
-    gap: 1em;
-    grid-template-columns: auto;
-    margin: 2em 0;
-    border-right: 1px solid #fff;
-    right: 250px;
-    height: unset;
-    background: linear-gradient(90deg, rgb(247 31 61 / 50%), rgb(247 31 61 / 75%));
-    padding: 2em 1em;
-  }
-  .header-nav:hover a {
-    display: block;
-  }
-  .header-nav:hover i {
-    display: none;
-  }
   .project-components {
     gap: 1em;
     grid-template-columns: 1fr 1fr;
@@ -1175,6 +1160,33 @@ button:focus {
 
   .benefits-grid {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .header-nav i {
+    display: block;
+  }
+  .header-nav a {
+    display: none;
+  }
+  .header-nav:hover {
+    display: grid;
+    text-align: right;
+    gap: 1em;
+    grid-template-columns: auto;
+    margin: 2em 0;
+    border-right: 1px solid #fff;
+    right: 300px;
+    height: unset;
+    background: linear-gradient(90deg, rgb(247 31 61 / 50%), rgb(247 31 61 / 75%));
+    padding: 2em 1em;
+  }
+  .header-nav:hover a {
+    display: block;
+  }
+  .header-nav:hover i {
+    display: none;
   }
 }
 
