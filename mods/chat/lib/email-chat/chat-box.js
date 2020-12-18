@@ -48,7 +48,10 @@ module.exports = ChatBox = {
 
 	  }
 
-	}
+  }
+        document.querySelectorAll('img.img-prev').forEach(img => { console.log('sucess');
+          img.addEventListener('click', window.imgPop(img));
+        });
         chat_self.scrollToBottom(group_id);
      });
 
@@ -226,7 +229,8 @@ module.exports = ChatBox = {
         app.browser.addDragAndDropFileUploadToElement(el.id, function(filesrc) {
 
 	  let group_id = el.id.split('chat-box-main-')[1];
-	  let img = document.createElement('img'); 
+    let img = document.createElement('img');
+              img.classList.add('img-prev');
               img.src = filesrc;
 
           let newtx = mod.createMessage(group_id, img.outerHTML);
