@@ -23,6 +23,9 @@ class WestieCryptoServer extends ModTemplate {
     this.keypair = null;
     this.keyring = null;
     this.dotcryptomod = null;
+    // TODO: pendingtx only supports on user at a time!! We need to have a map
+    // of these for each user!!
+    this.pendingTx = null;
   }
   initialize(app) {
     this.load();
@@ -30,16 +33,16 @@ class WestieCryptoServer extends ModTemplate {
       const wsProvider = new WsProvider(this.endpoint);
       this._api = new ApiPromise({ provider: wsProvider });
       this._api.on('connected', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider connected');
+        console.log(this.description + ' WestieCryptoServer Socket Provider connected');
       });
       this._api.on('disconnected', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider disconnected');
+        console.log(this.description + ' WestieCryptoServer Socket Provider disconnected');
       });
       this._api.on('ready', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider ready');
+        console.log(this.description + ' WestieCryptoServer Socket Provider ready');
       });
       this._api.on('error', (stream) => {
-        console.log(this.description + ' Polkadot Socket Provider error');
+        console.log(this.description + ' WestieCryptoServer Socket Provider error');
       });
     }
     
@@ -86,8 +89,9 @@ class WestieCryptoServer extends ModTemplate {
     return this._api;
   }
   webServer(app, expressapp, express) {
-
+    super.webServer(app, expressapp, express);
     expressapp.get("/" + this.name + "/getbalance/:address/:sig", async (req, res) => {
+      console.log("GET /" + this.name + "/getbalance/:address/:sig");
       // TODO: Authorize the signature!
       if (req.params.address == null) {
         //TODO: send a 403 or w/e
@@ -99,15 +103,51 @@ class WestieCryptoServer extends ModTemplate {
       }
       let api = await this.getApi();
       const { nonce, data: balance } = await api.query.system.account(req.params.address);
-      console.log("GET /" + this.name + "/getbalance/:address/:sig");
-      console.log(req.params.address);
-      console.log(balance);
-      console.log(balance.free);
       res.status(200);
       res.write(JSON.stringify({balance: balance.free }));
       res.end();
     });
-    super.webServer(app, expressapp, express);
+    expressapp.get("/" + this.name + "/buildtx/:from/:to/:amount", async (req, res) => {
+      console.log("GET /" + this.name + "/buildtx");
+      console.log(req.params);
+      console.log(req.params.from);
+      let api = await this.getApi();
+      this.pendingTx = await api.tx.balances.transfer(req.params.to, req.params.howMuch);
+      //console.log(this.pendingTx);
+      const { nonce, data: balance } = await api.query.system.account(req.params.from);
+      //const nonce = await api.query.system.accountNonce('5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY');
+      this.pendingSignable = api.createType('SignerPayload', {
+        method: this.pendingTx,
+        nonce,
+        genesisHash: api.genesisHash,
+        blockHash: api.genesisHash,
+        runtimeVersion: api.runtimeVersion,
+        version: api.extrinsicVersion
+      });
+      this.pendingExtrinsicPayload = api.createType('ExtrinsicPayload', this.pendingSignable.toPayload(), { version: api.extrinsicVersion });
+      const hexPayload = this.pendingExtrinsicPayload.toHex();
+      res.status(200);
+      res.write(JSON.stringify({hexPayload: hexPayload}));
+      res.end();
+    });
+    
+    expressapp.get("/" + this.name + "/send/:from/:signature", async (req, res) => {
+      console.log("GET /" + this.name + "/send");
+      console.log(req.params.signature);
+      try {
+        // const address = this.keypair.address;
+        this.pendingTx.addSignature(req.params.from, req.params.signature, this.pendingExtrinsicPayload);
+        // // send the transaction now that is is signed
+        const hash = await this.pendingTx.send();
+        console.log("result");
+        console.log(hash);
+        res.status(200);
+        res.write(JSON.stringify({result: result }));
+        res.end();
+      } catch (error) {
+        console.error(error);
+      }
+    });
   }
 }
 module.exports = WestieCryptoServer;

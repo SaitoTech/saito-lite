@@ -1,6 +1,8 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const { Keyring, decodeAddress, encodeAddress, createPair } = require('@polkadot/keyring');
+const { u8aToHex } = require('@polkadot/util');
+
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { randomBytes } = require('crypto');
 const EventEmitter = require('events');
@@ -77,9 +79,6 @@ class WestieCryptoClient extends ModTemplate {
   }
   async onConfirmation(blk, tx, conf, app) {
     if (conf == 0 && !app.BROWSER) {
-      
-      console.log("DotCryptoRouter onConfirmation");
-      console.log(tx);
       let authorizationTime = Date.now() + 24*60*1000;
       this.optionsStorage[tx.transaction.from[0].add] = authorizationTime;
       this.save();
@@ -92,11 +91,41 @@ class WestieCryptoClient extends ModTemplate {
     // TODO: Send a signature!
     let response = await fetch("/" + this.serverName + "/getbalance/" + this.getAddress() + "/dummiesig");
     let responseObj = await response.json();
-    console.log(responseObj);
     return responseObj.balance;
   }
-  async transfer(howMuch, to) {
+  async transfer(amount, to) {
+    console.log("Transfer...");
+    const buildtxResponse = await fetch("/" + this.serverName + "/buildtx/" + this.getAddress() + "/" + to + "/" + amount);
+    let buildtxResponseObj = await buildtxResponse.json();
+    console.log("buildtxResponse");
+    console.log(buildtxResponse);
+    console.log(buildtxResponseObj);
+    // console.log(buildtxResponseObj.signable);
+    // console.log(buildtxResponseObj.extrinsicPayload);
+    console.log(buildtxResponseObj.hexPayload);
+    let api = new ApiPromise({ provider: new WsProvider("ws://1.1.1.1") });
+    // re-create the payload from the hex (we are assuming this is "somewhere else now")
+    // TODO: send payload.version from the server....
+    const payload = api.createType('ExtrinsicPayload', buildtxResponseObj.hexPayload, { version: 4 });
+    // sign the actual payload
+    const signature = this.keypair.sign(payload.toU8a(true));
+    // convert signature back to hex to transfer back to the original
+    const sigHex = u8aToHex(signature);
+    // we also want the address of the signer to put inside process 1
+    console.log("sigHex");
+    console.log(sigHex);
+    // const { signature } = buildtxResponseObj.extrinsicPayload.sign(this.keypair);
+    const sendResponse = await fetch("/" + this.serverName + "/send/" + this.getAddress() + "/" + sigHex);
+    console.log("sendResponse");
+    console.log(sendResponse);
+    // const signedTx = await buildtxResponseObj.signAsync(this.keypair);
+    console.log("signedTx");
+    console.log(signedTx);
     
+    
+    
+    
+    // let response = await fetch("/" + this.serverName + "/transfer");
   }
   
   save() {
