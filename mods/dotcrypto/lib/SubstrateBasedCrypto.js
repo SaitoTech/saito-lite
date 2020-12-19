@@ -43,6 +43,38 @@ class SubstrateBasedCrypto extends ModTemplate {
     }
     return null;
   }
+  
+  initialize(app) {
+    if(app.BROWSER) {
+      super.initialize(app);
+      this.load();
+      const wsProvider = new WsProvider(this.endpoint);
+      this._api = new ApiPromise({ provider: wsProvider });
+      this._api.on('connected', (stream) => {
+        //console.log(this.description + ' Polkadot Socket Provider connected');
+      });
+      this._api.on('disconnected', (stream) => {
+        //console.log(this.description + ' Polkadot Socket Provider disconnected');
+      });
+      this._api.on('ready', (stream) => {
+        //console.log(this.description + ' Polkadot Socket Provider ready');
+      });
+      this._api.on('error', (stream) => {
+        //console.log(this.description + ' Polkadot Socket Provider error');
+      });
+      this.keyring = new Keyring({ type: 'ed25519'});
+      this.keyring.setSS58Format(0);
+      if(!this.optionsStorage.keypair) {
+        let keypair = this.keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
+        this.optionsStorage.keypair = keypair.toJson();
+        this.save();
+      }
+      this.keypair = this.keyring.addFromJson(this.optionsStorage.keypair);  
+      this.keypair.decodePkcs8();
+      // TODO
+      //this.eventEmitter.emit("balance_change")
+    }
+  }
   async getApi() {
     await this._api.isReady;
     return this._api;
@@ -84,35 +116,6 @@ class SubstrateBasedCrypto extends ModTemplate {
       this.optionsStorage = moduleOptions.storage;
     } else {
       throw "Module Not Installed: " + this.name;
-    }
-  }
-  initialize(app) {
-    if(app.BROWSER) {
-      super.initialize(app);
-      this.load();
-      const wsProvider = new WsProvider(this.endpoint);
-      this._api = new ApiPromise({ provider: wsProvider });
-      this._api.on('connected', (stream) => {
-        //console.log(this.description + ' Polkadot Socket Provider connected');
-      });
-      this._api.on('disconnected', (stream) => {
-        //console.log(this.description + ' Polkadot Socket Provider disconnected');
-      });
-      this._api.on('ready', (stream) => {
-        //console.log(this.description + ' Polkadot Socket Provider ready');
-      });
-      this._api.on('error', (stream) => {
-        //console.log(this.description + ' Polkadot Socket Provider error');
-      });
-      this.keyring = new Keyring({ type: 'ed25519'});
-      this.keyring.setSS58Format(0);
-      if(!this.optionsStorage.keypair) {
-        let keypair = this.keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
-        this.optionsStorage.keypair = keypair.toJson();
-        this.save();
-      }
-      this.keypair = this.keyring.addFromJson(this.optionsStorage.keypair);  
-      this.keypair.decodePkcs8();
     }
   }
 }

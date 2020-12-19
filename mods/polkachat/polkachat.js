@@ -1,7 +1,8 @@
-var ModTemplate = require('../../lib/templates/modtemplate');
-// const TransferManager = require('./lib/chat-navbar/transfer-manager.js');
+const ModTemplate = require('../../lib/templates/modtemplate');
 const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
-
+const QRScannerTemplate = require('./lib/templates/qrscanner.template');
+const QRShowTemplate = require('./lib/templates/qrshow.template');
+const PolkachatTemplate = require('./lib/templates/polkachat.template');
 
 class Polkachat extends ModTemplate {
 
@@ -17,18 +18,18 @@ class Polkachat extends ModTemplate {
     return this;
   }
   initialize(app){
-    if(app.BROWSER) {
+    if (app.BROWSER) {
       this.qrCodeGenerator = require('../../lib/helpers/qrcode');
       this.overlay = new SaitoOverlay(app, this);
-      this.qrscanner = app.modules.returnModule("QRScanner");  
+      this.qrscanner = app.modules.returnModule("QRScanner");
     }
   }
   respondTo(type=null) {
 
     if (type == "chat-navbar") {
       let obj = {};
-          obj.render = this.renderPolkachat;
-          obj.attachEvents = this.attachEventsPolkachat;
+          obj.render = this.renderPolkachat.bind(this);
+          obj.attachEvents = this.attachEventsPolkachat.bind(this);
       return obj;
     }
     return null;
@@ -36,38 +37,63 @@ class Polkachat extends ModTemplate {
   }
   
   async showQR(app) {
+    this.overlay.showOverlay(app, this, QRShowTemplate(), () => {});
     let address = await app.wallet.getPreferredCryptoAddress();
+    console.log("showQR");
+    console.log(address);
     let qrCode = this.generateQRCode(address);
-    this.overlay.showOverlay(app, mod, TransferManagerTemplate(mod.transfer_mode), () => {});
+    //return new this.qrCodeGenerator(document.getElementById("qrcode"), data);
   }
-  async scanQR (app) {
-    qrscanner.startScanner(polkachat_transfer_manager_self.handleDecodedMessage);
+  scanQR (app) {
+    try {
+      this.overlay.showOverlay(app, this, QRScannerTemplate(), () => {});
+      this.qrscanner.startScanner(this.handleDecodedMessage, document.getElementById("scanner-holder"));  
+    } catch(er){
+      salert("Error opening qrscanner. Perhaps you need to install the QRScanner module...");
+      console.log(er);
+    }
   }
+  
+  handleDecodedMessage(msg) {
+    
+    console.log("handleDecodedMessage");
+    console.log(msg);
+    // 
+    // let mySaitoAddress = app.wallet.returnPublicKey();
+    // let newtx = app.wallet.returnBalance() > 0 ?
+    //     app.wallet.createUnsignedTransactionWithDefaultFee(mySaitoAddress, 0.0) :
+    //     app.wallet.createUnsignedTransaction(mySaitoAddress, 0.0, 0.0);
+    // 
+    // newtx.msg.module = "CryptoRouter";
+    // newtx.msg.package = {
+    //   method: "",
+    //   args = []
+    // }
+    // newtx = app.wallet.signTransaction(newtx);
+    // 
+    // app.network.propagateTransaction(newtx);
+  }  
   generateQRCode(data) {
     return new this.qrCodeGenerator(document.getElementById("qrcode"), data);
   }
 
   renderPolkachat(app, mod) {
     if (!document.getElementById("polkachat-nav-transfer-out")) {
-      app.browser.addElementToElement(`<li id="polkachat-nav-transfer-out" class="chat-nav-row"><i class="fas fa-sign-out-alt"></i></i>Send Polkadot</li><li id="polkachat-nav-transfer-in" class="chat-nav-row"><i class="fas fa-sign-in-alt"></i></i>Receive Polkadot</li>`, document.getElementById("chat-navbar"));
+      app.browser.addElementToElement(PolkachatTemplate(), document.getElementById("chat-navbar"));
     }
   }
 
   attachEventsPolkachat(app, mod) {
-    document.getElementById('polkachat-nav-transfer-out').onclick = () => {
-      this.scanQR(app);
-      // this.transfer_mode = "scanner";
-      // document.getElementById('chat-nav').style.display = 'none';
-      // TransferManager.render(app, this);
-      // TransferManager.attachEvents(app, this);
-    };
-    document.getElementById('polkachat-nav-transfer-in').onclick = () => {
-      this.showQR(app);
-      // this.transfer_mode = "qrcode";
-      // document.getElementById('chat-nav').style.display = 'none';
-      // TransferManager.render(app, this);
-      // TransferManager.attachEvents(app, this);
-    };
+    document.querySelectorAll("#polkachat-nav-transfer-out").forEach((button, i) => {
+      button.onclick = () => {
+        this.scanQR(app);
+      };
+    });
+    document.querySelectorAll("#polkachat-nav-transfer-in").forEach((button, i) => {
+      button.onclick = () => {
+        this.showQR(app);
+      };
+    });
   }
 }
 

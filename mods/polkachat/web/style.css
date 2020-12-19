@@ -1,0 +1,41 @@
+.saito-overlay {
+  width: 80vw;
+  height: 80vh;
+  
+}
+
+.video-container {
+  position: relative;
+  width: 80vw;
+  height: 80vh;
+}
+
+.video-container video {
+  
+}
+.scanner-holder {
+    border: 3px solid var(--saito-red); */
+    /* margin: 2vh auto; */
+    /* height: 80vh; */
+    /* width: 80%;
+}
+/* .video-container {
+  background-color: black;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.video-container video {
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+} */

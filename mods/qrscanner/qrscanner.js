@@ -93,7 +93,7 @@ class QRScanner extends ModTemplate {
 
 
 
-  startScanner(mycallback=null) {
+  startScanner(mycallback=null, where = document.body) {
 
     if (this.app.BROWSER == 0) { return; }
     if (!document) { return; }
@@ -102,7 +102,7 @@ class QRScanner extends ModTemplate {
     this.scanner_callback = null;
     if (mycallback) { this.scanner_callback = mycallback; }
 
-    document.body.innerHTML = this.returnScannerHTML();
+    where.innerHTML = this.returnScannerHTML();
 
     let scanner_self = this;
 
