@@ -94,7 +94,7 @@ class SubstrateBasedCrypto extends ModTemplate {
   async getBal(){
     let api = await this.getApi();
     const { nonce, data: balance } = await api.query.system.account(this.keypair.publicKey);
-    return balance.free;  
+    return balance.free;
   }
   async transfer(howMuch, to) {
     let api = await this.getApi();

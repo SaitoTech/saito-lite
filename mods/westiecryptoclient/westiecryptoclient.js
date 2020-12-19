@@ -9,23 +9,25 @@ const EventEmitter = require('events');
 // TODO subscribe to and fire balance_change events in the eventEmitter
 // TODO support of setting confirmations
 // TODO esitmate fees
-class WestieCryptoRouter extends ModTemplate {
-super(app, 'WESTIE', 'ws://178.128.181.212:9932');
+class WestieCryptoClient extends ModTemplate {
   constructor(app) {
     super(app);
     this.ticker = "WESTIER";
-    this.name = 'WestieCryptoRouter';
-    this.description = 'Polkadot at Saito Endpoint';
+    this.name = 'WestieCryptoClient';
+    this.serverName = "WestieCryptoServer";
+    this.description = 'Polkadot through Saito Endpoint';
     this.categories = "Cryptocurrency";
     this.app = app;
-    this.endpoint = "ws://178.128.181.212:9932";
     this._api = null; // treat as private, please use getApi to access
     this.optionsStorage = {};
+    this.keypair = null;
+    this.keyring = null;
+    this.eventEmitter = new EventEmitter();
     this.dotcryptomod = null;
   }
   initialize(app) {
+    this.load();
     this.dotcryptomod = app.modules.returnModule("DOTCrypto");
-    console.log(this.dotcryptomod);
     try {
       this.dotCryptoRespondTo = this.dotcryptomod.respondTo("is_cryptocurrency");
     } catch(err) {
@@ -38,14 +40,23 @@ super(app, 'WESTIE', 'ws://178.128.181.212:9932');
         // TODO:
         // - Dont send 0.0 
         // - Send the transaction/authorization request to the node that's actually running DOTCryptoRouter
+        let mySaitoAddress = app.wallet.returnPublicKey();
         let newtx = app.wallet.createUnsignedTransaction(mySaitoAddress, 0.0, 0.0);
         // Send a transaction to this module for authorization
-        newtx.msg.module = this.name;
+        newtx.msg.module = this.serverName;
+        //newtx.msg.
+        app.network.propagateTransaction(newtx);
       }  
-    }
-    // this.dotCryptoRespondTo.eventEmitter.on("balance_change", (balance) => {
-    //   this.eventEmitter.emit("balance_change", balance);
-    // });
+      this.keyring = new Keyring({ type: 'ed25519'});
+      this.keyring.setSS58Format(0);
+      if(!this.optionsStorage.keypair) {
+        let keypair = this.keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
+        this.optionsStorage.keypair = keypair.toJson();
+        this.save();
+      }
+      this.keypair = this.keyring.addFromJson(this.optionsStorage.keypair);  
+      this.keypair.decodePkcs8();
+    } 
   }
   respondTo(type = "") {
     if (type == "is_cryptocurrency") {
@@ -62,15 +73,10 @@ super(app, 'WESTIE', 'ws://178.128.181.212:9932');
         setConfirmationThreshold: null, // TODO: Implement me!
       }
     }
-    if (type == "is_saito_infrastructure") {
-      return {
-        openPort: this.openPort.bind(this),
-      }
-    }
     return null;
   }
   async onConfirmation(blk, tx, conf, app) {
-    if (conf == 0) {
+    if (conf == 0 && !app.BROWSER) {
       
       console.log("DotCryptoRouter onConfirmation");
       console.log(tx);
@@ -79,20 +85,15 @@ super(app, 'WESTIE', 'ws://178.128.181.212:9932');
       this.save();
     }
   }
-  
-  openPort() {
-    // let newtx = app.wallet.returnBalance() > 0 ?
-    //     app.wallet.createUnsignedTransactionWithDefaultFee(mySaitoAddress, 0.0) :
-    //     app.wallet.createUnsignedTransaction(mySaitoAddress, 0.0, 0.0);
-
-    //newtx.msg.module = "CryptoRouter";
-    //app.network.propagateTransaction(newtx);
-  }
   getAddress() {
-    
+    return this.keypair.address;
   }
   async getBal(){
-    
+    // TODO: Send a signature!
+    let response = await fetch("/" + this.serverName + "/getbalance/" + this.getAddress() + "/dummiesig");
+    let responseObj = await response.json();
+    console.log(responseObj);
+    return responseObj.balance;
   }
   async transfer(howMuch, to) {
     
@@ -116,51 +117,5 @@ super(app, 'WESTIE', 'ws://178.128.181.212:9932');
       throw "Module Not Installed: " + this.name;
     }
   }
-  
-  async getApi() {
-    await this._api.isReady;
-    
-    this._api = new ApiPromise({ provider: wsProvider });
-    this._api.on('connected', (stream) => {
-      //console.log(this.description + ' Polkadot Socket Provider connected');
-    });
-    this._api.on('disconnected', (stream) => {
-      //console.log(this.description + ' Polkadot Socket Provider disconnected');
-    });
-    this._api.on('ready', (stream) => {
-      //console.log(this.description + ' Polkadot Socket Provider ready');
-    });
-    this._api.on('error', (stream) => {
-      //console.log(this.description + ' Polkadot Socket Provider error');
-    });
-    
-    return this._api;
-    
-  }
-  webServer(app, expressapp, express) {
-    expressapp.get(this.name + '/getbalance', function (req, res) {
-      // app.modules.getRespondTos("send-reward").forEach((itnerface, i) => {
-      //   itnerface.makePayout(req.query.pubkey, 10000);
-      // 
-      // });
-      async getBal(){
-        let api = await this.getApi();
-        const { nonce, data: balance } = await api.query.system.account(this.keypair.publicKey);
-        return balance.free;  
-      }
-      
-      res.status(200);
-      res.write(JSON.stringify({balance: this.dotCryptoRespondTo.getBalance() }));
-      res.end();
-    });
-    expressapp.get("/getserverkey", function(req, res){
-      res.type('application/json');
-      //res.setHeader('Content-type', 'text/html');
-      res.status(200);
-      res.write(JSON.stringify({pubkey: app.wallet.returnPublicKey()}));
-      res.end();
-    });
-    super.webServer(app, expressapp, express);
-  }
 }
-module.exports = WestieCryptoRouter;
+module.exports = WestieCryptoClient;
