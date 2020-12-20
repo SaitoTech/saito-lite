@@ -132,6 +132,7 @@ class Post extends ModTemplate {
     //
     // fetch posts from server
     //
+console.log("FETCHING REQUEST FROM SERVER: " + (new Date().getTime()));
     let sql = `SELECT id, children, img, tx FROM posts WHERE parent_id = "" ORDER BY ts DESC`;
     this.sendPeerDatabaseRequestWithFilter(
 
@@ -141,6 +142,7 @@ class Post extends ModTemplate {
 
         (res) => {
           if (res) {
+console.log("REQUEST FETCHED: " + (new Date().getTime()));
             if (res.rows) {
               for (let i = 0; i < res.rows.length; i++) {
                 this.posts.push(new saito.transaction(JSON.parse(res.rows[i].tx)));
