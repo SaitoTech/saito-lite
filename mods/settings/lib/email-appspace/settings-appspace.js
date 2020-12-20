@@ -24,6 +24,8 @@ module.exports = SettingsAppspace = {
 
   attachEvents(app, mod) {
 
+    try {
+
     let settings_appspace = document.querySelector(".settings-appspace");
     if (settings_appspace) {
       for (let i = 0; i < app.modules.mods.length; i++) {
@@ -47,8 +49,6 @@ module.exports = SettingsAppspace = {
       mod.modal_register_username.render(app, mod);
       mod.modal_register_username.attachEvents(app, mod);
     }
-
-
 
     document.getElementById("privatekey").onclick = function (e) {
       if (this.private_key_visible == 1) {
@@ -75,7 +75,6 @@ module.exports = SettingsAppspace = {
 	}
       }
     }
-
 
  
     //
@@ -111,16 +110,12 @@ module.exports = SettingsAppspace = {
       };
     });
 
-
-
     document.getElementById('backup-account-btn')
       .addEventListener('click', (e) => {
         app.wallet.backupWallet();
       });
 
-
     document.getElementById('restore-account-btn').onclick = async(e) => {
-      
 
         //let confirm_password = await sconfirm("Did you encrypt this backup with a password. Click cancel if not:");
         let password_prompt = "";
@@ -257,6 +252,10 @@ module.exports = SettingsAppspace = {
       }
 
     };
+
+    } catch (err) {
+console.log("Error in Settings Appspace: " + JSON.stringify(err));
+    }
 
   },
 
