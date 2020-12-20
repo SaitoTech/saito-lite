@@ -158,7 +158,7 @@ console.log("REQUEST FETCHED: " + (new Date().getTime()));
 
         }, 
 
-	(p) => { if (p.services.includes("post")) { return 1; } }
+	() => { if (peer.services.includes("post")) { return 1; } }
     );
   }
 
