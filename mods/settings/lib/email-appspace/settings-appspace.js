@@ -36,19 +36,23 @@ module.exports = SettingsAppspace = {
       }
     }
 
+    try {
     document.getElementById("register-email-btn").onclick = function (e) {
       mod.modal_register_email = new ModalRegisterEmail(app, function() {
       });
       mod.modal_register_email.render(app, mod);
       mod.modal_register_email.attachEvents(app, mod);
     }
+    } catch (err) {}
 
+    try {
     document.getElementById("register-identifier-btn").onclick = function (e) {
       mod.modal_register_username = new ModalRegisterUsername(app, function() {
       });
       mod.modal_register_username.render(app, mod);
       mod.modal_register_username.attachEvents(app, mod);
     }
+    } catch (err) {}
 
     document.getElementById("privatekey").onclick = function (e) {
       if (this.private_key_visible == 1) {
