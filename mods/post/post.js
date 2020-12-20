@@ -132,7 +132,6 @@ class Post extends ModTemplate {
     //
     // fetch posts from server
     //
-console.log("FETCHING REQUEST FROM SERVER: " + (new Date().getTime()));
     let sql = `SELECT id, children, img, tx FROM posts WHERE parent_id = "" ORDER BY ts DESC`;
     this.sendPeerDatabaseRequestWithFilter(
 
@@ -142,7 +141,6 @@ console.log("FETCHING REQUEST FROM SERVER: " + (new Date().getTime()));
 
         (res) => {
           if (res) {
-console.log("REQUEST FETCHED: " + (new Date().getTime()));
             if (res.rows) {
               for (let i = 0; i < res.rows.length; i++) {
                 this.posts.push(new saito.transaction(JSON.parse(res.rows[i].tx)));
@@ -158,7 +156,18 @@ console.log("REQUEST FETCHED: " + (new Date().getTime()));
 
         }, 
 
-	() => { if (peer.services.includes("post")) { return 1; } }
+
+        (p) => {
+
+                if (p.peer.services) {
+                  for (let i = 0; i < p.peer.services.length; i++) {
+                    let s = p.peer.services[i];
+                    if (s.service === "post") { return 1; }
+                  }
+                }
+                return 0;
+        }
+
     );
   }
 
