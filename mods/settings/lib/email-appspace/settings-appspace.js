@@ -26,6 +26,7 @@ module.exports = SettingsAppspace = {
 
     try {
 
+    try {
     let settings_appspace = document.querySelector(".settings-appspace");
     if (settings_appspace) {
       for (let i = 0; i < app.modules.mods.length; i++) {
@@ -35,6 +36,7 @@ module.exports = SettingsAppspace = {
         }
       }
     }
+    } catch (err) {}
 
     try {
     document.getElementById("register-email-btn").onclick = function (e) {
@@ -54,6 +56,7 @@ module.exports = SettingsAppspace = {
     }
     } catch (err) {}
 
+    try {
     document.getElementById("privatekey").onclick = function (e) {
       if (this.private_key_visible == 1) {
       } else {
@@ -61,7 +64,9 @@ module.exports = SettingsAppspace = {
         this.private_key_visible = 1;
       }
     }
+    } catch (err) {}
 
+    try {
     document.getElementById("see-password").onclick = function (e) {
       document.getElementById("privatekey").toggleClass("password");
       if (this.private_key_visible == 1) {
@@ -70,7 +75,9 @@ module.exports = SettingsAppspace = {
 	this.private_key_visible = 1;
       }
     }
+    } catch (err) {}
 
+    try {
     if (document.getElementById("trigger-appstore-btn")) {
       document.getElementById("trigger-appstore-btn").onclick = function (e) {
 	let appstore_mod = app.modules.returnModule("AppStore");
@@ -79,11 +86,12 @@ module.exports = SettingsAppspace = {
 	}
       }
     }
+    } catch (err) {}
 
- 
     //
     // install module (button)
     //
+    try {
     Array.from(document.getElementsByClassName("modules_mods_checkbox")).forEach(ckbx => {
 
       ckbx.onclick = async (e) => {
@@ -113,12 +121,15 @@ module.exports = SettingsAppspace = {
 
       };
     });
+    } catch (err) {}
 
-    document.getElementById('backup-account-btn')
-      .addEventListener('click', (e) => {
-        app.wallet.backupWallet();
-      });
+    try {
+    document.getElementById('backup-account-btn').addEventListener('click', (e) => {
+      app.wallet.backupWallet();
+    });
+    } catch (err) {}
 
+    try {
     document.getElementById('restore-account-btn').onclick = async(e) => {
 
         //let confirm_password = await sconfirm("Did you encrypt this backup with a password. Click cancel if not:");
@@ -187,12 +198,12 @@ module.exports = SettingsAppspace = {
         wallet_reader.readAsBinaryString(selectedFile);
 
       };
+    } catch (err) {}
 
 
 
-
-    document.getElementById('reset-account-btn')
-      .onclick = (e) => {
+    try {
+    document.getElementById('reset-account-btn').onclick = (e) => {
     
         app.wallet.resetWallet();
         app.modules.returnModule('Arcade').onResetWallet();
@@ -208,24 +219,11 @@ module.exports = SettingsAppspace = {
         mod.attachEvents(app, mod);
     
         app.blockchain.resetBlockchain();
-    
     };
+    } catch (err) {}
 
-    // document.getElementById('delete-account-btn')
-    //   .onclick = async (e) => {
-    // 
-    //     await app.storage.resetOptions();
-    //     await salert("Account deleted!");
-    // 
-    //     mod.emails.inbox = [];
-    //     mod.emails.sent = [];
-    //     mod.emails.trash = [];
-    // 
-    //     app.blockchain.resetBlockchain();
-    // 
-    //     window.location = window.location;
-    // };
 
+    try {
     document.getElementById('restore-privatekey-btn').onclick = async (e) => {
 
       await app.storage.resetOptions();
@@ -256,6 +254,7 @@ module.exports = SettingsAppspace = {
       }
 
     };
+    } catch (err) {}
 
     } catch (err) {
 console.log("Error in Settings Appspace: " + JSON.stringify(err));
