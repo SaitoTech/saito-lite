@@ -156,7 +156,9 @@ console.log("REQUEST FETCHED: " + (new Date().getTime()));
 
           this.render();
 
-        }
+        }, 
+
+	(p) => { if (p.services.includes("post")) { return 1; } }
     );
   }
 
