@@ -161,7 +161,7 @@ class Chessgame extends GameTemplate {
 
 console.log("QUEUE IN CHESS: " + JSON.stringify(this.game.queue));
 console.log(JSON.stringify(msg));
-alert("LOOP");
+//alert("LOOP");
 
     if (this.game.queue[this.game.queue.length-1] == "OBSERVER_CHECKPOINT") {
       return;
