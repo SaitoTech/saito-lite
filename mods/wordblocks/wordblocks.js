@@ -118,7 +118,7 @@ class Wordblocks extends GameTemplate {
   initializeGame(game_id) {
 
     // OBSERVER MODE
-    if (this.game.player == 0) { return; }
+    //if (this.game.player == 0) { return; }
 
     this.updateStatus("loading game...");
     this.loadGame(game_id);
@@ -244,6 +244,7 @@ class Wordblocks extends GameTemplate {
           </div>
         `;
       } else {
+if (this.game.player != 0) {
         let opponent = this.game.opponents[op];
         // we do this here
         opponent = this.app.keys.returnIdentifierByPublicKey(opponent, true);
@@ -254,6 +255,7 @@ class Wordblocks extends GameTemplate {
             <span id="score_${this_player}"> ${this.game.score[i]} </span>
           </div>
         `;
+}
       }
     }
 
@@ -1611,6 +1613,17 @@ class Wordblocks extends GameTemplate {
       }
 
       if (mv[0] === "turn") {
+
+	//
+	// observer mode
+	//
+	if (this.game.player == 0) {
+	  this.game.queue.push("OBSERVER_CHECKPOINT");
+          this.game.queue.splice(this.game.queue.length - 1, 1);
+	  return 1;
+	}
+
+
         if (wordblocks_self.checkForEndGame() == 1) {
           return;
         }

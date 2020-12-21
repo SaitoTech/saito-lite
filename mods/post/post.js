@@ -154,7 +154,20 @@ class Post extends ModTemplate {
 
           this.render();
 
+        }, 
+
+
+        (p) => {
+
+                if (p.peer.services) {
+                  for (let i = 0; i < p.peer.services.length; i++) {
+                    let s = p.peer.services[i];
+                    if (s.service === "post") { return 1; }
+                  }
+                }
+                return 0;
         }
+
     );
   }
 

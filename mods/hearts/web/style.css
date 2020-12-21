@@ -1,0 +1,37 @@
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden; 
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main {
+  margin-top: unset;
+  padding: unset;
+}
+
+.gameboard {
+  position: absolute;
+  background-image: url("img/gameboard.jpg");
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.player-info {
+  min-width: 30vh;
+  height: 32vh;
+  bottom: 1vh;
+  left: 50vw;
+  transform: translateX(-50%);
+  width: 16vw;
+  overflow-y: scroll;
+}
+.pile{
+  
+}

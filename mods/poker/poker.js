@@ -65,14 +65,6 @@ class Poker extends GameTemplate {
 
   }
   
-  // requestInterface(type) {
-  //   if (type == "arcade-sidebar") {
-  //     return { title: this.name };
-  //   }
-  //   return null;
-  // }
-
-
 
 
   initializeQueue() {
@@ -318,6 +310,7 @@ class Poker extends GameTemplate {
         }
       }
     }
+
     this.menu.render(app, this);
     this.menu.attachEvents(app, this);
 
@@ -604,6 +597,14 @@ class Poker extends GameTemplate {
             }
             this.game.queue.push("FLIPRESET\t1");
           }
+
+	  //
+	  // observer mode
+	  //
+	  if (this.game.player == 0) {
+            this.game.queue.push("OBSERVER_CHECKPOINT");
+	  }
+
           this.game.state.plays_since_last_raise = 0;
           return 1;
         }
@@ -781,9 +782,6 @@ class Poker extends GameTemplate {
               //
               round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1] / winners.length) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
 
-              //let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]], this.game.state.player_pot[this.game.player - 1]);
-              //newtx = this.app.wallet.signTransaction(newtx);
-              //this.app.network.propagateTransaction(newtx);
             }
           } else {
 
