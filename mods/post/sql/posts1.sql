@@ -9,10 +9,12 @@ CREATE TABLE IF NOT EXISTS posts (
       forum TEXT,
       link TEXT,
       img TEXT,
-      tx TEXT,
+      lite_tx BLOB,
+      tx BLOB,
       ts INTEGER,
       children INTEGER,
       flagged INTEGER ,
-      deleted INTEGER,
+      deleted INTEGER ,
       PRIMARY KEY(id DESC)
 );
+

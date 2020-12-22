@@ -35,6 +35,8 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
 	html += `<img class="post-view-gallery-image" src="${tx.msg.images[i]}" />`;
       }
       html += '</div>';
+    } else {
+      html += '<div id="post-view-gallery" style="display:none" class="post-view-gallery"></div>';
     }
 
     html += `

@@ -6,6 +6,7 @@ const PostViewCommentTemplate = require('./post-view-comment.template');
 module.exports = PostView = {
 
   render(app, mod, sig="") {
+
     mod.overlay = new SaitoOverlay(app, mod);
     mod.overlay.render(app, mod);
     mod.overlay.attachEvents(app, mod);
@@ -14,7 +15,10 @@ module.exports = PostView = {
     //
     // fetch comments from server
     //
-    let sql = `SELECT id, tx FROM posts WHERE thread_id = "${sig}" AND parent_id != "" ORDER BY ts DESC`;
+    // we now fetch parent to show images and stuff
+    //
+    //let sql = `SELECT id, tx FROM posts WHERE thread_id = "${sig}" AND parent_id != "" ORDER BY ts DESC`;
+    let sql = `SELECT id, tx FROM posts WHERE thread_id = "${sig}" ORDER BY ts DESC`;
     mod.sendPeerDatabaseRequestWithFilter(
 
         "Post" ,
@@ -27,16 +31,33 @@ module.exports = PostView = {
               for (let i = 0; i < res.rows.length; i++) {
                 let add_this_comment = 1;
                 let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
+                let txmsg = tx.returnMessage();
                 for (let z = 0; z < mod.comments.length; z++) {
                   if (mod.comments[z].transaction.sig == tx.transaction.sig) { add_this_comment = 0; }
                 }
+	        if (tx.transaction.sig == sig) {
+		  add_this_comment = 0;
+		  try {
+		    document.getElementById("post-view-parent-comment").innerHTML = txmsg.comment;
+		    let gallery = document.getElementById("post-view-gallery");
+		    let html = "";
+    		    if (txmsg.images.length > 0) {
+      		      for (let i = 0; i < tx.msg.images.length; i++) {
+       			 html += `<img class="post-view-gallery-image" src="${tx.msg.images[i]}" />`;
+      		      }
+		      gallery.innerHTML = html;
+		      gallery.style.display = "block";
+    		    }
+		  } catch (err) {
+console.log("error showing comment or gallery");
+		  }
+	        }
                 if (add_this_comment == 1) {
                   tx.originalSig = res.rows[i].id;
                   mod.comments.push(tx);
                 }
               }
               for (let i = 0; i < mod.comments.length; i++) {
-                
                 this.addComment(app, mod, mod.comments[i]);
               }
               this.attachEvents(app, mod, sig);
