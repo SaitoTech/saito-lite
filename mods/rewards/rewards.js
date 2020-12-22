@@ -6,6 +6,7 @@ const RewardsAppSpace = require('./lib/email-appspace/rewards-appspace');
 const RewardsSidebar = require('./lib/arcade-sidebar/arcade-right-sidebar');
 const RewardsSidebarRow = require('./lib/arcade-sidebar/arcade-sidebar-row.template');
 const activities = require('./lib/email-appspace/activities');
+const { last } = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 
 class Rewards extends ModTemplate {
 
@@ -18,6 +19,7 @@ class Rewards extends ModTemplate {
     this.categories = "Core Utilities Finance";
     this.initial = 10;
     this.payoutRatio = 0.95;
+    this.cap = 100;
     this.rewards_publickey = app.options.runtime.rewardsPubkey || "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
     
     this.backupPayout = 50;
@@ -339,13 +341,28 @@ class Rewards extends ModTemplate {
   }
 
   async updateUser(row, tx, ii) {
+    if(row.last_payout_ts != null) {
+      if (row.last_payout_ts >= tx.transaction.ts) {
+        return;
+      }
+    }
     let sql = "";
     let params = {};
     var payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.payoutRatio);
-    if (row.total_spend > 100) {
-      payout = (row.total_spend % 100) > tx.returnFees();
+    //if (row.total_spend > this.cap) {
+    //  payout = (row.total_spend % this.cap) > tx.returnFees();
+    //}
+    
+
+    var lastPayout = row.last_payout_amt;
+    if (lastPayout > this.cap) {
+      lastPayout = this.cap;
     }
-    var newPayout = Math.ceil(row.last_payout_amt / this.payoutRatio);
+    var newPayout = Math.ceil(lastPayout / this.payoutRatio);
+    if(newPayout > this.cap) {
+      newPayout = this.cap;
+    }
+    
     var isGame = 0;
     if (typeof tx.msg.game_id != "undefined") { isGame = 1 };
     var gameOver = 0;
@@ -357,7 +374,7 @@ class Rewards extends ModTemplate {
     if (payout == true) {
       params = {
         $address: row.address,
-        $last_payout_ts: tx.ts,
+        $last_payout_ts: tx.transaction.ts,
         $last_payout_amt: newPayout,
         $total_payout: row.total_payout + newPayout,
         $tx_count: row.tx_count + 1,
