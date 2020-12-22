@@ -3,9 +3,9 @@ const webpack = require('webpack');
 
 
 webpack({
-  //optimization: {
-  //  minimize: false
-  //},
+  optimization: {
+    minimize: false
+  },
   target: 'web',
   node: {
     fs: "empty",

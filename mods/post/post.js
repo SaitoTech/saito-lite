@@ -75,6 +75,9 @@ class Post extends ModTemplate {
     return services;
   }
 
+
+
+
   initializeHTML(app) {
 
     this.header.render(app, this);
@@ -132,7 +135,7 @@ class Post extends ModTemplate {
     //
     // fetch posts from server
     //
-    let sql = `SELECT id, children, img, tx FROM posts WHERE parent_id = "" ORDER BY ts DESC`;
+    let sql = `SELECT id, children, img, lite_tx FROM posts WHERE parent_id = "" ORDER BY ts DESC`;
     this.sendPeerDatabaseRequestWithFilter(
 
         "Post" ,
@@ -143,11 +146,9 @@ class Post extends ModTemplate {
           if (res) {
             if (res.rows) {
               for (let i = 0; i < res.rows.length; i++) {
-                this.posts.push(new saito.transaction(JSON.parse(res.rows[i].tx)));
+                this.posts.push(new saito.transaction(JSON.parse(res.rows[i].lite_tx)));
                 this.posts[this.posts.length-1].children = res.rows[i].children;
                 this.posts[this.posts.length-1].img = res.rows[i].img;
-                // this.posts[i].children = res.rows[i].children;
-                // this.posts[i].img = res.rows[i].img;
               }
             }
           }
@@ -158,15 +159,15 @@ class Post extends ModTemplate {
 
 
         (p) => {
-
-                if (p.peer.services) {
-                  for (let i = 0; i < p.peer.services.length; i++) {
-                    let s = p.peer.services[i];
-                    if (s.service === "post") { return 1; }
-                  }
-                }
-                return 0;
+          if (p.peer.services) {
+            for (let i = 0; i < p.peer.services.length; i++) {
+              let s = p.peer.services[i];
+              if (s.service === "post") { return 1; }
+            }
+          }
+          return 0;
         }
+
 
     );
   }
@@ -236,6 +237,12 @@ class Post extends ModTemplate {
   async receivePostTransaction(tx) {
 
     let txmsg = tx.returnMessage();
+    let pfulltx = JSON.stringify(tx.transaction);
+    let plitetx = new saito.transaction(JSON.parse(JSON.stringify(tx.transaction)));
+	plitetx.msg.comment = "";
+	plitetx.msg.images = [];
+        plitetx = this.app.wallet.signTransaction(plitetx);
+        plitetx = JSON.stringify(plitetx.transaction);
 
     if (txmsg.title == "") { return; }
 
@@ -253,6 +260,7 @@ class Post extends ModTemplate {
 		forum,
 		link,
                 tx, 
+                lite_tx, 
                 ts,
                 children,
                 flagged,
@@ -269,7 +277,8 @@ class Post extends ModTemplate {
 		$ptext ,
 		$pforum ,
 		$plink ,
-		$ptx ,
+		$pfulltx ,
+		$plitetx ,
 		$pts ,
 		$pchildren ,
 		$pflagged ,
@@ -287,7 +296,8 @@ class Post extends ModTemplate {
 	$ptext		: txmsg.comment ,
 	$pforum		: txmsg.forum ,
 	$plink		: txmsg.link ,
-	$ptx		: JSON.stringify(tx.transaction) ,
+	$pfulltx	: pfulltx ,
+	$plitetx	: plitetx ,
 	$pts		: tx.transaction.ts ,
 	$pchildren	: 0 ,
 	$pflagged 	: 0 ,
@@ -295,6 +305,12 @@ class Post extends ModTemplate {
     };
 
     await this.app.storage.executeDatabase(sql, params, "post");
+
+
+    //
+    // save a lite version without the content
+    //
+
 
     //
     // fetch image if needed
@@ -321,7 +337,14 @@ class Post extends ModTemplate {
       
   }
   async receiveEditPostTransaction(tx) {
+
     let txmsg = tx.returnMessage();
+    let pfulltx = JSON.stringify(tx.transaction);   
+    let plitetx = new saito.transaction(JSON.parse(JSON.stringify(tx.transaction)));
+	plitetx.msg.comment = "";
+	plitetx.msg.images = [];
+        plitetx = this.app.wallet.signTransaction(plitetx);
+        plitetx = JSON.stringify(plitetx.transaction);
 
     if (txmsg.title == "") { return; }
 
@@ -371,6 +394,7 @@ class Post extends ModTemplate {
 		forum,
 		link,
                 tx, 
+                lite_tx, 
                 ts,
                 children,
                 flagged,
@@ -387,7 +411,8 @@ class Post extends ModTemplate {
 		$ptext ,
 		$pforum ,
 		$plink ,
-		$ptx ,
+		$pfulltx ,
+		$plitetx ,
 		$pts ,
 		$pchildren ,
 		$pflagged ,
@@ -405,7 +430,8 @@ class Post extends ModTemplate {
 	$ptext		: txmsg.comment ,
 	$pforum		: txmsg.forum ,
 	$plink		: txmsg.link ,
-	$ptx		: JSON.stringify(tx.transaction) ,
+	$pfulltx	: pfulltx ,
+	$plitetx	: plitetx ,
 	$pts		: tx.transaction.ts ,
 	$pchildren	: rows[0].children ,
 	$pflagged 	: rows[0].flagged ,
@@ -529,7 +555,20 @@ class Post extends ModTemplate {
   }
   async receiveCommentTransaction(tx) {
 
+    //
+    // lite removes comment (content) and images. for lite-weight
+    // protocol compliance for things like displaying headers. 
+    // it is signed by the node storing it in the database.
+    //
     let txmsg = tx.returnMessage();
+    let pfulltx = JSON.stringify(tx.transaction);   
+    let plitetx = new saito.transaction(JSON.parse(JSON.stringify(tx.transaction)));
+	plitetx.msg.comment = "";
+	plitetx.msg.images = [];
+        plitetx = this.app.wallet.signTransaction(plitetx);
+        plitetx = JSON.stringify(plitetx.transaction);
+
+
     let sql = `
         INSERT INTO 
             posts (
@@ -544,6 +583,7 @@ class Post extends ModTemplate {
                 link,
                 img,
                 tx, 
+                lite_tx, 
                 ts,
                 children,
                 flagged,
@@ -561,6 +601,7 @@ class Post extends ModTemplate {
                 $pimg ,
                 $plink ,
                 $ptx ,
+                $plite_tx ,
                 $pts ,
                 $pchildren ,
                 $pflagged ,
@@ -578,7 +619,8 @@ class Post extends ModTemplate {
       $pforum		: '' ,
       $pimg		: '' ,
       $plink		: '' ,
-      $ptx		: JSON.stringify(tx.transaction) ,
+      $ptx		: pfulltx ,
+      $plitetx		: plitetx ,
       $pts		: tx.transaction.ts ,
       $pchildren	: 0 ,
       $pflagged 	: 0 ,
@@ -586,7 +628,6 @@ class Post extends ModTemplate {
     };
 
     await this.app.storage.executeDatabase(sql, params, "post");
-
 
     sql = "UPDATE posts SET children = children+1 WHERE id = $pid";
     params = { $pid : txmsg.thread_id }
