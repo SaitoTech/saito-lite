@@ -59,20 +59,16 @@ body {
 }
 
 .pot {
-  border: 1px solid #555;
   position: absolute;
-  top: 54vh;
+  top: 50vh;
   left: 50vw;
   transform: translateX(-50%);
-  background-color: whitesmoke;
-  padding: 3px 16px 0px 16px;
-  border-radius: 15px;
+  background-color: #4448;
+  padding: 0.7em 1.5em 0.5em;
   text-align: center;
-  text-valign: middle;
-  font-size: 2.6em;
+  font-size: 3em;
   font-weight: bold;
-  color: #555;
-  line-height: 1.1em;
+  color: #efefef;
 }
 
 .player-info {
@@ -128,7 +124,7 @@ body {
 .cardfan {
   position: absolute;
   top: 70vh;
-  left: 20vw;
+  left: 15vw;
 }
 
 .cardfan .card {
@@ -329,8 +325,8 @@ body {
   }
 
   .pot {
-    top: 50vh;
-    font-size: 1.4em;
+    top: 27vh;
+    font-size: 2.4em;
   }
 
   .player-info.p1 {
@@ -417,7 +413,7 @@ body {
   }
 
   .cardfan {
-    top: 36vh;
+    top: 40vh;
   }
 
 }
