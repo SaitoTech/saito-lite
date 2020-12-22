@@ -5,6 +5,9 @@ body {
   overflow-x: hidden;
   width: 100%;
   position: fixed;
+  /*
+  background-image: url(/saito/img/background.png);
+  */
 }
 
 .slider-content-title {
@@ -173,7 +176,7 @@ img.banner-logo {
 }
 
 .calltoaction {
-  margin: 1em auto 0;
+  margin: 15em auto 0;
   display: flex;
   justify-content: center;
 }
@@ -193,10 +196,8 @@ img.banner-logo {
 }
 
 .action-components .component {
-  display: block;
-  width: 520px;
-  height: 278px;
-  min-width: 320px;
+  display: grid;
+  grid-template-columns: 200px 320px;
   padding: 0;
 }
 
@@ -278,55 +279,21 @@ img.banner-logo {
 }
 
 .component-title {
-  color: white;
-  font-weight: bold;
-  font-size: 2.5em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 2em;
 }
 
 .component-subtitle {
-  color: white;
-  font-weight: bold;
-  font-size: 2.5em;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.component-subtitle-text {
-  color: white;
-  font-weight: bold;
-  font-size: 0.7em;
-  padding: 8px 20px 5px 20px;
-  background-color: #444a;
-  border-radius: 10px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.component-subtitle-text:hover {  
-  color: whitesmoke;
-  font-weight: bold;
-  font-size: 0.7em;
-  padding: 8px 20px 5px 20px;
-  background-color: #666a;
-  border-radius: 10px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.component-content {
-  color: white;
-  font-weight: bold;
-  font-size: 0.7em;
-  padding: 8px 20px 5px 20px;
-  background-color: #444a;
-  border-radius: 10px;
+  font-size: 1.35em;
+  color: var(--saito-red);
 }
 
 .component-content {
   font-size: 1.2em;
   line-height: 1.3em;
+}
+
+.component div {
+  margin: 0 0 0.5em 0;
 }
 
 .component-content p {
@@ -548,9 +515,6 @@ img.banner-logo {
 .intro {
   background-color: #fffc;
   padding: 1em 7em 0;
-  width: 75%;
-  margin-left:auto;
-  margin-right:auto;
 }
 
 .intro-box {
@@ -958,11 +922,10 @@ button:focus {
   color: var(--saito-skyline-grey);
   height: 5em;
   z-index: 9;
+  left: calc(50% - 400px);
   top: 0;
   align-items: center;
   transition: all ease-in 0.1s;
-  /* left: calc(50% - 400px); */
-  left: 240px;
 }
 
 .disabled {
@@ -1015,7 +978,7 @@ button:focus {
 
 .benefit {
   padding: 5px 1em;
-  height: 90px;
+  height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -1025,7 +988,7 @@ button:focus {
 .benefit-title {
   font-weight: bold;
   font-size: 1.1em;
-  margin: 0 0 0.5em;
+  margin: 0 0 1em;
 }
 
 .love-tools img {
@@ -1122,9 +1085,6 @@ button:focus {
   font-size: 3em;
   color: var(--saito-red);
 }
-
-
-
 
 @media only screen and (max-width: 1460px) {
   section {
@@ -1382,7 +1342,3 @@ button:focus {
   }
 
 }
-
-
-
-
