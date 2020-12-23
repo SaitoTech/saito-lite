@@ -5,6 +5,9 @@ body {
   overflow-x: hidden;
   width: 100%;
   position: fixed;
+  /*
+  background-image: url(/saito/img/background.png);
+  */
 }
 
 .slider-content-title {
@@ -48,42 +51,14 @@ h2, h5 {
   transform: translateX(-50%);
 }
 
-.backslash-shim {
-  width: 120vw;
-  left: -10vw;
-  position: relative;
-  background: linear-gradient(-11deg, #fff 20%, #0000 35%, #0000 65%, #fff 80%);
-}
-
-/*
 .backslash {
+  background-color: var(--saito-skyline-grey);
   height: 100vh;
   position: relative;
   z-index: -1;
-  clip-path: polygon(0 48vh, 100% 0%, 100% 84vh, 0% 100%);
-  width: 120vw;
-  left: 0vw;
-  background-image: url(/website/img/brand-pattern-colour-large.png);
-  background-size: cover;
-}
-*/
-
-.backslash {
-  height: 120vh;
-  position: relative;
-  z-index: -1;
-  width: 120vw;
-  left: 0vw;
-  background-image: url(/website/img/brand-pattern-colour-large.png);
-  background-size: cover;
-}
-
-.backslash:before {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 999;
-  border: 100px solid orange;
+  clip-path: polygon(0 48vh, 100% 0%, 100% 69vh, 0% 100%);
+  width: 116vw;
+  left: -8vw;
 }
 
 .all {
@@ -201,7 +176,7 @@ img.banner-logo {
 }
 
 .calltoaction {
-  margin: 1em auto 0;
+  margin: 15em auto 0;
   display: flex;
   justify-content: center;
 }
@@ -214,34 +189,18 @@ img.banner-logo {
 }
 
 .component-text {
-  padding: 2em;
   display: flex;
   flex-direction: column;
   text-align: center;
   justify-content: center;
-  align-self: unset;
-  margin: 50px 0;
-  background: linear-gradient(45deg, #2224, #222A, #2224);
 }
 
 .action-components .component {
-  display: block;
-  width: 520px;
-  height: 278px;
-  min-width: 320px;
+  display: grid;
+  grid-template-columns: 200px 320px;
   padding: 0;
-  border-radius: 0;
 }
 
-.component.community {
-  background-image: url('/website/img/arcade-banner1.jpg'); 
-  background-size: cover; 
-}
-
-.component.developer {
-  background-image: url('/website/img/developer.jpg'); 
-  background-size: cover; 
-}
 .calltoaction .component img {
   width: 320px;
   height: 180px;
@@ -320,35 +279,21 @@ img.banner-logo {
 }
 
 .component-title {
-  color: white;
-  font-weight: bold;
-  font-size: 2.5em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 2em;
 }
 
 .component-subtitle {
-  color: #efefef;
-  font-size: 2em;
-  margin: 1em auto 0;
-}
-
-.component-subtitle:hover {  
-  color: #fff;
- }
-
-.component-content {
-  color: white;
-  font-weight: bold;
-  font-size: 0.7em;
-  padding: 8px 20px 5px 20px;
-  background-color: #444a;
-  border-radius: 10px;
+  font-size: 1.35em;
+  color: var(--saito-red);
 }
 
 .component-content {
   font-size: 1.2em;
   line-height: 1.3em;
+}
+
+.component div {
+  margin: 0 0 0.5em 0;
 }
 
 .component-content p {
@@ -570,9 +515,6 @@ img.banner-logo {
 .intro {
   background-color: #fffc;
   padding: 1em 7em 0;
-  width: 75%;
-  margin-left:auto;
-  margin-right:auto;
 }
 
 .intro-box {
@@ -980,11 +922,10 @@ button:focus {
   color: var(--saito-skyline-grey);
   height: 5em;
   z-index: 9;
+  left: calc(50% - 400px);
   top: 0;
   align-items: center;
   transition: all ease-in 0.1s;
-  /* left: calc(50% - 400px); */
-  left: 240px;
 }
 
 .disabled {
@@ -1037,7 +978,7 @@ button:focus {
 
 .benefit {
   padding: 5px 1em;
-  height: 90px;
+  height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -1047,7 +988,7 @@ button:focus {
 .benefit-title {
   font-weight: bold;
   font-size: 1.1em;
-  margin: 0 0 0.5em;
+  margin: 0 0 1em;
 }
 
 .love-tools img {
@@ -1144,9 +1085,6 @@ button:focus {
   font-size: 3em;
   color: var(--saito-red);
 }
-
-
-
 
 @media only screen and (max-width: 1460px) {
   section {
@@ -1404,7 +1342,3 @@ button:focus {
   }
 
 }
-
-
-
-

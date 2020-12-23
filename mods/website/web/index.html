@@ -51,22 +51,22 @@
   </div>
   <div class="header-nav">
     <i class="fas fa-ellipsis-v"></i>
-    <a target="_blank" alt="the Saito Arcade" href="https://saito.io/arcade">Arcade</a>
-    <a target="_blank" alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
+    <a alt="the Saito Arcade" href="https://saito.io/arcade">Arcade</a>
+    <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
     <a alt="links to get involved" href="#getinvolved">Community</a>
-    <a target="_blank" alt="blog" href="https://org.saito.tech/blog">Blog</a>
+    <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
   </div>
 
   <div class="all">
     <div class="parallax-layer parallax-back">
       <section id="banner" class="banner">
-        <img class="banner-logo" alt="saito logo" src="/saito/img/logo.svg"></img>
-        <img class="background-logo mobile" alt="saito logo" src="/website/img/saito-shape-white.svg"></img>
       </section>
       <div class="background-logo-box">
         <img class="background-logo" alt="saito logo" src="/website/img/saito-shape-red.svg"></img>
       </div>
-      <div class="backslash"></div>
+      <div class="backslash-shim">
+        <div class="backslash"></div>
+      </div>
 
     </div>
     <div class="parallax-layer parallax-base">
@@ -74,188 +74,150 @@
 
         <section class="calltoaction">
           <div class="action-components">
-            <div class="component">
+            <div class="component community">
+	      <a href="https://saito.io/arcade">
               <div class="component-text">
-                <div class="component-title">Community</div>
-                <div class="component-subtitle"><a href="https://saito.io/arcade/" target="_blank">Play Now</a></div>
-                <div class="component-subtitle"><a href="#getinvolved">Get Involved</a></div>
-                <!--div class="component-content">
-                  <p>
-                    Call to action text
-                  </p>
-                  <p>
-                    ... for community </p>
-                </div-->
+                <div class="component-title shine">Applications</div>
+                <div class="component-subtitle"><div class="component-subtitle-text">use the apps</div></div>
               </div>
-              <img src="/website/img/arcade-banner.jpg" />
+	      </a>
             </div>
-            <div class="component">
+            <div class="component developer">
+	      <a href="https://org.saito.tech/developers">
               <div class="component-text">
                 <div class="component-title">Developers</div>
-                <div class="component-subtitle"><a href="https://org.saito.tech/developers" target="_blank">Start
-                    Building Now</a></div>
-                <div class="component-subtitle"><a href="https://github.com/saitotech/saito-lite"
-                    target="_blank">Github</a></div>
-                <!--div class="component-content">
-                  <p>
-                    Call to action text for developers
-                  </p>
-                </div-->
+                <div class="component-subtitle"><div class="component-subtitle-text">get started</div></div>
               </div>
-              <img src="/website/img/developer.jpg" />
+	      </a>
             </div>
         </section>
-
-        <!--div class="site-main">
-          <section class="splash-row">
-            <!--div class="grid-2-columns row">
-              <div class="title-container">
-                <div class="featured-app">
-                  <div class="featured-app-inner">
-                    <div class="featured-app-front">
-                      <img class="arcade-banner" alt="Arcade Banner" src="/website/img/arcade-banner.jpg">
-                    </div>
-                    <div class="featured-app-back">
-                      <div class="featured-app-back-inner">
-                        <p>
-                          Why not try a game on the <a href="/arcade">Saito Arcade</a>?
-                        </p>
-                        <p>
-                          You already have a <a href="/wallet/">wallet</a>.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="intro-box">
-                <div class="intro-title">Crypto Apps in your Browser!</div>
-                <div class="intro-content">
-                  <p>
-                    Saito lets you run blockchain apps directly in your browser without the need
-                    for closed plugins and non-open infrastructure.
-                  </p>
-                  <p>
-                    Try it out by visiting the Saito Arcade, or build your own application in a few
-                    minutes. Best of all, Saito plays nicely with other blockchains, providing
-                    routing infrastructure for cryptos that only pay miners, stakers and validators.
-                  </p>
-                  <p>
-                    <a href="https://org.saito.tech" target="_blank">Saito Whitepaper</a> | <a
-                      href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-        </div>
-          </section-->
-        <!--section class="mobile-banner">
-          <div class="intro-box-mobile">
-            <div class="intro-title">Welcome to the Saito Network</div>
-            <div class="intro-content">
-              <p>
-                Most blockchains force users to pay for <em>forever storage</em> and require separate payments for
-                off-chain data. Saito fixes both problems.
-              </p>
-
-              <p>
-                <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a
-                  href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
-              </p>
-            </div>
-          </div>
-      </div>
-
-      <div class="featured-app-inner-mobile">
-        <div class="featured-app-front-mobile">
-          <img class="arcade-banner" alt="Arcade Banner" src="/website/img/arcade-banner.jpg">
-        </div>
-        <div class="featured-app-back-mobile">
-          <div class="featured-app-back-inner">
-            <p>
-              Why not try a game on the <a href="/arcade">Saito Arcade</a>?
-            </p>
-            <p>
-              You already have a <a href="/wallet/">wallet</a>.
-            </p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    </section-->
 
         <section class="intro first">
-          <div class="intro-title">In-Browser Web3</div>
+          <div class="intro-title" id="intro-title-text-container">
+	    <div id="intro-title-text-textured">A World of Blockchains - In Your Browser</div>
+	  </div>
           <div class="intro-content">
             <p>
-              Saito lets you run blockchain apps directly in your browser without the need
-              for closed plugins and non-open infrastructure.
+              Saito runs blockchain apps in your browser without the need for closed plugins and 
+	      non-open infrastructure. Even better, it pays people to run the access points needed 
+	      to keep other networks free and decentralized.
             </p>
-            <p>
-              Try it out by visiting the Saito Arcade, or build your own application in a few
-              minutes. Best of all, Saito plays nicely with other blockchains, providing
-              routing infrastructure for cryptos that only pay miners, stakers and validators.
-            </p>
-            <p>
-              <a href="https://org.saito.tech" target="_blank">Saito Whitepaper</a> | <a
-                href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
+            <p style="text-align:center;">
+              <a href="https://org.saito.tech" target="_blank">Technical Whitepaper</a> | 
+              <a href="https://org.saito.tech" target="_blank">Network Explainer</a> | 
+              <a href="https://org.saito.tech" target="_blank">Saito Whitepaper</a>
             </p>
           </div>
         </section>
 
-        <section class="theproject">
-          <h2>The Saito Project</h2>
-          <div class="project-components">
-            <div class="component">
-              <div class="component-title">Application Prototols</div>
-              <div class="component-subtitle">Simplicity and Interoperability</div>
-              <div class="component-content">
-                <p>
-                  Complex cryptographic tools and design patterns for building decentralized peer to peer applications.
-                </p>
+        <!--Join us / Social-->
+        <a id="getinvolved"></a>
+        <section class="join-us">
+          <!--- <h1>Get Involved</h1> --->
+          <div class="boxes">
+            <div class="deeperboxes">
+              <a target="_blank" alt="blog" href="https://org.saito.tech/blog" class="deeperbox">
+                <i class="fas fa-rss-square"></i>
+                <!--div class="deepertext">Discord</div-->
+              </a>
+              <a target="_blank" alt="Discord" href="https://discord.gg/QjeXTC3" class="deeperbox">
+                <i class="fab fa-discord"></i>
+                <!--div class="deepertext">Discord</div-->
+              </a>
+              <a href="https://t.me/joinchat/BOSYOk_BR8HIqp-scldlEA" target="_blank" alt="chat with us"
+                class="deeperbox">
+                <i class="fab fa-telegram"></i>
+                <!-- div class="deepertext">Telegram</div-->
+              </a>
+              <a href="https://twitter.com/saitoofficial" alt="Twitter" class="deeperbox">
+                <i class="fab fa-twitter"></i>
+                <!-- div class="deepertext">Twitter</div-->
+              </a>
+              <a href="https://github.com/saitotech/saito-lite" target="_blank" alt="saito for developers"
+                class="deeperbox">
+                <i class="fas fa-code-branch"></i>
+                <!-- div class="deepertext">Github</div-->
+              </a>
+              <a href="mailto://info@saito.tech" target="_blank" alt="email" class="deeperbox">
+                <i class="fas fa-envelope"></i>
+                <!-- div class="deepertext">info@</div-->
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="benefits">
+          <div class="benefits-grid">
+            <div class="benefit">
+              <div class="benefit-title">
+                Layer 0:
+              </div>
+              <div class="benefit-text">
+                Saito funds the infrastructure that keeps other blockchains running...
               </div>
             </div>
-            <div class="component">
-              <div class="component-title">Data Network</div>
-              <div class="component-subtitle">Infrastructure for P2P</div>
-              <div class="component-content">
-                <p>
-                  Edge infrastructure connecting blockchains to users.
-                </p>
-                <p>
-                  Micropayments and simple business models for anyone that can generate usage.
-                </p>
+            <div class="benefit">
+              <div class="benefit-title">
+                Polkadot Ecosystem:
+              </div>
+              <div class="benefit-text">
+                Full support for Polkadot and other leading web3 blockchains...
               </div>
             </div>
-            <div class="component">
-              <div class="component-title">Web3 Stack</div>
-              <div class="component-subtitle">Fast, simple development</div>
-              <div class="component-content">
-                <p>
-                  Tools and workflows that developers understand and fit existing workflows.
-                </p>
-                <p>
-                  Full range of web technologies and interoperability with legacy Web2 APIs and platforms.
-                </p>
+            <div class="benefit">
+              <div class="benefit-title">
+                In-Browser:
+              </div>
+              <div class="benefit-text">
+                Saito apps run directly in the browser, no plugins needed...
               </div>
             </div>
-            <div class="component">
-              <div class="component-title">Monetary Tokens</div>
-              <div class="component-subtitle">Bringing Value to Applications</div>
-              <div class="component-content">
-                <p>Saito</p>
-                <p>Dot/Kusama</p>
-                <p>Bitcoin</p>
-                <p>… ask us.</p>
+            <div class="benefit">
+              <div class="benefit-title">
+                Powerful Apps:
+              </div>
+              <div class="benefit-text">
+                Data-intensive applications like games and social media...
+              </div>
+            </div>
+            <div class="benefit">
+              <div class="benefit-title">
+                Developer-Friendly:</div>
+              <div class="benefit-text">
+                One-click to upload applications, one click to install them...
+              </div>
+            </div>
+            <div class="benefit">
+              <div class="benefit-title">
+                Open Source:</div>
+              <div class="benefit-text">
+                A trust-free and decentralized open-source software stack...
+              </div>
+            </div>
+            <div class="benefit">
+              <div class="benefit-title">
+                Proper Economics:
+              </div>
+              <div class="benefit-text">
+                An elegant economic design that scales with throughput...
+              </div>
+            </div>
+            <div class="benefit">
+              <div class="benefit-title">
+                Mobile Friendly:
+              </div>
+              <div class="benefit-text">
+                Full support for mobile browsers, qrcodes and camera-scanning...
               </div>
             </div>
           </div>
         </section>
+
+
 
         <!--what you can build-->
         <section class="can-build">
-          <h2>What you can build</h2>
+          <!---- <h2>What you can build</h2> ---->
           <div id="slider" class="slider">
             <div class="slider-content">
               <div class="slider-content-wrapper">
@@ -289,7 +251,7 @@
                 <div class="slider-content__item image-4">
                   <div class="slider-content_grid">
                     <div class="slider-content_html">
-                      <div class="saito-content-title">Provably-Fair, Crypto-graphically Secure Apps</div>
+                      <div class="saito-content-title">Provably-Fair, Cryptographically Secure Apps</div>
                     </div>
                     <img class="can-build-img-tall desktop" src="/website/img/build/poker.png" />
                     <img class="can-build-img-tall mobile" src="/website/img/build/poker2.png" />
@@ -315,72 +277,8 @@
             <div class="slider-controls-wrapper"></div>
           </div>
         </section>
-        <section class="benefits">
-          <div class="benefits-grid">
-            <div class="benefit">
-              <div class="benefit-title">
-                Layer 0:
-              </div>
-              <div class="benefit-text">
-                Saito pays for the infrastructure that keeps other blockchains running....
-              </div>
-            </div>
-            <div class="benefit">
-              <div class="benefit-title">
-                Polkadot Ecosystem:
-              </div>
-              <div class="benefit-text">
-                Full support for Polkadot and other leading web3 blockchains...
-              </div>
-            </div>
-            <div class="benefit">
-              <div class="benefit-title">
-                In-Browser:
-              </div>
-              <div class="benefit-text">
-                Saito apps run directly in the browser, no plugins needed...
-              </div>
-            </div>
-            <div class="benefit">
-              <div class="benefit-title">
-                Powerful Apps:
-              </div>
-              <div class="benefit-text">
-                Complex CPU-hungry applications like games and media networks...
-              </div>
-            </div>
-            <div class="benefit">
-              <div class="benefit-title">
-                Saito AppStore:</div>
-              <div class="benefit-text">
-                A world of click-to-install apps at your fingertips...
-              </div>
-            </div>
-            <div class="benefit">
-              <div class="benefit-title">
-                Open Source:</div>
-              <div class="benefit-text">
-                A trust-free and decentralized open-source software stack
-              </div>
-            </div>
-            <div class="benefit">
-              <div class="benefit-title">
-                Economics:
-              </div>
-              <div class="benefit-text">
-                An elegant economic design that scales with throughput
-              </div>
-            </div>
-            <div class="benefit">
-              <div class="benefit-title">
-                Mobile First:
-              </div>
-              <div class="benefit-text">
-                Enterprise and Corporate adoption.
-              </div>
-            </div>
-          </div>
-        </section>
+
+
 
         <section class="supporters">
           <h2>Our Supporters</h2>
@@ -394,11 +292,12 @@
           </div>
         </section>
 
+
         <!--roadmap-->
+<!-----
         <section class="roadmap">
           <div class="roadmap-wrapper">
             <h2>Roadmap</h2>
-
             <div class="roadmap-row project">
               <div class="content blanc start">
                 <h3>Project</h3>
@@ -455,8 +354,8 @@
               <div class="content blanc"></div>
             </div>
           </div>
-
         </section>
+------->
 
         <!--about-->
         <!--section class="about-saito red">
@@ -477,47 +376,10 @@
     </section-->
 
         <section class="stats">
-          <h2>Network Statistics</h2>
           <div class="stats-container">
             <div class="stat">30,000+ Transactions a Day and Growing</div>
             <div class="stat">7+ Million Transactions</div>
-            <div class="stat">100s of Daily active Keys</div>
-          </div>
-        </section>
-
-        <!--Join us / Social-->
-        <a id="getinvolved"></a>
-        <section class="join-us">
-          <h1>Get Involved</h1>
-          <div class="boxes">
-            <div class="deeperboxes">
-              <a target="_blank" alt="blog" href="https://org.saito.tech/blog" class="deeperbox">
-                <i class="fas fa-rss-square"></i>
-                <!--div class="deepertext">Discord</div-->
-              </a>
-              <a target="_blank" alt="Discord" href="https://discord.gg/QjeXTC3" class="deeperbox">
-                <i class="fab fa-discord"></i>
-                <!--div class="deepertext">Discord</div-->
-              </a>
-              <a href="https://t.me/joinchat/BOSYOk_BR8HIqp-scldlEA" target="_blank" alt="chat with us"
-                class="deeperbox">
-                <i class="fab fa-telegram"></i>
-                <!-- div class="deepertext">Telegram</div-->
-              </a>
-              <a href="https://twitter.com/saitoofficial" alt="Twitter" class="deeperbox">
-                <i class="fab fa-twitter"></i>
-                <!-- div class="deepertext">Twitter</div-->
-              </a>
-              <a href="https://github.com/saitotech/saito-lite" target="_blank" alt="saito for developers"
-                class="deeperbox">
-                <i class="fas fa-code-branch"></i>
-                <!-- div class="deepertext">Github</div-->
-              </a>
-              <a href="mailto://info@saito.tech" target="_blank" alt="email" class="deeperbox">
-                <i class="fas fa-envelope"></i>
-                <!-- div class="deepertext">info@</div-->
-              </a>
-            </div>
+            <div class="stat">30+ Popular Applications</div>
           </div>
         </section>
 
@@ -535,9 +397,30 @@
       </div>
 
 
-      <div class="chat-manager" id="chat-manager"></div>
       <script type="text/javascript" src="/website/js/slider.js"></script>
       <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
+
+
+<style text="text/css">
+
+#intro-title-text-container {
+	background: url(/saito/img/dreamscape.png) no-repeat center center;
+	background-size: cover;
+	color: #fff;
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+}
+#intro-title-text-textured h1 {
+	font-size: 30px;
+	font-weight: bold;
+	font-family: Anton, sans-serif;
+	text-align: center;
+	-webkit-transition: text-shadow 1s ease;
+	text-shadow: 0 0 1px rgba(0,0,0,.1);
+	margin: 0;
+	padding: 0;
+}
+</style>
 
 </body>
 
