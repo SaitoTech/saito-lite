@@ -983,8 +983,7 @@ button:focus {
   top: 0;
   align-items: center;
   transition: all ease-in 0.1s;
-  /* left: calc(50% - 400px); */
-  left: 240px;
+  left: calc(50% - 550px); 
 }
 
 .disabled {
@@ -1225,7 +1224,7 @@ button:focus {
   }
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 900px) {
   .header-nav i {
     display: block;
   }
