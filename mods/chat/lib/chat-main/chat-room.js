@@ -52,6 +52,8 @@ module.exports = ChatRoom = {
           e.preventDefault();
           if (msg_input.value == '') { return; }
           let newtx = mod.createMessage(group_id, msg_input.value);
+          console.log("newtx");
+          console.log(newtx);
           mod.sendMessage(app, newtx);
           chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';

@@ -28,7 +28,8 @@ class Chat extends ModTemplate {
 
 
   receiveEvent(type, data) {
-
+    console.log("receiveEvent");
+    console.log(type);
     if (type === "encrypt-key-exchange-confirm") {
 
       if (data.members === undefined) { return; }
@@ -150,6 +151,8 @@ class Chat extends ModTemplate {
     // create mastodon server
     //
     if (peer.isMainPeer()) {
+      console.log("IS MAIN PEER");
+      console.log(peer.peer.publickey);
       this.createChatGroup([peer.peer.publickey], "Community Chat");
     } else {
 
@@ -219,6 +222,8 @@ class Chat extends ModTemplate {
   // onchain messages --> receiveMessage()
   //
   onConfirmation(blk, tx, conf, app) {
+    console.log("onConfirmationonConfirmationonConfirmationonConfirmationonConfirmation");
+    console.log(tx.msg);
     let txmsg = tx.returnMessage();
     if (conf == 0) {
       if (txmsg.request == "chat message") {
@@ -233,7 +238,7 @@ class Chat extends ModTemplate {
   // peer messages --< receiveMessage() 
   //
   async handlePeerRequest(app, req, peer, mycallback) {
-
+    console.log("handlePeerRequest");
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 
@@ -324,6 +329,8 @@ class Chat extends ModTemplate {
     };
     newtx.msg.sig = this.app.wallet.signMessage(JSON.stringify(newtx.msg));
     newtx = this.app.wallet.signTransaction(newtx);
+    console.log("createMessage");
+    console.log(newtx);
     return newtx;
 
   }
@@ -578,7 +585,8 @@ console.log("ERROR 113234: chat error receiving message: " + err);
   // CHAT SPECIFIC //
   ///////////////////
   createChatGroup(members=null, name=null) {
-
+    console.log("createChatGroup");
+    console.log(members);
     if (members == null) { return; } members.sort();
     if (name == null) {
       for (let i = 0; i < members.length; i++) {
