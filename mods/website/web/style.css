@@ -48,14 +48,42 @@ h2, h5 {
   transform: translateX(-50%);
 }
 
+.backslash-shim {
+  width: 120vw;
+  left: -10vw;
+  position: relative;
+  background: linear-gradient(-11deg, #fff 20%, #0000 35%, #0000 65%, #fff 80%);
+}
+
+/*
 .backslash {
-  background-color: var(--saito-skyline-grey);
   height: 100vh;
   position: relative;
   z-index: -1;
-  clip-path: polygon(0 48vh, 100% 0%, 100% 69vh, 0% 100%);
-  width: 116vw;
-  left: -8vw;
+  clip-path: polygon(0 48vh, 100% 0%, 100% 84vh, 0% 100%);
+  width: 120vw;
+  left: 0vw;
+  background-image: url(/website/img/brand-pattern-colour-large.png);
+  background-size: cover;
+}
+*/
+
+.backslash {
+  height: 120vh;
+  position: relative;
+  z-index: -1;
+  width: 120vw;
+  left: 0vw;
+  background-image: url(/website/img/brand-pattern-colour-large.png);
+  background-size: cover;
+}
+
+.backslash:before {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  border: 100px solid orange;
 }
 
 .all {
@@ -186,10 +214,14 @@ img.banner-logo {
 }
 
 .component-text {
+  padding: 2em;
   display: flex;
   flex-direction: column;
   text-align: center;
   justify-content: center;
+  align-self: unset;
+  margin: 50px 0;
+  background: linear-gradient(45deg, #2224, #222A, #2224);
 }
 
 .action-components .component {
@@ -198,8 +230,18 @@ img.banner-logo {
   height: 278px;
   min-width: 320px;
   padding: 0;
+  border-radius: 0;
 }
 
+.component.community {
+  background-image: url('/website/img/arcade-banner1.jpg'); 
+  background-size: cover; 
+}
+
+.component.developer {
+  background-image: url('/website/img/developer.jpg'); 
+  background-size: cover; 
+}
 .calltoaction .component img {
   width: 320px;
   height: 180px;
@@ -286,34 +328,14 @@ img.banner-logo {
 }
 
 .component-subtitle {
-  color: white;
-  font-weight: bold;
-  font-size: 2.5em;
-  margin-left: auto;
-  margin-right: auto;
+  color: #efefef;
+  font-size: 2em;
+  margin: 1em auto 0;
 }
 
-.component-subtitle-text {
-  color: white;
-  font-weight: bold;
-  font-size: 0.7em;
-  padding: 8px 20px 5px 20px;
-  background-color: #444a;
-  border-radius: 10px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.component-subtitle-text:hover {  
-  color: whitesmoke;
-  font-weight: bold;
-  font-size: 0.7em;
-  padding: 8px 20px 5px 20px;
-  background-color: #666a;
-  border-radius: 10px;
-  margin-left: auto;
-  margin-right: auto;
-}
+.component-subtitle:hover {  
+  color: #fff;
+ }
 
 .component-content {
   color: white;
