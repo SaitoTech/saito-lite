@@ -16,10 +16,11 @@ module.exports = AppStoreAppspace = {
     //
     // server also performs sanity checks, but we'll do basic ones here too
     //
-    let where_clause = ""; if (search_options.category != "") {
+    let where_clause = "";
+    if (search_options.category != "" && search_options.category != undefined) {
       where_clause = " WHERE categories LIKE \"%" + search_options.category.replace(/\W/, '') + "%\"";
     }
-    if (search_options.search != "") {
+    if (search_options.search != "" && search_options.search != undefined) {
       if (where_clause == "") { 
 	where_clause = " WHERE ";
       } else {
@@ -27,7 +28,16 @@ module.exports = AppStoreAppspace = {
       }
       where_clause += " description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\"";
     }
-    let featured = 0; if (search_options.featured == 1) { featured = 1; }
+    if (search_options.version != "" && search_options.version != undefined) {
+      if (where_clause == "") {
+	where_clause = " WHERE ";
+      } else {
+	where_clause += " AND ";
+      }
+      where_clause += " version = \"" + search_options.version + "\"";
+    }
+    let featured = 0; 
+    if (search_options.featured == 1) { featured = 1; }
     if (where_clause == "") { 
       where_clause = " WHERE ";
     } else {
@@ -36,7 +46,7 @@ module.exports = AppStoreAppspace = {
     if (featured == 1) {
       where_clause += " featured = 1";
     } else {
-      where_clause += " featured = 1 OR featured = 0";
+      where_clause += " (featured = 1 OR featured = 0) ";
     }
 
     //
@@ -56,6 +66,8 @@ console.log(sql_query);
 	sql_query ,
 
         (res) => {
+
+console.log("GOT THIS: " + JSON.stringify(res.rows));
 
         if (res.rows != undefined) {
           let installed_apps = [];
@@ -94,8 +106,7 @@ console.log(sql_query);
 	      };
     	    });
 
-          } catch (err) {
-          }
+          } catch (err) { console.log("error in appstore callback"); }
         }
       }
     );

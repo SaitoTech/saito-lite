@@ -132,6 +132,9 @@ class Post extends ModTemplate {
 
 
   onPeerHandshakeComplete(app, peer) {
+
+    if (this.renderMethod == "none") { return; }
+
     //
     // fetch posts from server
     //

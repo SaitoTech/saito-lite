@@ -1,8 +1,10 @@
 const saito = require('../../lib/saito/saito');
 const helpers = require('../../lib/helpers/index');
 const ModTemplate = require('../../lib/templates/modtemplate');
+const EmailAppStore = require('./lib/email-appspace/appstore-appspace');
 const AppStoreOverlay = require('./lib/appstore-overlay/appstore-overlay');
 const AppStoreBundleConfirm = require('./lib/appstore-overlay/appstore-bundle-confirm');
+const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const fs = require('fs');
 const path = require('path');
 
@@ -19,6 +21,67 @@ class AppStore extends ModTemplate {
     this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
     this.categories    = "Utilities Dev";
     this.featured_apps = ['Imperium', 'Debug', 'Scotland', 'Escrow'];
+
+    this.header        = new SaitoHeader(app);
+
+    this.renderMode    = "none";
+    this.search_options = {};
+
+  }
+
+
+  //
+  // appstore upload is in email
+  //
+  respondTo(type) {
+    if (type == 'email-appspace') {
+      let obj = {};
+      obj.render = this.renderEmail;
+      obj.attachEvents = this.attachEventsEmail;
+      obj.script = '<link ref="stylesheet" href="/appstore/css/email-appspace.css" />';
+      return obj;
+    }
+    return null;
+  }
+  renderEmail(app, mod) {
+    appstore_mod = app.modules.returnModule("AppStore");
+    EmailAppStore.render(app, appstore_mod);
+  }
+  attachEventsEmail(app, mod) {
+    appstore_mod = app.modules.returnModule("AppStore");
+    EmailAppStore.attachEvents(app, appstore_mod);
+  }
+
+
+
+
+  //
+  // click-to-access overlay access
+  //
+  initializeHTML(app) {
+
+    super.initializeHTML(app);
+
+    this.header.render(app, this);
+    this.header.attachEvents(app, this);
+
+  }
+  handleUrlParams(urlParams) {
+    let i = urlParams.get('app');
+    if (i) {
+      let search_options = {};
+	  search_options.version = i;
+      this.search_options = search_options;
+      this.renderMode = "standalone";
+    }
+  }
+  onPeerHandshakeComplete(app, mod) {
+
+    if (this.renderMode == "standalone") {
+      AppStoreOverlay.render(this.app, this, this.search_options);
+      AppStoreOverlay.attachEvents(this.app, this);
+    }
+
   }
 
 
@@ -49,7 +112,6 @@ class AppStore extends ModTemplate {
       mycallback(res);
 
     }
-
 
   }
 
@@ -91,9 +153,8 @@ class AppStore extends ModTemplate {
       dirs.forEach(dir => {
 
 console.log("##########################");
-console.log("##########################");
-console.log("##########################");
 console.log("processing: " + dir);
+console.log("##########################");
 
         let mod_path = path.resolve(__dirname, `mods/${dir}.zip`);
         let output = fs.createWriteStream(mod_path);
@@ -131,10 +192,6 @@ console.log("processing: " + dir);
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
-console.log("sending tx");
-
-
-
           newtx.msg = {
             module: "AppStore",
             request: "submit module",
@@ -142,11 +199,7 @@ console.log("sending tx");
             name: dir,
           };
 
-console.log("About to Fail: " + newtx.msg.name);
-console.log("ZIP LEN: " + zip.length);
-
           newtx = app.wallet.signTransaction(newtx);
-
           app.network.propagateTransaction(newtx);
         });
 
@@ -332,7 +385,7 @@ console.log("ZIP LEN: " + zip.length);
 
 	    <p></p>
 
-	    <a href="http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}">http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}</a>
+	    <a href="https://saito.io/appstore/?app={tx.transaction.ts}-${tx.transaction.sig}">https://saito.io/appstore/?app=${tx.transaction.ts}-${tx.transaction.sig}</a>
 
 	    <p></p>
 
@@ -344,7 +397,7 @@ console.log("ZIP LEN: " + zip.length);
 
             <p></p>
 
-	    If your application does not appear shortly, it means there is a bug in the code preventing AppStores from compiling it successfully. We recommend that you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile and test your module locally to eliminate any errors before uploading in this case.
+	    If your application does not appear shortly, that indicates a there is bug in your code preventing the AppStore from compiling it successfully. In the event of difficulty developing remotely, we recommend you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile and test your module manually to find and fix any errors before uploading to the network.
 
         `;
         newtx = this.app.wallet.signTransaction(newtx);
@@ -416,8 +469,6 @@ console.log("ZIP LEN: " + zip.length);
   async requestBundle(blk, tx) {
 
     if (this.app.BROWSER == 1) { return; }
-
-console.log("SERVER REQUEST BUNDLE");
 
     let sql = '';
     let params = '';
@@ -751,10 +802,8 @@ console.log("SERVER REQUEST BUNDLE");
   // UI Functions //
   //////////////////
   openAppstoreOverlay(options) {
-
     AppStoreOverlay.render(this.app, this, options);
     AppStoreOverlay.attachEvents(this.app, this);
-
   }
 
 
