@@ -292,11 +292,14 @@ class Chat extends ModTemplate {
 
 
   createMessage(group_id, msg) {
-
+    console.log("createMessage");
+    console.log(group_id);
+    
     let members = [];
 
     for (let i = 0; i < this.groups.length; i++) {
       if (group_id === this.groups[i].id) {
+        console.log(this.groups[i].members);
         for (let z = 0; z < this.groups[i].members.length; z++) {
 	  if (!members.includes(this.groups[i].members[z])) {
 	    members.push(this.groups[i].members[z]);
