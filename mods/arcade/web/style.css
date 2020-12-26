@@ -1015,11 +1015,8 @@ a {
   #alert-box {
     background: var(--saito-nightscape);
   }
-  /* .arcade-game-row-delete {
-  margin: 0 0 0 12px;
-} */
   .loader {
-    margin: 25%;
+    margin: 12.5%;
   }
   /* achiecvments */
   .badges {

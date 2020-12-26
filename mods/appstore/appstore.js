@@ -231,7 +231,9 @@ console.log("##########################");
             } catch (err) {
             }
           }
-          if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
+          if (!tx.isTo(app.wallet.returnPublicKey())) { 
+	    return; 
+	  }
           this.requestBundle(blk, tx);
           break;
         case 'receive bundle':
@@ -276,12 +278,13 @@ console.log("##########################");
 
       const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
 
+
       let promises = directory.files.map(async file => {
 
         if (file.path.substr(0,3) == "lib") { return; }
         if (file.path.substr(-2) !== "js") { return; }
         if (file.path.substr(-2) !== "js") { return; }
-        if (file.path.indexOf("/") > -1) { return; }
+        //if (file.path.substr(2).indexOf("/") > -1) { return; }
         if (file.path.indexOf("/web/") > -1) { return; }
         if (file.path.indexOf("/www/") > -1) { return; }
         if (file.path.indexOf("/lib/") > -1) { return; }
@@ -298,6 +301,7 @@ console.log("##########################");
 	let found_categories = 0;	
 
 	for (let i = 0; i < zip_lines.length && i < 50 && (found_name == 0 || found_description == 0 || found_categories == 0); i++) {
+
 
 	  //
 	  // get name
@@ -357,7 +361,7 @@ console.log("##########################");
 
       await Promise.all(promises);
     } catch (err) {
-      console.log(err);
+      console.log("ERROR UNZIPPING: " + err);
     }
 
     //
@@ -385,7 +389,7 @@ console.log("##########################");
 
 	    <p></p>
 
-	    <a href="https://saito.io/appstore/?app={tx.transaction.ts}-${tx.transaction.sig}">https://saito.io/appstore/?app=${tx.transaction.ts}-${tx.transaction.sig}</a>
+	    <a href="https://saito.io/appstore/?app=${tx.transaction.ts}-${tx.transaction.sig}">https://saito.io/appstore/?app=${tx.transaction.ts}-${tx.transaction.sig}</a>
 
 	    <p></p>
 
@@ -413,6 +417,10 @@ console.log("##########################");
 
     }
 
+console.log("----------------------------");
+console.log("--INSERTING INTO APPSTORE---");
+console.log("----------------------------");
+
     let sql = `INSERT OR IGNORE INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured) VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
 
     let { from, sig, ts } = tx.transaction;
@@ -426,7 +434,7 @@ console.log("##########################");
     if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
 
     let params = {
-      $name:name,
+      $name: name,
       $description: description || '',
       $version: `${ts}-${sig}`,
       $categories: categories,
@@ -694,6 +702,8 @@ console.log("##########################");
       IndexTemplate(modules_config_filename)
     );
 
+console.log("done with index template");
+
     //
     // execute bundling process
     //
@@ -703,6 +713,9 @@ console.log("##########################");
     bash_script_content += 'cd ' + __dirname + "\n";
     bash_script_content += 'cd ../../' + "\n";
     bash_script_content += `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
+console.log("FROM " + __dirname + "/../../");
+console.log(`sh bundle.sh ${entry} ${output_path} ${bundle_filename}`);
+
     bash_script_content += "\n";
     //bash_script_content += bash_script_delete;
 
@@ -715,11 +728,17 @@ console.log("##########################");
       console.log(err);
     }
 
+console.log(newappdir + " --- " + index_filename + " ------ " + bash_script);
+
     //
     // create tx
     //
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     let bundle_bin = "";
+
+console.log("Bundle Filename: " + bundle_filename);
+console.log("Bundle __dirname: " + __dirname);
+
     if (fs) { bundle_bin = fs.readFileSync(path.resolve(__dirname, `./bundler/dist/${bundle_filename}`), { encoding: 'binary' }); }
     newtx.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin };
     newtx = this.app.wallet.signTransaction(newtx);

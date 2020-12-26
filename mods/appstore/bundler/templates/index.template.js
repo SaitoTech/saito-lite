@@ -1,6 +1,6 @@
 module.exports = IndexTemplate = (module_config_filename) => {
   return `
-import { Saito } from '../lib/index';
+import { Saito } from '../apps/core/index';
 import mod_paths from './${module_config_filename}';
 
 // ../mods/appstore/bundler/mods/

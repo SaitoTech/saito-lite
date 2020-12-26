@@ -3,11 +3,7 @@ module.exports = AppStoreBundleConfirmTemplate = (publickey) => {
   return `
 
 
-  The AppStore identified by publickey ${publickey} has generated a new Saito bundle for you.
-
-  <p></p>
-
-  Do you wish to use this new version of Saito?
+  The AppStore at ${publickey} has generated a new Saito bundle for you. Use it?
 
   <p></p>
 
