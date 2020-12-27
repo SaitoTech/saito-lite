@@ -46,10 +46,10 @@
 
 <body>
 
-  <div class="header">
+  <!--div class="header small-head">
     <h2>Downloading Saito then Synching the Chain</h2>
-  </div>
-  <div class="header-nav">
+  </div-->
+  <div class="header-nav small-head">
     <i class="fas fa-ellipsis-v"></i>
     <a alt="the Saito Arcade" href="https://saito.io/arcade">Arcade</a>
     <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
@@ -420,7 +420,50 @@
 	margin: 0;
 	padding: 0;
 }
+
+.header-home, .logo, .header-nav {
+  transition: all 1s ease-in-out;
+}
+.logo {
+  transform-origin: top;
+}
+
+.small-head {
+  height: 2em;
+}
+
+.small-head .logo {
+  transform: scale(0);
+  position: absolute;
+  top: 1em;
+}
+.logo {
+  transform: scale(1);  
+}
+
+.main {
+  margin: 0;
+}
+
+
 </style>
+<script>
+  var el = document.querySelector('.all');
+  var head = document.querySelector('.header-home');
+  var head_nav = document.querySelector('.header-nav');
+  head.classList.add('small-head');
+  el.addEventListener('scroll', () => {
+    if (el.scrollTop > 100) {
+      console.log(el.scrollTop);
+      head.classList.remove('small-head');
+      head_nav.classList.remove('small-head');
+    } else {
+      console.log(-el.scrollTop);  
+      head.classList.add('small-head');    
+      head_nav.classList.add('small-head');
+    }
+  });
+</script>
 
 </body>
 
