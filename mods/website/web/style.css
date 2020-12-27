@@ -976,6 +976,7 @@ button:focus {
 
 /* Mods */
 
+
 .header-nav a, .header-nav i {
   color: white;
   text-decoration: none;
@@ -1004,7 +1005,7 @@ button:focus {
   z-index: 9;
   top: 0;
   align-items: center;
-  transition: height ease-in 0.1s;
+  transition: all ease-in 0.3s, height ease-in-out 1s;
   left: calc(50% - 550px);
 }
 
