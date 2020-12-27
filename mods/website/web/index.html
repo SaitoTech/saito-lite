@@ -60,6 +60,7 @@
   <div class="all">
     <div class="parallax-layer parallax-back">
       <section id="banner" class="banner">
+        <img class="banner-logo" src="/saito/img/logo.svg">
       </section>
       <div class="background-logo-box">
         <img class="background-logo" alt="saito logo" src="/website/img/saito-shape-red.svg"></img>
@@ -293,8 +294,17 @@
         </section>
 
 
+        <section class="stats">
+          <div class="stats-container">
+            <div class="stat">30,000+ Transactions a Day and Growing</div>
+            <div class="stat">7+ Million Transactions</div>
+            <div class="stat">30+ Popular Applications</div>
+          </div>
+        </section>
+
+
         <!--roadmap-->
-<!-----
+
         <section class="roadmap">
           <div class="roadmap-wrapper">
             <h2>Roadmap</h2>
@@ -355,7 +365,6 @@
             </div>
           </div>
         </section>
-------->
 
         <!--about-->
         <!--section class="about-saito red">
@@ -375,13 +384,6 @@
       </div>
     </section-->
 
-        <section class="stats">
-          <div class="stats-container">
-            <div class="stat">30,000+ Transactions a Day and Growing</div>
-            <div class="stat">7+ Million Transactions</div>
-            <div class="stat">30+ Popular Applications</div>
-          </div>
-        </section>
 
 
         <footer class="footer">
@@ -401,52 +403,6 @@
       <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
 
 
-<style text="text/css">
-
-#intro-title-text-container {
-	background: url(/saito/img/dreamscape.png) no-repeat center center;
-	background-size: cover;
-	color: #fff;
-	-webkit-text-fill-color: transparent;
-	-webkit-background-clip: text;
-}
-#intro-title-text-textured h1 {
-	font-size: 30px;
-	font-weight: bold;
-	font-family: Anton, sans-serif;
-	text-align: center;
-	-webkit-transition: text-shadow 1s ease;
-	text-shadow: 0 0 1px rgba(0,0,0,.1);
-	margin: 0;
-	padding: 0;
-}
-
-.header-home, .logo, .header-nav {
-  transition: all 1s ease-in-out;
-}
-.logo {
-  transform-origin: top;
-}
-
-.small-head {
-  height: 2em;
-}
-
-.small-head .logo {
-  transform: scale(0);
-  position: absolute;
-  top: 1em;
-}
-.logo {
-  transform: scale(1);  
-}
-
-.main {
-  margin: 0;
-}
-
-
-</style>
 <script>
   var el = document.querySelector('.all');
   var head = document.querySelector('.header-home');
