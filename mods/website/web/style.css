@@ -39,6 +39,7 @@ h2, h5 {
   display: block;
   height: unset;
   overflow: hidden;
+  margin: 25em 0 0;
 }
 
 .site-main {
@@ -75,7 +76,7 @@ h2, h5 {
   width: 120vw;
   left: 0vw;
   background-image: url(/website/img/brand-pattern-colour-large.png);
-  background-size: cover;
+  background-size: contain;
 }
 
 .backslash:before {
@@ -95,7 +96,7 @@ h2, h5 {
 
 .parallax-layer {
   position: absolute;
-  top: 0;
+  top: -6em;
   left: 0;
   right: 0;
   bottom: 0;
@@ -121,7 +122,7 @@ h2, h5 {
 }
 
 .banner {
-  height: 34em;
+  height: 50em;
   background-color: rgb(247 31 61 / 57%);
   background-image: url('/saito/img/dreamscape.png');
   background-repeat: no-repeat;
@@ -150,11 +151,11 @@ section.first {
 }
 
 img.banner-logo {
-  width: 39%;
+  width: 45%;
   max-width: 700px;
   position: absolute;
   left: 40%;
-  top: 3em;
+  top: 6em;
   transform: translate(-50%, 0em);
 }
 
@@ -234,14 +235,15 @@ img.banner-logo {
 }
 
 .component.community {
-  background-image: url('/website/img/arcade-banner1.jpg'); 
-  background-size: cover; 
+  background-image: url('/website/img/arcade-banner1.jpg');
+  background-size: cover;
 }
 
 .component.developer {
-  background-image: url('/website/img/developer.jpg'); 
-  background-size: cover; 
+  background-image: url('/website/img/developer.jpg');
+  background-size: cover;
 }
+
 .calltoaction .component img {
   width: 320px;
   height: 180px;
@@ -333,9 +335,9 @@ img.banner-logo {
   margin: 1em auto 0;
 }
 
-.component-subtitle:hover {  
+.component-subtitle:hover {
   color: #fff;
- }
+}
 
 .component-content {
   color: white;
@@ -571,8 +573,8 @@ img.banner-logo {
   background-color: #fffc;
   padding: 1em 7em 0;
   width: 75%;
-  margin-left:auto;
-  margin-right:auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .intro-box {
@@ -586,7 +588,7 @@ img.banner-logo {
   color: #f71e3d;
   font-size: 2.1em;
   font-weight: 700;
-  margin: 0 0 0.5em 0;
+  margin: 0.5em 0;
   text-align: center;
 }
 
@@ -595,11 +597,31 @@ img.banner-logo {
   color: #000000;
   line-height: 1.5em;
   padding: 1em 1em 0;
+  text-align: justify;
 }
 
 .intro-content p {
   letter-spacing: 0.05em;
   margin: 0 0 1em 0;
+}
+
+#intro-title-text-container {
+  background: url(/saito/img/dreamscape.png) no-repeat center center;
+  background-size: cover;
+  color: #fff;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+#intro-title-text-textured h1 {
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Anton, sans-serif;
+  text-align: center;
+  -webkit-transition: text-shadow 1s ease;
+  text-shadow: 0 0 1px rgba(0, 0, 0, .1);
+  margin: 0;
+  padding: 0;
 }
 
 .black {
@@ -982,8 +1004,8 @@ button:focus {
   z-index: 9;
   top: 0;
   align-items: center;
-  transition: all ease-in 0.1s;
-  left: calc(50% - 550px); 
+  transition: height ease-in 0.1s;
+  left: calc(50% - 550px);
 }
 
 .disabled {
@@ -1024,7 +1046,6 @@ button:focus {
   color: #fff;
 }
 
-
 .benefits-grid {
   display: grid;
   gap: 2em;
@@ -1040,7 +1061,8 @@ button:focus {
   display: flex;
   flex-direction: column;
   justify-content: start;
-  border-left: 1px solid var(--saito-red);;
+  border-left: 1px solid var(--saito-red);
+  ;
 }
 
 .benefit-title {
@@ -1144,9 +1166,6 @@ button:focus {
   color: var(--saito-red);
 }
 
-
-
-
 @media only screen and (max-width: 1460px) {
   section {
     padding: 1em 2em;
@@ -1159,12 +1178,11 @@ button:focus {
     display: flex;
     flex-direction: column-reverse;
   }
-
   .intro {
-    background-color: #fffc;
+    background-color: #eee;
     padding: 1em 0;
+    box-shadow: 0 70px 90px -50px #444;
   }
-
   .header-nav {
     left: 200px;
   }
@@ -1201,15 +1219,9 @@ button:focus {
   .about-saito {
     clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
   }
-
-  .stats-container {
-    display: grid;
-    justify-content: center;
-    gap: 1em;
-  }
 }
-@media only screen and (max-width: 1200px) {
 
+@media only screen and (max-width: 1200px) {
   .project-components {
     gap: 1em;
     grid-template-columns: 1fr 1fr;
@@ -1218,27 +1230,45 @@ button:focus {
     gap: 1em;
     grid-template-columns: auto;
   }
-
   .benefits-grid {
     grid-template-columns: 1fr 1fr;
+  }
+  .benefit {
+    height: 60px;
+  }
+  .main {
+    margin: 20em 0 0;
+  }
+  .stats-container {
+    display: grid;
+    justify-content: center;
+    gap: 1em;
   }
 }
 
 @media only screen and (max-width: 900px) {
   .header-nav i {
     display: block;
+    text-shadow: 1px 1px #222;;
   }
   .header-nav a {
     display: none;
+  }
+  .header-wrapper {
+    width: calc(100vw - 3em);
+  }
+  .header-nav {
+    left: unset;
+    right: 0;
   }
   .header-nav:hover {
     display: grid;
     text-align: right;
     gap: 1em;
     grid-template-columns: auto;
-    margin: 2em 0;
+    margin: 1em 0;
     border-right: 1px solid #fff;
-    right: 300px;
+    right: 0;
     height: unset;
     background: linear-gradient(90deg, rgb(247 31 61 / 50%), rgb(247 31 61 / 75%));
     padding: 2em 1em;
@@ -1250,7 +1280,6 @@ button:focus {
     display: none;
   }
 }
-
 
 @media only screen and (max-width: 800px) {
   .project-components {
@@ -1276,6 +1305,7 @@ button:focus {
     padding: 0px;
     height: unset;
     overflow: hidden;
+    margin: 16em 0 0;
   }
   .site-main {
     height: 5px;
@@ -1299,10 +1329,11 @@ button:focus {
     flex-flow: column;
     justify-content: space-around;
   }
-  .featured-app-inner-mobile {
-    width: calc(100vw - 2em);
-    margin: 1em auto;
-    display: block;
+  .component {
+    height: 170px !important;
+  }
+  .component-text {
+    margin: 0;
   }
   .roadmap-wrapper {
     padding: 1em 0;
@@ -1314,9 +1345,6 @@ button:focus {
   }
   .banner {
     clip-path: polygon(100% 0, 100% 56%, -10% 100%, 0 38%, 0 0);
-  }
-  .banner-logo {
-    display: none;
   }
   .featured-app-back-inner p {
     margin: 1em;
@@ -1372,22 +1400,20 @@ button:focus {
   .compare-grid-header, .compare-grid .label {
     font-size: medium;
   }
-
-
 }
 
 @media only screen and (max-width: 600px) {
   body {
     font-size: 0.8em;
   }
+  .main {
+    margin: 10em 0 0;
+  }
   .intro-title {
     font-size: 1.7em;
   }
   .calltoaction {
     transform: scale(0.65);
-  }
-  .main {
-    margin-top: 0;
   }
   section.first {
     margin-top: -40px;
@@ -1401,9 +1427,35 @@ button:focus {
   .benefits-grid {
     grid-template-columns: 1fr;
   }
-
+  .benefit {
+    height: 40px;
+  }
+  .component {
+    height: 130px !important;
+  }
+  .component-text {
+    margin: 0;
+  }
 }
 
+/* dynamic header */
 
+.header-home, .logo {
+  transition: all 1s ease-in-out;
+}
+.logo {
+  transform-origin: top;
+}
 
+.small-head {
+  height: 2.5em;
+}
 
+.small-head .logo {
+  transform: scale(0);
+  position: absolute;
+  top: 1em;
+}
+.logo {
+  transform: scale(1);  
+}
