@@ -18,6 +18,7 @@ class AppStore extends ModTemplate {
     this.app = app;
 
     this.name          = "AppStore";
+//    this.appname       = "Deploy";
     this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
     this.categories    = "Utilities Dev";
     this.featured_apps = ['Imperium', 'Debug', 'Scotland', 'Escrow'];
@@ -76,12 +77,10 @@ class AppStore extends ModTemplate {
     }
   }
   onPeerHandshakeComplete(app, mod) {
-
     if (this.renderMode == "standalone") {
       AppStoreOverlay.render(this.app, this, this.search_options);
       AppStoreOverlay.attachEvents(this.app, this);
     }
-
   }
 
 

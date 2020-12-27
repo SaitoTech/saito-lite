@@ -43,6 +43,9 @@ class Email extends ModTemplate {
     this.addrController = new AddressController(app, this.returnMenuItems());
 
   }
+
+
+
   initialize(app) {
     super.initialize(app);
     if(app.BROWSER && this.browser_active) {

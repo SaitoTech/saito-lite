@@ -52,6 +52,15 @@
   display: none;
 }
 
+.appstore-overlay-container .appstore-header-featured .appstore-overlay-searchbox {
+  padding: 0px;
+  font-size: 20px;
+}
+.appstore-overlay-container .appstore-header-featured .appstore-header-title {
+  font-size: 25px;
+}
+
+
 .appstore-app-item-categories .category {
   display: inline-block;
   margin: 0 5px 0 0;
