@@ -18,6 +18,8 @@ module.exports = AppStoreAppspace = {
       AppStoreAppspacePublish.render(app, data);
       AppStoreAppspacePublish.attachEvents(app, data);
     }
+    document.getElementById('appstore-publish-button').click();
+
   }
 
 

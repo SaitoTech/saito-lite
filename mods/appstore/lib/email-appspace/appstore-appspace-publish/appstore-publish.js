@@ -1,27 +1,43 @@
 const AppStorePublishTemplate = require('./appstore-publish.template');
 const AppStorePublishSuccess = require('./appstore-publish-success/appstore-publish-success');
+const AppStoreOverlay = require('./../../appstore-overlay/appstore-overlay');
+
+
 
 module.exports = AppStorePublish = {
-  render(app, data) {
+  render(app, mod) {
     document.querySelector(".email-appspace")
             .innerHTML = AppStorePublishTemplate();
     //zip.workerScriptsPath = '/saito/lib/zip/';
   },
 
-  attachEvents(app, data) {
+  attachEvents(app, mod) {
 
-    data.publish = {};
+    mod.data = {};
+    mod.data.publish = {};
 
     let appstore_self = this;
 
 
-    document.getElementById('appstore-publish-moddrop-inside').ondrop = function(evt) {
-    		  evt.stopPropagation()
-    		  evt.preventDefault()
-    		  var files = evt.dataTransfer.files  // FileList object.
-    		  var file = files[0]                 // File     object.
-    		  alert(file.name)
-    };
+    app.browser.addDragAndDropFileUploadToElement('appstore-publish-moddrop-inside', function(fileres) {
+      this.files = [];
+      this.files.push(fileres);
+      mod.data.publish.zip = fileres;
+      mod.data.publish.zip = mod.data.publish.zip.substring(28);
+      document.querySelector(".submit-file-btn-box").style.display = "block";
+    }, true);
+
+
+
+    document.querySelector('.appstore-browse-btn').onclick = (e) => {
+      AppStoreOverlay.render(app, mod);
+      AppStoreOverlay.attachEvents(app, mod);
+      try {
+        let obj = document.querySelector('.appstore-header-featured');
+        obj.style.display = "block";
+      } catch (err) {}
+    }
+
 
 
 
@@ -42,9 +58,9 @@ module.exports = AppStorePublish = {
               }
 
               base64_reader.onload = function() {
-		data.publish.zip = base64_reader.result;
+		mod.data.publish.zip = base64_reader.result;
 		// remove "data:application/zip;base64," from head of string
-		data.publish.zip = data.publish.zip.substring(28);
+		mod.data.publish.zip = data.publish.zip.substring(28);
 		try {
 		  document.querySelector(".submit-file-btn-box").style.display = "block";
 		} catch (err) {
@@ -59,14 +75,14 @@ module.exports = AppStorePublish = {
 
               e.preventDefault();
 
-              if (data.publish.zip) {
+              if (mod.data.publish.zip) {
 
                 //
                 // Name + Description
                 // reg.search()
                 //
 
-                let newtx = this.createPublishTX(app, data);
+                let newtx = this.createPublishTX(app, mod.data);
                 app.network.propagateTransaction(newtx);
                 //
                 // TODO:
