@@ -39,7 +39,7 @@ h2, h5 {
   display: block;
   height: unset;
   overflow: hidden;
-  margin: 25em 0 0;
+  margin: 8em 0 0;
 }
 
 .site-main {
@@ -150,13 +150,19 @@ section.first {
   padding: 0px;
 }
 
-img.banner-logo {
-  width: 45%;
-  max-width: 700px;
+.banner-logo {
+  width: 45em;
+  max-width: 65vw;
   position: absolute;
   left: 40%;
-  top: 6em;
+  top: 4em;
   transform: translate(-50%, 0em);
+}
+
+.spacer-logo {
+  width: 45em;
+  max-width: 65vw;
+  opacity: 0;
 }
 
 .banner-title {
@@ -202,7 +208,7 @@ img.banner-logo {
 }
 
 .calltoaction {
-  margin: 1em auto 0;
+  margin:  min(30vw, 16em) auto 0;
   display: flex;
   justify-content: center;
 }
@@ -1238,9 +1244,6 @@ button:focus {
   .benefit {
     height: 60px;
   }
-  .main {
-    margin: 23em 0 0;
-  }
   .stats-container {
     display: grid;
     justify-content: center;
@@ -1281,18 +1284,12 @@ button:focus {
   .header-nav:hover i {
     display: none;
   }
-  .main {
-    margin: 19em 0 0;
-  }
 }
 
 @media only screen and (max-width: 800px) {
   .project-components {
     gap: 1em;
     grid-template-columns: 1fr;
-  }
-  .calltoaction {
-    margin: 2em auto 0;
   }
   .mobile {
     display: block;
@@ -1409,9 +1406,6 @@ button:focus {
 @media only screen and (max-width: 600px) {
   body {
     font-size: 0.8em;
-  }
-  .main {
-    margin: 17em 0 0;
   }
   .intro-title {
     font-size: 1.7em;
