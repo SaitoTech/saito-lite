@@ -559,7 +559,14 @@ button i {
 }
 
 .appstore-header-featured {
-  grid-template-columns: 1fr auto;
+  height: 3em;
+  min-height: 2em;
+}
+.appstore-overlay-searchbox {
+  font-size: 0.8em;
+}
+.appstore-header-title {
+  font-size: 1.4em;
 }
 
 .app-category-all {

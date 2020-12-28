@@ -26,7 +26,7 @@ module.exports = AppStoreAppspace = {
       } else {
 	where_clause += " AND ";
       }
-      where_clause += " description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\"";
+      where_clause += " (name LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" OR description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" )";
     }
     if (search_options.version != "" && search_options.version != undefined) {
       if (where_clause == "") {
@@ -66,8 +66,6 @@ console.log(sql_query);
 	sql_query ,
 
         (res) => {
-
-console.log("GOT THIS: " + JSON.stringify(res.rows));
 
         if (res.rows != undefined) {
           let installed_apps = [];
@@ -140,17 +138,22 @@ console.log("GOT THIS: " + JSON.stringify(res.rows));
     });
 
     //
+    // developers overlay
+    //
+    document.querySelector('.appstore-overlay-developers').onclick = (e) => {
+      window.location = "https://org.saito.tech/developers";
+      return false;
+    };
+
+    //
     // search
     //
     document.getElementById('appstore-search-box').addEventListener('keypress', (e) => {
       let key = e.which || e.keyCode;
       if (key === 13) {
-
-        alert("Search Query: " + e.currentTarget.value);
-
 	let options = { search : e.currentTarget.value , category : "" , featured : 0 };
 	search_self.render(app, mod, options);	
-
+	search_self.attachEvents(app, mod);	
       }
     });
 

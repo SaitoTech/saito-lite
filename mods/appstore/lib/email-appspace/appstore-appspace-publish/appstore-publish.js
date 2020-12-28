@@ -6,9 +6,7 @@ const AppStoreOverlay = require('./../../appstore-overlay/appstore-overlay');
 
 module.exports = AppStorePublish = {
   render(app, mod) {
-    document.querySelector(".email-appspace")
-            .innerHTML = AppStorePublishTemplate();
-    //zip.workerScriptsPath = '/saito/lib/zip/';
+    document.querySelector(".email-appspace").innerHTML = AppStorePublishTemplate();
   },
 
   attachEvents(app, mod) {
