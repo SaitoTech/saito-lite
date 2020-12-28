@@ -575,6 +575,7 @@ img.banner-logo {
   width: 75%;
   margin-left: auto;
   margin-right: auto;
+  box-shadow: 0 70px 90px -50px #444;
 }
 
 .intro-box {
@@ -1182,7 +1183,6 @@ button:focus {
   .intro {
     background-color: #eee;
     padding: 1em 0;
-    box-shadow: 0 70px 90px -50px #444;
   }
   .header-nav {
     left: 200px;
