@@ -623,7 +623,7 @@ class Post extends ModTemplate {
       $pimg		: '' ,
       $plink		: '' ,
       $ptx		: pfulltx ,
-      $plitetx		: plitetx ,
+      $plite_tx		: plitetx ,
       $pts		: tx.transaction.ts ,
       $pchildren	: 0 ,
       $pflagged 	: 0 ,

@@ -1003,8 +1003,8 @@ div#message-wrapper {
   transform: translateX(-50%) translateY(-50%);
   border: 3px solid var(--saito-red);
   border-radius: 2px;
-  padding: 1em;
-  background-color: #eee;
+  padding: 0.1em;
+  /* background-color: #eee; */
   max-width: 90%;
   max-height: 90%;
 }

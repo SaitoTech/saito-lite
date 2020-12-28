@@ -46,9 +46,7 @@
 
 <body>
 
-  <div class="header">
-    <h2>Downloading Saito then Synching the Chain</h2>
-  </div>
+ 
   <div class="header-nav">
     <i class="fas fa-ellipsis-v"></i>
     <a alt="the Saito Arcade" href="https://saito.io/arcade">Arcade</a>
@@ -60,6 +58,7 @@
   <div class="all">
     <div class="parallax-layer parallax-back">
       <section id="banner" class="banner">
+        <img class="banner-logo" src="/saito/img/logo.svg">
       </section>
       <div class="background-logo-box">
         <img class="background-logo" alt="saito logo" src="/website/img/saito-shape-red.svg"></img>
@@ -71,43 +70,49 @@
     </div>
     <div class="parallax-layer parallax-base">
       <div class="main">
-
+        <!--img class="spacer-logo" src="/saito/img/logo.svg"-->
         <section class="calltoaction">
           <div class="action-components">
             <div class="component community">
-	      <a href="https://saito.io/arcade">
-              <div class="component-text">
-                <div class="component-title shine">Applications</div>
-                <div class="component-subtitle"><div class="component-subtitle-text">use the apps</div></div>
-              </div>
-	      </a>
+              <a href="https://saito.io/arcade">
+                <div class="component-text">
+                  <div class="component-title shine">Applications</div>
+                  <div class="component-subtitle">
+                    <div class="component-subtitle-text">use the apps</div>
+                  </div>
+                </div>
+              </a>
             </div>
             <div class="component developer">
-	      <a href="https://org.saito.tech/developers">
-              <div class="component-text">
-                <div class="component-title">Developers</div>
-                <div class="component-subtitle"><div class="component-subtitle-text">get started</div></div>
-              </div>
-	      </a>
+              <a href="https://org.saito.tech/developers">
+                <div class="component-text">
+                  <div class="component-title">Developers</div>
+                  <div class="component-subtitle">
+                    <div class="component-subtitle-text">get started</div>
+                  </div>
+                </div>
+              </a>
             </div>
         </section>
 
         <section class="intro first">
+          <div class="intro-back">
           <div class="intro-title" id="intro-title-text-container">
-	    <div id="intro-title-text-textured">A World of Blockchains - In Your Browser</div>
-	  </div>
+            <div id="intro-title-text-textured">A World of Blockchains - In Your Browser</div>
+          </div>
           <div class="intro-content">
             <p>
-              Saito runs blockchain apps in your browser without the need for closed plugins and 
-	      non-open infrastructure. Even better, it pays people to run the access points needed 
-	      to keep other networks free and decentralized.
+              Saito runs blockchain apps in your browser without the need for closed plugins and
+              non-open infrastructure. Even better, it pays people to run the access points needed
+              to keep other networks free and decentralized.
             </p>
             <p style="text-align:center;">
-              <a href="https://org.saito.tech" target="_blank">Technical Whitepaper</a> | 
-              <a href="https://org.saito.tech" target="_blank">Network Explainer</a> | 
+              <a href="https://org.saito.tech" target="_blank">Technical Whitepaper</a> |
+              <a href="https://org.saito.tech" target="_blank">Network Explainer</a> |
               <a href="https://org.saito.tech" target="_blank">Saito Whitepaper</a>
             </p>
           </div>
+        </div>
         </section>
 
         <!--Join us / Social-->
@@ -293,8 +298,17 @@
         </section>
 
 
+        <section class="stats">
+          <div class="stats-container">
+            <div class="stat">30,000+ Transactions a Day and Growing</div>
+            <div class="stat">7+ Million Transactions</div>
+            <div class="stat">30+ Popular Applications</div>
+          </div>
+        </section>
+
+
         <!--roadmap-->
-<!-----
+
         <section class="roadmap">
           <div class="roadmap-wrapper">
             <h2>Roadmap</h2>
@@ -355,7 +369,6 @@
             </div>
           </div>
         </section>
-------->
 
         <!--about-->
         <!--section class="about-saito red">
@@ -375,13 +388,6 @@
       </div>
     </section-->
 
-        <section class="stats">
-          <div class="stats-container">
-            <div class="stat">30,000+ Transactions a Day and Growing</div>
-            <div class="stat">7+ Million Transactions</div>
-            <div class="stat">30+ Popular Applications</div>
-          </div>
-        </section>
 
 
         <footer class="footer">
@@ -401,26 +407,9 @@
       <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
 
 
-<style text="text/css">
+      <script>
 
-#intro-title-text-container {
-	background: url(/saito/img/dreamscape.png) no-repeat center center;
-	background-size: cover;
-	color: #fff;
-	-webkit-text-fill-color: transparent;
-	-webkit-background-clip: text;
-}
-#intro-title-text-textured h1 {
-	font-size: 30px;
-	font-weight: bold;
-	font-family: Anton, sans-serif;
-	text-align: center;
-	-webkit-transition: text-shadow 1s ease;
-	text-shadow: 0 0 1px rgba(0,0,0,.1);
-	margin: 0;
-	padding: 0;
-}
-</style>
+      </script>
 
 </body>
 

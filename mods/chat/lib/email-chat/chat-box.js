@@ -48,7 +48,10 @@ module.exports = ChatBox = {
 
 	  }
 
-	}
+  }
+        document.querySelectorAll('img.img-prev').forEach(img => {
+          img.addEventListener('click', window.imgPop(img));
+        });
         chat_self.scrollToBottom(group_id);
      });
 
@@ -226,7 +229,8 @@ module.exports = ChatBox = {
         app.browser.addDragAndDropFileUploadToElement(el.id, function(filesrc) {
 
 	  let group_id = el.id.split('chat-box-main-')[1];
-	  let img = document.createElement('img'); 
+    let img = document.createElement('img');
+              img.classList.add('img-prev');
               img.src = filesrc;
 
           let newtx = mod.createMessage(group_id, img.outerHTML);
@@ -338,12 +342,13 @@ return;
           chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(new_message_block, mod);
         }
         // add window.imgPoP to all images in chat_box_main ...
-
-        document.querySelectorAll('.chat-box-main .img-prev').forEach(img => {
+        document.querySelectorAll('.img-prev').forEach(img => {
           img.addEventListener('click', window.imgPop(img));
         });
         this.scrollToBottom(message.group_id);
-      } catch (err) { }
+      } catch (err) {
+        console.log('Error @ chat-box.js | addMessageToDOM\n ERROR: ' + err);
+      }
     },
 
 

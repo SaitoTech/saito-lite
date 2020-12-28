@@ -116,7 +116,7 @@ module.exports = EmailForm = {
         newtx = app.wallet.signTransaction(newtx);
 
         app.network.propagateTransaction(newtx);
-        window.location.hash = this.goToLocation("#page=email_list&subpage=inbox");
+        window.location.hash = mod.goToLocation("#page=email_list&subpage=inbox");
         
         salert("Your message has been sent");
 
