@@ -1411,6 +1411,9 @@ button:focus {
     font-size: 1.7em;
   }
   .calltoaction {
+    margin: 16vw auto 0;
+  }
+  .calltoaction>div {
     transform: scale(0.65);
   }
   section.first {
@@ -1433,6 +1436,9 @@ button:focus {
   }
   .component-text {
     margin: 0;
+  }
+  .banner-logo {
+    top: 5.5em;
   }
 }
 
