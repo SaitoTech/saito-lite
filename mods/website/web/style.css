@@ -570,8 +570,8 @@ img.banner-logo {
 }
 
 .intro {
-  background-color: #fffc;
-  padding: 1em 7em 0;
+  background-color: #eee;
+  padding: 1em 7em;
   width: 75%;
   margin-left: auto;
   margin-right: auto;
@@ -1181,7 +1181,6 @@ button:focus {
     flex-direction: column-reverse;
   }
   .intro {
-    background-color: #eee;
     padding: 1em 0;
   }
   .header-nav {
