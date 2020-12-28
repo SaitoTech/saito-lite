@@ -30,6 +30,8 @@ echo ""
 echo ""
 echo "Compiling Lite-Client JS..." 
 
+    rm -rf bundler/default/mods/appstore/bundler/dist
+
     for md in bundler/default/mods/* ; do
       rm -rf "$md/web"
       rm -rf "$md/sql"
@@ -80,7 +82,10 @@ function reset_nonpersistent {
 
   rm -rf ./mods/appstore/mods
   mkdir ./mods/appstore/mods
-  rm -f ./mods/appstore/bundler/dist/*
+  # 
+  # do not delete compiled software
+  # 
+  # rm -f ./mods/appstore/bundler/dist/
 
   rm -f ./mods/forum/web/img/thumbnails/*.png
   rm -f ./mods/registry/web/addresses.txt
@@ -147,8 +152,9 @@ function copy_lite_mods_to_bundler_directory {
     cp -rf ./mods/$i bundler/default/mods/$i
   done
 
-
   rm -f ./bundler/default/mods/appstore/mods/*
+  rm -f ./bundler/default/mods/appstore/bundler/*
+  rm -f ./bundler/default/mods/appstore/dist/*
 
 }
 

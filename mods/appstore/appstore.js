@@ -25,6 +25,7 @@ class AppStore extends ModTemplate {
 
     this.header        = new SaitoHeader(app);
 
+    this.bundling_timer = null;
     this.renderMode    = "none";
     this.search_options = {};
 
@@ -226,7 +227,24 @@ console.log("##########################");
         case 'request bundle':
           if (tx.isFrom(app.wallet.returnPublicKey())) {
             try {
-              document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
+              document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about <span class=\"time_remaining\">45</span> seconds.";
+	      let appstore_mod = app.modules.returnModule("AppStore");
+	      appstore_mod.time_remaining = 45;
+	      appstore_mod.bundling_timer = setInterval(() => {
+		if (appstore_mod.time_remaining < 0) {
+		  clearInterval(appstore_mod.bundling_timer);
+		} else {
+		  appstore_mod.time_remaining--;
+		  if (appstore_mod.time_remaining >= 0) {
+		    try {
+	 	      document.querySelector(".time_remaining").innerHTML = appstore_mod.time_remaining;
+		    } catch (err) {
+		      clearInterval(appstore_mod.bundling_timer);
+		    }
+		  }
+		}
+	      }, 1000);
+
             } catch (err) {
             }
           }
@@ -701,8 +719,6 @@ console.log("----------------------------");
       IndexTemplate(modules_config_filename)
     );
 
-console.log("done with index template");
-
     //
     // execute bundling process
     //
@@ -712,11 +728,9 @@ console.log("done with index template");
     bash_script_content += 'cd ' + __dirname + "\n";
     bash_script_content += 'cd ../../' + "\n";
     bash_script_content += `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
-console.log("FROM " + __dirname + "/../../");
-console.log(`sh bundle.sh ${entry} ${output_path} ${bundle_filename}`);
 
     bash_script_content += "\n";
-    //bash_script_content += bash_script_delete;
+    bash_script_content += bash_script_delete;
 
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
     try {
@@ -808,7 +822,32 @@ console.log("Bundle __dirname: " + __dirname);
 
         res.setHeader('Content-type', 'text/javascript');
         res.charset = 'UTF-8';
-        res.write('alert("Server does not contain your Saito javascript bundle...");');
+        res.write(`
+
+	  let x = confirm("Server reports it does not contain your Saito javascript bundle. This can happen across server upgrades with remotely-hosted application bundles. Do you wish to reset to use the server defaults?");
+	  if (x) { 
+
+	    try {
+
+	      if (typeof(Storage) !== "undefined") {
+	        let options = null;
+	        let data = localStorage.getItem("options");
+	        if (data) {
+	  	  options = JSON.parse(data); 
+	          options.bundle = "";
+	          options.modules = [];
+	          localStorage.setItem("options", JSON.stringify(options));
+		  window.location.reload(false);
+    		}
+	      }
+
+	    } catch (err) {
+  	      alert("Error attempting to reset to use default Saito: " + err);
+	    }
+	  }
+
+	`);
+
         res.end();
       });
     }

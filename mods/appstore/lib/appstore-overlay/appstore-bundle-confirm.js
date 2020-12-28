@@ -9,13 +9,14 @@ module.exports = AppStoreBundleConfirm = {
 
     attachEvents(app, data) {
 
-      document.getElementById('confirm-bundle-install-btn')
-        .addEventListener('click', (e) => {
+      document.getElementById('confirm-bundle-install-btn').addEventListener('click', (e) => {
 
-          salert("accepting bundle: " + data.appstore_bundle);
           app.options.bundle = data.appstore_bundle;
           app.storage.saveOptions();
-          window.location = window.location;
+
+	  let email_redirect = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/wallet";
+	  salert("Application Installed - redirecting to Saito Wallet");
+          window.location = email_redirect;
 
         });
 

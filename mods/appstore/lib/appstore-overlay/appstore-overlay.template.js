@@ -14,12 +14,13 @@ module.exports = AppStoreAppspaceTemplate = (app, row) => {
   <div class="appstore-overlay-grid" id="appstore-overlay-grid">
   </div>
 
+  <a href="https://org.saito.tech/developers">
   <fieldset class="appstore-overlay-developers">
     <p>
       Developer? Code and upload your first Saito Application in five minutes.
     </p>
   </fieldset>
-
+  </a>
 </div>
 
   `;

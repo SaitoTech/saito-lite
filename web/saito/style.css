@@ -474,7 +474,11 @@ button i {
 }
 
 .appstore-overlay-developers {
-  font-size: 0.5em;
+  font-size: 1.2em;
+}
+.appstore-overlay-developers:hover {
+  font-weight: bold;
+  cursor: pointer;;
 }
 
 .appstore-overlay-container {

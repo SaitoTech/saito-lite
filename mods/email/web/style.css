@@ -379,6 +379,9 @@ hr {
   max-height: calc(100vh - 400px);
   overflow: auto;
 }
+.email-detail-text p {
+  margin-bottom: 0.4em;
+}
 
 .email-detail-left-options {
   display: grid;
