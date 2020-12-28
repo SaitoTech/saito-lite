@@ -23,9 +23,6 @@ class Website extends ModTemplate {
 
   initializeHTML(app) {
 
-    //    super.initializeHTML(app);
-
-    //    Data.render(app);
 
     this.header.render(app, this);
     this.header.attachEvents(app, this);
@@ -51,17 +48,6 @@ class Website extends ModTemplate {
     //      mod.respondTo('chat-manager').render(this.app, this);
     //    });
 
-    /***
-        var html = `
-          <a class="header-icon-fullscreen tip" target="_blank" href="https://org.saito.tech/blog">
-          <i id="blog" class="header-icon icon-med fas fa-rss-square">
-          <div class="redicon"></div></i>
-          <div class="tiptext headertip">Saito Blog</div>
-          </a>
-        `;
-        var iconlist = document.querySelector('.header-icon-links');
-        iconlist.insertBefore(app.browser.htmlToElement(html), iconlist.firstChild);
-        ***/
 
   }
 
