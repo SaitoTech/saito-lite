@@ -568,13 +568,15 @@ img.banner-logo {
   padding: 1em;
   border: 1px solid white;
 }
-
 .intro {
-  background-color: #eee;
   padding: 1em 7em;
   width: 75%;
   margin-left: auto;
   margin-right: auto;
+}
+.intro-back {
+  padding: 2em;
+  background-color: #eee;
   box-shadow: 0 70px 90px -50px #444;
 }
 
@@ -1237,7 +1239,7 @@ button:focus {
     height: 60px;
   }
   .main {
-    margin: 20em 0 0;
+    margin: 23em 0 0;
   }
   .stats-container {
     display: grid;
@@ -1279,6 +1281,9 @@ button:focus {
   .header-nav:hover i {
     display: none;
   }
+  .main {
+    margin: 19em 0 0;
+  }
 }
 
 @media only screen and (max-width: 800px) {
@@ -1305,7 +1310,6 @@ button:focus {
     padding: 0px;
     height: unset;
     overflow: hidden;
-    margin: 16em 0 0;
   }
   .site-main {
     height: 5px;
@@ -1407,7 +1411,7 @@ button:focus {
     font-size: 0.8em;
   }
   .main {
-    margin: 10em 0 0;
+    margin: 17em 0 0;
   }
   .intro-title {
     font-size: 1.7em;
