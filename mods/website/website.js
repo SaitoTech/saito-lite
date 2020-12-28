@@ -30,6 +30,23 @@ class Website extends ModTemplate {
     this.header.render(app, this);
     this.header.attachEvents(app, this);
 
+      var el = document.querySelector('.all');
+      var head = document.querySelector('.header-home');
+      var head_nav = document.querySelector('.header-nav');
+      head.classList.add('small-head');
+      head_nav.classList.add('small-head');
+      el.addEventListener('scroll', () => {
+        if (el.scrollTop > 100) {
+          console.log(el.scrollTop);
+          head.classList.remove('small-head');
+          head_nav.classList.remove('small-head');
+        } else {
+          console.log(-el.scrollTop);
+          head.classList.add('small-head');
+          head_nav.classList.add('small-head');
+        }
+      });
+    
     //    this.app.modules.respondTo("chat-manager").forEach(mod => {
     //      mod.respondTo('chat-manager').render(this.app, this);
     //    });
