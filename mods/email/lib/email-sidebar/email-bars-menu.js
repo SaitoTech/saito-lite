@@ -17,13 +17,14 @@ module.exports = EmailBarsMenu = {
       }
     }
     
-    app.wallet.getSupportedCryptos().forEach(async(responseInterface, i) => {
-      if(responseInterface.name !== "SaitoCrypto") {
+    app.wallet.returnAvailableCryptos().forEach(async(responseInterface, i) => {
+      if (responseInterface.name !== "Saito") {
         app.browser.addElementToDom(`<li id="email-nav-${responseInterface.name}" class="crypto-apps-item">
           ${responseInterface.ticker}
         </li>`, "crypto-apps");  
       }
     });
+
     // copy the content of .email-bars-menu into #mobile.email-bars-menu
     // ############### TODO #############
     // Do this with CSS and remove all the relevant javacsript.

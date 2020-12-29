@@ -9865,7 +9865,7 @@ alert("end of history!");
       //
       // event already run - sync loading error
       //
-      console.log("sync loading error -- playEvent");
+      console.log("sync loading error -- playEvent on card: " + card);
       return 1;
     }
 

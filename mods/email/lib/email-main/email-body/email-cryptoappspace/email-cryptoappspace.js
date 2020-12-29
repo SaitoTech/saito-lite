@@ -12,9 +12,9 @@ module.exports = EmailCryptoAppspace = {
     
     try {
       let subPage = app.browser.parseHash(window.location.hash).subpage;
-      let modInterface = app.wallet.getCryptoModuleInterfaceByName(subPage);
-      let preferredCrpytoName = app.wallet.getPreferredCryptoName(); 
-      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(modInterface, preferredCrpytoName);  
+      let modInterface = app.wallet.returnPreferredCryptoByName(subPage);
+      let preferredCryptoName = app.wallet.returnPreferredCryptoName(); 
+      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(modInterface, preferredCryptoName);  
       loadBalance(modInterface);
       loadPubkey(modInterface);  
 

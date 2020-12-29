@@ -90,9 +90,12 @@ class Email extends ModTemplate {
     // this.renderMain(app);
     // this.renderSidebar(app);
     // 
-    this.app.wallet.subscribeToPreferredCryptoChangeEvent(this.preferredCryptoChangeCallback);
-    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
-    this.cacheAndRenderPreferredCryptoBalance();
+//
+// DEC 30 --- disabled as part of preferred module cleanup
+//
+//    this.app.wallet.subscribeToPreferredCryptoChangeEvent(this.preferredCryptoChangeCallback);
+//    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
+//    this.cacheAndRenderPreferredCryptoBalance();
     
     window.addEventListener("hashchange", () => {
       this.rerender(app);
@@ -273,7 +276,7 @@ class Email extends ModTemplate {
 
   cacheAndRenderPreferredCryptoBalance() {
     this.preferredCryptoBalance = "loading...";
-    this.app.wallet.getPreferredCryptoBalance().then((value) => {
+    this.app.wallet.returnPreferredCryptoBalance().then((value) => {
       this.preferredCryptoBalance = value;
       this.renderBalance();
     });
@@ -281,14 +284,17 @@ class Email extends ModTemplate {
   }
   async renderBalance() {
     if(document.getElementById("email-token")){ /// might not have rendered yet, no problem.
-      document.getElementById("email-token").innerHTML = " " + this.app.wallet.getPreferredCryptoTicker();
+      document.getElementById("email-token").innerHTML = " " + this.app.wallet.returnPreferredCryptoTicker();
       document.getElementById("email-balance").innerHTML = this.preferredCryptoBalance;  
     }
   }
   preferredCryptoChangeCallback() {
-    this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
-    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
-    this.cacheAndRenderPreferredCryptoBalance();
+//
+// TODO - removed Dec 30 
+//
+//    this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
+//    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
+//    this.cacheAndRenderPreferredCryptoBalance();
   }
 }
 
