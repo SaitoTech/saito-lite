@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS modules (
   description TEXT,
   categories TEXT,
   version TEXT,
+  image TEXT,
   publickey TEXT,
   unixtime INTEGER,
   bid INTEGER,

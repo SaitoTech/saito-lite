@@ -467,10 +467,12 @@ button i {
   margin: 0 0 1em 0;
 }
 
-.appstore-search-box {
-  width: 300px;
+#appstore-search-box {
+  width: 200px;
   float: right;
   font-size: 0.8em;
+  padding: 4px;
+  max-width:200px;
 }
 
 .appstore-overlay-developers {
@@ -494,6 +496,7 @@ button i {
   grid-gap: 1em;
   grid-template-columns: 1fr 1fr 1fr;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .appstore-overlay-app {
@@ -564,9 +567,11 @@ button i {
 }
 .appstore-overlay-searchbox {
   font-size: 0.8em;
+  padding: 4px;
 }
 .appstore-header-title {
   font-size: 1.4em;
+  padding: 4px;
 }
 
 .app-category-all {
