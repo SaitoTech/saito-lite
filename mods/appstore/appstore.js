@@ -288,6 +288,7 @@ console.log("##########################");
     fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin2, { encoding: 'binary' });
 
     let name = 'Unknown Module';
+    let image = "";
     let description = 'unknown';
     let categories = 'unknown';
 
@@ -316,9 +317,9 @@ console.log("##########################");
 	let found_name = 0;
 	let found_description = 0;
 	let found_categories = 0;	
+	let found_image = 0;	
 
-	for (let i = 0; i < zip_lines.length && i < 50 && (found_name == 0 || found_description == 0 || found_categories == 0); i++) {
-
+	for (let i = 0; i < zip_lines.length && i < 50 && (found_image == 0 || found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 
 	  //
 	  // get name
@@ -331,6 +332,19 @@ console.log("##########################");
 	      name = name.replace(/^\s+|\s+$/gm,'');
 	      if (name.length > 50) { name = "Unknown"; found_name = 0; }
 	      if (name === "name") { name = "Unknown"; found_name = 0; }
+	    }
+	  }
+
+	  //
+	  // get image
+	  //
+	  if (/this.image/.test(zip_lines[i]) && found_image == 0) {
+	    found_image = 1;
+	    if (zip_lines[i].indexOf("=") > 0) {
+	      image = zip_lines[i].substring(zip_lines[i].indexOf("="));
+	      //image = cleanString(image);
+	      image = image.replace(/^\s+|\s+$/gm,'');
+              image = image.substring(1, image.length-1);
 	    }
 	  }
 
@@ -386,7 +400,7 @@ console.log("##########################");
     //
     fs.unlink(path.resolve(__dirname, zip_path));
 
-    return { name, description, categories };
+    return { name, description, categories, image };
   }
 
 
@@ -434,18 +448,19 @@ console.log("##########################");
 
     }
 
-console.log("----------------------------");
-console.log("--INSERTING INTO APPSTORE---");
-console.log("----------------------------");
-
-    let sql = `INSERT OR IGNORE INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured) VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
+    let sql = `INSERT OR IGNORE INTO modules (name, description, version, image, categories, publickey, unixtime, bid, bsh, tx, featured) VALUES ($name, $description, $version, $image, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
 
     let { from, sig, ts } = tx.transaction;
 
     // should happen locally from ZIP
     let { module_zip } = tx.returnMessage();
 
-    let { name, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
+    let { name, image, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
+
+console.log("-----------------------------");
+console.log("--INSERTING INTO APPSTORE --- " + name);
+console.log("-----------------------------");
+
 
     let featured_app = 0;
     if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
@@ -454,6 +469,7 @@ console.log("----------------------------");
       $name: name,
       $description: description || '',
       $version: `${ts}-${sig}`,
+      $image: image ,
       $categories: categories,
       $publickey: from[0].add,
       $unixtime: ts,
@@ -580,10 +596,11 @@ console.log("----------------------------");
     //
     // show link to bundle or save in it? Should save it as a file
     //
-    sql = `INSERT OR IGNORE INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
+    sql = `INSERT OR IGNORE INTO bundles (version, image, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $image, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts } = tx.transaction;
     params = {
       $version: `${ts}-${sig}`,
+      $image: '',
       $publickey: from[0].add,
       $unixtime: ts,
       $bid: blk.block.id,

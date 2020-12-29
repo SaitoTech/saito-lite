@@ -13,7 +13,6 @@
 }
 
 .appstore-header-featured {
-  display: none;
 }
 
 .app-space {
@@ -57,7 +56,7 @@
   font-size: 20px;
 }
 .appstore-overlay-container .appstore-header-featured .appstore-header-title {
-  font-size: 25px;
+  font-size: 20px;
 }
 
 
