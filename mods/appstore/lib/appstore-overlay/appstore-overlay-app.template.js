@@ -9,14 +9,14 @@ module.exports = AppStoreOverlayAppTemplate = (app, approw) => {
     <div class="appstore-overlay-app" id="${base64msg}">
    `;
   if (approw.image != "") {
-    html += `    <div class="appstore-overlay-app-image" style="background: url('${appimg}')"></div>`;
+    html += `    <div class="appstore-overlay-app-image" style="background: url(`+approw.image+`);background-repeat: no-repeat; background-size: cover"></div>`;
   } else {
     html += `    <div class="appstore-overlay-app-image" style="background-image: url('${appimg}')"></div>`;
   }
   html += `
       <div class="appstore-overlay-app-details">
         <div class="appstore-overlay-app-title">${approw.name}</div>
-        <div class="appstore-overlay-app-author">david@saito</div>
+        <div class="appstore-overlay-app-author">${app.keys.returnUsername(approw.publickey)}</div>
         <div class="appstore-overlay-app-btn" id="" class="appstore-overlay-app-btn button">install</div>
       </div>
     </div>

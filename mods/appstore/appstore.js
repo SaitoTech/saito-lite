@@ -299,6 +299,11 @@ console.log("##########################");
 
       let promises = directory.files.map(async file => {
 
+        if (file.path === "web/img/arcade.jpg") {
+          let content = await file.buffer();
+          image = "data:image/jpeg;base64," + content.toString('base64')
+	}
+
         if (file.path.substr(0,3) == "lib") { return; }
         if (file.path.substr(-2) !== "js") { return; }
         if (file.path.substr(-2) !== "js") { return; }
@@ -317,9 +322,10 @@ console.log("##########################");
 	let found_name = 0;
 	let found_description = 0;
 	let found_categories = 0;	
-	let found_image = 0;	
+	//let found_image = 0;	
 
-	for (let i = 0; i < zip_lines.length && i < 50 && (found_image == 0 || found_name == 0 || found_description == 0 || found_categories == 0); i++) {
+	//for (let i = 0; i < zip_lines.length && i < 50 && (found_image == 0 || found_name == 0 || found_description == 0 || found_categories == 0); i++) {
+	for (let i = 0; i < zip_lines.length && i < 50 && (found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 
 	  //
 	  // get name
@@ -336,17 +342,21 @@ console.log("##########################");
 	  }
 
 	  //
-	  // get image
+	  // get image (base64)
 	  //
+/***
 	  if (/this.image/.test(zip_lines[i]) && found_image == 0) {
 	    found_image = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
-	      image = zip_lines[i].substring(zip_lines[i].indexOf("="));
-	      //image = cleanString(image);
-	      image = image.replace(/^\s+|\s+$/gm,'');
-              image = image.substring(1, image.length-1);
+	      image = zip_lines[i].substring(zip_lines[i].indexOf("=")+1);
+	      image = image.replace(/ /gm,'');
+	      image = image.replace(/^=/gm,'');
+	      image = image.replace(/;$/gm,'');
+	      image = image.replace(/\"/gm,'');
+	      image = image.replace(/\'/gm,'');
 	    }
 	  }
+***/
 
 	  //
 	  // get description
@@ -399,9 +409,12 @@ console.log("##########################");
     // delete unziped module
     //
     fs.unlink(path.resolve(__dirname, zip_path));
-
     return { name, description, categories, image };
+
   }
+
+
+
 
 
 

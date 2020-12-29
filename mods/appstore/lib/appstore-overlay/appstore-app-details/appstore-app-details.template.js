@@ -1,12 +1,20 @@
 module.exports = AppstoreAppDetailsTemplate = (app, data) => {
 
   var unixtime = new Date(data.module.unixtime);
-    
-  return `
+
+  let html = `  
   <div class="appstore-app-install-content">
 
     <div class="appstore-app-install-image">
-      <img src="/saito/img/dreamscape.png" />
+  `;
+
+  if (data.image) {
+    html += `      <div style='background: ${data.image}; background-repeat: no-repeat; background-size: cover;width:100%;height:100%'></div> `;
+  } else {
+    html += `      <img src="/saito/img/dreamscape.png" /> `;
+  }
+
+  html += `
       <div class="appstore-app-install-name">${data.module.name}</div>
     </div>
 
@@ -46,4 +54,8 @@ module.exports = AppstoreAppDetailsTemplate = (app, data) => {
   </div>
 
   `;
+
+
+  return html;
+
 }

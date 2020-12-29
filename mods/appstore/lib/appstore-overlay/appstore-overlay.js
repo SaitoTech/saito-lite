@@ -96,9 +96,21 @@ console.log(sql_query);
       	    //
     	    Array.from(document.getElementsByClassName("appstore-overlay-app")).forEach(installbtn => {
       	      installbtn.onclick = (e) => {
+
+		let this_btn = e.currentTarget;
+		let app_img = null;
+		for (var i = 0; i < this_btn.childNodes.length; i++) {
+    		  if (this_btn.childNodes[i].className == "appstore-overlay-app-image") {
+		    app_img = this_btn.childNodes[i].style.background;
+console.log(app_img);
+    		  }    
+    		}    
+
+
                 let module_obj = JSON.parse(app.crypto.base64ToString(e.currentTarget.id));
 		let data = {};
                 data.module = module_obj;
+                data.image = app_img;
                 AppStoreAppDetails.render(app, data);
                 AppStoreAppDetails.attachEvents(app, data);
 	      };
