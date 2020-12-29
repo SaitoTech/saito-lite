@@ -470,7 +470,7 @@ button i {
 #appstore-search-box {
   width: 200px;
   float: right;
-  font-size: 0.8em;
+  font-size: 1em;
   padding: 4px;
   max-width:200px;
 }
@@ -553,6 +553,7 @@ button i {
 
 .appstore-overlay-app-author {
   margin-top: 10px;
+  font-size: 0.8em;
 }
 
 .appstore-overlay-searchbox {
@@ -1222,6 +1223,11 @@ div#message-wrapper {
 .account-info {
   display: flex;
   flex-flow: wrap;
+}
+.account-info .saito-select {
+  border: 0px;
+  color: #333;
+  background-color: #fff;
 }
 
 .account-info div {

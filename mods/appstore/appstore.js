@@ -609,11 +609,10 @@ console.log("-----------------------------");
     //
     // show link to bundle or save in it? Should save it as a file
     //
-    sql = `INSERT OR IGNORE INTO bundles (version, image, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $image, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
+    sql = `INSERT OR IGNORE INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts } = tx.transaction;
     params = {
       $version: `${ts}-${sig}`,
-      $image: '',
       $publickey: from[0].add,
       $unixtime: ts,
       $bid: blk.block.id,

@@ -869,6 +869,12 @@ a {
     color: #fff;
     cursor: pointer;
   }
+  .account-info select {
+    color: #333;
+  }
+  .account-info saito-select {
+    background-color: #fff;
+  }
   /* Arrow */
   .saito-select::after {
     content: '\25BC';

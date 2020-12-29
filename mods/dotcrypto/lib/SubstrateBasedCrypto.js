@@ -87,7 +87,7 @@ class SubstrateBasedCrypto extends ModTemplate {
     }
   }
   initialize(app) {
-    if(app.BROWSER) {
+    if (app.BROWSER) {
       super.initialize(app);
       this.load();
       const wsProvider = new WsProvider(this.endpoint);
