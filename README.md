@@ -68,14 +68,64 @@ Stated on more way: A valid block can be formed at any time, but will only be pr
 
 If you're still confused, don't feel bad. There is a reason we've tried to explain this mechanism multiple different ways and most people have trouble reasoning through it the first time. However, we encourage you to re-read this section if you feel you need to understand it, but also feel free to simply move on knowing that *we believe this mechanism creates an economic incentive for network participants to provide block space and transaction throughput at a fair rate*.
 
-## How
+# How To Use Saito
 
 The Reference Implementation of Saito is written in node.js.
 
-## Protocol
-### handshake
+The easiest way to get started is to clone the repo as described above and compile a "lite client" which can be served directly do your browser.
 
+See the "Lite Client Modules Getting Started" doc in /docs.
 
+Alternatively, you can integrate directly with our REST API which is described below. Currently we do not provide any easy way to call this API other than by implemented a Module in the Lite Client as described in the doc mentioned above, but these tools will be coming very soon.
+
+## REST API
+
+The API for interacting with Saito's Core code is quite minimalistic. Additional APIs will be provided later through modules which node's can opt to install or not depending on their preferences.
+
+### Websocket Connection
+
+A node will keep a list of peers which connect to it via a websocket(or local socket, coming soon). 
+
+A peer can send a "request" message through the socket with one of the following request types:
+```
+'handshake', 'block', 'missing block', 'blockchain', 'transaction', 'keylist', or by passing a transaction as the payload.
+```
+
+For Example:
+```
+var message = {};
+message.request = message;
+message.data = data;
+
+this.socket.emit('request', JSON.stringify(message), function (resdata) {
+	mycallback(resdata);
+});
+```
+Within the Lite Client, helper functions are provided:
+```
+peer.sendRequest("chat message", tx);
+//or
+peer.sendRequest("transaction", tx);
+// or
+peer.sendRequestWithCallback("keylist", {...}, function () {...});
+```
+Before a node will begin to send peer request and new transaction events to a peer, the peer must complete the handshake.
+
+```
+var message = {};
+message.request = "handshake";
+message.data = {...};
+
+this.socket.emit('request', JSON.stringify(message), function (resdata) {
+	mycallback(resdata);
+});
+```
+
+If a transaction is sent with message 
+
+WORK IN PROGRESS, WILL BE COMPLETED IN THE NEXT 24 TO 48 HOURS
+
+# Contact 
 
 To connect to the Saito Network please contact us at:
 
