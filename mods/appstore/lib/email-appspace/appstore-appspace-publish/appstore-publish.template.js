@@ -4,7 +4,7 @@ module.exports = AppStorePublishTemplate = () => {
 
     <div style="font-size:1.2em;margin-top:20px;">
 
-    To install new applications <span style="color: var(--saito-red); cursor:pointer;" class="appstore-browse-btn">launch the Saito Appstore</span>. To deploy a new application to the network, use the file uploader below or check our <a href="https://org.saito.tech/developers">developer center</a> for information on how to get started with development:
+    Launch the <span style="color: var(--saito-red); cursor:pointer;" class="appstore-browse-btn">Saito Appstore</span> to install new applications. Visit our <a style="text-decoration:none" href="https://org.saito.tech/developers">developer center</a> for information on how to build applications, or use the file-uploader below to deploy them to the network:
 
     </div>
 

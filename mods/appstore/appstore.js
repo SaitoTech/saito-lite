@@ -191,15 +191,28 @@ console.log("##########################");
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
-          newtx.msg = {
-            module: "AppStore",
-            request: "submit module",
-            module_zip: zip,
-            name: dir,
-          };
+	  //
+	  // TODO - fix 
+	  //
+	  // massive zip files bypassing tx size limits cause issues with 
+	  // some versions of NodeJS. In others they over-size and fail
+	  // elegantly. adding this check to prevent issues with server
+	  // on start, particularly with Red Imperium.
+	  //
+	  if (zip.length <= 10000000) {
 
-          newtx = app.wallet.signTransaction(newtx);
-          app.network.propagateTransaction(newtx);
+            newtx.msg = {
+              module: "AppStore",
+              request: "submit module",
+              module_zip: zip,
+              name: dir,
+            };
+
+            newtx = app.wallet.signTransaction(newtx);
+            app.network.propagateTransaction(newtx);
+
+	  }
+
         });
 
         archive.finalize();
