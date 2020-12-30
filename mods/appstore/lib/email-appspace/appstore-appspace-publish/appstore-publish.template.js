@@ -4,15 +4,7 @@ module.exports = AppStorePublishTemplate = () => {
 
     <div style="font-size:1.2em;margin-top:20px;">
 
-    <h2>Install Applications:</h2>
-
-    To install applications <span style="color: var(--saito-red); cursor:pointer;" class="appstore-browse-btn">launch the Saito Appstore</span> and find and install new applications.
-
-    <p><br/></p>
-
-    <h2>Deploy Applications:</h2>
-
-    Our <span style="color: var(--saito-red); cursor:pointer;" class="appstore-developer-center">developer center</span> has tutorials and documentation for building Saito applications. Once you have built an application, you can publish it to the network using the file-uploader below. It takes about 5 minutes to get your first application on the network:
+    To install new applications <span style="color: var(--saito-red); cursor:pointer;" class="appstore-browse-btn">launch the Saito Appstore</span>. To deploy a new application to the network, use the file uploader below or check our <a href="https://org.saito.tech/developers">developer center</a> for information on how to get started with development:
 
     </div>
 

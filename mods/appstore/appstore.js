@@ -428,23 +428,33 @@ console.log("##########################");
             newtx.msg.title        = "Saito Application Published";
             newtx.msg.message      = `
 
+	    <p>
 	    Your application is now available at the following link:
+	    </p>
 
-	    <p></p>
+	    <p><br /></p>
 
-	    <a href="https://saito.io/appstore/?app=${tx.transaction.ts}-${tx.transaction.sig}">https://saito.io/appstore/?app=${tx.transaction.ts}-${tx.transaction.sig}</a>
+	    <p>
+	    <a href="https://saito.io/appstore/?app=${this.app.crypto.hash(tx.transaction.ts + "-" + tx.transaction.sig)}">https://saito.io/appstore/?app=${this.app.crypto.hash(tx.transaction.ts + "-" + tx.transaction.sig)}</a>
+	    </p>
 
-	    <p></p>
+	    <p><br /></p>
 
-	    or by searching on your preferred AppStore for the following APP-ID:
+	    <p>
+	    Or search your preferred AppStore for your APP-ID:
+	    </p>
 
-	    <p></p>
+	    <p><br /></p>
 
-	     ${tx.transaction.ts}-${tx.transaction.sig}
+	    <p>
+	    ${this.app.crypto.hash(tx.transaction.ts + "-" + tx.transaction.sig)}
+	    </p>
 
-            <p></p>
+	    <p><br /></p>
 
-	    If your application does not appear shortly, that indicates a there is bug in your code preventing the AppStore from compiling it successfully. In the event of difficulty developing remotely, we recommend you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile and test your module manually to find and fix any errors before uploading to the network.
+	    <p>
+	    Please note: if your application is not listed within a few minutes, there may be a problem preventing our AppStore from compiling it successfully. In this case, we recommend <a href="https://org.saito.tech/developers">installing Saito</a> and testing locally before deploying to the network. Please contact the Saito team with questions or problems.
+	    </p>
 
         `;
         newtx = this.app.wallet.signTransaction(newtx);
@@ -480,7 +490,7 @@ console.log("-----------------------------");
     let params = {
       $name: name,
       $description: description || '',
-      $version: `${ts}-${sig}`,
+      $version: this.app.crypto.hash(`${ts}-${sig}`),
       $image: image ,
       $categories: categories,
       $publickey: from[0].add,
@@ -506,7 +516,7 @@ console.log("-----------------------------");
         sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
         params = {
           $name: name,
-          $version: `${ts}-${sig}`,
+          $version: this.app.crypto.hash(`${ts}-${sig}`),
         };
         await this.app.storage.executeDatabase(sql, params, "appstore");
 
@@ -611,7 +621,7 @@ console.log("-----------------------------");
     sql = `INSERT OR IGNORE INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts } = tx.transaction;
     params = {
-      $version: `${ts}-${sig}`,
+      $version: this.app.crypto.hash(`${ts}-${sig}`),
       $publickey: from[0].add,
       $unixtime: ts,
       $bid: blk.block.id,

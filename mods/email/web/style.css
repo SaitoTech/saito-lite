@@ -72,7 +72,7 @@ hr {
 .email-icons {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 2em;
+  grid-auto-columns: 2.3em;
   justify-items: center;
   align-items: center;
   grid-gap: 0.3em;
