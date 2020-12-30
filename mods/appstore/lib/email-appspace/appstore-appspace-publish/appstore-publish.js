@@ -86,8 +86,8 @@ module.exports = AppStorePublish = {
                 // TODO:
                 // convert this to main one way data flow structure like email
                 //
-                AppStorePublishSuccess.render();
-                AppStorePublishSuccess.attachEvents();
+                AppStorePublishSuccess.render(app, mod);
+                AppStorePublishSuccess.attachEvents(app, mod);
               } else {
                 salert("Please attach a zip file of your module");
               }

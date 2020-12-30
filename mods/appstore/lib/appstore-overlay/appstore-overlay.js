@@ -26,7 +26,7 @@ module.exports = AppStoreAppspace = {
       } else {
 	where_clause += " AND ";
       }
-      where_clause += " (name LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" OR description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" )";
+      where_clause += " (name LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" OR description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" OR version LIKE \"%" + search_options.search + "%\")";
     }
     if (search_options.version != "" && search_options.version != undefined) {
       if (where_clause == "") {
