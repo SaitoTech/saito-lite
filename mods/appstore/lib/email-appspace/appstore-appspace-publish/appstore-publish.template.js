@@ -12,7 +12,7 @@ module.exports = AppStorePublishTemplate = () => {
 
     <h2>Deploy Applications:</h2>
 
-    Our <span style="color: var(--saito-red); cursor:pointer;" class="appstore-developer-center">developer center</span> has tutorials and documentation for deploying Saito applications. Once you have build an application, come back here and upload it to the network using the file-uploader below. It takes about 5 minutes to get your first application running on the network.:
+    Our <span style="color: var(--saito-red); cursor:pointer;" class="appstore-developer-center">developer center</span> has tutorials and documentation for building Saito applications. Once you have built an application, you can publish it to the network using the file-uploader below. It takes about 5 minutes to get your first application on the network:
 
     </div>
 
