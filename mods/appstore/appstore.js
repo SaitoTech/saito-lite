@@ -757,6 +757,8 @@ console.log("-----------------------------");
     bash_script_content += 'cd ../../' + "\n";
     bash_script_content += `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
 
+console.log("COMPILING: " + `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`);
+
     bash_script_content += "\n";
     bash_script_content += bash_script_delete;
 
