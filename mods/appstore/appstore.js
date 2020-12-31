@@ -4,6 +4,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailAppStore = require('./lib/email-appspace/appstore-appspace');
 const AppStoreOverlay = require('./lib/appstore-overlay/appstore-overlay');
 const AppStoreBundleConfirm = require('./lib/appstore-overlay/appstore-bundle-confirm');
+const AppStoreModuleIndexedConfirm = require('./lib/appstore-overlay/appstore-module-indexed-confirm');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const fs = require('fs');
 const path = require('path');
@@ -235,6 +236,31 @@ console.log("##########################");
       switch (txmsg.request) {
         case 'submit module':
           this.submitModule(blk, tx);
+	  if (tx.isFrom(app.wallet.returnPublicKey())) {
+            try {
+              document.querySelector(".appstore-loading-text").innerHTML = "Your application has been submitted to the network. <p></p>It should be ready for install in <span class=\"time_remaining\">30</span> seconds.";
+              let appstore_mod = app.modules.returnModule("AppStore");
+              appstore_mod.time_remaining = 30;
+              appstore_mod.bundling_timer = setInterval(() => {
+                if (appstore_mod.time_remaining <= 0) {
+                  clearInterval(appstore_mod.bundling_timer);
+		  AppStoreModuleIndexedConfirm.render(appstore_mod.app, appstore_mod);
+		  AppStoreModuleIndexedConfirm.attachEvents(appstore_mod.app, appstore_mod);
+                } else {
+                  appstore_mod.time_remaining--;
+                  if (appstore_mod.time_remaining >= 1) {
+                    try {
+                      document.querySelector(".time_remaining").innerHTML = appstore_mod.time_remaining;
+                    } catch (err) {
+                      clearInterval(appstore_mod.bundling_timer);
+                    }
+                  }
+                }
+              }, 1000);
+
+            } catch (err) {
+            }
+	  }
           break;
         case 'request bundle':
           if (tx.isFrom(app.wallet.returnPublicKey())) {
@@ -354,23 +380,6 @@ console.log("##########################");
 	  }
 
 	  //
-	  // get image (base64)
-	  //
-/***
-	  if (/this.image/.test(zip_lines[i]) && found_image == 0) {
-	    found_image = 1;
-	    if (zip_lines[i].indexOf("=") > 0) {
-	      image = zip_lines[i].substring(zip_lines[i].indexOf("=")+1);
-	      image = image.replace(/ /gm,'');
-	      image = image.replace(/^=/gm,'');
-	      image = image.replace(/;$/gm,'');
-	      image = image.replace(/\"/gm,'');
-	      image = image.replace(/\'/gm,'');
-	    }
-	  }
-***/
-
-	  //
 	  // get description
 	  //
 	  if (/this.description/.test(zip_lines[i]) && found_description == 0) {
@@ -442,19 +451,7 @@ console.log("##########################");
             newtx.msg.message      = `
 
 	    <p>
-	    Your application is now available at the following link:
-	    </p>
-
-	    <p><br /></p>
-
-	    <p>
-	    <a href="https://saito.io/appstore/?app=${this.app.crypto.hash(tx.transaction.ts + "-" + tx.transaction.sig)}">https://saito.io/appstore/?app=${this.app.crypto.hash(tx.transaction.ts + "-" + tx.transaction.sig)}</a>
-	    </p>
-
-	    <p><br /></p>
-
-	    <p>
-	    Or search your preferred AppStore for your APP-ID:
+	    Your application has been published with the following APP-ID:
 	    </p>
 
 	    <p><br /></p>
@@ -466,7 +463,7 @@ console.log("##########################");
 	    <p><br /></p>
 
 	    <p>
-	    Please note: if your application is not listed within a few minutes, there may be a problem preventing our AppStore from compiling it successfully. In this case, we recommend <a href="https://org.saito.tech/developers">installing Saito</a> and testing locally before deploying to the network. Please contact the Saito team with questions or problems.
+	    Please note: if you have problems installing your application, there may be a problem preventing it from compiling successfully. In these cases, we recommend <a href="https://org.saito.tech/developers">installing Saito</a> and testing locally before deploying to the network. You are welcome to contact the Saito team with questions or problems.
 	    </p>
 
         `;

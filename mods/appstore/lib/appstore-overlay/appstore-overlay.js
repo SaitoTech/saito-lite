@@ -54,8 +54,6 @@ module.exports = AppStoreAppspace = {
     //
     let sql_query = ("SELECT name, description, version, image, publickey, unixtime, bid, bsh FROM modules " + where_clause);
 
-console.log(sql_query);
-
     //
     // fetch modules from appstore
     //
@@ -102,10 +100,8 @@ console.log(sql_query);
 		for (var i = 0; i < this_btn.childNodes.length; i++) {
     		  if (this_btn.childNodes[i].className == "appstore-overlay-app-image") {
 		    app_img = this_btn.childNodes[i].style.background;
-console.log(app_img);
     		  }    
     		}    
-
 
                 let module_obj = JSON.parse(app.crypto.base64ToString(e.currentTarget.id));
 		let data = {};
@@ -115,7 +111,6 @@ console.log(app_img);
                 AppStoreAppDetails.attachEvents(app, data);
 	      };
     	    });
-
           } catch (err) { console.log("error in appstore callback"); }
         }
       }
@@ -132,7 +127,6 @@ console.log(app_img);
     // install module (button)
     //
     Array.from(document.getElementsByClassName("appstore-app-install-btn")).forEach(installbtn => {
-
       installbtn.onclick = (e) => {
         let module_obj = JSON.parse(app.crypto.base64ToString(e.currentTarget.id));
         data.module = module_obj;
@@ -169,8 +163,6 @@ console.log(app_img);
       }
     });
 
-
-
   }
-
 }
+
