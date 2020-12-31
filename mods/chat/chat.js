@@ -234,7 +234,7 @@ class Chat extends ModTemplate {
 
 
   //
-  // peer messages --< receiveMessage() 
+  // peer messages --> receiveMessage() 
   //
   async handlePeerRequest(app, req, peer, mycallback) {
 
@@ -433,24 +433,13 @@ class Chat extends ModTemplate {
       }
       if (add_new_group == 1) {
         this.createChatGroup(members);
+        txmsg.group_id = group_id;
+      } else {
+        if (!txmsg,group_id) { txmsg.group_id = group_id; }
       }
     }
 
    
-
-
-    //
-    // create msg object
-    //
-    //let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-    //app.browser.addIdentifiersToDom([tx.transaction.from[0].add]);
-    //let message = Object.assign(txmsg, {
-    //  sig: tx.transaction.sig,
-    //  type: msg_type,
-    //  identicon: this.app.keys.returnIdenticon()
-    //});
-
-
     //
     // notify group chat if not-on-page
     //
@@ -462,7 +451,7 @@ class Chat extends ModTemplate {
       }
     } catch (err) {
     }
-
+  
 
 
     let message = txmsg.message;
@@ -485,7 +474,7 @@ class Chat extends ModTemplate {
 	  }
         }
       } catch (err) {
-console.log("ERROR 113234: chat error receiving message: " + err);
+        console.log("ERROR 113234: chat error receiving message: " + err);
       }
     });
 
@@ -590,6 +579,7 @@ console.log("ERROR 113234: chat error receiving message: " + err);
 	  name = members[i];
 	}
       }
+      if (name == null) { name = "me"; }
     }
 
     let id = this.app.crypto.hash(`${members.join('_')}`)

@@ -71,7 +71,7 @@ class Tutorial01 extends ModTemplate {
 	  // module but another data structure.
 	  //	
           obj.render = function(app, mod) {
-	    document.querySelector('.email-appspace').innerHTML = '<div class="button tutorial-btn" id="tutorial-btn">Click me!</div>';
+	    document.querySelector('.email-appspace').innerHTML = '<div class="button tutorial-btn" id="tutorial-btn" style="margin-top: 30px; width: 120px; text-align: center;">Click me!</div>';
 	  }
 
           obj.attachEvents = function(app, mod) {
