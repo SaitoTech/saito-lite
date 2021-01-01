@@ -10,7 +10,7 @@ module.exports = ForumSidebarTemplate = (app, data) => {
 
 .arcade-forum-posts {
   color: var(--saito-skyline-grey);
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   display: grid;
   grid-gap: 0.7em;
   overflow-x: hidden;

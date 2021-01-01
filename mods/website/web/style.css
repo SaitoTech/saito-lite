@@ -1,7 +1,7 @@
 body {
   background-color: var(--saito-skyline-grey);
   font-size: 1em;
-  font-family: "visuelt-light";
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   overflow-x: hidden;
   width: 100%;
   position: fixed;
@@ -26,13 +26,22 @@ h2, h5 {
   color: var(--saito-red);
 }
 
-.header {
+.header, .back-head {
   position: absolute;
   top: 0px;
   left: 0px;
   background-image: url('/saito/img/dreamscape.png');
   background-repeat: no-repeat;
   background-size: 100% 100px;
+}
+
+.back-head {
+  height: 2.5em;
+  line-height: 2.5em;
+  color: #efefef;
+  width: 100%;
+  padding: 0 2em;
+  font-weight: bolder;
 }
 
 .main {
@@ -985,10 +994,11 @@ button:focus {
   color: white;
   text-decoration: none;
   display: block;
-  margin: 0 1em;
+  margin: 0 1em 8px;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
+  align-self: flex-end;
 }
 
 .header-nav i {

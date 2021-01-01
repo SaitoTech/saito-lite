@@ -329,7 +329,7 @@ body {
   grid-template-rows: 40px auto;
   grid-template-columns: 100px auto;
   grid-template-areas: "hud-header hud-header" "hud-body hud-body";
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   position: fixed;
   left: 10vw;
   bottom: 0%;

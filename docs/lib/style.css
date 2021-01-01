@@ -26,7 +26,7 @@ html[data-theme='dark'] {
 }
 
 @font-face {
-    font-family: 'visuelt-light';
+    font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
     src: url('/saito/fonts/visuelt-light.eot');
     src: url('/saito/fonts/visuelt-light.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-light.woff2') format('woff2'), url('/saito/fonts/visuelt-light.woff') format('woff'), url('/saito/fonts/visuelt-light.ttf') format('truetype');
     font-weight: normal;
@@ -103,7 +103,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     color: var(--text-color-normal);
-    font-family: visuelt-light, Helvetica Neue, Arial, sans-serif;
+    font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB", Helvetica Neue, Arial, sans-serif;
     font-size: 15px;
     letter-spacing: 0;
     margin: 0;

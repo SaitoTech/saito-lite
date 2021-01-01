@@ -23,7 +23,7 @@ body {
 .hud {
   display: grid;
   grid-template-rows: 40px auto;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   position: absolute;
   left: 0%;
   bottom: 0%;

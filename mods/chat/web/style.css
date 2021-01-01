@@ -49,12 +49,12 @@ p {
 }
 
 .chat-last-message {
-    font-family: visuelt-light;
+    font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
     margin-top: 0.5em;
 }
 
 .chat-last-message-timestamp {
-    font-family: visuelt-light;
+    font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 .chat-room-message-identicon {
