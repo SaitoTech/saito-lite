@@ -2,6 +2,8 @@ const AppStorePublishSuccessTemplate = require('./appstore-publish-success.templ
 const AppStorePublishWaitingTemplate = require('./appstore-publish-waiting.template');
 const SaitoOverlay = require('./../../../../../../lib/saito/ui/saito-overlay/saito-overlay');
 
+
+
 module.exports = AppStorePublishSuccess = {
 
   render(app, mod) {
