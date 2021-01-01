@@ -9,7 +9,7 @@
 }
 
 @font-face {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   src: url('/saito/fonts/visuelt-light.eot');
   src: url('/saito/fonts/visuelt-light.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-light.woff2') format('woff2'), url('/saito/fonts/visuelt-light.woff') format('woff'), url('/saito/fonts/visuelt-light.ttf') format('truetype');
   font-weight: normal;
@@ -64,7 +64,7 @@ html[data-theme='dark'] {
 }
 
 p {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 a {
@@ -149,11 +149,11 @@ p {
 .chat-last-message {
   color: grey;
   margin-top: 2px;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 .chat-last-message-timestamp {
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 4px 0 0 0;
 }
 
@@ -166,7 +166,7 @@ p {
   margin: unset;
   margin-bottom: 1px;
   word-wrap: break-word;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   line-height: 16px;
   font-size: 15px;
 }
@@ -298,7 +298,7 @@ p {
   grid-template-areas: "chat_header" "chat_main" ".";
   width: 32em;
   height: 38em;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   z-index: 100;
   max-height: 100vh;
 }

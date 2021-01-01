@@ -226,7 +226,7 @@ hr {
 
 .email-message-content {
   font-size: 1.2em;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   display: grid;
   grid-gap: 1em;
   white-space: nowrap;
@@ -506,7 +506,7 @@ hr {
     top: 9em;
     padding: 0 1em;
     background: white;
-    font-family: visuelt-light;
+    font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
     display: block;
     box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
   }

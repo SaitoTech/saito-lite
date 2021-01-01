@@ -1,5 +1,0 @@
-CREATE TABLE IF NOT EXISTS uuids (
-  id INTEGER,
-  uuid INTEGER,
-  PRIMARY KEY (id ASC)
-);

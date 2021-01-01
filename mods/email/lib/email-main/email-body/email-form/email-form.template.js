@@ -12,7 +12,7 @@ module.exports = EmailFormTemplate = (address, title, msg) => {
     </div>
     <div class="amount-label tip">
       SAITO:
-      <div class="tiptext" style="font-family: 'visuelt-light';"> Optional.</div>
+      <div class="tiptext" style="font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";"> Optional.</div>
     </div>
     <div class="amount-value">
       <input class="email-amount" type="number" placeholder="0.0">

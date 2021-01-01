@@ -71,7 +71,7 @@ html[data-theme='dark'] {
 }
 
 p {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 a {
@@ -98,7 +98,7 @@ a:hover {
 body {
   background-color: var(--backround-general);
   color: var(--text-color-normal);
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
   overflow: hidden;
@@ -385,7 +385,7 @@ button i {
   border: 1px solid var(--saito-red);
   background-color: var(--saito-cyber-black);
   color: #fff;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 1em;
   transform: translate(-50%, -50%);
 }
@@ -407,7 +407,7 @@ button i {
   min-width: 400px;
   padding: 1em;
   color: var(--saito-white);
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   line-height: 1.5em;
   background-color: var(--saito-cyber-black);
   margin: auto;
@@ -975,7 +975,7 @@ label.treated {
 }
 
 #alert-box p {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   font-size: 1.4em;
   text-align: center;
   align-self: center;
@@ -1165,7 +1165,7 @@ div#message-wrapper {
   top: 83px;
   color: var(--text-color-normal);
   padding: 15px;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   border: 1px solid var( --saito-cyber-black-wash);
   border-radius: 5px 0 0 5px;
   width: 250px;
@@ -1240,7 +1240,7 @@ div#message-wrapper {
   width: 100%;
   font-size: 0.9em;
   zoom: 1;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 12px 0 8px 0;
   margin: 0px;
 }
@@ -1315,7 +1315,7 @@ div#message-wrapper {
 .main {
   display: grid;
   grid-gap: 1.5em;
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 1em;
   /* margin: 1em; */
   scrollbar-width: none;
@@ -1372,7 +1372,7 @@ div#message-wrapper {
 }
 
 .wallet-container {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 .wallet-container-row {
@@ -1582,7 +1582,7 @@ div#message-wrapper {
 .welcome-modal-wrapper {
   display: grid;
   grid-template-columns: 6fr 1fr;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   background-image: url(/saito/img/dreamscape.png);
   background-position: 0em;
   background-size: cover;
