@@ -390,6 +390,25 @@ body {
 }
 
 
+.cardlist-container {
+  height: 80vh;
+  width: 80vw;
+  overflow-y: scroll;
+}
+.cardlist-card {
+  position: relative;
+  float:left;
+  margin-right:10px;
+  margin-bottom: 10px;
+  height: 30vh;
+  max-height: 520px;
+  width: calc(30vh * 0.72110);
+  max-width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: block;
+}
 
 .cardimg-hud {
   position: absolute;
