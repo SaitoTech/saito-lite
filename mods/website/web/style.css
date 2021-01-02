@@ -42,6 +42,7 @@ h2, h5 {
   width: 100%;
   padding: 0 2em;
   font-weight: bolder;
+  z-index: 1;
 }
 
 .main {
@@ -999,6 +1000,11 @@ button:focus {
   font-weight: bold;
   cursor: pointer;
   align-self: flex-end;
+  padding: 0 0 20px;
+}
+
+.small-head a, .small-head i {
+  padding: 0;
 }
 
 .header-nav i {
@@ -1271,23 +1277,28 @@ button:focus {
     left: unset;
     right: 0;
   }
-  .header-nav:hover {
+  .header-nav {
     display: grid;
-    text-align: right;
     gap: 1em;
     grid-template-columns: auto;
-    margin: 1em 0;
+  }
+  .header-nav:hover{
+    text-align: right;
+    margin: 0;
     border-right: 1px solid #fff;
     right: 0;
     height: unset;
     background: linear-gradient(90deg, rgb(247 31 61 / 50%), rgb(247 31 61 / 75%));
-    padding: 2em 1em;
+    padding: 1em;
+    border: 1px solid var(--saito-skyline-grey);
   }
   .header-nav:hover a {
     display: block;
+    padding: 0;
   }
   .header-nav:hover i {
-    display: none;
+    opacity: 0;
+    padding: 0;
   }
 }
 
