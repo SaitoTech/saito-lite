@@ -2,6 +2,7 @@
     this.importFaction('faction5', {
       id		:	"faction5" ,
       name		: 	"Yin Brotherhood",
+      nickname		: 	"Yin",
       homeworld		: 	"sector13",
       space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],

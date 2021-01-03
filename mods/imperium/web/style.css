@@ -27,12 +27,15 @@
   position: absolute;
 }
 .strategy_card_overlay {
+  font-family: 'orbitron-medium';
   position: absolute;
   color: white;
   margin-top: 50px;
   padding: 20px;
   padding-right: 50px;
+  padding-top:10px;
   font-size: 1.2em;
+  line-height: 1.5em;
 }
 
 .game-menu {
@@ -119,13 +122,22 @@
   overflow-y: scroll;
 }
 .overlay_strategy_card_box {
+  font-family: 'orbitron-medium';
   position:relative;
   float: left;
   width: calc(42vh * 0.72110);
   display: block;
   height: 42vh;
-  margin-bottom: 20px;
-  font-size: 0.8em;
+  color: white;
+  margin-top: 50px;
+  padding: 20px;
+  font-size: 1.5em;
+  line-height: 1.5em;
+}
+
+.game-menu {
+  font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;
+
 }
 .overlay_strategy_card_box_img {
   position: absolute;
@@ -136,7 +148,7 @@
   padding-left: 15px;
   padding-top: 45px;
   top: 0px;
-  width: 80%;
+  width: 100%;
   font-family: 'orbitron-light', helvetica, sans-serif;
   font-size: 0.7em;
   line-height: 1.4;
@@ -282,11 +294,17 @@
 }
 
 .sf-readable {
-  font-family: 'orbitron-light', helvetica, sans-serif;
+  /** font-family: 'orbitron-light', helvetica, sans-serif; **/
+  font-family: helvetica, sans-serif;
   line-height: 1.6em;
+  font-weight: normal;
 }
 
 .status > .sf-readable {
+  /** font-family: 'orbitron-light', helvetica, sans-serif; ***/
+  font-family: helvetica, sans-serif;
+  line-height: 1.6em;
+  font-weight: normal;
   padding-top: 14px;
 }
 
@@ -575,7 +593,7 @@ body {
 }
 
 .faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
-  transform: scale(1.5) translate(1vw, 1vw);
+  transform: scale(1.8) translate(1vw, 1vw);
   z-index: 10;
 }
 
@@ -826,6 +844,10 @@ body {
   text-align: left;
   padding: 1vw;
   color: white;
+  padding: 0.75vw;
+  color: white;
+  font-family: 'orbitron-medium', 'arial';
+  line-height: 1.3em;
 }
 
 .tech_card_level {

@@ -38,11 +38,7 @@ class Saito {
 
       await this.storage.initialize();
 
-console.log("DEVMODE? " + process.env.NODE_ENV);
-
-
       let _self = this;
-console.log("OPT: " + JSON.stringify(this.options));
 
       //
       // having initialized storage, we permit command-line arguments to alter runtime variables

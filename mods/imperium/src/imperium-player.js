@@ -243,8 +243,9 @@ playerTurn(stage = "main") {
 
     let playercol = "player_color_" + this.game.player;
 
-    let html = '<div class="terminal_header sf-readable">[command: ' + this.game.players_info[this.game.player - 1].command_tokens + '] [strategy: ' + this.game.players_info[this.game.player - 1].strategy_tokens + '] [fleet: ' + this.game.players_info[this.game.player - 1].fleet_supply + ']</div>';
-    html += '<p style="margin-top:20px"></p>';
+    let html = '';
+//    html = '<div class="terminal_header sf-readable">[command: ' + this.game.players_info[this.game.player - 1].command_tokens + '] [strategy: ' + this.game.players_info[this.game.player - 1].strategy_tokens + '] [fleet: ' + this.game.players_info[this.game.player - 1].fleet_supply + ']</div>';
+//    html += '<p style="margin-top:20px"></p>';
     html += '<div class="terminal_header2 sf-readable"><div class="player_color_box ' + playercol + '"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
 
     if (this.canPlayerPass(this.game.player) == 1) {
@@ -4771,7 +4772,7 @@ playerActivateSystem() {
 
 
       let chtml = "<div class='sf-readable'>Activate this system?</div><ul>";
-          chtml += '<li class="option" id="yes">activate sector</li>';
+          chtml += '<li class="option" id="yes">yes, do it</li>';
           chtml += '<li class="option" id="no">choose again</li>';
           chtml += '</ul>';
 
@@ -4797,6 +4798,8 @@ playerActivateSystem() {
           activated_once = 0;
           $(divpid).find('.hex_activated').css('background-color', 'transparent');
           $(divpid).find('.hex_activated').css('opacity', '1');
+
+	  imperium_self.playerActivateSystem();
 
         }
       });

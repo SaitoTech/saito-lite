@@ -157,6 +157,7 @@ class Arcade extends ModTemplate {
         if (res.rows) {
           res.rows.forEach(row => {
             let { game_id, module, players_array, player } = row;
+console.log("Adding: " + game_id);
             this.addGameToObserverList({
               game_id,
               module,
@@ -1207,10 +1208,11 @@ class Arcade extends ModTemplate {
         let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND last_move > $last_move ORDER BY last_move ASC";
         let params = { $game_id: game_id , $last_move : lm };
 
-	if (lm == 0 && (ltid != 0)) {
-          sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND tid > $last_tid ORDER BY last_move ASC";
-          params = { $game_id: game_id , $last_tid : ltid };
+	if (ltid != 0) {
+          sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND (last_move > $last_move OR tid > $last_tid) ORDER BY last_move ASC";
+          params = { $game_id: game_id , $last_move : lm , $last_tid : ltid };
 	}
+
 
         let games = await app.storage.queryDatabase(sql, params, "arcade");
 
@@ -1630,8 +1632,6 @@ class Arcade extends ModTemplate {
 
     let arcade_self = this;
 
-console.log("1");
-
     let msgobj = JSON.parse(this.app.crypto.base64ToString(msg));
     let address_to_watch = msgobj.player;
     let game_id = msgobj.game_id;
@@ -1639,21 +1639,16 @@ console.log("1");
     let bid = msgobj.bid;
     let last_move = msgobj.last_move;
 
-console.log("2");
-
     if (tid === undefined || tid == "") { tid = 1; }
     if (bid === undefined || bid == "") { tid = 1; }
     if (last_move === undefined || last_move == "") { tid = 1; }
 
-console.log("2");
     //
     // already watching game... load it
     //
     if (this.app.options.games) {
-console.log("2 - 2");
       let { games } = this.app.options;
       for (let i = 0; i < games.length; i++) {
-console.log("2 - 3");
         if (games[i].id === game_id) {
           games[i].observer_mode = 1;
           games[i].observer_mode_active = 0;
@@ -1672,7 +1667,6 @@ console.log("2 - 3");
           arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
           arcade_self.app.options.games = games;
           arcade_self.app.storage.saveOptions();
-console.log("2");
           let slug = arcade_self.app.modules.returnModule(msgobj.module).returnSlug();
           window.location = '/' + slug;
           return;
@@ -1680,7 +1674,6 @@ console.log("2");
       }
     }
 
-console.log("WE ARE HERE IN LOADING THE GAME");
 
 /***
     //
@@ -1788,18 +1781,18 @@ console.log("AND CONTINUING");
         game_mod.game.future.splice(i, 1);
         i--;
       }
-
     }
 
     console.log(` NEXT MOVES: /arcade/observer_multi/${game_mod.game.id}/${game_mod.game.step.bid}/${game_mod.game.step.tid}/${game_mod.game.step.ts}`);
 
-
-
     fetch(`/arcade/observer_multi/${game_mod.game.id}/${game_mod.game.step.bid}/${game_mod.game.step.tid}/${game_mod.game.step.ts}`).then(response => {
       response.json().then(data => {
 
+console.log("data length: " + data.length);
+
 	for (let i = 0; i < data.length; i++) {
 
+console.log("i: " + i + " --- tx id: " + data[i].id);
 	  let future_tx = new saito.transaction(JSON.parse(data[i].tx));
 	  future_tx.msg = future_tx.returnMessage();
 	  future_tx.msg.game_state = {};
@@ -1813,8 +1806,13 @@ console.log("AND CONTINUING");
 
 	  let already_contains_move = 0;
 	  for (let z = 0; z < game_mod.game.future.length; z++) {
+
 	    let tmptx = new saito.transaction(JSON.parse(game_mod.game.future[z]));
+
+console.log("steps comparison: " + future_tx.msg.step.game + " -- vs -- " + game_mod.game.step.game);
+
 	    if (future_tx.msg.step.game <= game_mod.game.step.game && future_tx.msg.step.game <= game_mod.game.step.players[future_tx.transaction.from[0].add]) {
+console.log("not adding this tx");
 	      already_contains_move = 1;
 	    }
 	  }
@@ -1844,12 +1842,16 @@ console.log("POST: " + game_mod.game.id);
 
     let first_tx = null;;
 
-    console.log(`/arcade/observer_prev/${game_id}/${starting_move}`);
+    console.log(`FETCHING: /arcade/observer_prev/${game_id}/${starting_move}`);
 
     fetch(`/arcade/observer_prev/${game_id}/${starting_move}`).then(response => {
       response.json().then(data => {
 
         first_tx = JSON.parse(data[0].game_state);
+
+console.log("UPDATED GAME TS to: " + JSON.stringify(first_tx.step));
+console.log("UPDATED GAME QUEUE to: " + JSON.stringify(first_tx.queue));
+
 
 	//
 	// single transaction
@@ -1863,13 +1865,28 @@ console.log("POST: " + game_mod.game.id);
 	    future_tx = arcade_self.app.wallet.signTransaction(future_tx);
             if (first_tx.future == undefined || first_tx.future == "undefined" || first_tx.future == null) { first_tx.future = []; }
 	    first_tx.future.push(JSON.stringify(future_tx.transaction));
+
         //
         // we did not add a move
         //
         let game = first_tx;
+
+	//
+	// prevent old turns from persisting
+	//
+	game.turn = [];
+
+console.log("reset to step: " + game.step.game);
+console.log("queue at this step: " + game.queue);
+
         game.observer_mode = 1;
         game.observer_mode_active = 0;
         game.player = 0;
+
+	//
+	// set timestamp
+	//
+	game.step.ts = 0;
 
         let idx = -1;
         for (let i = 0; i < games.length; i++) {
@@ -1885,6 +1902,8 @@ console.log("POST: " + game_mod.game.id);
 
         arcade_self.app.options.games = games;
         arcade_self.app.storage.saveOptions();
+
+	let game_mod = arcade_self.app.modules.returnModule(game.module);
 
         //
         // move into or reload game

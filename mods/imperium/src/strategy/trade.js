@@ -3,7 +3,7 @@
       name     			:       "Trade",
       rank			:	5,
       img			:	"/strategy/TRADE.png",
-      text			:	"Gain 3 trade goods and refresh your commodities. You may refresh the commodities of any other players, or they may refresh themselves by spending a strategy token." ,
+      text			:	"Gain 3 trade goods. Refresh your commodities and those of any other players.<hr />Unrefreshed players may spend a strategy token to refresh their commodities." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
