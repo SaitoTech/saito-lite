@@ -169,7 +169,6 @@ section.first {
   transform: translate(-50%, 0em);
 }
 
-
 .banner-title {
   color: #fff;
   font-size: 3em;
@@ -213,7 +212,7 @@ section.first {
 }
 
 .calltoaction {
-  margin:  min(30vw, 16em) auto 0;
+  margin: min(30vw, 16em) auto 0;
   display: flex;
   justify-content: center;
 }
@@ -579,12 +578,14 @@ section.first {
   padding: 1em;
   border: 1px solid white;
 }
+
 .intro {
   padding: 1em 7em;
   width: 75%;
   margin-left: auto;
   margin-right: auto;
 }
+
 .intro-back {
   padding: 2em;
   background-color: #eee;
@@ -990,7 +991,6 @@ button:focus {
 
 /* Mods */
 
-
 .header-nav a, .header-nav i {
   color: white;
   text-decoration: none;
@@ -1263,26 +1263,34 @@ button:focus {
 }
 
 @media only screen and (max-width: 900px) {
+  .small-head .header-icon-links {
+    height: 2.5em;
+  }
+  .small-head.header-nav {
+    top: 0;
+  }
   .header-nav i {
     display: block;
-    text-shadow: 1px 1px #222;;
+    text-shadow: 1px 1px #222;
+    ;
   }
   .header-nav a {
     display: none;
   }
   .header-wrapper {
-    width: calc(100vw - 3em);
+    width: calc(100vw - 5em);
   }
   .header-nav {
     left: unset;
     right: 0;
+    top: 5px;
   }
   .header-nav {
     display: grid;
     gap: 1em;
     grid-template-columns: auto;
   }
-  .header-nav:hover{
+  .header-nav:hover {
     text-align: right;
     margin: 0;
     border-right: 1px solid #fff;
@@ -1350,6 +1358,7 @@ button:focus {
     height: 170px !important;
   }
   .component-text {
+    height: 100%;
     margin: 0;
   }
   .roadmap-wrapper {
@@ -1423,6 +1432,12 @@ button:focus {
   body {
     font-size: 0.8em;
   }
+  .intro {
+    width: 100%;
+  }
+  .intro-back {
+    padding: 1em
+  }
   .intro-title {
     font-size: 1.7em;
   }
@@ -1435,9 +1450,6 @@ button:focus {
   section.first {
     margin-top: -40px;
   }
-  .header-nav {
-    right: 50px;
-  }
   .header-nav:hover {
     right: 60px;
   }
@@ -1448,13 +1460,26 @@ button:focus {
     height: 40px;
   }
   .component {
-    height: 130px !important;
+    height: 155px !important;
   }
   .component-text {
     margin: 0;
+    height: 100%;
   }
   .banner-logo {
     top: 5.5em;
+  }
+  .can-build-img-tall {
+    height: 165px;
+  }
+  .supporter-list {
+    padding: 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .can-build {
+    display: none;
   }
 }
 
@@ -1463,6 +1488,7 @@ button:focus {
 .header-home, .logo {
   transition: all 1s ease-in-out;
 }
+
 .logo {
   transform-origin: top;
 }
@@ -1476,6 +1502,7 @@ button:focus {
   position: absolute;
   top: 1em;
 }
+
 .logo {
-  transform: scale(1);  
+  transform: scale(1);
 }
