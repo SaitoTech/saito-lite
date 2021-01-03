@@ -34,11 +34,9 @@ class Website extends ModTemplate {
       head_nav.classList.add('small-head');
       el.addEventListener('scroll', () => {
         if (el.scrollTop > 100) {
-          console.log(el.scrollTop);
           head.classList.remove('small-head');
           head_nav.classList.remove('small-head');
         } else {
-          console.log(-el.scrollTop);
           head.classList.add('small-head');
           head_nav.classList.add('small-head');
         }
