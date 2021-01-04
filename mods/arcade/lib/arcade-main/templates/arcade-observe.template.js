@@ -1,10 +1,9 @@
 
 module.exports = ArcadeObserveTemplate = (app, mod, msg, idx, msgjson) => {
 
-  //  let inviteHtml = `<button data-sig="${msgjson}" data-cmd="watch" class="button observe-game-btn invite-tile-button">WATCH</div>`;
-
-
   let playersHtml = `<div class="playerInfo" style="grid-template-columns: repeat(${msg.players_array.split("_").length}, 1fr);">`;
+  let gametime = new Date().getTime();
+  let datetime = app.browser.formatDate(gametime);
 
   msg.players_array.split("_").forEach((player) => {
     let identicon = app.keys.returnIdenticon(player);
@@ -16,8 +15,8 @@ module.exports = ArcadeObserveTemplate = (app, mod, msg, idx, msgjson) => {
     <div id="invite-${msg.game_id}" class="arcade-tile" style="background-image: url(/${msg.module}/img/arcade.jpg);">
       <div class="invite-tile-wrapper">
         <div class="game-inset-img" style="background-image: url(/${msg.module}/img/arcade.jpg);"></div>
-        <div class="invite-row-2">
-          <div class="gameName">${msg.module}</div>
+        <div class="invite-col-2">
+          <div class="gameName" style="font-size:0.9em">${datetime.day} ${datetime.month} ${datetime.year}</div>
           ${playersHtml}
         </div>
         <div class="gameShortDescription">${makeDescription(app, msg)}</div>

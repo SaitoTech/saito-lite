@@ -1706,7 +1706,7 @@ console.log("Adding: " + game_id);
           }
 
           for (let i = 0; i < games.length; i++) {
-            if (games[i].id == game.id) {
+            if (games[i].id == game_id) {
               games.splice(i, 1);
             }
           }
@@ -1751,7 +1751,7 @@ console.log("Adding: " + game_id);
       let { games } = arcade_self.app.options;
       if (games == undefined) { games = []; }
       for (let i = 0; i < games.length; i++) {
-        if (games[i].id == game.id) {
+        if (games[i].id == game_id) {
           games.splice(i, 1);
         }
       }
