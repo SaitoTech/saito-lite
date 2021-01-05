@@ -1402,8 +1402,7 @@ console.log("CARD: " + card);
 
           this.updateLog(mv[1].toUpperCase() + " </span>rolls a<span> " + roll);
 
-          if (roll < 0) {
-//          if (roll < 5) {
+          if (roll < 5) {
 
             if (mv[1] == "ussr") {
               this.game.state.events.beartrap = 0;
@@ -4296,6 +4295,7 @@ console.log("SELECTED CARD NOT NULL: bbc");
       //
       let cards_available = 0;
       let scoring_cards_available = 0;
+      playable_cards = [];
 
       //
       // how many turns left?
@@ -4313,6 +4313,7 @@ console.log("SELECTED CARD NOT NULL: bbc");
 
       for (i = 0; i < this.game.deck[0].hand.length; i++) {
         if (this.modifyOps(this.game.deck[0].cards[this.game.deck[0].hand[i]].ops, this.game.deck[0].hand[i], this.game.player, 0) >= 2 && this.game.deck[0].hand[i] != "china") {
+	  playable_cards.push(this.game.deck[0].hand[i]);
           cards_available++;
         }
         if (this.game.deck[0].cards[this.game.deck[0].hand[i]] != undefined) {
