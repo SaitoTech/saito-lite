@@ -65,6 +65,10 @@ module.exports = AppStoreAppspace = {
 
         (res) => {
 
+	try {
+          document.querySelector(".appstore-overlay-grid").innerHTML = "";
+	} catch (err) {}
+
         if (res.rows != undefined) {
           let installed_apps = [];
           if (app.options.modules) {
@@ -146,10 +150,10 @@ module.exports = AppStoreAppspace = {
     //
     // developers overlay
     //
-    document.querySelector('.appstore-overlay-developers').onclick = (e) => {
-      window.location = "https://org.saito.tech/developers";
-      return false;
-    };
+//    document.querySelector('.appstore-overlay-developers').onclick = (e) => {
+//      window.location = "https://org.saito.tech/developers";
+//      return false;
+//    };
 
     //
     // search
@@ -157,6 +161,9 @@ module.exports = AppStoreAppspace = {
     document.getElementById('appstore-search-box').addEventListener('keypress', (e) => {
       let key = e.which || e.keyCode;
       if (key === 13) {
+	try {
+          document.querySelector(".appstore-overlay-grid").innerHTML = '<div class="game-loader-spinner loader" id="game-loader-spinner"></div>';
+	} catch (err) {}
 	let options = { search : e.currentTarget.value , category : "" , featured : 0 };
 	search_self.render(app, mod, options);	
 	search_self.attachEvents(app, mod);	
