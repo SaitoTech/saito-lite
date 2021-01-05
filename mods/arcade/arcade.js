@@ -1205,11 +1205,11 @@ console.log("Adding: " + game_id);
 	} catch (err) {}
 
 
-        let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND last_move > $last_move ORDER BY last_move ASC";
+        let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND last_move > $last_move ORDER BY last_move ASC LIMIT 10";
         let params = { $game_id: game_id , $last_move : lm };
 
 	if (ltid != 0) {
-          sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND (last_move > $last_move OR tid > $last_tid) ORDER BY last_move ASC";
+          sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND (last_move > $last_move OR tid > $last_tid) ORDER BY last_move ASC LIMIT 10";
           params = { $game_id: game_id , $last_move : lm , $last_tid : ltid };
 	}
 
@@ -1282,7 +1282,7 @@ console.log("Adding: " + game_id);
 
       expressapp.get('/arcade/keystate/:game_id/:player_pkey', async (req, res) => {
 
-        let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND player_pkey = $playerpkey ORDER BY id DESC LIMIT 1";
+        let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND player = $playerpkey ORDER BY id DESC LIMIT 1";
         let params = {
           $game_id: req.params.game_id,
           $playerpkey: req.params.player_pkey

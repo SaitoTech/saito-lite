@@ -1,1 +1,1 @@
-CREATE INDEX player_pkey_idx ON gamestate (player_pkey);
+CREATE INDEX player_idx ON gamestate (player);

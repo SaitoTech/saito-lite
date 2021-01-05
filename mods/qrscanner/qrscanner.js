@@ -1,9 +1,6 @@
-// const qrcode = require('./lib/scanner');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
 const AddContact = require('./lib/add-contact');
-
-
 
 const HeaderDropdownTemplate = (dropdownmods) => {
   html = dropdownmods.map(mod => {
@@ -217,8 +214,6 @@ class QRScanner extends ModTemplate {
         return 1;
       } catch (err) {
         return 0;
-        //if (err.name == 'NS_ERROR_NOT_AVAILABLE') { setTimeout(() => { this.attemptQRDecode() }, 0); return; }
-        //setTimeout(() => { this.attemptQRDecode() }, 500);
       }
     } else {
       return 0;

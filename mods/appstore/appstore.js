@@ -103,6 +103,9 @@ class AppStore extends ModTemplate {
         $squery2: squery2,
       };
 
+console.log(sql);
+console.log(JSON.stringify(params));
+
       let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
 
       let res = {};
@@ -200,7 +203,7 @@ console.log("##########################");
 	  // elegantly. adding this check to prevent issues with server
 	  // on start, particularly with Red Imperium.
 	  //
-	  if (zip.length <= 10000000) {
+	  if (zip.length <= 20000000) {
 
             newtx.msg = {
               module: "AppStore",
@@ -334,7 +337,6 @@ console.log("##########################");
 
       const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
 
-
       let promises = directory.files.map(async file => {
 
         if (file.path === "web/img/arcade.jpg") {
@@ -344,14 +346,13 @@ console.log("##########################");
 
         if (file.path.substr(0,3) == "lib") { return; }
         if (file.path.substr(-2) !== "js") { return; }
-        if (file.path.substr(-2) !== "js") { return; }
         //if (file.path.substr(2).indexOf("/") > -1) { return; }
-        if (file.path.indexOf("/web/") > -1) { return; }
-        if (file.path.indexOf("/www/") > -1) { return; }
-        if (file.path.indexOf("/lib/") > -1) { return; }
-        if (file.path.indexOf("/license/") > -1) { return; }
-        if (file.path.indexOf("/docs/") > -1) { return; }
-        if (file.path.indexOf("/sql/") > -1) { return; }
+        if (file.path.indexOf("web/") > -1) { return; }
+        if (file.path.indexOf("www/") > -1) { return; }
+        if (file.path.indexOf("lib/") > -1) { return; }
+        if (file.path.indexOf("license/") > -1) { return; }
+        if (file.path.indexOf("docs/") > -1) { return; }
+        if (file.path.indexOf("sql/") > -1) { return; }
 
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
@@ -360,9 +361,7 @@ console.log("##########################");
 	let found_name = 0;
 	let found_description = 0;
 	let found_categories = 0;	
-	//let found_image = 0;	
 
-	//for (let i = 0; i < zip_lines.length && i < 50 && (found_image == 0 || found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 	for (let i = 0; i < zip_lines.length && i < 50 && (found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 
 	  //
@@ -371,11 +370,16 @@ console.log("##########################");
 	  if (/this.name/.test(zip_lines[i]) && found_name == 0) {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
+console.log("FP: " + file.path);
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
+console.log("N1: " + name);
 	      name = cleanString(name);
+console.log("N2: " + name);
 	      name = name.replace(/^\s+|\s+$/gm,'');
+console.log("N3: " + name);
 	      if (name.length > 50) { name = "Unknown"; found_name = 0; }
 	      if (name === "name") { name = "Unknown"; found_name = 0; }
+console.log("N4: " + name);
 	    }
 	  }
 
@@ -430,7 +434,7 @@ console.log("##########################");
     // delete unziped module
     //
     fs.unlink(path.resolve(__dirname, zip_path));
-    return { name, description, categories, image };
+    return { name, image , description, categories };
 
   }
 
@@ -492,7 +496,11 @@ console.log("##########################");
 console.log("-----------------------------");
 console.log("--INSERTING INTO APPSTORE --- " + name);
 console.log("-----------------------------");
-
+if (name == "Unknown") {
+  console.log(`TROUBLE EXTRACTING: mods/module-${sig}-${ts}.zip`);
+  //console.log("ZIP: " + module_zip);
+  //process.exit();
+}
 
     let featured_app = 0;
     if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }

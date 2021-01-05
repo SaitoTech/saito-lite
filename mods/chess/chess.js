@@ -10,18 +10,13 @@ class Chessgame extends GameTemplate {
 
     super(app);
 
-    this.publickey = app.wallet.returnPublicKey();
-
     this.name = "Chess";
     this.description = "Chess is a two-player strategy board game played on a checkered board with 64 squares arranged in an 8×8 grid."
-
     this.board = null;
     this.engine = null;
     this_chess = this;
+    this.publickey = app.wallet.returnPublicKey();
 
-    //
-    // USE THE TOURNAMENT CLOCK -- testing
-    //
     this.useHUD = 0;
     this.useClock = 1;
 
@@ -30,6 +25,7 @@ class Chessgame extends GameTemplate {
     this.type       = "Classic Boardgame";
     this.description = "An implementation of Chess for the Saito Blockchain";
     this.categories  = "Boardgame Game";
+
     return this;
 
   }
@@ -49,23 +45,9 @@ class Chessgame extends GameTemplate {
       obj.title = "Chess";
       return obj;
     }
-    // if (type == "make-invite-description") {
-    //   return {
-    //     makeDescription: (txMsg) => {
-    //       return txMsg.options.color;
-    //     }    
-    //   }
-    // }
     return null;
 
   }
-  // requestInterface(type) {
-  // 
-  //   if (type == "arcade-sidebar") {
-  //     return { title: this.name };
-  //   }
-  //   return null;
-  // }
 
   initializeHTML(app) {
 
