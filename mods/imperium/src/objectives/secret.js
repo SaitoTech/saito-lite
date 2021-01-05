@@ -30,7 +30,7 @@
 
 
   this.importSecretObjective('flagship-dominance', {
-      name 		: 	"" ,
+      name 		: 	"Blood Christening" ,
       text		:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
       type		: 	"secret" ,
       phase		: 	"action" ,

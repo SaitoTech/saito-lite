@@ -349,17 +349,25 @@ returnStrategyOverlay() {
       };
       
     }
-    
-    cards.push(`
+
+    let card_html = `
 	<div class="overlay_strategy_card_box">
 	  <img class="overlay_strategy_card_box_img" src="/imperium/img/${thiscard.img}" style="width:100%" />
 	  <div class="overlay_strategy_card_text">${thiscard.text}</div>
+    `;
+     if (strategy_card_state != "not picked") {
+       card_html += `
 	  <div class="strategy_card_state p${strategy_card_player}">
 	    <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
-     </div>
-     ${strategy_card_bonus_html}
+          </div>
+       `;
+     }
+     card_html += `
+          ${strategy_card_bonus_html}
 	</div>
-    `);
+    `;
+    cards.push(card_html);
+
      rank.push(this.strategy_cards[s].rank);
      card_no++;
   }

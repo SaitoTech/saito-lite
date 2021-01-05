@@ -70,14 +70,24 @@
 }
 
 .overlay_agendatitle {
-  font-size: 0.9em;
+  font-size: 2em;
   min-height: 7vh;
+  font-family: 'orbitron-medium' ariel;
+  font-weight: bold;
+  min-height: 7vh;
+  text-align: center;
+  width: 100%;
 }
 
 .overlay_agendacontent {
+  font-family: 'orbitron-medium';
+  position: absolute;
+  color: white;
   margin-top: 10px;
-  font-size: 0.8em;
-  line-height: 1.3em;
+  padding: 14px;
+  padding-top:10px;
+  font-size: 1.6em;
+  line-height: 1.5em;
 }
 
 .objectives-overlay-container {
@@ -92,15 +102,31 @@
   padding: 15px 5px 10px;
   background: #0008;
   position: relative;
+  font-size: 2em;
+  min-height: 7vh;
+  font-family: 'orbitron-medium' ariel;
+  font-weight: bold;
+  min-height: 7vh;
+  text-align: center;
+  width: 100%;
 }
 
 .objectives_card_content {
   color: white;
-  font-size: 0.7em;
   padding: 10px;
-  position: relative;
   background: #0006;
+  font-family: 'orbitron-medium';
+  position: relative;
+  color: white;
+  margin-top: 10px;
+  padding: 14px;
+  padding-top:10px;
+  font-size: 1.6em;
+  line-height: 1.5em;
+  height: 100%;
+  text-align: center;
 }
+
 
 .objectives_overlay_objectives_card {
   width: calc(42vh * 0.72110);
@@ -980,7 +1006,7 @@ body {
   background-color: #222C;
   color: #fff;
   border-color: #555;
-  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
+  font-family: 'orbitron-medium', helvetica, sans-serif;
   line-height: 1.3em;
 }
 

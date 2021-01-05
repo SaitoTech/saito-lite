@@ -8,7 +8,13 @@ const linkifyHtml = require('markdown-linkify');
 
 module.exports = ChatRoom = {
 
-    render(app, mod, group) {
+    render(app, mod, group=null) {
+
+      if (group != null) {
+        mod.active_group = group;
+      } else {
+        group = mod.active_group;
+      }
 
       document.getElementById("chat-main").innerHTML = "";
       app.browser.addElementToDom(ChatRoomTemplate(group), "chat-main");
@@ -53,7 +59,7 @@ module.exports = ChatRoom = {
           if (msg_input.value == '') { return; }
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
-          mod.receiveMessage(app, newtx);
+          mod.receiveMessage(app, newtx, "chatroom"); // rendermode
           //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
         }
@@ -75,7 +81,7 @@ module.exports = ChatRoom = {
           if (msg_input.value == '') { return; }
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
-          mod.receiveMessage(app, newtx);
+          mod.receiveMessage(app, newtx, "chatroom");
           //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
       }
@@ -85,7 +91,7 @@ module.exports = ChatRoom = {
           if (msg_input.value == '') { return; }
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
-          mod.receiveMessage(app, newtx);
+          mod.receiveMessage(app, newtx, "chatroom");
           //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
       }
@@ -97,7 +103,7 @@ module.exports = ChatRoom = {
 
 
     addMessage(app, mod, group_id, tx) {
-      app.modules.returnModule("Chat").receiveMessage(app, tx);
+      app.modules.returnModule("Chat").receiveMessage(app, tx, "chatroom");
       for (let i = 0; i < mod.groups.length; i++) {
 	if (mod.groups[i].id === group_id) {
           this.render(app, mod, mod.groups[i]);
