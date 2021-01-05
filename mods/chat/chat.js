@@ -8,14 +8,13 @@ var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
 const linkifyHtml = require('markdown-linkify');
 
-
-
 class Chat extends ModTemplate {
 
   constructor(app) {
 
     super(app);
     this.name   = "Chat";
+    this.description = "Saito instant-messaging client and application platform";
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
 
@@ -453,7 +452,6 @@ class Chat extends ModTemplate {
     }
   
 
-
     let message = txmsg.message;
     this.groups.forEach(group => {
       try {
@@ -501,7 +499,6 @@ class Chat extends ModTemplate {
     // update sidebar if possible
     //
     this.updateLastMessage(txmsg.group_id, message);
-
     this.sendEvent('chat_receive_message', message);
     this.render(this.app);
 

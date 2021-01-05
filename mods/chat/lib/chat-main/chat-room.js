@@ -53,7 +53,8 @@ module.exports = ChatRoom = {
           if (msg_input.value == '') { return; }
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
-          chat_self.addMessage(app, mod, group_id, newtx);
+          mod.receiveMessage(app, newtx);
+          //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
         }
       });
@@ -74,7 +75,8 @@ module.exports = ChatRoom = {
           if (msg_input.value == '') { return; }
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
-          chat_self.addMessage(app, mod, group_id, newtx);
+          mod.receiveMessage(app, newtx);
+          //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
       }
 
@@ -83,7 +85,8 @@ module.exports = ChatRoom = {
           if (msg_input.value == '') { return; }
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
-          chat_self.addMessage(app, mod, group_id, newtx);
+          mod.receiveMessage(app, newtx);
+          //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
       }
 
