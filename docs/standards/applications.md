@@ -15,34 +15,40 @@ The following standard allows for the implementation of a standard API for appli
 
 ## Distribution and File Format
 
-Applications exist in standalone directories in the /mods directory. The "arcade" module will be located at /mods/arcade. The AppStore module will be located at /mods/appstore. The basic contents of this directory are:
+Applications exist in standalone directories in the /mods directory. The name of this directory should be the lowercase, alphanumeric version of the application name. The "arcade" module is located at /mods/arcade. The AppStore module is located at /mods/appstore. All applications share the same basic directory structure:
 
-> module.js
-> lib/
-> sql/
-> web/
-> README.md.
+```
+appname.js
+lib/
+sql/
+web/
+README.md.
+```
 
-The only necessary file is the `module.js` file, which is the only javascript file in the root directory. The name of this file must consist only of lowercase, alphanumeric characters (i.e. slug). The additional directories are used as follows:
+The only necessary file is the `appname.js` file, which should share its name with the parent directory. This should be the only javascript file in the root directory. Additional files should be installed in the relevant subdirectories according to the application standard. These subdirectories are:
 
-### /lib
+#### /lib
 
 Optional directory to place additional javascript files.
 
-### /sql
+#### /doc
 
-Optional directory to include SQLITE3 table definition files. Saito clients with backend database support will insert these tables on installation of the module. All tables will be inserted into a database that corresponds to the application slug. The database will be stored in the `/saito-lite/data/` subdirectory.
+Optional directory for documentation and license information.
+
+#### /sql
+
+Optional directory for database definition files (sqlite3 format). Saito clients with database support capabilities will auto-create a module database (`/data/appname.sq3`) on installation and insert these tables in that database. Saito-clients without database support will simply skip this step.
 
 ### /web
 
-Optional directory to contain HTML / CSS / JS files for remote serving. Files in this directory will be made available over HTTP to requests made to the main server. Complicated applications often use HTML files to create a DOM scaffold for manipulation.
+Optional directory for JS / HTML / CSS files. Saito clients with HTTP support will serve these files from the subdirectory of the application name (i.e. `https://appserver.com/appname`) with `index.html` as the default file to serve.
 
 
-## Publishing
+## Distribution and Publishing
 
-Modules are typically distributed as .zip files. These files contain a directory structure, which influences how the application will be executed and illustrates how to organize a module. The most important elements of an application directory are as follows:
+The contents of the application directory should be compressed into a .zip file. This can be done through the command line by navigating into your application directory and running `zip -r appname.zip .`. The .zip file should not include a parent directory.
 
-Applications may be published to the network by submitting the application data as part of a normal transaction that is broadcast into the network. The content of the transaction message field is as follows. The two user-provided elements are the module_zip (containing the zip-file above) and the name of the application):
+Applications may be submitted through the AppStore module bundled in most Saito Wallets (i.e. https://saito.io/wallet). The transaction that is created and broadcast will contain a message field that notifies the AppStores running on the network that there is a new application to index and host. The format of the transaction message field is as follows. The two user-provided elements are the module_zip (containing the zip-file above) and the name of the application):
 
 ```javascript
   tx.msg = {
@@ -56,11 +62,11 @@ Applications may be published to the network by submitting the application data 
 AppStores running on the network will identify the publisher by , and derive the application version by hashing the timestamp and signature of the transaction containing the application payload. This ensures that every application published to the network has a unique ID, and can be verified as produced by the publisher prior to installation.
 
 
-## Module.js API
+## Building the Application (Saito API)
 
 NOTES:
 
-All modules should extend from a class in the `/lib/saito/templates` directory. This standard documents the functionality available in the default `/lib/saito/templates/modtemplate` file. The most basic module possible should provide itself with a constructor and a name as follows:
+All modules should extend from a class in the `/lib/saito/templates` directory. The most basic module should inherit from the `/lib/saito/templates/modtemplate` file. The most basic requirement for a valid module is a constructor and name as follows:
 
 ```javascript
 const ModTemplate = require('../../lib/templates/modtemplate');
@@ -68,27 +74,27 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 class ModuleName extends ModTemplate {
 
   constructor(app) {
-
     super(app);
-
     this.name          = "ModuleName";
-
   }
+
 }
+
 module.exports = ModuleName;
 ```
 
-### Class Variables
+### Optional Class Variables
 
 The following variables may be defined by applications within the constructor:
 
-|---------------|---------------|
-| name  	| String 	| 
-| description  	| String 	|
-| categories   	| String 	|
-| slug  	| String 	|
-| events  	| Array 	| 
-| db_tables 	| Array 	|
+| Variable Name | Variable Type | Description |
+|---------------|---------------|-------------|
+| name  	| String 	| the name of the application |
+| description  	| String 	| a brief description of the application |
+| categories   	| String 	| application categories |
+| slug  	| String 	| custom slug (alphanumeric, lowercase) |
+| events  	| Array 	| list of Saito events to which this module responds |
+| db_tables 	| Array 	| list of additional tables which exist |
 
 
 
