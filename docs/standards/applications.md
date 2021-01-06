@@ -1,10 +1,12 @@
 # Saito Module Protocol - SMP-10
 
- ------- | ------------------
- Author  | David Lancashire  
- Status  | Published         
- Type    | Protocol Standard 
- Created | October 31, 2020  
+
+| Header  | Content           |
+| ------- | ----------------- |
+| Author  | David Lancashire  |
+| Status  | Published         |
+| Type    | Protocol Standard |
+| Created | October 31, 2020  |
 
 ## Abstract 
 
