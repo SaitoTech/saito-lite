@@ -91,20 +91,7 @@ The following variables may be defined by applications within the constructor:
 
 
 
-### Class Functions 
-
-Applications may optionally override the following functions. These functions take the following arguments:
-
-| Argument | Explanation |
-|----------|-------------|
-| app      | reference to Saito Application Object |
-| blk      | reference to current block |
-| bid      | block id / block height |
-| bsh      | block hash |
-| pos      | position of blk in blockchain.index.blocks |
-| lc       | longest chain (0 or 1) |
-
-
+### Application Functions 
 
 ```javascript
 installModule(app) {}
@@ -162,10 +149,6 @@ __pos__ - the position of the block in the blockchain.index.blocks data-structur
 
 (OPTIONAL) This function is executed whenever there is a chain reorganization. This means it is also executed when a block is added to the chain. The most common use-case is updating external data structures with the state of the blockchain, such as keeping an external database synced with longest-chain state.
 
-
-    if (modname == this.name) { return 1; }
-    return 0;
-  }
 
 ```javascript
   shouldAffixCallbackToModule(modname, tx=null) {}
