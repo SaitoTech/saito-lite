@@ -86,8 +86,7 @@ The following variables may be defined by applications within the constructor:
 | description  	| String 	| a brief description of the application |
 | categories   	| String 	| application categories |
 | slug  	| String 	| custom slug (alphanumeric, lowercase) |
-| events  	| Array 	| list of Saito events to which this module responds |
-| db_tables 	| Array 	| list of additional tables which exist |
+| events  	| Array 	| list of events to which this module listens |
 
 
 
