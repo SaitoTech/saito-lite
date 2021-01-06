@@ -27,44 +27,37 @@ README.md.
 
 The only necessary file is the `appname.js` file, which should share its name with the parent directory. This should be the only javascript file in the root directory. Additional files should be installed in the relevant subdirectories according to the application standard. These subdirectories are:
 
-#### /lib
-
+__lib/__
 Optional directory to place additional javascript files.
 
-#### /doc
-
+__doc/__
 Optional directory for documentation and license information.
 
-#### /sql
-
+__sql/__
 Optional directory for database definition files (sqlite3 format). Saito clients with database support capabilities will auto-create a module database (`/data/appname.sq3`) on installation and insert these tables in that database. Saito-clients without database support will simply skip this step.
 
-### /web
-
+__web/__
 Optional directory for JS / HTML / CSS files. Saito clients with HTTP support will serve these files from the subdirectory of the application name (i.e. `https://appserver.com/appname`) with `index.html` as the default file to serve.
 
 
 ## Distribution and Publishing
 
-The contents of the application directory should be compressed into a .zip file. This can be done through the command line by navigating into your application directory and running `zip -r appname.zip .`. The .zip file should not include a parent directory.
-
-Applications may be submitted through the AppStore module bundled in most Saito Wallets (i.e. https://saito.io/wallet). The transaction that is created and broadcast will contain a message field that notifies the AppStores running on the network that there is a new application to index and host. The format of the transaction message field is as follows. The two user-provided elements are the module_zip (containing the zip-file above) and the name of the application):
+Compress the contents of your application directory into a .zip file. 
+Navigate into your application directory and compress the contents of your directory into a .zip file (`zip -r appname.zip .`). Applications may be submitted through the AppStore module bundled with most Saito Wallets. This creates and broadcasts a Saito transaction with this format:
 
 ```javascript
   tx.msg = {
     module: "AppStore",
     request: "submit module",
-    module_zip: __ZIPFILE__,
-    name: __MODULE_NAME___
+    module_zip: appname.zip,
+    name: appname
   };
 ```
 
-AppStores running on the network will identify the publisher by , and derive the application version by hashing the timestamp and signature of the transaction containing the application payload. This ensures that every application published to the network has a unique ID, and can be verified as produced by the publisher prior to installation.
+AppStores will index your application, identifying it with a unique ID created by hashing the timestamp and signature of the transaction you created containing the application payload. Users download the application by fetching the full transaction, and can verify its identity before installation.
 
 
 ## Building the Application (Saito API)
-
-NOTES:
 
 All modules should extend from a class in the `/lib/saito/templates` directory. The most basic module should inherit from the `/lib/saito/templates/modtemplate` file. The most basic requirement for a valid module is a constructor and name as follows:
 
@@ -100,20 +93,36 @@ The following variables may be defined by applications within the constructor:
 
 ### Class Functions 
 
-  installModule(app) {} 
+Applications may optionally override the following functions. These functions take the following arguments:
 
-  this callback is run the first time the module is loaded. You
-  can override this callback in your module if you would like,
-  but should be a bit careful to include this line at the top:
-  
-      super.installModule(app);
-  
-   ... if you want to keep the default functionality of auto-
-   creating a database with the necessary tables on install
-   if it does not exist.
+| Argument | Explanation |
+|----------|-------------|
+| app      | reference to Saito Application Object |
+| blk      | reference to current block |
+| bid      | block id / block height |
+| bsh      | block hash |
+| pos      | position of blk in blockchain.index.blocks |
+| lc       | longest chain (0 or 1) |
 
 
+
+```javascript
+installModule(app) {}
+```
+
+__app__ - reference to the Saito application object.
+
+(OPTIONAL) This function will be run the first time Saito initializes after the module is loaded. If you override this function and still wish your application to handle default on-install functionality, call the super.installModule(app) function within your own.
+
+
+```javascript
   initialize(app) {}
+```
+
+__app__ - reference to the Saito application object.
+
+(OPTIONAL) This function is run every time the module is initialized. Note that all modules are initialized every time that Saito loads, not just the module with which the user is interacting. So this function is executed every time Saito initializes.
+
 
   //
   // INITIALIZE
@@ -184,7 +193,7 @@ The following variables may be defined by applications within the constructor:
   // and then it is run a second time setting the LC to 1 for all of the
   // blocks that are moved (back?) into the longest_chain
   //
-  onChainReorganization(block_id, block_hash, lc, pos) { }
+  onChainReorganization(bid, bsh, lc, pos) { }
 
   //
   //
