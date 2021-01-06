@@ -1,5 +1,6 @@
 # Saito Module Protocol - SMP-10
 
+|---------|-------------------|
 | Author  | David Lancashire  |
 | Status  | Published         |
 | Type    | Protocol Standard |
@@ -28,14 +29,14 @@ Of these, the only necessary file is the `module.js` file. Restrictions are that
 
 Applications may be published to the network by submitting the application data as part of a normal transaction that is broadcast into the network. The content of the transaction message field is as follows. The two user-provided elements are the module_zip (containing the zip-file above) and the name of the application):
 
-`
+```javascript
   tx.msg = {
     module: "AppStore",
     request: "submit module",
     module_zip: __ZIPFILE__,
     name: __MODULE_NAME___
   };
-`
+```
 
 AppStores running on the network will identify the publisher by , and derive the application version by hashing the timestamp and signature of the transaction containing the application payload. This ensures that every application published to the network has a unique ID, and can be verified as produced by the publisher prior to installation.
 
@@ -46,7 +47,7 @@ NOTES:
 
 All modules should extend from a class in the `/lib/saito/templates` directory. This standard documents the functionality available in the default `/lib/saito/templates/modtemplate` file. The most basic module possible should provide itself with a constructor and a name as follows:
 
-`
+```javascript
 const ModTemplate = require('../../lib/templates/modtemplate');
 
 class ModuleName extends ModTemplate {
@@ -58,16 +59,15 @@ class ModuleName extends ModTemplate {
     this.name          = "ModuleName";
 
   }
-
 }
-
 module.exports = ModuleName;
-`
+```
 
 ### Class Variables
 
 The following variables may be defined by applications within the constructor:
 
+|---------------|---------------|
 | name  	| String 	| 
 | description  	| String 	|
 | categories   	| String 	|
