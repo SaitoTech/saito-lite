@@ -1,11 +1,10 @@
 # Saito Module Protocol - SMP-10
 
-|---------|-------------------|
-| Author  | David Lancashire  |
-| Status  | Published         |
-| Type    | Protocol Standard |
-| Created | October 31, 2020  |
-
+ ------- | ------------------
+ Author  | David Lancashire  
+ Status  | Published         
+ Type    | Protocol Standard 
+ Created | October 31, 2020  
 
 ## Abstract 
 
@@ -15,12 +14,10 @@ The following standard allows for the implementation of a standard API for appli
 
 Modules are distributed as .zip files. These files contain a directory structure, which forms the standard for how to organize a module at the top level. The most important elements of an application directory are as follows:
 
-`
-module.js
-lib/
-sql/
-README.md.
-`
+> module.js
+> lib/
+> sql/
+> README.md.
 
 Of these, the only necessary file is the `module.js` file. Restrictions are that the filename contains only alphanumeric characters. Additional javascript files should be packaged within the /lib directory. If the /sql directory exists it may contain optional SQLITE3 table definition file. If the Saito client supports Sqlite3 it may load them.
 
