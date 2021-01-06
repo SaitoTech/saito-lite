@@ -1,16 +1,16 @@
 # Saito Module Protocol - SMP-10
 
 
-| Header  | Content           |
-| ------- | ----------------- |
-| Author  | David Lancashire  |
-| Status  | Published         |
-| Type    | Protocol Standard |
-| Created | October 31, 2020  |
-
 ## Abstract 
 
 The following standard allows for the implementation of a standard API for applications or modules running on Saito nodes. This standard provides basic functionality to interact with the blockchain, process messages received over the blockchain, as well as handle common user-interface requirements such as distributing data.
+
+| Author  | David Lancashire  |
+| ------- | ----------------- |
+| __Status__  | __Published__         |
+| __Type__    | __Protocol Standard__ |
+| __Created__ | __October 31, 2020__  |
+
 
 ## Specification
 
