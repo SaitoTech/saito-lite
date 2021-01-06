@@ -5,26 +5,42 @@
 
 The following standard allows for the implementation of a standard API for applications or modules running on Saito nodes. This standard provides basic functionality to interact with the blockchain, process messages received over the blockchain, as well as handle common user-interface requirements such as distributing data.
 
-| Author  | David Lancashire  |
+| Field   | Value             |
 | ------- | ----------------- |
-| __Status__  | __Published__         |
-| __Type__    | __Protocol Standard__ |
-| __Created__ | __October 31, 2020__  |
+| Author  | David Lancashire  |
+| Status  | Published_        |
+| Type    | Protocol Standard |
+| Created | October 31, 2020  |
 
 
-## Specification
+## Distribution and File Format
 
-Modules are distributed as .zip files. These files contain a directory structure, which forms the standard for how to organize a module at the top level. The most important elements of an application directory are as follows:
+Applications exist in standalone directories in the /mods directory. The "arcade" module will be located at /mods/arcade. The AppStore module will be located at /mods/appstore. The basic contents of this directory are:
 
 > module.js
 > lib/
 > sql/
+> web/
 > README.md.
 
-Of these, the only necessary file is the `module.js` file. Restrictions are that the filename contains only alphanumeric characters. Additional javascript files should be packaged within the /lib directory. If the /sql directory exists it may contain optional SQLITE3 table definition file. If the Saito client supports Sqlite3 it may load them.
+The only necessary file is the `module.js` file, which is the only javascript file in the root directory. The name of this file must consist only of lowercase, alphanumeric characters (i.e. slug). The additional directories are used as follows:
+
+### /lib
+
+Optional directory to place additional javascript files.
+
+### /sql
+
+Optional directory to include SQLITE3 table definition files. Saito clients with backend database support will insert these tables on installation of the module. All tables will be inserted into a database that corresponds to the application slug. The database will be stored in the `/saito-lite/data/` subdirectory.
+
+### /web
+
+Optional directory to contain HTML / CSS / JS files for remote serving. Files in this directory will be made available over HTTP to requests made to the main server. Complicated applications often use HTML files to create a DOM scaffold for manipulation.
 
 
 ## Publishing
+
+Modules are typically distributed as .zip files. These files contain a directory structure, which influences how the application will be executed and illustrates how to organize a module. The most important elements of an application directory are as follows:
 
 Applications may be published to the network by submitting the application data as part of a normal transaction that is broadcast into the network. The content of the transaction message field is as follows. The two user-provided elements are the module_zip (containing the zip-file above) and the name of the application):
 
