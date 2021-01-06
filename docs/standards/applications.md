@@ -8,7 +8,7 @@ The following standard allows for the implementation of a standard API for appli
 | Field   | Value             |
 | ------- | ----------------- |
 | Author  | David Lancashire  |
-| Status  | Published_        |
+| Status  | Published         |
 | Type    | Protocol Standard |
 | Created | October 31, 2020  |
 
@@ -124,197 +124,93 @@ __app__ - reference to the Saito application object.
 (OPTIONAL) This function is run every time the module is initialized. Note that all modules are initialized every time that Saito loads, not just the module with which the user is interacting. So this function is executed every time Saito initializes.
 
 
-  //
-  // INITIALIZE
-  //
-  // this callback is run every time the module is initialized. It
-  // takes care of the events to which we want to listen by default
-  // so if you over-write it, be careful to include this line at
-  // the top:
-  //
-  //    super.initialize(app);
-  //
-  // that will ensure default behavior appies to inherited modules
-  // and the the sendEvent and receiveEvent functions will still work
-  //
+```javascript
+  initializeHTML(app) {}
+```
+
+__app__ - reference to the Saito application object.
+
+(OPTIONAL) This function is run whenever the HTML/DOM is initialized in an application the user is seeking to interact with. It is the recommended place to manipulate the DOM and add new components.
 
 
-  initializeHTML(app) { };
+```javascript
+  attachEvents(app) {}
+```
+
+__app__ - reference to the Saito application object.
+
+(OPTIONAL) This function is run after `initializeHTML(app)` is executed in an application that the user has loaded to interact with through a web interface. It is traditionally used to attach events to DOM objects every time the module is initialized.
 
 
-  //
-  // INITIALIZE HTML (deprecated by render(app))
-  //
-  // this callback is called whenever web applications are loaded
-  //
+```javascript
+  onNewBlock(blk, lc) {}
+```
+
+__blk__ - the block which has just been added to the chain
+__lc__ - is this block part of the longest chain (0 or 1) 
+
+(OPTIONAL) This function is executed whenever a new block is added to the chain. Modules can overwrite this function to take action when blocks are received. It differs from onConfirmation in that it will be triggered by any blocks, not just those that add to the longest-chain.
+
+```javascript
+  onChainReorganization(bid, bsh, lc, pos) {}
+```
+
+__bid__ - the id / height of the block being reorganized
+__bsh__ - the hash of the block being reorganized
+__lc__ - 1 if being moved onto the longest chain, 0 if being moved off
+__pos__ - the position of the block in the blockchain.index.blocks data-structure
+
+(OPTIONAL) This function is executed whenever there is a chain reorganization. This means it is also executed when a block is added to the chain. The most common use-case is updating external data structures with the state of the blockchain, such as keeping an external database synced with longest-chain state.
 
 
-  attachEvents(app) { }
-
-  //
-  // ATTACH EVENTS (deprecated by render(app))
-  //
-  // this callback attaches the javascript interactive bindings to the
-  // DOM, allowing us to incorporate the web applications to our own
-  // internal functions and send and receive transactions natively.
-  //
-
-  render(app) { }
-
-  //
-  // RENDER
-  //
-  // adds elements to the DOM and then attaches events to them as needed.
-  // this replaces initializeHTML and attachEvents with a single function
-  //
-
-
-  //
-  //
-  // ON NEW BLOCK
-  //
-  // this callback is run every time a block is added to the longest_chain
-  // it differs from the onConfirmation function in that it is not linked to
-  // individual transactions -- i.e. it will only be run once per block, while
-  // the onConfirmation function is run by every TRANSACTION tagged as
-  // this is where the most important code in your module should go,
-  // listening to requests that come in over the blockchain and replying.
-  //
-  onNewBlock(blk, lc) { }
-
-  //
-  //
-  //
-  // ON CHAIN REORGANIZATION
-  //
-  // this callback is run everytime the chain is reorganized, for every block
-  // with a status that is changed. so it is invoked first to notify us when
-  // longest_chain is set to ZERO as we unmark the previously dominant chain
-  // and then it is run a second time setting the LC to 1 for all of the
-  // blocks that are moved (back?) into the longest_chain
-  //
-  onChainReorganization(bid, bsh, lc, pos) { }
-
-  //
-  //
-  //
-  // ON WALLET RESET
-  //
-  // this function runs if the wallet is reset
-  onWalletReset() { }
-
-
-
-  //
-  //
-  // ON CONNECTION STABLE
-  //
-  // this function runs "connect" event
-  onConnectionStable(app, peer) { }
-
-  //
-  //
-  // ON CONNECTION UNSTABLE
-  //
-  // this function runs "disconnect" event
-  onConnectionUnstable(app, peer) { }
-
-
-  //
-  // SHOULD AFFIX CALLBACK TO MODULE
-  //
-  // sometimes modules want to run the onConfirmation function for transactions
-  // that belong to OTHER modules. onConfirmation will be fired automatically
-  // for any module whose name matches tx.msg.module. Other modules who are
-  // interested in those transactions can use this method to subscribe to those
-  // onConfirmation events. See onConfirmation for more details.
-  //
-  // An example is a server that wants to monitor
-  // AUTH messages, or a module that needs to parse third-party email messages
-  // for custom data processing.
-  //
-  shouldAffixCallbackToModule(modname, tx=null) {
     if (modname == this.name) { return 1; }
     return 0;
   }
 
-  //
-  // SERVER
-  //
-  // this callback allows the module to serve pages through the main application
-  // server, by listening to specific route-requests and serving data from its own
-  // separate web directory.
-  //
-  // This can be overridden to provide advanced interfaces, for example you may
-  // want to create a module which serves JSON objects as an RESTFUL API. See
-  // Express.js for details.
-  //
+```javascript
+  shouldAffixCallbackToModule(modname, tx=null) {}
+```
+
+__modname__ - the name of the module, as identified by its name variable
+__tx__ - the transaction containing the module
+
+RETURNS boolean (1 or 0)
+
+(OPTIONAL) This function is executed to see if a module wishes to process a specific transaction. It is handed the modname (name of the module specified in the txmsg.module field) along with the full transaction in case it wishes to apply more complicated criteria. By default this will pass through transactions that are addressed to the module.
 
 
-  //
-  // UPDATE BALANCE
-  //
-  // this callback is run whenever the wallet balance is updated
-  // if your web application needs to display the amount of funds
-  // in the user wallet, you should hook into this to update your
-  // display when it changes.
-  //
-  // updateBalance(app) { }
+```javascript
+  webServer(app, expressapp, express) {
+```
+__app__ - the Saito application object
+__expressapp__ - the Express Webserver object
+__express__ - the Express Web Server
 
-  //
-  // UPDATE IDENTIFIER
-  //
-  // this callback is run when a user registers an identifier.
-  // You can use this to update parts of the application that are displaying
-  // their initial hash username
-  //
-  updateIdentifier(app) { }
+(OPTIONAL) You may override this function to provide custom routing for full-clients who are running Saito modules with server support. This can be done to add custom GET and POST requests to scripts running in the `web/` directory. For example, you may create a module which serves JSON objects as a RESTFUL API.
 
 
 
-  //
-  // modules may ask other modules to respond to "request_types". The
-  // response that they get may or may not be suitable, but if suitable
-  // can be used by the requesting module to format data or update
-  // its DOM as needed. This is a basic method of providing inter-app
-  // interactivity and extensibility.
-  //
-  respondTo(request_type = "") { return null; }
 
-  //
-  // when an event to which modules are listening triggers, we push the
-  // data out into this function, which can be overridden as needed in
-  // order to
-  //
-  receiveEvent(eventname, data) {
-  }
+```javascript
+  respondTo(type) {}
+```
 
+RETURNS Object or null
 
-  // HANDLE PEER REQUEST
-  //
-  // not all messages sent from peer-to-peer need to be transactions. the
-  // underlying software structure supports a number of alternatives,
-  // including requests for transmitting blocks, transactions, etc.
-  //
-  // DNS messages are one example, and are treated specially because of
-  // the importance of the DNS system for routing data. This is a more
-  // generic way to plug into P2P routing.
-  //
-  // if your web application defines a lower-level massage format, it can
-  // send and receive data WITHOUT the need for that data to be confirmed
-  // in the blockchain. See our search module for an example of this in
-  // action. This is useful for applications that are happy to pass data
-  // directly between peers, but still want to use the blockchain for peer
-  // discovery (i.e. "what is your IP address" requests)
-  //
-  async handlePeerRequest(app, message, peer, mycallback = null) {
+__type__ - the request-type to which our application may choose to respond
 
+(OPTIONAL) Modules can interact by querying other modules to see if they "respondTo" specific opportunities. An example is the Saito Arcade which queries installed games which `respondTo('arcade-games')` with an object. The object returns and its protocol is defined on a module-by-module basis. Modules which implement this are responding to opportunities for interactivity created by other modules.
 
-  returnServices() {
-    return []; // no services by default
-  }
+```javascript
+  receiveEvent(evtname, data) {}
+```
 
-  handleUrlParams(urlParams) {}
+RETURNS Object or null
+
+__evtname__ - the name of the event to which we respond
+__data__ - the data object emitted by the event originator
+
+(OPTIONAL) Modules can listen to events by including the names of those events in the events Array in their constructor. Implement this function to catch those events as they are triggered. You may skip this and have your module hook manually onto the `app.connector` object.
 
 
 
