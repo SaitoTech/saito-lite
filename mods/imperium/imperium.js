@@ -8935,6 +8935,18 @@ try {
       }
     });
     this.menu.addSubMenuOption("game-info", {
+      text : "Start",
+      id : "game-vp2",
+      class : "game-vp2",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnNewObjectivesOverlay());
+	document.getElementById("close-objectives-btn").onclick = (e) => {
+	  game_mod.overlay.hideOverlay(game_mod.app, game_mod);
+	}
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
       text : "Laws",
       id : "game-agendas",
       class : "game-agendas",
@@ -11541,6 +11553,7 @@ console.log(JSON.stringify(this.game.state.choices));
   	}
 
       	this.game.queue.push("resolve\tnewround");
+      	this.game.queue.push("shownewobjectives");
     	this.game.state.round++;
     	this.updateLog("<div style='margin-top:10px;margin-bottom:10px;'>ROUND: " + this.game.state.round + '</div>');
   	this.updateStatus("Moving into Round " + this.game.state.round);
@@ -11701,6 +11714,20 @@ console.log(JSON.stringify(this.game.state.choices));
   	return 1;
       }
   
+      if (mv[0] === "shownewobjectives") {
+
+        this.overlay.showOverlay(this.app, this, this.returnNewObjectivesOverlay());
+        try {
+          document.getElementById("close-objectives-btn").onclick = (e) => {
+            this.overlay.hideOverlay(this.app, this);
+          }
+        } catch (err) {}
+
+  	this.game.queue.splice(qe, 1);
+
+  	return 1;
+      }
+
 
       if (mv[0] === "revealobjectives") {
   
@@ -25345,6 +25372,37 @@ returnStrategyOverlay() {
   return final_result;
 
 }
+
+
+returnNewObjectivesOverlay() {
+
+  let html = `
+    <div class="new_objectives_overlay_container" style="">
+      <div class="new_objectives_title">Round Objectives</div>
+      <div class="new_objectives_container">
+      <div class="objectives_overlay_objectives_card" style="background-image: url(/imperium/img/secret_objective.jpg)">
+        <div class="objectives_card_name" style="min-height: 4em; background: #0006;">War Engine</div>
+        <div class="objectives_card_content">Have three spacedocks in play</div>
+      </div>
+      <div class="objectives_overlay_objectives_card" style="background-image: url(/imperium/img/secret_objective.jpg)">
+        <div class="objectives_card_name">Space to Breathe</div>
+        <div class="objectives_card_content">Have at least 1 ship in 3 systems with no planets</div>
+      </div>
+      <div class="objectives_overlay_objectives_card" style="background-image: url(/imperium/img/objective_card_1_template.png)">
+        <div class="objectives_card_name">Pecuniary Diplomacy</div>
+        <div class="objectives_card_content">Spend 8 influence when scoring</div>
+      </div>
+    </div>
+
+    <div id="close-objectives-btn" class="button" style="">CONTINUE</div>
+
+</div>
+  `;
+
+  return html;
+}
+
+
 
 returnObjectivesOverlay() {
 

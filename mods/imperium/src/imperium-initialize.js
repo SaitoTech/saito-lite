@@ -121,6 +121,18 @@ try {
       }
     });
     this.menu.addSubMenuOption("game-info", {
+      text : "Start",
+      id : "game-vp2",
+      class : "game-vp2",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnNewObjectivesOverlay());
+	document.getElementById("close-objectives-btn").onclick = (e) => {
+	  game_mod.overlay.hideOverlay(game_mod.app, game_mod);
+	}
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
       text : "Laws",
       id : "game-agendas",
       class : "game-agendas",

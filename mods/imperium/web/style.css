@@ -103,10 +103,9 @@
   background: #0008;
   position: relative;
   font-size: 2em;
-  min-height: 7vh;
+  min-height: 4em;
   font-family: 'orbitron-medium' ariel;
   font-weight: bold;
-  min-height: 7vh;
   text-align: center;
   width: 100%;
 }
@@ -118,12 +117,12 @@
   font-family: 'orbitron-medium';
   position: relative;
   color: white;
-  margin-top: 10px;
+  margin-top: 0px;
   padding: 14px;
   padding-top:10px;
   font-size: 1.6em;
   line-height: 1.5em;
-  height: 100%;
+  height: calc(42vh - 5em);
   text-align: center;
 }
 
@@ -137,9 +136,55 @@
   max-height: 450px;
   float: left;
   font-size: 0.8em;
+  z-index: 5;
 }
 
+.objectives_overlay_objectives_card:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
 
+#close-objectives-btn {
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 240px;
+  margin-top: 14px;
+  margin-bottom: 20px;
+  font-size: 2em;
+  font-family: 'bank-gothic';
+}
+.new_objectives_container {
+  display: inline-block;
+  text-align:center;
+}
+.new_objectives_overlay_container {
+  border-radius: 15px;
+  width: 80vw;
+  font-family: 'orbitron-medium';
+  letter-spacing: 0.1em;
+  line-height: 2em;
+  background: #333;
+  text-align: center;
+}
+.new_objectives_title {
+  font-size: 3em;
+  padding: 30px;
+  text-align: center;
+  color: white;
+  padding-bottom: 20px;
+}
+.close-objectives-btn {
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 240px;
+  margin-top: 14px;
+  margin-bottom: 20px;
+  font-size: 2em;
+  font-family: 'bank-gothic';
+  text-align:center;
+}
 
 
 .overlay_strategy_container {

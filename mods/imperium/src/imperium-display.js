@@ -406,6 +406,37 @@ returnStrategyOverlay() {
 
 }
 
+
+returnNewObjectivesOverlay() {
+
+  let html = `
+    <div class="new_objectives_overlay_container" style="">
+      <div class="new_objectives_title">Round Objectives</div>
+      <div class="new_objectives_container">
+      <div class="objectives_overlay_objectives_card" style="background-image: url(/imperium/img/secret_objective.jpg)">
+        <div class="objectives_card_name" style="min-height: 4em; background: #0006;">War Engine</div>
+        <div class="objectives_card_content">Have three spacedocks in play</div>
+      </div>
+      <div class="objectives_overlay_objectives_card" style="background-image: url(/imperium/img/secret_objective.jpg)">
+        <div class="objectives_card_name">Space to Breathe</div>
+        <div class="objectives_card_content">Have at least 1 ship in 3 systems with no planets</div>
+      </div>
+      <div class="objectives_overlay_objectives_card" style="background-image: url(/imperium/img/objective_card_1_template.png)">
+        <div class="objectives_card_name">Pecuniary Diplomacy</div>
+        <div class="objectives_card_content">Spend 8 influence when scoring</div>
+      </div>
+    </div>
+
+    <div id="close-objectives-btn" class="button" style="">CONTINUE</div>
+
+</div>
+  `;
+
+  return html;
+}
+
+
+
 returnObjectivesOverlay() {
 
   let html = '';

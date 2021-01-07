@@ -1170,6 +1170,7 @@ console.log(JSON.stringify(this.game.state.choices));
   	}
 
       	this.game.queue.push("resolve\tnewround");
+      	this.game.queue.push("shownewobjectives");
     	this.game.state.round++;
     	this.updateLog("<div style='margin-top:10px;margin-bottom:10px;'>ROUND: " + this.game.state.round + '</div>');
   	this.updateStatus("Moving into Round " + this.game.state.round);
@@ -1330,6 +1331,20 @@ console.log(JSON.stringify(this.game.state.choices));
   	return 1;
       }
   
+      if (mv[0] === "shownewobjectives") {
+
+        this.overlay.showOverlay(this.app, this, this.returnNewObjectivesOverlay());
+        try {
+          document.getElementById("close-objectives-btn").onclick = (e) => {
+            this.overlay.hideOverlay(this.app, this);
+          }
+        } catch (err) {}
+
+  	this.game.queue.splice(qe, 1);
+
+  	return 1;
+      }
+
 
       if (mv[0] === "revealobjectives") {
   
