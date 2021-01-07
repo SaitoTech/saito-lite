@@ -14,7 +14,7 @@ class Post extends ModTemplate {
 
     this.name = "Post";
 
-    this.header = new SaitoHeader(app, this);
+    this.header = null;
     this.events = ['chat-render-request'];
     this.renderMethod = "none";
 
@@ -80,6 +80,9 @@ class Post extends ModTemplate {
 
   initializeHTML(app) {
 
+    if (this.header == null) {
+      this.header = new SaitoHeader(app, this);
+    }
     this.header.render(app, this);
     this.header.attachEvents(app, this);
 

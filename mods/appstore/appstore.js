@@ -23,7 +23,7 @@ class AppStore extends ModTemplate {
     this.categories    = "Utilities Dev";
     this.featured_apps = ['Imperium', 'Debug', 'Scotland', 'Escrow'];
 
-    this.header        = new SaitoHeader(app);
+    this.header        = null;
 
     this.bundling_timer = null;
     this.renderMode    = "none";
@@ -64,6 +64,9 @@ class AppStore extends ModTemplate {
 
     super.initializeHTML(app);
 
+    if (this.header == null) {
+      this.header = new SaitoHeader(app, this);
+    }
     this.header.render(app, this);
     this.header.attachEvents(app, this);
 
@@ -370,16 +373,12 @@ console.log("##########################");
 	  if (/this.name/.test(zip_lines[i]) && found_name == 0) {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
-console.log("FP: " + file.path);
+//console.log("FP: " + file.path);
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
-console.log("N1: " + name);
 	      name = cleanString(name);
-console.log("N2: " + name);
 	      name = name.replace(/^\s+|\s+$/gm,'');
-console.log("N3: " + name);
 	      if (name.length > 50) { name = "Unknown"; found_name = 0; }
 	      if (name === "name") { name = "Unknown"; found_name = 0; }
-console.log("N4: " + name);
 	    }
 	  }
 

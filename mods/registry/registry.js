@@ -20,6 +20,7 @@ class Registry extends ModTemplate {
     // master DNS publickey for this module
     //
     this.publickey = 'zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK';
+    this.publickey = 'c8G5e3fkc6gX6rkDfPtJc66NTXT6deK9pp1eXGdzgCdF';
 
     return this;
   }
@@ -212,11 +213,13 @@ console.log(registry_self.publickey + " -- " + app.wallet.returnPublicKey());
               let sig		 = tx.msg.sig;
 
 	      try {
-              if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
-                registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
-                registry_self.app.modules.updateIdentifier();
-              }
-	      } catch (err) {
+console.log("a");
+                if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
+console.log("b");
+                  registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
+console.log("c");
+                }
+  	      } catch (err) {
 		console.log("ERROR verifying username registration message: " + err);
 	      }
             }

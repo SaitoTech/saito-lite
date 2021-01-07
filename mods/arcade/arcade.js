@@ -39,8 +39,8 @@ class Arcade extends ModTemplate {
     this.categories = "Games Utilities";
     this.addrController = new AddressController(app);
 
-    this.header = new SaitoHeader(app, this);
-    this.overlay = new SaitoOverlay(app, this);
+    this.header = null;
+    this.overlay = null;
     
     //TODO: DELETE THESE LINES
     // no mock games
@@ -114,6 +114,12 @@ class Arcade extends ModTemplate {
 
   }
 
+  initializeHTML(app) {
+
+    this.header = new SaitoHeader(app, this);
+
+  }
+
 
 
   //
@@ -179,6 +185,13 @@ console.log("Adding: " + game_id);
   async render(app) {
     if (!document.getElementById("arcade-container")) { 
       app.browser.addElementToDom(ArcadeContainerTemplate()); 
+    }
+
+    if (this.header == null) {
+      this.header = new SaitoHeader(app, this);
+    }
+    if (this.overlay == null) {
+      this.overlay = new SaitoOverlay(app, this);
     }
 
     this.header.render(app, this);

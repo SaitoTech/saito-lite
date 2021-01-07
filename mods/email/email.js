@@ -23,7 +23,7 @@ class Email extends ModTemplate {
     this.events = ['chat-render-request'];
     this.icon_fa = "fas fa-wallet";
 
-    this.header = new SaitoHeader(app);
+    this.header = null;
 
     this.emails = {};
     this.emails.inbox = [];
@@ -88,6 +88,9 @@ class Email extends ModTemplate {
     `;
     app.browser.addElementToDom(html);
 
+    if (this.header == null) {
+      this.header = new SaitoHeader(app, this);
+    }
     this.header.render(app, this);
     this.header.attachEvents(app, this);
     
@@ -249,8 +252,14 @@ class Email extends ModTemplate {
       }
       if (addtx) {
         this.emails.inbox.unshift(tx);
-        let readyCount = this.app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
-        window.location.hash = this.app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
+        if (this.browser_active == 1) {
+	  try {
+            let readyCount = this.app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
+            window.location.hash = this.app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
+	  } catch (err) {
+	    console.log("ERROR 312324: calculating hash when window active");
+	  }
+        }
       }
     } catch (err) {
       console.error(err);

@@ -19,7 +19,7 @@ class Chat extends ModTemplate {
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
 
-    this.header = new SaitoHeader(app, this);
+    this.header = null;
 
     this.renderMode = "none";
     this.relay_moves_onchain_if_possible = 1;
@@ -113,6 +113,9 @@ class Chat extends ModTemplate {
 
     if (this.renderMode == "main") {
 
+      if (this.header == null) {
+        this.header = new SaitoHeader(app, this);
+      }
       this.header.render(app, this);
       this.header.attachEvents(app, this);
 

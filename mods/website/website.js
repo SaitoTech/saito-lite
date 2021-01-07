@@ -15,7 +15,7 @@ class Website extends ModTemplate {
 
     this.description = "Module that creates a root website on a Saito node.";
     this.categories = "Utilities Communications";
-    this.header = new SaitoHeader(this.app, this);
+    this.header = null;
 
     return this;
   }
@@ -23,6 +23,10 @@ class Website extends ModTemplate {
 
 
   initializeHTML(app) {
+
+    if (this.header == null) {
+      this.header = new SaitoHeader(app, this);
+    }
 
     this.header.render(app, this);
     this.header.attachEvents(app, this);

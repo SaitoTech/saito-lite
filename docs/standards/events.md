@@ -87,6 +87,27 @@ key - reference to the updated Saito key object
 NOTE: Saito manages a keychain (`/lib/saito/keychain.js`) with a set of keys (`/lib/saito/key.js`). These keys store peer-to-peer information. The identifier is a user-readable name . This event fires when the wallet updates an identifier.
 
 
+#### UPDATE EMAIL
+
+```javascript
+app.connection.on('update_email', (key) => {});
+```
+
+key - reference to the updated Saito key object
+
+NOTE: Saito manages a keychain (`/lib/saito/keychain.js`) with a set of keys (`/lib/saito/key.js`). These keys store peer-to-peer information. The email is an optional legacy email-address associated with each key. This event fires when the wallet updates an email.
+
+#### UPDATE TAG
+
+```javascript
+app.connection.on('update_tag', (key) => {});
+```
+
+key - reference to the updated Saito key object
+
+NOTE: Saito manages a keychain (`/lib/saito/keychain.js`) with a set of keys (`/lib/saito/key.js`). These keys store peer-to-peer information. The tag is an array of Strings which can be added to keys to associate them with publickeys. Modules may use tags to selectively tag addresses as in need to special processing. This event fires when the wallet inserts a tag.
+
+
 #### SET PREFERRED CRYPTO
 
 ```javascript
