@@ -23,7 +23,7 @@ apt upgrade
 apt install npm
 ```
 # Install Dependencies and Run
-```
+``` 
 npm install
 npm run compile
 npm start
@@ -72,15 +72,15 @@ If you're still confused, don't feel bad. There is a reason we've tried to expla
 
 The Reference Implementation of Saito is written in node.js.
 
-The easiest way to get started is to clone the repo as described above and compile a "lite client" which can be served directly do your browser.
+The easiest way to get started is to clone the repo as described above and compile a "lite client" which can be served directly to your browser.
 
-See the "Lite Client Modules Getting Started" doc in /docs.
+See the [Applications readme in the /docs directory](https://github.com/SaitoTech/saito-lite/blob/master/docs/standards/applications.md).
 
 Alternatively, you can integrate directly with our REST API which is described below. Currently we do not provide any easy way to call this API other than by implemented a Module in the Lite Client as described in the doc mentioned above, but these tools will be coming very soon.
 
 ## REST API
 
-The API for interacting with Saito's Core code is quite minimalistic. Additional APIs will be provided later through modules which node's can opt to install or not depending on their preferences.
+The API for interacting with Saito's Core code is quite minimalistic. Additional APIs will be provided later through modules which nodes can opt to install or not depending on their preferences. The Saito philosophy is always that nodes only provide the services which they are incentived to provide.
 
 ### Websocket Connection
 
@@ -88,13 +88,13 @@ A node will keep a list of peers which connect to it via a websocket(or local so
 
 A peer can send a "request" message through the socket with one of the following request types:
 ```
-'handshake', 'block', 'missing block', 'blockchain', 'transaction', 'keylist', or by passing a transaction as the payload.
+'handshake', 'block', 'missing block', 'blockchain', 'transaction', 'keylist', or by simply passing a transaction as the payload.
 ```
 
 For Example:
 ```
 var message = {};
-message.request = message;
+message.request = requestType;
 message.data = data;
 
 this.socket.emit('request', JSON.stringify(message), function (resdata) {
@@ -109,18 +109,137 @@ peer.sendRequest("transaction", tx);
 // or
 peer.sendRequestWithCallback("keylist", {...}, function () {...});
 ```
-Before a node will begin to send peer request and new transaction events to a peer, the peer must complete the handshake.
+Before a node will begin to send peer request and new transaction events to a peer, the peer must complete a handshake.
 
+When a client first opens a websocket to a peer, the peer will reply with a handshake request.
+
+The server does something like this:
 ```
-var message = {};
-message.request = "handshake";
-message.data = {...};
+this.socket.on('connect', () => {
+  // build a handshake object(described below)
+  var handshakeMessage = {};
+  message.request = "handshake";
+  message.data = handshakeObj;
 
-this.socket.emit('request', JSON.stringify(message), function (resdata) {
-	mycallback(resdata);
-});
+  this.socket.emit('request', JSON.stringify(message), function (resdata) {
+      mycallback(resdata);
+  });
+ });
 ```
+A handshake data object should look something like this:
+```
+{
+  request: 'handshake',
+  data: {
+  	step: 1,
+    ts: 1609917235055,
+    attempts: 1,
+    complete: 0,
+    challenge_mine: 0.7214271616371855,
+    challenge_peer: '',
+    challenge_proof: '',
+    challenge_verified: 0,
+    peer: { 
+      host: '',
+      port: '',
+      protocol: '',
+      endpoint: {},
+      publickey: 'i6VdbjoWC1F8ZUa13ZVJM26Q3eLXDLymK1cfnNu6VoMt',
+      version: 3.273,
+      synctype: 'lite',
+      sendblks: 1,
+      sendtxs: 1,
+      sendgts: 1,
+      receiveblks: 1,
+      receivetxs: 0,
+      receivegts: 0,
+      keylist: [ ...]
+    },
+    modules: [ ... ],
+    services: [ ... ],
+    blockchain: {
+      last_bid: 86,
+      last_ts: 1608882688413,
+      last_bsh: 'a91604e2ef887ead350567037b52050c1e2f53cd241365f399e99987f77e8f9c',
+      last_bf: 0.540765046013423,
+      fork_id: '',
+      genesis_bid: 0
+    }
+  }
+}
+```
+The server will set the step to 1, which begins the handshake process, which goes like this:
 
+1) Server creates a handshake object which includes a challenge, and sends it
+2) Client creates it's own handshake object which includes a challenge and a signature of the server server's challenge, and sends it.
+3) Server confirms the client's signature, signs the client's challenge, sends it's handshake *and* sends a second request informing the client it is free to begin requesting blocks.
+4) Client confirms the server's signature and begins requesting blocks(if it's behind).
+
+*(Note that in a peer-to-peer blockchain context, the terminology "server" and "client" are not necessarily correct. In this case "client" refers to the peer openning the websocket connection and "server" as the peer which begins the handshake. In the wild, this will often be something which looks like a client and server, but there is no reason either peer cannot perform any particular service)*
+
+The data fields serve the following purposes:
+```
+step
+	Tracks the step in the handshake we are on. Should be incremented when replying.
+ts
+	(optional)Timestamp.
+attempts
+	(optional)Tracks the number of attempts the peer has used to complete the handshake.
+    This is tracked by each individual peer on it's own.
+complete
+	(optional)
+    This is tracked by each individual peer on it's own.
+challenge_mine
+	A random number between 0.0 and 1.0 which the other peer must sign to confirm
+    it controls the pubkey it claims to own.
+challenge_peer
+	(optional)
+    The challenge_mine of the other peer.
+challenge_proof
+	A signature of the challenge_mine sent by the other peer.
+challenge_verified
+	(optional)
+    This is tracked by each individual peer on it's own.
+peer.publickey
+	The peer object generally represent information about the peer itself.
+    The publickey is it's own publickey.
+peer.host
+peer.port
+peer.protocol
+	If the peer wishes to act like a server, this may be useful for peers in case the connection is lost.
+peer.endpoint
+	Another protocol, host, and port set which represents the other peer.
+peer.version
+	The version of the wallet this peer is running. This can be used by a client to let it know whether it needs to wipe it's wallet and create a new one. This is for testnet purposed only and will be deprecated.
+peer.synctype
+	Can be "none", "full", or "lite". Indicates what type of peer I am. A full client will be given full blocks, a lite client will be given lite blocks, a "none" client will not get new blocks.
+peer.sendblks
+	Indicates if this peer sends blocks.
+peer.sendtxs
+	Indicates if this peer sends transactions.
+peer.sendgts
+	Indicates if this peer sends golden ticket solutions.
+peer.receiveblks
+	Indicates if this peer receives blocks.
+peer.receivetxs
+	Indicates if this peer receives transactions.
+peer.receivegts
+	Indicates if this peer receives golden ticket solutions.
+peer.keylist
+	When requesting lite blocks, the serving peer will only blocks which include transactions from or to one of the pubkeys in this list.
+modules
+	A list of modules being run by the client. If a transaction includes a message with the field module, these transaction will automatically be routed to the relevant module by the module system. In the future, we may also have peers honor this logic for peer requests by leveraging this list, but it is currently unused.
+services
+	A module may act as a service. If so, it can indicate to peers that it provides this service here. For now a service is simply a name and peers must know how to interact with the given service. In the future, a new module type will allow services to automatically be disoverable and help to broadcast the form or their API to service consumers.
+blockchain.last_bid
+	The blockchain object is used to indicate to the other peer the state of this peers blockchain. last_bid is the last block id.
+blockchain.last_ts
+	last time
+blockchain.last_bsh
+blockchain.last_bf
+blockchain.fork_id
+blockchain.genesis_bid
+```
 If a transaction is sent with message 
 
 WORK IN PROGRESS, WILL BE COMPLETED IN THE NEXT 24 TO 48 HOURS
