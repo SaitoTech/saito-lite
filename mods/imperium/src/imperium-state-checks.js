@@ -9,9 +9,18 @@
     if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
     return this.returnFactionName(this, player);
   }
+  returnFactionNickname(player) {
+    if (this.game.players_info[player-1] == null) { return "Unknown"; }
+    if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
+    return this.returnFactionNameNickname(this, player);
+  }
   returnFactionName(imperium_self, player) {
     let factions = imperium_self.returnFactions();
     return factions[imperium_self.game.players_info[player-1].faction].name;
+  }
+  returnFactionNameNickname(imperium_self, player) {
+    let factions = imperium_self.returnFactions();
+    return factions[imperium_self.game.players_info[player-1].faction].nickname;
   }
   returnPlayerHomeworld(player) {
     let factions = this.returnFactions();

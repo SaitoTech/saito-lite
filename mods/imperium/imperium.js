@@ -1334,6 +1334,7 @@ console.log("P: " + planet);
     this.importFaction('faction2', {
       id		:	"faction2" ,
       name		: 	"Universities of Jol Nar",
+      nickname		: 	"Jol Nar",
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
@@ -1621,13 +1622,14 @@ console.log("P: " + planet);
     this.importFaction('faction4', {
       id		:	"faction4" ,
       name		: 	"Sardakk N'Orr",
+      nickname		: 	"Sardakk",
       homeworld		: 	"sector53",
       space_units	: 	["carrier","carrier","cruiser"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
       tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro		:	`<div style="font-weight:bold">What use are frames of quivvering flesh in times of war? Let the Sardakk do what we will -- the weak will suffer what they must.</div>`
+      intro             :       `<div style="">What use is quivvering flesh in times of war? The Sardakk do what we will -- the weak suffer what they must.</div>`
     });
 
 
@@ -1819,6 +1821,7 @@ console.log("P: " + planet);
     this.importFaction('faction1', {
       id		:	"faction1" ,
       name		: 	"Federation of Sol",
+      nickname		: 	"Sol",
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
@@ -2003,6 +2006,7 @@ console.log("P: " + planet);
     this.importFaction('faction3', {
       id		:	"faction3" ,
       name		: 	"XXCha Kingdom",
+      nickname		: 	"XXCha",
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
@@ -2317,6 +2321,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
     this.importFaction('faction5', {
       id		:	"faction5" ,
       name		: 	"Yin Brotherhood",
+      nickname		: 	"Yin",
       homeworld		: 	"sector13",
       space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
@@ -2705,7 +2710,8 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       name     			:       "Construction",
       rank			:	4,
       img			:	"/strategy/BUILD.png",
-      text			:	"Build a PDS and Space Dock or two PDS units. Others can spend a strategy token and activate a sector to build a PDS or Space Dock in it." ,
+
+      text			:	"Build a PDS or Space Dock. Then build a PDS.<hr />Other players may spend a strategy token and activate a sector to build a PDS or Space Dock in it." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -2779,7 +2785,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       name     			:       "Diplomacy",
       rank			:	2,
       img			:	"/strategy/DIPLOMACY.png",
-      text			:	"Everyone but you activates a system other than New Byzantium. All planets in that sector are refreshed. Ohters may spend a strategy token to refresh two planets." ,
+      text			:	"Pick a sector other than New Byzantium. Other players activate it. Refresh two planets.<hr />Other players may spend a strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -2924,7 +2930,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       name     			:       "Imperial",
       rank			:	8,
       img			:	"/strategy/EMPIRE.png",
-      text			:	"You may score a public objective. All players then score objectives in Initiative Order" ,
+      text			:	"You may score a public objective. If you control New Byzantium gain 1 VP. Otherwise gain a secret objective.<hr />All players score objectives in Initiative Order" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         imperium_self.game.state.round_scoring = 1;
@@ -3019,7 +3025,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       name     			:       "Leadership",
       rank			:	1,
       img			:	"/strategy/INITIATIVE.png",
-      text			:	"Get three tokens. Everyone may purchase additional tokens at three influence per token." ,
+      text			:	"You may gain and distribute three tokens.<hr />All players may purchase extra tokens at three influence per token." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 	if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -3058,7 +3064,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       name     			:       "Politics",
       rank			:	3,
       img			:	"/strategy/POLITICS.png",
-      text			:	"Pick a new Speaker. If New Byzantium is controlled vote on two agendas. Other players may spend a strategy token to purchase two action cards. ",
+      text			:	"Pick a new Speaker. Gain 2 action cards. Vote on two agendas if New Byzantium is controlled.<hr />Other players may spend a strategy token to purchase two action cards.",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == player) {
@@ -3202,7 +3208,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       name     			:       "Technology",
       rank			:	7,
       img			:	"/strategy/TECH.png",
-      text			:	"Research a technology for free, and spend 6 resources for a second if you wish. Others may spend a strategy token and 4 resources to research one technology" ,
+      text			:	"Research a technology. You may spend 6 resources to research another.<hr />Other players may spend a strategy token and 4 resources to research a technology" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
@@ -3411,7 +3417,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       name     			:       "Trade",
       rank			:	5,
       img			:	"/strategy/TRADE.png",
-      text			:	"Gain 3 trade goods and refresh your commodities. You may refresh the commodities of any other players, or they may refresh themselves by spending a strategy token." ,
+      text			:	"Gain 3 trade goods. Refresh your commodities and those of any other players.<hr />Unrefreshed players may spend a strategy token to refresh their commodities." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -3511,7 +3517,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       name     			:       "Warfare",
       rank			:	6,
       img			:	"/strategy/MILITARY.png",
-      text			:	"De-activate a sector and get 1 free token. Others may spend a strategy token to producein their home system" ,
+      text			:	"De-activate a sector. Gain and distribute 1 free token.<hr />Other players may spend a strategy token to producein their home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -3605,7 +3611,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
   this.importSecretObjective('flagship-dominance', {
-      name 		: 	"" ,
+      name 		: 	"Blood Christening" ,
       text		:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
       type		: 	"secret" ,
       phase		: 	"action" ,
@@ -8862,8 +8868,9 @@ ACTION CARD - types
     });
 try {
     for (let i = 0; i < this.game.players_info.length; i++) {
+      let fctn = imperium_self.returnFactionNickname((i+1));
       this.menu.addSubMenuOption("game-factions", {
-        text : imperium_self.returnFaction((i+1)),
+        text : fctn ,
         id : ("game-faction-"+(i+1)),
         class : ("game-faction-"+(i+1)),
         callback : function(app, game_mod) {
@@ -8944,7 +8951,7 @@ try {
     let main_menu_added = 0;
     let community_menu_added = 0;
     for (let i = 0; i < this.app.modules.mods.length; i++) {
-      if (this.app.modules.mods[i].slug === "chat") {
+      if (this.app.modules.mods[i].name === "Chat") {
         for (let ii = 0; ii < this.game.players.length; ii++) {
           if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
 
@@ -8961,9 +8968,9 @@ try {
               main_menu_added = 1;
             }
 
-            if (ommunity_menu_added == 0) {
+            if (community_menu_added == 0) {
               this.menu.addSubMenuOption("game-chat", {
-                text : "Community",
+                text : "Group",
                 id : "game-chat-community",
                 class : "game-chat-community",
                 callback : function(app, game_mod) {
@@ -8981,10 +8988,11 @@ try {
             let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
             let gid = this.app.crypto.hash(members.join('_'));
             let name = imperium_self.returnFaction((ii+1));
+            let nickname = imperium_self.returnFactionNickname((ii+1));
             let chatmod = this.app.modules.mods[i];
 
             this.menu.addSubMenuOption("game-chat", {
-              text : name,
+              text : nickname,
               id : "game-chat-"+(ii+1),
               class : "game-chat-"+(ii+1),
               callback : function(app, game_mod) {
@@ -9000,7 +9008,9 @@ try {
         }
       }
     }
-    } catch (err) {}
+    } catch (err) {
+console.log("error initing chat: " + err);
+    }
 
     //
     // duck out if in arcade
@@ -10288,6 +10298,7 @@ handleSystemsMenuItem() {
 
     if (obj.id == null)			{ obj.id = "faction"; }
     if (obj.name == null) 		{ obj.name = "Unknown Faction"; }
+    if (obj.nickname == null)		{ obj.nickname = obj.name; }
     if (obj.homeworld  == null) 	{ obj.homeworld = "sector32"; }
     if (obj.space_units == null) 	{ obj.space_units = []; }
     if (obj.ground_units == null) 	{ obj.ground_units = []; }
@@ -11922,7 +11933,7 @@ console.log(JSON.stringify(this.game.state.choices));
   	} else {
 
 	  let html = '';
-	  html += this.returnFaction(player) + " is picking a strategy card. Their options: <ul>";
+	  html += this.returnFaction(player) + " is picking a strategy card: <ul>";
 
           let scards = [];
           for (let z in this.strategy_cards) {
@@ -15693,8 +15704,9 @@ playerTurn(stage = "main") {
 
     let playercol = "player_color_" + this.game.player;
 
-    let html = '<div class="terminal_header sf-readable">[command: ' + this.game.players_info[this.game.player - 1].command_tokens + '] [strategy: ' + this.game.players_info[this.game.player - 1].strategy_tokens + '] [fleet: ' + this.game.players_info[this.game.player - 1].fleet_supply + ']</div>';
-    html += '<p style="margin-top:20px"></p>';
+    let html = '';
+//    html = '<div class="terminal_header sf-readable">[command: ' + this.game.players_info[this.game.player - 1].command_tokens + '] [strategy: ' + this.game.players_info[this.game.player - 1].strategy_tokens + '] [fleet: ' + this.game.players_info[this.game.player - 1].fleet_supply + ']</div>';
+//    html += '<p style="margin-top:20px"></p>';
     html += '<div class="terminal_header2 sf-readable"><div class="player_color_box ' + playercol + '"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
 
     if (this.canPlayerPass(this.game.player) == 1) {
@@ -20221,7 +20233,7 @@ playerActivateSystem() {
 
 
       let chtml = "<div class='sf-readable'>Activate this system?</div><ul>";
-          chtml += '<li class="option" id="yes">activate sector</li>';
+          chtml += '<li class="option" id="yes">yes, do it</li>';
           chtml += '<li class="option" id="no">choose again</li>';
           chtml += '</ul>';
 
@@ -20247,6 +20259,8 @@ playerActivateSystem() {
           activated_once = 0;
           $(divpid).find('.hex_activated').css('background-color', 'transparent');
           $(divpid).find('.hex_activated').css('opacity', '1');
+
+	  imperium_self.playerActivateSystem();
 
         }
       });
@@ -21906,9 +21920,18 @@ playerDiscardActionCards(num) {
     if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
     return this.returnFactionName(this, player);
   }
+  returnFactionNickname(player) {
+    if (this.game.players_info[player-1] == null) { return "Unknown"; }
+    if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
+    return this.returnFactionNameNickname(this, player);
+  }
   returnFactionName(imperium_self, player) {
     let factions = imperium_self.returnFactions();
     return factions[imperium_self.game.players_info[player-1].faction].name;
+  }
+  returnFactionNameNickname(imperium_self, player) {
+    let factions = imperium_self.returnFactions();
+    return factions[imperium_self.game.players_info[player-1].faction].nickname;
   }
   returnPlayerHomeworld(player) {
     let factions = this.returnFactions();
@@ -25266,17 +25289,25 @@ returnStrategyOverlay() {
       };
       
     }
-    
-    cards.push(`
+
+    let card_html = `
 	<div class="overlay_strategy_card_box">
 	  <img class="overlay_strategy_card_box_img" src="/imperium/img/${thiscard.img}" style="width:100%" />
 	  <div class="overlay_strategy_card_text">${thiscard.text}</div>
+    `;
+     if (strategy_card_state != "not picked") {
+       card_html += `
 	  <div class="strategy_card_state p${strategy_card_player}">
 	    <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
-     </div>
-     ${strategy_card_bonus_html}
+          </div>
+       `;
+     }
+     card_html += `
+          ${strategy_card_bonus_html}
 	</div>
-    `);
+    `;
+    cards.push(card_html);
+
      rank.push(this.strategy_cards[s].rank);
      card_no++;
   }

@@ -3,7 +3,7 @@
       name     			:       "Imperial",
       rank			:	8,
       img			:	"/strategy/EMPIRE.png",
-      text			:	"You may score a public objective. All players then score objectives in Initiative Order" ,
+      text			:	"You may score a public objective. If you control New Byzantium gain 1 VP. Otherwise gain a secret objective.<hr />All players score objectives in Initiative Order" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         imperium_self.game.state.round_scoring = 1;

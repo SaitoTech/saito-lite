@@ -1,7 +1,7 @@
 body {
   background-color: var(--saito-skyline-grey);
   font-size: 1em;
-  font-family: "visuelt-light";
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   overflow-x: hidden;
   width: 100%;
   position: fixed;
@@ -26,13 +26,23 @@ h2, h5 {
   color: var(--saito-red);
 }
 
-.header {
+.header, .back-head {
   position: absolute;
   top: 0px;
   left: 0px;
   background-image: url('/saito/img/dreamscape.png');
   background-repeat: no-repeat;
   background-size: 100% 100px;
+}
+
+.back-head {
+  height: 2.5em;
+  line-height: 2.5em;
+  color: #efefef;
+  width: 100%;
+  padding: 0 2em;
+  font-weight: bolder;
+  z-index: 1;
 }
 
 .main {
@@ -159,7 +169,6 @@ section.first {
   transform: translate(-50%, 0em);
 }
 
-
 .banner-title {
   color: #fff;
   font-size: 3em;
@@ -203,7 +212,7 @@ section.first {
 }
 
 .calltoaction {
-  margin:  min(30vw, 16em) auto 0;
+  margin: min(30vw, 16em) auto 0;
   display: flex;
   justify-content: center;
 }
@@ -569,12 +578,14 @@ section.first {
   padding: 1em;
   border: 1px solid white;
 }
+
 .intro {
   padding: 1em 7em;
   width: 75%;
   margin-left: auto;
   margin-right: auto;
 }
+
 .intro-back {
   padding: 2em;
   background-color: #eee;
@@ -980,15 +991,20 @@ button:focus {
 
 /* Mods */
 
-
 .header-nav a, .header-nav i {
   color: white;
   text-decoration: none;
   display: block;
-  margin: 0 1em;
+  margin: 0 1em 8px;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
+  align-self: flex-end;
+  padding: 0 0 20px;
+}
+
+.small-head a, .small-head i {
+  padding: 0;
 }
 
 .header-nav i {
@@ -1247,37 +1263,50 @@ button:focus {
 }
 
 @media only screen and (max-width: 900px) {
+  .small-head .header-icon-links {
+    height: 2.5em;
+  }
+  .small-head.header-nav {
+    top: 0;
+  }
   .header-nav i {
     display: block;
-    text-shadow: 1px 1px #222;;
+    text-shadow: 1px 1px #222;
+    ;
   }
   .header-nav a {
     display: none;
   }
   .header-wrapper {
-    width: calc(100vw - 3em);
+    width: calc(100vw - 5em);
   }
   .header-nav {
     left: unset;
     right: 0;
+    top: 5px;
   }
-  .header-nav:hover {
+  .header-nav {
     display: grid;
-    text-align: right;
     gap: 1em;
     grid-template-columns: auto;
-    margin: 1em 0;
+  }
+  .header-nav:hover {
+    text-align: right;
+    margin: 0;
     border-right: 1px solid #fff;
     right: 0;
     height: unset;
     background: linear-gradient(90deg, rgb(247 31 61 / 50%), rgb(247 31 61 / 75%));
-    padding: 2em 1em;
+    padding: 1em;
+    border: 1px solid var(--saito-skyline-grey);
   }
   .header-nav:hover a {
     display: block;
+    padding: 0;
   }
   .header-nav:hover i {
-    display: none;
+    opacity: 0;
+    padding: 0;
   }
 }
 
@@ -1329,6 +1358,7 @@ button:focus {
     height: 170px !important;
   }
   .component-text {
+    height: 100%;
     margin: 0;
   }
   .roadmap-wrapper {
@@ -1402,6 +1432,12 @@ button:focus {
   body {
     font-size: 0.8em;
   }
+  .intro {
+    width: 100%;
+  }
+  .intro-back {
+    padding: 1em
+  }
   .intro-title {
     font-size: 1.7em;
   }
@@ -1414,9 +1450,6 @@ button:focus {
   section.first {
     margin-top: -40px;
   }
-  .header-nav {
-    right: 50px;
-  }
   .header-nav:hover {
     right: 60px;
   }
@@ -1427,13 +1460,26 @@ button:focus {
     height: 40px;
   }
   .component {
-    height: 130px !important;
+    height: 155px !important;
   }
   .component-text {
     margin: 0;
+    height: 100%;
   }
   .banner-logo {
     top: 5.5em;
+  }
+  .can-build-img-tall {
+    height: 165px;
+  }
+  .supporter-list {
+    padding: 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .can-build {
+    display: none;
   }
 }
 
@@ -1442,6 +1488,7 @@ button:focus {
 .header-home, .logo {
   transition: all 1s ease-in-out;
 }
+
 .logo {
   transform-origin: top;
 }
@@ -1455,6 +1502,7 @@ button:focus {
   position: absolute;
   top: 1em;
 }
+
 .logo {
-  transform: scale(1);  
+  transform: scale(1);
 }

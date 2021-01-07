@@ -135,7 +135,7 @@
   border: 1px solid var(--saito-red);
   background-color: var(--saito-cyber-black);
   color: #fff;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 1em;
   transform: translate(-50%, -50%);
 }
@@ -243,7 +243,7 @@
   min-width: 400px;
   padding: 1em;
   color: var(--saito-white);
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   line-height: 1.5em;
   background-color: var(--saito-cyber-black);
   margin: auto;

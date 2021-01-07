@@ -1,5 +1,6 @@
 var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
+const ModalRegisterEmail = require('../../lib/saito/ui/modal-register-email/modal-register-email');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const Data = require('./lib/data');
 
@@ -23,30 +24,29 @@ class Website extends ModTemplate {
 
   initializeHTML(app) {
 
-
     this.header.render(app, this);
     this.header.attachEvents(app, this);
 
-      var el = document.querySelector('.all');
-      var head = document.querySelector('.header-home');
-      var head_nav = document.querySelector('.header-nav');
-      head.classList.add('small-head');
-      head_nav.classList.add('small-head');
-      el.addEventListener('scroll', () => {
-        if (el.scrollTop > 100) {
-          console.log(el.scrollTop);
-          head.classList.remove('small-head');
-          head_nav.classList.remove('small-head');
-        } else {
-          console.log(-el.scrollTop);
-          head.classList.add('small-head');
-          head_nav.classList.add('small-head');
-        }
-      });
+    var el = document.querySelector('.all');
+    var head = document.querySelector('.header-home');
+    var head_nav = document.querySelector('.header-nav');
+    head.classList.add('small-head');
+    head_nav.classList.add('small-head');
+    el.addEventListener('scroll', () => {
+      if (el.scrollTop > 100) {
+        head.classList.remove('small-head');
+        head_nav.classList.remove('small-head');
+      } else {
+        head.classList.add('small-head');
+        head_nav.classList.add('small-head');
+      }
+    });
     
-    //    this.app.modules.respondTo("chat-manager").forEach(mod => {
-    //      mod.respondTo('chat-manager').render(this.app, this);
-    //    });
+    document.getElementById("website-newsletter-subscribe").onclick = (e) => {
+      this.mre = new ModalRegisterEmail(app);
+      this.mre.render(app, this);
+      this.mre.attachEvents(app, this);
+    }
 
 
   }

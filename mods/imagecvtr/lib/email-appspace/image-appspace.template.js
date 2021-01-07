@@ -2,7 +2,7 @@ module.exports = ImageAppspaceTemplate = () => {
 
   return `
 
-    <h3>Upload Image to Generate Text:</h3> 
+    <h3>Upload Image to Generate Base64 Text:</h3> 
 
     <p></p>
 

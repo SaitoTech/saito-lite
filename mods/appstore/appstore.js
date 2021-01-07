@@ -4,6 +4,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailAppStore = require('./lib/email-appspace/appstore-appspace');
 const AppStoreOverlay = require('./lib/appstore-overlay/appstore-overlay');
 const AppStoreBundleConfirm = require('./lib/appstore-overlay/appstore-bundle-confirm');
+const AppStoreModuleIndexedConfirm = require('./lib/appstore-overlay/appstore-module-indexed-confirm');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const fs = require('fs');
 const path = require('path');
@@ -18,7 +19,6 @@ class AppStore extends ModTemplate {
     this.app = app;
 
     this.name          = "AppStore";
-//    this.appname       = "Deploy";
     this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
     this.categories    = "Utilities Dev";
     this.featured_apps = ['Imperium', 'Debug', 'Scotland', 'Escrow'];
@@ -102,6 +102,9 @@ class AppStore extends ModTemplate {
         $squery1: squery1,
         $squery2: squery2,
       };
+
+console.log(sql);
+console.log(JSON.stringify(params));
 
       let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
 
@@ -192,15 +195,28 @@ console.log("##########################");
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
-          newtx.msg = {
-            module: "AppStore",
-            request: "submit module",
-            module_zip: zip,
-            name: dir,
-          };
+	  //
+	  // TODO - fix 
+	  //
+	  // massive zip files bypassing tx size limits cause issues with 
+	  // some versions of NodeJS. In others they over-size and fail
+	  // elegantly. adding this check to prevent issues with server
+	  // on start, particularly with Red Imperium.
+	  //
+	  if (zip.length <= 20000000) {
 
-          newtx = app.wallet.signTransaction(newtx);
-          app.network.propagateTransaction(newtx);
+            newtx.msg = {
+              module: "AppStore",
+              request: "submit module",
+              module_zip: zip,
+              name: dir,
+            };
+
+            newtx = app.wallet.signTransaction(newtx);
+            app.network.propagateTransaction(newtx);
+
+	  }
+
         });
 
         archive.finalize();
@@ -223,6 +239,31 @@ console.log("##########################");
       switch (txmsg.request) {
         case 'submit module':
           this.submitModule(blk, tx);
+	  if (tx.isFrom(app.wallet.returnPublicKey())) {
+            try {
+              document.querySelector(".appstore-loading-text").innerHTML = "Your application has been submitted to the network. <p></p>It should be ready for install in <span class=\"time_remaining\">30</span> seconds.";
+              let appstore_mod = app.modules.returnModule("AppStore");
+              appstore_mod.time_remaining = 30;
+              appstore_mod.bundling_timer = setInterval(() => {
+                if (appstore_mod.time_remaining <= 0) {
+                  clearInterval(appstore_mod.bundling_timer);
+		  AppStoreModuleIndexedConfirm.render(appstore_mod.app, appstore_mod);
+		  AppStoreModuleIndexedConfirm.attachEvents(appstore_mod.app, appstore_mod);
+                } else {
+                  appstore_mod.time_remaining--;
+                  if (appstore_mod.time_remaining >= 1) {
+                    try {
+                      document.querySelector(".time_remaining").innerHTML = appstore_mod.time_remaining;
+                    } catch (err) {
+                      clearInterval(appstore_mod.bundling_timer);
+                    }
+                  }
+                }
+              }, 1000);
+
+            } catch (err) {
+            }
+	  }
           break;
         case 'request bundle':
           if (tx.isFrom(app.wallet.returnPublicKey())) {
@@ -296,7 +337,6 @@ console.log("##########################");
 
       const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
 
-
       let promises = directory.files.map(async file => {
 
         if (file.path === "web/img/arcade.jpg") {
@@ -306,14 +346,13 @@ console.log("##########################");
 
         if (file.path.substr(0,3) == "lib") { return; }
         if (file.path.substr(-2) !== "js") { return; }
-        if (file.path.substr(-2) !== "js") { return; }
         //if (file.path.substr(2).indexOf("/") > -1) { return; }
-        if (file.path.indexOf("/web/") > -1) { return; }
-        if (file.path.indexOf("/www/") > -1) { return; }
-        if (file.path.indexOf("/lib/") > -1) { return; }
-        if (file.path.indexOf("/license/") > -1) { return; }
-        if (file.path.indexOf("/docs/") > -1) { return; }
-        if (file.path.indexOf("/sql/") > -1) { return; }
+        if (file.path.indexOf("web/") > -1) { return; }
+        if (file.path.indexOf("www/") > -1) { return; }
+        if (file.path.indexOf("lib/") > -1) { return; }
+        if (file.path.indexOf("license/") > -1) { return; }
+        if (file.path.indexOf("docs/") > -1) { return; }
+        if (file.path.indexOf("sql/") > -1) { return; }
 
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
@@ -322,9 +361,7 @@ console.log("##########################");
 	let found_name = 0;
 	let found_description = 0;
 	let found_categories = 0;	
-	//let found_image = 0;	
 
-	//for (let i = 0; i < zip_lines.length && i < 50 && (found_image == 0 || found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 	for (let i = 0; i < zip_lines.length && i < 50 && (found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 
 	  //
@@ -333,30 +370,18 @@ console.log("##########################");
 	  if (/this.name/.test(zip_lines[i]) && found_name == 0) {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
+console.log("FP: " + file.path);
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
+console.log("N1: " + name);
 	      name = cleanString(name);
+console.log("N2: " + name);
 	      name = name.replace(/^\s+|\s+$/gm,'');
+console.log("N3: " + name);
 	      if (name.length > 50) { name = "Unknown"; found_name = 0; }
 	      if (name === "name") { name = "Unknown"; found_name = 0; }
+console.log("N4: " + name);
 	    }
 	  }
-
-	  //
-	  // get image (base64)
-	  //
-/***
-	  if (/this.image/.test(zip_lines[i]) && found_image == 0) {
-	    found_image = 1;
-	    if (zip_lines[i].indexOf("=") > 0) {
-	      image = zip_lines[i].substring(zip_lines[i].indexOf("=")+1);
-	      image = image.replace(/ /gm,'');
-	      image = image.replace(/^=/gm,'');
-	      image = image.replace(/;$/gm,'');
-	      image = image.replace(/\"/gm,'');
-	      image = image.replace(/\'/gm,'');
-	    }
-	  }
-***/
 
 	  //
 	  // get description
@@ -409,7 +434,7 @@ console.log("##########################");
     // delete unziped module
     //
     fs.unlink(path.resolve(__dirname, zip_path));
-    return { name, description, categories, image };
+    return { name, image , description, categories };
 
   }
 
@@ -429,23 +454,21 @@ console.log("##########################");
             newtx.msg.title        = "Saito Application Published";
             newtx.msg.message      = `
 
-	    Your application is now available at the following link:
+	    <p>
+	    Your application has been published with the following APP-ID:
+	    </p>
 
-	    <p></p>
+	    <p><br /></p>
 
-	    <a href="https://saito.io/appstore/?app=${tx.transaction.ts}-${tx.transaction.sig}">https://saito.io/appstore/?app=${tx.transaction.ts}-${tx.transaction.sig}</a>
+	    <p>
+	    ${this.app.crypto.hash(tx.transaction.ts + "-" + tx.transaction.sig)}
+	    </p>
 
-	    <p></p>
+	    <p><br /></p>
 
-	    or by searching on your preferred AppStore for the following APP-ID:
-
-	    <p></p>
-
-	     ${tx.transaction.ts}-${tx.transaction.sig}
-
-            <p></p>
-
-	    If your application does not appear shortly, that indicates a there is bug in your code preventing the AppStore from compiling it successfully. In the event of difficulty developing remotely, we recommend you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile and test your module manually to find and fix any errors before uploading to the network.
+	    <p>
+	    Please note: if you have problems installing your application, there may be a problem preventing it from compiling successfully. In these cases, we recommend <a href="https://org.saito.tech/developers">installing Saito</a> and testing locally before deploying to the network. You are welcome to contact the Saito team with questions or problems.
+	    </p>
 
         `;
         newtx = this.app.wallet.signTransaction(newtx);
@@ -473,7 +496,11 @@ console.log("##########################");
 console.log("-----------------------------");
 console.log("--INSERTING INTO APPSTORE --- " + name);
 console.log("-----------------------------");
-
+if (name == "Unknown") {
+  console.log(`TROUBLE EXTRACTING: mods/module-${sig}-${ts}.zip`);
+  //console.log("ZIP: " + module_zip);
+  //process.exit();
+}
 
     let featured_app = 0;
     if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
@@ -481,7 +508,7 @@ console.log("-----------------------------");
     let params = {
       $name: name,
       $description: description || '',
-      $version: `${ts}-${sig}`,
+      $version: this.app.crypto.hash(`${ts}-${sig}`),
       $image: image ,
       $categories: categories,
       $publickey: from[0].add,
@@ -507,7 +534,7 @@ console.log("-----------------------------");
         sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
         params = {
           $name: name,
-          $version: `${ts}-${sig}`,
+          $version: this.app.crypto.hash(`${ts}-${sig}`),
         };
         await this.app.storage.executeDatabase(sql, params, "appstore");
 
@@ -612,7 +639,7 @@ console.log("-----------------------------");
     sql = `INSERT OR IGNORE INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts } = tx.transaction;
     params = {
-      $version: `${ts}-${sig}`,
+      $version: this.app.crypto.hash(`${ts}-${sig}`),
       $publickey: from[0].add,
       $unixtime: ts,
       $bid: blk.block.id,
@@ -757,6 +784,8 @@ console.log("-----------------------------");
     bash_script_content += 'cd ' + __dirname + "\n";
     bash_script_content += 'cd ../../' + "\n";
     bash_script_content += `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
+
+console.log("COMPILING: " + `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`);
 
     bash_script_content += "\n";
     bash_script_content += bash_script_delete;

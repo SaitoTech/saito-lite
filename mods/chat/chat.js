@@ -2,13 +2,12 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailChat = require('./lib/email-chat/email-chat');
 const ChatMain = require('./lib/chat-main/chat-main');
+const ChatRoom = require('./lib/chat-main/chat-room');
 const SaitoHeader = require('./../../lib/saito/ui/saito-header/saito-header');
 
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
 const linkifyHtml = require('markdown-linkify');
-
-
 
 class Chat extends ModTemplate {
 
@@ -16,6 +15,7 @@ class Chat extends ModTemplate {
 
     super(app);
     this.name   = "Chat";
+    this.description = "Saito instant-messaging client and application platform";
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
 
@@ -79,9 +79,15 @@ class Chat extends ModTemplate {
   //
   // main module render
   //
-  render(app) {
+  render(app, renderMode="") {
 
     if (this.browser_active == 1) { this.renderMode = "main"; }
+
+    if (renderMode == "chatroom") {
+      ChatRoom.render(app, this);
+      ChatRoom.attachEvents(app, this);
+      return;
+    }
 
     if (this.renderMode == "main") {
       ChatMain.render(app, this);
@@ -234,7 +240,7 @@ class Chat extends ModTemplate {
 
 
   //
-  // peer messages --< receiveMessage() 
+  // peer messages --> receiveMessage() 
   //
   async handlePeerRequest(app, req, peer, mycallback) {
 
@@ -404,7 +410,7 @@ class Chat extends ModTemplate {
   }
 
 
-  receiveMessage(app, tx) {
+  receiveMessage(app, tx, renderMode="") {
 
     let txmsg = tx.returnMessage();
 
@@ -433,24 +439,13 @@ class Chat extends ModTemplate {
       }
       if (add_new_group == 1) {
         this.createChatGroup(members);
+        txmsg.group_id = group_id;
+      } else {
+        if (!txmsg,group_id) { txmsg.group_id = group_id; }
       }
     }
 
    
-
-
-    //
-    // create msg object
-    //
-    //let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-    //app.browser.addIdentifiersToDom([tx.transaction.from[0].add]);
-    //let message = Object.assign(txmsg, {
-    //  sig: tx.transaction.sig,
-    //  type: msg_type,
-    //  identicon: this.app.keys.returnIdenticon()
-    //});
-
-
     //
     // notify group chat if not-on-page
     //
@@ -462,8 +457,7 @@ class Chat extends ModTemplate {
       }
     } catch (err) {
     }
-
-
+  
 
     let message = txmsg.message;
     this.groups.forEach(group => {
@@ -485,7 +479,7 @@ class Chat extends ModTemplate {
 	  }
         }
       } catch (err) {
-console.log("ERROR 113234: chat error receiving message: " + err);
+        console.log("ERROR 113234: chat error receiving message: " + err);
       }
     });
 
@@ -512,9 +506,8 @@ console.log("ERROR 113234: chat error receiving message: " + err);
     // update sidebar if possible
     //
     this.updateLastMessage(txmsg.group_id, message);
-
     this.sendEvent('chat_receive_message', message);
-    this.render(this.app);
+    this.render(this.app, renderMode);
 
   }
 
@@ -590,6 +583,7 @@ console.log("ERROR 113234: chat error receiving message: " + err);
 	  name = members[i];
 	}
       }
+      if (name == null) { name = "me"; }
     }
 
     let id = this.app.crypto.hash(`${members.join('_')}`)

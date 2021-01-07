@@ -891,8 +891,6 @@ try {
     //
     if (this.game.player === 0) { player = "observer"; }
 
-console.log("PLAYER: " + this.game.player + " ---> " + player);
-
     //
     // avoid China bug on reshuffle - sept 27
     //
@@ -1090,8 +1088,6 @@ console.log("MOVE: " + JSON.stringify(mv));
               this.game.state.events.missile_envy = 0;
               this.game.state.events.missileenvy = 0;
             }
-
-console.log("DECK SD: " + JSON.stringify(this.game.deck));
 
             for (var i in this.game.deck[0].cards) {
               if (mv[2] == i) {
@@ -1410,19 +1406,19 @@ console.log("CARD: " + card);
 
             if (mv[1] == "ussr") {
               this.game.state.events.beartrap = 0;
-                this.updateLog("Bear Trap ends");
+              this.updateLog("Bear Trap ends");
             }
             if (mv[1] == "us") {
               this.game.state.events.quagmire = 0;
-                this.updateLog("Quagmire ends");
+              this.updateLog("Quagmire ends");
             }
 
           } else {
             if (mv[1] == "ussr") {
-                this.updateLog("Bear Trap continues...");
+              this.updateLog("Bear Trap continues...");
             }
             if (mv[1] == "us") {
-                this.updateLog("Quagmire continues...");
+              this.updateLog("Quagmire continues...");
             }
           }
 
@@ -2259,6 +2255,16 @@ console.log("place: " + mv[1] + " -- " + player);
               let lmv = this.game.queue[le].split("\t");
               let rmvd = 0;
 
+
+	      if (lmv[0] === "OBSERVER_CHECKPOINT" && le >= 1) {
+		let tmp = this.game.queue[le];
+	        this.game.queue[le] = this.game.queue[le-1];
+		this.game.queue[le-1] = tmp; 		
+                lmv = this.game.queue[le].split("\t");
+console.log("re-arranged resolve to avoid OBSERVER MODE bug");
+	      }
+
+
               if (lmv[0] == "headline" && mv[1] == "headline") {
                 this.game.queue.splice(le, 2);
                 rmvd = 1;
@@ -2360,7 +2366,7 @@ console.log("place: " + mv[1] + " -- " + player);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["greatsociety","unintervention","abmtreaty","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["missileenvy","beartrap","redscare","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
               this.game.deck[0].hand = ["campdavid", "olympic", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
@@ -4289,6 +4295,7 @@ console.log("SELECTED CARD NOT NULL: bbc");
       //
       let cards_available = 0;
       let scoring_cards_available = 0;
+      playable_cards = [];
 
       //
       // how many turns left?
@@ -4306,6 +4313,7 @@ console.log("SELECTED CARD NOT NULL: bbc");
 
       for (i = 0; i < this.game.deck[0].hand.length; i++) {
         if (this.modifyOps(this.game.deck[0].cards[this.game.deck[0].hand[i]].ops, this.game.deck[0].hand[i], this.game.player, 0) >= 2 && this.game.deck[0].hand[i] != "china") {
+	  playable_cards.push(this.game.deck[0].hand[i]);
           cards_available++;
         }
         if (this.game.deck[0].cards[this.game.deck[0].hand[i]] != undefined) {
@@ -4313,18 +4321,25 @@ console.log("SELECTED CARD NOT NULL: bbc");
         }
       }
 
+console.log("available cards: " + cards_available + " -- " + this.game.state.events.missile_envy + " -- " + this.game.state.events.missileenvy);
+
       //
       // handle missile envy if needed
       //
+      let playable_cards_handled = 1;
       if (this.game.state.events.missile_envy == this.game.player) {
+        playable_cards_handled = 0;
         if (this.modifyOps(2, "missileenvy", this.game.player, 0) >= 2) {
 	  // reset here, since will not trigger elsewhere
+          playable_cards_handled = 1;
           this.game.state.events.missile_envy = 0;
           this.game.state.events.missileenvy = 0;
           playable_cards = [];
           playable_cards.push("missileenvy");
         }
-      } else {
+      }
+
+      if (playable_cards_handled == 0) {
 
         //
         // do we have any cards to play?

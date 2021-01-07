@@ -1,7 +1,7 @@
 body {
   background-color: var(--saito-skyline-grey);
   font-size: 1em;
-  font-family: "visuelt-light";
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   overflow-x: hidden;
   width: 100%;
   position: fixed;

@@ -54,8 +54,9 @@
     });
 try {
     for (let i = 0; i < this.game.players_info.length; i++) {
+      let fctn = imperium_self.returnFactionNickname((i+1));
       this.menu.addSubMenuOption("game-factions", {
-        text : imperium_self.returnFaction((i+1)),
+        text : fctn ,
         id : ("game-faction-"+(i+1)),
         class : ("game-faction-"+(i+1)),
         callback : function(app, game_mod) {
@@ -136,7 +137,7 @@ try {
     let main_menu_added = 0;
     let community_menu_added = 0;
     for (let i = 0; i < this.app.modules.mods.length; i++) {
-      if (this.app.modules.mods[i].slug === "chat") {
+      if (this.app.modules.mods[i].name === "Chat") {
         for (let ii = 0; ii < this.game.players.length; ii++) {
           if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
 
@@ -153,9 +154,9 @@ try {
               main_menu_added = 1;
             }
 
-            if (ommunity_menu_added == 0) {
+            if (community_menu_added == 0) {
               this.menu.addSubMenuOption("game-chat", {
-                text : "Community",
+                text : "Group",
                 id : "game-chat-community",
                 class : "game-chat-community",
                 callback : function(app, game_mod) {
@@ -173,10 +174,11 @@ try {
             let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
             let gid = this.app.crypto.hash(members.join('_'));
             let name = imperium_self.returnFaction((ii+1));
+            let nickname = imperium_self.returnFactionNickname((ii+1));
             let chatmod = this.app.modules.mods[i];
 
             this.menu.addSubMenuOption("game-chat", {
-              text : name,
+              text : nickname,
               id : "game-chat-"+(ii+1),
               class : "game-chat-"+(ii+1),
               callback : function(app, game_mod) {
@@ -192,7 +194,9 @@ try {
         }
       }
     }
-    } catch (err) {}
+    } catch (err) {
+console.log("error initing chat: " + err);
+    }
 
     //
     // duck out if in arcade

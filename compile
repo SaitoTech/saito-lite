@@ -85,13 +85,13 @@ function reset_nonpersistent {
   # 
   # do not delete compiled software
   # 
-  # rm -f ./mods/appstore/bundler/dist/
+  # rm -rf ./mods/appstore/bundler/dist/
 
   rm -f ./mods/forum/web/img/thumbnails/*.png
   rm -f ./mods/registry/web/addresses.txt
   rm -f ./mods/appstore/mods/*
   rm -rf ./mods/appstore/bundler/mods/*
-  rm -f ./mods/appstore/bundler/dist/*
+  rm -rf ./mods/appstore/bundler/dist/*
   rm -f ./mods/appstore/bundler/*.js
   rm -f ./mods/appstore/bundler/*.json
   rm -f ./logs/*

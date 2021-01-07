@@ -1562,7 +1562,7 @@ console.log(JSON.stringify(this.game.state.choices));
   	} else {
 
 	  let html = '';
-	  html += this.returnFaction(player) + " is picking a strategy card. Their options: <ul>";
+	  html += this.returnFaction(player) + " is picking a strategy card: <ul>";
 
           let scards = [];
           for (let z in this.strategy_cards) {

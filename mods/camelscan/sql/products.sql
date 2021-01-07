@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS products (
-  id INTEGER,
-  PRIMARY KEY (id ASC)
-);

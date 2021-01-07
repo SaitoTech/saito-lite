@@ -21,8 +21,6 @@ class Registry extends ModTemplate {
     //
     this.publickey = 'zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK';
 
-    this.description = "A naming service for Saito Addresses";
-    this.categories  = "Utilities Communications";
     return this;
   }
 
@@ -54,36 +52,9 @@ class Registry extends ModTemplate {
           }
         }
       }
-      //                 document.getElementById('settings-dropdown').classList.add('show-right-sidebar-hard');
-      //                   let register_success = app.modules.returnModule('Registry').registerIdentifier(requested_id);
-      //                   if (register_success) {
-      //                       id = `"${requested_id}@saito" requested.`;
-      //                       document.getElementById('settings-dropdown').classList.remove('show-right-sidebar-hard');
-      //                       document.getElementById('settings-dropdown').classList.add('show-right-sidebar');
-      //                       document.querySelector('.profile-identifier').innerHTML = id;
-      //                   }
     }
     return null;
   }
-
-  // respondTo(type) {
-  //   if (type == 'email-appspace') {
-  //     let obj = {};
-  //         obj.render = this.renderEmail;
-  //         obj.attachEvents = this.attachEventsEmail;
-  //     return obj;
-  //   }
-  //   return null;
-  // }
-  // renderEmail(app, data) {
-  //    data.registry = app.modules.returnModule("Registry");
-  //    let RegistryAppspace = require('./lib/email-appspace/registry-appspace');
-  //    RegistryAppspace.render(app, data);
-  // }
-  // attachEventsEmail(app, data) {
-  //    data.registry = app.modules.returnModule("Registry");
-  //    RegistryAppspace.attachEvents(app, data);
-  // }
 
 
   showModal() {
@@ -120,6 +91,7 @@ class Registry extends ModTemplate {
 
     
   }
+
   // DEPRECATED, USE tryRegisterIdentifier()
   registerIdentifier(identifier, domain="@saito") {
 
@@ -167,6 +139,10 @@ class Registry extends ModTemplate {
 
     if (conf == 0) {
       if (txmsg.module === "Registry") {
+
+	//
+	// this is to us, and we are the main registry server
+	//
         if (tx.isTo(registry_self.publickey) && app.wallet.returnPublicKey() === registry_self.publickey) {
 
 console.log(registry_self.publickey + " -- " + app.wallet.returnPublicKey());
@@ -174,10 +150,10 @@ console.log(registry_self.publickey + " -- " + app.wallet.returnPublicKey());
           let request = txmsg.request;
           let identifier = txmsg.identifier;
           let publickey = tx.transaction.from[0].add;
-            let unixtime = new Date().getTime();
+          let unixtime = new Date().getTime();
           let bid = blk.block.id;
           let bsh = blk.returnHash();
-            let lock_block = 0;
+          let lock_block = 0;
           let signed_message = identifier + publickey + bid + bsh;
           let sig = registry_self.app.wallet.signMessage(signed_message);
           let signer = this.publickey;
@@ -235,18 +211,13 @@ console.log(registry_self.publickey + " -- " + app.wallet.returnPublicKey());
               let signed_message = tx.msg.signed_message;
               let sig		 = tx.msg.sig;
 
-console.log("X:");
-console.log(JSON.stringify(signed_message));
-console.log(sig + " -- " + registry_self.publickey);
-
 	      try {
               if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
-console.log("ADD KEY IN REGISTRY");
                 registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
                 registry_self.app.modules.updateIdentifier();
               }
 	      } catch (err) {
-		console.log("ERROR verifying username registration message");
+		console.log("ERROR verifying username registration message: " + err);
 	      }
             }
           }

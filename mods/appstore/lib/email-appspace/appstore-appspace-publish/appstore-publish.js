@@ -16,7 +16,6 @@ module.exports = AppStorePublish = {
 
     let appstore_self = this;
 
-
     app.browser.addDragAndDropFileUploadToElement('appstore-publish-moddrop-inside', function(fileres) {
       this.files = [];
       this.files.push(fileres);
@@ -24,8 +23,6 @@ module.exports = AppStorePublish = {
       mod.data.publish.zip = mod.data.publish.zip.substring(28);
       document.querySelector(".submit-file-btn-box").style.display = "block";
     }, true);
-
-
 
     document.querySelector('.appstore-browse-btn').onclick = (e) => {
       AppStoreOverlay.render(app, mod);
@@ -36,11 +33,7 @@ module.exports = AppStorePublish = {
       } catch (err) {}
     }
 
-
-
-
-    document.getElementById('appstore-publish-module')
-            .onchange = async function(e) {
+    document.getElementById('appstore-publish-module').onchange = async function(e) {
 
               let selectedFile = this.files[0];
               //
@@ -68,8 +61,7 @@ module.exports = AppStorePublish = {
 
             }
 
-    document.getElementById('appstore-publish-form')
-            .onsubmit = (e) => {
+    document.getElementById('appstore-publish-form').onsubmit = (e) => {
 
               e.preventDefault();
 
@@ -82,12 +74,19 @@ module.exports = AppStorePublish = {
 
                 let newtx = this.createPublishTX(app, mod.data);
                 app.network.propagateTransaction(newtx);
+
+		//
+		//
+		//
+		mod.uploading_application_id = app.crypto.hash(newtx.transaction.ts + "-" + newtx.transaction.sig);
+
                 //
                 // TODO:
                 // convert this to main one way data flow structure like email
                 //
-                AppStorePublishSuccess.render();
-                AppStorePublishSuccess.attachEvents();
+                AppStorePublishSuccess.render(app, mod);
+                AppStorePublishSuccess.attachEvents(app, mod);
+
               } else {
                 salert("Please attach a zip file of your module");
               }
@@ -102,7 +101,8 @@ module.exports = AppStorePublish = {
       request: "submit module",
       module_zip: zip,
     };
-    return app.wallet.signTransaction(newtx);
+    newtx = app.wallet.signTransaction(newtx);
+    return newtx;
   },
 
 }

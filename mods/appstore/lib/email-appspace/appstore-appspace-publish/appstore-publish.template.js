@@ -3,7 +3,9 @@ module.exports = AppStorePublishTemplate = () => {
     <link rel="stylesheet" href="/appstore/css/email-appspace.css" />
 
     <div style="font-size:1.2em;margin-top:20px;">
-    <span style="color: var(--saito-red); cursor:pointer;" class="appstore-browse-btn">Click here</span> to install new applications. Visit our <span style="color: var(--saito-red); cursor:pointer;" class="appstore-developer-center">developer center</span> for help building applications or publish them using the file-uploader below:
+
+    Launch the <span style="color: var(--saito-red); cursor:pointer;" class="appstore-browse-btn">Saito Appstore</span> to install new applications. Visit our <a style="text-decoration:none" href="https://org.saito.tech/developers">developer center</a> for information on how to build applications, or use the file-uploader below to deploy them to the network:
+
     </div>
 
     <p></p>

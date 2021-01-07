@@ -63,8 +63,8 @@ module.exports = AppstoreAppDetails = {
       if (app.options.modules) {
         mods_to_include = app.options.modules;
       } else {
-alert("ERROR: your wallet does not report having modules. Please reset");
-return;
+	alert("ERROR: your wallet does not report having modules. Please reset");
+	return;
       }
 
       //
@@ -113,19 +113,70 @@ return;
 
           document.querySelector(".appstore-app-install-overlay").innerHTML = `
             <div class="appstore-bundler-install-notice">
-              <center style="margin-bottom:20px">Your wallet does not specify a trusted party to compile your software for you. Please download and compile manually.
+              <center style="margin-bottom:20px">
+		Your wallet does not specify a trusted party to compile your software for you. Do you want to use this AppStore? 
+	        <p></p>
+	        <div class="button" id="appstore-compile-btn">yes, compile</div>
+	      </center>
             </div>
           `;
+
+	   document.getElementById("appstore-compile-btn").onclick = (e) => {
+	     app.options.appstore = {};
+	     app.options.appstore.default = app.network.peers[0].peer.publickey;
+	     app.storage.saveOptions();
+
+             var newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.options.appstore.default, 0);
+             if (newtx == null) { return; }
+             newtx.msg.module = "AppStore";
+             newtx.msg.request = "request bundle";
+             newtx.msg.list = module_list;
+             newtx = app.wallet.signTransaction(newtx);
+             app.network.propagateTransaction(newtx);
+ 
+             document.querySelector('.appstore-app-install-overlay').innerHTML = `
+               <div class="appstore-bundler-install-notice">
+                 <center class="appstore-loading-text" style="margin-bottom:20px">Your custom Saito bundle is being compiled. Please do not leave this page -- estimated time to completion 60 seconds.</center>
+                 <center><div class="loader" id="game_spinner"></div></center>
+               </div>
+             `;
+
+	   }
+
 
         }
       } else {
 
         document.querySelector(".appstore-app-install-overlay").innerHTML = `
           <div class="appstore-bundler-install-notice">
-            <center style="margin-bottom:20px">Your wallet does not specify a trusted party to compile your software for you. Please download and compile manually.
+            <center style="margin-bottom:20px">
+	      Your wallet does not specify a trusted party to compile your software for you. Use this AppStore?
+	      <p></p>
+	      <div class="button" id="appstore-compile-btn">yes, compile</div>
+	    </center>
           </div>
         `;
 
+	 document.getElementById("appstore-compile-btn").onclick = (e) => {
+	   app.options.appstore = {};
+	   app.options.appstore.default = app.network.peers[0].peer.publickey;
+	   app.storage.saveOptions();
+
+           var newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.options.appstore.default, 0);
+           if (newtx == null) { return; }
+           newtx.msg.module = "AppStore";
+           newtx.msg.request = "request bundle";
+           newtx.msg.list = module_list;
+           newtx = app.wallet.signTransaction(newtx);
+           app.network.propagateTransaction(newtx);
+ 
+           document.querySelector('.appstore-app-install-overlay').innerHTML = `
+             <div class="appstore-bundler-install-notice">
+               <center class="appstore-loading-text" style="margin-bottom:20px">Your custom Saito bundle is being compiled. Please do not leave this page -- estimated time to completion 60 seconds.</center>
+               <center><div class="loader" id="game_spinner"></div></center>
+             </div>
+           `;
+        }
       }
     }
   }

@@ -2,13 +2,14 @@
     this.importFaction('faction4', {
       id		:	"faction4" ,
       name		: 	"Sardakk N'Orr",
+      nickname		: 	"Sardakk",
       homeworld		: 	"sector53",
       space_units	: 	["carrier","carrier","cruiser"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
       tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro		:	`<div style="font-weight:bold">What use are frames of quivvering flesh in times of war? Let the Sardakk do what we will -- the weak will suffer what they must.</div>`
+      intro             :       `<div style="">What use is quivvering flesh in times of war? The Sardakk do what we will -- the weak suffer what they must.</div>`
     });
 
 

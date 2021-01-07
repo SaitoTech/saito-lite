@@ -26,7 +26,7 @@ module.exports = AppStoreAppspace = {
       } else {
 	where_clause += " AND ";
       }
-      where_clause += " (name LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" OR description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" )";
+      where_clause += " (name LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" OR description LIKE \"%" + search_options.search.replace(/\W/, '') + "%\" OR version LIKE \"%" + search_options.search + "%\")";
     }
     if (search_options.version != "" && search_options.version != undefined) {
       if (where_clause == "") {
@@ -54,8 +54,6 @@ module.exports = AppStoreAppspace = {
     //
     let sql_query = ("SELECT name, description, version, image, publickey, unixtime, bid, bsh FROM modules " + where_clause);
 
-console.log(sql_query);
-
     //
     // fetch modules from appstore
     //
@@ -66,6 +64,10 @@ console.log(sql_query);
 	sql_query ,
 
         (res) => {
+
+	try {
+          document.querySelector(".appstore-overlay-grid").innerHTML = "";
+	} catch (err) {}
 
         if (res.rows != undefined) {
           let installed_apps = [];
@@ -102,10 +104,8 @@ console.log(sql_query);
 		for (var i = 0; i < this_btn.childNodes.length; i++) {
     		  if (this_btn.childNodes[i].className == "appstore-overlay-app-image") {
 		    app_img = this_btn.childNodes[i].style.background;
-console.log(app_img);
     		  }    
     		}    
-
 
                 let module_obj = JSON.parse(app.crypto.base64ToString(e.currentTarget.id));
 		let data = {};
@@ -115,7 +115,6 @@ console.log(app_img);
                 AppStoreAppDetails.attachEvents(app, data);
 	      };
     	    });
-
           } catch (err) { console.log("error in appstore callback"); }
         }
       }
@@ -132,7 +131,6 @@ console.log(app_img);
     // install module (button)
     //
     Array.from(document.getElementsByClassName("appstore-app-install-btn")).forEach(installbtn => {
-
       installbtn.onclick = (e) => {
         let module_obj = JSON.parse(app.crypto.base64ToString(e.currentTarget.id));
         data.module = module_obj;
@@ -152,10 +150,10 @@ console.log(app_img);
     //
     // developers overlay
     //
-    document.querySelector('.appstore-overlay-developers').onclick = (e) => {
-      window.location = "https://org.saito.tech/developers";
-      return false;
-    };
+//    document.querySelector('.appstore-overlay-developers').onclick = (e) => {
+//      window.location = "https://org.saito.tech/developers";
+//      return false;
+//    };
 
     //
     // search
@@ -163,14 +161,15 @@ console.log(app_img);
     document.getElementById('appstore-search-box').addEventListener('keypress', (e) => {
       let key = e.which || e.keyCode;
       if (key === 13) {
+	try {
+          document.querySelector(".appstore-overlay-grid").innerHTML = '<div class="game-loader-spinner loader" id="game-loader-spinner"></div>';
+	} catch (err) {}
 	let options = { search : e.currentTarget.value , category : "" , featured : 0 };
 	search_self.render(app, mod, options);	
 	search_self.attachEvents(app, mod);	
       }
     });
 
-
-
   }
-
 }
+

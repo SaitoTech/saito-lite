@@ -29,11 +29,15 @@ class Email extends ModTemplate {
     this.emails.inbox = [];
     this.emails.sent = [];
     this.emails.trash = [];
+
     // Need to bind to this so it can be used in callbacks
-    this.preferredCryptoChangeCallback = this.preferredCryptoChangeCallback.bind(this);
-    this.cacheAndRenderPreferredCryptoBalance = this.cacheAndRenderPreferredCryptoBalance.bind(this);
-    
-    this.preferredCryptoBalance = "loading...";
+//
+// TODO - removed Dec 31
+//
+//    this.preferredCryptoChangeCallback = this.preferredCryptoChangeCallback.bind(this);
+//    this.cacheAndRenderPreferredCryptoBalance = this.cacheAndRenderPreferredCryptoBalance.bind(this);    
+//    this.preferredCryptoBalance = "loading...";
+
     this.mods = [];
     this.appspace = 0;	// print email-body with appspace
 
@@ -283,9 +287,9 @@ class Email extends ModTemplate {
     this.renderBalance();
   }
   async renderBalance() {
-    if(document.getElementById("email-token")){ /// might not have rendered yet, no problem.
+    if (document.getElementById("email-token")) { /// might not have rendered yet, no problem.
       document.getElementById("email-token").innerHTML = " " + this.app.wallet.returnPreferredCryptoTicker();
-      document.getElementById("email-balance").innerHTML = this.preferredCryptoBalance;  
+      document.getElementById("email-balance").innerHTML = await this.app.wallet.returnPreferredCryptoBalance();
     }
   }
   preferredCryptoChangeCallback() {

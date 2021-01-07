@@ -38,7 +38,7 @@ module.exports = ChatBox = {
 	    if (message_blocks[i].length > 0) { first_comment_sig = app.crypto.hash(message_blocks[i][0].transaction.sig); }
 
 	    // recreate html after destroying so existing entries are output (template checks to avoid dupes)
-	    try{document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){};
+	    try {document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){};
 	    html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
 	    chat_box_main.innerHTML += html;
 
@@ -89,7 +89,8 @@ module.exports = ChatBox = {
             if (msg_input.value == '') { return; }
             let newtx = mod.createMessage(group_id, msg_input.value);
             mod.sendMessage(app, newtx);
-            chat_self.addMessage(app, mod, newtx);
+            mod.receiveMessage(app, newtx);
+            //chat_self.addMessage(app, mod, newtx);
             msg_input.value = '';
           }
         });
@@ -109,9 +110,10 @@ module.exports = ChatBox = {
 
           let newtx = mod.createMessage(group_id, msg_input.value);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
+          app.modules.returnModule("Chat").receiveMessage(app, newtx);
 
 	  // alert("sending chat message!");
-          chat_self.addMessage(app, mod, newtx);
+          ///chat_self.addMessage(app, mod, newtx);
           msg_input.value = '';
 
 	};
@@ -124,9 +126,10 @@ module.exports = ChatBox = {
 
           let newtx = mod.createMessage(group_id, msg_input.value);
           app.modules.returnModule("Chat").sendMessage(app, newtx);
+          app.modules.returnModule("Chat").receiveMessage(app, newtx);
 
 	  // alert("sending chat message!");
-          chat_self.addMessage(app, mod, newtx);
+          //chat_self.addMessage(app, mod, newtx);
           msg_input.value = '';
 
 	};
@@ -235,7 +238,8 @@ module.exports = ChatBox = {
 
           let newtx = mod.createMessage(group_id, img.outerHTML);
           mod.sendMessage(app, newtx);
-          chat_self.addMessage(app, mod, newtx);
+          mod.receiveMessage(app, newtx);
+          //chat_self.addMessage(app, mod, newtx);
 
 	}, false); // false = no drag-and-drop image click
       });
@@ -308,25 +312,45 @@ return;
           identicon: app.keys.returnIdenticon(msg.publickey),
           identicon_color: app.keys.returnIdenticonColor(msg.publickey),
         });
-        //remove safety base64 encoding.
-        //message.message = app.crypto.base64ToString(message.message);
 
         let chat_box_main = document.getElementById(`chat-box-main-${message.group_id}`);
 
-        let last_message_block = Object.assign({ messages: [] }, this.message_blocks[this.message_blocks.length - 1]);
-        let last_message = Object.assign({}, last_message_block.messages[last_message_block.messages.length - 1]);
+console.log("MBL: " + this.message_blocks.length);
 
-        if (last_message.publickey == message.publickey) {
-          last_message_block = Object.assign({}, last_message_block, {
-            last_message_timestamp: message.timestamp,
-            last_message_sig: message.sig,
-            messages: [...last_message_block.messages, message],
-            type: app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others',
-          });
-          chat_box_main.removeChild(chat_box_main.lastElementChild);
-          chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(last_message_block, mod);
-          this.message_blocks[this.message_blocks.length - 1] = last_message_block;
-        } else {
+	if (this.message_blocks.length > 0) {
+
+          let last_message_block = Object.assign({ messages: [] }, this.message_blocks[this.message_blocks.length - 1]);
+          let last_message = Object.assign({}, last_message_block.messages[last_message_block.messages.length - 1]);
+
+          if (last_message.publickey == message.publickey) {
+            last_message_block = Object.assign({}, last_message_block, {
+              last_message_timestamp: message.timestamp,
+              last_message_sig: message.sig,
+              messages: [...last_message_block.messages, message],
+              type: app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others',
+            });
+            chat_box_main.removeChild(chat_box_main.lastElementChild);
+            chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(last_message_block, mod);
+            this.message_blocks[this.message_blocks.length - 1] = last_message_block;
+          } else {
+            let new_message_block = Object.assign({}, {
+              publickey: message.publickey,
+              group_id: message.group_id,
+              last_message_timestamp: message.timestamp,
+              last_message_sig: message.sig,
+              keyHTML: message.keyHTML,
+              identicon: message.identicon,
+              identicon_color: message.identicon_color,
+              type: app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others',
+              messages: [message]
+            });
+            this.message_blocks.push(new_message_block);
+            chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(new_message_block, mod);
+          }
+	} else {
+
+console.log("Here!");
+
           let new_message_block = Object.assign({}, {
             publickey: message.publickey,
             group_id: message.group_id,
@@ -340,7 +364,9 @@ return;
           });
           this.message_blocks.push(new_message_block);
           chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(new_message_block, mod);
-        }
+	}
+
+
         // add window.imgPoP to all images in chat_box_main ...
         document.querySelectorAll('.img-prev').forEach(img => {
           img.addEventListener('click', window.imgPop(img));
