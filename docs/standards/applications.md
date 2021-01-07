@@ -129,6 +129,17 @@ __app__ - reference to the Saito application object.
 
 
 ```javascript
+  async onConfirmation(blk, tx, conf, app) {}
+```
+
+__blk__ - the block which has just been added to the chain
+__tx__ - the transaction being processed
+__conf__ - the number of confirmations this transaction is receiving
+__app__ - reference to the Saito application object
+
+(OPTIONAL) This function is executed whenever a transaction receives an additional confirmation (conf). The first time it is executed conf will be provided as 0 rather than 1. The transaction is provided along with the block which contained the transaction. The block may or may not have the other transaction-level information stored depending on its depth in the chain.
+
+```javascript
   onNewBlock(blk, lc) {}
 ```
 
