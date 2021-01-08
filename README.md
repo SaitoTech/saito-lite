@@ -16,8 +16,12 @@ info@saito.tech
 * [Applications/Modules](docs/applications.md)
 * [Services](docs/services.md)
 * [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
+* [Block and Transcation Validation](docs/validation.md)
 
 ## Table of Content
+
+* [Preamble] (#-Preamble)
+* [How To Use Saito] (#-How To Use Saito)
 
 # Preamble
 Before working with this repository it may be helpful to get some perspective on the Saito roadmap and what you can expect at this point.
@@ -303,8 +307,9 @@ This message informs the peer that a new block has been found or that the peer s
   * bid: the block id
 
 **Example**:
-
+```
 { bhash: block.hash, bid: block.id }
+```
 
 ### missing block
 This message requests a block from the peer. The peer will then reply with a 'block' message.
@@ -314,9 +319,9 @@ This message requests a block from the peer. The peer will then reply with a 'bl
   * last_hash: to hash 
 
 **Example**:
-
+```
 { hash: block.prevbsh, last_hash: latestBlockHash }
-
+```
 
 ### blockchain
 This message sends arrays of data which indicate to a lite client which blocks in the chain contain transactions in it's keylist.
@@ -343,7 +348,6 @@ let message = {};
 ### transaction
 
 This message is used to send a transaction to a peer.
-
 
 **Message Data**:
   * start: previous block hash of starting block
@@ -377,6 +381,4 @@ To connect to the Saito Network please contact us at:
 * network@saito.tech
 * [Discord](https://discord.gg/QjeXTC3)
 * [Telegram](https://t.me/joinchat/BOSYOk_BR8HIqp-scldlEA)
-
-
 
