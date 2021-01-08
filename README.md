@@ -3,33 +3,78 @@
 
 Saito is a **Tier 1 Blockchain Protocol** which provides **high transaction and data throughput**.
 
-Please see the documents in the /docs directory for instructions on how to 
-install Saito, learn how the network works, or just get started building 
-applications on the network.
-
 If you need to get in touch with us, please reach out anytime. 
 
 The Saito Team
 info@saito.tech
 
-# Clone Repository
-```git clone https://github.com/saitotech/saito-lite ```
+## Table of Content
 
-# System Preparation
+* [Preamble](#Preamble)
+* [How To Use Saito](#How-To-Use-Saito)
+* [Getting Started](#Getting-Started)
+* [The Concensus Mechanism](#The-Concensus-Mechanism)
+* [REST API](#REST-API)
+	* [Websocket Connection](#Websocket-Connection)
+	* [Peer Requests](#Peer-Requests) 
+	* [Block Data Endpoints](#Block-Data-endpoints)
+	* [Other RESTFUL Endpoints](#Other-RESTFUL-Endpoints)
+* [Contact](#Contact)
+
+## Other Documentation
+* [Welcome To Saito(this doc)](README.md)
+* [Roadmap](docs/roadmap.md)
+* [Applications/Modules](docs/applications.md)
+* [Services](docs/services.md)
+* [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
+* [Block and Transcation Validation](docs/validation.md)
+
+# Preamble
+Before working with this repository it may be helpful to get some perspective on the Saito roadmap and what you can expect at this point.
+
+Firstly, a word on "complexity". At first, it may seem that Saito's consensus mechanism is overly complex. However, also note that from a DAPP developer's viewpoint, all that really needs to be understood is that the chain contains a UTXO set representing a ledger of Saito payments(similar to Bitcoin) and that this set is what end-users will be interested in. Transactions can be sent and received and arbitrarily large data can be attached to any transaction. Fees must be included for every transaction.
+
+If you're interested in developing DAPPs on top of Saito, that's all you really need to know. However, we've included a description of the consensus mechanism here because it is an important piece of the protocol and many people reading this document will need to know the details.
+
+If you're interested in helping to develop the core blockchain, please also see our roadmap doc and please reach out if you have any questions or suggestions.
+
+
+# How To Use Saito
+
+The Reference Implementation of Saito is written in node.js.
+
+The easiest way to get started is to clone the repo as described below and compile a "lite client" which can be served directly to your browser.
+
+See the [Applications readme in the /docs directory](docs/applications.md).
+
+Alternatively, you can integrate directly with our REST API which is described further below. Currently we do not provide any easy way to call this API other than by implemented a Module in the Lite Client as described in the doc mentioned above, but these tools will be coming very soon.
+
+# Getting Started
+```git clone https://github.com/saitotech/saito-lite```
+
+## System Preparation
 requires node version >= 12
 ```
 apt update
 apt upgrade
 apt install npm
 ```
-# Install Dependencies and Run
+## Install Dependencies and Run
 ``` 
 npm install
 npm run compile
 npm start
 ```
-
 The system will be installed in 'local' or 'development' mode with a default set of modules responding on port 12101.
+## Build a Lite Client
+```
+npm run compile dev
+```
+Running this command will compile the codebase(with some subtle changes) into a javascript payload which can be delivered to browsers. The payload will be placed into the /web directory and can be loaded by any page you wish to author.
+
+As a convenience, the Modules system which is provided as an aside to the core will automatically serve web requests if configured correctly, making it quite simple to get started making DAPPs in the browser.
+
+Again, the [applications readme in the /docs directory](docs/applications.md).
 
 # The Concensus Mechanism
 
@@ -68,19 +113,17 @@ Stated on more way: A valid block can be formed at any time, but will only be pr
 
 If you're still confused, don't feel bad. There is a reason we've tried to explain this mechanism multiple different ways and most people have trouble reasoning through it the first time. However, we encourage you to re-read this section if you feel you need to understand it, but also feel free to simply move on knowing that *we believe this mechanism creates an economic incentive for network participants to provide block space and transaction throughput at a fair rate*.
 
-# How To Use Saito
-
-The Reference Implementation of Saito is written in node.js.
-
-The easiest way to get started is to clone the repo as described above and compile a "lite client" which can be served directly to your browser.
-
-See the [Applications readme in the /docs directory](https://github.com/SaitoTech/saito-lite/blob/master/docs/standards/applications.md).
-
-Alternatively, you can integrate directly with our REST API which is described below. Currently we do not provide any easy way to call this API other than by implemented a Module in the Lite Client as described in the doc mentioned above, but these tools will be coming very soon.
-
 ## REST API
 
 The API for interacting with Saito's Core code is quite minimalistic. Additional APIs will be provided later through modules which nodes can opt to install or not depending on their preferences. The Saito philosophy is always that nodes only provide the services which they are incentived to provide.
+
+The API consists of a websocket which will be described below as well as to GET method endpoints for retrieving blocks:
+
+GET /blocks/:bhash/:pkey
+
+GET /lite-blocks/:bhash/:pkey
+
+GET /options
 
 ### Websocket Connection
 
@@ -234,15 +277,119 @@ services
 blockchain.last_bid
 	The blockchain object is used to indicate to the other peer the state of this peers blockchain. last_bid is the last block id.
 blockchain.last_ts
-	last time
+	Last timestamp seen by the peer.
 blockchain.last_bsh
+	Hash of the last block.
 blockchain.last_bf
+	Last Burn Fee
 blockchain.fork_id
+	Fork ID. This is a concise representation of the block hash which can be use to reconcile the latest common block between peers which appear to be on separate forks.
 blockchain.genesis_bid
+	Genesis Block ID
 ```
-If a transaction is sent with message 
+## Peer Requests
+Once peers have connected the websocket and verified each other, they can begin to send other messages over the socket.
 
-WORK IN PROGRESS, WILL BE COMPLETED IN THE NEXT 24 TO 48 HOURS
+These message can serve a number of purposes, or can also simply be leveraged by a DAPP as a means of peer-to-peer communication. At the moment, there's not really a good way to discover peers, but in the future we envision this becoming a common technique. As of this moment, this mechanism is mostly used for client-server type interactions, for example, the chat module will send transaction to connected peers so they can receive messages before they are mined. Think of it as a simple mechanism for transactions which are "0-conf safe".
+
+To leverage this capability, a transaction can simply be sent with an arbitrary message type(i.e. message.request).
+
+Core provides helper functions for this as mentioned above: *peer.sendRequest*, *peer.sendRequestWithCallback*, and their counterparts *network.sendRequest* and  *network.sendRequestWithCallback*, which will send the message to all connected peers.
+```
+peer.sendRequest('myCustomMessageType', someDataObject);
+// or
+peer.sendRequestWithCallback('myCustomMessageType', someDataObject, (res) => {
+// do something with the response
+});
+```
+Beside being used a generate data transportation, there are some message types which have a special purpose. Beside 'handshake', this is also 'block', 'missing block', 'blockchain', 'transaction', and 'keylist', which have to following purposes:
+
+
+### block
+This message informs the peer that a new block has been found or that the peer should request a block for some other reason. The peer then makes a request to the appropriate GET enpoint mentiond above, i.e. /blocks/:bhash/:pkey or /lite-blocks/:bhash/:pkey.
+
+**Message Data**:
+  * bhash: the block hash
+  * bid: the block id
+
+**Example**:
+```
+{ bhash: block.hash, bid: block.id }
+```
+
+### missing block
+This message requests a block from the peer. The peer will then reply with a 'block' message.
+
+**Message Data**:
+  * hash: from hash
+  * last_hash: to hash 
+
+**Example**:
+```
+{ hash: block.prevbsh, last_hash: latestBlockHash }
+```
+
+### blockchain
+This message sends arrays of data which indicate to a lite client which blocks in the chain contain transactions in it's keylist.
+
+**Message Data**:
+  * start: previous block hash of starting block
+  * prehash: array of hashes of block signatures
+  * bid: array of block ids
+  * ts: array of timestamps
+  * txs: array of 0 and 1 indicating if block contains tx related to keylist 
+
+**Example**:
+```
+let message = {};
+    message.request = "blockchain";
+    message.data = {};
+    message.data.start = prevhash;
+    message.data.prehash = [];
+    message.data.bid = [];
+    message.data.ts = [];
+    message.data.txs = [];
+```
+
+### transaction
+
+This message is used to send a transaction to a peer.
+
+**Message Data**:
+  * start: previous block hash of starting block
+  * prehash: array of hashes of block signatures
+  * bid: array of block ids
+  * ts: array of timestamps
+  * txs: array of 0 and 1 indicating if block contains tx related to keylist 
+
+**Example**:
+```
+let tx = new saito.transaction({...});
+peer.sendRequest("transaction, JSON.stringify(tx.transaction));
+```
+
+### keylist
+
+**Message Data**:
+  * [array of pubkeys]
+
+**Example**:
+```
+peer.sendRequest(message, app.keys.returnWatchedPublicKeys());
+```
+## Block Data Endpoints
+
+GET /blocks/:bhash/:pkey
+
+GET /lite-blocks/:bhash/:pkey
+
+TODO: Finish this section
+
+## Other RESTFUL Endpoints
+
+GET /options
+
+TODO: Finish this section
 
 # Contact 
 
@@ -251,6 +398,4 @@ To connect to the Saito Network please contact us at:
 * network@saito.tech
 * [Discord](https://discord.gg/QjeXTC3)
 * [Telegram](https://t.me/joinchat/BOSYOk_BR8HIqp-scldlEA)
-
-
 

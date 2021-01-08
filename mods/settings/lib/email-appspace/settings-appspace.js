@@ -203,14 +203,15 @@ module.exports = SettingsAppspace = {
 
 
     try {
-    document.getElementById('reset-account-btn').onclick = (e) => {
-    
+    document.getElementById('reset-account-btn').onclick = async (e) => {
+      
+      confirmation = await sconfirm('This will reset your account, do you wish to proceed?');
+      if(confirmation){
         app.wallet.resetWallet();
         app.modules.returnModule('Arcade').onResetWallet();
         app.storage.saveOptions();
-    
-        salert("Wallet reset!");
-    
+      
+  
         mod.emails.inbox = [];
         mod.emails.sent = [];
         mod.emails.trash = [];
@@ -219,6 +220,7 @@ module.exports = SettingsAppspace = {
         mod.attachEvents(app, mod);
     
         app.blockchain.resetBlockchain();
+      }
     };
     } catch (err) {}
 

@@ -260,22 +260,22 @@ class Chat extends ModTemplate {
           this.receiveMessage(app, new saito.transaction(tx.transaction));
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
-
-        case "chat broadcast message":
-
-          let routed_tx = new saito.transaction(tx.transaction);
-	  let routed_tx_msg = routed_tx.returnMessage();
-
-          let archive = this.app.modules.returnModule("Archive");
-          archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx);
-
-          this.app.network.peers.forEach(p => {
-            if (p.peer.publickey !== peer.peer.publickey) {
-              p.sendRequest("chat message", tx);
-            }
-          });
-          if (mycallback) { mycallback({ "payload": "success", "error": {} }); }
-          break;
+    // I believe this is now handled in a general way by relay.js
+    //     case "chat broadcast message":
+    // 
+    //       let routed_tx = new saito.transaction(tx.transaction);
+	  // let routed_tx_msg = routed_tx.returnMessage();
+    // 
+    //       let archive = this.app.modules.returnModule("Archive");
+    //       archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx);
+    // 
+    //       this.app.network.peers.forEach(p => {
+    //         if (p.peer.publickey !== peer.peer.publickey) {
+    //           p.sendRequest("chat message", tx);
+    //         }
+    //       });
+    //       if (mycallback) { mycallback({ "payload": "success", "error": {} }); }
+    //       break;
       }
     } catch(err) {
       console.log(err);
