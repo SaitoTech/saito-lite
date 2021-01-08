@@ -8,20 +8,26 @@ If you need to get in touch with us, please reach out anytime.
 The Saito Team
 info@saito.tech
 
-# Documentation Overview
+## Table of Content
 
-## Docs
-* [Welcome To Saito](README.md)
+* [Preamble](#Preamble)
+* [How To Use Saito](#How-To-Use-Saito)
+* [Getting Started](#Getting-Started)
+* [The Concensus Mechanism](#The-Concensus-Mechanism)
+* [REST API](#REST-API)
+	* [Websocket Connection](#Websocket-Connection)
+  * [Peer Requests](#Peer-Requests) 
+	* [Block Data Endpoints](#Block-Data-endpoints)
+	* [Other RESTFUL Endpoints](#Other-RESTFUL-Endpoints)
+* [Contact](#Contact)
+
+## Other Documentation
+* [Welcome To Saito(this doc)](README.md)
 * [Roadmap](docs/roadmap.md)
 * [Applications/Modules](docs/applications.md)
 * [Services](docs/services.md)
 * [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
 * [Block and Transcation Validation](docs/validation.md)
-
-## Table of Content
-
-* [Preamble](#-Preamble)
-* [How To Use Saito](#-How-To-Use-Saito)
 
 # Preamble
 Before working with this repository it may be helpful to get some perspective on the Saito roadmap and what you can expect at this point.
@@ -46,21 +52,21 @@ Alternatively, you can integrate directly with our REST API which is described f
 # Getting Started
 ```git clone https://github.com/saitotech/saito-lite```
 
-# System Preparation
+## System Preparation
 requires node version >= 12
 ```
 apt update
 apt upgrade
 apt install npm
 ```
-# Install Dependencies and Run
+## Install Dependencies and Run
 ``` 
 npm install
 npm run compile
 npm start
 ```
 The system will be installed in 'local' or 'development' mode with a default set of modules responding on port 12101.
-#Build a Lite Client
+## Build a Lite Client
 ```
 npm run compile dev
 ```
@@ -371,8 +377,19 @@ peer.sendRequest("transaction, JSON.stringify(tx.transaction));
 ```
 peer.sendRequest(message, app.keys.returnWatchedPublicKeys());
 ```
+## Block Data Endpoints
 
-WORK IN PROGRESS, WILL BE COMPLETED IN THE NEXT 24 TO 48 HOURS
+GET /blocks/:bhash/:pkey
+
+GET /lite-blocks/:bhash/:pkey
+
+TODO: Finish this section
+
+## Other RESTFUL Endpoints
+
+GET /options
+
+TODO: Finish this section
 
 # Contact 
 
