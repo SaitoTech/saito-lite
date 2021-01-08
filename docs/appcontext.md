@@ -21,36 +21,67 @@ isPublicKey
 ## Keychain
 
 addKey(publickey = "", identifier = "", watched = false, tag = "", bid = "", bsh = "", lc = 1)
+
 decryptMessage(publickey, encrypted_msg)
+
 addGroup(group_id = "", members = [], name = "", watched = false, tag = "", bid = "", bsh = "", lc = 1)
+
 decryptString(publickey, encrypted_string)
+
 encryptMessage(publickey, msg)
+
 findByPublicKey(publickey)
+
 findByIdentifier(identifier)
+
 hasSharedSecret(publickey)
+
 isWatched(publickey)
+
 initializeKeyExchange(publickey)
+
 isTagged(publickey, tag)
+
 saveKeys()
+
 saveGrouos()
+
 removeKey(publickey)
+
 removeKeywordByIdentifierAndKeyword(identifier, tag)
+
 returnKeys()
+
 returnGroups()
+
 returnKeychainByTag(tag)
+
 updateEmail(publickey, email)
+
 returnEmail(publickey)
+
 updateIdenticon(publickey, identicon)
+
 returnIdenticon(publickey)
+
 returnIdenticonColor(publickey)
+
 fetchIdentifierPromise(publickey)
+
 fetchManyIdentifiersPromise(publickeys)
+
 fetchIdentifier(publickey = "", mycallback) 
+
 fetchManyIdentifiers(publickeys = [], mycallback) 
+
 fetchPublicKeyPromise(identifier = "")
+
 fetchPublicKey(identifier = null, mycallback)
+
 returnPublicKeyByIdentifier(identifier)
+
 returnIdentifierByPublicKey(publickey, returnKey = false) 
+
 returnUsername(publickey)
 
 
