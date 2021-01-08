@@ -16,7 +16,7 @@ info@saito.tech
 * [The Concensus Mechanism](#The-Concensus-Mechanism)
 * [REST API](#REST-API)
 	* [Websocket Connection](#Websocket-Connection)
-  * [Peer Requests](#Peer-Requests) 
+	* [Peer Requests](#Peer-Requests) 
 	* [Block Data Endpoints](#Block-Data-endpoints)
 	* [Other RESTFUL Endpoints](#Other-RESTFUL-Endpoints)
 * [Contact](#Contact)
