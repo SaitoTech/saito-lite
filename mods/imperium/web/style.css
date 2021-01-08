@@ -158,6 +158,20 @@
   display: inline-block;
   text-align:center;
 }
+.objectives_secret_notice {
+  position: relative;
+  bottom: 0px;
+  left: 0px;
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 1em;
+  margin-top: 5px;
+}
 .new_objectives_overlay_container {
   border-radius: 15px;
   width: 80vw;
@@ -166,10 +180,11 @@
   line-height: 2em;
   background: #333;
   text-align: center;
+  padding: 20px;
 }
 .new_objectives_title {
   font-size: 3em;
-  padding: 30px;
+  padding: 20px;
   text-align: center;
   color: white;
   padding-bottom: 20px;

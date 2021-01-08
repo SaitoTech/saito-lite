@@ -1170,7 +1170,6 @@ console.log(JSON.stringify(this.game.state.choices));
   	}
 
       	this.game.queue.push("resolve\tnewround");
-      	this.game.queue.push("shownewobjectives");
     	this.game.state.round++;
     	this.updateLog("<div style='margin-top:10px;margin-bottom:10px;'>ROUND: " + this.game.state.round + '</div>');
   	this.updateStatus("Moving into Round " + this.game.state.round);
@@ -1230,6 +1229,7 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
+          this.game.queue.push("shownewobjectives");
           this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	}
 
@@ -1347,7 +1347,9 @@ console.log(JSON.stringify(this.game.state.choices));
 
 
       if (mv[0] === "revealobjectives") {
-  
+
+ 	this.game.state.new_objectives = [];
+
   	//
   	// reset agendas -- disabled July 19
   	//
@@ -1359,6 +1361,7 @@ console.log(JSON.stringify(this.game.state.choices));
           for (i = 0; i < this.game.deck[5].hand.length; i++) {
   	    if (!this.game.state.secret_objectives.includes(this.game.deck[5].hand[i])) {
               this.game.state.secret_objectives.push(this.game.deck[5].hand[i]);
+	      this.game.state.new_objectives.push({ type : "secret" , card : this.game.deck[5].hand[i] });
 	    }
   	  }
 	}
@@ -1366,6 +1369,7 @@ console.log(JSON.stringify(this.game.state.choices));
           for (i = 0; i < this.game.pool[1].hand.length; i++) {
   	    if (!this.game.state.stage_i_objectives.includes(this.game.pool[1].hand[i])) {
               this.game.state.stage_i_objectives.push(this.game.pool[1].hand[i]);	
+	      this.game.state.new_objectives.push({ type : "stage1" , card : this.game.pool[1].hand[i]});
 	    }
   	  }
 	}
@@ -1373,9 +1377,11 @@ console.log(JSON.stringify(this.game.state.choices));
           for (i = 0; i < this.game.pool[2].hand.length; i++) {
 	    if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
               this.game.state.stage_ii_objectives.push(this.game.pool[2].hand[i]);	
+	      this.game.state.new_objectives.push({ type : "stage2" , card : this.game.pool[2].hand[i]});
   	    }
   	  }
   	}
+
   	this.game.queue.splice(qe, 1);
   	return 1;
       }
