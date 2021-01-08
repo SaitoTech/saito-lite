@@ -40,6 +40,14 @@
         game_mod.log.toggleLog();
       }
     });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
 
     //
     // factions

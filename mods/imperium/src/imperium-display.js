@@ -406,6 +406,61 @@ returnStrategyOverlay() {
 
 }
 
+
+returnNewObjectivesOverlay() {
+
+  let title = "Your Objectives";
+  if (this.game.state.round > 1) { title = "New Objectives"; }
+
+  let html = `
+    <div class="new_objectives_overlay_container" style="">
+      <div class="new_objectives_title">${title}</div>
+      <div class="new_objectives_container">
+  `;
+
+  for (let i = 0; i < this.game.state.new_objectives.length; i++) {
+    let ob = this.game.state.new_objectives[i];
+    if (ob.type == "secret") {
+      let obj = this.secret_objectives[ob.card];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+                 <div class="objectives_card_name">${obj.name}</div>
+                 <div class="objectives_card_content">
+		   ${obj.text}
+		   <div class="objectives_secret_notice">secret</div>
+		 </div>
+	       </div>
+      `;
+    }
+    if (ob.type == "stage1") {
+      let obj = this.stage_i_objectives[ob.card];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+               <div class="objectives_card_name">${obj.name}</div>
+               <div class="objectives_card_content">${obj.text}</div>
+	       </div>
+     ` ;
+    }
+    if (ob.type == "stage2") {
+      let obj = this.stage_i_objectives[ob.card];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${objc[o].img})">
+               <div class="objectives_card_name">${objc[o].name}</div>
+               <div class="objectives_card_content">${objc[o].text}</div>
+               <div class="objectives_players_scored players_scored_${(i+1)} p${(i+1)}"><div class="bk" style="width:100%;height:100%"></div></div>
+             </div>
+      `;
+    }
+  }
+
+  html += `
+      </div>
+      <div id="close-objectives-btn" class="button" style="">CONTINUE</div>
+    </div>
+  `;
+
+  return html;
+}
+
+
+
 returnObjectivesOverlay() {
 
   let html = '';

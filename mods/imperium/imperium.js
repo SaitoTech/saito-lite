@@ -8854,6 +8854,14 @@ ACTION CARD - types
         game_mod.log.toggleLog();
       }
     });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
 
     //
     // factions
@@ -11600,6 +11608,7 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
+          this.game.queue.push("shownewobjectives");
           this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	}
 
@@ -11701,9 +11710,25 @@ console.log(JSON.stringify(this.game.state.choices));
   	return 1;
       }
   
+      if (mv[0] === "shownewobjectives") {
+
+        this.overlay.showOverlay(this.app, this, this.returnNewObjectivesOverlay());
+        try {
+          document.getElementById("close-objectives-btn").onclick = (e) => {
+            this.overlay.hideOverlay(this.app, this);
+          }
+        } catch (err) {}
+
+  	this.game.queue.splice(qe, 1);
+
+  	return 1;
+      }
+
 
       if (mv[0] === "revealobjectives") {
-  
+
+ 	this.game.state.new_objectives = [];
+
   	//
   	// reset agendas -- disabled July 19
   	//
@@ -11715,6 +11740,7 @@ console.log(JSON.stringify(this.game.state.choices));
           for (i = 0; i < this.game.deck[5].hand.length; i++) {
   	    if (!this.game.state.secret_objectives.includes(this.game.deck[5].hand[i])) {
               this.game.state.secret_objectives.push(this.game.deck[5].hand[i]);
+	      this.game.state.new_objectives.push({ type : "secret" , card : this.game.deck[5].hand[i] });
 	    }
   	  }
 	}
@@ -11722,6 +11748,7 @@ console.log(JSON.stringify(this.game.state.choices));
           for (i = 0; i < this.game.pool[1].hand.length; i++) {
   	    if (!this.game.state.stage_i_objectives.includes(this.game.pool[1].hand[i])) {
               this.game.state.stage_i_objectives.push(this.game.pool[1].hand[i]);	
+	      this.game.state.new_objectives.push({ type : "stage1" , card : this.game.pool[1].hand[i]});
 	    }
   	  }
 	}
@@ -11729,9 +11756,11 @@ console.log(JSON.stringify(this.game.state.choices));
           for (i = 0; i < this.game.pool[2].hand.length; i++) {
 	    if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
               this.game.state.stage_ii_objectives.push(this.game.pool[2].hand[i]);	
+	      this.game.state.new_objectives.push({ type : "stage2" , card : this.game.pool[2].hand[i]});
   	    }
   	  }
   	}
+
   	this.game.queue.splice(qe, 1);
   	return 1;
       }
@@ -25345,6 +25374,61 @@ returnStrategyOverlay() {
   return final_result;
 
 }
+
+
+returnNewObjectivesOverlay() {
+
+  let title = "Your Objectives";
+  if (this.game.state.round > 1) { title = "New Objectives"; }
+
+  let html = `
+    <div class="new_objectives_overlay_container" style="">
+      <div class="new_objectives_title">${title}</div>
+      <div class="new_objectives_container">
+  `;
+
+  for (let i = 0; i < this.game.state.new_objectives.length; i++) {
+    let ob = this.game.state.new_objectives[i];
+    if (ob.type == "secret") {
+      let obj = this.secret_objectives[ob.card];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+                 <div class="objectives_card_name">${obj.name}</div>
+                 <div class="objectives_card_content">
+		   ${obj.text}
+		   <div class="objectives_secret_notice">secret</div>
+		 </div>
+	       </div>
+      `;
+    }
+    if (ob.type == "stage1") {
+      let obj = this.stage_i_objectives[ob.card];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+               <div class="objectives_card_name">${obj.name}</div>
+               <div class="objectives_card_content">${obj.text}</div>
+	       </div>
+     ` ;
+    }
+    if (ob.type == "stage2") {
+      let obj = this.stage_i_objectives[ob.card];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${objc[o].img})">
+               <div class="objectives_card_name">${objc[o].name}</div>
+               <div class="objectives_card_content">${objc[o].text}</div>
+               <div class="objectives_players_scored players_scored_${(i+1)} p${(i+1)}"><div class="bk" style="width:100%;height:100%"></div></div>
+             </div>
+      `;
+    }
+  }
+
+  html += `
+      </div>
+      <div id="close-objectives-btn" class="button" style="">CONTINUE</div>
+    </div>
+  `;
+
+  return html;
+}
+
+
 
 returnObjectivesOverlay() {
 
