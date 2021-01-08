@@ -128,6 +128,6 @@ Copyright Proclus Technologies, 2021.
 ## Citation
 Please cite this document as:
 
-David Lancashire, "SMP-20: Saito Module Protocol", Saito Network Documents, no, 1, October 2020 [Online serial]. Available: https://github.com/saitotech/saito-lite/docs/standard/application.md.
+David Lancashire, "SMP-30: Saito Module Protocol", Saito Network Documents, no, 3, January 2021 [Online serial]. Available: https://github.com/saitotech/saito-lite/docs/standard/application.md.
 
 

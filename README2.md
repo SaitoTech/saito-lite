@@ -105,7 +105,7 @@ npm run compile
 This command will compile the codebase into a javascript payload which can be delivered to browsers. The payload will saved as the `/web/saito/saito.js` file and can be loaded by any page you wish to author. As a convenience, the Saito platform will automatically serve web requests if configured correctly, making it quite simple to get started making DAPPs in the browser.
 
 
-# The Concensus Mechanism
+# The Consensus Mechanism
 
 Saito Protocol creates a network similar to Bitcoin. As an economically self-sufficient network, Saito manages a token which is collected from user fees and paid out to the nodes which run the protocol. This reward incentivize nodes to run the protocol and ensures it is always profitable to participate in the network. Saito differs from a typical Proof-of-Work chain in several ways:
 
