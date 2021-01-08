@@ -20,8 +20,8 @@ info@saito.tech
 
 ## Table of Content
 
-* [Preamble] (#-Preamble)
-* [How To Use Saito] (#-How To Use Saito)
+* [Preamble](#-Preamble)
+* [How To Use Saito](#-How-To-Use-Saito)
 
 # Preamble
 Before working with this repository it may be helpful to get some perspective on the Saito roadmap and what you can expect at this point.
