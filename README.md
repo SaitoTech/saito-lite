@@ -22,7 +22,7 @@ info@saito.tech
 
 ## Web3 Grant
 * [Grant Application](https://github.com/SaitoTech/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md)
-* [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
+* [Polkadot Integration](docs/polkadot.md)
 
 ## Other Documentation
 * [Welcome To Saito(this doc)](README.md)
