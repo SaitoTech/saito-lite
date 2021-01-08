@@ -415,6 +415,16 @@ returnNewObjectivesOverlay() {
   let html = `
     <div class="new_objectives_overlay_container" style="">
       <div class="new_objectives_title">${title}</div>
+  `;
+
+  if (this.game.state.round == 1) {
+    html += `
+      <div class="new_objectives_text">check objectives, action cards and more anytime using the INFO menu above...</div>
+    `;
+  }
+  
+
+  html += `
       <div class="new_objectives_container">
   `;
 
