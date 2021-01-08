@@ -105,13 +105,15 @@ npm run compile
 This command will compile the codebase into a javascript payload which can be delivered to browsers. The payload will saved as the `/web/saito/saito.js` file and can be loaded by any page you wish to author. As a convenience, the Saito platform will automatically serve web requests if configured correctly, making it quite simple to get started making DAPPs in the browser.
 
 
-# The Concensus Mechanism
+# The Consensus Mechanism
 
 Saito Protocol creates a network similar to Bitcoin. As an economically self-sufficient network, Saito manages a token which is collected from user fees and paid out to the nodes which run the protocol. This reward incentivize nodes to run the protocol and ensures it is always profitable to participate in the network. Saito differs from a typical Proof-of-Work chain in several ways:
 
 ## 1) Automatic Transaction Rebroadcasting
 
 Saito's Blockchain has a pruning mechanism that charges rent to transactions which wish to stay on the blockchain. This allows the network to prune old blocks and retain only the header-hash to prove connection with the original genesis block. In addition to giving users full control over how long their data must be hosted and distributed by the network, this approach lowers the cost of using the network for most web3 applications, which no longer need to pay for long-term data persistence.
+
+After a number of blocks which we call the Genesis Period, UTXOs which are below the Rebroadcast Limit can be pruned from the chain. However, the consensus mechanism dictates that any UTXO with sufficient output to pay the Rebroadcast Fee(double the average fee per byte over the last N blocks) must be included in the next block, i.e. rebroadcasted. However, it is important to note that we do not envision this mechanism actually being used to keep UTXOs on the chain, it's primary purpose is to incentives wallets to consolidate their UTXOs in a more sensible manner.
 
 ## 2) Burn Fee and Golden Tickets
 
@@ -121,20 +123,26 @@ In Saito these are split into two separate functions: the network has one algori
 
 ## 3) Burn Fee 
 
-Block production is made difficult by requiring nodes to collect a critical mass of "routing work". Nodes accomplish this by servicing users and collecting transactions from them in return. In order to be eligible for payment they must be in the chain of routing nodes that successfully route this transaction into a valid block.
+Block production is made difficult by requiring nodes to collect a critical mass of "Routing Work". Nodes accomplish this by servicing users and collecting transactions from them in return. In order to be eligible for payment they must be in the chain of routing nodes that successfully route this transaction into a valid block.
 
-The amount of work each transaction provides each node is algorithmically derived from the fee embedded in the transaction modified downwards according to its position in the network. User-facing nodes on the outside of a routing path get more "routing work" from the same transaction than nodes which receive that transaction after several hops. The amount of "routing work" available to each additional node falls as the routing path increases, but the total amount of "routing work" contained in that transaction increases.
+The amount of Routing Work each transaction provides to each node is algorithmically derived from the fee embedded in the transaction modified downwards according to its position in the network. User-facing nodes on the outside of a routing path get more Routing Work from the same transaction than nodes which receive that transaction after several hops. The amount of Routing Work available to each additional node falls as the routing path increases, but the total amount of Routing Work contained in that transaction increases. At this time, the amount of Routing Work provided by a transaction is halved with each hop.
 
 To produce blocks nodes must efficiently locate themselves at critical junctures with access to high-fee, low-hop transaction inflows. We call the amount of work they must gather to produce a valid block the Burn Fee. This Burn Fee is dynamic: it decreases logarithmically from the previous Block Time and will eventually fall to zero, at which point the cost of producing a valid block will fall to zero. When a block is produced, no payment is made to the block producer. They are eligible for payment as a routing node through the Golden Ticket mechanism described below.
 
 ## 4) Golden Tickets
 
-Once a valid block is seen on the network, hashers begin trying to solve a hashing puzzle. We call this system the "Golden Ticket System" and the hashing puzzle the "Golden Ticket Puzzle". The network auto-adjusts hashing difficulty to keep the number of tickets produced constant. Any sufficiently difficult hash which passes this difficulty threshold constitutes a "Golden Ticket Solution". Golden Ticket solutions are broadcast to the network as a special transaction. if this transaction is included in the very next block we say that the Golden Ticket has been solved.
+Once a valid block is seen on the network, hashers begin trying to solve a hashing puzzle. We call this system the "Golden Ticket System" and the hashing puzzle the "Golden Ticket Puzzle". The network auto-adjusts hashing difficulty to keep the number of tickets produced constant(Currently 1 every 2 blocks). Any sufficiently difficult hash which passes this difficulty threshold constitutes a "Golden Ticket Solution". Golden Ticket solutions are broadcast to the network as a special transaction. If this transaction is included in the very next block we say that the Golden Ticket has been solved.
 
-The Golden Ticket included in the subsequent block is used as a source of entropy to choose a winning Routing node from the list of Routing nodes contained in the transactions contained in the previous block. The fees that were burned by the block producer producing the block are then revivified and split between the winning Routing node and the Hashing node that found the Golden Ticket solution.
+The Golden Ticket included in the subsequent block is used as a source of entropy to choose a winning Routing node from the list of Routing nodes which routed transactions contained in the previous block. The fees that were burned by the block producer producing the block are then revivified and split between the winning Routing node and the Hashing node that found the Golden Ticket solution.
 
-To ensure that attackers cannot break either the Burn Fee or Golden Ticket mechanisms, Saito adds cryptographic signatures to the network layer of the blockchain. As each transaction is passed around the network, the cost of including it in a block increases. This cost is a claim on all of the fees included in the block. Honest nodes find this acceptable as they are accepting a reduced claim on a basket of fees paid by honest users. Attackers must accept a reduced claim on recapturing their own money. The cost of attack becomes statistically negative in all situations.
+To ensure that attackers cannot break either the Burn Fee or Golden Ticket mechanisms, Saito adds cryptographic signatures to the network layer of the blockchain. As each transaction is passed around the network, the cost of including it in a block increases. This cost is a claim on all of the fees included in the block. Honest nodes find this acceptable as they are accepting a reduced claim on a basket of fees paid by honest users. Attackers must accept a reduced claim on recapturing their own money.
 
+The cost of attack becomes statistically negative in all situations.
+
+The magic happens at the confluence of these two mechanisms:
+
+* The amount of Routing Work associated with a transaction increases as the transaction is routed(halved at each hop, same as the Golden Ticket chances).
+* A Routing Node's chance of winning the Golden Ticket is proportional to the amount of extra Routing Work it is adding to the transaction by signing and routing it.
 
 ## 5) Moving Beyond Majoritarian Attacks
 
@@ -149,6 +157,10 @@ Don't be discouraged if this mechanism seems confusing at first. If you have que
 1) The value of a transaction for producing a block drops the more hops a node is from a user.
 
 2) The amount of money a routing node can expect to get paid on their share of the overall work done by all routing nodes.
+
+The Routing Work associated with a transaction is the sum of the Golden Ticket chances it has imparted to it's Routers.
+
+Stated on more way: A valid block can be formed at any time, but will only be profitable to it's Routers when the total Burn Fee is offset by the amount of fees included by the transaction in the block. The contribution to Routing Work from a transaction is it's fee. The Routing Work needed to include that transaction is increased each time it is routed through the network but the total Burn Fee needed for a given block is decreasing as the previous block gets further away in the past.
 
 If you're still confused don't feel bad: most people have trouble wrapping their head around the mechanism the first time. We encourage those interested in exploring the intricacies of the mechanism to read the [Saito Whitepaper](https://saito.io/saito-whitepaper.pdf). In addition to providing more details on technical and economic implementation, our whitepaper explains how to secure this mechanism against sybil attacks, block-flooding (spam) attacks and more issues that commonly arise in POW and POS-class mechanisms.
 
