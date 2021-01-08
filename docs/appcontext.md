@@ -2,7 +2,7 @@
 
 The Saito Application Context is an object with some state and a number of helper functions that is passed around to most module methods which helps DAPP developers to interact with Saito.
 
-TODO: Complete this document. We need to figure out which methods are actually meant to be public and document their 
+TODO: Complete this document.
 
 ## Public Properties
 
