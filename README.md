@@ -26,8 +26,10 @@ info@saito.tech
 * [Roadmap](docs/roadmap.md)
 * [Applications/Modules](docs/applications.md)
 * [Services](docs/services.md)
-* [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
+* [Saito Application Context(app)](docs/appcontext.md)
 * [Block and Transcation Validation](docs/validation.md)
+
+* [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
 
 # Preamble
 Before working with this repository it may be helpful to get some perspective on the Saito roadmap and what you can expect at this point.
