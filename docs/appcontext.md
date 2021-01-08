@@ -1,4 +1,9 @@
 # Saito Application Context
+
+The Saito Application Context is an object with some state and a number of helper functions that is passed around to most module methods which helps DAPP developers to interact with Saito.
+
+TODO: Complete this document. We need to figure out which methods are actually meant to be public and document their 
+
 ## Public Properties
 
 app.BROWSER
@@ -8,15 +13,112 @@ app.BROWSER
 See [events.md](events.md)
 
 ## Peers
+
+isConnected()
+
+isMainPeer()
+
+returnHandshake()
+
+returnPublicKey()
+
+deletePeer()
+
+connect(mode = 0)
+
+sendRequest(message, data = "")
+
+sendRequestWithCallback(message, data = "", mycallback)
+
+addSocketEvents()
+
+handleKeylistRequest(message)
+
+configPeerFromHandshake(peershake)
+
+handleHandshakeRequest(message)
+
+handleBlockRequest(message)
+
+handleMissingBlockRequest(message, callback)
+
+async handleBlockchainRequest(message)
+
+sendBlockchain(start_bid, synctype)
+
+handleTransactionRequest(message, mycallback)
+
+returnBlockURL(block_hash)
+
+returnURL()
+
+inTransactionPath(tx)
+
+addPathToTransaction(tx)
+
 ## Network
+
+updatePeersWithWatchedPublicKeys()
+
+initialize()
+
+pollPeers(peers, app)
+
+cleanupDisconnectedSocket(peer)
+
+connectToPeer(peerjson)
+
+addRemotePeer(socket)
+
+propagateBlock(blk)
+
+propagateTransaction(tx, outbound_message = "transaction", mycallback = null)
+
+propagateOffchainTransaction(tx, outbound_message = "offchain transaction", mycallback = null)
+
+sendTransaction(message, data = "", fee = 1)
+
+sendRequest(message, data = "", fee = 1) 
+
+sendRequestWithCallback(message, data = "", callback)
+
+sendTransactionToPeers(tx, outbound_message, fees = 1, callback = null)
+
+propagateTransactionWithCallback(tx, mycallback = null)
+
+addBlockHashToQueue(peer, bhash)
+
+async fetchBlocks()
+
+async fetchBlock(block_to_download_url, bhash)
+
+returnPeerByPublicKey(publickey)
+
+isPrivateNetwork()
+
+isProductionNetwork()
+
+isConnected() 
+
+hasPeer(publickey)
+
 ## Modules
 
-respondTo
+returnActiveModule()
+
+respondTo(request)
+
+getRespondTos(request)
 
 ## Key
 
-isIdentifier
-isPublicKey
+addIdentifier(identifier)
+
+removeIdentifier(identifier)
+
+isIdentifier(identifier)
+
+isPublicKey(publickey)
 
 ## Keychain
 
@@ -84,19 +186,61 @@ returnIdentifierByPublicKey(publickey, returnKey = false)
 
 returnUsername(publickey)
 
-
-
 ## Storage
 
 loadOptions
+
 saveOptions
+
 resetOptions
+
 saveTransaction
+
 deleteTransaction
+
 loadTransactions
+
 loadTransactionsByKeys
 
 ## Transaction
+
+generateRebroadcastTransaction(creator, tid, sid, avg_fee=2)
+
+isFrom(senderPublicKey) 
+
+isTo(receiverPublicKey) 
+
+isGoldenTicket() 
+
+isRebroadcast(oldblk, newblk, sid) 
+
+involvesPublicKey(publickey)
+
+returnPaymentTo(publickey) 
+
+returnSlipsFrom(fromAddress)
+
+returnSlipsToAndFrom(theAddress)
+
+returnSlipsTo(toAddress)
+
+stringToBase64(str)
+
+base64ToString(str)
+
+decryptMessage(app)
+
+returnMessage()
+
+returnSignature(app)
+
+returnSignatureSource(app)
+
+returnFees(app) 
+
+returnRoutingWorkAvailable(app, publickey="")
+
+validate(app, bid=0)
 
 ## Wallet
 
