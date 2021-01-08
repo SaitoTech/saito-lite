@@ -9,7 +9,6 @@ The Saito Team
 info@saito.tech
 
 ## Table of Content
-
 * [Preamble](#Preamble)
 * [How To Use Saito](#How-To-Use-Saito)
 * [Getting Started](#Getting-Started)
@@ -21,13 +20,20 @@ info@saito.tech
 	* [Other RESTFUL Endpoints](#Other-RESTFUL-Endpoints)
 * [Contact](#Contact)
 
+## Web3 Grant
+* [Grant Application](https://github.com/SaitoTech/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md)
+* [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
+
 ## Other Documentation
 * [Welcome To Saito(this doc)](README.md)
 * [Roadmap](docs/roadmap.md)
 * [Applications/Modules](docs/applications.md)
+* [Saito Application Context(app)](docs/appcontext.md)
 * [Services](docs/services.md)
-* [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
-* [Block and Transcation Validation](docs/validation.md)
+* [Events](docs/events.md)
+* [Block and Transaction Validation](docs/validation.md)
+* [White Paper](docs/saito-whitepaper.pdf)
+* [Lite Paper](docs/saito-litepaper.pdf)
 
 # Preamble
 Before working with this repository it may be helpful to get some perspective on the Saito roadmap and what you can expect at this point.
