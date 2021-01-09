@@ -524,6 +524,15 @@ console.log(err);
         game_mod.handleStatsMenu();
       }
     });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
+
 
     this.menu.addMenuOption({
       text : "Cards",
@@ -2368,7 +2377,7 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
             if (this.game.player == 2) {
               this.game.deck[0].hand = ["missileenvy","beartrap","redscare","socgov" , "degaulle","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
-              this.game.deck[0].hand = ["campdavid", "olympic", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["cia", "olympic", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -4042,7 +4051,9 @@ this.startClock();
 
   revertTurn() {
     let twilight_self = this;
-    twilight_self.game.state = start_turn_game_state;
+    if (start_turn_game_state == null || start_turn_game_state == undefined) {} else {
+      twilight_self.game.state = start_turn_game_state;
+    }
     for (let i = twilight_self.game.queue.length-1; i >= 0; i--) {
       let tmpar = twilight_self.game.queue[i].split("\t");
       if (tmpar[0] === "discard") {
