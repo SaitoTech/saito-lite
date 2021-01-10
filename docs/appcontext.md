@@ -2,7 +2,7 @@
 
 The Saito Application Context is an object with some state and a number of helper functions that is passed around to most module methods which helps DAPP developers to interact with Saito.
 
-TODO: Complete this document.
+TODO: Complete this document. Are there other properties? Fill in each method's paramaters, return value, and description.
 
 ## Public Properties
 
@@ -21,6 +21,10 @@ isMainPeer()
 returnHandshake()
 
 returnPublicKey()
+
+>Returns wallet's public key
+
+* returns string public key
 
 deletePeer()
 
@@ -244,8 +248,100 @@ validate(app, bid=0)
 
 ## Wallet
 
-TODO: Make sure these are all up to date and complete
-createUnsignedTransaction
+addInput(x) 
+
+addOutput(x) 
+
+containsInput(s) 
+
+containsOutput(s) 
+
+addTransactionToPending(tx) 
+
+doesSlipInPendingTransactionsSpendBlockHash(bsh="") 
+
+isSlipInPendingTransactions(slip=null) 
+
+rebroadcastPendingTransactions(peer=null) 
+
+unspendInputSlips(tmptx=null) 
+
+onChainReorganization(bid, bsh, lc, pos) 
+
+processPayments(blk, lc=0) 
+
+purgeExpiredSlips() 
+
+resetExistingSlips(bid, bsh, lc) 
+
+resetSpentInputs(bid=0) 
+
+returnAdequateInputs(amt) 
+
+calculateBalance() 
+
+calculateDisplayBalance() 
+
+isSlipValid(slip, index) 
+
+returnBalance() 
+
+returnPrivateKey() 
+
+> Returns wallet's private key
+
+* returns string private key
+
+returnPublicKey() 
+
+async backupWallet() 
+
+async resetWallet() 
+
+saveWallet() 
+
+signMessage(msg) 
+
+>Returns wallet's balance
+
+* returns double balance
+
+signTransaction(tx)
+
+>Signs a transaction using the wallet private key.
+
+* tx Saito transaction to sign
+* returns saito.transaction Signed Saito transaction
+
+updateBalance() 
+
+returnDisplayBalance() 
+
+createSlip(addr) 
+
+createRawTransaction(txobj) 
+
+createUnsignedTransactionWithDefaultFee(publickey="", amt=0.0) 
+
+>Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens. Use the default wallet fee.
+
+* recipient Publickey of the recipient (string)
+* fee to send with tx
+* returns saito.transaction if successful
+* returns null if inadequate inputs
+
+signTransaction
+
+>Signs a msg string using the wallet private key.
+
+returnBalance
+
+* msg string to sign
+* returns string public key
+
+createUnsignedTransaction(publickey="", amt=0.0, fee=0.0) 
+
+> Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens.
 
 * recipient Publickey of the recipient (string)
 * payment amount
@@ -253,49 +349,12 @@ createUnsignedTransaction
 * returns saito.transaction if successful
 * returns null if inadequate inputs
 
-Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens.
-createUnsignedTransactionWithDefaultFee
+createToSlips(num, address, amount, change_amount) 
 
-* recipient Publickey of the recipient (string)
-* fee to send with tx
-* returns saito.transaction if successful
-* returns null if inadequate inputs
+createReplacementTransaction(oldtx) 
 
-Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens. Use the default wallet fee.
-signTransaction
+returnAvailableCryptos() 
 
-* tx Saito transaction to sign
-* returns saito.transaction Signed Saito transaction
+returnPreferredCrypto(ticker="") 
 
-Signs a transaction using the wallet private key.
-signMessage
-
-* msg string to sign
-* returns string public key
-
-Signs a msg string using the wallet private key.
-returnBalance
-
-* returns double balance
-
-Returns wallet's balance
-returnDefaultFee
-
-* returns double fee
-
-Returns wallet's default fee
-returnPublicKey
-
-* returns string public key
-
-Returns wallet's public key
-returnPrivateKey
-
-* returns string private key
-
-Returns wallet's private key
-returnIdentifier
-
-* returns string identifier
-
-If exists, Return the default identifier associated with a wallet
+returnPreferredCryptoByName(modname="Saito")
