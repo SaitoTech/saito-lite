@@ -97,12 +97,12 @@ Developers may also build applications that integrate directly with the blockcha
 
 Once you have developed an application, see our [online developer tutorials](http://org.saito.tech/introduction-to-saito-development) for information on how to publish it into the live network and get it hosted on the Saito AppStore for other users and developers to install.
 
-If you wish to install your module locally for testing, put it into the `/mods` directory and add it to both the `core` and `lite` sections of your `/config/modules.config.js` file. Then run this commpand:
+If you wish to install your module locally for testing, put it into the `/mods` directory and add it to both the `core` and `lite` sections of your `/config/modules.config.js` file. Then run this command:
 
 ``` 
-npm run compile
+npm run compile dev
 ```
-This command will compile the codebase into a javascript payload which can be delivered to browsers. The payload will saved as the `/web/saito/saito.js` file and can be loaded by any page you wish to author. As a convenience, the Saito platform will automatically serve web requests if configured correctly, making it quite simple to get started making DAPPs in the browser.
+This command will compile the codebase into a javascript payload which can be delivered to browsers. The payload will saved as the `/web/saito/saito.js` file and can be loaded by any page you wish to author. As a convenience, the Saito Application/Module platform will automatically serve web requests if configured correctly, making it quite simple to get started making DAPPs in the browser.
 
 
 # The Consensus Mechanism
