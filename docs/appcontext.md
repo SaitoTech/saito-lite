@@ -22,6 +22,10 @@ returnHandshake()
 
 returnPublicKey()
 
+>Returns wallet's public key
+
+* returns string public key
+
 deletePeer()
 
 connect(mode = 0)
@@ -284,6 +288,10 @@ returnBalance()
 
 returnPrivateKey() 
 
+> Returns wallet's private key
+
+* returns string private key
+
 returnPublicKey() 
 
 async backupWallet() 
@@ -294,13 +302,16 @@ saveWallet()
 
 signMessage(msg) 
 
+>Returns wallet's balance
+
+* returns double balance
+
 signTransaction(tx)
+
+>Signs a transaction using the wallet private key.
 
 * tx Saito transaction to sign
 * returns saito.transaction Signed Saito transaction
-
->Signs a transaction using the wallet private key.
-signMessage
 
 updateBalance() 
 
@@ -312,23 +323,30 @@ createRawTransaction(txobj)
 
 createUnsignedTransactionWithDefaultFee(publickey="", amt=0.0) 
 
+>Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens. Use the default wallet fee.
+
 * recipient Publickey of the recipient (string)
 * fee to send with tx
 * returns saito.transaction if successful
 * returns null if inadequate inputs
 
->Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens. Use the default wallet fee.
 signTransaction
 
+>Signs a msg string using the wallet private key.
+returnBalance
+
+* msg string to sign
+* returns string public key
+
 createUnsignedTransaction(publickey="", amt=0.0, fee=0.0) 
+
+> Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens.
 
 * recipient Publickey of the recipient (string)
 * payment amount
 * fee to send with tx
 * returns saito.transaction if successful
 * returns null if inadequate inputs
-
-> Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens.
 
 createToSlips(num, address, amount, change_amount) 
 
@@ -339,42 +357,3 @@ returnAvailableCryptos()
 returnPreferredCrypto(ticker="") 
 
 returnPreferredCryptoByName(modname="Saito")
-
-
-
-TODO: Make sure these are all up to date and complete
-
-createUnsignedTransactionWithDefaultFee
-
-signTransaction
-
-
-* msg string to sign
-* returns string public key
-
-Signs a msg string using the wallet private key.
-returnBalance
-
-* returns double balance
-
-Returns wallet's balance
-returnDefaultFee
-
-* returns double fee
-
-Returns wallet's default fee
-returnPublicKey
-
-* returns string public key
-
-Returns wallet's public key
-returnPrivateKey
-
-* returns string private key
-
-Returns wallet's private key
-returnIdentifier
-
-* returns string identifier
-
-If exists, Return the default identifier associated with a wallet
