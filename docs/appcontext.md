@@ -244,8 +244,83 @@ validate(app, bid=0)
 
 ## Wallet
 
-TODO: Make sure these are all up to date and complete
-createUnsignedTransaction
+addInput(x) 
+
+addOutput(x) 
+
+containsInput(s) 
+
+containsOutput(s) 
+
+addTransactionToPending(tx) 
+
+doesSlipInPendingTransactionsSpendBlockHash(bsh="") 
+
+isSlipInPendingTransactions(slip=null) 
+
+rebroadcastPendingTransactions(peer=null) 
+
+unspendInputSlips(tmptx=null) 
+
+onChainReorganization(bid, bsh, lc, pos) 
+
+processPayments(blk, lc=0) 
+
+purgeExpiredSlips() 
+
+resetExistingSlips(bid, bsh, lc) 
+
+resetSpentInputs(bid=0) 
+
+returnAdequateInputs(amt) 
+
+calculateBalance() 
+
+calculateDisplayBalance() 
+
+isSlipValid(slip, index) 
+
+returnBalance() 
+
+returnPrivateKey() 
+
+returnPublicKey() 
+
+async backupWallet() 
+
+async resetWallet() 
+
+saveWallet() 
+
+signMessage(msg) 
+
+signTransaction(tx)
+
+* tx Saito transaction to sign
+* returns saito.transaction Signed Saito transaction
+
+>Signs a transaction using the wallet private key.
+signMessage
+
+updateBalance() 
+
+returnDisplayBalance() 
+
+createSlip(addr) 
+
+createRawTransaction(txobj) 
+
+createUnsignedTransactionWithDefaultFee(publickey="", amt=0.0) 
+
+* recipient Publickey of the recipient (string)
+* fee to send with tx
+* returns saito.transaction if successful
+* returns null if inadequate inputs
+
+>Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens. Use the default wallet fee.
+signTransaction
+
+createUnsignedTransaction(publickey="", amt=0.0, fee=0.0) 
 
 * recipient Publickey of the recipient (string)
 * payment amount
@@ -253,22 +328,26 @@ createUnsignedTransaction
 * returns saito.transaction if successful
 * returns null if inadequate inputs
 
-Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens.
+> Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens.
+
+createToSlips(num, address, amount, change_amount) 
+
+createReplacementTransaction(oldtx) 
+
+returnAvailableCryptos() 
+
+returnPreferredCrypto(ticker="") 
+
+returnPreferredCryptoByName(modname="Saito")
+
+
+
+TODO: Make sure these are all up to date and complete
+
 createUnsignedTransactionWithDefaultFee
 
-* recipient Publickey of the recipient (string)
-* fee to send with tx
-* returns saito.transaction if successful
-* returns null if inadequate inputs
-
-Create a transaction with the appropriate slips given the desired fee and payment to associate with the transaction, and a change address to receive any surplus tokens. Use the default wallet fee.
 signTransaction
 
-* tx Saito transaction to sign
-* returns saito.transaction Signed Saito transaction
-
-Signs a transaction using the wallet private key.
-signMessage
 
 * msg string to sign
 * returns string public key
