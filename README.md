@@ -30,9 +30,6 @@ info@saito.tech
 ## Web3 Grant and Polkadot Integration
 * [Web3 Game Protocol and Engine Grant](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md)
 * [Polkadot Integration](docs/polkadot.md)
-//
-// this is how we describe a valid
-//
 
 # Preamble
 
