@@ -26,10 +26,13 @@ info@saito.tech
 * [Roadmap](docs/roadmap.md)
 * [Application/Module Protocol](docs/applications.md)
 * [Application/Module Events Protocol](docs/events.md)
-* [Network Services](docs/services.md)
-* [Saito Open Infrastructure](docs/saitoopeninfrastructure.md)
+* [Application/Module Context API](docs/appcontext.md)
+* [Services](docs/services.md)
 * [Block and Transaction Validation](docs/validation.md)
 
+## Web3 Grant and Polkadot Integration
+* [Web3 Game Protocol and Engine Grant](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md)
+* [Polkadot Integration](docs/polkadot.md)
 //
 // this is how we describe a valid
 //

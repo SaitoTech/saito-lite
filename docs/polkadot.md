@@ -10,13 +10,13 @@ The functions provided by the Lite Client's Wallet API will then honor the user'
 
 If a DAPP author also wishes to leverage Saito as an Open Infrastructure platform as well, all interactions with the cryptocurrency can be passed through Saito Transactions. This enables efficient distribution of the transactions to their endpoint services within the Saito Network and also allows the author to receive payment for access to the endpoints by requiring a micro-payment in Saito.
 
-The first milestone to support this type of of Service infrastructure is an API to support interoperability between Saito and the 3rd party cryptocurrencies. This is equivalent to [the grant we have been awarded by the Web 3 Foundation](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md), which is in a prototypal stage now.
+The first milestone to support this type of Service Infrastructure is an API to support interoperability between Saito and the 3rd party cryptocurrencies. This is equivalent to [the grant we have been awarded by the Web 3 Foundation](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md), which is in a prototypal stage now.
 
 If there is further interest in leveraging this system we also plan to extend the APIs further to better support an Open Infrastructure Service. For now, that work is left to the DAPP author and we encourage anyone interested in this to reach out.
 
 ## Future Work
 
-The project is a work-in-progress and subject to change, but a general idea of the direction can be see from the current proposed milestones, which will most certainly change in their details but not in general functionality.
+The project is a work-in-progress and subject to change, but a general idea of the direction can be seen from the current proposed milestones, which will most certainly change in their details but not in general functionality.
 
 ### Current Prototypal APIs(Milestone 1)
 

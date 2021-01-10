@@ -2,7 +2,7 @@
 
 The Saito Application Context is an object with some state and a number of helper functions that is passed around to most module methods which helps DAPP developers to interact with Saito.
 
-TODO: Complete this document.
+TODO: Complete this document. Are there other properties? Fill in each method's paramaters, return value, and description.
 
 ## Public Properties
 
@@ -333,6 +333,7 @@ createUnsignedTransactionWithDefaultFee(publickey="", amt=0.0)
 signTransaction
 
 >Signs a msg string using the wallet private key.
+
 returnBalance
 
 * msg string to sign
