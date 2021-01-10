@@ -2972,7 +2972,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 	  if (imperium_self.game.planets['new-byzantium'].owner == strategy_card_player) {
 	    imperium_self.playerAcknowledgeNotice("Congratulations, Master of New Byzantium (+1 VP). Your power grows by the day. Surely it is only a matter of time before the Galaxy bows to your superiority and a Natural Order is restored to the universe", supplementary_scoring);
 	  } else {
-	    imperium_self.playerAcknowledgeNotice("Although you do not control New Byzantium, your strategic choice of play has been noticed by the other factions, and will be rewarded by the issuance of a Secret Objective", supplementary_secret);
+	    imperium_self.playerAcknowledgeNotice("As you do not control New Byzantium you will be issued a Secret Objective once the other factions have elected whether to spend a strategy token to purchase one", supplementary_secret);
 	  }
         }
 
@@ -3101,9 +3101,9 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
           // two action cards
           //
           imperium_self.addMove("resolve\tstrategy");
-          imperium_self.addMove("gain\t2\t"+imperium_self.game.player+"\taction_cards"+"\t"+2);
+          imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards"+"\t"+2);
           imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
-          imperium_self.addMove("NOTIFY\tdealing action cards to " + imperium_self.returnFaction(player));
+          imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " gains action cards");
           imperium_self.addMove("strategy\t"+"politics"+"\t"+strategy_card_player+"\t2");
           imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
 
@@ -3132,7 +3132,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 	    // if New Byzantium is unoccupied, we skip the voting stage
 	    //
 	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
+	      imperium_self.playerAcknowledgeNotice("You will be issued your Action Cards once other players have decided if they wish to spend a strategy token to purchase them as well. This card will not trigger Agenda voting until until New Byzantium is occupied. Conquer the planet to earn 1 VP: ", function() {
                 imperium_self.addMove("change_speaker\t"+chancellor);
 		imperium_self.endTurn();
 	      });
@@ -8963,7 +8963,14 @@ try {
         for (let ii = 0; ii < this.game.players.length; ii++) {
           if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
 
-            // add main menu
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = imperium_self.returnFaction((ii+1));
+            let nickname = imperium_self.returnFactionNickname((ii+1));
+            let chatmod = this.app.modules.mods[i];
+
             if (main_menu_added == 0) {
               this.menu.addMenuOption({
                 text : "Chat",
@@ -8989,15 +8996,6 @@ try {
               });
               community_menu_added = 1;
             }
-
-
-            // add peer chat
-            let data = {};
-            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
-            let gid = this.app.crypto.hash(members.join('_'));
-            let name = imperium_self.returnFaction((ii+1));
-            let nickname = imperium_self.returnFactionNickname((ii+1));
-            let chatmod = this.app.modules.mods[i];
 
             this.menu.addSubMenuOption("game-chat", {
               text : nickname,
@@ -10387,6 +10385,8 @@ handleSystemsMenuItem() {
     let imperium_self = this;
     let z = imperium_self.returnEventObjects();
 
+console.log("QUEUE: " + JSON.stringify(this.game.queue));
+
     if (this.game.queue.length > 0) {
 
       imperium_self.saveGame(imperium_self.game.id);
@@ -11550,7 +11550,7 @@ console.log(JSON.stringify(this.game.state.choices));
 
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
-    	this.updateLog("<div style='margin-top:10px;margin-bottom:10px;'>ROUND: " + this.game.state.round + '</div>');
+    	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
 
 
@@ -12522,9 +12522,15 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	let z            = this.returnEventObjects();
 
 	if (type == "action_cards") {
+          if (this.game.player == player && this.browser_active == 1) {
+	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.splice(this.game.deck[1].hand.length-amount-1, amount)));
+	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
 	if (type == "secret_objectives") {
+          if (this.game.player == player && this.browser_active == 1) {
+	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.splice(this.game.deck[5].hand.length-amount-1, amount)));
+	  }
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
@@ -12696,6 +12702,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	return 1;
   
       }
+
 
       if (mv[0] === "move") {
  
@@ -17878,6 +17885,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
     if (id == "yes") {
 
       imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gets action cards");
       imperium_self.addMove("gain\t" + imperium_self.game.player + "\taction_cards\t2");
       imperium_self.addMove("DEAL\t2\t" + imperium_self.game.player + "\t2");
       imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
@@ -25010,6 +25018,53 @@ try {
 } catch (err) {}
 }
 
+
+returnNewActionCardsOverlay(cards) {
+  let imperium_self = this;
+
+
+
+  let text = "Card";
+  if (cards.length > 1) { text = "Cards"; }
+
+  let html = `
+    <div class="new_action_cards_overlay" id="new_action_cards_overlay">
+      <div class="new_action_cards_overlay_card_container">
+  `;
+  for (let i = 0; i < cards.length; i++) {
+    html += `
+      <div class="faction_sheet_action_card bc">
+        <div class="action_card_name">${imperium_self.action_cards[cards[i]].name}</div>
+        <div class="action_card_content">${imperium_self.action_cards[cards[i]].text}</div>
+      </div>
+    `;
+  }
+  html += `
+      </div>
+    </div>
+  `;
+  return html;
+}
+
+returnNewSecretObjectiveOverlay(card) {
+  let obj = this.secret_objectives[card];
+  let html = `
+    <div class="new_secret_objective_overlay" id="new_secret_objective_overlay">
+      <div style="width:100%"><div class="new_secret_objective_overlay_title">New Secret Objective</div></div>
+      <div style="width:100%"><div style="display:inline-block">
+      <div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+        <div class="objectives_card_name">${obj.name}</div>
+        <div class="objectives_card_content">
+          ${obj.text}
+        <div class="objectives_secret_notice">secret</div>
+      </div>
+      </div></div>
+    </div>
+  `;
+  return html;
+}
+
+
 returnTechOverlay() {
   let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png"></div>';
   return html;
@@ -25389,7 +25444,7 @@ returnNewObjectivesOverlay() {
 
   if (this.game.state.round == 1) {
     html += `
-      <div class="new_objectives_text">check objectives, action cards and more anytime using the INFO menu above...</div>
+      <div style="width:100%"><div class="new_objectives_text">check objectives, actions cards and more in the INFO menu...</div></div>
     `;
   }
   

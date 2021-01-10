@@ -40,6 +40,53 @@ try {
 } catch (err) {}
 }
 
+
+returnNewActionCardsOverlay(cards) {
+  let imperium_self = this;
+
+
+
+  let text = "Card";
+  if (cards.length > 1) { text = "Cards"; }
+
+  let html = `
+    <div class="new_action_cards_overlay" id="new_action_cards_overlay">
+      <div class="new_action_cards_overlay_card_container">
+  `;
+  for (let i = 0; i < cards.length; i++) {
+    html += `
+      <div class="faction_sheet_action_card bc">
+        <div class="action_card_name">${imperium_self.action_cards[cards[i]].name}</div>
+        <div class="action_card_content">${imperium_self.action_cards[cards[i]].text}</div>
+      </div>
+    `;
+  }
+  html += `
+      </div>
+    </div>
+  `;
+  return html;
+}
+
+returnNewSecretObjectiveOverlay(card) {
+  let obj = this.secret_objectives[card];
+  let html = `
+    <div class="new_secret_objective_overlay" id="new_secret_objective_overlay">
+      <div style="width:100%"><div class="new_secret_objective_overlay_title">New Secret Objective</div></div>
+      <div style="width:100%"><div style="display:inline-block">
+      <div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+        <div class="objectives_card_name">${obj.name}</div>
+        <div class="objectives_card_content">
+          ${obj.text}
+        <div class="objectives_secret_notice">secret</div>
+      </div>
+      </div></div>
+    </div>
+  `;
+  return html;
+}
+
+
 returnTechOverlay() {
   let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png"></div>';
   return html;
@@ -419,7 +466,7 @@ returnNewObjectivesOverlay() {
 
   if (this.game.state.round == 1) {
     html += `
-      <div class="new_objectives_text">check objectives, action cards and more anytime using the INFO menu above...</div>
+      <div style="width:100%"><div class="new_objectives_text">check objectives, actions cards and more in the INFO menu...</div></div>
     `;
   }
   

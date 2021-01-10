@@ -149,7 +149,14 @@ try {
         for (let ii = 0; ii < this.game.players.length; ii++) {
           if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
 
-            // add main menu
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = imperium_self.returnFaction((ii+1));
+            let nickname = imperium_self.returnFactionNickname((ii+1));
+            let chatmod = this.app.modules.mods[i];
+
             if (main_menu_added == 0) {
               this.menu.addMenuOption({
                 text : "Chat",
@@ -175,15 +182,6 @@ try {
               });
               community_menu_added = 1;
             }
-
-
-            // add peer chat
-            let data = {};
-            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
-            let gid = this.app.crypto.hash(members.join('_'));
-            let name = imperium_self.returnFaction((ii+1));
-            let nickname = imperium_self.returnFactionNickname((ii+1));
-            let chatmod = this.app.modules.mods[i];
 
             this.menu.addSubMenuOption("game-chat", {
               text : nickname,

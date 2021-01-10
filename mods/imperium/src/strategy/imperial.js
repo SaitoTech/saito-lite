@@ -45,7 +45,7 @@
 	  if (imperium_self.game.planets['new-byzantium'].owner == strategy_card_player) {
 	    imperium_self.playerAcknowledgeNotice("Congratulations, Master of New Byzantium (+1 VP). Your power grows by the day. Surely it is only a matter of time before the Galaxy bows to your superiority and a Natural Order is restored to the universe", supplementary_scoring);
 	  } else {
-	    imperium_self.playerAcknowledgeNotice("Although you do not control New Byzantium, your strategic choice of play has been noticed by the other factions, and will be rewarded by the issuance of a Secret Objective", supplementary_secret);
+	    imperium_self.playerAcknowledgeNotice("As you do not control New Byzantium you will be issued a Secret Objective once the other factions have elected whether to spend a strategy token to purchase one", supplementary_secret);
 	  }
         }
 

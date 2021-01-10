@@ -8,6 +8,8 @@
     let imperium_self = this;
     let z = imperium_self.returnEventObjects();
 
+console.log("QUEUE: " + JSON.stringify(this.game.queue));
+
     if (this.game.queue.length > 0) {
 
       imperium_self.saveGame(imperium_self.game.id);
@@ -1171,7 +1173,7 @@ console.log(JSON.stringify(this.game.state.choices));
 
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
-    	this.updateLog("<div style='margin-top:10px;margin-bottom:10px;'>ROUND: " + this.game.state.round + '</div>');
+    	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
 
 
@@ -2143,9 +2145,15 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	let z            = this.returnEventObjects();
 
 	if (type == "action_cards") {
+          if (this.game.player == player && this.browser_active == 1) {
+	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.splice(this.game.deck[1].hand.length-amount-1, amount)));
+	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
 	if (type == "secret_objectives") {
+          if (this.game.player == player && this.browser_active == 1) {
+	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.splice(this.game.deck[5].hand.length-amount-1, amount)));
+	  }
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
@@ -2317,6 +2325,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	return 1;
   
       }
+
 
       if (mv[0] === "move") {
  

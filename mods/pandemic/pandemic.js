@@ -200,6 +200,14 @@ class Pandemic extends GameTemplate {
         game_mod.log.toggleLog();
       }
     });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
     this.menu.addMenuOption({
       text : "Cards",
       id : "game-cards",
@@ -1571,18 +1579,27 @@ console.log("hops not found!");
       }
       if (mv[0] === "round") {
         this.game.queue.push("turn\t1");
+        this.game.state.welcome = 0;
       }
+
+
       if (mv[0] === "turn") {
-  
-        if (parseInt(mv[1]) == this.game.player) {
-          this.playerTurn();
-        } else {
-  	this.removeEvents();
- 	//this.updateStatusAndListCards("You are the "+this.game.players_info[this.game.player-1].role+" ("+this.game.cities[this.game.players_info[this.game.player-1].city].name+"). Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
- 	this.updateStatusAndListCards("Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
+
+	if (this.browser_active == 1) {
+	  if (this.game.state.welcome == 0) {
+	    this.overlay.showOverlay(this.app, this, this.returnWelcomeOverlay());
+	    document.querySelector(".close_welcome_overlay").onclick = (e) => {
+	      this.overlay.hideOverlay();
+            }
+            this.game.state.welcome = 1;
+          }
+          if (parseInt(mv[1]) == this.game.player) {
+            this.playerTurn();
+          } else {
+	    this.removeEvents();
+ 	    this.updateStatusAndListCards("Waiting for " + this.app.keys.returnUsername(this.game.players[parseInt(mv[1])-1]) + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
+          }
         }
-  
-  
         return 0;
       }
       if (mv[0] === "draw_player_card") {
@@ -1604,7 +1621,7 @@ console.log("hops not found!");
 
   	  if (card == "epidemic1" || card == "epidemic2" || card == "epidemic3" || card == "epidemic4" || card == "epidemic5" || card == "epidemic6") {
   
-  	    this.updateLog("Player "+(player+1)+": draws Epidemic Card");
+  	    this.updateLog("EPIDEMIC!");
   	    this.addMove("RESOLVE");
   	    this.addMove("draw_player_card\t"+(player+1)+"\t"+cards_left);
   	    this.addMove("epidemic");
@@ -1615,7 +1632,7 @@ console.log("hops not found!");
   
   	  } else {
 console.log("PLAYER: " + player + " --- " + " need to overwrite now that players is pkeys");
-  	    this.updateLog("Player "+(player+1)+": draws "+this.game.deck[1].cards[card].name);
+  	    //this.updateLog("Player "+(player+1)+": draws "+this.game.deck[1].cards[card].name);
             this.game.players_info[player].cards.push(card);
   	  }
         }
@@ -1640,7 +1657,16 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
         this.addDiseaseCube(city, virus);
         this.addDiseaseCube(city, virus);
 
-  
+	//
+	// show overlay
+	//
+        this.overlay.showOverlay(this.app, this, this.returnEpidemicOverlay(city));
+	document.quertySelector(".close_epidemic_overlay").onclick = (e) => {
+	  this.overlay.hideOverlay();
+        }
+
+
+
         //
         // shuffle cards into TOP of infection deck
         //
@@ -1708,6 +1734,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   
   	    if (place_virus == 1) {
   	      this.updateLog(this.game.cities[city].name + " adds 1 disease cube");
+	      this.game.queue.push("ACKNOWLEDGE\tInfection: 1 "+virus+" added to "+this.game.cities[city].name);
     	      this.addDiseaseCube(city, virus);
   	    } else {
   	      this.updateLog("Cure prevents infection in " + this.game.cities[city].name);
@@ -1847,6 +1874,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
         this.game.queue.splice(qe, 1);
       }
       if (mv[0] === "move") {
+        pandemic_self.updateLog(pandemic_self.game.players_info[(parseInt(mv[1])-1)].role + " moves to " + this.game.cities[mv[2]].city);
         pandemic_self.game.players_info[(parseInt(mv[1])-1)].city = mv[2];
         pandemic_self.showBoard();
         this.game.queue.splice(qe, 1);
@@ -1945,10 +1973,11 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   triggerOutbreak(city, virus) {
   
     this.game.state.outbreak_rate++;
-    this.updateLog("Outbreak in " + city);
+    this.updateLog("Outbreak in " + this.game.cities[city].name);
   
     for (let i = 0; i < this.game.cities[city].neighbours.length; i++) {
       if (!this.outbreaks.includes(this.game.cities[city].neighbours[i])) {
+	this.game.queue.push("ACKNOWLEDGE\tOutbreak! Virus expands beyond " + this.game.cities[city].name);
         this.addDiseaseCube(this.game.cities[city].neighbours[i], virus);
       }
     }
@@ -2125,6 +2154,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
         players[i].role     = "Generalist";
         players[i].pawn     = "Pawn%20Generalist.png";
         players[i].card     = "Role%20-%20Generalist.jpg";
+        players[i].desc     = "The Generalist may take an extra move every turn, performing 5 actions instead of 4";
         players[i].moves    = 5;
         players[i].type     = 1;
       }
@@ -2132,18 +2162,21 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
         players[i].role     = "Scientist";
         players[i].pawn     = "Pawn%20Scientist.png";
         players[i].card     = "Role%20-%20Scientist.jpg";
+        players[i].desc     = "The Scientist may research a vaccine with only 4 cards instead of 5";
         players[i].type     = 2;
       }
       if (role === 'medic') {
         players[i].role     = "Medic";
         players[i].pawn     = "Pawn%20Medic.png";
         players[i].card     = "Role%20-%20Medic.jpg";
+        players[i].desc     = "The Medic may remove all disease cubes in a city when they treat disease";
         players[i].type     = 3;
       }
       if (role === 'operationsexpert') {
         players[i].role     = "Operations Expert";
         players[i].pawn     = "Pawn%20Operations%20Expert.png";
         players[i].card     = "Role%20-%20Operations%20Expert.jpg";
+        players[i].desc     = "The Operations Expert may build a research center in their current city as an action";
         players[i].type     = 4;
       }
   
@@ -2915,6 +2948,85 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   
   }
   
+
+  returnEpidemicOverlay(city) {
+
+    let html = `
+      <div class="epidemic_overlay">
+        Epidemic in ${this.game.cities[city].name}!!!
+
+        <p></p>
+
+        <div class="button" class="close_epidemic_overlay" id="close_epidemic_overlay">close</div>
+      </div>
+    `;
+
+    return html;
+
+  }
+
+
+
+  returnWelcomeOverlay() {
+
+    let html = `
+
+<div class="welcome_overlay">
+
+    `;
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+
+      let player = this.game.players_info[i];
+      let cards_overview = "";
+      let deck = player.cards;
+
+      for (let i = 0; i < deck.length; i++) {
+        let city = this.game.deck[1].cards[deck[i]];
+        if (i > 0) { cards_overview += ", "; }
+        cards_overview += city.name;
+      }
+
+      html += `
+        <div class="player_info_box">
+	    <div class="player_role_card">
+	      <img src="/pandemic/img/${player.card}" />
+	    </div>
+	    <div class="player_role_description">
+	      <table>
+		<tr>
+		  <td class="player_role_description_header">Player: </td>
+		  <td>${this.app.keys.returnUsername(this.game.players[i])}</td>
+	        </td>
+		<tr>
+		  <td class="player_role_description_header">Role: </td>
+		  <td>${player.role}</td>
+	        </td>
+		<tr>
+		  <td class="player_role_description_header">Description: </td>
+		  <td>Medics can remove all cubes from a city when treating disease</td>
+	        </tr>
+		<tr>
+		  <td class="player_role_description_header">Cards: </td>
+		  <td>`+cards_overview+`</td>
+	        </tr>
+	      </table>
+	    </div>
+        </div>
+      `;
+    }
+
+    html += `
+        <display style="width:100%"><div style="display:inline-block;margin-left:auto;margin-right:auto" class="button close_welcome_overlay" id="close_welcome_overlay">close</div></div>
+      </div>
+    `;
+
+    return html;
+
+  }
+
+
+
 }
 module.exports = Pandemic;
 

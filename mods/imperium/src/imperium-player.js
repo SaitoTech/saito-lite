@@ -2387,6 +2387,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
     if (id == "yes") {
 
       imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gets action cards");
       imperium_self.addMove("gain\t" + imperium_self.game.player + "\taction_cards\t2");
       imperium_self.addMove("DEAL\t2\t" + imperium_self.game.player + "\t2");
       imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");

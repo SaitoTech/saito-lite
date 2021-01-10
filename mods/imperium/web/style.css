@@ -23,6 +23,43 @@
 }
 
 
+.new_action_cards_overlay {
+  width: 70vw;
+  height: auto;
+  text-align:center;
+  transform: scale(1.4);
+  position: relative;
+  transform: translate(0%, -100%);
+}
+.new_action_cards_overlay_card_container {
+  display: inline-block;
+  color: white;
+  font-family: 'orbitron-medium', helvetica, arial;
+  transform: scale(1.6);
+}
+.new_action_cards_overlay_action_card{
+  transform: scale(2);
+}
+.new_secret_objective_overlay {
+  width: 50vw;
+  height: auto;
+  text-align:center;
+  transform: scale(1.4);
+}
+.new_secret_objective_overlay_title {
+  background: #3335;
+  display: inline-block;
+  color: white;
+  font-size: 3em;
+  font-family: 'orbitron-medium', helvetica, arial;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
 .cardbox-card img {
   position: absolute;
 }
@@ -168,6 +205,9 @@
   padding-top: 6px;
   padding-bottom: 2px;
   border-radius: 5px;
+  font-size: 1.3em;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 .objectives_secret_notice {
   position: relative;
@@ -184,6 +224,8 @@
   margin-top: 5px;
 }
 .new_objectives_overlay_container {
+  background-image: url('/iimperium/img/background_starscape1.jpg');
+  background-size: cover;
   border-radius: 15px;
   width: 80vw;
   font-family: 'orbitron-medium';
