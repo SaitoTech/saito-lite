@@ -11609,7 +11609,8 @@ console.log(JSON.stringify(this.game.state.choices));
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
           this.game.queue.push("shownewobjectives");
-          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
+	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">The Galactic Senate has Fallen!</div><div style="margin-top:10px">And with its collapse age-old conflicts have been reborn, pitting faction against faction in a race to claim New Byzantium and the Imperial Throne...</div><div style="margin-top:10px;margin-bottom:10px;">But which faction will win? The race is not always to the swiftest or strongest or most keen. Even the weakest may yet plot elevation to the Seat of Galactic Power.</div>`);
+//          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	}
 
 
@@ -25384,6 +25385,16 @@ returnNewObjectivesOverlay() {
   let html = `
     <div class="new_objectives_overlay_container" style="">
       <div class="new_objectives_title">${title}</div>
+  `;
+
+  if (this.game.state.round == 1) {
+    html += `
+      <div class="new_objectives_text">check objectives, action cards and more anytime using the INFO menu above...</div>
+    `;
+  }
+  
+
+  html += `
       <div class="new_objectives_container">
   `;
 
