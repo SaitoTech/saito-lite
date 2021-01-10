@@ -122,6 +122,13 @@
                     imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
                     imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
 
+
+		    //
+		    // avoid double research of same tech by manually inserting
+		    //
+                    imperium_self.game.players_info[imperium_self.game.player-1].tech.push(tech);
+
+
 	  	    let resources_to_spend = 6;
                     let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';
 
