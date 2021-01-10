@@ -648,6 +648,12 @@ button i {
   transform: rotate(45deg);
 }
 
+
+/*--- Chat ---*/
+.chat-message p {
+  margin-bottom: 10px;
+}
+
 /*--------------------------*/
 
 fieldset {

@@ -67,6 +67,7 @@ module.exports = ArcadeGameDetails = {
     document.querySelector('.game-wizard-description').innerHTML = gamemod.description;
 
     setTimeout(() => {
+      document.querySelector('.game-wizard-players-select').innerHTML = "";
       for (let p = gamemod.minPlayers; p <= gamemod.maxPlayers; p++) {
         var option = document.createElement("option");
             option.text = p + " player";
