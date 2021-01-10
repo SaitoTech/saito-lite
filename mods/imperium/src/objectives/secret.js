@@ -388,7 +388,7 @@
 
   this.importSecretObjective('wormhole-administrator', {
       name 		: 	"Wormhole Administrator" ,
-      text		:	"Have at least 1 ship in asystems containing alpha and beta wormholes respectively" ,
+      text		:	"Have at least 1 ship in systems containing alpha and beta wormholes respectively" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
 	let relevant_sectors = imperium_self.returnSectorsWithPlayerShips(player);

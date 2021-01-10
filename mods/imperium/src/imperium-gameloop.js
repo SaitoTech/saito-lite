@@ -78,6 +78,19 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	}
 
 	//
+	// token allocation workaround
+	//
+	if (lmv[1] != undefined) {
+	  if (lmv[1] === "tokenallocation") {
+	    if (lmv[2] != undefined) {
+	      if (lmv[2] === this.app.wallet.returnPublicKey()) {
+		this.playing_token_allocation = 0;
+	      }
+	    }
+	  }
+	}
+
+	//
 	// this overwrites secondaries, we need to clear manually
 	// if we are playing the sceondary, we don't want to udpate status
 	//
@@ -1129,7 +1142,15 @@ console.log(JSON.stringify(this.game.state.choices));
 
       }
 
+
       if (mv[0] == "tokenallocation") {
+
+	//
+	// we undo this when we receive our own token allocation onchain
+	//
+	if (this.playing_token_allocation == 1) { return; }
+	this.playing_token_allocation = 1; 
+
 	if (parseInt(mv[2])) { 
  	  this.playerAllocateNewTokens(parseInt(mv[1]), parseInt(mv[2]), 1, 3);
 	} else { 
