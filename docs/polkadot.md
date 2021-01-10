@@ -14,6 +14,10 @@ The first milestone to support this type of Service Infrastructure is an API to 
 
 If there is further interest in leveraging this system we also plan to extend the APIs further to better support an Open Infrastructure Service. For now, that work is left to the DAPP author and we encourage anyone interested in this to reach out.
 
+## Architecture
+
+For details of the architecture, see our [architecture document](saito-dot-integration.pdf).
+
 ## Future Work
 
 The project is a work-in-progress and subject to change, but a general idea of the direction can be seen from the current proposed milestones, which will most certainly change in their details but not in general functionality.
