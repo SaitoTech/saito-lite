@@ -56,17 +56,19 @@ class Website extends ModTemplate {
   }
 
 
-  // onConfirmation(blk, tx, conf, app) {
-  //   if (this.browser_active == 1) {
-  //     try {
-  //       if (document.querySelector('.netstats')) {
-  //         Data.render(app)
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   }
-  // }
+  onConfirmation(blk, tx, conf, app) {
+
+    //
+    // newsletter signups and email registration
+    //
+    if (conf == 0) {
+
+      let txmsg = tx.returnMessage();
+      console.log("TX: " + JSON.stringify(txmsg));
+
+    }
+
+   }
 
   // shouldAffixCallbackToModule() { return 1; }
 
