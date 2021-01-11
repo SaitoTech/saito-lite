@@ -1,5 +1,4 @@
-# Saito Events Protocol - SMP-20
-
+# Saito Events Protocol
 
 ## Abstract 
 
@@ -10,8 +9,7 @@ The following document describes the major events that occur in the Saito client
 | Author  | David Lancashire  |
 | Status  | Published         |
 | Type    | Protocol Standard |
-| Created | January 1, 2021   |
-
+| Created | January 8, 2021   |
 
 ## Sending and Receiving Events
 
