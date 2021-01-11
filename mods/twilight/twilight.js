@@ -2273,7 +2273,6 @@ console.log("place: " + mv[1] + " -- " + player);
 console.log("re-arranged resolve to avoid OBSERVER MODE bug");
 	      }
 
-
               if (lmv[0] == "headline" && mv[1] == "headline") {
                 this.game.queue.splice(le, 2);
                 rmvd = 1;
@@ -2310,6 +2309,11 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
                 this.game.queue.splice(le, 2);
                 rmvd = 1;
               }
+	      // manual removal of headline
+              if (lmv[0] == "resolve" && lmv[1] == "headline") {
+                this.game.queue.splice(le, 1);
+                rmvd = 1;
+	      }
               if (rmvd == 0) {
 
                 //
@@ -3064,7 +3068,7 @@ console.log("resetging bbc");
       //
       // USSR picks
       //
-      if (stage == "headline1") {
+      if (stage === "headline1") {
 
         //
         // both players reset headline info
@@ -3090,7 +3094,7 @@ console.log("resetging bbc");
       //
       // US picks
       //
-      if (stage == "headline2") {
+      if (stage === "headline2") {
         if (this.game.player == player) {
 
           this.game.state.headline_opponent_hash = hash;
@@ -3110,8 +3114,26 @@ console.log("resetging bbc");
       //
       // USSR sends XOR
       //
-      if (stage == "headline3") {
+      if (stage === "headline3") {
         if (this.game.player == player) {
+
+
+          //
+          // HACK - January 11, 2021
+          //
+          // we have an error where sometimes something flakes out and we lose the card we choose
+          // so we are going to save these OUTSIDE the game. and when we reload if the information
+          // is missing submit the older data. this error happens only in headline mode when one
+          // of the clients flakes out during the headline back-and-forth. unsure of cause
+          //
+          if (this.game.state.headline_hash == "") {
+	    if (this.app.options.tmp) {
+              this.game.state.headline_card = this.app.options.tmp.twilight_headline_card;
+              this.game.state.headline_xor = this.app.options.tmp.twilight_headline_xor;
+              this.game.state.headline_hash = this.app.options.tmp.twilight_headline_hash;
+	    }
+	  }
+
 
           this.game.state.headline_opponent_hash = hash;
           this.updateLog("Initiating blind headline card swap");
@@ -3129,7 +3151,7 @@ console.log("resetging bbc");
       //
       // US confirms USSR XOR and sends its XOR
       //
-      if (stage == "headline4") {
+      if (stage === "headline4") {
         if (this.game.player == player) {
 
           this.game.state.headline_opponent_xor  = xor;
@@ -3156,7 +3178,7 @@ console.log("resetging bbc");
       //
       // USSR confirms US XOR
       //
-      if (stage == "headline5") {
+      if (stage === "headline5") {
 
         if (this.game.player == 0) {
     	  this.updateLog("Observer Mode does not handle headlines well...");
@@ -3165,7 +3187,6 @@ console.log("resetging bbc");
         }
 
         if (this.game.player == player) {
-
 
           this.game.state.headline_opponent_xor  = xor;
           this.game.state.headline_opponent_card = card;
@@ -4089,16 +4110,37 @@ this.startClock();
 
     let twilight_self = this;
 
-
+    //
     // cannot pick china card or UN intervention
+    //
     if (card == "china") {
-      twilght_self.displayModal("Invalid Headline", "You cannot headline China"); return; }
+      twilght_self.displayModal("Invalid Headline", "You cannot headline China");
+      return; 
+    }
     if (card == "unintervention") {
-      twilght_self.displayModal("Invalid Headline", "You cannot headline UN Intervention"); return; }
+      twilght_self.displayModal("Invalid Headline", "You cannot headline UN Intervention");
+      return;
+    }
 
     twilight_self.game.state.headline_card = card;
     twilight_self.game.state.headline_xor = twilight_self.app.crypto.hash(Math.random());
     twilight_self.game.state.headline_hash = twilight_self.app.crypto.encodeXOR(twilight_self.app.crypto.stringToHex(twilight_self.game.state.headline_card), twilight_self.game.state.headline_xor);
+
+    //
+    // HACK - January 11, 2021
+    //
+    // we have an error where sometimes something flakes out and we lose the card we choose
+    // so we are going to save these OUTSIDE the game. and when we reload if the information
+    // is missing submit the older data. this error happens only in headline mode when one
+    // of the clients flakes out during the headline back-and-forth
+    //
+    if (card != "") {
+      if (!this.app.options.tmp) { this.app.options.tmp = {}; }
+      this.app.options.tmp.twilight_headline_card = this.game.state.headline_card;
+      this.app.options.tmp.twilight_headline_card = this.game.state.headline_xor;
+      this.app.options.tmp.twilight_headline_hash = this.game.state.headline_hash;
+      this.app.storage.saveOptions();
+    }
 
 
     //
