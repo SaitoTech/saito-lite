@@ -3126,7 +3126,7 @@ console.log("resetging bbc");
           // is missing submit the older data. this error happens only in headline mode when one
           // of the clients flakes out during the headline back-and-forth. unsure of cause
           //
-          if (this.game.state.headline_hash == "") {
+          if (this.game.state.headline_card == "") {
 	    if (this.app.options.tmp) {
               this.game.state.headline_card = this.app.options.tmp.twilight_headline_card;
               this.game.state.headline_xor = this.app.options.tmp.twilight_headline_xor;
@@ -3160,6 +3160,23 @@ console.log("resetging bbc");
           if (this.game.state.headline_opponent_hash != this.app.crypto.encodeXOR(this.app.crypto.stringToHex(this.game.state.headline_opponent_card), this.game.state.headline_opponent_xor)) {
             alert("PLAYER 1 HASH WRONG: -- this is a development error message that can be triggered if the opponent attempts to cheat by changing their selected card after sharing the encrypted hash. It can also be rarely caused if one or both players reload or have unreliable connections during the headline exchange process. The solution in this case is for both players to reload until the game hits the first turn. " + this.game.state.headline_opponent_hash + " -- " + this.game.state.headline_opponent_card + " -- " + this.game.state.headline_opponent_xor + " -- " + this.app.crypto.encodeXOR(this.app.crypto.stringToHex(this.game.state.headline_opponent_card), this.game.state.headline_opponent_xor));
           }
+
+          //
+          // HACK - January 11, 2021
+          //
+          // we have an error where sometimes something flakes out and we lose the card we choose
+          // so we are going to save these OUTSIDE the game. and when we reload if the information
+          // is missing submit the older data. this error happens only in headline mode when one
+          // of the clients flakes out during the headline back-and-forth. unsure of cause
+          //
+          if (this.game.state.headline_card == "") {
+	    if (this.app.options.tmp) {
+              this.game.state.headline_card = this.app.options.tmp.twilight_headline_card;
+              this.game.state.headline_xor = this.app.options.tmp.twilight_headline_xor;
+              this.game.state.headline_hash = this.app.options.tmp.twilight_headline_hash;
+	    }
+	  }
+
 
           this.updateLog("Initiating blind headline card swap");
           this.addMove("resolve\theadline");

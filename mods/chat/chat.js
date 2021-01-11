@@ -247,8 +247,6 @@ class Chat extends ModTemplate {
   //
   async handlePeerRequest(app, req, peer, mycallback) {
 
-console.log("in chat: " + req.request);
-
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 

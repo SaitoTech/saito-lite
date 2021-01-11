@@ -34,8 +34,6 @@ class Relay extends ModTemplate {
   //
   sendRelayMessage(recipients, message_request, message_data) {
 
-console.log("sending relay message...");
-
     //
     // recipient can be an array
     //
@@ -120,11 +118,7 @@ console.log("sending relay message...");
 
       let relay_self = app.modules.returnModule("Relay");
 
-console.log("in relay hpr");
-
       if (message.request === "relay peer message") {
-
-console.log("relay message");
 
         //
         // sanity check on tx
@@ -146,14 +140,10 @@ console.log("relay message");
         //
         if (tx.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
 
-console.log("relay 1");
-
           app.modules.handlePeerRequest(txmsg, peer, mycallback);
           if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
 
         } else {
-
-console.log("relay 2");
 
           let peer_found = 0;
 
