@@ -44,8 +44,6 @@ try {
 returnNewActionCardsOverlay(cards) {
   let imperium_self = this;
 
-
-
   let text = "Card";
   if (cards.length > 1) { text = "Cards"; }
 
@@ -689,13 +687,37 @@ returnFactionSheet(imperium_self, player=null) {
    `;
 
 
+
+    //
+    // FACTION ABILITIES
+    //
+    html += `
+      <div class="faction_sheet_tech_box" id="faction_sheet_abilities_box">
+    `;
+    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
+      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
+      if (tech.type == "ability") {
+        html += `
+          <div class="faction_sheet_tech_card bc">
+            <div class="tech_card_name">${tech.name}</div>
+            <div class="tech_card_content">${tech.text}</div>
+            <div class="tech_card_level">♦♦</div>
+          </div>
+        `;
+      }
+    }
+    html += `</div>`;
+
+    
+
+
+
     //
     // ACTION CARDS
     //
     let ac = imperium_self.returnPlayerActionCards(imperium_self.game.player);
     if (ac.length > 0) {
       html += `
-      <h3 class="action anchor">Action Cards</h3>
       <div class="faction_sheet_action_card_box" id="faction_sheet_action_card_box">
       `;
       if (imperium_self.game.player == player) {
@@ -719,16 +741,15 @@ returnFactionSheet(imperium_self, player=null) {
 	  `;
 	}
       }
-      html += `</div>`;
+      //html += `</div>`;
     }
 
     //
     // PLANET CARDS
     //
-    html += `
-      <h3 class="planets anchor">Planet Cards</h3>
-      <div class="faction_sheet_planet_card_box" id="faction_sheet_planet_card_box">
-    `;
+    //html += `
+    //  <div class="faction_sheet_planet_card_box" id="faction_sheet_planet_card_box">
+    //`;
   
     let pc = imperium_self.returnPlayerPlanetCards(player);
     for (let b = 0; b < pc.length; b++) {
@@ -740,35 +761,12 @@ returnFactionSheet(imperium_self, player=null) {
       </div>
     `;
 
-
-    //
-    // FACTION ABILITIES
-    //
-    html += `
-      <h3 class="abilities anchor">Faction Abilities</h3>
-      <div class="faction_sheet_tech_box" id="faction_sheet_abilities_box">
-    `;
-
-    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
-      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
-      if (tech.type == "ability") {
-        html += `
-          <div class="faction_sheet_tech_card bc">
-            <div class="tech_card_name">${tech.name}</div>
-            <div class="tech_card_content">${tech.text}</div>
-            <div class="tech_card_level">♦♦</div>
-          </div>
-        `;
-      }
-    }
-    html += `</div>`;
-
-    
+     //
+     // tech
+     //
      html += `
-      <h3 class="tech anchor">Tech</h3>
       <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
     `;
-
     for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
       let techname = imperium_self.game.players_info[player-1].tech[i];
       let tech = imperium_self.tech[techname];

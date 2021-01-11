@@ -1,11 +1,12 @@
 const SubstrateBasedCrypto = require("../dotcrypto/lib/SubstrateBasedCrypto");
 
-class WestendCrypto extends SubstrateBasedCrypto {
+class Westend extends SubstrateBasedCrypto {
   constructor(app) {
     super(app, 'WESTIE', 'ws://178.128.181.212:9932');
     this.name = 'WestendCrypto';
     this.description = 'Westend Polkadot Testnet';
+    this.categories = "Cryptocurrency";
   }
 }
 
-module.exports = WestendCrypto;
+module.exports = Westend;

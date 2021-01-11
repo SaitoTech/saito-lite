@@ -2167,13 +2167,13 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
 	if (type == "action_cards") {
           if (this.game.player == player && this.browser_active == 1) {
-	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.splice(this.game.deck[1].hand.length-amount-1, amount)));
+	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
 	if (type == "secret_objectives") {
           if (this.game.player == player && this.browser_active == 1) {
-	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.splice(this.game.deck[5].hand.length-amount-1, amount)));
+	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.slice(this.game.deck[5].hand.length-amount, this.game.deck[5].hand.length)));
 	  }
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}

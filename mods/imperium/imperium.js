@@ -2332,7 +2332,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       homeworld		: 	"sector13",
       space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
-      tech		: 	["faction5-indoctrination", "faction5-devotion", "faction5-flagship"],
+      tech		: 	["sarween-tools", "faction5-indoctrination", "faction5-devotion", "faction5-flagship"],
       background	: 	'faction5.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro		:	`<div style="font-weight:bold">One must conquer the turmoil within to conquer the turmoil without. Such is the will. Such is the law. So be it.</div>`
@@ -3139,7 +3139,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 	    // if New Byzantium is unoccupied, we skip the voting stage
 	    //
 	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-	      imperium_self.playerAcknowledgeNotice("You will be issued your Action Cards once other players have decided if they wish to spend a strategy token to purchase them as well. This card will not trigger Agenda voting until until New Byzantium is occupied. Conquer the planet to earn 1 VP: ", function() {
+	      imperium_self.playerAcknowledgeNotice("You will receive two action cards after other players decided if they wish to purchase them. The Politics card will not trigger Agenda voting until until New Byzantium is occupied. Conquer the planet to earn 1 VP: ", function() {
                 imperium_self.addMove("change_speaker\t"+chancellor);
 		imperium_self.endTurn();
 	      });
@@ -8148,7 +8148,7 @@ ACTION CARD - types
     this.importActionCard('courageous-to-the-end', {
   	name : "Courageous to the End" ,
   	type : "space_combat_after" ,
-  	text : "If you lost a ship in the last round of space combat, roll two dice. For each result greater than the combat value of that ship, your opponent must destroy a ship of their chosing" ,
+  	text : "For one ship lost in last round of space combat, fire twice. With each hit your opponent must destroy a ship of their chosing" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.players_info[action_card_player-1].my_units_destroyed_last_combat_round.length > 0) {
@@ -12551,13 +12551,13 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
 	if (type == "action_cards") {
           if (this.game.player == player && this.browser_active == 1) {
-	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.splice(this.game.deck[1].hand.length-amount-1, amount)));
+	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
 	if (type == "secret_objectives") {
           if (this.game.player == player && this.browser_active == 1) {
-	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.splice(this.game.deck[5].hand.length-amount-1, amount)));
+	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.slice(this.game.deck[5].hand.length-amount, this.game.deck[5].hand.length)));
 	  }
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
@@ -25050,8 +25050,6 @@ try {
 returnNewActionCardsOverlay(cards) {
   let imperium_self = this;
 
-
-
   let text = "Card";
   if (cards.length > 1) { text = "Cards"; }
 
@@ -25695,13 +25693,37 @@ returnFactionSheet(imperium_self, player=null) {
    `;
 
 
+
+    //
+    // FACTION ABILITIES
+    //
+    html += `
+      <div class="faction_sheet_tech_box" id="faction_sheet_abilities_box">
+    `;
+    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
+      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
+      if (tech.type == "ability") {
+        html += `
+          <div class="faction_sheet_tech_card bc">
+            <div class="tech_card_name">${tech.name}</div>
+            <div class="tech_card_content">${tech.text}</div>
+            <div class="tech_card_level">♦♦</div>
+          </div>
+        `;
+      }
+    }
+    html += `</div>`;
+
+    
+
+
+
     //
     // ACTION CARDS
     //
     let ac = imperium_self.returnPlayerActionCards(imperium_self.game.player);
     if (ac.length > 0) {
       html += `
-      <h3 class="action anchor">Action Cards</h3>
       <div class="faction_sheet_action_card_box" id="faction_sheet_action_card_box">
       `;
       if (imperium_self.game.player == player) {
@@ -25725,16 +25747,15 @@ returnFactionSheet(imperium_self, player=null) {
 	  `;
 	}
       }
-      html += `</div>`;
+      //html += `</div>`;
     }
 
     //
     // PLANET CARDS
     //
-    html += `
-      <h3 class="planets anchor">Planet Cards</h3>
-      <div class="faction_sheet_planet_card_box" id="faction_sheet_planet_card_box">
-    `;
+    //html += `
+    //  <div class="faction_sheet_planet_card_box" id="faction_sheet_planet_card_box">
+    //`;
   
     let pc = imperium_self.returnPlayerPlanetCards(player);
     for (let b = 0; b < pc.length; b++) {
@@ -25746,35 +25767,12 @@ returnFactionSheet(imperium_self, player=null) {
       </div>
     `;
 
-
-    //
-    // FACTION ABILITIES
-    //
-    html += `
-      <h3 class="abilities anchor">Faction Abilities</h3>
-      <div class="faction_sheet_tech_box" id="faction_sheet_abilities_box">
-    `;
-
-    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
-      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
-      if (tech.type == "ability") {
-        html += `
-          <div class="faction_sheet_tech_card bc">
-            <div class="tech_card_name">${tech.name}</div>
-            <div class="tech_card_content">${tech.text}</div>
-            <div class="tech_card_level">♦♦</div>
-          </div>
-        `;
-      }
-    }
-    html += `</div>`;
-
-    
+     //
+     // tech
+     //
      html += `
-      <h3 class="tech anchor">Tech</h3>
       <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
     `;
-
     for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
       let techname = imperium_self.game.players_info[player-1].tech[i];
       let tech = imperium_self.tech[techname];

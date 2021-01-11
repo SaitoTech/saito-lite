@@ -665,6 +665,15 @@ body {
   font-family: 'bank-gothic';
   transform: scale(0.6);
 }
+.faction_sheet_token_box .fa-dice-d20 {
+  transform: translateX(-50%);
+}
+.faction_sheet_token_box .fa-futbol {
+  transform: translateX(-50%);
+}
+.faction_sheet_token_box .fa-space-shuttle {
+  transform: translateX(-50%);
+}
 
 .objectives_players_scored {
   height: 20px;
@@ -702,10 +711,12 @@ body {
 }
 
 .faction_sheet_action_card_box, .faction_sheet_planet_card_box, .faction_sheet_tech_box {
+  clear: both;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 1em 1em 1em 1em;
+  font-size:0.9em;
 }
 
 .faction_sheet_action_card_box, .faction_sheet_planet_card_box {
@@ -714,8 +725,8 @@ body {
 
 .faction_sheet_action_card {
   background-image: url(img/action_card_template.png);
-  width: 12vw;
-  height: 17vw;
+  height: 26vh;
+  width: calc(26vh * 0.72110);
   background-size: cover;
   margin: 1vw;
   padding: 1vw;
@@ -731,7 +742,7 @@ body {
 }
 
 .faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
-  transform: scale(1.8) translate(1vw, 1vw);
+  transform: scale(1.5) translate(1vw, 1vw);
   z-index: 10;
 }
 
@@ -864,23 +875,27 @@ body {
 }
 
 .action_card_content {
+  font-family: 'orbitron-medium', helvetica, arial;
+  color: white;
+  padding: 0px;
   margin: 1.1vw 0 0 0;
   height: 11vw;
   text-align: left;
   line-height: 1.6em;
-  padding-top: 10px;
 }
 
 .action_card_name {
-  font-family: 'bank-gothic';
+  font-family: 'orbitron-medium', helvetica, arial;
+  color: white;
+  padding-right:10px;
   white-space: nowrap;
   margin: 0.2vw 0 0 0;
   font-weight: bold;
 }
 
 .faction_sheet_planet_card {
-  width: 12vw;
-  height: 17vw;
+  height: 26vh;
+  width: calc(26vh * 0.72110);
   background-size: cover;
   margin: 1vw;
   padding: 1vw;

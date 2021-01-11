@@ -456,7 +456,19 @@ class Pandemic extends GameTemplate {
     if (moves == 0) { this.endTurn(); return; }
   
     this.active_moves = moves;
-  
+
+    let html  = "<div class='status-message'>YOUR TURN: " + player.role + " in " + this.game.cities[player.city].name + " [" + moves +']:';
+        html += '</div>';
+        html += "<div class='status-icon-menu'>";
+          html += '<div class="card menu_icon" id="move"><img src="/pandemic/img/icons/MOVE.png" /></li>';
+          html += '<div class="card menu_icon" id="treat"><img src="/pandemic/img/icons/TREAT.png" /></li>';
+          html += '<div class="card menu_icon" id="build"><img src="/pandemic/img/icons/BUILD.png" /></li>';
+          html += '<div class="card menu_icon" id="cure"><img src="/pandemic/img/icons/CURE.png" /></li>';
+          html += '<div class="card menu_icon" id="cards"><img src="/pandemic/img/icons/CARDS.png" /></li>';
+        html += '</div>';
+
+
+/****
     let html  = "<div class='status-message'>YOUR TURN: " + player.role + " in " + this.game.cities[player.city].name + " [" + moves +']:<ul>';
         html += '<li class="card" id="move">drive / ferry</li>';
         html += '<li class="card" id="flight">direct flight</li>';
@@ -490,6 +502,8 @@ class Pandemic extends GameTemplate {
         html += '<li class="card" id="pass">pass</li>';
         html += '</ul>';
         html += '</div>';
+****/
+
   
     $('.card').off();
     this.updateStatus(html);

@@ -20,7 +20,7 @@
     this.importActionCard('courageous-to-the-end', {
   	name : "Courageous to the End" ,
   	type : "space_combat_after" ,
-  	text : "If you lost a ship in the last round of space combat, roll two dice. For each result greater than the combat value of that ship, your opponent must destroy a ship of their chosing" ,
+  	text : "For one ship lost in last round of space combat, fire twice. With each hit your opponent must destroy a ship of their chosing" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.players_info[action_card_player-1].my_units_destroyed_last_combat_round.length > 0) {
