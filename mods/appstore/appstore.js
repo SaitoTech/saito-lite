@@ -885,7 +885,7 @@ console.log("Bundle __dirname: " + __dirname);
         res.charset = 'UTF-8';
         res.write(`
 
-	  let x = confirm("Server reports it does not contain your Saito javascript bundle. This can happen across server upgrades with remotely-hosted application bundles. Do you wish to reset to use the server defaults?");
+	  let x = confirm("Server reports it does not contain your Saito javascript bundle. This can happen across server upgrades with remotely-hosted application bundles. Do you wish to reset to use the server default and update your default AppStore to this server?");
 	  if (x) { 
 
 	    try {
@@ -895,6 +895,7 @@ console.log("Bundle __dirname: " + __dirname);
 	        let data = localStorage.getItem("options");
 	        if (data) {
 	  	  options = JSON.parse(data); 
+	          options.appstore = "";
 	          options.bundle = "";
 	          options.modules = [];
 	          localStorage.setItem("options", JSON.stringify(options));
