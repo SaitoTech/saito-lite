@@ -346,6 +346,10 @@ console.log("##########################");
           let content = await file.buffer();
           image = "data:image/jpeg;base64," + content.toString('base64')
 	}
+        if (file.path === "web/img/saito_icon.jpg") {
+          let content = await file.buffer();
+          image = "data:image/jpeg;base64," + content.toString('base64')
+	}
 
         if (file.path.substr(0,3) == "lib") { return; }
         if (file.path.substr(-2) !== "js") { return; }

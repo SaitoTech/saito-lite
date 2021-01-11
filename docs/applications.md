@@ -10,10 +10,9 @@ The following standard allows for the implementation of a standard API for appli
 | Author  | David Lancashire  |
 | Status  | Published         |
 | Type    | Protocol Standard |
-| Created | October 31, 2020  |
+| Created | January 8, 2021   |
 
-
-## Distribution and File Format
+## Module File Name Conventions
 
 Applications exist in standalone directories in the /mods directory. The name of this directory should be the lowercase, alphanumeric version of the application name. The "arcade" module is located at /mods/arcade. The AppStore module is located at /mods/appstore. All applications share the same basic directory structure:
 
@@ -39,6 +38,15 @@ Optional directory for database definition files (sqlite3 format). Saito clients
 __web/__
 Optional directory for JS / HTML / CSS files. Saito clients with HTTP support will serve these files from the subdirectory of the application name (i.e. `https://appserver.com/appname`) with `index.html` as the default file to serve.
 
+## Workflow
+
+To build and test your Module while developing simply configure and build the "Lite Client".
+
+In the config directory you'll find a file named modules.config.js. You'll need to add your module to the array called "lite".
+
+Once your module is in the config file you can do *npm run compile dev* and a lite client will be bundled and copied to /web/saito/saito.js. The core code will serve this file at localhost:12101/saito/saito.js. This file should be included in the index.html file inside the web directory of your module.
+
+The server can then be started by running *npm start* or *npm start -- env=DEV* if you wish to use the DEV flag. 
 
 ## Distribution and Publishing
 
