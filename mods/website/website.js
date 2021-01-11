@@ -52,23 +52,8 @@ class Website extends ModTemplate {
       this.mre.attachEvents(app, this);
     }
 
-
   }
 
-
-  onConfirmation(blk, tx, conf, app) {
-
-    //
-    // newsletter signups and email registration
-    //
-    if (conf == 0) {
-
-      let txmsg = tx.returnMessage();
-      console.log("TX: " + JSON.stringify(txmsg));
-
-    }
-
-   }
 
   // shouldAffixCallbackToModule() { return 1; }
 
