@@ -266,9 +266,10 @@ class Chat extends ModTemplate {
            let routed_tx = new saito.transaction(tx.transaction);
 	   let routed_tx_msg = routed_tx.returnMessage();
      
-           //let archive = this.app.modules.returnModule("Archive");
-           //archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx);
-     
+
+           let archive = this.app.modules.returnModule("Archive");
+           if (archive) { archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx); }     
+
            this.app.network.peers.forEach(p => {
              if (p.peer.publickey !== peer.peer.publickey) {
                p.sendRequest("chat message", tx);
