@@ -248,6 +248,14 @@ class Poker extends GameTemplate {
         game_mod.handleStatsMenu();
       }
     });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
     this.menu.addMenuIcon({
       text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
       id : "game-menu-fullscreen",
