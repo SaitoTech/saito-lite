@@ -149,14 +149,14 @@ class Arcade extends ModTemplate {
 
 
     //
-    // load observer games (active)
+    // load observer games (active) -- ASC 
     //
     let current_timestamp = new Date().getTime() - 1200000;
     this.sendPeerDatabaseRequestWithFilter(
 
       "Arcade" ,
 
-      `SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
+      `SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 GROUP BY game_id ORDER BY last_move ASC LIMIT 5`,
 
       (res) => {
 
