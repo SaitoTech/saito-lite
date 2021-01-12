@@ -35,7 +35,7 @@ info@saito.tech
 
 Saito is a simple and elegant system. The consensus mechanism provides economic security without the need for external markets or complicated governance structures.
 
-Building on Saito is also very simple. From the perspective of an DAPP developer, all that really needs to be understood is that the chain contains a UTXO set representing a ledger of Saito payments (similar to Bitcoin). Applications install into the wallets of end-users. These applications can attach data to transactions and broadcast them to each over over the network. The Saito application layer describes how to build applications that do this. The Saito network documentation describes the underlying mechanism that powers the application layer.
+Building on Saito is also very simple. From the perspective of an DAPP developer, all that really needs to be understood is that the chain contains a UTXO set representing a ledger of Saito payments (similar to Bitcoin). Applications install into the wallets of end-users. These applications can attach data to transactions and broadcast them to each other over the network. The Saito application layer describes how to build applications that do this. The Saito network documentation describes the underlying mechanism that powers the blockchain layer.
 
 Before working with this repository it may be helpful to get some perspective on the Saito roadmap and what you can expect at this point.
 
