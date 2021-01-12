@@ -16,7 +16,7 @@
         }
 
       } else {
-        this.updateLog("NATO cannot trigger before Warsaw Pact of Marshall Plan. Moving to discard pile.");
+        this.updateLog("NATO cannot trigger before Warsaw Pact or Marshall Plan. Moving to discard pile.");
       }
       return 1;
     }

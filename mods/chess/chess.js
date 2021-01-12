@@ -600,35 +600,50 @@ console.log(JSON.stringify(msg));
   }
 
   returnGameOptionsHTML() {
-    return `
 
-        <label for="color">Pick Your Color:</label>
-        <select name="color">
-          <option value="black" default>Black</option>
-          <option value="white">White</option>
-        </select>
 
-        <label for="clock">Time Limit:</label>
-        <select name="clock">
-          <option value="0" default>no limit</option>
-          <option value="2">2 minutes</option>
-          <option value="10">10 minutes</option>
-          <option value="30">30 minutes</option>
-          <option value="60">60 minutes</option>
-          <option value="90">90 minutes</option>
-        </select>
+    let html = `
 
-        <label for="observer_mode">Observer Mode:</label>
-        <select name="observer">
-          <option value="enable" selected>enable</option>
-          <option value="disable">disable</option>
-        </select>
+      <div style="padding:40px;width:100vw;height:100vh;overflow-y:scroll;display:grid;grid-template-columns: 200px auto">
 
-        <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+        <div style="top:0;left:0;margin-right: 20px;">
 
+          <label for="color">Pick Your Color:</label>
+          <select name="color">
+            <option value="black" default>Black</option>
+            <option value="white">White</option>
+          </select>
+
+          <label for="clock">Time Limit:</label>
+          <select name="clock">
+            <option value="0" default>no limit</option>
+            <option value="2">2 minutes</option>
+            <option value="10">10 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="60">60 minutes</option>
+            <option value="90">90 minutes</option>
+          </select>
+
+          <label for="observer_mode">Observer Mode:</label>
+          <select name="observer">
+            <option value="enable" selected>enable</option>
+            <option value="disable">disable</option>
+          </select>
+
+        </div>
+        <div>
+
+          <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
+        </div>
+      </div>
     `;
+
+    return html;
+
   }
 }
 
 module.exports = Chessgame;
+
 

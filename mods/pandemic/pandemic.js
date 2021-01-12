@@ -2886,55 +2886,51 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   
   returnGameOptionsHTML() {
   
-    return `
+    let player_upper_limit = this.maxPlayers;
+    try {
+      player_upper_limit = document.querySelector('.game-wizard-players-select').value;
+    } catch (err) {}
 
-            <label for="difficulty">Difficulty:</label>
-            <select name="difficulty">
-              <option value="easy">easy</option>
-              <option value="medium" default>not so easy</option>
-              <option value="hard">damn hard</option>
-            </select>
+    let html = `
 
-            <label for="player1">Player 1:</label>
-            <select name="player1">
+      <div style="padding:40px;width:100vw;height:100vh;overflow-y:scroll;display:grid;grid-template-columns: 200px auto">
+
+        <div style="top:0;left:0;margin-right: 20px;">
+
+          <label for="difficulty">Difficulty:</label>
+          <select name="difficulty">
+            <option value="easy">easy</option>
+            <option value="medium" selected default>not so easy</option>
+            <option value="hard">damn hard</option>
+          </select>
+
+          <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+
+        </div>
+        <div>
+
+    `;
+
+     for (let i = 1; i <= player_upper_limit; i++) {
+       html += `
+            <label for="player${i}" class="game-players-options game-players-options-${i}p">Player ${i}:</label>
+            <select name="player${i}" id="game-players-select-${i}p" class="game-players-options game-players-options-${i}p">
               <option value="random" default>random</option>
               <option value="generalist" default>generalist</option>
               <option value="scientist">scientist</option>
               <option value="medic">medic</option>
               <option value="operationsexpert">operations expert</option>
             </select>
-  
-            <label for="player2">Player 2:</label>
-            <select name="player2">
-              <option value="random" default>random</option>
-              <option value="generalist" default>generalist</option>
-              <option value="scientist">scientist</option>
-              <option value="medic">medic</option>
-              <option value="operationsexpert">operations expert</option>
-            </select>
+       `;
+     }
 
-            <label for="player3" class="game-players-options game-players-options-3p">Player 3:</label>
-            <select name="player3" id="game-players-select-3p" class="game-players-options game-players-options-3p">
-              <option value="random" default>random</option>
-              <option value="generalist" default>generalist</option>
-              <option value="scientist">scientist</option>
-              <option value="medic">medic</option>
-              <option value="operationsexpert">operations expert</option>
-            </select>
+     html += `
+        </div>
+      </div>
+    `;
 
-            <label for="player4" class="game-players-options game-players-options-4p">Player 4:</label>
-            <select name="player4" id="game-players-select-4p" class="game-players-options game-players-options-4p">
-              <option value="random" default>random</option>
-              <option value="generalist" default>generalist</option>
-              <option value="scientist">scientist</option>
-              <option value="medic">medic</option>
-              <option value="operationsexpert">operations expert</option>
-            </select>
-  
-            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+    return html;
 
-  	`;
-  
   }
   
   

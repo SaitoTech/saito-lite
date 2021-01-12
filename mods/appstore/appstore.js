@@ -271,9 +271,9 @@ console.log("##########################");
         case 'request bundle':
           if (tx.isFrom(app.wallet.returnPublicKey())) {
             try {
-              document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about <span class=\"time_remaining\">45</span> seconds.";
+              document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be compiled within about <span class=\"time_remaining\">120</span> seconds.";
 	      let appstore_mod = app.modules.returnModule("AppStore");
-	      appstore_mod.time_remaining = 45;
+	      appstore_mod.time_remaining = 120;
 	      appstore_mod.bundling_timer = setInterval(() => {
 		if (appstore_mod.time_remaining < 0) {
 		  clearInterval(appstore_mod.bundling_timer);
