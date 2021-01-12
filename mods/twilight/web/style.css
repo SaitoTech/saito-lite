@@ -3,6 +3,13 @@
   padding: 10px;
 }
 
+
+.status-message {
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0px;
+}
+
 .statistics-overlay {
   min-width:50vw;
   min-height: 50vh;
