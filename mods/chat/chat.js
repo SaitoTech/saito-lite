@@ -491,17 +491,23 @@ class Chat extends ModTemplate {
       if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
         this.openChatBox(txmsg.group_id);
 	try {
-	  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
-	  if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
-            document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+	  if (this.isOtherInputActive() == 0) {
+console.log("CHAT 1");
+	    document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+	    if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
+              document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+	    }
 	  }
 	} catch (err) {}
       }
     } else {
       try {
-        document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
-	if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
-          document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+	if (this.isOtherInputActive() == 0) {
+console.log("CHAT 2");
+          document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+	  if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
+            document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+	  }
 	}
       } catch (err) {}
     }
@@ -547,7 +553,10 @@ class Chat extends ModTemplate {
 
     if (document.getElementById(`chat-box-${group_id}`)) {
       let chat_box_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
-      chat_box_input.focus();
+      if (this.isOtherInputActive() == 0) {
+console.log("CHAT 3");
+        chat_box_input.focus();
+      }
 
       // 
       // maximize if minimized
@@ -566,9 +575,12 @@ class Chat extends ModTemplate {
     this.render(this.app);
 
     try {
-      document.getElementById(`chat-box-new-message-input-${group_id}`).focus();
-      if (document.getElementById(`chat-box-new-message-input-${group_id}`).val === "") {
-        document.getElementById(`chat-box-new-message-input-${group_id}`).select();
+      if (this.isOtherInputActive() == 0) {
+console.log("CHAT 4");
+        document.getElementById(`chat-box-new-message-input-${group_id}`).focus();
+        if (document.getElementById(`chat-box-new-message-input-${group_id}`).val === "") {
+          document.getElementById(`chat-box-new-message-input-${group_id}`).select();
+        }
       }
     } catch (err) {}
 
@@ -636,8 +648,30 @@ class Chat extends ModTemplate {
 
 
 
+  isOtherInputActive() {
+    try {
+      let ae = document.activeElement;
+      // if we are viewing an overlay, nope out
+      if (document.getElementById("saito-overlay-backdrop")) {
+        if (document.getElementById("saito-overlay-backdrop").style.display == "block") { return 1; }
+      }
+      if (document.getElementById("game-overlay-backdrop")) {
+        if (document.getElementById("game-overlay-backdrop").style.display == "block") { return 1; }
+      }
+      if (!ae) { return 0; }
+      if (ae.tagName == "INPUT") { return 1; }
+      if (ae.tagName == "TEXTAREA") { return 1; }
+      if (ae.tagName == "input") { return 1; }
+      if (ae.tagName == "textarea") { return 1; }
+    } catch (err) {}
+    return 0;
+  }
+
+
   chatLoadMessages(app, tx) {}
   async chatRequestMessages(app, tx) {}
+
+
 
 }
 
