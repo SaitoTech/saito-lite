@@ -1,4 +1,4 @@
-const SubstrateBasedCrypto = require("./lib/SubstrateBasedCrypto");
+const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto");
 
 const parityArchiveNodeEndpoint = 'wss://rpc.polkadot.io';
 const saitoEndpoint = 'ws://206.189.222.218:9932';
@@ -12,11 +12,6 @@ class Polkadot extends SubstrateBasedCrypto {
     this.description = 'Polkadot application layer for in-browser Polkadot applications. Install this module to make Polkadot your default in-browser cryptocurrency';
     this.categories = "Cryptocurrency";
   }
-
-  installModule(app) {
-    app.wallet.setPreferredCrypto("DOT");
-  }
-
 }
 
 module.exports = Polkadot;

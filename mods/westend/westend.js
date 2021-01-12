@@ -1,4 +1,4 @@
-const SubstrateBasedCrypto = require("./lib/SubstrateBasedCrypto");
+const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto");
 
 class Westend extends SubstrateBasedCrypto {
   constructor(app) {
@@ -7,13 +7,6 @@ class Westend extends SubstrateBasedCrypto {
     this.description = 'Westend Polkadot Testnet application support for Saito. Installing this module will make Westnet your default in-browser cryptocurrency.';
     this.categories = "Cryptocurrency";
   }
-
-  installModule(app) {
-    app.wallet.setPreferredCrypto("WESTIE");
-  }
-
-
-
 }
 
 module.exports = Westend;

@@ -355,6 +355,3 @@ createReplacementTransaction(oldtx)
 
 returnAvailableCryptos() 
 
-returnPreferredCrypto(ticker="") 
-
-returnPreferredCryptoByName(modname="Saito")

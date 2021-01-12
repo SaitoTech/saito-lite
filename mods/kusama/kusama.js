@@ -1,4 +1,4 @@
-const SubstrateBasedCrypto = require("./lib/SubstrateBasedCrypto");
+const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto");
 
 const parityArchiveNodeEndpoint = 'wss://kusama-rpc.polkadot.io/';
 const web3FoundationArchiveNodeEndpoint = 'wss://cc3-5.kusama.network/';
@@ -11,13 +11,6 @@ class Kusama extends SubstrateBasedCrypto {
     this.description = 'Kusama Polkadot testnet for Saito. Installing this module will make Kusama your default in-browser cryptocurrency.';
     this.categories = "Cryptocurrency";
   }
-
-  installModule(app) {
-    app.wallet.setPreferredCrypto("KSM");
-  }
-
-
 }
 
 module.exports = Kusama;
-
