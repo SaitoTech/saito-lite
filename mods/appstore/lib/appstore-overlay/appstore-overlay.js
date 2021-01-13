@@ -57,6 +57,7 @@ module.exports = AppStoreAppspace = {
     //
     // fetch modules from appstore
     //
+console.log("Fetching: " + (new Date().getTime()));
     mod.sendPeerDatabaseRequestWithFilter(
 
         "AppStore" ,
@@ -68,6 +69,8 @@ module.exports = AppStoreAppspace = {
 	try {
           document.querySelector(".appstore-overlay-grid").innerHTML = "";
 	} catch (err) {}
+
+console.log("Fetched: " + (new Date().getTime()));
 
         if (res.rows != undefined) {
           let installed_apps = [];
