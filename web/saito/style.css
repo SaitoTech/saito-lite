@@ -1592,7 +1592,7 @@ div#message-wrapper {
 
 .welcome-modal-wrapper {
   display: grid;
-  grid-template-columns: 6fr 1fr;
+  grid-template-columns: 6fr 2fr;
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   background-image: url(/saito/img/dreamscape.png);
   background-position: 0em;
@@ -1621,11 +1621,9 @@ div#message-wrapper {
 .welcome-modal-exit .fa-arrow-right {
   margin: auto;
   font-size: 5vw;
-  position: absolute;
-  bottom: 0px;
+  margin-top: 0.5em;
   width: 100%;
   text-align: center;
-  position: absolute;
 }
 
 .welcome-modal-header {
