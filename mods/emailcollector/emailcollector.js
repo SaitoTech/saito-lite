@@ -17,6 +17,11 @@ class EmailCollector extends ModTemplate {
     
   }
   
+  returnServices() {
+    let services = [];
+    services.push({ service: "emailcollector", domain: "saito" });
+    return services;
+  }
   async handlePeerRequest(app, message, peer, callback) {
     
     if (message.request == "public sale signup") {

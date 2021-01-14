@@ -7,6 +7,7 @@ const AddressController = require('../../lib/ui/menu/address-controller');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const getMockGames = require('./mockinvites.js');
 const ArcadeContainerTemplate = require('./lib/arcade-main/templates/arcade-container.template');
+const ModalRegisterEmail = require('../../lib/saito/ui/modal-register-email/modal-register-email');
 // const ArcadeCreateGameOverlay = require('./lib/arcade-create-game-overlay/arcade-create-game-overlay');
 
 fetch = require("node-fetch");
@@ -117,7 +118,13 @@ class Arcade extends ModTemplate {
   initializeHTML(app) {
 
     this.header = new SaitoHeader(app, this);
-
+    let doPubsaleSignup = app.browser.parseHash(window.location.hash).pubsale;
+    if(doPubsaleSignup) {
+      let mre = new ModalRegisterEmail(app);
+      mre.render(this.app, this, ModalRegisterEmail.MODES.PUBLICSALE);
+      mre.attachEvents(this.app, this);
+      window.location.hash = app.browser.removeFromHash(window.location.hash, "pubsale");
+    }
   }
 
 
