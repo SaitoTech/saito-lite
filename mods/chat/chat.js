@@ -306,11 +306,18 @@ class Chat extends ModTemplate {
     let recipient = app.network.peers[0].peer.publickey;
     let relay_mod = app.modules.returnModule('Relay');
 
+console.log("trying to sign and encrypt transaction...");
+    tx = this.app.wallet.signTransaction(tx);
+
+    tx = this.app.wallet.signAndEncryptTransaction(tx);
+
     if (this.relay_moves_onchain_if_possible == 1) {
-      tx = this.app.wallet.signTransaction(tx);
+console.log("propagating..");
       this.app.network.propagateTransaction(tx);
+console.log("done propagating..");
     }
-    relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
+//    relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
+console.log(" and out!");
   }
 
 
