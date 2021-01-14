@@ -492,7 +492,6 @@ class Chat extends ModTemplate {
         this.openChatBox(txmsg.group_id);
 	try {
 	  if (this.isOtherInputActive() == 0) {
-console.log("CHAT 1");
 	    document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
 	    if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
               document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
@@ -503,7 +502,6 @@ console.log("CHAT 1");
     } else {
       try {
 	if (this.isOtherInputActive() == 0) {
-console.log("CHAT 2");
           document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
 	  if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
             document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
@@ -554,7 +552,6 @@ console.log("CHAT 2");
     if (document.getElementById(`chat-box-${group_id}`)) {
       let chat_box_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
       if (this.isOtherInputActive() == 0) {
-console.log("CHAT 3");
         chat_box_input.focus();
       }
 
@@ -576,7 +573,6 @@ console.log("CHAT 3");
 
     try {
       if (this.isOtherInputActive() == 0) {
-console.log("CHAT 4");
         document.getElementById(`chat-box-new-message-input-${group_id}`).focus();
         if (document.getElementById(`chat-box-new-message-input-${group_id}`).val === "") {
           document.getElementById(`chat-box-new-message-input-${group_id}`).select();

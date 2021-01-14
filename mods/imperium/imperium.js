@@ -11636,10 +11636,13 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
+          this.game.queue.push("showunitoverlay");
           this.game.queue.push("shownewobjectives");
 	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">The Galactic Senate has Fallen!</div><div style="margin-top:10px">And with its collapse age-old conflicts have been reborn, pitting faction against faction in a race to claim New Byzantium and the Imperial Throne...</div><div style="margin-top:10px;margin-bottom:10px;">But which faction will win? The race is not always to the swiftest or strongest or most keen. Even the weakest may yet plot elevation to the Seat of Galactic Power.</div>`);
 //          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
- 	}
+ 	} else {
+          this.game.queue.push("shownewobjectives");
+        }
 
 
   
@@ -11743,8 +11746,11 @@ console.log(JSON.stringify(this.game.state.choices));
 
         this.overlay.showOverlay(this.app, this, this.returnNewObjectivesOverlay());
         try {
-          document.getElementById("close-objectives-btn").onclick = (e) => {
-            this.overlay.hideOverlay(this.app, this);
+          document.getElementById("close-objectives-btn").onclick = () => {
+	    this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
+            document.getElementById("close-units-btn").onclick = () => {
+              this.overlay.hideOverlay(this.app, this);
+            }
           }
         } catch (err) {}
 
@@ -11804,7 +11810,7 @@ console.log(JSON.stringify(this.game.state.choices));
 
         if (this.secret_objectives[objective] != null) { objective_name = this.secret_objectives[objective].name; }
         if (this.stage_i_objectives[objective] != null) { objective_name = this.stage_i_objectives[objective].name; }
-        if (this.stage_ii_ojectives[objective] != null) { objective_name = this.stage_ii_objectives[objective].name; }
+        if (this.stage_ii_objectives[objective] != null) { objective_name = this.stage_ii_objectives[objective].name; }
 
   	this.updateLog(this.returnFaction(player)+" scores "+objective_name+" ("+vp+" VP)");
 
@@ -25450,6 +25456,64 @@ returnStrategyOverlay() {
 
   return final_result;
 
+}
+
+
+
+
+
+
+returnUnitsOverlay() {
+
+  let title = "Your Units";
+
+  let html = `
+    <div class="units_overlay_container" style="">
+  `;
+
+  if (this.game.state.round == 1) {
+    html += `
+      <div style="width:100%"><div class="new_units_overlay_text">check units and movement properties in the INFO menu...</div></div>
+    `;
+  }
+
+  html += `
+    <div class="unit-table">
+      <div class="unit-box">
+        <div class="unit-box">1</div>
+        <div class="unit-box">2</div>
+        <div class="unit-box">4</div>
+        <div class="unit-box">4</div>
+        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-box">1</div>
+        <div class="unit-box">2</div>
+        <div class="unit-box">4</div>
+        <div class="unit-box">4</div>
+        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-box">1</div>
+        <div class="unit-box">2</div>
+        <div class="unit-box">4</div>
+        <div class="unit-box">4</div>
+        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-box">1</div>
+        <div class="unit-box">2</div>
+        <div class="unit-box">4</div>
+        <div class="unit-box">4</div>
+        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
+      </div>
+    </div>
+
+    <div id="close-units-btn" class="button" style="">CONTINUE</div>
+
+  `;
+
+  return html;
 }
 
 

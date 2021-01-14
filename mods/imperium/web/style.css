@@ -36,6 +36,7 @@
   color: white;
   font-family: 'orbitron-medium', helvetica, arial;
   transform: scale(1.6);
+  min-height: 30vh;
 }
 .new_action_cards_overlay_action_card{
   transform: scale(2);
@@ -45,6 +46,7 @@
   height: auto;
   text-align:center;
   transform: scale(1.4);
+  min-height: 30vh;
 }
 .new_secret_objective_overlay_title {
   background: #3335;
@@ -735,6 +737,7 @@ body {
   transition: all 50ms;
   margin-bottom: -15vw;
   border: 1px solid;
+  float: left;
 }
 
 .faction_sheet_action_card_back {
@@ -904,6 +907,7 @@ body {
   transition: all 50ms;
   margin-bottom: -15vw;
   border: 1px solid;
+  float: left;
 }
 
 .faction_sheet_objectives {

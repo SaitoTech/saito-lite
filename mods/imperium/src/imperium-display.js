@@ -452,6 +452,64 @@ returnStrategyOverlay() {
 }
 
 
+
+
+
+
+returnUnitsOverlay() {
+
+  let title = "Your Units";
+
+  let html = `
+    <div class="units_overlay_container" style="">
+  `;
+
+  if (this.game.state.round == 1) {
+    html += `
+      <div style="width:100%"><div class="new_units_overlay_text">check units and movement properties in the INFO menu...</div></div>
+    `;
+  }
+
+  html += `
+    <div class="unit-table">
+      <div class="unit-box">
+        <div class="unit-box">1</div>
+        <div class="unit-box">2</div>
+        <div class="unit-box">4</div>
+        <div class="unit-box">4</div>
+        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-box">1</div>
+        <div class="unit-box">2</div>
+        <div class="unit-box">4</div>
+        <div class="unit-box">4</div>
+        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-box">1</div>
+        <div class="unit-box">2</div>
+        <div class="unit-box">4</div>
+        <div class="unit-box">4</div>
+        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-box">1</div>
+        <div class="unit-box">2</div>
+        <div class="unit-box">4</div>
+        <div class="unit-box">4</div>
+        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
+      </div>
+    </div>
+
+    <div id="close-units-btn" class="button" style="">CONTINUE</div>
+
+  `;
+
+  return html;
+}
+
+
 returnNewObjectivesOverlay() {
 
   let title = "Your Objectives";

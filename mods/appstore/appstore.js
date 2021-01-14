@@ -244,9 +244,9 @@ console.log("##########################");
           this.submitModule(blk, tx);
 	  if (tx.isFrom(app.wallet.returnPublicKey())) {
             try {
-              document.querySelector(".appstore-loading-text").innerHTML = "Your application has been submitted to the network. <p></p>It should be ready for install in <span class=\"time_remaining\">30</span> seconds.";
+              document.querySelector(".appstore-loading-text").innerHTML = "Your application is being broadcast to the network. <p></p>Your AppStore should receive it within <span class=\"time_remaining\">45</span> seconds.";
               let appstore_mod = app.modules.returnModule("AppStore");
-              appstore_mod.time_remaining = 30;
+              appstore_mod.time_remaining = 45;
               appstore_mod.bundling_timer = setInterval(() => {
                 if (appstore_mod.time_remaining <= 0) {
                   clearInterval(appstore_mod.bundling_timer);
@@ -271,7 +271,7 @@ console.log("##########################");
         case 'request bundle':
           if (tx.isFrom(app.wallet.returnPublicKey())) {
             try {
-              document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be compiled within about <span class=\"time_remaining\">120</span> seconds.";
+              document.querySelector(".appstore-loading-text").innerHTML = "Your application is being processed by the network. Your upgrade should be complete within about <span class=\"time_remaining\">120</span> seconds.";
 	      let appstore_mod = app.modules.returnModule("AppStore");
 	      appstore_mod.time_remaining = 120;
 	      appstore_mod.bundling_timer = setInterval(() => {

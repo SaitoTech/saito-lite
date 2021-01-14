@@ -15,7 +15,6 @@ module.exports = AppStoreBundleConfirm = {
           app.storage.saveOptions();
 
 	  let email_redirect = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/wallet";
-	  salert("Application Installed - redirecting to Saito Wallet");
           window.location = email_redirect;
 
         });

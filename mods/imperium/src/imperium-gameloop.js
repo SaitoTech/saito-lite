@@ -1252,10 +1252,13 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
+          this.game.queue.push("showunitoverlay");
           this.game.queue.push("shownewobjectives");
 	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">The Galactic Senate has Fallen!</div><div style="margin-top:10px">And with its collapse age-old conflicts have been reborn, pitting faction against faction in a race to claim New Byzantium and the Imperial Throne...</div><div style="margin-top:10px;margin-bottom:10px;">But which faction will win? The race is not always to the swiftest or strongest or most keen. Even the weakest may yet plot elevation to the Seat of Galactic Power.</div>`);
 //          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
- 	}
+ 	} else {
+          this.game.queue.push("shownewobjectives");
+        }
 
 
   
@@ -1359,8 +1362,11 @@ console.log(JSON.stringify(this.game.state.choices));
 
         this.overlay.showOverlay(this.app, this, this.returnNewObjectivesOverlay());
         try {
-          document.getElementById("close-objectives-btn").onclick = (e) => {
-            this.overlay.hideOverlay(this.app, this);
+          document.getElementById("close-objectives-btn").onclick = () => {
+	    this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
+            document.getElementById("close-units-btn").onclick = () => {
+              this.overlay.hideOverlay(this.app, this);
+            }
           }
         } catch (err) {}
 
