@@ -81,7 +81,7 @@ class Chat extends ModTemplate {
   //
   render(app, renderMode="") {
 
-    if (this.browser_active == 1) { this.renderMode = "main"; }
+    if (renderMode != "") { this.renderMode = renderMode; }
 
     if (renderMode == "chatroom") {
       ChatRoom.render(app, this);
@@ -163,6 +163,7 @@ class Chat extends ModTemplate {
     // create mastodon server
     //
     if (peer.isMainPeer()) {
+ 
       this.createChatGroup([peer.peer.publickey], "Community Chat");
     } else {
 
@@ -199,9 +200,14 @@ class Chat extends ModTemplate {
     for (let i = 0; i < this.groups.length; i++) {
       if (this.renderMode == "email") {
 	if (this.groups[i].txs.length > 0) {
-	  this.updateLastMessage(this.groups[i].id, this.groups[i].txs[this.groups[i].txs.length-1].returnMessage().message);
+	  this.updateLastMessage(this.groups[i].id, this.groups[i].txs[this.groups[i].txs.length-1].returnMessage().message, this.groups[i].txs[this.groups[i].txs.length-1].transaction.ts);
         } else {
 	  this.updateLastMessage(this.groups[i].id, "new chat");
+	}
+      }
+      if (this.renderMode == "main") {
+	if (this.groups[i].txs.length > 0) {
+	  this.updateLastMessage(this.groups[i].id, this.groups[i].txs[this.groups[i].txs.length-1].returnMessage().message, this.groups[i].txs[this.groups[i].txs.length-1].transaction.ts);
 	}
       }
     }
@@ -218,10 +224,19 @@ class Chat extends ModTemplate {
   }
 
 
-  updateLastMessage(group_id, msg) {
+  updateLastMessage(group_id, msg, ts=null) {
+
+    let tstamp = new Date().getTime();
+    if (ts != null) { tstamp = ts; }
+
+    let datetime = this.app.browser.formatDate(tstamp);
+
     for (let i = 0; i < this.groups.length; i++) {
       if (this.groups[i].id === group_id) {
-        try{document.querySelector(`#chat-last-message-${this.groups[i].id}`).innerHTML=msg;}catch(e){}
+        let element_to_update = 'chat-last-message-'+group_id;
+        try { document.getElementById(element_to_update).innerHTML = msg; } catch(err) {}
+        element_to_update = 'chat-last-message-timestamp-'+group_id;
+        try{document.getElementById(element_to_update).innerHTML=`${datetime.hours}-${datetime.minutes}`;}catch(e){}
       }
     }
   }
@@ -229,7 +244,7 @@ class Chat extends ModTemplate {
 
 
   //
-  // onchain messages --> receiveMessage()
+  // onchain messages --> eeceiveMessage()
   //
   onConfirmation(blk, tx, conf, app) {
     let txmsg = tx.returnMessage();
@@ -537,6 +552,9 @@ class Chat extends ModTemplate {
   // UI Functions //
   //////////////////
   openChatBox(group_id=null) {
+
+    if (this.renderMode != "email") { return; }
+
 
     if (group_id == null) {
        //

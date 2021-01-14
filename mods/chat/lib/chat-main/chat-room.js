@@ -16,6 +16,8 @@ module.exports = ChatRoom = {
         group = mod.active_group;
       }
 
+      mod.renderMode = "chatroom";
+
       document.getElementById("chat-main").innerHTML = "";
       app.browser.addElementToDom(ChatRoomTemplate(group), "chat-main");
 
@@ -62,18 +64,20 @@ module.exports = ChatRoom = {
           mod.receiveMessage(app, newtx, "chatroom"); // rendermode
           //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
+	  msg_input.focus();
+	  msg_input.select();
         }
       });
 
 
       document.getElementById("back-button").onclick = (e) => {
 	mod.renderMode = "main";
-	mod.render(app);
+	mod.render(app, "main");
       }
 
       document.getElementById("back-button").ontouch = (e) => {
 	mod.renderMode = "main";
-	mod.render(app);
+	mod.render(app, "main");
       }
 
       document.querySelector(".chat-room-submit-button").onclick = (e) => {
