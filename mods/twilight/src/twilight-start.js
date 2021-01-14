@@ -48,6 +48,11 @@ class Twilight extends GameTemplate {
     this.cards    	 = [];
     this.is_testing 	 = 0;
 
+    //
+    // newbie mode
+    //
+    this.confirm_moves = 1;
+
     this.log_length 	 = 150;
     this.interface 	 = 1;
 
@@ -471,11 +476,13 @@ console.log(err);
     });
 
     // required here so menu will be proper
-    if (this.app.options.gameprefs.confirm_moves == 1) {
-      this.confirm_moves = 1;
-    } else {
-      this.confirm_moves = 0;
-    }
+    try {
+      if (this.app.options.gameprefs.twilight_expert_mode == 1) {
+        this.confirm_moves = 0;
+      } else {
+        this.confirm_moves = 1;
+      }
+    } catch (err) {}
 
     this.menu.addMenuOption({
       text : "Game",
@@ -506,11 +513,11 @@ console.log(err);
         game_mod.menu.hideSubMenus();
 	if (game_mod.confirm_moves == 0) {
 	  game_mod.confirm_moves = 1;
-          game_mod.saveGamePreference('confirm_moves', 1);
+          game_mod.saveGamePreference('twilight_expert_mode', 0);
 	  window.location.reload();	
 	} else {
 	  game_mod.confirm_moves = 0;
-          game_mod.saveGamePreference('confirm_moves', 0);
+          game_mod.saveGamePreference('twilight_expert_mode', 1);
 	  window.location.reload();	
 	}
       }
@@ -694,10 +701,10 @@ initializeGame(game_id) {
       if (this.app.options.gameprefs.interface == 1) {
         this.interface = 1;
       }
-      if (this.app.options.gameprefs.confirm_moves == 1) {
-        this.confirm_moves = 1;
-      } else {
+      if (this.app.options.gameprefs.twilight_expert_mode == 1) {
 	this.confirm_moves = 0;
+      } else {
+        this.confirm_moves = 1;
       }
     }
   }

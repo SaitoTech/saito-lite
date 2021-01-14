@@ -5,7 +5,8 @@
     if (card == "abmtreaty") {
 
 //      this.game.state.back_button_cancelled = 1;
-      this.updateStatus(player.toUpperCase() + "</span> <span>plays ABM Treaty");
+      this.updateStatus('<div class="status-message" id="status-message">' + player.toUpperCase() + " <span>plays ABM Treaty</span></div>");
+
       this.updateLog("DEFCON increases by 1");
 
       this.game.state.defcon++;
