@@ -20,8 +20,6 @@ class Website extends ModTemplate {
     return this;
   }
 
-
-
   initializeHTML(app) {
 
     if (this.header == null) {
@@ -48,17 +46,19 @@ class Website extends ModTemplate {
     
     document.getElementById("website-newsletter-subscribe").onclick = (e) => {
       this.mre = new ModalRegisterEmail(app);
-      this.mre.render(app, this);
-      this.mre.attachEvents(app, this);
+      this.mre.render(this.app, this, ModalRegisterEmail.MODES.NEWSLETTER);
+      this.mre.attachEvents(this.app, this);
     }
-
+    let doPubsaleSignup = app.browser.parseHash(window.location.hash).pubsale;
+    if(doPubsaleSignup) {
+      this.mre = new ModalRegisterEmail(app);
+      this.mre.render(this.app, this, ModalRegisterEmail.MODES.PUBLICSALE);
+      this.mre.attachEvents(this.app, this);
+      window.location.hash = app.browser.removeFromHash(window.location.hash, "pubsale");
+    }
+    
   }
 
-
   // shouldAffixCallbackToModule() { return 1; }
-
 }
-
-
-
 module.exports = Website;
