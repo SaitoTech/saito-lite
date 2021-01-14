@@ -42,7 +42,7 @@ module.exports = SettingsAppspace = {
     document.getElementById("register-email-btn").onclick = function (e) {
       mod.modal_register_email = new ModalRegisterEmail(app, function() {
       });
-      mod.modal_register_email.render(app, mod);
+      mod.modal_register_email.render(app, mod, ModalRegisterEmail.MODES.REGISTEREMAIL);
       mod.modal_register_email.attachEvents(app, mod);
     }
     } catch (err) {}
