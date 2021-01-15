@@ -28,7 +28,7 @@ class Email extends ModTemplate {
     this.emails = {};
     this.emails.inbox = [];
     this.emails.sent = [];
-    this.emails.trash = [];
+    //this.emails.trash = [];
 
     // Need to bind to this so it can be used in callbacks
 //
@@ -52,18 +52,6 @@ class Email extends ModTemplate {
 
   initialize(app) {
     super.initialize(app);
-    if(app.BROWSER && this.browser_active) {
-      //
-      // add an email
-      //
-      let tx = app.wallet.createUnsignedTransaction();
-      tx.msg.module = "Email";
-      tx.msg.title = "Sent Message Folder";
-      tx.msg.message = "This folder is where your sent messages are stored...";
-      tx = this.app.wallet.signTransaction(tx);
-      this.emails.sent.push(tx);
-    }
-
   }
   rerender(app) {
     let page = app.browser.parseHash(window.location.hash).page;
@@ -162,16 +150,17 @@ class Email extends ModTemplate {
   }
 
   deleteTransaction(tx, subPage) {
-
-    for (let i = 0; i < this.emails[subPage].length; i++) {
-      let mytx = this.emails[subPage][i];
-      if (mytx.transaction.sig == tx.transaction.sig) {
-        this.app.storage.deleteTransaction(tx);
-        this.emails[subPage].splice(i, 1);
-        this.emails['trash'].unshift(tx);
-      }
+    let confirmed = sconfirm("Are you sure you want to delete these emails?");
+    if(confirmed) {
+      for (let i = 0; i < this.emails[subPage].length; i++) {
+        let mytx = this.emails[subPage][i];
+        if (mytx.transaction.sig == tx.transaction.sig) {
+          this.app.storage.deleteTransaction(tx);
+          this.emails[subPage].splice(i, 1);
+          // this.emails['trash'].unshift(tx);
+        }
+      }  
     }
-
   }
 
 
@@ -186,84 +175,52 @@ class Email extends ModTemplate {
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
-      let keys = [];
+      //let keys = [];
 
       for (let i = 0; i < txs.length; i++) {
-        let addtx = true;
-        for (let k = 0; k < this.emails.inbox.length; k++) {
-          if (txs[i].returnSignature() == this.emails.inbox[k].returnSignature()) {
-            addtx = false;
-          }
-        }
-        if (addtx) {
-          this.emails.inbox.push(txs[i]);
-          keys.push(txs[i].transaction.from[0].add);
-        }
+        this.addTransaction(txs[i]);
+        //keys.push(txs[i].transaction.from[0].add);
       }
       let readyCount = app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
       window.location.hash = app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
-      app.browser.addIdentifiersToDom(keys);
+      //app.browser.addIdentifiersToDom(keys);
     });
-
-
-    //EmailList.render(this.app, this);
-    //EmailList.attachEvents(this.app, this);
-
   }
-
-
 
   onConfirmation(blk, tx, conf, app) {
-
     let txmsg = tx.returnMessage();
     let email = app.modules.returnModule("Email");
-
     if (conf == 0) {
-
-      let publickey = app.wallet.returnPublicKey();
-
-      //
-      // if transaction is for me
-      //
-      if (tx.transaction.to[0].add == publickey) {
-
-        //
-        // great lets save this
-        //
-        app.storage.saveTransaction(tx);
-
-        //
-        // and update our email client
-        //
-        email.addEmail(tx);
-      }
+      addTransaction(tx);
     }
   }
-
-
-  addEmail(tx) {
-    try {
-      if (this.browser_active == 0) { this.showAlert(); }
-      let addtx = true;
-      for (let k = 0; k < this.emails.inbox.length; k++) {
-        if (this.emails.inbox[k].returnSignature() == tx.returnSignature()) {
-          addtx = false;
-        }
-      }
-      if (addtx) {
-        this.emails.inbox.unshift(tx);
-        if (this.browser_active == 1) {
-	  try {
-            let readyCount = this.app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
-            window.location.hash = this.app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
-	  } catch (err) {
-	    console.log("ERROR 312324: calculating hash when window active");
-	  }
-        }
-      }
-    } catch (err) {
-      console.error(err);
+  addTransaction(tx) {
+    let publickey = this.app.wallet.returnPublicKey();
+    if (tx.transaction.to[0].add == publickey) {
+      this.app.storage.saveTransaction(tx);
+      this.addEmail(tx);
     }
+    if (tx.transaction.from[0].add == publickey) {
+      this.app.storage.saveTransaction(tx);
+      this.addSentEmail(tx);
+    }
+  }
+  addToBox(tx, where) {
+    for (let k = 0; k < where.length; k++) {
+      if (where[k].returnSignature() == tx.returnSignature()) {
+        return;
+      }
+    }
+    where.unshift(tx);
+  }
+
+  addSentEmail(tx) {
+    this.addToBox(tx, this.emails.sent);
+  }
+  addEmail(tx) {
+    if (this.browser_active == 0) { this.showAlert(); }
+    this.addToBox(tx, this.emails.inbox);
+    
   }
  
   // receiveEvent(type, data) {
@@ -281,7 +238,7 @@ class Email extends ModTemplate {
       'send-email': {
         name: 'Send Email',
         callback: (address) => {
-          window.location.hash = app.browser.modifyHash(window.location.hash, {toaddres: address})
+          window.location.hash = this.app.browser.modifyHash(window.location.hash, {toaddres: address})
         }
       }
     }

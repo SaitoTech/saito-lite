@@ -116,7 +116,6 @@ class Arcade extends ModTemplate {
   }
 
   initializeHTML(app) {
-
     this.header = new SaitoHeader(app, this);
     let doPubsaleSignup = app.browser.parseHash(window.location.hash).pubsale;
     if(doPubsaleSignup) {

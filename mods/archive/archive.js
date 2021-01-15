@@ -97,6 +97,17 @@ class Archive extends ModTemplate {
       };
       await this.app.storage.executeDatabase(sql, params, "archive");
     }
+    for (let i = 0; i < tx.transaction.from.length; i++) {    
+      sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+      params = {
+        $sig		:	tx.transaction.sig ,
+        $publickey	:	tx.transaction.from[i].add ,
+        $tx		:	JSON.stringify(tx.transaction) ,
+        $ts		:	tx.transaction.ts ,
+        $type		:	msgtype
+      };
+      await this.app.storage.executeDatabase(sql, params, "archive");
+    }
 
   }
 

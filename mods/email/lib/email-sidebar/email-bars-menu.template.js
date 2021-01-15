@@ -5,7 +5,7 @@ module.exports = EmailBarsMenuTemplate = () => {
     <ul class="email-navigator" id="email-navigator">
       <li class="email-navigator-item active-navigator-item" id="email-nav-inbox">Inbox</li>
       <li class="email-navigator-item" id="email-nav-sent">Sent</li>
-      <li class="email-navigator-item" id="email-nav-trash">Trash</li>
+      <!--li class="email-navigator-item" id="email-nav-trash">Trash</li-->
     </ul>
   </div>
   <div>
