@@ -50,7 +50,7 @@ class Archive extends ModTemplate {
         this.deleteTransaction(req.data.tx, req.data.publickey, req.data.sig);
       }
       if (req.data.request === "save") {
-        this.saveTransaction(req.data.tx);
+        this.saveTransaction(req.data.tx, req.data.type);
       }
       if (req.data.request === "load") {
         let type = "";
@@ -76,12 +76,9 @@ class Archive extends ModTemplate {
 
 
 
-  async saveTransaction(tx=null) {
+  async saveTransaction(tx=null, msgtype="") {
 
     if (tx == null) { return; }
-
-    let msgtype = "";
-    if (tx.msg.module != "") { msgtype = tx.msg.module; }
 
     let sql = "";
     let params = {};
@@ -97,6 +94,12 @@ class Archive extends ModTemplate {
       };
       await this.app.storage.executeDatabase(sql, params, "archive");
     }
+
+    //
+    // TODO:
+    //
+    // sanity check that we want to be saving this for the FROM fields
+    //
     for (let i = 0; i < tx.transaction.from.length; i++) {    
       sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
       params = {

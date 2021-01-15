@@ -55,7 +55,7 @@ class Email extends ModTemplate {
   }
   rerender(app) {
     let page = app.browser.parseHash(window.location.hash).page;
-    if(page) {
+    if (page) {
       // Render
       this.renderSidebar(app);
       this.renderMain(app);
@@ -189,9 +189,9 @@ class Email extends ModTemplate {
 
   onConfirmation(blk, tx, conf, app) {
     let txmsg = tx.returnMessage();
-    let email = app.modules.returnModule("Email");
+    let email_mod = app.modules.returnModule("Email");
     if (conf == 0) {
-      addTransaction(tx);
+      email_mod.addTransaction(tx);
     }
   }
   addTransaction(tx) {
@@ -220,7 +220,7 @@ class Email extends ModTemplate {
   addEmail(tx) {
     if (this.browser_active == 0) { this.showAlert(); }
     this.addToBox(tx, this.emails.inbox);
-    
+    this.render(this.app);
   }
  
   // receiveEvent(type, data) {
