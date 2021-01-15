@@ -307,7 +307,7 @@ class Chat extends ModTemplate {
     let relay_mod = app.modules.returnModule('Relay');
 
 console.log("trying to sign and encrypt transaction...");
-    tx = this.app.wallet.signTransaction(tx);
+//    tx = this.app.wallet.signTransaction(tx);
 
     tx = this.app.wallet.signAndEncryptTransaction(tx);
 
