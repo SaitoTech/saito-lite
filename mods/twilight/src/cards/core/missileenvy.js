@@ -25,7 +25,7 @@
       //
       // targeted player provided list if multiple options available
       //
-      if (this.game.player != instigator) {
+      if (this.game.player != instigator && this.game.player != 0) {
 
         this.addMove("resolve\tmissileenvy");
 

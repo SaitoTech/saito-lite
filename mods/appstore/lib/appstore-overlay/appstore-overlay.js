@@ -52,6 +52,7 @@ module.exports = AppStoreAppspace = {
     //
     // form sql query
     //
+    console.log("SELECT name, description, version, image, publickey, unixtime, bid, bsh FROM modules " + where_clause);
     let sql_query = ("SELECT name, description, version, image, publickey, unixtime, bid, bsh FROM modules " + where_clause);
 
     //

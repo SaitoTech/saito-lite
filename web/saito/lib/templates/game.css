@@ -260,7 +260,7 @@ ul li a {
 .game-observer-last {
   position: absolute;
   display: block;
-  top: 20vh;
+  top: 10vh;
   left: 10vw;
   height: 60vh;
   width: 10vw;
@@ -269,7 +269,6 @@ ul li a {
   font-size: 4vh;
   text-align: center;
   vertical-align: middle;
-  padding-top: 20vh;
   cursor: pointer;
   opacity: 0.6;
 }
@@ -285,9 +284,20 @@ ul li a {
   font-size: 4vh;
   text-align: center;
   vertical-align: middle;
-  padding-top: 20vh;
   cursor: pointer;
   opacity: 0.6;
+}
+.game-observer-last-btn {
+  padding-top: 15vh;
+  padding-bottom: 10vh;
+  width: 100%;
+}
+.game-observer-next-btn {
+  clear: both;
+  margin-top: 4vh;
+  padding-top: 10vh;
+  padding-bottom: 15vh;
+  width: 100%;
 }
 
 

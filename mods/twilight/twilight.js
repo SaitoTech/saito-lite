@@ -48,6 +48,11 @@ class Twilight extends GameTemplate {
     this.cards    	 = [];
     this.is_testing 	 = 0;
 
+    //
+    // newbie mode
+    //
+    this.confirm_moves = 1;
+
     this.log_length 	 = 150;
     this.interface 	 = 1;
 
@@ -471,11 +476,13 @@ console.log(err);
     });
 
     // required here so menu will be proper
-    if (this.app.options.gameprefs.confirm_moves == 1) {
-      this.confirm_moves = 1;
-    } else {
-      this.confirm_moves = 0;
-    }
+    try {
+      if (this.app.options.gameprefs.twilight_expert_mode == 1) {
+        this.confirm_moves = 0;
+      } else {
+        this.confirm_moves = 1;
+      }
+    } catch (err) {}
 
     this.menu.addMenuOption({
       text : "Game",
@@ -506,11 +513,11 @@ console.log(err);
         game_mod.menu.hideSubMenus();
 	if (game_mod.confirm_moves == 0) {
 	  game_mod.confirm_moves = 1;
-          game_mod.saveGamePreference('confirm_moves', 1);
+          game_mod.saveGamePreference('twilight_expert_mode', 0);
 	  window.location.reload();	
 	} else {
 	  game_mod.confirm_moves = 0;
-          game_mod.saveGamePreference('confirm_moves', 0);
+          game_mod.saveGamePreference('twilight_expert_mode', 1);
 	  window.location.reload();	
 	}
       }
@@ -694,10 +701,10 @@ initializeGame(game_id) {
       if (this.app.options.gameprefs.interface == 1) {
         this.interface = 1;
       }
-      if (this.app.options.gameprefs.confirm_moves == 1) {
-        this.confirm_moves = 1;
-      } else {
+      if (this.app.options.gameprefs.twilight_expert_mode == 1) {
 	this.confirm_moves = 0;
+      } else {
+        this.confirm_moves = 1;
       }
     }
   }
@@ -2273,6 +2280,7 @@ console.log("place: " + mv[1] + " -- " + player);
 console.log("re-arranged resolve to avoid OBSERVER MODE bug");
 	      }
 
+
               if (lmv[0] == "headline" && mv[1] == "headline") {
                 this.game.queue.splice(le, 2);
                 rmvd = 1;
@@ -2309,11 +2317,6 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
                 this.game.queue.splice(le, 2);
                 rmvd = 1;
               }
-	      // manual removal of headline
-              if (lmv[0] == "resolve" && lmv[1] == "headline") {
-                this.game.queue.splice(le, 1);
-                rmvd = 1;
-	      }
               if (rmvd == 0) {
 
                 //
@@ -3068,7 +3071,7 @@ console.log("resetging bbc");
       //
       // USSR picks
       //
-      if (stage === "headline1") {
+      if (stage == "headline1") {
 
         //
         // both players reset headline info
@@ -3094,7 +3097,7 @@ console.log("resetging bbc");
       //
       // US picks
       //
-      if (stage === "headline2") {
+      if (stage == "headline2") {
         if (this.game.player == player) {
 
           this.game.state.headline_opponent_hash = hash;
@@ -3114,26 +3117,8 @@ console.log("resetging bbc");
       //
       // USSR sends XOR
       //
-      if (stage === "headline3") {
+      if (stage == "headline3") {
         if (this.game.player == player) {
-
-
-          //
-          // HACK - January 11, 2021
-          //
-          // we have an error where sometimes something flakes out and we lose the card we choose
-          // so we are going to save these OUTSIDE the game. and when we reload if the information
-          // is missing submit the older data. this error happens only in headline mode when one
-          // of the clients flakes out during the headline back-and-forth. unsure of cause
-          //
-          if (this.game.state.headline_card == "") {
-	    if (this.app.options.tmp) {
-              this.game.state.headline_card = this.app.options.tmp.twilight_headline_card;
-              this.game.state.headline_xor = this.app.options.tmp.twilight_headline_xor;
-              this.game.state.headline_hash = this.app.options.tmp.twilight_headline_hash;
-	    }
-	  }
-
 
           this.game.state.headline_opponent_hash = hash;
           this.updateLog("Initiating blind headline card swap");
@@ -3151,7 +3136,7 @@ console.log("resetging bbc");
       //
       // US confirms USSR XOR and sends its XOR
       //
-      if (stage === "headline4") {
+      if (stage == "headline4") {
         if (this.game.player == player) {
 
           this.game.state.headline_opponent_xor  = xor;
@@ -3160,23 +3145,6 @@ console.log("resetging bbc");
           if (this.game.state.headline_opponent_hash != this.app.crypto.encodeXOR(this.app.crypto.stringToHex(this.game.state.headline_opponent_card), this.game.state.headline_opponent_xor)) {
             alert("PLAYER 1 HASH WRONG: -- this is a development error message that can be triggered if the opponent attempts to cheat by changing their selected card after sharing the encrypted hash. It can also be rarely caused if one or both players reload or have unreliable connections during the headline exchange process. The solution in this case is for both players to reload until the game hits the first turn. " + this.game.state.headline_opponent_hash + " -- " + this.game.state.headline_opponent_card + " -- " + this.game.state.headline_opponent_xor + " -- " + this.app.crypto.encodeXOR(this.app.crypto.stringToHex(this.game.state.headline_opponent_card), this.game.state.headline_opponent_xor));
           }
-
-          //
-          // HACK - January 11, 2021
-          //
-          // we have an error where sometimes something flakes out and we lose the card we choose
-          // so we are going to save these OUTSIDE the game. and when we reload if the information
-          // is missing submit the older data. this error happens only in headline mode when one
-          // of the clients flakes out during the headline back-and-forth. unsure of cause
-          //
-          if (this.game.state.headline_card == "") {
-	    if (this.app.options.tmp) {
-              this.game.state.headline_card = this.app.options.tmp.twilight_headline_card;
-              this.game.state.headline_xor = this.app.options.tmp.twilight_headline_xor;
-              this.game.state.headline_hash = this.app.options.tmp.twilight_headline_hash;
-	    }
-	  }
-
 
           this.updateLog("Initiating blind headline card swap");
           this.addMove("resolve\theadline");
@@ -3195,7 +3163,7 @@ console.log("resetging bbc");
       //
       // USSR confirms US XOR
       //
-      if (stage === "headline5") {
+      if (stage == "headline5") {
 
         if (this.game.player == 0) {
     	  this.updateLog("Observer Mode does not handle headlines well...");
@@ -3204,6 +3172,7 @@ console.log("resetging bbc");
         }
 
         if (this.game.player == player) {
+
 
           this.game.state.headline_opponent_xor  = xor;
           this.game.state.headline_opponent_card = card;
@@ -4127,37 +4096,16 @@ this.startClock();
 
     let twilight_self = this;
 
-    //
+
     // cannot pick china card or UN intervention
-    //
     if (card == "china") {
-      twilght_self.displayModal("Invalid Headline", "You cannot headline China");
-      return; 
-    }
+      twilght_self.displayModal("Invalid Headline", "You cannot headline China"); return; }
     if (card == "unintervention") {
-      twilght_self.displayModal("Invalid Headline", "You cannot headline UN Intervention");
-      return;
-    }
+      twilght_self.displayModal("Invalid Headline", "You cannot headline UN Intervention"); return; }
 
     twilight_self.game.state.headline_card = card;
     twilight_self.game.state.headline_xor = twilight_self.app.crypto.hash(Math.random());
     twilight_self.game.state.headline_hash = twilight_self.app.crypto.encodeXOR(twilight_self.app.crypto.stringToHex(twilight_self.game.state.headline_card), twilight_self.game.state.headline_xor);
-
-    //
-    // HACK - January 11, 2021
-    //
-    // we have an error where sometimes something flakes out and we lose the card we choose
-    // so we are going to save these OUTSIDE the game. and when we reload if the information
-    // is missing submit the older data. this error happens only in headline mode when one
-    // of the clients flakes out during the headline back-and-forth
-    //
-    if (card != "") {
-      if (!this.app.options.tmp) { this.app.options.tmp = {}; }
-      this.app.options.tmp.twilight_headline_card = this.game.state.headline_card;
-      this.app.options.tmp.twilight_headline_card = this.game.state.headline_xor;
-      this.app.options.tmp.twilight_headline_hash = this.game.state.headline_hash;
-      this.app.storage.saveOptions();
-    }
 
 
     //
@@ -9963,7 +9911,8 @@ alert("end of history!");
     if (card == "abmtreaty") {
 
 //      this.game.state.back_button_cancelled = 1;
-      this.updateStatus(player.toUpperCase() + "</span> <span>plays ABM Treaty");
+      this.updateStatus('<div class="status-message" id="status-message">' + player.toUpperCase() + " <span>plays ABM Treaty</span></div>");
+
       this.updateLog("DEFCON increases by 1");
 
       this.game.state.defcon++;
@@ -12073,7 +12022,8 @@ console.log("card: " + card);
       if (player == "us" && this.game.player == 2) { my_go = 1; }
 
       if (my_go == 0) {
-        this.updateStatus(player.toUpperCase() + "</span> <span>playing Junta");
+        this.updateStatus('<div class="status-message" id="status-message">' + player.toUpperCase() + " <span>playing Junta</span></div>");
+
       }
       if (my_go == 1) {
 
@@ -12569,7 +12519,7 @@ console.log("card: " + card);
       //
       // targeted player provided list if multiple options available
       //
-      if (this.game.player != instigator) {
+      if (this.game.player != instigator && this.game.player != 0) {
 
         this.addMove("resolve\tmissileenvy");
 
@@ -12775,7 +12725,7 @@ console.log("card: " + card);
         }
 
       } else {
-        this.updateLog("NATO cannot trigger before Warsaw Pact of Marshall Plan. Moving to discard pile.");
+        this.updateLog("NATO cannot trigger before Warsaw Pact or Marshall Plan. Moving to discard pile.");
       }
       return 1;
     }

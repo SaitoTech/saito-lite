@@ -113,8 +113,9 @@ module.exports = EmailForm = {
         newtx.msg.module   = "Email";
         newtx.msg.title    = email_title;
         newtx.msg.message  = email_text;
-        newtx = app.wallet.signTransaction(newtx);
 
+//        newtx = app.wallet.signTransaction(newtx);
+        newtx = app.wallet.signAndEncryptTransaction(newtx);
         app.network.propagateTransaction(newtx);
         window.location.hash = mod.goToLocation("#page=email_list&subpage=inbox");
         

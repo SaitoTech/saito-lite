@@ -12,10 +12,26 @@ module.exports = ChatList = {
 
       document.getElementById("chat-main").innerHTML = "";
       app.browser.addElementToDom(ChatListTemplate(), "chat-main");      
+
+
  
       document.querySelector(".chat-list-container").innerHTML = "";
       for (let i = 0; i < mod.groups.length; i++) {
-        app.browser.addElementToDom(ChatListHeaderTemplate(mod.groups[i]), "chat-list-container");
+
+	let last_message = "";
+	let ts = new Date().getTime();
+	let formatted_ts = "";
+
+	if (mod.groups[i].txs.length > 0) {
+          last_message = mod.groups[i].txs[mod.groups[i].txs.length-1].returnMessage().message;
+          ts = mod.groups[i].txs[mod.groups[i].txs.length-1].transaction.ts
+	}
+
+	let timestamp = app.browser.formatDate(ts);
+	formatted_ts = timestamp.hours + ":" + timestamp.minutes;
+
+        app.browser.addElementToDom(ChatListHeaderTemplate(mod.groups[i], last_message, formatted_ts), "chat-list-container");
+
       }
 
     },
