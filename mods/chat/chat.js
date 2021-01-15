@@ -185,6 +185,7 @@ class Chat extends ModTemplate {
     //
     for (let i = 0; i < txs.length; i++) {
       loaded_txs = 1;
+      txs[i].decryptMessage(app);
       let txmsg = txs[i].returnMessage();
       for (let z = 0; z < this.groups.length; z++) {
 	if (this.groups[z].id === txmsg.group_id) {
@@ -247,9 +248,12 @@ class Chat extends ModTemplate {
   // onchain messages --> eeceiveMessage()
   //
   onConfirmation(blk, tx, conf, app) {
+    tx.decryptMessage(app);
     let txmsg = tx.returnMessage();
     if (conf == 0) {
       if (txmsg.request == "chat message") {
+console.log("heading to storage saveTx by Key");
+	app.storage.saveTransactionByKey(txmsg.group_id, tx);
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
         this.receiveMessage(app, tx);
       }
@@ -273,6 +277,7 @@ class Chat extends ModTemplate {
 
         case "chat message":
           this.receiveMessage(app, new saito.transaction(tx.transaction));
+	  //this.app.storage.saveTransaction(routed_tx);
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
 
@@ -282,7 +287,9 @@ class Chat extends ModTemplate {
 	   routed_tx.decryptMessage(this.app);
 	   let routed_tx_msg = routed_tx.returnMessage();
      
-
+	   //
+	   // serversaves
+	   //
            let archive = this.app.modules.returnModule("Archive");
            if (archive) { archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx); }     
 
@@ -618,6 +625,8 @@ class Chat extends ModTemplate {
   ///////////////////
   createChatGroup(members=null, name=null) {
 
+console.log("create group with : " + JSON.stringify(members));
+
     if (members == null) { return; } members.sort();
     if (name == null) {
       for (let i = 0; i < members.length; i++) {
@@ -639,6 +648,8 @@ class Chat extends ModTemplate {
       name : name ,
       txs : [] ,
     });
+
+console.log("G: " + JSON.stringify(this.groups));
 
   }
 

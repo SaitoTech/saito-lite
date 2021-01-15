@@ -49,7 +49,6 @@ class Saito {
         _self.options.runtime[uvar] = uval;
       });
 
-console.log("RUNTIME: " + JSON.stringify(this.options.runtime));
 
 
       this.wallet.initialize();

@@ -174,16 +174,12 @@ class Email extends ModTemplate {
     if (url.searchParams.get('module') != null) { return; }
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
-
-      //let keys = [];
-
       for (let i = 0; i < txs.length; i++) {
+	txs[i].decryptMessage(app);
         this.addTransaction(txs[i]);
-        //keys.push(txs[i].transaction.from[0].add);
       }
       let readyCount = app.browser.getValueFromHashAsNumber(window.location.hash, "ready")
       window.location.hash = app.browser.modifyHash(window.location.hash, {ready: readyCount + 1});
-      //app.browser.addIdentifiersToDom(keys);
     });
   }
 
@@ -195,6 +191,7 @@ class Email extends ModTemplate {
     }
   }
   addTransaction(tx) {
+
     let publickey = this.app.wallet.returnPublicKey();
     if (tx.transaction.to[0].add == publickey) {
       this.app.storage.saveTransaction(tx);

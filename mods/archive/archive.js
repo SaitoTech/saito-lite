@@ -52,6 +52,12 @@ class Archive extends ModTemplate {
       if (req.data.request === "save") {
         this.saveTransaction(req.data.tx, req.data.type);
       }
+      if (req.data.request === "save_key") {
+console.log("into save tx by key being executed");
+        if (!req.data.key) { return; }
+console.log("Save tx by key being executed with type: " + req.data.type);
+        this.saveTransactionByKey(req.data.key, req.data.tx, req.data.type);
+      }
       if (req.data.request === "load") {
         let type = "";
         let num  = 50;
@@ -115,6 +121,22 @@ class Archive extends ModTemplate {
   }
 
 
+  async saveTransactionByKey(key="", tx=null, msgtype="") {
+
+    if (tx == null) { return; }
+
+    let sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+    let params = {
+      $sig:	tx.transaction.sig ,
+      $publickey:	key,
+      $tx:	JSON.stringify(tx.transaction),
+      $ts:	tx.transaction.ts,
+      $type:	msgtype
+    };
+    await this.app.storage.executeDatabase(sql, params, "archive");
+
+  }
+
 
   async deleteTransaction(tx=null, authorizing_publickey="", authorizing_sig="") {
 
@@ -164,27 +186,6 @@ class Archive extends ModTemplate {
 
   }
 
-  async saveTransactionByKey(key="", tx=null) {
-
-    if (tx == null) { return; }
-
-    //
-    // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
-    //
-    let msgtype = "";
-    if (tx.msg.module != "") { msgtype = tx.msg.module; }
-
-    let sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
-    let params = {
-      $sig:	tx.transaction.sig ,
-      $publickey:	key,
-      $tx:	JSON.stringify(tx.transaction),
-      $ts:	tx.transaction.ts,
-      $type:	msgtype
-    };
-    await this.app.storage.executeDatabase(sql, params, "archive");
-
-  }
 
   async loadTransactionsByKeys({keys=[], type='all', num=50}) {
     let sql = "";
