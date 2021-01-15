@@ -252,7 +252,6 @@ class Chat extends ModTemplate {
     let txmsg = tx.returnMessage();
     if (conf == 0) {
       if (txmsg.request == "chat message") {
-console.log("heading to storage saveTx by Key");
 	app.storage.saveTransactionByKey(txmsg.group_id, tx);
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
         this.receiveMessage(app, tx);
@@ -625,10 +624,9 @@ console.log("heading to storage saveTx by Key");
   ///////////////////
   createChatGroup(members=null, name=null) {
 
-console.log("create group with : " + JSON.stringify(members));
-
-    if (members == null) { return; } members.sort();
-    if (name == null) {
+    if (members == null) { return; }
+    members.sort();
+    if (name == null || name == "" || name == undefined) {
       for (let i = 0; i < members.length; i++) {
         if (members[i] != this.app.wallet.returnPublicKey()) {
 	  name = members[i];
@@ -648,8 +646,6 @@ console.log("create group with : " + JSON.stringify(members));
       name : name ,
       txs : [] ,
     });
-
-console.log("G: " + JSON.stringify(this.groups));
 
   }
 
