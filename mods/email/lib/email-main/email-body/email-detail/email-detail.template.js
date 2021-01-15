@@ -4,6 +4,7 @@ module.exports = EmailDetailTemplate = (app, mod) => {
   let selectedEmailSig = app.browser.parseHash(window.location.hash).selectedemail;
   let selected_email = mod.getSelectedEmail(selectedEmailSig, subPage);  
   if (selected_email) {
+
     let from  	= selected_email.transaction.from[0].add;
     let to  	= selected_email.transaction.to[0].add;
     let amt  	= selected_email.transaction.to[0].amt;
@@ -19,12 +20,9 @@ module.exports = EmailDetailTemplate = (app, mod) => {
 
     let datetime = app.browser.formatDate(ts);
 
-    return `
+    let html = `
       <div>
         <div class="email-detail-addresses">
-          <div>
-            <h4 class="email-detail-subject">${subject}</h4>
-          </div>
           <div class="email-detail-address-row">
             <p>FROM:</p>
             <p class="email-detail-address-id">${from}</p>
@@ -33,19 +31,29 @@ module.exports = EmailDetailTemplate = (app, mod) => {
             <p>TO:</p>
             <p class="email-detail-address-id">${to}</p>
           </div>
+      `;
+      if (s2Number(amt) > 0) {
+        html += `
           <div class="email-detail-address-row">
             <p>Amt:</p>
             <p class="email-detail-ammount">${s2Number(amt)}</p>
           </div>
+	`;
+      }
+      html += `
+          <div>
+            <div class="email-detail-timestamp">${datetime.hours}:${datetime.minutes}</div>
+            <div class="email-detail-subject">${subject}</div>
+          </div>
         </div>
         <div class="email-detail-message">
-          <p class="email-detail-timestamp">${datetime.hours}:${datetime.minutes}</p>
           <div class="email-detail-text"><div>${message.message}</div></div>
         </div>
       </div>
     `;
+    return html;
   } else {
-    return `
+    let html = `
       <div>
         <div class="email-detail-addresses">
           <div>
@@ -54,6 +62,7 @@ module.exports = EmailDetailTemplate = (app, mod) => {
           </div>
         </div>
       `;
+    return html;
   }
 }
 

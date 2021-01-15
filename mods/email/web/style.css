@@ -1,5 +1,29 @@
 
 
+.grid-2 {
+  grid-gap: 0px;
+}
+.grid-2 div {
+  padding: 0px;
+}
+.email-payment-btn {
+  float: right;
+  padding: 10px;
+}
+.email-payment-btn:hover {
+  cursor: pointer;
+  color: var(--saito-red);
+}
+.amount-label {
+  float: left;
+  width: 5em;
+}
+.amount-value {
+  float: left;
+  width: 220px;
+  min-width: 220px;
+}
+
 /******* START CRYPTO MODS ********/
 .superwallet-container {
 padding: 10em;
@@ -173,6 +197,10 @@ hr {
 .email-title {
   border-top: 1px solid lightgrey;
   width: 100%;
+}
+
+.email-detail-subject {
+  font-weight: bold;
 }
 
 .email-detail-footer {
@@ -372,6 +400,7 @@ hr {
   justify-self: right;
   grid-area: t;
   color: grey;
+  float: right;
 }
 
 .email-detail-text {

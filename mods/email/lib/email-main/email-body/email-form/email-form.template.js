@@ -10,13 +10,15 @@ module.exports = EmailFormTemplate = (address, title, msg) => {
     <div>
       <input id="email-to-address" class="email-address" type="text" placeholder="Address" value="${address}">
     </div>
-    <div class="amount-label tip">
-      SAITO:
-      <div class="tiptext" style="font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";"> Optional.</div>
+    <div class="email-payment-row" style="display:none;grid-column-start: 1;grid-column-end:span 2">
+      <div class="amount-label tip">
+        SAITO:
+        <div class="tiptext" style="font-family: " visuelt-light",="" "microsoft="" yahei",="" "hiragino="" sans="" gb";"=""> Optional.</div>
+      </div>
+      <div class="amount-value">
+        <input class="email-amount" type="number" placeholder="0.0">
+      </div>  
     </div>
-    <div class="amount-value">
-      <input class="email-amount" type="number" placeholder="0.0">
-    </div>  
   </div>
   
   <div id="email-form-options" class="tip">
@@ -35,6 +37,7 @@ module.exports = EmailFormTemplate = (address, title, msg) => {
   <div id="email-text" class="email-text markdown" placeholder="Message">${msg}</div>
   </div>
   <div>
+    <div class="email-payment-btn">include payment</div>
     <button class="email-submit">Send</button>
   </div>
   `

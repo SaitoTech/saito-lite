@@ -66,6 +66,11 @@ module.exports = EmailForm = {
         document.querySelector('.email-submit')
             .addEventListener('click', (e) => this.sendEmailTransaction(app, mod));
 
+	document.querySelector(".email-payment-btn").onclick = (e) => {
+	  let obj = document.querySelector(".email-payment-row");
+	  if (obj.style.display != "block") { obj.style.display = "block"; } else { obj.style.display = "none"; }
+	};
+
         /*document.querySelector('.fa-dollar-sign')
             .addEventListener('click', (e) => {
             document.querySelector('.amount-value').toggleClass("hidden");
