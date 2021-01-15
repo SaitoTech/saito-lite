@@ -300,7 +300,7 @@ class Rewards extends ModTemplate {
         this.updateUsers(tx);
       }
 
-      if (tx.returnMessage().origin == "Registry") {
+      if (tx.returnMessage().module == "Registry") {
         this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registryPayout);
       }
     }
