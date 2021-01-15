@@ -191,6 +191,7 @@ class Encrypt extends ModTemplate {
 console.log("sending request on network");
       this.app.network.sendPeerRequest("diffie hellman key exchange", data, peer);
     }
+    this.saveEncrypt();
 
 
   }
@@ -231,6 +232,7 @@ console.log("sending request on network");
 
     this.app.keys.updateCryptoByPublicKey(remote_address, bob_publickey.toString("hex"), bob_privatekey.toString("hex"), bob_secret.toString("hex"));
     this.sendEvent('encrypt-key-exchange-confirm', { members: [remote_address, our_address] });
+    this.saveEncrypt();
 
   }
 
@@ -290,6 +292,7 @@ console.log("sending request on network");
           //
           //
           encrypt_self.sendEvent('encrypt-key-exchange-confirm', { members: [sender, app.wallet.returnPublicKey()] });
+          encrypt_self.saveEncrypt();
 
         }
       }
