@@ -54,7 +54,7 @@ class Website extends ModTemplate {
       this.mre = new ModalRegisterEmail(app);
       this.mre.render(this.app, this, ModalRegisterEmail.MODES.PUBLICSALE);
       this.mre.attachEvents(this.app, this);
-      window.location.hash = app.browser.removeFromHash(window.location.hash, "pubsale");
+      window.location.hash = app.browser.removeFromHash(window.location.hash, "private-sale");
     }
     
   }
