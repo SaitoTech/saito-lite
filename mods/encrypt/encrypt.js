@@ -105,6 +105,7 @@ class Encrypt extends ModTemplate {
       //
       //
       this.sendEvent('encrypt-key-exchange-confirm', { members: [sender, app.wallet.returnPublicKey()] });
+      this.saveEncrypt();
 
     }
   }

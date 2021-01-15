@@ -279,6 +279,7 @@ class Chat extends ModTemplate {
         case "chat broadcast message":
      
            let routed_tx = new saito.transaction(tx.transaction);
+	   routed_tx.decryptMessage(this.app);
 	   let routed_tx_msg = routed_tx.returnMessage();
      
 
@@ -306,18 +307,12 @@ class Chat extends ModTemplate {
     let recipient = app.network.peers[0].peer.publickey;
     let relay_mod = app.modules.returnModule('Relay');
 
-console.log("trying to sign and encrypt transaction...");
-//    tx = this.app.wallet.signTransaction(tx);
-
     tx = this.app.wallet.signAndEncryptTransaction(tx);
 
     if (this.relay_moves_onchain_if_possible == 1) {
-console.log("propagating..");
       this.app.network.propagateTransaction(tx);
-console.log("done propagating..");
     }
-//    relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
-console.log(" and out!");
+    relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
   }
 
 
@@ -439,6 +434,16 @@ console.log(" and out!");
   receiveMessage(app, tx, renderMode="") {
 
     let txmsg = tx.returnMessage();
+
+    //
+    // if to someone else and encrypted
+    //
+    if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
+      if (app.keys.hasSharedSecret(tx.transaction.to[0].add)) {
+	tx.decryptMessage(app);
+	txmsg = tx.returnMessage();
+      }
+    }
 
     if (app.BROWSER == 1) {
       let m = app.modules.returnActiveModule();
