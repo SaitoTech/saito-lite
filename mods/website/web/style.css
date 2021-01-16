@@ -49,7 +49,8 @@ h2, h5 {
   display: block;
   height: unset;
   overflow: hidden;
-  margin: 12em 0 0;
+/*  margin: 12em 0 0; */
+  margin: 0px;
 }
 
 .site-main {
@@ -212,7 +213,8 @@ section.first {
 }
 
 .calltoaction {
-  margin: min(30vw, 16em) auto 0;
+/*  margin: min(30vw, 16em) auto 0; */
+  margin: min(30vw, 12.5em) auto 0;
   display: flex;
   justify-content: center;
 }
@@ -225,13 +227,14 @@ section.first {
 }
 
 .component-text {
+  height: 100%;
   padding: 2em;
   display: flex;
   flex-direction: column;
   text-align: center;
   justify-content: center;
   align-self: unset;
-  margin: 50px 0;
+  margin: 0px 0;
   background: linear-gradient(45deg, #2224, #222A, #2224);
 }
 
@@ -1004,7 +1007,7 @@ button:focus {
 }
 
 .small-head a, .small-head i {
-  padding: 0;
+/*  padding: 0; */
 }
 
 .header-nav i {
@@ -1264,10 +1267,10 @@ button:focus {
 
 @media only screen and (max-width: 900px) {
   .small-head .header-icon-links {
-    height: 2.5em;
+/*    height: 2.5em; */
   }
   .small-head.header-nav {
-    top: 0;
+/*    top: 0; */
   }
   .header-nav i {
     display: block;
@@ -1494,13 +1497,15 @@ button:focus {
 }
 
 .small-head {
-  height: 2.5em;
+/*  height: 2.5em; */
 }
 
 .small-head .logo {
+/*
   transform: scale(0);
   position: absolute;
   top: 1em;
+*/
 }
 
 .logo {

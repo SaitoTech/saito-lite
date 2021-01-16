@@ -9,7 +9,6 @@ module.exports = ArcadeMainTemplate = (app, mod) => {
       </div>
       <div id="arcade-tabs">
         <div id="arcade-hero" class="arcade-hero">
-          
         </div>
         <div id="observables-hero" class="observables-hero arcade-tab-hidden">
         </div>

@@ -199,6 +199,8 @@ module.exports = PostStyleTemplate = (app, mod) => {
   min-height: 12em;
   margin-bottom: 20px;
   background-color: white;
+  max-height: 30vh;
+  overflow: hidden;
 }
 
 .post-submit-btn {
@@ -371,7 +373,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 }
 .arcade-post-title > a {
   text-decoration: none;
-  color: inherit;
+  color: var(--saito-red);
 }
 
 
