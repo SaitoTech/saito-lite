@@ -9,7 +9,8 @@
       space		:	0,
       ground		:	1,
       can_be_stored	:	1,
-      capacity_required :	1
+      capacity_required :	1,
+      description	:	"Infantry invade and conquer planets, but cannot typically be moved between sectors without moving on carriers or other ships with capacity.",
     });
 
     this.importUnit("fighter", {
@@ -20,7 +21,8 @@
       combat 		:	9,
       strength 		:	1,
       can_be_stored	:	1,
-      capacity_required :	1
+      capacity_required :	1,
+      description	:	"Fighters are cheap and disposible ships deployed to keep damage away from capital ships. They must be transported on carriers or other ships with capacity.",
     });
 
 
@@ -29,7 +31,8 @@
       type     		:       "pds",
       range 		:	0,
       cost 		:	5,
-      combat 		:	6
+      combat 		:	6,
+      description	:	"PDS units fire on other ships that invade their sectors. They can also fire on foreign infantry that invade a planet.",
     });
 
     this.importUnit("spacedock", {
@@ -38,7 +41,8 @@
       capacity 		:	3,
       production 	:	4,
       combat      	: 	0,
-      range       	: 	0
+      range       	: 	0,
+      description	:	"Spacedocks are used to produce infantry and other ships. They cannot produce ships in space if an opponent fighter is in the sector",
     });
 
     this.importUnit("carrier", {
@@ -48,7 +52,8 @@
       move 		:	1,
       combat 		:	9,
       capacity 		:	4,
-      strength 		:	1
+      strength 		:	1,
+      description	:	"The Carrier is a troop and fighter transport ship. Load it with infantry and fighters and use it to conquer other sectors.",
     });
 
     this.importUnit("destroyer", {
@@ -60,6 +65,7 @@
       strength 		:	1,
       anti_fighter_barrage :	2,
       anti_fighter_barrage_combat :	9,
+      description	:	"The Destroyer is an inexpensive but mobile ship designed to counter fighter swarms - its ANTI-FIGHTER BARRAGE (2 rolls hitting on 9 or higher) happens at the very start of space-combat",
     });
 
     this.importUnit("cruiser", {
@@ -68,7 +74,8 @@
       cost 		:	2,
       move 		:	2,
       combat 		:	7,
-      strength 		:	1
+      strength 		:	1,
+      description	:	"The Cruiser is a more powerful ship with a reasonable chance of landing hits in battle.",
     });
 
     this.importUnit("dreadnaught", {
@@ -80,7 +87,8 @@
       combat 		:	6,
       strength 		:	2,
       bombardment_rolls	:	1,
-      bombardment_combat:	5
+      bombardment_combat:	5,
+      description	:	"The Dreadnaught is a powerful combat ship able to SUSTAIN DAMAGE once before being destroyed in combat",
     });
 
     this.importUnit("flagship", {
@@ -90,7 +98,8 @@
       move 		:	2,
       capacity 		:	1,
       combat 		:	7,
-      strength 		:	2
+      strength 		:	2,
+      description	:	"The Flagship is the pride of the fleet -- each faction's flagship confers specific abilities. See your factino sheet for more details",
     });
 
     this.importUnit("warsun", {
@@ -102,7 +111,8 @@
       combat 		:	3,
       strength 		:	2,
       bombardment_rolls	:	3,
-      bombardment_combat:	3
+      bombardment_combat:	3,
+      description	:	"The War Sun is death packaged in a mass of planet-destroying turbinium. Rumours of their lethality abound, as few have fought one and lived to tell the tale." ,
     });
 
   
@@ -116,7 +126,8 @@
       ground		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Infantry II are stronger and more resilient but cannot typically be moved between sectors without moving on carriers or other ships with capacity.",
     });
 
     this.importUnit("fighter-ii", {
@@ -128,7 +139,8 @@
       strength 		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Fighter II can move without being transported by other ships. Any ships inexcess of your carrying capacity could against your fleet supply.",
       
     });
 
@@ -137,7 +149,8 @@
       type     		:       "spacedock",
       capacity 		:	3,
       production 	:	4,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Spacedock II can produce more units whenever they produce.",
     });
 
     this.importUnit("pds-ii", {
@@ -146,7 +159,8 @@
       cost 		:	5,
       combat 		:	5,
       range		:	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"PDS II has a slightly more accurate targeting mechanism and can fire into adjacent sectors.",
     });
 
     this.importUnit("carrier-ii", {
@@ -157,7 +171,8 @@
       combat 		:	9,
       capacity 		:	6,
       strength 		:	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Carrier II has upgraded ship capacity and is slightly more robust in combat",
     });
 
     this.importUnit("destroyer-ii", {
@@ -167,9 +182,10 @@
       move 		:	2,
       combat 		:	8,
       strength 		:	1,
-      extension : 1,
+      extension 	: 	1,
       anti_fighter_barrage :	3,
       anti_fighter_barrage_combat :	6,
+      description	:	"Destroyer II has improved ANTI-FIGHTER-BARRAGE (3x6) and is slightly more effective in general combat",
     });
 
     this.importUnit("cruiser-ii", {
@@ -179,7 +195,8 @@
       move 		:	2,
       combat 		:	7,
       strength 		:	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Cruiser II has extended range and the ability to support a small phalanx of ground troops",
     });
 
     this.importUnit("dreadnaught-ii", {
@@ -190,7 +207,8 @@
       capacity 		:	1,
       combat 		:	5,
       strength 		:	2,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Dreadnaught II has improved movement, can support a small ground team and is slightly more effective in space combat",
     });
 
 

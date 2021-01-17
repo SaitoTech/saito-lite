@@ -458,55 +458,147 @@ returnStrategyOverlay() {
 
 returnUnitsOverlay() {
 
-  let title = "Your Units";
-
-  let html = `
-    <div class="units_overlay_container" style="">
-  `;
+  let html = `<div class="units-overlay-container" style="">`;
+  let units = [];
 
   if (this.game.state.round == 1) {
     html += `
-      <div style="width:100%"><div class="new_units_overlay_text">check units and movement properties in the INFO menu...</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-title">Starting Units</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the INFO menu...</div></div>
+      <div class="unit-table">
     `;
+
+    let fleet = this.returnPlayerFleet(this.game.player);
+
+    if (fleet.carriers > 0) 	{ units.push("carrier"); }
+    if (fleet.cruisers > 0) 	{ units.push("cruiser"); }
+    if (fleet.destroyers > 0) 	{ units.push("destroyer"); }
+    if (fleet.dreadnaughts > 0) { units.push("dreadnaughts"); }
+    if (fleet.warsuns > 0) 	{ units.push("warsun"); }
+    if (fleet.fighters > 0) 	{ units.push("fighter"); }
+    if (fleet.infantry > 0) 	{ units.push("infantry"); }
+    if (fleet.flagships > 0) 	{ units.push("flagship"); }
+    if (fleet.pds > 0) 		{ units.push("pds"); }
+    if (fleet.spacedocks > 0) 	{ }
+
+  } else {
+    let player = this.game.players_info[this.game.player-1];
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "infantry-ii")) {
+      units.push("infantry-ii");
+    } else {
+      units.push("infantry");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "fighter-ii")) {
+      units.push("fighter-ii");
+    } else {
+      units.push("fighter");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "destroyer-ii")) {
+      units.push("destroyer-ii");
+    } else {
+      units.push("destroyer");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "carrier-ii")) {
+      units.push("carrier-ii");
+    } else {
+      units.push("carrier");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "cruiser-ii")) {
+      units.push("cruiser-ii");
+    } else {
+      units.push("cruiser");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "dreadnaught-ii")) {
+      units.push("dreadnaught-ii");
+    } else {
+      units.push("dreadnaught");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "flagship-ii")) {
+      units.push("flagship-ii");
+    } else {
+      units.push("flagship");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "warsun-ii")) {
+      units.push("warsun-ii");
+    } else {
+      if (player.may_produce_warsuns == 1) {
+        units.push("warsun");
+      }
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "spacedock-ii")) {
+      units.push("spacedock-ii");
+    } else {
+      units.push("spacedock");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "pds-ii")) {
+      units.push("pds-ii");
+    } else {
+      units.push("pds");
+    }
+
+  }
+
+  for (let i = 0; i < units.length; i++) {
+    html += this.returnUnitTableEntry(units[i]);
   }
 
   html += `
-    <div class="unit-table">
-      <div class="unit-box">
-        <div class="unit-box">1</div>
-        <div class="unit-box">2</div>
-        <div class="unit-box">4</div>
-        <div class="unit-box">4</div>
-        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
-      </div>
-      <div class="unit-box">
-        <div class="unit-box">1</div>
-        <div class="unit-box">2</div>
-        <div class="unit-box">4</div>
-        <div class="unit-box">4</div>
-        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
-      </div>
-      <div class="unit-box">
-        <div class="unit-box">1</div>
-        <div class="unit-box">2</div>
-        <div class="unit-box">4</div>
-        <div class="unit-box">4</div>
-        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
-      </div>
-      <div class="unit-box">
-        <div class="unit-box">1</div>
-        <div class="unit-box">2</div>
-        <div class="unit-box">4</div>
-        <div class="unit-box">4</div>
-        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
-      </div>
-    </div>
 
     <div id="close-units-btn" class="button" style="">CONTINUE</div>
 
   `;
 
   return html;
+}
+
+returnUnitTableEntry(unittype) {
+
+  let obj = this.units[unittype];
+  if (!obj) { return ""; }
+
+  if (this.game.state.round == 1) {
+    if (obj.type == "carrier") {
+      obj.description = '<div style="background-color:yellow;color:black">Your most important ship. Activate a neighbouring sector and move this in with infantry to conquer planets and gain their resources and influence.</div>';
+    }
+  }
+
+
+  let html = `
+      <div class="unit-element">
+        <div class="unit-box-ship unit-box-ship-${unittype}"></div>
+        <div class="unit-box">
+	  <div class="unit-box-num">${obj.cost}</div>
+	  <div class="unit-box-desc">cost</div>
+	</div>
+        <div class="unit-box">
+	  <div class="unit-box-num">${obj.move}</div>
+	  <div class="unit-box-desc">move</div>
+	</div>
+        <div class="unit-box">
+	  <div class="unit-box-num">${obj.combat}</div>
+	  <div class="unit-box-desc">combat</div>
+	</div>
+        <div class="unit-box">
+	  <div class="unit-box-num">${obj.capacity}</div>
+	  <div class="unit-box-desc">carry</div>
+	</div>
+        <div class="unit-description">${obj.description}.</div>
+      </div>
+    `;
+
+  return html;
+
+
 }
 
 

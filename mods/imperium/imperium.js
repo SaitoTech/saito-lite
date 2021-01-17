@@ -933,7 +933,8 @@ console.log("P: " + planet);
       space		:	0,
       ground		:	1,
       can_be_stored	:	1,
-      capacity_required :	1
+      capacity_required :	1,
+      description	:	"Infantry invade and conquer planets, but cannot typically be moved between sectors without moving on carriers or other ships with capacity.",
     });
 
     this.importUnit("fighter", {
@@ -944,7 +945,8 @@ console.log("P: " + planet);
       combat 		:	9,
       strength 		:	1,
       can_be_stored	:	1,
-      capacity_required :	1
+      capacity_required :	1,
+      description	:	"Fighters are cheap and disposible ships deployed to keep damage away from capital ships. They must be transported on carriers or other ships with capacity.",
     });
 
 
@@ -953,7 +955,8 @@ console.log("P: " + planet);
       type     		:       "pds",
       range 		:	0,
       cost 		:	5,
-      combat 		:	6
+      combat 		:	6,
+      description	:	"PDS units fire on other ships that invade their sectors. They can also fire on foreign infantry that invade a planet.",
     });
 
     this.importUnit("spacedock", {
@@ -962,7 +965,8 @@ console.log("P: " + planet);
       capacity 		:	3,
       production 	:	4,
       combat      	: 	0,
-      range       	: 	0
+      range       	: 	0,
+      description	:	"Spacedocks are used to produce infantry and other ships. They cannot produce ships in space if an opponent fighter is in the sector",
     });
 
     this.importUnit("carrier", {
@@ -972,7 +976,8 @@ console.log("P: " + planet);
       move 		:	1,
       combat 		:	9,
       capacity 		:	4,
-      strength 		:	1
+      strength 		:	1,
+      description	:	"The Carrier is a troop and fighter transport ship. Load it with infantry and fighters and use it to conquer other sectors.",
     });
 
     this.importUnit("destroyer", {
@@ -984,6 +989,7 @@ console.log("P: " + planet);
       strength 		:	1,
       anti_fighter_barrage :	2,
       anti_fighter_barrage_combat :	9,
+      description	:	"The Destroyer is an inexpensive but mobile ship designed to counter fighter swarms - its ANTI-FIGHTER BARRAGE (2 rolls hitting on 9 or higher) happens at the very start of space-combat",
     });
 
     this.importUnit("cruiser", {
@@ -992,7 +998,8 @@ console.log("P: " + planet);
       cost 		:	2,
       move 		:	2,
       combat 		:	7,
-      strength 		:	1
+      strength 		:	1,
+      description	:	"The Cruiser is a more powerful ship with a reasonable chance of landing hits in battle.",
     });
 
     this.importUnit("dreadnaught", {
@@ -1004,7 +1011,8 @@ console.log("P: " + planet);
       combat 		:	6,
       strength 		:	2,
       bombardment_rolls	:	1,
-      bombardment_combat:	5
+      bombardment_combat:	5,
+      description	:	"The Dreadnaught is a powerful combat ship able to SUSTAIN DAMAGE once before being destroyed in combat",
     });
 
     this.importUnit("flagship", {
@@ -1014,7 +1022,8 @@ console.log("P: " + planet);
       move 		:	2,
       capacity 		:	1,
       combat 		:	7,
-      strength 		:	2
+      strength 		:	2,
+      description	:	"The Flagship is the pride of the fleet -- each faction's flagship confers specific abilities. See your factino sheet for more details",
     });
 
     this.importUnit("warsun", {
@@ -1026,7 +1035,8 @@ console.log("P: " + planet);
       combat 		:	3,
       strength 		:	2,
       bombardment_rolls	:	3,
-      bombardment_combat:	3
+      bombardment_combat:	3,
+      description	:	"The War Sun is death packaged in a mass of planet-destroying turbinium. Rumours of their lethality abound, as few have fought one and lived to tell the tale." ,
     });
 
   
@@ -1040,7 +1050,8 @@ console.log("P: " + planet);
       ground		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Infantry II are stronger and more resilient but cannot typically be moved between sectors without moving on carriers or other ships with capacity.",
     });
 
     this.importUnit("fighter-ii", {
@@ -1052,7 +1063,8 @@ console.log("P: " + planet);
       strength 		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Fighter II can move without being transported by other ships. Any ships inexcess of your carrying capacity could against your fleet supply.",
       
     });
 
@@ -1061,7 +1073,8 @@ console.log("P: " + planet);
       type     		:       "spacedock",
       capacity 		:	3,
       production 	:	4,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Spacedock II can produce more units whenever they produce.",
     });
 
     this.importUnit("pds-ii", {
@@ -1070,7 +1083,8 @@ console.log("P: " + planet);
       cost 		:	5,
       combat 		:	5,
       range		:	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"PDS II has a slightly more accurate targeting mechanism and can fire into adjacent sectors.",
     });
 
     this.importUnit("carrier-ii", {
@@ -1081,7 +1095,8 @@ console.log("P: " + planet);
       combat 		:	9,
       capacity 		:	6,
       strength 		:	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Carrier II has upgraded ship capacity and is slightly more robust in combat",
     });
 
     this.importUnit("destroyer-ii", {
@@ -1091,9 +1106,10 @@ console.log("P: " + planet);
       move 		:	2,
       combat 		:	8,
       strength 		:	1,
-      extension : 1,
+      extension 	: 	1,
       anti_fighter_barrage :	3,
       anti_fighter_barrage_combat :	6,
+      description	:	"Destroyer II has improved ANTI-FIGHTER-BARRAGE (3x6) and is slightly more effective in general combat",
     });
 
     this.importUnit("cruiser-ii", {
@@ -1103,7 +1119,8 @@ console.log("P: " + planet);
       move 		:	2,
       combat 		:	7,
       strength 		:	1,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Cruiser II has extended range and the ability to support a small phalanx of ground troops",
     });
 
     this.importUnit("dreadnaught-ii", {
@@ -1114,7 +1131,8 @@ console.log("P: " + planet);
       capacity 		:	1,
       combat 		:	5,
       strength 		:	2,
-      extension : 1
+      extension 	: 	1,
+      description	:	"Dreadnaught II has improved movement, can support a small ground team and is slightly more effective in space combat",
     });
 
 
@@ -8950,6 +8968,15 @@ try {
       }
     });
     this.menu.addSubMenuOption("game-info", {
+      text : "Units",
+      id : "game-units",
+      class : "game-units",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleUnitsMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
       text : "Laws",
       id : "game-agendas",
       class : "game-agendas",
@@ -9530,6 +9557,9 @@ handleTechMenuItem() {
 handleLawsMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnLawsOverlay());
 }
+handleUnitsMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
+}
 handleStrategyMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnStrategyOverlay());
 }
@@ -9673,6 +9703,7 @@ handleSystemsMenuItem() {
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
     if (obj.extension == null)		{ obj.extension = 0; }			// 1 if replacing other unit as upgrade
+    if (obj.description == null)	{ obj.description = ""; }		// shown on unit sheet
     if (obj.anti_fighter_barrage ==null){ obj.anti_fighter_barrage = 0; }
     if (obj.anti_fighter_barrage_combat ==null){ obj.anti_fighter_barrage_combat = 0; }
     if (obj.temporary_combat_modifier == null) { obj.temporary_combat_modifier = 0; } // some action cards manipulate
@@ -11636,9 +11667,8 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
-          this.game.queue.push("showunitoverlay");
           this.game.queue.push("shownewobjectives");
-	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">The Galactic Senate has Fallen!</div><div style="margin-top:10px">And with its collapse age-old conflicts have been reborn, pitting faction against faction in a race to claim New Byzantium and the Imperial Throne...</div><div style="margin-top:10px;margin-bottom:10px;">But which faction will win? The race is not always to the swiftest or strongest or most keen. Even the weakest may yet plot elevation to the Seat of Galactic Power.</div>`);
+	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px">You are playing as ${this.factions[faction].name}. If you are new to Red Imperium, move a carrier with infantry into a sector beside your homeworld first turn and expand your empire...</div><div style="margin-top:10px;margin-bottom:10px;">Capture resource-rich planets help you build ships and wage war. Capture influence-rich planets to purchase tokens for more moves. Good luck.</div>`);
 //          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	} else {
           this.game.queue.push("shownewobjectives");
@@ -25465,55 +25495,140 @@ returnStrategyOverlay() {
 
 returnUnitsOverlay() {
 
-  let title = "Your Units";
-
-  let html = `
-    <div class="units_overlay_container" style="">
-  `;
+  let html = `<div class="units-overlay-container" style="">`;
+  let units = [];
 
   if (this.game.state.round == 1) {
     html += `
-      <div style="width:100%"><div class="new_units_overlay_text">check units and movement properties in the INFO menu...</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-title">Starting Units</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the INFO menu...</div></div>
+      <div class="unit-table">
     `;
+
+    let fleet = this.returnPlayerFleet(this.game.player);
+
+    if (fleet.carriers > 0) 	{ units.push("carrier"); }
+    if (fleet.cruisers > 0) 	{ units.push("cruiser"); }
+    if (fleet.destroyers > 0) 	{ units.push("destroyer"); }
+    if (fleet.dreadnaughts > 0) { units.push("dreadnaughts"); }
+    if (fleet.warsuns > 0) 	{ units.push("warsun"); }
+    if (fleet.fighters > 0) 	{ units.push("fighter"); }
+    if (fleet.infantry > 0) 	{ units.push("infantry"); }
+    if (fleet.flagships > 0) 	{ units.push("flagship"); }
+    if (fleet.pds > 0) 		{ units.push("pds"); }
+    if (fleet.spacedocks > 0) 	{ }
+
+  } else {
+    let player = this.game.players_info[this.game.player-1];
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "infantry-ii")) {
+      units.push("infantry-ii");
+    } else {
+      units.push("infantry");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "fighter-ii")) {
+      units.push("fighter-ii");
+    } else {
+      units.push("fighter");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "destroyer-ii")) {
+      units.push("destroyer-ii");
+    } else {
+      units.push("destroyer");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "carrier-ii")) {
+      units.push("carrier-ii");
+    } else {
+      units.push("carrier");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "cruiser-ii")) {
+      units.push("cruiser-ii");
+    } else {
+      units.push("cruiser");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "dreadnaught-ii")) {
+      units.push("dreadnaught-ii");
+    } else {
+      units.push("dreadnaught");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "flagship-ii")) {
+      units.push("flagship-ii");
+    } else {
+      units.push("flagship");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "warsun-ii")) {
+      units.push("warsun-ii");
+    } else {
+      if (player.may_produce_warsuns == 1) {
+        units.push("warsun");
+      }
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "spacedock-ii")) {
+      units.push("spacedock-ii");
+    } else {
+      units.push("spacedock");
+    }
+
+    if (imperium_self.doesPlayerHaveTech(this.game.player, "pds-ii")) {
+      units.push("pds-ii");
+    } else {
+      units.push("pds");
+    }
+
+  }
+
+  for (let i = 0; i < units.length; i++) {
+    html += this.returnUnitTableEntry(units[i]);
   }
 
   html += `
-    <div class="unit-table">
-      <div class="unit-box">
-        <div class="unit-box">1</div>
-        <div class="unit-box">2</div>
-        <div class="unit-box">4</div>
-        <div class="unit-box">4</div>
-        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
-      </div>
-      <div class="unit-box">
-        <div class="unit-box">1</div>
-        <div class="unit-box">2</div>
-        <div class="unit-box">4</div>
-        <div class="unit-box">4</div>
-        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
-      </div>
-      <div class="unit-box">
-        <div class="unit-box">1</div>
-        <div class="unit-box">2</div>
-        <div class="unit-box">4</div>
-        <div class="unit-box">4</div>
-        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
-      </div>
-      <div class="unit-box">
-        <div class="unit-box">1</div>
-        <div class="unit-box">2</div>
-        <div class="unit-box">4</div>
-        <div class="unit-box">4</div>
-        <div class="unit-description">The carrier transports infantry and fighters between sectors.</div>
-      </div>
-    </div>
 
     <div id="close-units-btn" class="button" style="">CONTINUE</div>
 
   `;
 
   return html;
+}
+
+returnUnitTableEntry(unittype) {
+
+  let obj = this.units[unittype];
+  if (!obj) { return ""; }
+
+  let html = `
+      <div class="unit-element">
+        <div class="unit-box-ship unit-box-ship-${unittype}"></div>
+        <div class="unit-box">
+	  <div class="unit-box-num">${obj.cost}</div>
+	  <div class="unit-box-desc">cost</div>
+	</div>
+        <div class="unit-box">
+	  <div class="unit-box-num">${obj.move}</div>
+	  <div class="unit-box-desc">move</div>
+	</div>
+        <div class="unit-box">
+	  <div class="unit-box-num">${obj.combat}</div>
+	  <div class="unit-box-desc">combat</div>
+	</div>
+        <div class="unit-box">
+	  <div class="unit-box-num">${obj.capacity}</div>
+	  <div class="unit-box-desc">carry</div>
+	</div>
+        <div class="unit-description">${obj.description}.</div>
+      </div>
+    `;
+
+  return html;
+
+
 }
 
 

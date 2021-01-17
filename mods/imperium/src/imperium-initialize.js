@@ -129,6 +129,15 @@ try {
       }
     });
     this.menu.addSubMenuOption("game-info", {
+      text : "Units",
+      id : "game-units",
+      class : "game-units",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleUnitsMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-info", {
       text : "Laws",
       id : "game-agendas",
       class : "game-agendas",

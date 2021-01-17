@@ -25,6 +25,7 @@
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
     if (obj.extension == null)		{ obj.extension = 0; }			// 1 if replacing other unit as upgrade
+    if (obj.description == null)	{ obj.description = ""; }		// shown on unit sheet
     if (obj.anti_fighter_barrage ==null){ obj.anti_fighter_barrage = 0; }
     if (obj.anti_fighter_barrage_combat ==null){ obj.anti_fighter_barrage_combat = 0; }
     if (obj.temporary_combat_modifier == null) { obj.temporary_combat_modifier = 0; } // some action cards manipulate

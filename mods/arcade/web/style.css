@@ -29,9 +29,11 @@ body {
   justify-content: center;
 }
 
+/*
 a {
-  color: #BCF;
+  color: var(--saito-red);
 }
+*/
 
 .invite-tile-button-join {
   height: 5em;

@@ -23,6 +23,127 @@
 }
 
 
+/*** unit overlay ***/
+
+#close-units-btn {
+  margin-bottom: 30px;
+  width: 120px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 2em;
+}
+.unit-box-ship {
+  float: left;
+  color: black;
+  width: 200px;
+  text-align: center;
+  height: 100px;
+  vertical-align: middle;
+  padding-top: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: 'bank-gothic', 'orbitron-medium', helvetica;
+}
+.unit-box-ship-fighter, .unit-box-ship-fighter-ii {
+  background-image: url("/imperium/img/ships/fighter_100x200.png");
+  background-size: cover;
+}
+.unit-box-ship-destroyer, .unit-box-ship-destroyer-ii {
+  background-image: url("/imperium/img/ships/destroyer_100x200.png");
+  background-size: cover;
+}
+.unit-box-ship-carrier, .unit-box-ship-carrier-ii {
+  background-image: url("/imperium/img/ships/carrier_100x200.png");
+  background-size: cover;
+}
+.unit-box-ship-cruiser, .unit-box-ship-cruiser-ii {
+  background-image: url("/imperium/img/ships/cruiser_100x200.png");
+  background-size: cover;
+}
+.unit-box-ship-dreadnaught, .unit-box-ship-dreadnaught-ii {
+  background-image: url("/imperium/img/ships/dreadnaught_100x200.png");
+  background-size: cover;
+}
+.unit-box-ship-flagship {
+  background-image: url("/imperium/img/ships/flagship_100x200.png");
+  background-size: cover;
+}
+.unit-box-ship-warsun, .unit-box-ship-warsun-ii {
+  background-image: url("/imperium/img/ships/warsun_100x200.png");
+  background-size: cover;
+}
+.units-overlay-container {
+  background-image: url(/imperium/img/starscape_background1.jpg);
+  background-size: cover;
+  min-width: 80vw;
+  min-height: 80vh;
+  overflow-y: scroll;
+  max-height: 80vh;
+}
+.unit-element {
+  margin-top:20px;
+  color: white;
+  font-family: 'orbitron-light', helvetica, arial;
+}
+.unit-box {
+  float: left;
+  width: 120px;
+  height: 120px;
+  border: 1px solid green;
+  text-align: center;
+}
+.unit-box-num {
+  font-size: 60px;
+  padding-top: 17px;
+}
+.unit-box-desc {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 18px;
+  clear:both;
+}
+.unit-description {
+  clear: both;
+  padding: 10px;
+  font-weight: bold;
+  min-height: 50px;
+  line-height: 1.7em;
+  letter-spacing: 0.1em;
+}
+.units-overlay-container {
+  background-colour: whitesmoke;
+  width: 800px;
+}
+.units-overlay-title {
+  padding-top:30px;
+  color: white;
+  width: 100%;
+  text-align: center;
+  font-size: 4em;
+  font-family: 'orbitron-medium';
+}
+.units-overlay-text {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  font-size: 1.2em;
+  font-family: 'orbitron-medium';
+  background-color: whitesmoke;
+  padding-top:8px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-top: 15px;
+}
+.unit-table {
+  width: 685px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
 .new_action_cards_overlay {
   width: 70vw;
   height: auto;

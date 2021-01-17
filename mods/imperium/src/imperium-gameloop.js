@@ -1252,9 +1252,8 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
-          this.game.queue.push("showunitoverlay");
           this.game.queue.push("shownewobjectives");
-	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">The Galactic Senate has Fallen!</div><div style="margin-top:10px">And with its collapse age-old conflicts have been reborn, pitting faction against faction in a race to claim New Byzantium and the Imperial Throne...</div><div style="margin-top:10px;margin-bottom:10px;">But which faction will win? The race is not always to the swiftest or strongest or most keen. Even the weakest may yet plot elevation to the Seat of Galactic Power.</div>`);
+	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px">You are playing as ${this.factions[faction].name}. If you are new to Red Imperium, move a carrier with infantry into a sector beside your homeworld first turn and expand your empire...</div><div style="margin-top:10px;margin-bottom:10px;">Capture resource-rich planets help you build ships and wage war. Capture influence-rich planets to purchase tokens for more moves. Good luck.</div>`);
 //          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	} else {
           this.game.queue.push("shownewobjectives");

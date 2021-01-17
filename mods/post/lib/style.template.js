@@ -214,6 +214,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 .post-view-container {
   color: #444;
   width: 90vw;
+  max-width: 1000px;
   min-height: 90vh;
   max-height: 90vh;
   background-color: whitesmoke;
@@ -310,7 +311,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-view-comment-text {
   clear: both;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .post-view-comment-sublinks {
@@ -362,7 +363,8 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .arcade-post-sublinks {
   clear: both;
-  font-size: 0.8em;
+  font-size: 0.85em;
+  padding-top: 2px;
 }
 
 .arcade-post-title {

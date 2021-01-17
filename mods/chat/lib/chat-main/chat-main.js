@@ -9,6 +9,7 @@ module.exports = ChatMain = {
       if (app.BROWSER == 0) { return; }
 
       if (!document.getElementById("chat-main")) {
+	mod.renderMode = "main";
 	app.browser.addElementToDom(ChatMainTemplate());
       }
 

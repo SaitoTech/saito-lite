@@ -571,7 +571,7 @@ class Chat extends ModTemplate {
   //////////////////
   openChatBox(group_id=null) {
 
-    if (this.renderMode != "email") { return; }
+    if (this.renderMode != "email" && this.renderMode != "none") { return; }
 
 
     if (group_id == null) {
