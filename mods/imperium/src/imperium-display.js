@@ -568,7 +568,7 @@ returnUnitTableEntry(unittype) {
 
   if (this.game.state.round == 1) {
     if (obj.type == "carrier") {
-      obj.description = '<div style="background-color:yellow;color:black">Your most important ship. Activate a neighbouring sector and move this in with infantry to conquer planets and gain their resources and influence.</div>';
+      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">Your most important starting ship! Move this into a neighbouring sector (bring infantry) to conquer planets and gain their resources and influence.</div>';
     }
   }
 
