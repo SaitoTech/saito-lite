@@ -43,13 +43,13 @@ try {
 
 returnHowToPlayOverlay() {
   let imperium_self = this;
-  let html = "";
-
   let html = `
+
     <div class="how_to_play_overlay" id="how_to_play_overlay">
       <div class="new_action_cards_overlay_card_container">
       </div>
     </div>
+
   `;
 
   return html;
