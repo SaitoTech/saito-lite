@@ -1,13 +1,3 @@
-/**
-.button {
-  background: var(--saito-red);
-  color: #fefefe;
-}
-.button:hover {
-  background: #fefefe;
-  color: var(--saito-red);
-}
-**/
 
 :root {
   --saito-red: #639;
@@ -29,11 +19,9 @@ body {
   justify-content: center;
 }
 
-/*
-a {
-  color: var(--saito-red);
+#arcade-posts-insert-add-contact {
+  margin-right:15px;
 }
-*/
 
 .invite-tile-button-join {
   height: 5em;

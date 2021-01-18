@@ -8,7 +8,7 @@ module.exports = ChatRoomTemplate = (group) => {
 	      <p class="chat-room-name">${group.name}</p>
 	    </div>
 
-            <div class="chat-room-content" id="chat-room-content-${group.id}"></div>
+            <div class="chat-room-content" id="chat-room-content-${group.id}" style="max-height:100%;overflow-y: scroll;"></div>
 
             <div class="chat-room-footer">
               <div class="chat-room-input">

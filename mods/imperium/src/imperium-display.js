@@ -568,7 +568,7 @@ returnUnitTableEntry(unittype) {
 
   if (this.game.state.round == 1) {
     if (obj.type == "carrier") {
-      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">Your most important starting ship! Move this into a neighbouring sector (bring infantry) to conquer planets and gain their resources and influence.</div>';
+      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is your most important starting ship! Move this into a neighbouring sector (bring infantry) to conquer planets and gain their resources and influence.</div>';
     }
   }
 
@@ -759,10 +759,12 @@ displayFactionDashboard() {
 
   try {
     document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard();
-    var pl = "";
+    let pl = "";
+    let fo = "";
     for (let i = 0; i < this.game.players_info.length; i++) {
 
       pl = "p" + (i+1);
+      fo = ".dash-faction."+pl;
 
       let total_resources = this.returnTotalResources((i+1)) - this.game.players_info[i].goods;
       let available_resources = this.returnAvailableResources((i+1)) - this.game.players_info[i].goods;
@@ -777,7 +779,13 @@ displayFactionDashboard() {
       document.querySelector(`.${pl} .dash-item-goods`).innerHTML = this.game.players_info[i].goods;
       document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
       document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
+
+      document.querySelector(fo).onclick = (e) => {
+        imperium_self.displayFactionSheet((i+1));
+      }
+
     }
+
   } catch (err) {}
 }
 

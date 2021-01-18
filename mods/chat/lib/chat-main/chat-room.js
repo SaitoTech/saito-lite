@@ -24,6 +24,16 @@ module.exports = ChatRoom = {
       let message_input = document.querySelector('#input.chat-room-input');
       let msg = message_input == null ? '' : message_input.value;
 
+
+      //
+      // how many messages -- max 100 in community chat
+      //
+      while (groups.txs.length > 100) {
+        group.txs.shift();
+      }
+
+
+
       let message_blocks = mod.createMessageBlocks(group); 
       let chat_box_main = document.getElementById(`chat-room-content-${group.id}`);
 
@@ -42,6 +52,7 @@ module.exports = ChatRoom = {
         }
       }
 
+console.log("scrolling to the bottom!");
       this.scrollToBottom(group.id);
 
     },
@@ -64,8 +75,8 @@ module.exports = ChatRoom = {
           mod.receiveMessage(app, newtx, "chatroom"); // rendermode
           //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
-	  msg_input.focus();
-	  msg_input.select();
+	  document.querySelector("#input.chat-room-input").focus();
+	  document.querySelector("#input.chat-room-input").select();
         }
       });
 
