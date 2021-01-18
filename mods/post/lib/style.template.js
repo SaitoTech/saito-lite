@@ -223,7 +223,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   overflow-y: scroll;
   border-radius: 3px;
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
-  font-size: 1.5em;
+  font-size: 1.15em;
 }
 
 .post-view-overview {}
@@ -237,6 +237,9 @@ module.exports = PostStyleTemplate = (app, mod) => {
   float: left;
   font-size: 1.2em;
   font-weight: bold;
+}
+.post-view-title a {
+  text-decoration: none;
 }
 
 .post-view-sublinks {
