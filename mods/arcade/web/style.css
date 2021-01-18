@@ -11,11 +11,10 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   font-size: 1.0em;
   color: var(--saito-skyline-grey);
   background: var(--saito-nightscape);
-  overflow: hidden;
   justify-content: center;
 }
 
@@ -43,6 +42,8 @@ body {
   display: flex;
   flex-flow: column;
   z-index: 10;
+  padding-bottom: 10px;
+  padding-left: 10px;
 }
 .arcade-sidebar>div {
   overflow-x: hidden;
@@ -81,6 +82,7 @@ body {
   height: calc(100vh - 5em - 5px);
   display: grid;
   grid-template-rows: 2.5em auto 1fr;
+  padding-right: 10px;
 }
 
 #arcade-tabs {
