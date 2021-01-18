@@ -443,11 +443,7 @@ class Poker extends GameTemplate {
     for (let i = 0; i < this.game.players.length; i++) {
       this.updateLog("Seat "+(i+1)+": "+this.game.state.player_names[i]+" ("+this.game.state.player_credit+")");
     }
-
-    //Flavor Round counters
-    //this.updateLog("Round: "+(this.game.state.round) +". FIGHT!");
-    //this.updateLog("Heaven or Hell. Duel: "+(this.game.state.round) +". Let's Rock");
-    //this.updateLog("The wheel of fate is turning. Rebel: "+(this.game.state.round) +". Action");
+    this.updateLog("Round: "+(this.game.state.round));
     document.querySelectorAll('.plog').forEach(el => {
       el.innerHTML = "";
     });
