@@ -31,6 +31,9 @@ hideOverlays() {
   });
 }
 
+handleHowToPlayMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnHowToPlayOverlay());
+}
 handleTechMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnTechOverlay());
 }

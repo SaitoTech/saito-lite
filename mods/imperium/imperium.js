@@ -1897,7 +1897,7 @@ console.log("P: " + planet);
 
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
-      type	:	"ability" ,
+      type	:	  "ability" ,
       text	  :	  "Drop two infantry onto any controlled planet" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].orbital_drop == undefined) {
@@ -11668,7 +11668,7 @@ console.log(JSON.stringify(this.game.state.choices));
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
           this.game.queue.push("shownewobjectives");
-	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px">You are playing as ${this.factions[faction].name}. If you are new to Red Imperium, move a carrier with infantry into a sector beside your homeworld first turn and expand your empire...</div><div style="margin-top:10px;margin-bottom:10px;">Capture resource-rich planets help you build ships and wage war. Capture influence-rich planets to purchase tokens for more moves. Good luck.</div>`);
+	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px">You are playing as ${this.factions[faction].name}. If you are new to Red Imperium, move a carrier with infantry into a sector beside your homeworld first turn and expand your empire...</div><div style="margin-top:10px;margin-bottom:10px;">Capture resource-rich planets to build ships and wage war. Capture influence-rich planets to purchase tokens for more moves. Good luck.</div>`);
 //          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	} else {
           this.game.queue.push("shownewobjectives");
@@ -25605,7 +25605,7 @@ returnUnitTableEntry(unittype) {
 
   if (this.game.state.round == 1) {
     if (obj.type == "carrier") {
-      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">Your most important starting ship! Move this into a neighbouring sector (bring infantry) to conquer planets and gain their resources and influence.</div>';
+      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is your most important starting ship! Move this into a neighbouring sector (bring infantry) to conquer planets and gain their resources and influence.</div>';
     }
   }
 
@@ -25796,10 +25796,12 @@ displayFactionDashboard() {
 
   try {
     document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard();
-    var pl = "";
+    let pl = "";
+    let fo = "";
     for (let i = 0; i < this.game.players_info.length; i++) {
 
       pl = "p" + (i+1);
+      fo = ".dash-faction."+pl;
 
       let total_resources = this.returnTotalResources((i+1)) - this.game.players_info[i].goods;
       let available_resources = this.returnAvailableResources((i+1)) - this.game.players_info[i].goods;
@@ -25814,7 +25816,13 @@ displayFactionDashboard() {
       document.querySelector(`.${pl} .dash-item-goods`).innerHTML = this.game.players_info[i].goods;
       document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
       document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
+
+      document.querySelector(fo).onclick = (e) => {
+        imperium_self.displayFactionSheet((i+1));
+      }
+
     }
+
   } catch (err) {}
 }
 

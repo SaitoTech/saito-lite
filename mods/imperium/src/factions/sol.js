@@ -53,7 +53,7 @@
 
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
-      type	:	"ability" ,
+      type	:	  "ability" ,
       text	  :	  "Drop two infantry onto any controlled planet" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].orbital_drop == undefined) {

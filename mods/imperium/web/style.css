@@ -1851,7 +1851,10 @@ body {
   height: 4.4em;
   padding: 0;
 }
-
+.dash-faction-info:hover {
+  font-weight:bold;
+  background-color: #fff3;
+}
 .dash-item {
   width: 3em;
   line-height: 1.9em;

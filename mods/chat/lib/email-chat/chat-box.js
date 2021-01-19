@@ -25,6 +25,14 @@ module.exports = ChatBox = {
           chat_box_main.innerHTML = `<p id="chat-box-default-message-${group_id}" style="text-align:center">No messages in this group :(</p>`;
        }
 
+        //
+        // how many messages -- max 100 in community chat
+        //
+	while (mod.groups[idx].txs.length > 100) {
+	  mod.groups[idx].txs.shift();
+	}
+
+
 	let message_blocks = mod.createMessageBlocks(mod.groups[idx]);
 	let first_comment_sig = "";
 

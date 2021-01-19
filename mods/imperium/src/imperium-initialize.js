@@ -53,27 +53,14 @@
     // factions
     //
     this.menu.addMenuOption({
-      text : "Factions",
-      id : "game-factions",
-      class : "game-factions",
+      text : "How to Play",
+      id : "game-howto",
+      class : "game-howto",
       callback : function(app, game_mod) {
-        game_mod.menu.showSubMenu("game-factions");
+        game_mod.menu.hideSubMenus();
+	game_mod.handleHowToPlayMenuItem();
       }
     });
-try {
-    for (let i = 0; i < this.game.players_info.length; i++) {
-      let fctn = imperium_self.returnFactionNickname((i+1));
-      this.menu.addSubMenuOption("game-factions", {
-        text : fctn ,
-        id : ("game-faction-"+(i+1)),
-        class : ("game-faction-"+(i+1)),
-        callback : function(app, game_mod) {
-	  game_mod.menu.hideSubMenus();
-	  game_mod.displayFactionSheet((i+1));
-        }
-      });
-    }
-} catch (err) {}
 
     this.menu.addMenuOption({
       text : "Info",
