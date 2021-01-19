@@ -368,12 +368,12 @@ module.exports = PostStyleTemplate = (app, mod) => {
 }
 
 .arcade-post-title {
-  font-size: 1.2em;
-  font-weight: bold;
+  font-size: 1em;
   float: left;
-  font-weight: bold;
   cursor: pointer;
+  margin: 0 0 0.5em;
 }
+
 .arcade-post-title > a {
   text-decoration: none;
   color: var(--saito-red);
