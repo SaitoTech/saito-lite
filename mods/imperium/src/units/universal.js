@@ -10,7 +10,7 @@
       ground		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      description	:	"Infantry invade and conquer planets, but cannot typically be moved between sectors without moving on carriers or other ships with capacity.",
+      description	:	"Infantry invade planets, but cannot move between sectors without being carried on carriers or other ships with capacity.",
     });
 
     this.importUnit("fighter", {
@@ -22,7 +22,7 @@
       strength 		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      description	:	"Fighters are cheap and disposible ships deployed to keep damage away from capital ships. They must be transported on carriers or other ships with capacity.",
+      description	:	"Fighters are disposible ships deployed to protect capital ships. They must be transported on carriers or other ships with capacity.",
     });
 
 

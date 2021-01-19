@@ -934,7 +934,7 @@ console.log("P: " + planet);
       ground		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      description	:	"Infantry invade and conquer planets, but cannot typically be moved between sectors without moving on carriers or other ships with capacity.",
+      description	:	"Infantry invade planets, but cannot move between sectors without being carried on carriers or other ships with capacity.",
     });
 
     this.importUnit("fighter", {
@@ -946,7 +946,7 @@ console.log("P: " + planet);
       strength 		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      description	:	"Fighters are cheap and disposible ships deployed to keep damage away from capital ships. They must be transported on carriers or other ships with capacity.",
+      description	:	"Fighters are disposible ships deployed to protect capital ships. They must be transported on carriers or other ships with capacity.",
     });
 
 
@@ -8892,27 +8892,14 @@ ACTION CARD - types
     // factions
     //
     this.menu.addMenuOption({
-      text : "Factions",
-      id : "game-factions",
-      class : "game-factions",
+      text : "Rules",
+      id : "game-howto",
+      class : "game-howto",
       callback : function(app, game_mod) {
-        game_mod.menu.showSubMenu("game-factions");
+        game_mod.menu.hideSubMenus();
+	game_mod.handleHowToPlayMenuItem();
       }
     });
-try {
-    for (let i = 0; i < this.game.players_info.length; i++) {
-      let fctn = imperium_self.returnFactionNickname((i+1));
-      this.menu.addSubMenuOption("game-factions", {
-        text : fctn ,
-        id : ("game-faction-"+(i+1)),
-        class : ("game-faction-"+(i+1)),
-        callback : function(app, game_mod) {
-	  game_mod.menu.hideSubMenus();
-	  game_mod.displayFactionSheet((i+1));
-        }
-      });
-    }
-} catch (err) {}
 
     this.menu.addMenuOption({
       text : "Info",
@@ -9550,6 +9537,9 @@ hideOverlays() {
   });
 }
 
+handleHowToPlayMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnHowToPlayOverlay());
+}
 handleTechMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnTechOverlay());
 }
@@ -25078,6 +25068,133 @@ try {
 }
 
 
+returnHowToPlayOverlay() {
+  let imperium_self = this;
+  let html = `
+
+    <div class="how_to_play_overlay" id="how_to_play_overlay">
+
+<h1>Basic Rules:</h1>
+
+Players start with 3 command tokens, 3 fleet supply and 2 strategy tokens:
+
+<p></p>
+
+<img src="/imperium/img/player_tokens.png" class="demo_player_tokens" />
+
+<p></p>
+
+Every turn players can:
+
+  <ol class="demo_ordered_list">
+    <li>Spend a command token to activate a sector</li>
+      <ul style="margin-left:20px">
+        <li style="list-style:none">- to move ships into the sector</li>
+        <li style="list-style:none">- to produce in the sector</li>
+      </ul>
+    <li>Play your strategy card</li>
+    <li>Pass</li>
+  </ol>
+
+<h2 style="clear:both;margin-top:35px">Conquer Planets:</h2>
+
+<img src="/imperium/img/planets/BROUGHTON.png" class="demo_planet_card" />
+
+<p></p>
+
+Planets give <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. The third hex on the board indicates planet type: industrial-green, cultural-blue, and hazardous-red.
+
+<p></p>
+
+<div style="padding-left:30px;padding-right:30px;">
+<div class="how_to_play_resources_entry">
+<b>RESOURCES:</b>
+<p></p>
+use resources to build units and research technology.
+</div>
+
+<div class="how_to_play_resources_entry">
+<b>INFLUENCE:</b>
+<p></p>
+influence is used to vote on laws and buy command tokens.
+</div>
+</div>
+
+<h2 style="clear:both;margin-top:35px;">Upgrade Faction:</h2>
+
+<img src="/imperium/img/factions/faction_dashboard.png" class="demo_planet_card" />
+
+<p></p>
+
+Each faction has special abilities, accessible through the faction dashboard. These show total available <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. They also show faction trade goods and commodities.
+
+<div style="padding-left:30px;padding-right:30px;">
+<div class="how_to_play_resources_entry">
+<b>TRADE GOODS:</b>
+<p></p>
+trade goods can be spent instead of resources or influence.
+</div>
+
+<div class="how_to_play_resources_entry">
+<b>COMMODITIES:</b>
+<p></p>
+commodities are turned into trade goods by trading them with others.
+</div>
+</div>
+
+	</div>
+      </div>
+
+    </div>
+
+    <style type="text/css">
+.resources_box {
+ background-color:black;padding:4px;border:1px solid #fff;
+}
+.influence_box {
+  background-color:orange;padding:4px;border:1px solid #fff;
+}
+.demo_ordered_list {
+  margin-left: 30px; 
+  font-family: courier;
+  margin-top: 2a0px;
+  margin-bottom: 20px;
+}
+.demo_planet_card {
+  float: right;
+  width: 150px;
+}
+.demo_player_tokens {
+  clear:both;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 200px;
+  display: inline-block;
+}
+.how_to_play_overlay {
+  padding:30px;
+  width: 800px;
+  max-width: 80vw;
+  max-height: 90vh;
+  font-family: 'orbitron-medium', helvetica, arial;
+  line-height: 1.7em;
+  font-size: 1.1em;
+  background-image: url('/imperium/img/starscape-background4.jpg');
+  background-size: cover;
+  color: white;
+  overflow-y: scroll;
+  font-size: 1.1em;
+}
+.how_to_play_resources_entry {
+  padding-top: 20px;
+}
+    </style>
+  `;
+
+  return html;
+}
 returnNewActionCardsOverlay(cards) {
   let imperium_self = this;
 
@@ -25605,7 +25722,7 @@ returnUnitTableEntry(unittype) {
 
   if (this.game.state.round == 1) {
     if (obj.type == "carrier") {
-      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is your most important starting ship! Move this into a neighbouring sector (bring infantry) to conquer planets and gain their resources and influence.</div>';
+      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is the most important starting ship. Move it into a neighbouring sector to conquer planets and gain their resources and influence.</div>';
     }
   }
 

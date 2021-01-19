@@ -53,7 +53,7 @@
     // factions
     //
     this.menu.addMenuOption({
-      text : "How to Play",
+      text : "Rules",
       id : "game-howto",
       class : "game-howto",
       callback : function(app, game_mod) {
