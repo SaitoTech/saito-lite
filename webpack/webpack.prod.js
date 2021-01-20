@@ -58,6 +58,11 @@ webpack({
   module: {
         rules: [
             {
+                test: /\.mjs$/,
+                include: /(node_modules)/,
+                type: 'javascript/auto',
+            },
+            {
                 test: /html$/,
                 exclude: [ /(mods)/, /(email)/ ],
             },

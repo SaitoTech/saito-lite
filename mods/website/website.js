@@ -49,12 +49,12 @@ class Website extends ModTemplate {
       this.mre.render(this.app, this, ModalRegisterEmail.MODES.NEWSLETTER);
       this.mre.attachEvents(this.app, this);
     }
-    let doPubsaleSignup = app.browser.parseHash(window.location.hash).pubsale;
+    let doPubsaleSignup = app.browser.parseHash(window.location.hash).private_sale;
     if(doPubsaleSignup) {
       this.mre = new ModalRegisterEmail(app);
       this.mre.render(this.app, this, ModalRegisterEmail.MODES.PUBLICSALE);
       this.mre.attachEvents(this.app, this);
-      window.location.hash = app.browser.removeFromHash(window.location.hash, "private-sale");
+      window.location.hash = app.browser.removeFromHash(window.location.hash, "private_sale");
     }
     
   }
