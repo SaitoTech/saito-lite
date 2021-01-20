@@ -305,10 +305,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-view-comment {
   clear: both;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 1em 5px
 }
 
 .post-view-comment:nth-child(even) {
@@ -317,7 +314,6 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-view-comment-text {
   clear: both;
-  margin-top: 20px;
 }
 
 .post-view-comment-sublinks {
@@ -377,7 +373,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   font-size: 1em;
   float: left;
   cursor: pointer;
-  margin: 0 0 0.5em;
+  margin: 0 0 0.3em;
 }
 
 .arcade-post-title > a {
