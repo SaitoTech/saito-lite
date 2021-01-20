@@ -96,17 +96,31 @@ a:hover {
 }
 
 body {
+  min-height: 100vh;
   background-color: var(--backround-general);
   color: var(--text-color-normal);
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
-  overflow: hidden;
-}
+  overflow-x: none;
+  overflow-y: scroll;
+  height: 100%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 
+}
+::-webkit-scrollbar {
+  display: none;
+}
+/*
 ::-webkit-scrollbar {
   width: 7px;
 }
+*/
 
 ::-webkit-scrollbar-track {
   background: var(--scrollbarBG);
@@ -1045,7 +1059,8 @@ div#message-wrapper {
   background-position: 0em;
   background-size: cover;
   /* sus and still out to jury */
-  position: fixed;
+  position: absolute;
+  /* position: fixed; */
   width: 100%;
   top: 0%;
   z-index: 1;
@@ -1084,6 +1099,7 @@ div#message-wrapper {
   border:  solid 1px;
   padding: 0em 0.4em;
   height: 1.35em;
+  
 }
 
 .header-mini-wallet {
@@ -1192,6 +1208,8 @@ div#message-wrapper {
   width: 400px;
   right: -405px;
   position: absolute;
+  height: calc(100vh - 5em);
+  overflow-y: scroll;
 }
 
 .show-right-sidebar, .show-right-sidebar-hard {
@@ -1592,7 +1610,7 @@ div#message-wrapper {
 
 .welcome-modal-wrapper {
   display: grid;
-  grid-template-columns: 6fr 1fr;
+  grid-template-columns: 6fr 2fr;
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   background-image: url(/saito/img/dreamscape.png);
   background-position: 0em;
@@ -1621,11 +1639,9 @@ div#message-wrapper {
 .welcome-modal-exit .fa-arrow-right {
   margin: auto;
   font-size: 5vw;
-  position: absolute;
-  bottom: 0px;
+  margin-top: 0.5em;
   width: 100%;
   text-align: center;
-  position: absolute;
 }
 
 .welcome-modal-header {
@@ -1862,4 +1878,3 @@ a.header-icon-fullscreen.tip {
 .align-top {
   align-self: auto !important;
 }
-
