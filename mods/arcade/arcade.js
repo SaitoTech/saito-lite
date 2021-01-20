@@ -1647,6 +1647,29 @@ console.log("Adding: " + game_id);
 
     await app.storage.executeDatabase(sql, params, "arcade");
 
+
+    //
+    // periodically prune
+    //
+    let current_ts = new Date().getTime();
+    let one_week_ago = current_ts - 640000000;
+    let delete_sql = "SELECT game_id FROM gamestate WHERE last_move < $last_move GROUP BY game_id ORDER BY last_move ASC";
+    let delete_params = { $last_move : one_week_ago };
+    //if (Math.random() < 0.005) {
+    if (1) {
+      let rows3 = await app.storage.queryDatabase(delete_sql, delete_params, "arcade");
+      if (rows3) {
+        if (rows3.length > 0) {
+          for (let i = 0; i < rows3.length; i++) {
+            let game_id = rows3[i].game_id;
+	    let purge_sql = "DROP FROM gamestate WHERE game_id = $game_id";
+            let purge_params = { $game_id : game_id };
+	    await app.storage.executeDatabase(purge_sql, purge_params, "arcade");
+          }
+        }
+      }
+    }
+
   }
 
 
