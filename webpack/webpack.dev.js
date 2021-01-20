@@ -58,6 +58,11 @@ webpack({
   module: {
         rules: [
             {
+                test: /\.mjs$/,
+                include: /(node_modules)/,
+                type: 'javascript/auto',
+            },
+            {
                 test: /html$/,
                 exclude: [ /(mods)/, /(email)/ ],
             },
@@ -88,7 +93,7 @@ webpack({
                     publicPath: "dist/"
                 }
             },
-	    {
+            {
                 test: /\.zip$/,
                 exclude: [
                     path.resolve(__dirname, '../mods/appstore/bundler'),

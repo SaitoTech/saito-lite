@@ -3,6 +3,7 @@ const SubstrateBasedCrypto = require("./lib/SubstrateBasedCrypto");
 const parityArchiveNodeEndpoint = 'wss://kusama-rpc.polkadot.io/';
 const web3FoundationArchiveNodeEndpoint = 'wss://cc3-5.kusama.network/';
 const saitoEndpoint = 'ws://206.189.221.128:9932';
+const saitoEndpointSecure = 'wss://saito.io:9931/kusama/';
 
 class Kusama extends SubstrateBasedCrypto {
   constructor(app) {
