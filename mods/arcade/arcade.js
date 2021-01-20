@@ -158,10 +158,6 @@ class Arcade extends ModTemplate {
     // load observer games (active) -- ASC 
     //
     let current_timestamp = new Date().getTime() - 1200000;
-    //console.log(`SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 8`);
-    //`SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE 1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 8`,
-
-
     this.sendPeerDatabaseRequestWithFilter(
 
       "Arcade" ,
@@ -175,7 +171,6 @@ class Arcade extends ModTemplate {
         if (res.rows) {
           res.rows.forEach(row => {
             let { game_id, module, players_array, player } = row;
-console.log("Adding: " + game_id);
             this.addGameToObserverList({
               game_id,
               module,
@@ -714,23 +709,6 @@ console.log("Adding: " + game_id);
       }
 
     }
-
-/*****  NEEDS REIMPLEMENTATION SOMEWHER ******
-      if (Math.random() < 0.05) {
-
-        let current_timestamp = new Date().getTime() - 1200000;
-
-        let sql3 = "DELETE FROM games WHERE status = 'open' AND created_at < "+current_timestamp;
-        let params3 = {}
-        await this.app.storage.executeDatabase(sql3, params3, 'arcade');
-
-        let sql4 = "DELETE FROM invites WHERE created_at < "+current_timestamp;
-        let params4 = {}
-        await this.app.storage.executeDatabase(sql4, params4, 'arcade');
-
-
-    }
-*********************************************/
 
 
     super.handlePeerRequest(app, message, peer, mycallback);
@@ -1646,6 +1624,42 @@ console.log("Adding: " + game_id);
     };
 
     await app.storage.executeDatabase(sql, params, "arcade");
+
+
+    //
+    // periodically prune
+    //
+    if (Math.random() < 0.005) {
+      let current_ts = new Date().getTime();
+      let one_week_ago = current_ts - 640000000;
+      let delete_sql = "SELECT game_id FROM gamestate WHERE last_move < $last_move GROUP BY game_id ORDER BY last_move ASC";
+      let delete_params = { $last_move : one_week_ago };
+      let rows3 = await app.storage.queryDatabase(delete_sql, delete_params, "arcade");
+
+      if (rows3) {
+        if (rows3.length > 0) {
+          for (let i = 0; i < rows3.length; i++) {
+            let game_id = rows3[i].game_id;
+	    let purge_sql = "DELETE FROM gamestate WHERE game_id = $game_id";
+            let purge_params = { $game_id : game_id };
+	    await app.storage.executeDatabase(purge_sql, purge_params, "arcade");
+          }
+        }
+      }
+
+      //
+      // purge old games
+      //
+      let current_timestamp = new Date().getTime() - 1200000;
+      let sql5 = "DELETE FROM games WHERE status = 'open' AND created_at < $adjusted_ts";
+      let params5 = { $adjusted_ts : current_timestamp }
+      await this.app.storage.executeDatabase(sql5, params5, 'arcade');
+
+      let sql6 = "DELETE FROM invites WHERE created_at < $adjusted_timestamp";
+      let params6 = { $adjusted_ts : current_timestamp }
+      await this.app.storage.executeDatabase(sql6, params6, 'arcade');
+
+    }
 
   }
 
