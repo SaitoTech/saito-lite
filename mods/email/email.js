@@ -64,6 +64,7 @@ class Email extends ModTemplate {
     }
   }
   render(app) {
+    if(app.BROWSER == 0) {return;}
     super.render(app);
 
     let html = `
@@ -186,7 +187,7 @@ class Email extends ModTemplate {
   onConfirmation(blk, tx, conf, app) {
     let txmsg = tx.returnMessage();
     let email_mod = app.modules.returnModule("Email");
-    if (conf == 0 && this.app.browser == 1) {
+    if (conf == 0) {
       email_mod.addTransaction(tx);
     }
   }

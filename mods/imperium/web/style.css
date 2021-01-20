@@ -74,6 +74,18 @@
   background-image: url("/imperium/img/ships/warsun_100x200.png");
   background-size: cover;
 }
+.unit-box-ship-infantry, .unit-box-ship-infantry-ii {
+  background-image: url("/imperium/img/ships/infantry_100x200.png");
+  background-size: cover;
+}
+.unit-box-ship-pds, .unit-box-ship-pds-ii {
+  background-image: url("/imperium/img/ships/pds_100x200.png");
+  background-size: cover;
+}
+.unit-box-ship-spacedock, .unit-box-ship-spacedock-ii {
+  background-image: url("/imperium/img/ships/spacedock_100x200.png");
+  background-size: cover;
+}
 .units-overlay-container {
   background-image: url(/imperium/img/starscape_background1.jpg);
   background-size: cover;

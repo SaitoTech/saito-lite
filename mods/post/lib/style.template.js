@@ -237,6 +237,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   float: left;
   font-size: 1.2em;
   font-weight: bold;
+  margin-bottom: 3px;
 }
 .post-view-title a {
   text-decoration: none;
