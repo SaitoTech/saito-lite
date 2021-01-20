@@ -18,7 +18,7 @@ module.exports = PostView = {
     // we now fetch parent to show images and stuff
     //
     //let sql = `SELECT id, tx FROM posts WHERE thread_id = "${sig}" AND parent_id != "" ORDER BY ts DESC`;
-    let sql = `SELECT id, tx FROM posts WHERE thread_id = "${sig}" ORDER BY ts DESC`;
+    let sql = `SELECT id, tx FROM posts WHERE thread_id = "${sig}" ORDER BY ts ASC`;
     mod.sendPeerDatabaseRequestWithFilter(
 
         "Post" ,
