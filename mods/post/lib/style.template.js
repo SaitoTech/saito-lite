@@ -220,7 +220,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   background-color: whitesmoke;
   padding: 20px;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   border-radius: 3px;
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
   font-size: 1.15em;

@@ -20,7 +20,7 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
     html = `<div id="post-view-container" class="post-view-container">
     <div id="post-view-overview" class="post-view-overview">
       <div id="post-view-thumbnail" class="post-view-thumbnail" style="background-image: url('/post/img/post-logo.png');"></div>
-      <div id="post-view-title" class="post-view-title"><a href="${tx.msg.link}">${tx.msg.title}</a></div>
+      <div id="post-view-title" class="post-view-title"><a target="_blank" href="${tx.msg.link}">${tx.msg.title}</a></div>
       <div id="post-view-sublinks" class="post-view-sublinks">
         <div id="post-view-posted-by" class="post-view-posted-by">posted by </div>
         <div id="post-view-user" class="post-view-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
