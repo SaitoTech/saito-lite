@@ -107,7 +107,6 @@ module.exports = PostStyleTemplate = (app, mod) => {
 /*** Create ***/
 
 .post-create-container {
-  min-height: 80vh;
   min-width: 80vw;
   background-color: whitesmoke;
   padding: 2em;
@@ -126,7 +125,9 @@ module.exports = PostStyleTemplate = (app, mod) => {
 }
 
 .post-create-active {
-  background-color: #dfdfdf;
+  background-color: var(--saito-red);
+  color: #fff;
+  box-shadow: inset 1px 1px 1px #222;
 }
 
 .post-create-header-item {
@@ -150,7 +151,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 }
 
 .post-create-link {
-  height: 200px;
+  height: 220px;
   border: none;
   border-radius: 0px;
   font-size: 1.2em;
@@ -166,7 +167,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-create-image {
   width: 100%;
-  height: 50px;
+  height: 220px;
   text-align: center;
   padding: 90px;
   border-radius: 5px;
@@ -196,7 +197,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 .post-create-textarea {
   border: 1px solid var(--saito-cyber-black-wash);
   padding: 1em;
-  min-height: 12em;
+  height: 220px;
   margin-bottom: 20px;
   background-color: white;
   max-height: 30vh;
@@ -215,7 +216,6 @@ module.exports = PostStyleTemplate = (app, mod) => {
   color: #444;
   width: 90vw;
   max-width: 1000px;
-  min-height: 90vh;
   max-height: 90vh;
   background-color: whitesmoke;
   padding: 20px;
@@ -283,6 +283,8 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 100%;
   border-top: 1px solid #ddd;
   padding-top: 20px;
+  max-height: 20vh;
+  overflow: auto;
 }
 
 .post-view-textarea {
@@ -429,7 +431,6 @@ module.exports = PostStyleTemplate = (app, mod) => {
     flex-flow: column;
   }
   .post-create-container, .post-view-container {
-    min-height: 70vh;
     max-height: 70vh;
   }
 }
