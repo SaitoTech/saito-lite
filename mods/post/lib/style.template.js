@@ -427,8 +427,28 @@ module.exports = PostStyleTemplate = (app, mod) => {
     flex-flow: column;
   }
   .post-create-container, .post-view-container {
-    max-height: 70vh;
+    max-height: 80vh;
+    overflow-y: auto;
   }
+}
+
+/* horribly hacky but necessary */
+
+.post-sidebar-create-btn {
+  position: fixed;
+  bottom: 1em;
+}
+
+.post-sidebar {
+  position: absolute;
+}
+
+.post-main {
+  width: 90vw;
+}
+
+.post-sidebar .email_chat {
+  display: none;
 }
 
 </style>
