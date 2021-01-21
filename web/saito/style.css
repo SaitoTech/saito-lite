@@ -1601,13 +1601,20 @@ div#message-wrapper {
 }
 
 .welcome-invite-box {
-  display: block;
-  float: left;
   min-width: 200px;
   min-height: 120px;
+  max-width: 325px;
   padding: 10px;
-  border: 1px solid #444;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  border: 1px solid;
+  margin: 1em;
+}
+
+.welcome-invite-box i {
+  margin: 1em;
 }
 
 .welcome-modal-exit {
@@ -1681,7 +1688,7 @@ div#message-wrapper {
     width: 100%;
   }
   .welcome-modal-exit .fa-arrow-right {
-    font-size: 100px;
+    font-size: 80px;
     bottom: 2px;
   }
   .welcome-modal-action {
@@ -1689,6 +1696,12 @@ div#message-wrapper {
   }
   i.fas.fa-arrow-right {
     right: -1em;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .saito-overlay {
+    width: 95vw;
   }
 }
 
