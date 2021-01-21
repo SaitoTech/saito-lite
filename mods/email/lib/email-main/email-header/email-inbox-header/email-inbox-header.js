@@ -3,7 +3,8 @@ const EmailInboxHeaderTemplate = require('./email-inbox-header.template');
 module.exports = EmailInboxHeader = {
 
   render(app, mod) {
-    document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate(app, mod);
+    let subPage = app.browser.parseHash(window.location.hash).subpage;
+    document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate(app, mod, subPage);
   },
 
   attachEvents(app, mod) {

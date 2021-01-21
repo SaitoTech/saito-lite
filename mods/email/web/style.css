@@ -89,17 +89,29 @@ hr {
   padding: 10px 0px;
   display: grid;
   align-items: center;
-  grid-template-columns: 60% 40%;
-  border-bottom: 1px solid var(--saito-cyber-black);
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 50% 50%;
+  grid-template-areas: "header header" "icons .";
+  grid-gap: 0.3em;
+  /* border-bottom: 1px solid var(--saito-cyber-black); */
 }
 
 .email-icons {
+  justify-self: start;
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 2.3em;
-  justify-items: center;
-  align-items: center;
-  grid-gap: 0.3em;
+  justify-items: start;
+  align-items: start;
+  
+}
+
+.email-box-name {
+  align-self: end;
+  font-family: visuelt-medium;
+  font-size: 1.9em;
+  text-transform: capitalize;
+  justify-items: left;
+  border-bottom: 1px solid var(--saito-cyber-black);
 }
 
 #email-form-back-button {
@@ -114,11 +126,13 @@ hr {
 }
 
 .email-balance {
-  justify-self: right;
   font-family: visuelt-medium;
+  text-align: right;
+  width: 100%;
   align-self: flex-end;
   font-size: 1.33em;
   text-transform: capitalize;
+  border-bottom: 1px solid var(--saito-cyber-black);
 }
 
 .email-main {
@@ -212,9 +226,11 @@ hr {
 }
 
 #email-select-icon {
-  width: 24px;
-  height: 24px;
+  margin-left: 0.5em;
+  width: 20px;
+  height: 20px;
   justify-self: left;
+  
 }
 
 #email-delete-icon {
