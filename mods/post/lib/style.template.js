@@ -61,7 +61,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-teaser-posted-by {
   float: left;
-  margin-right: 1em;
+  margin-right: 0.5em;
 }
 
 .post-teaser-user {
@@ -91,7 +91,9 @@ module.exports = PostStyleTemplate = (app, mod) => {
   margin-left: 1em;
   cursor: pointer;
 }
-
+.post-view-user-identicon {
+  height: 1em;
+}
 .post-view-edit:hover {
   color: #444;
   text-decoration: underline;
@@ -250,7 +252,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-view-posted-by {
   float: left;
-  margin-right: 1em;
+  margin-right: 0.5em;
 }
 
 .post-view-user {
@@ -283,7 +285,8 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 100%;
   border-top: 1px solid #ddd;
   padding-top: 20px;
-  max-height: 20vh;
+  padding-left: 20px;
+  /* max-height: 20vh; */
   overflow: auto;
   color: black;
 }
@@ -291,7 +294,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 .post-view-textarea {
   border: 1px solid var(--saito-cyber-black-wash);
   padding: 1em;
-  min-height: 12em;
+  min-height: 6em;
   margin-bottom: 10px;
   background-color: white;
 }
@@ -320,7 +323,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 .post-view-comment-sublinks {
   font-size: 0.9em;
   clear: both;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   height: 1em;
 }
 
