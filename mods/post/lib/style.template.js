@@ -285,6 +285,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
   padding-top: 20px;
   max-height: 20vh;
   overflow: auto;
+  color: black;
 }
 
 .post-view-textarea {
