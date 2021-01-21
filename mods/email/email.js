@@ -52,6 +52,30 @@ class Email extends ModTemplate {
 
   initialize(app) {
     super.initialize(app);
+    if(app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
+      let mypubkey = app.wallet.returnPublicKey();
+      let welcometx = app.wallet.createUnsignedTransaction(mypubkey, 0.0, 0.0);
+      welcometx.msg.module   = "Email";
+      welcometx.msg.title    = "Welcome to Saito";
+      welcometx.msg.message  = `Saito is a high throughput blockchain. Sending a message with your transactions is both useful and reasonable!<br/><br/>
+      This email was sent with your first transaction automatically.<br/><br/>
+      The reward server should see that you've sent your first email and give you a reward which should also appear in your inbox.<br/><br/>
+      A keypair has been generated for you. If you need more secure keys, it's possible to generate a paper wallet. However, in a Web3/Saito context it will sometimes be useful to generate keys which will be used only temporarily, perhaps to access a service for only 5 minutes or simply to set up a temporary keypair for use of some Web3 PKI infrastructure like negotiating an encrypted data tunnel or accessing web services anonymously.
+      `;
+      welcometx = app.wallet.signAndEncryptTransaction(welcometx);
+      app.network.propagateTransaction(welcometx);
+      
+      // save welcomesent to options so we dont' send this over and over
+      // todo: Could this just be done in installModule instead??
+      if(!app.options.email){
+        app.options.email = {};  
+      }
+      app.options.email.welcomesent = true;
+      app.storage.saveOptions();
+
+      
+    }
+
   }
   rerender(app) {
     let page = app.browser.parseHash(window.location.hash).page;
