@@ -28,8 +28,8 @@ module.exports = ChatRoom = {
       //
       // how many messages -- max 100 in community chat
       //
-      while (groups.txs.length > 100) {
-        group.txs.shift();
+      while (group.txs.length > 100) {
+        grou.txs.shift();
       }
 
 

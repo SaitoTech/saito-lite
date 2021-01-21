@@ -25076,7 +25076,7 @@ returnHowToPlayOverlay() {
 
 <h1>Basic Rules:</h1>
 
-Players start with 3 command tokens, 3 fleet supply and 2 strategy tokens:
+You start with 3 command tokens, 3 fleet supply and 2 strategy tokens:
 
 <p></p>
 
@@ -25084,7 +25084,7 @@ Players start with 3 command tokens, 3 fleet supply and 2 strategy tokens:
 
 <p></p>
 
-Every turn players can:
+Every turn you can:
 
   <ol class="demo_ordered_list">
     <li>Spend a command token to activate a sector</li>
@@ -25102,7 +25102,7 @@ Every turn players can:
 
 <p></p>
 
-Planets give <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. The third hex on the board indicates planet type: industrial-green, cultural-blue, and hazardous-red.
+Planets give you <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. The third hex on the board indicates planet type: industrial-green, cultural-blue, and hazardous-red.
 
 <p></p>
 
