@@ -16,7 +16,7 @@ module.exports = AppStoreOverlayAppTemplate = (app, approw) => {
   html += `
       <div class="appstore-overlay-app-details">
         <div class="appstore-overlay-app-title">${approw.name}</div>
-        <div class="appstore-overlay-app-author">${app.keys.returnUsername(approw.publickey)}</div>
+        <div class="appstore-overlay-app-author">pub: ${app.keys.returnUsername(approw.publickey)}</div>
         <div class="appstore-overlay-app-btn" id="" class="appstore-overlay-app-btn button">install</div>
       </div>
     </div>

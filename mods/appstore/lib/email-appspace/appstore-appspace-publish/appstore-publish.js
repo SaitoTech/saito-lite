@@ -25,7 +25,9 @@ module.exports = AppStorePublish = {
     }, true);
 
     document.querySelector('.appstore-browse-btn').onclick = (e) => {
-      AppStoreOverlay.render(app, mod);
+      let search_options = {};
+      search_options.featured = 1;
+      AppStoreOverlay.render(app, mod, search_options);
       AppStoreOverlay.attachEvents(app, mod);
       try {
         let obj = document.querySelector('.appstore-header-featured');

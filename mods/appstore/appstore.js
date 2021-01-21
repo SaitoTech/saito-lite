@@ -21,8 +21,7 @@ class AppStore extends ModTemplate {
     this.name          = "AppStore";
     this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
     this.categories    = "Utilities Dev";
-    this.featured_apps = ['Imperium', 'Debug', 'Scotland', 'Escrow'];
-
+    this.featured_apps = ['Polkadot','Kusama', 'Westend', 'Design', 'Debug', 'Midnight', 'Hearts', 'Settlers', 'President', 'Scotland'];
     this.header        = null;
 
     this.bundling_timer = null;
@@ -206,7 +205,7 @@ console.log("##########################");
 	  // elegantly. adding this check to prevent issues with server
 	  // on start, particularly with Red Imperium.
 	  //
-	  if (zip.length <= 20000000) {
+	  if (zip.length <= 30000000) {
 
             newtx.msg = {
               module: "AppStore",
@@ -507,6 +506,14 @@ if (name == "Unknown") {
 
     let featured_app = 0;
     if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
+    if (featured_app == 1) {
+      featured_app = 0;
+      if (this.featured_apps.includes(name)) {
+	featured_app = 1;
+      }
+    }
+
+console.log(name + " is included? " + featured_app);
 
     let params = {
       $name: name,
