@@ -78,6 +78,7 @@ class Email extends ModTemplate {
 
   }
   rerender(app) {
+    if(app.BROWSER != 1 || this.browser_active != 1 ) {return;}
     let page = app.browser.parseHash(window.location.hash).page;
     if (page) {
       // Render
@@ -88,7 +89,7 @@ class Email extends ModTemplate {
     }
   }
   render(app) {
-    if(app.BROWSER == 0) {return;}
+    if(app.BROWSER != 1 || this.browser_active != 1 ) {return;}
     super.render(app);
 
     let html = `
@@ -134,11 +135,13 @@ class Email extends ModTemplate {
 
   }
   renderSidebar(app) {
+    if(app.BROWSER != 1 || this.browser_active != 1 ) {return;}
     EmailSidebar.render(app, this);
     EmailSidebar.attachEvents(app, this);
 
   }
   renderMain(app) {
+    if(app.BROWSER != 1 || this.browser_active != 1 ) {return;}
     EmailMain.render(app, this);
     EmailMain.attachEvents(app, this);
   }
