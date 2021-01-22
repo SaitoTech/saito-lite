@@ -86,6 +86,7 @@ body {
 }
 
 #arcade-tabs {
+  height: -moz-fit-content;
   height: fit-content;
   max-height: 45vh;
   overflow-y: auto;
