@@ -24,6 +24,8 @@ class Chat extends ModTemplate {
     this.renderMode = "none";
     this.relay_moves_onchain_if_possible = 1;
 
+    this.icon_fa = "far fa-comments";
+
   }
 
 
