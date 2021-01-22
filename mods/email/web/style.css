@@ -477,7 +477,7 @@ hr {
   }
   .main {
     max-width: unset;
-    padding: 1em 3px;
+    padding: 1em 0;
   }
   .email-body {
     padding: 3px;
