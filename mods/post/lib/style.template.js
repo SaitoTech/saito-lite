@@ -245,6 +245,20 @@ module.exports = PostStyleTemplate = (app, mod) => {
   text-decoration: none;
 }
 
+.post-view-url {
+  display: flex;
+  clear: both;
+  font-size: 0.8em;
+  margin-bottom: 1em;
+}
+
+.post-view-url a{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+}
+
 .post-view-sublinks {
   clear: both;
   font-size: 0.8em;
