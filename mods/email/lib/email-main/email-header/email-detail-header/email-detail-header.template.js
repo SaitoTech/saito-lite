@@ -1,5 +1,6 @@
 module.exports = EmailDetailHeaderTempkate = (app, mod) => {
   return `
+  <div class="email-header-holder">
     <div class="email-detail-left-options">
       <i id="email-form-back-button" class="icon-med fas fa-arrow-left"></i>
     </div>
@@ -12,5 +13,6 @@ module.exports = EmailDetailHeaderTempkate = (app, mod) => {
       </div>
       <div class="email-balance"><span id="email-balance"></span><nbsp/><span id="email-token"></span></div>
     </div>
+  </div>
   `;
 }

@@ -86,14 +86,22 @@ hr {
 }
 
 .email-header {
-  padding: 10px 0px;
+  
+}
+  
+.email-header .email-header-holder{
   display: grid;
   align-items: center;
+  grid-template-columns: 60% 40%;
+  padding: 10px 0px;
+  border-bottom: 1px solid var(--saito-cyber-black);
+}
+.email-header .email-inbox-header-holder {
+  display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 50% 50%;
   grid-template-areas: "header header" "icons .";
   grid-gap: 0.3em;
-  /* border-bottom: 1px solid var(--saito-cyber-black); */
 }
 
 .email-icons {
@@ -104,14 +112,15 @@ hr {
   align-items: start;
   
 }
-
+.email-header .email-inbox-header-holder .email-box-name {
+  border-bottom: 1px solid var(--saito-cyber-black);
+}
 .email-box-name {
   align-self: end;
   font-family: visuelt-medium;
   font-size: 1.9em;
   text-transform: capitalize;
   justify-items: left;
-  border-bottom: 1px solid var(--saito-cyber-black);
 }
 
 #email-form-back-button {
@@ -124,15 +133,17 @@ hr {
   margin: unset;
   line-height: 0;
 }
-
+.email-header .email-inbox-header-holder .email-balance {
+    border-bottom: 1px solid var(--saito-cyber-black);
+}
 .email-balance {
+  justify-self: right;
   font-family: visuelt-medium;
   text-align: right;
   width: 100%;
   align-self: flex-end;
   font-size: 1.33em;
   text-transform: capitalize;
-  border-bottom: 1px solid var(--saito-cyber-black);
 }
 
 .email-main {
@@ -466,7 +477,7 @@ hr {
   }
   .main {
     max-width: unset;
-    padding: 1em 3px;
+    padding: 1em 0;
   }
   .email-body {
     padding: 3px;

@@ -35,7 +35,10 @@ module.exports = EmailBarsMenu = {
       // email-nav-inbox email-nav-sent email-nav-trash email-apps crypto-apps
       emailBarsMenuInnerHTML = emailBarsMenuInnerHTML.replaceAll("email-nav-", "mobile-email-nav-");
       
-      app.browser.addElementToDom(`<div id="mobile" class="email-bars-menu" style="display:none;"><button class="super" id="mobile-email-compose-btn">SEND</button>${emailBarsMenuInnerHTML}</div>`)
+      app.browser.addElementToDom(`<div id="mobile" class="email-bars-menu" style="display:none;">
+        <button class="super" id="mobile-email-compose-btn">SEND</button>
+        ${emailBarsMenuInnerHTML}
+      </div>`)
     }
     
   },
@@ -48,12 +51,12 @@ module.exports = EmailBarsMenu = {
         window.location.hash = mod.goToLocation(`#page=crypto_page&subpage=${subPage}`);
       }
     });
-
-    Array.from(document.getElementsByClassName('email-navigator-item'))
-      .forEach(item => item.addEventListener('click', (e) => {
+    Array.from(document.getElementsByClassName('email-navigator-item')).forEach((item) => {
+      item.onclick = (e) => {
         let subPage = e.currentTarget.id.replace('email-nav-','').replace('mobile-','');
         window.location.hash = mod.goToLocation(`#page=email_list&subpage=${subPage}`);
-    }));
+      }
+    });
 
     Array.from(document.getElementsByClassName('email-apps-item'))
       .forEach(item => item.addEventListener('click', (e) => {
