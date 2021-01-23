@@ -156,24 +156,6 @@
 }
 
 
-.new_action_cards_overlay {
-  width: 70vw;
-  height: auto;
-  text-align:center;
-  transform: scale(1.4);
-  position: relative;
-  transform: translate(0%, -25%);
-}
-.new_action_cards_overlay_card_container {
-  display: inline-block;
-  color: white;
-  font-family: 'orbitron-medium', helvetica, arial;
-  transform: scale(1.6);
-  min-height: 30vh;
-}
-.new_action_cards_overlay_action_card{
-  transform: scale(2);
-}
 .new_secret_objective_overlay {
   width: 50vw;
   height: auto;
@@ -300,6 +282,7 @@
 
 
 .objectives_overlay_objectives_card {
+  position: relative;
   width: calc(42vh * 0.72110);
   height: 42vh;
   margin: 10px;
@@ -318,6 +301,26 @@
   border: 1px solid whitesmoke;
 }
 
+#close-action-cards-btn {
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 240px;
+  margin-top: 14px;
+  margin-bottom: 20px;
+  font-size: 2em;
+  font-family: 'bank-gothic';
+}
+#close-agendas-btn {
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 240px;
+  margin-top: 14px;
+  margin-bottom: 20px;
+  font-size: 2em;
+  font-family: 'bank-gothic';
+}
 #close-objectives-btn {
   max-width: 240px;
   margin-left: auto;
@@ -358,6 +361,8 @@
   font-size: 1em;
   margin-top: 5px;
 }
+
+
 .new_objectives_overlay_container {
   background-image: url('/imperium/img/starscape_background1.jpg');
   background-size: cover;
@@ -388,12 +393,49 @@
   text-align:center;
 }
 
+.new_action_cards {
+  height: 35vh;
+  min-height: 35vh;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+.new_action_cards_overlay_container {
+  background-image: url('/imperium/img/starscape_background3.jpg');
+  background-size: cover;
+  border-radius: 15px;
+  width: 80vw;
+  font-family: 'orbitron-medium';
+  letter-spacing: 0.1em;
+  line-height: 2em;
+  text-align: center;
+  padding: 20px;
+}
+.new_action_cards_title {
+  font-size: 3em;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  padding-bottom: 20px;
+}
+.close-action-cards-btn {
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 240px;
+  margin-top: 14px;
+  margin-bottom: 20px;
+  font-size: 2em;
+  font-family: 'bank-gothic';
+  text-align:center;
+}
+
 
 .overlay_strategy_container {
   width: 86vw;
   max-width: 80vw;
   height: auto;
   overflow-y: scroll;
+  max-height: 90vh;
 }
 .overlay_strategy_card_box {
   font-family: 'orbitron-medium';
@@ -526,11 +568,13 @@
 
 
 .strategy_card_bonus {
-  position: fixed;
-  bottom: 40px;
-  right: 0px;
+  position: relative;
+  bottom: 0px;
+  left: 75%;
   font-size: 3em;
   color: gold;
+  float: right;
+  width: 100%;
 }
 
 .strategy_card_bonus span {
@@ -830,15 +874,17 @@ body {
   transform: translateX(-50%);
 }
 
+.objectives_scorings {
+  display: grid;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  grid-template-rows: auto;
+}
 .objectives_players_scored {
   height: 20px;
-  width: 80px;
-  display: block;
   z-index: 99;
-  position: relative;
-  display: all;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .token_count {
@@ -892,12 +938,26 @@ body {
   border: 1px solid;
   float: left;
 }
+.overlay_action_card {
+  background-image: url(img/action_card_template.png);
+  height: 34vh;
+  width: calc(34vh * 0.72110);
+  background-size: cover;
+  margin: 1vw;
+  padding: 1vw;
+  text-align: center;
+  font-size: 1em;
+  transition: all 50ms;
+  margin-bottom: -15vw;
+  border: 1px solid;
+  float: left;
+}
 
 .faction_sheet_action_card_back {
   background-image: url(img/action_card_back.jpg);
 }
 
-.faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
+.overlay_action_card:hover, faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
   transform: scale(1.5) translate(1vw, 1vw);
   z-index: 10;
 }
@@ -1299,6 +1359,7 @@ body {
   width: 100%;
   opacity: 1;
   visibility: visible;
+  background-color: #222e;
 }
 
 #menu-container>ul>li:hover {

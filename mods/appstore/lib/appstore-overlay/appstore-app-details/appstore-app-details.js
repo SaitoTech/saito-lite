@@ -114,7 +114,7 @@ module.exports = AppstoreAppDetails = {
           document.querySelector(".appstore-app-install-overlay").innerHTML = `
             <div class="appstore-bundler-install-notice">
               <center style="margin-bottom:20pxpadding:20px;">
-		Your wallet does not specify an AppStore to use. Do you want to use this AppStore? 
+		Your wallet does not specify an AppStore to use. Use this AppStore? 
 	        <p></p>
 	        <div class="button" id="appstore-compile-btn">yes please</div>
 	        <p></p>
@@ -157,9 +157,11 @@ module.exports = AppstoreAppDetails = {
         document.querySelector(".appstore-app-install-overlay").innerHTML = `
           <div class="appstore-bundler-install-notice">
             <center style="margin-bottom:20px">
-	      Your wallet does not specify a trusted party to compile your software for you. Use this AppStore?
+	      Your wallet does not specify an AppStore to use. Use this AppStore? 
 	      <p></p>
 	      <div class="button" id="appstore-compile-btn">yes, compile</div>
+	      <p></p>
+	      <div class="button" id="appstore-end-compile-btn">no thanks</div>
 	    </center>
           </div>
         `;

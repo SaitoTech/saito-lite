@@ -108,12 +108,10 @@ class Imperium extends GameTemplate {
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
-console.log("player " + gainer + " -- gains " + tech);
         if (tech == "gravity-drive") {
           imperium_self.game.players_info[gainer-1].gravity_drive = 1;
           imperium_self.game.players_info[gainer-1].ship_move_bonus = 1;
         }
-console.log("ship move bonus updated to 1");
       },
     });
 
@@ -126,10 +124,14 @@ console.log("ship move bonus updated to 1");
       prereqs     	:       ['blue','blue'],
       text		: 	"You may perform two actions in any turn" ,
       onNewRound : function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].fleet_logistics_turn = 0;
+        if (imperium_self.doesPlayerHaveTech(player, "fleet-logistics")) {
+          imperium_self.game.players_info[player-1].fleet_logistics_turn = 0;
+        }
       },
       onNewTurn : function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].fleet_logistics_turn++;
+        if (imperium_self.doesPlayerHaveTech(player, "fleet-logistics")) {
+          imperium_self.game.players_info[player-1].fleet_logistics_turn++;
+	}
       },
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].fleet_logistics == undefined) {
@@ -147,18 +149,22 @@ console.log("ship move bonus updated to 1");
       },
       menuOption  :       function(imperium_self, menu, player) {
         if (menu == "main") {
-          return { event : 'fleetlogistics', html : '<li class="option" id="fleetlogistics">use fleet logistics</li>' };
+          if (imperium_self.doesPlayerHaveTech(player, "fleet-logistics")) {
+            return { event : 'fleetlogistics', html : '<li class="option" id="fleetlogistics">use fleet logistics</li>' };
+	  }
         }
         return {};
       },
       menuOptionTriggers:  function(imperium_self, menu, player) {
         if (menu == "main") {
+          if (imperium_self.doesPlayerHaveTech(player, "fleet-logistics")) {
 	  if (imperium_self.game.players_info[player-1].fleet_logistics_exhausted == 0) {
 	    if (imperium_self.game.players_info[player-1].fleet_logistics_turn < 2) {
 	      if (imperium_self.game.players_info[player-1].fleet_logistics == 1) {
                 return 1;
 	      }
 	    }
+	  }
 	  }
         }
         return 0;
@@ -1663,7 +1669,7 @@ console.log("P: " + planet);
       tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Sardaak N'Orr, an overpowered faction ramarkable for its raw strength in combat. Your brutal power makes you an intimidating faction on the board. Good luck!</div>`
+      intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Sardaak N'Orr, an overpowered faction known for its raw strength in combat. Your brutal power makes you an intimidating faction on the board. Good luck!</div>`
     });
 
 
@@ -5570,7 +5576,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	    imperium_self.updateLog("All players have 5 trade goods");
           }
 
-	  imperium_self.updateTokenDisplay();
+	  imperium_self.displayFactionDashboard();
 
 	  return 1;
 
@@ -11822,7 +11828,9 @@ console.log(JSON.stringify(this.game.state.choices));
               	document.getElementById("close-agendas-btn").onclick = () => {
                   this.overlay.hideOverlay(this.app, this);
               	}
-             }
+              } else {
+                this.overlay.hideOverlay(this.app, this);
+              }
 	    }
           }
         } catch (err) {}
@@ -12631,6 +12639,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	if (type == "action_cards") {
           if (this.game.player == player && this.browser_active == 1) {
 	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
+	    document.getElementById("close-action-cards-btn").onclick = (e) => {
+	      this.overlay.hideOverlay();
+            }
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
@@ -12712,6 +12723,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	  }
   	  this.game.players_info[player-1].commodities += amount;
 	  if (this.game.players_info[player-1].commodities > this.game.players_info[player-1].commodity_limit) {
+  	    this.updateLog(this.returnFaction(player) + " capped at " + this.game.players_info[player-1].commodity_limit);
 	    this.game.players_info[player-1].commodities = this.game.players_info[player-1].commodity_limit;
 	  }
   	}
@@ -18373,7 +18385,10 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
           mycallback(imperium_self.game.planets[planet].sector);
         }
       },
-      null
+      function() {
+        imperium_self.unlockInterface();
+        imperium_self.playerBuildInfrastructure(mycallback, stage);
+      },
     );
   });
 
@@ -18695,14 +18710,12 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
 
     if (action == "no") {
       imperium_self.addMove("refuse_offer\t" + imperium_self.game.player + "\t" + faction_offering);
-      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " refuses trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
 
     if (action == "yes") {
       imperium_self.addMove("trade\t" + faction_offering + "\t" + imperium_self.game.player + "\t" + JSON.stringify(their_offer) + "\t" + JSON.stringify(my_offer));
-      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " accepts trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
@@ -25257,30 +25270,7 @@ commodities are turned into trade goods by trading them with others.
 
   return html;
 }
-returnNewActionCardsOverlay(cards) {
-  let imperium_self = this;
 
-  let text = "Card";
-  if (cards.length > 1) { text = "Cards"; }
-
-  let html = `
-    <div class="new_action_cards_overlay" id="new_action_cards_overlay">
-      <div class="new_action_cards_overlay_card_container">
-  `;
-  for (let i = 0; i < cards.length; i++) {
-    html += `
-      <div class="faction_sheet_action_card bc">
-        <div class="action_card_name">${imperium_self.action_cards[cards[i]].name}</div>
-        <div class="action_card_content">${imperium_self.action_cards[cards[i]].text}</div>
-      </div>
-    `;
-  }
-  html += `
-      </div>
-    </div>
-  `;
-  return html;
-}
 
 returnNewSecretObjectiveOverlay(card) {
   let obj = this.secret_objectives[card];
@@ -25320,18 +25310,22 @@ returnSectorInformationHTML(sector) {
   html += '<div class="system_summary_sector">';
   html += sys.s.name;
   html += "</div>";
+  let units_html = "";
   if (sys.s.units.length > 0) {
-  html += '<div class="system_summary_units">';
   for (let i = 0; i < sys.s.units.length; i++) {
     if (sys.s.units.length > 0) {
-      html += this.returnPlayerFleetInSector((i+1), sector);
+      units_html += this.returnPlayerFleetInSector((i+1), sector);
       i = sys.s.units.length;
     }
   }
-  html += `
-    </div>
-  `;
   }
+  
+  if (units_html != "") {
+    html += '<div class="system_summary_units">';
+    html += units_html;
+    html += '</div>';
+  }
+
   html += `
     <div class="grid-2">
   `;
@@ -25343,7 +25337,7 @@ returnSectorInformationHTML(sector) {
         <div style='clear:both;margin-left:10px;margin-top:6px;'>
           ${this.returnInfantryOnPlanet(sys.p[i])} infantry
           <br />
-          ${this.returnPDSOnPlanet(sys.p[i])} pds
+          ${this.returnPDSOnPlanet(sys.p[i])} PDS
           <br />
           ${this.returnSpaceDocksOnPlanet(sys.p[i])} space docks
         </div>
@@ -25376,7 +25370,6 @@ returnPlanetInformationHTML(planet) {
     powner = "nowner";
   }   
       
-      
   let html = '';
       
   if (ionp > 0) {
@@ -25398,7 +25391,7 @@ returnPlanetInformationHTML(planet) {
     html = `<div class="sector_information_planetname ${powner}">${p.name}</div>`;
   }
 
-
+  return html;
 
 }
 
@@ -25850,7 +25843,7 @@ returnUnitTableEntry(unittype) {
 
   if (this.game.state.round == 1) {
     if (obj.type == "carrier") {
-      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is the most important starting ship. Move it into a neighbouring sector and INVADE planets to gain their resources and influence.</div>';
+      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is the most important starting ship. Move it into a neighbouring sector and invade planets to gain their resources and influence.</div>';
     }
   }
 
@@ -25980,6 +25973,33 @@ returnNewObjectivesOverlay() {
   return html;
 }
 
+returnNewActionCardsOverlay(cards) {
+
+  let title = "Your New Action Cards";
+
+  let html = `
+    <div class="new_action_cards_overlay_container" style="">
+      <div class="new_action_cards_title">${title}</div>
+      <div style="width:100%"><div class="new_objectives_text">click on your faction dash to see your planets, action cards and more...</div></div>
+      <div class="new_action_cards">
+  `;
+
+  for (let i = 0; i < cards.length; i++) {
+    html += `
+      <div class="overlay_action_card bc">
+        <div class="action_card_name">${this.action_cards[cards[i]].name}</div>
+        <div class="action_card_content">${this.action_cards[cards[i]].text}</div>
+      </div>
+    `;
+  }
+  html += `
+      </div>
+      <div id="close-action-cards-btn" class="button" style="">CONTINUE</div>
+    </div>
+  `;
+  return html;
+}
+
 
 
 returnObjectivesOverlay() {
@@ -26011,6 +26031,7 @@ returnObjectivesOverlay() {
     html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
                <div class="objectives_card_name">${obj.name}</div>
                <div class="objectives_card_content">${obj.text}</div>
+               <div class="objectives_scorings">
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
       for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
@@ -26019,6 +26040,7 @@ returnObjectivesOverlay() {
         }
       }
     }
+    html += `</div>`;
     html += `</div>`;
   }
 
@@ -26032,6 +26054,7 @@ returnObjectivesOverlay() {
     html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
                <div class="objectives_card_name">${obj.name}</div>
                <div class="objectives_card_content">${obj.text}</div>
+               <div class="objectives_scorings">
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
       for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
@@ -26040,6 +26063,7 @@ returnObjectivesOverlay() {
         }
       }
     }
+    html += `</div>`;
     html += `</div>`;
   }
 

@@ -1370,6 +1370,8 @@ console.log("MOVE: " + JSON.stringify(mv));
           let discarder = "ussr";
           if (sender == 2) { receiver = "ussr"; discarder = "us"; }
 
+console.log("CARD: " + card);
+
           this.game.state.events.missile_envy = sender;
 
           let opponent_card = 0;
@@ -4336,6 +4338,8 @@ console.log("SELECTED CARD NOT NULL: bbc");
           if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) { scoring_cards_available++; }
         }
       }
+
+console.log("available cards: " + cards_available + " -- " + this.game.state.events.missile_envy + " -- " + this.game.state.events.missileenvy);
 
       //
       // handle missile envy if needed
@@ -12508,6 +12512,7 @@ console.log("card: " + card);
       if (this.game.player == instigator) {
         this.updateStatus("<div class='status-message' id='status-message'>Opponent is returning card for Missile Envy</div>");
         return 0;
+
       }
 
 
@@ -12557,7 +12562,6 @@ console.log("card: " + card);
           }
         }
 
-console.log("found multiple cards: " + multiple_cards);
 
         if (multiple_cards == 0) {
 
@@ -12574,7 +12578,7 @@ console.log("found multiple cards: " + multiple_cards);
           //
           let user_message = "<span>Select card to give opponent:</span><ul>";
           for (let i = 0; i < available_cards.length; i++) {
-            if (this.modifyOps(this.game.deck[0].cards[available_cards[i]].ops) >= selected_ops && available_cards[i] != "china") {
+            if (this.modifyOps(this.game.deck[0].cards[available_cards[i]].ops) == selected_ops && available_cards[i] != "china") {
               user_message += '<li class="card showcard" id="'+available_cards[i]+'">'+this.game.deck[0].cards[available_cards[i]].name+'</li>';
             }
           }

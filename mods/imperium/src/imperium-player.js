@@ -2773,7 +2773,10 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
           mycallback(imperium_self.game.planets[planet].sector);
         }
       },
-      null
+      function() {
+        imperium_self.unlockInterface();
+        imperium_self.playerBuildInfrastructure(mycallback, stage);
+      },
     );
   });
 
@@ -3095,14 +3098,12 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
 
     if (action == "no") {
       imperium_self.addMove("refuse_offer\t" + imperium_self.game.player + "\t" + faction_offering);
-      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " refuses trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
 
     if (action == "yes") {
       imperium_self.addMove("trade\t" + faction_offering + "\t" + imperium_self.game.player + "\t" + JSON.stringify(their_offer) + "\t" + JSON.stringify(my_offer));
-      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " accepts trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }

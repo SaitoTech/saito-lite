@@ -899,6 +899,9 @@ body {
   .start-game-btn {
     text-transform: capitalize;
     margin: 3em 0;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .start-game {
     background: #000;
