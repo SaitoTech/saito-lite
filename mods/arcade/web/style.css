@@ -89,6 +89,7 @@ body {
   height: fit-content;
   max-height: 45vh;
   overflow-y: auto;
+  border: 1px solid var(--saito-red);
 }
 
 #arcade-tab-buttons {
@@ -160,7 +161,7 @@ body {
   justify-content: space-around;
   overflow-y: auto;
   background: linear-gradient(-45deg, #0002, #0004);
-  border: 1px solid var(--saito-red);
+  /* border: 1px solid var(--saito-red); */
 }
 
 .hero-invite-wrapper {
@@ -349,6 +350,7 @@ body {
   gap: 0.5em;
   margin: 0.5em 0 0 0;
   overflow-y: auto;
+  border: 1px solid var(--saito-red);
 }
 
 .arcade-infobox {
