@@ -31,6 +31,9 @@
         if (imperium_self.game.player != strategy_card_player && imperium_self.game.player == player) {
 
           let html = '<p>Construction has been played. Do you wish to spend 1 strategy token to build a PDS or Space Dock? This will activate the sector (if unactivated): </p><ul>';
+          if (imperium_self.game.state.round == 1) { 
+	    html = `${imperium_self.returnFaction(strategy_card_player)} has just played the Construction strategy card. This lets you to spend 1 strategy token to build a PDS or Space Dock on a planet you control? Doing so will activate the sector (if unactivated). You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability: </p><ul>`;
+	  }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             html += '<li class="option" id="yes">Yes</li>';
           }

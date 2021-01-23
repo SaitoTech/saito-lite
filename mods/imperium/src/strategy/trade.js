@@ -52,6 +52,9 @@
 	  }
 
           let html = '<p>Trade has been played. Do you wish to spend 1 strategy token to refresh your commodities? </p><ul>';
+          if (imperium_self.game.state.round == 1) {
+            html = `${imperium_self.returnFaction(strategy_card_player)} has played the Trade strategy card. This lets you spend 1 strategy token to refresh your faction commodities. You may trade these commodities with neighbours on the board in exchange for trade goods. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability: </p><ul>`;
+          }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             html += '<li class="option" id="yes">Yes</li>';
           }

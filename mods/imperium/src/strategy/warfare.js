@@ -30,6 +30,9 @@
         if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) { 
 
           let html = '<p>Do you wish to spend 1 strategy token to produce in your home sector? </p><ul>';
+          if (imperium_self.game.state.round == 1) {
+            html = `${imperium_self.returnFaction(strategy_card_player)} has played the Warfare strategy card. This lets you spend 1 strategy token to produce in your Homeworld without activating the sector. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability: </p><ul>`;
+          }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0 ) { 
             html += '<li class="option" id="yes">Yes</li>';
 	  }

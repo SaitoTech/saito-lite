@@ -29,6 +29,9 @@
 	  resources_to_spend = imperium_self.game.players_info[imperium_self.game.player-1].cost_of_technology_secondary;
 ;
           html = '<p>Technology has been played. Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
+          if (imperium_self.game.state.round == 1) {
+            html = `${imperium_self.returnFaction(strategy_card_player)} has played the Technology strategy card. This lets you to spend 4 resources and a strategy token to research technology -- a permanent boost to your faction units and abilities. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability: </p><ul>`;
+          }
 
 	  if (
 	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||

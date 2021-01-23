@@ -35,7 +35,7 @@ try {
   });
   $('.sector').on('click', function () {
     pid = $(this).attr("id");
-    imperium_self.updateLog(imperium_self.returnSectorInformationHTML(pid));
+    imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnSectorInformationHTML(pid));
   });
 } catch (err) {}
 }
@@ -223,30 +223,49 @@ returnSectorInformationHTML(sector) {
   if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
 
   let sys = this.returnSectorAndPlanets(sector);
-  let html = "System Summary: <br/>";
-      html += '<div style="margin-left:20px;margin-top:10px;">';
-      html += sys.s.name + " (sector):";
-      html += "<div style='clear:both;margin-left:10px;margin-top:6px;'>";
-      for (let i = 0; i < sys.s.units.length; i++) {
-        if (sys.s.units.length > 0) {
-          html += this.returnPlayerFleetInSector((i+1), sector);
-          i = sys.s.units.length;
-        }
-      }
-      html += '</div>';
+  let html = `
+    <div class="system_summary">
+      <div class="system_summary_text">
+  `;
 
-  for (let i = 0; i < sys.p.length; i++) {
-    html += '<p style="margin-top:10px" />';
-    html += "  " + sys.p[i].name + " (planet):";
-    html += "<div style='clear:both;margin-left:10px;margin-top:6px;'>";
-    html +=   "    " + this.returnInfantryOnPlanet(sys.p[i]) + " infantry";
-    html +=   '<br />';
-    html +=   "    " + this.returnPDSOnPlanet(sys.p[i]) + " pds";
-    html +=   '<br />';
-    html +=   "    " + this.returnSpaceDocksOnPlanet(sys.p[i]) + " space docks";
-    html += '</div>';
+  html += '<div class="system_summary_sector">';
+  html += sys.s.name;
+  html += "</div>";
+  if (sys.s.units.length > 0) {
+  html += '<div class="system_summary_units">';
+  for (let i = 0; i < sys.s.units.length; i++) {
+    if (sys.s.units.length > 0) {
+      html += this.returnPlayerFleetInSector((i+1), sector);
+      i = sys.s.units.length;
+    }
   }
-  html += '</div>';
+  html += `
+    </div>
+  `;
+  }
+  html += `
+    <div class="grid-2">
+  `;
+  for (let i = 0; i < sys.p.length; i++) {
+    html += `
+      <div class="system_summary_planet">
+        ${sys.p[i].name}:
+        <p style="margin-top:10px" />
+        <div style='clear:both;margin-left:10px;margin-top:6px;'>
+          ${this.returnInfantryOnPlanet(sys.p[i])} infantry
+          <br />
+          ${this.returnPDSOnPlanet(sys.p[i])} pds
+          <br />
+          ${this.returnSpaceDocksOnPlanet(sys.p[i])} space docks
+        </div>
+      </div>
+      <div class="system_summary_planet_card" style="background-image: url('${sys.p[i].img}');"></div>
+    `;
+  }
+  html += `
+    </div>
+  </div>
+  `;
 
   return html;
 
@@ -587,6 +606,7 @@ returnUnitsOverlay() {
 
   let html = `<div class="units-overlay-container" style="">`;
   let units = [];
+  let imperium_self = this;
 
   if (this.game.state.round == 1) {
     html += `
@@ -688,6 +708,52 @@ returnUnitsOverlay() {
   return html;
 }
 
+
+returnUnitPopup(unittype) {
+
+  let html = `
+
+    <div class="unit_details_popup">
+      ${this.returnUnitPopupEntry(unittype)}}
+    </div
+
+  `;
+
+  return html;
+
+}
+returnUnitPopupEntry(unittype) {
+
+  let obj = this.units[unittype];
+  if (!obj) { return ""; }
+
+  let html = `
+      <div class="unit-element" style="background:#333c;width:100%;padding:5%;border-radius:5px;font-size:0.7em;">
+        <div class="unit-box-ship unit-box-ship-${unittype}" style="width:100%"></div>
+        <div class="unit-box" style="width:24.5%;height:auto;padding-bottom:10px;">
+	  <div class="unit-box-num" style="font-size:2.8em">${obj.cost}</div>
+	  <div class="unit-box-desc" style="font-size:1.4em;padding-top:5px;">cost</div>
+	</div>
+        <div class="unit-box" style="width:24.5%;height:auto;padding-bottom:10px;">
+	  <div class="unit-box-num" style="font-size:2.8em">${obj.move}</div>
+	  <div class="unit-box-desc" style="font-size:1.4em;padding-top:5px;">move</div>
+	</div>
+        <div class="unit-box" style="width:24.5%;height:auto;padding-bottom:10px;">
+	  <div class="unit-box-num" style="font-size:2.8em">${obj.combat}</div>
+	  <div class="unit-box-desc" style="font-size:1.4em;padding-top:5px;">combat</div>
+	</div>
+        <div class="unit-box" style="width:24.5%;height:auto;padding-bottom:10px;">
+	  <div class="unit-box-num" style="font-size:2.8em">${obj.capacity}</div>
+	  <div class="unit-box-desc" style="font-size:1.4em;padding-top:5px;">carry</div>
+	</div>
+        <div class="unit-description" style="font-size:1.1em">${obj.description}.</div>
+      </div>
+    `;
+
+  return html;
+
+}
+
 returnUnitTableEntry(unittype) {
 
   let obj = this.units[unittype];
@@ -695,10 +761,9 @@ returnUnitTableEntry(unittype) {
 
   if (this.game.state.round == 1) {
     if (obj.type == "carrier") {
-      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is the most important starting ship. Move it into a neighbouring sector to conquer planets and gain their resources and influence.</div>';
+      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is the most important starting ship. Move it into a neighbouring sector and INVADE planets to gain their resources and influence.</div>';
     }
   }
-
 
   let html = `
       <div class="unit-element">
@@ -725,7 +790,38 @@ returnUnitTableEntry(unittype) {
 
   return html;
 
+}
 
+
+returnNewAgendasOverlay() {
+
+  let title = "New Agendas";
+  let laws = this.returnAgendaCards();
+
+  let html = `
+    <div class="new_objectives_overlay_container" style="">
+      <div class="new_objectives_title">${title}</div>
+      <div style="width:100%"><div class="new_objectives_text">check agendas under debate in the INFO menu...</div>
+    </div>
+    <div class="new_objectives_container">
+  `;
+
+  if (this.game.state.agendas.length > 0) {
+    html += '<div class="overlay_laws_list">';
+    for (let i = 0; i < this.game.state.agendas.length; i++) {
+      html += `  <div style="background-image: url('/imperium/img/agenda_card_template.png');" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.agendas[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.agendas[i]].text}</div></div>`;
+    }
+    html += '</div>';
+  }
+
+
+  html += `
+      </div>
+      <div id="close-agendas-btn" class="button" style="">CONTINUE</div>
+    </div>
+  `;
+
+  return html;
 }
 
 
@@ -934,9 +1030,9 @@ returnFactionSheet(imperium_self, player=null) {
   let html = `
       <div class="faction_sheet_container ${player_class} ${border_color}" style="overflow-y:scroll;padding:15px;;width:90vw;height:90vh;background-image:url('/imperium/img/factions/faction${player}.jpg');background-size:cover;">
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
-          <div>Command</div>
-          <div>Strategy</div>
-          <div>Fleet</div>
+          <div class="faction_sheet_token_box_title">Command</div>
+          <div class="faction_sheet_token_box_title">Strategy</div>
+          <div class="faction_sheet_token_box_title">Fleet</div>
           <div>	
             <span class="fa-stack fa-3x">
             <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
@@ -994,6 +1090,22 @@ returnFactionSheet(imperium_self, player=null) {
     html += `</div>`;
 
     
+     //
+     // tech
+     //
+     html += `
+      <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
+    `;
+    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
+      let techname = imperium_self.game.players_info[player-1].tech[i];
+      let tech = imperium_self.tech[techname];
+      if (tech.type != "ability") {
+        html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card");
+      }
+    }
+    html += `</div>`;
+
+
 
 
 
@@ -1045,21 +1157,6 @@ returnFactionSheet(imperium_self, player=null) {
     html += `
       </div>
     `;
-
-     //
-     // tech
-     //
-     html += `
-      <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
-    `;
-    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
-      let techname = imperium_self.game.players_info[player-1].tech[i];
-      let tech = imperium_self.tech[techname];
-      if (tech.type != "ability") {
-        html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card");
-      }
-    }
-    html += `</div>`;
 
   return html;
 }
@@ -1526,6 +1623,15 @@ updateSectorGraphics(sector) {
     for (let i in this.game.sectors) {
       this.removeSectorHighlight(i);
     }
+  }
+
+
+  showUnit(unittype) {
+    let unit_popup = this.returnUnitPopup(unittype);
+    this.cardbox.showCardboxHTML("", unit_popup, "", function() {});
+  }
+  hideUnit(unittype) {
+    this.cardbox.hideCardbox(1);
   }
 
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }

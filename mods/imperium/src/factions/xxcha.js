@@ -9,7 +9,7 @@
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">The failure of diplomatic options has struck the XXCha Kingdom harshly...</div><div style="margin-top:10px">What is left for your people but the conquest of New Byzantium and imposition of peace by force?</div>`
+      intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the XXCha Kingdom, a faction which excels in diplomacy and defensive weaponry. With the proper alliances and political maneuvers your faction you can be a contender for the Imperial Throne. Good luck!</div>`
     });
   
 
