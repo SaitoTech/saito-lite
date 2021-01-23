@@ -1378,7 +1378,9 @@ console.log(JSON.stringify(this.game.state.choices));
               	document.getElementById("close-agendas-btn").onclick = () => {
                   this.overlay.hideOverlay(this.app, this);
               	}
-             }
+              } else {
+                this.overlay.hideOverlay(this.app, this);
+              }
 	    }
           }
         } catch (err) {}
