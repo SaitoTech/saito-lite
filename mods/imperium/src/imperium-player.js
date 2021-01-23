@@ -2258,7 +2258,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
   if (stage == 2) {
     html = '<div class="sf-readable">Leadership has been played. Do you wish to purchase any additional command or strategy tokens, or increase your fleet supply?</div><ul>';
     if (imperium_self.game.state.round == 1)  {
-      html = `${imperium_self.returnFaction(strategy_card_player)} has played the Leadership strategy card. This lets you spend 3 influence to purchase additional command tokens, strategy tokens or fleet supply. Do you wish to purchase any additional tokens: </p><ul>`;
+      html = `The Leadership strategy card has been played. This lets you spend 3 influence to purchase additional command tokens, strategy tokens or fleet supply. Do you wish to purchase any additional tokens: </p><ul>`;
     }
   }
 
@@ -3336,14 +3336,11 @@ playerSelectSector(mycallback, mode = 0) {
   // 0 = any sector
   // 1 = activated actor
   //
-
   let imperium_self = this;
 
+  $('.sector').off();
   $('.sector').on('click', function () {
-
-    console.log("de-activated sectors -- clicks should do nothing now...");
     $('.sector').off();
-
     let pid = $(this).attr("id");
     mycallback(pid);
   });

@@ -596,6 +596,10 @@
   padding: 0;
 }
 
+.doublespace {
+  line-height: 1.8em;
+}
+
 :root {
   --p1: #229922;
   --p2: #0066ff;

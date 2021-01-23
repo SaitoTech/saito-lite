@@ -2774,7 +2774,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 
           let html = '<p>Construction has been played. Do you wish to spend 1 strategy token to build a PDS or Space Dock? This will activate the sector (if unactivated): </p><ul>';
           if (imperium_self.game.state.round == 1) { 
-	    html = `${imperium_self.returnFaction(strategy_card_player)} has just played the Construction strategy card. This lets you to spend 1 strategy token to build a PDS or Space Dock on a planet you control? Doing so will activate the sector (if unactivated). You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability: </p><ul>`;
+	    html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has played the Construction strategy card. You may spend 1 strategy token to build a PDS or Space Dock on a planet you control (this will activate the sector). You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability? </p><ul>`;
 	  }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             html += '<li class="option" id="yes">Yes</li>';
@@ -2875,7 +2875,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 
           let html = '<p>Do you wish to spend 1 strategy token to unexhaust two planet cards? </p><ul>';
 	  if (imperium_self.game.state.round == 1) {
-            html = `${imperium_self.returnFaction(strategy_card_player)} has just played the Diplomacy strategy card. This lets you to spend 1 strategy token to unexhaust two planet cards (letting you re-spend their resources or influence). You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability? </p><ul>`;
+            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has just played the Diplomacy strategy card. This lets you to spend 1 strategy token to unexhaust two planet cards. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability? </p><ul>`;
           }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
 	    html += '<li class="option" id="yes">Yes</li>';
@@ -3277,7 +3277,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 ;
           html = '<p>Technology has been played. Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
           if (imperium_self.game.state.round == 1) {
-            html = `${imperium_self.returnFaction(strategy_card_player)} has played the Technology strategy card. This lets you to spend 4 resources and a strategy token to research technology -- a permanent boost to your faction units and abilities. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability: </p><ul>`;
+            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has played the Technology strategy card. You may spend 4 resources and a strategy token to gain a permanent new unit or abilities. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability?</p><ul>`;
           }
 
 	  if (
@@ -3512,7 +3512,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
           let html = '<p>Trade has been played. Do you wish to spend 1 strategy token to refresh your commodities? </p><ul>';
           if (imperium_self.game.state.round == 1) {
-            html = `${imperium_self.returnFaction(strategy_card_player)} has played the Trade strategy card. This lets you spend 1 strategy token to refresh your faction commodities. You may trade these commodities with neighbours on the board in exchange for trade goods. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability: </p><ul>`;
+            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has played the Trade strategy card. You may spend 1 strategy token to refresh your faction commodities, which may be exchanged with your neighbours on the board for trade goods. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability? </p><ul>`;
           }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             html += '<li class="option" id="yes">Yes</li>';
@@ -3593,7 +3593,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
           let html = '<p>Do you wish to spend 1 strategy token to produce in your home sector? </p><ul>';
           if (imperium_self.game.state.round == 1) {
-            html = `${imperium_self.returnFaction(strategy_card_player)} has played the Warfare strategy card. This lets you spend 1 strategy token to produce in your Homeworld without activating the sector. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability: </p><ul>`;
+            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has played the Warfare strategy card. You may spend 1 strategy token to produce in your Homeworld without activating the sector. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability? </p><ul>`;
           }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0 ) { 
             html += '<li class="option" id="yes">Yes</li>';
@@ -17858,7 +17858,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
   if (stage == 2) {
     html = '<div class="sf-readable">Leadership has been played. Do you wish to purchase any additional command or strategy tokens, or increase your fleet supply?</div><ul>';
     if (imperium_self.game.state.round == 1)  {
-      html = `${imperium_self.returnFaction(strategy_card_player)} has played the Leadership strategy card. This lets you spend 3 influence to purchase additional command tokens, strategy tokens or fleet supply. Do you wish to purchase any additional tokens: </p><ul>`;
+      html = `The Leadership strategy card has been played. This lets you spend 3 influence to purchase additional command tokens, strategy tokens or fleet supply. Do you wish to purchase any additional tokens: </p><ul>`;
     }
   }
 
@@ -18936,14 +18936,11 @@ playerSelectSector(mycallback, mode = 0) {
   // 0 = any sector
   // 1 = activated actor
   //
-
   let imperium_self = this;
 
+  $('.sector').off();
   $('.sector').on('click', function () {
-
-    console.log("de-activated sectors -- clicks should do nothing now...");
     $('.sector').off();
-
     let pid = $(this).attr("id");
     mycallback(pid);
   });
