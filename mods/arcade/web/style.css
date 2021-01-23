@@ -348,6 +348,7 @@ body {
   grid-template-columns: 1fr;
   gap: 0.5em;
   margin: 0.5em 0 0 0;
+  overflow-y: auto;
 }
 
 .arcade-infobox {
