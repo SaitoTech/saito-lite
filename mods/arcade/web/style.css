@@ -30,7 +30,7 @@ body {
 }
 .arcade-container {
   display: grid;
-  gap: 1em;
+  gap: 0.5em;
   grid-template-columns: var(--sidebar-width) auto;
   font-size: 1em;
   width: 100vw;
@@ -396,31 +396,6 @@ body {
 
 .appstore-overlay-app {
   background-color: #c2cdde;
-}
-
-@media only screen and (max-width: 1000px) {
-  .main {
-    margin-left: 1em;
-  }
-  .arcade-container {
-    grid-template-columns: auto;
-  }
-  .arcade-sidebar {
-    position: absolute;
-    width: 15em;
-    left: -15em;
-    height: calc(100vh - 5em);
-    transition: all ease-in-out 1s;
-    background: var(--saito-nightscape);
-  }
-  .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
-    left: 0;
-  }
-  .arcade-sub {
-    overflow-y: scroll;
-    display: block;
-    margin: 1em 0 0 0;
-  }
 }
 
   /* controls */
@@ -1113,7 +1088,31 @@ body {
     height: 6em;
     margin: 25%;
   }
+
   @media only screen and (max-width: 1000px) {
+    .main {
+      margin-left: 1em;
+    }
+    .arcade-container {
+      grid-template-columns: auto;
+    }
+    .arcade-sidebar {
+      position: absolute;
+      width: 15em;
+      left: -15em;
+      height: calc(100vh - 5em);
+      transition: all ease-in-out 1s;
+      background: var(--saito-nightscape);
+    }
+    .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
+      left: 0;
+    }
+    .arcade-sub {
+      overflow-y: scroll;
+      display: block;
+      margin: 0.5em 0 0 0;
+    }
+
     .arcade-container {
       padding: 0;
     }
@@ -1165,6 +1164,9 @@ body {
     }
     .arcade-sidebar:hover::after {
       opacity: 0;
+    }
+    .arcade-main {
+      padding-left: 10px;
     }
   }
   @media only screen and (max-width: 600px) {
