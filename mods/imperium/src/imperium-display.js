@@ -168,30 +168,7 @@ commodities are turned into trade goods by trading them with others.
 
   return html;
 }
-returnNewActionCardsOverlay(cards) {
-  let imperium_self = this;
 
-  let text = "Card";
-  if (cards.length > 1) { text = "Cards"; }
-
-  let html = `
-    <div class="new_action_cards_overlay" id="new_action_cards_overlay">
-      <div class="new_action_cards_overlay_card_container">
-  `;
-  for (let i = 0; i < cards.length; i++) {
-    html += `
-      <div class="faction_sheet_action_card bc">
-        <div class="action_card_name">${imperium_self.action_cards[cards[i]].name}</div>
-        <div class="action_card_content">${imperium_self.action_cards[cards[i]].text}</div>
-      </div>
-    `;
-  }
-  html += `
-      </div>
-    </div>
-  `;
-  return html;
-}
 
 returnNewSecretObjectiveOverlay(card) {
   let obj = this.secret_objectives[card];
@@ -231,18 +208,22 @@ returnSectorInformationHTML(sector) {
   html += '<div class="system_summary_sector">';
   html += sys.s.name;
   html += "</div>";
+  let units_html = "";
   if (sys.s.units.length > 0) {
-  html += '<div class="system_summary_units">';
   for (let i = 0; i < sys.s.units.length; i++) {
     if (sys.s.units.length > 0) {
-      html += this.returnPlayerFleetInSector((i+1), sector);
+      units_html += this.returnPlayerFleetInSector((i+1), sector);
       i = sys.s.units.length;
     }
   }
-  html += `
-    </div>
-  `;
   }
+  
+  if (units_html != "") {
+    html += '<div class="system_summary_units">';
+    html += units_html;
+    html += '</div>';
+  }
+
   html += `
     <div class="grid-2">
   `;
@@ -254,7 +235,7 @@ returnSectorInformationHTML(sector) {
         <div style='clear:both;margin-left:10px;margin-top:6px;'>
           ${this.returnInfantryOnPlanet(sys.p[i])} infantry
           <br />
-          ${this.returnPDSOnPlanet(sys.p[i])} pds
+          ${this.returnPDSOnPlanet(sys.p[i])} PDS
           <br />
           ${this.returnSpaceDocksOnPlanet(sys.p[i])} space docks
         </div>
@@ -287,7 +268,6 @@ returnPlanetInformationHTML(planet) {
     powner = "nowner";
   }   
       
-      
   let html = '';
       
   if (ionp > 0) {
@@ -309,7 +289,7 @@ returnPlanetInformationHTML(planet) {
     html = `<div class="sector_information_planetname ${powner}">${p.name}</div>`;
   }
 
-
+  return html;
 
 }
 
@@ -891,6 +871,33 @@ returnNewObjectivesOverlay() {
   return html;
 }
 
+returnNewActionCardsOverlay(cards) {
+
+  let title = "Your New Action Cards";
+
+  let html = `
+    <div class="new_action_cards_overlay_container" style="">
+      <div class="new_action_cards_title">${title}</div>
+      <div style="width:100%"><div class="new_objectives_text">click on your faction to see all your action cards anytime...</div></div>
+      <div class="new_action_cards">
+  `;
+
+  for (let i = 0; i < cards.length; i++) {
+    html += `
+      <div class="overlay_action_card bc">
+        <div class="action_card_name">${this.action_cards[cards[i]].name}</div>
+        <div class="action_card_content">${this.action_cards[cards[i]].text}</div>
+      </div>
+    `;
+  }
+  html += `
+      </div>
+      <div id="close-action-cards-btn" class="button" style="">CONTINUE</div>
+    </div>
+  `;
+  return html;
+}
+
 
 
 returnObjectivesOverlay() {
@@ -922,6 +929,7 @@ returnObjectivesOverlay() {
     html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
                <div class="objectives_card_name">${obj.name}</div>
                <div class="objectives_card_content">${obj.text}</div>
+               <div class="objectives_scorings">
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
       for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
@@ -930,6 +938,7 @@ returnObjectivesOverlay() {
         }
       }
     }
+    html += `</div>`;
     html += `</div>`;
   }
 
@@ -943,6 +952,7 @@ returnObjectivesOverlay() {
     html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
                <div class="objectives_card_name">${obj.name}</div>
                <div class="objectives_card_content">${obj.text}</div>
+               <div class="objectives_scorings">
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
       for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
@@ -951,6 +961,7 @@ returnObjectivesOverlay() {
         }
       }
     }
+    html += `</div>`;
     html += `</div>`;
   }
 

@@ -57,7 +57,7 @@
 	    imperium_self.updateLog("All players have 5 trade goods");
           }
 
-	  imperium_self.updateTokenDisplay();
+	  imperium_self.displayFactionDashboard();
 
 	  return 1;
 

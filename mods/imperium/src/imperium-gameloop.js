@@ -2189,6 +2189,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	if (type == "action_cards") {
           if (this.game.player == player && this.browser_active == 1) {
 	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
+	    document.getElementById("close-action-cards-btn").onclick = (e) => {
+	      this.overlay.hideOverlay();
+            }
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
@@ -2270,6 +2273,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	  }
   	  this.game.players_info[player-1].commodities += amount;
 	  if (this.game.players_info[player-1].commodities > this.game.players_info[player-1].commodity_limit) {
+  	    this.updateLog(this.returnFaction(player) + " capped at " + this.game.players_info[player-1].commodity_limit);
 	    this.game.players_info[player-1].commodities = this.game.players_info[player-1].commodity_limit;
 	  }
   	}

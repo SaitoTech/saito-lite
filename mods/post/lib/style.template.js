@@ -318,6 +318,7 @@ module.exports = PostStyleTemplate = (app, mod) => {
 
 .post-view-comment-text {
   clear: both;
+  padding-left: 1.3em;
 }
 
 .post-view-comment-sublinks {
