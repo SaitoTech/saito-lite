@@ -9,7 +9,8 @@ module.exports = PostTeaserTemplate = (app, mod, tx) => {
   if (img == undefined) { img = '/post/img/post-logo.png'; }
   if (img == "")        { img = '/post/img/post-logo.png'; }
 
-
+  let ts = datetimeFormatter(tx.transaction.ts);
+  
   let html = `
     <div data-id="${tx.transaction.sig}" id="arcade-post" class="arcade-post">
       <div class="arcade-post-front">
@@ -20,6 +21,7 @@ module.exports = PostTeaserTemplate = (app, mod, tx) => {
         <div id="arcade-post-sublinks"  class="arcade-post-sublinks">
           <div id="arcade-post-posted-by" class="arcade-post-posted-by">posted by </div>
           <div id="arcade-post-user" class="arcade-post-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
+          <div id="arcade-post-ts" class="arcade-post-ts">( ${ts.years}/${ts.months}/${ts.days} - ${ts.hours}:${ts.minutes} )</div>
           <div data-id="${tx.transaction.sig}" id="arcade-post-comments" class="arcade-post-comments">${cmt}</div>
         </div>
       </div>

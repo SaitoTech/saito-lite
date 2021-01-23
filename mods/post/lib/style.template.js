@@ -440,6 +440,12 @@ module.exports = PostStyleTemplate = (app, mod) => {
 .post-teaser-back {
 }
 
+.arcade-post-ts {
+  float: left;
+  margin-left: 1em;
+  opacity: 0.7;
+}
+
 @media only screen and (max-width: 600px) {
   .post-create-header {
     flex-direction: column;
