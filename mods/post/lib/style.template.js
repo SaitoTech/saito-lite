@@ -350,6 +350,12 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 100%;
 }
 
+.post-view-ts {
+  float: left;
+  margin-left: 0.5em;
+  opacity: 0.7;
+}
+
 .post-teaser-thumbnail {
   background-image: url(/post/img/post-logo.png);
   background-size: contain;

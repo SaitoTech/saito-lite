@@ -7,6 +7,8 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
   }
   if (tx == null) { return; }
 
+  let ts = datetimeFormatter(tx.transaction.ts);
+
   let html = `
   <div id="post-view-container" class="post-view-container">
     <div id="post-view-overview" class="post-view-overview">
@@ -15,6 +17,7 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
       <div id="post-view-sublinks" class="post-view-sublinks">
         <div id="post-view-posted-by" class="post-view-posted-by">posted by </div>
         <div id="post-view-user" class="post-view-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
+        <div id="post-view-ts" class="post-view-ts"> (${ts.years}/${ts.months}/${ts.days} - ${ts.hours}:${ts.minutes})</div>
   `;
   if (tx.msg.link != "") {
     html = `<div id="post-view-container" class="post-view-container">
@@ -25,6 +28,7 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
       <div id="post-view-sublinks" class="post-view-sublinks">
         <div id="post-view-posted-by" class="post-view-posted-by">posted by </div>
         <div id="post-view-user" class="post-view-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
+        <div id="post-view-ts" class="post-view-ts"> (${ts.years}/${ts.months}/${ts.days} - ${ts.hours}:${ts.minutes})</div>
     `;
   }
 
