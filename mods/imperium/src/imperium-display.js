@@ -839,6 +839,10 @@ returnNewObjectivesOverlay() {
     html += `
       <div style="width:100%"><div class="new_objectives_text">check objectives, actions cards and more in the INFO menu...</div></div>
     `;
+  } else {
+    html += `
+      <div style="width:100%"><div class="new_objectives_text">view all public and secret objectives in the INFO menu...</div></div>
+    `;
   }
   
 
