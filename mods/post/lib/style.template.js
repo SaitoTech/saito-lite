@@ -245,6 +245,20 @@ module.exports = PostStyleTemplate = (app, mod) => {
   text-decoration: none;
 }
 
+.post-view-url {
+  display: flex;
+  clear: both;
+  font-size: 0.8em;
+  margin-bottom: 1em;
+}
+
+.post-view-url a{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+}
+
 .post-view-sublinks {
   clear: both;
   font-size: 0.8em;
@@ -336,6 +350,12 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 100%;
 }
 
+.post-view-ts {
+  float: left;
+  margin-left: 0.5em;
+  opacity: 0.7;
+}
+
 .post-teaser-thumbnail {
   background-image: url(/post/img/post-logo.png);
   background-size: contain;
@@ -424,6 +444,12 @@ module.exports = PostStyleTemplate = (app, mod) => {
   width: 3em;
 }
 .post-teaser-back {
+}
+
+.arcade-post-ts {
+  float: left;
+  margin-left: 1em;
+  opacity: 0.7;
 }
 
 @media only screen and (max-width: 600px) {

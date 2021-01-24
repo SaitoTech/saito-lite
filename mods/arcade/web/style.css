@@ -80,12 +80,15 @@ body {
 }
 .arcade-main {
   height: calc(100vh - 5em - 5px);
+  /* new design does not required a grid
   display: grid;
   grid-template-rows: 2.5em auto 1fr;
+  */
   padding-right: 10px;
 }
 
 #arcade-tabs {
+  height: -moz-fit-content;
   height: fit-content;
   max-height: 45vh;
   overflow-y: auto;
@@ -348,7 +351,6 @@ body {
   grid-template-columns: 1fr;
   gap: 0.5em;
   margin: 0.5em 0 0 0;
-  overflow-y: auto;
 }
 
 .arcade-infobox {
@@ -897,9 +899,6 @@ body {
   .start-game-btn {
     text-transform: capitalize;
     margin: 3em 0;
-    max-width: 350px;
-    margin-left: auto;
-    margin-right: auto;
   }
   .start-game {
     background: #000;
