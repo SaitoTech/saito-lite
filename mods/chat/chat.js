@@ -166,7 +166,7 @@ class Chat extends ModTemplate {
     //
     if (peer.isMainPeer()) {
  
-      this.createChatGroup([peer.peer.publickey], "Community Chat");
+      this.createChatGroup([peer.peer.publickey], "Saito Community Chat");
     } else {
 
       //
