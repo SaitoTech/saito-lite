@@ -3,7 +3,7 @@
     this.importActionCard('leadership-rider', {
   	name : "Leadership Rider" ,
   	type : "rider" ,
-  	text : "Gain two strategy tokens and 1 command token" ,
+  	text : "Bet on agenda outcome to gain two strategy tokens and 1 command token" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 	    let active_agenda = imperium_self.returnActiveAgenda();
@@ -34,7 +34,7 @@
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
   	type : "rider" ,
-  	text : "Select a planet and destroy all PDS units on that planet" ,
+  	text : "Bet on agenda outcome to destroy all PDS units on any planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -88,7 +88,7 @@
     this.importActionCard('politics-rider', {
   	name : "Politics Rider" ,
   	type : "rider" ,
-  	text : "Gain three action cards and the speaker token" ,
+  	text : "Bet on agenda outcome to gain three action cards and the speaker token" ,
         playActionCard : function(imperium_self, player, action_card_player, card) {
           if (imperium_self.game.player == action_card_player) {
             let active_agenda = imperium_self.returnActiveAgenda();
@@ -140,7 +140,7 @@
     this.importActionCard('construction-rider', {
   	name : "Construction Rider" ,
   	type : "rider" ,
-  	text : "Player may place a space dock on a planet they control" ,
+  	text : "Bet on agenda outcome to place a space dock on a planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (action_card_player == imperium_self.game.player) {
 
@@ -183,7 +183,7 @@
     this.importActionCard('trade-rider', {
   	name : "Trade Rider" ,
   	type : "rider" ,
-  	text : "Select a planet and destroy all PDS units on that planet" ,
+  	text : "Bet on agenda outcome to Select a planet and destroy all PDS units on that planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -214,7 +214,7 @@
     this.importActionCard('warfare-rider', {
   	name : "Warfare Rider" ,
   	type : "rider" ,
-  	text : "Place a dreadnaught in a system with one of your ships: " ,
+  	text : "Bet on agenda outcome to place a dreadnaught in a system with one of your ships: " ,
         playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -260,7 +260,7 @@
     this.importActionCard('technology-rider', {
   	name : "Technology Rider" ,
   	type : "rider" ,
-  	text : "Research a technology for free" ,
+  	text : "Bet on agenda outcome to research a technology for free" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {

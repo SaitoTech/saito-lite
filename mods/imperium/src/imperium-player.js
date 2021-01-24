@@ -5495,6 +5495,8 @@ playerDiscardActionCards(num) {
   this.updateStatus(html);
 
   $('.textchoice').off();
+  $('.textchoice').on('mouseenter', function () { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showActionCard(ac_in_hand[s]); } });
+  $('.textchoice').on('mouseleave', function () { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideActionCard(ac_in_hand[s]); } });
   $('.textchoice').on('click', function () {
 
     let action2 = $(this).attr("id");

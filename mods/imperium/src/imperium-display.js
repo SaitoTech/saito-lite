@@ -209,13 +209,12 @@ returnSectorInformationHTML(sector) {
   html += sys.s.name;
   html += "</div>";
   let units_html = "";
-  if (sys.s.units.length > 0) {
+console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
   for (let i = 0; i < sys.s.units.length; i++) {
-    if (sys.s.units.length > 0) {
+    if (sys.s.units[i].length > 0) {
       units_html += this.returnPlayerFleetInSector((i+1), sector);
       i = sys.s.units.length;
     }
-  }
   }
   
   if (units_html != "") {
@@ -591,7 +590,7 @@ returnUnitsOverlay() {
   if (this.game.state.round == 1) {
     html += `
       <div style="width:100%;text-align:center"><div class="units-overlay-title">Starting Units</div></div>
-      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the INFO menu...</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the cards menu...</div></div>
       <div class="unit-table">
     `;
 
@@ -817,11 +816,11 @@ returnNewObjectivesOverlay() {
 
   if (this.game.state.round == 1) {
     html += `
-      <div style="width:100%"><div class="new_objectives_text">check objectives, actions cards and more in the INFO menu...</div></div>
+      <div style="width:100%"><div class="new_objectives_text">check objectives, strategy cards and more in the CARDS menu...</div></div>
     `;
   } else {
     html += `
-      <div style="width:100%"><div class="new_objectives_text">view all public and secret objectives in the INFO menu...</div></div>
+      <div style="width:100%"><div class="new_objectives_text">view all public and secret objectives in the CARDS menu...</div></div>
     `;
   }
   
@@ -852,10 +851,10 @@ returnNewObjectivesOverlay() {
      ` ;
     }
     if (ob.type == "stage2") {
-      let obj = this.stage_i_objectives[ob.card];
-      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${objc[o].img})">
-               <div class="objectives_card_name">${objc[o].name}</div>
-               <div class="objectives_card_content">${objc[o].text}</div>
+      let obj = this.stage_ii_objectives[ob.card];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+               <div class="objectives_card_name">${obj.name}</div>
+               <div class="objectives_card_content">${obj.text}</div>
                <div class="objectives_players_scored players_scored_${(i+1)} p${(i+1)}"><div class="bk" style="width:100%;height:100%"></div></div>
              </div>
       `;
@@ -1665,8 +1664,6 @@ updateSectorGraphics(sector) {
     let divname = ".sector_graphics_space_" + sys.s.tile;
     $(divname).css('display', 'none');
 
-    //returnPlanetInformationHTML(this.game.sectors[sector].planets[0])
-
     // if we got here but the sector has no planets, nope out.
     if (!this.game.sectors[sector].planets) { return;}
     if (this.game.sectors[sector].planets.length == 0) { return;}
@@ -1721,7 +1718,13 @@ updateSectorGraphics(sector) {
   }
   showActionCard(c) {
     let thiscard = this.action_cards[c];
-    this.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
+    let html = `
+      <div class="overlay_action_card bc">
+        <div class="action_card_name">${thiscard.name}</div>
+        <div class="action_card_content">${thiscard.text}</div>
+      </div>
+    `;
+    this.cardbox.showCardboxHTML(thiscard, html);
   }
   hideActionCard(c) {
     this.cardbox.hideCardbox(1);
@@ -1789,7 +1792,14 @@ updateSectorGraphics(sector) {
     this.cardbox.hideCardbox(1);
   }
   showAgendaCard(agenda) {
-    this.cardbox.showCardboxHTML(agenda, '<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
+    let thiscard = this.agenda_cards[agenda];
+    let html = `
+      <div style="background-image: url('/imperium/img/agenda_card_template.png');height:100%;" class="overlay_agendacard card option" id="${agenda}">
+        <div class="overlay_agendatitle">${thiscard.name}</div>
+        <div class="overlay_agendacontent">${thiscard.text}</div>
+      </div>
+    `;
+    this.cardbox.showCardboxHTML(thiscard, html);
   }
   hideAgendaCard(sector, pid) {
     this.cardbox.hideCardbox(1);

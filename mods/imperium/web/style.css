@@ -937,6 +937,7 @@ body {
   margin-bottom: -15vw;
   border: 1px solid;
   float: left;
+  z-index: 1;
 }
 .overlay_action_card {
   background-image: url(img/action_card_template.png);
@@ -957,7 +958,7 @@ body {
   background-image: url(img/action_card_back.jpg);
 }
 
-.overlay_action_card:hover, faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
+.overlay_action_card:hover, .faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
   transform: scale(1.5) translate(1vw, 1vw);
   z-index: 10;
 }
@@ -1121,6 +1122,7 @@ body {
   margin-bottom: -15vw;
   border: 1px solid;
   float: left;
+  z-index: 1;
 }
 
 .faction_sheet_objectives {
@@ -1353,6 +1355,10 @@ body {
   font-family: 'orbitron-medium', helvetica, sans-serif;
   line-height: 1.3em;
 }
+.hud-square .hud-body {
+  min-height: 367px;
+}
+
 
 .hud-header {
   height: 100%;
@@ -1360,6 +1366,7 @@ body {
   opacity: 1;
   visibility: visible;
   background-color: #222e;
+  cursor: move;
 }
 
 #menu-container>ul>li:hover {
@@ -1405,6 +1412,7 @@ body {
   height: 100%;
   max-width: 100%;
   overflow-y: auto;
+  cursor: pointer;
 }
 
 .hud-menu ul li a {

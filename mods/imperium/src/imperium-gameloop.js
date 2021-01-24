@@ -94,7 +94,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	// this overwrites secondaries, we need to clear manually
 	// if we are playing the sceondary, we don't want to udpate status
 	//
-	if (this.game.state.playing_strategy_card_secondary == 0) {
+	if (this.game.state.playing_strategy_card_secondary == 0 && this.playing_token_allocation == 0) {
           this.updateStatus("Waiting for Opponent Move..."); 
 	}
 

@@ -84,7 +84,7 @@
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
               if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == "for") {
                 imperium_self.game.players_info[i].vp++;
-	        imperium_self.updateLog(imperium_self.returnFaction(i+1) + " gains 1 VP from unconventional measures");
+	        imperium_self.updateLog(imperium_self.returnFaction(i+1) + " gains 1 VP from Mutiny");
               }
             }
           }
@@ -96,7 +96,7 @@
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
               if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] === "for") {
                 imperium_self.game.players_info[i].vp--;
-	        imperium_self.updateLog(imperium_self.returnFaction(i+1) + " loses 1 VP from unconventional measures");
+	        imperium_self.updateLog(imperium_self.returnFaction(i+1) + " loses 1 VP from Mutiny");
               }
             }
 	  }

@@ -7858,7 +7858,7 @@ ACTION CARD - types
     this.importActionCard('leadership-rider', {
   	name : "Leadership Rider" ,
   	type : "rider" ,
-  	text : "Gain two strategy tokens and 1 command token" ,
+  	text : "Bet on agenda outcome to gain two strategy tokens and 1 command token" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 	    let active_agenda = imperium_self.returnActiveAgenda();
@@ -7889,7 +7889,7 @@ ACTION CARD - types
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
   	type : "rider" ,
-  	text : "Select a planet and destroy all PDS units on that planet" ,
+  	text : "Bet on agenda outcome to destroy all PDS units on any planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -7943,7 +7943,7 @@ ACTION CARD - types
     this.importActionCard('politics-rider', {
   	name : "Politics Rider" ,
   	type : "rider" ,
-  	text : "Gain three action cards and the speaker token" ,
+  	text : "Bet on agenda outcome to gain three action cards and the speaker token" ,
         playActionCard : function(imperium_self, player, action_card_player, card) {
           if (imperium_self.game.player == action_card_player) {
             let active_agenda = imperium_self.returnActiveAgenda();
@@ -7995,7 +7995,7 @@ ACTION CARD - types
     this.importActionCard('construction-rider', {
   	name : "Construction Rider" ,
   	type : "rider" ,
-  	text : "Player may place a space dock on a planet they control" ,
+  	text : "Bet on agenda outcome to place a space dock on a planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (action_card_player == imperium_self.game.player) {
 
@@ -8038,7 +8038,7 @@ ACTION CARD - types
     this.importActionCard('trade-rider', {
   	name : "Trade Rider" ,
   	type : "rider" ,
-  	text : "Select a planet and destroy all PDS units on that planet" ,
+  	text : "Bet on agenda outcome to Select a planet and destroy all PDS units on that planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -8069,7 +8069,7 @@ ACTION CARD - types
     this.importActionCard('warfare-rider', {
   	name : "Warfare Rider" ,
   	type : "rider" ,
-  	text : "Place a dreadnaught in a system with one of your ships: " ,
+  	text : "Bet on agenda outcome to place a dreadnaught in a system with one of your ships: " ,
         playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -8115,7 +8115,7 @@ ACTION CARD - types
     this.importActionCard('technology-rider', {
   	name : "Technology Rider" ,
   	type : "rider" ,
-  	text : "Research a technology for free" ,
+  	text : "Bet on agenda outcome to research a technology for free" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -10253,7 +10253,12 @@ handleSystemsMenuItem() {
 
   upgradeUnit(unit, player_to_upgrade) {
     let z = this.returnEventObjects();
+    //
+    // we need to keep capacity
+    //
+    let old_storage = unit.storage;
     for (let z_index in z) { unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
+    unit.storage = old_storage;
     return unit;
   }
   
@@ -10544,7 +10549,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	// this overwrites secondaries, we need to clear manually
 	// if we are playing the sceondary, we don't want to udpate status
 	//
-	if (this.game.state.playing_strategy_card_secondary == 0) {
+	if (this.game.state.playing_strategy_card_secondary == 0 && this.playing_token_allocation == 0) {
           this.updateStatus("Waiting for Opponent Move..."); 
 	}
 
@@ -21107,6 +21112,8 @@ playerDiscardActionCards(num) {
   this.updateStatus(html);
 
   $('.textchoice').off();
+  $('.textchoice').on('mouseenter', function () { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showActionCard(ac_in_hand[s]); } });
+  $('.textchoice').on('mouseleave', function () { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideActionCard(ac_in_hand[s]); } });
   $('.textchoice').on('click', function () {
 
     let action2 = $(this).attr("id");
@@ -25311,13 +25318,12 @@ returnSectorInformationHTML(sector) {
   html += sys.s.name;
   html += "</div>";
   let units_html = "";
-  if (sys.s.units.length > 0) {
+console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
   for (let i = 0; i < sys.s.units.length; i++) {
-    if (sys.s.units.length > 0) {
+    if (sys.s.units[i].length > 0) {
       units_html += this.returnPlayerFleetInSector((i+1), sector);
       i = sys.s.units.length;
     }
-  }
   }
   
   if (units_html != "") {
@@ -25693,7 +25699,7 @@ returnUnitsOverlay() {
   if (this.game.state.round == 1) {
     html += `
       <div style="width:100%;text-align:center"><div class="units-overlay-title">Starting Units</div></div>
-      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the INFO menu...</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the cards menu...</div></div>
       <div class="unit-table">
     `;
 
@@ -25919,11 +25925,11 @@ returnNewObjectivesOverlay() {
 
   if (this.game.state.round == 1) {
     html += `
-      <div style="width:100%"><div class="new_objectives_text">check objectives, actions cards and more in the INFO menu...</div></div>
+      <div style="width:100%"><div class="new_objectives_text">check objectives, strategy cards and more in the CARDS menu...</div></div>
     `;
   } else {
     html += `
-      <div style="width:100%"><div class="new_objectives_text">view all public and secret objectives in the INFO menu...</div></div>
+      <div style="width:100%"><div class="new_objectives_text">view all public and secret objectives in the CARDS menu...</div></div>
     `;
   }
   
@@ -25954,10 +25960,10 @@ returnNewObjectivesOverlay() {
      ` ;
     }
     if (ob.type == "stage2") {
-      let obj = this.stage_i_objectives[ob.card];
-      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${objc[o].img})">
-               <div class="objectives_card_name">${objc[o].name}</div>
-               <div class="objectives_card_content">${objc[o].text}</div>
+      let obj = this.stage_ii_objectives[ob.card];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+               <div class="objectives_card_name">${obj.name}</div>
+               <div class="objectives_card_content">${obj.text}</div>
                <div class="objectives_players_scored players_scored_${(i+1)} p${(i+1)}"><div class="bk" style="width:100%;height:100%"></div></div>
              </div>
       `;
@@ -25980,7 +25986,7 @@ returnNewActionCardsOverlay(cards) {
   let html = `
     <div class="new_action_cards_overlay_container" style="">
       <div class="new_action_cards_title">${title}</div>
-      <div style="width:100%"><div class="new_objectives_text">click on your faction dash to see your planets, action cards and more...</div></div>
+      <div style="width:100%"><div class="new_objectives_text">click on your faction to see all your action cards anytime...</div></div>
       <div class="new_action_cards">
   `;
 
@@ -26767,8 +26773,6 @@ updateSectorGraphics(sector) {
     let divname = ".sector_graphics_space_" + sys.s.tile;
     $(divname).css('display', 'none');
 
-    //returnPlanetInformationHTML(this.game.sectors[sector].planets[0])
-
     // if we got here but the sector has no planets, nope out.
     if (!this.game.sectors[sector].planets) { return;}
     if (this.game.sectors[sector].planets.length == 0) { return;}
@@ -26823,7 +26827,13 @@ updateSectorGraphics(sector) {
   }
   showActionCard(c) {
     let thiscard = this.action_cards[c];
-    this.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
+    let html = `
+      <div class="overlay_action_card bc">
+        <div class="action_card_name">${thiscard.name}</div>
+        <div class="action_card_content">${thiscard.text}</div>
+      </div>
+    `;
+    this.cardbox.showCardboxHTML(thiscard, html);
   }
   hideActionCard(c) {
     this.cardbox.hideCardbox(1);
@@ -26891,7 +26901,14 @@ updateSectorGraphics(sector) {
     this.cardbox.hideCardbox(1);
   }
   showAgendaCard(agenda) {
-    this.cardbox.showCardboxHTML(agenda, '<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
+    let thiscard = this.agenda_cards[agenda];
+    let html = `
+      <div style="background-image: url('/imperium/img/agenda_card_template.png');height:100%;" class="overlay_agendacard card option" id="${agenda}">
+        <div class="overlay_agendatitle">${thiscard.name}</div>
+        <div class="overlay_agendacontent">${thiscard.text}</div>
+      </div>
+    `;
+    this.cardbox.showCardboxHTML(thiscard, html);
   }
   hideAgendaCard(sector, pid) {
     this.cardbox.hideCardbox(1);
