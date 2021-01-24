@@ -30,7 +30,7 @@ body {
 }
 .arcade-container {
   display: grid;
-  gap: 0.5em;
+  gap: 1em;
   grid-template-columns: var(--sidebar-width) auto;
   font-size: 1em;
   width: 100vw;
@@ -86,10 +86,10 @@ body {
 }
 
 #arcade-tabs {
+  height: -moz-fit-content;
   height: fit-content;
   max-height: 45vh;
   overflow-y: auto;
-  border: 1px solid var(--saito-red);
 }
 
 #arcade-tab-buttons {
@@ -161,7 +161,7 @@ body {
   justify-content: space-around;
   overflow-y: auto;
   background: linear-gradient(-45deg, #0002, #0004);
-  /* border: 1px solid var(--saito-red); */
+  border: 1px solid var(--saito-red);
 }
 
 .hero-invite-wrapper {
@@ -349,8 +349,8 @@ body {
   grid-template-columns: 1fr;
   gap: 0.5em;
   margin: 0.5em 0 0 0;
-  overflow-y: auto;
-  border: 1px solid var(--saito-red);
+  z-index: -1;
+  padding: 1em 0 0;
 }
 
 .arcade-infobox {
@@ -396,6 +396,31 @@ body {
 
 .appstore-overlay-app {
   background-color: #c2cdde;
+}
+
+@media only screen and (max-width: 1000px) {
+  .main {
+    margin-left: 1em;
+  }
+  .arcade-container {
+    grid-template-columns: auto;
+  }
+  .arcade-sidebar {
+    position: absolute;
+    width: 15em;
+    left: -15em;
+    height: calc(100vh - 5em);
+    transition: all ease-in-out 1s;
+    background: var(--saito-nightscape);
+  }
+  .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
+    left: 0;
+  }
+  .arcade-sub {
+    overflow-y: scroll;
+    display: block;
+    margin: 1em 0 0 0;
+  }
 }
 
   /* controls */
@@ -874,9 +899,6 @@ body {
   .start-game-btn {
     text-transform: capitalize;
     margin: 3em 0;
-    max-width: 350px;
-    margin-left: auto;
-    margin-right: auto;
   }
   .start-game {
     background: #000;
@@ -1088,31 +1110,7 @@ body {
     height: 6em;
     margin: 25%;
   }
-
   @media only screen and (max-width: 1000px) {
-    .main {
-      margin-left: 1em;
-    }
-    .arcade-container {
-      grid-template-columns: auto;
-    }
-    .arcade-sidebar {
-      position: absolute;
-      width: 15em;
-      left: -15em;
-      height: calc(100vh - 5em);
-      transition: all ease-in-out 1s;
-      background: var(--saito-nightscape);
-    }
-    .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
-      left: 0;
-    }
-    .arcade-sub {
-      overflow-y: scroll;
-      display: block;
-      margin: 0.5em 0 0 0;
-    }
-
     .arcade-container {
       padding: 0;
     }
@@ -1164,9 +1162,6 @@ body {
     }
     .arcade-sidebar:hover::after {
       opacity: 0;
-    }
-    .arcade-main {
-      padding-left: 10px;
     }
   }
   @media only screen and (max-width: 600px) {
