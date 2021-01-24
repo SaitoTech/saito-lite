@@ -21302,7 +21302,7 @@ playerDiscardActionCards(num) {
     sectors['sector26']        = { img : "/imperium/img/sectors/sector26.png" , 	   name : "Populax" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet33'] }
     sectors['sector27']        = { img : "/imperium/img/sectors/sector27.png" , 	   name : "Old Moultour" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet34'] } 
     sectors['new-byzantium']   = { img : "/imperium/img/sectors/sector28.png" , 	   name : "New Byzantium" , type : 0 , hw : 0 , wormhole : 0, mr : 1 , planets : ['new-byzantium'] }
-    sectors['sector29']        = { img : "/imperium/img/sectors/sector29.png" , 	   name : "Outerant9" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet36'] }
+    sectors['sector29']        = { img : "/imperium/img/sectors/sector29.png" , 	   name : "Outerant" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet36'] }
     sectors['sector31']        = { img : "/imperium/img/sectors/sector31.png" , 	   name : "Craw Populi" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet38'] }
     sectors['sector32']        = { img : "/imperium/img/sectors/sector32.png" , 	   name : "Yssari-II" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet39'] }
     sectors['sector38']        = { img : "/imperium/img/sectors/sector38.png" , 	   name : "Lorstruck / Industryl" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet41','planet42'] }
@@ -25342,13 +25342,13 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
     <div class="grid-2">
   `;
   for (let i = 0; i < sys.p.length; i++) {
-    let planet_owner = "Uncontrolled";
+    let planet_owner = "UNCONTROLLED";
     if (sys.p[i].owner != -1) {
       planet_owner = this.returnFaction(sys.p[i].owner-1);
     }
     html += `
       <div class="system_summary_planet">
-        ${planet_owner}:
+        ${planet_owner}
         <p style="margin-top:10px" />
         <div style='clear:both;margin-left:10px;margin-top:6px;'>
           ${this.returnInfantryOnPlanet(sys.p[i])} infantry

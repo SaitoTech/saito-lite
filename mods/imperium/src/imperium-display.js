@@ -233,7 +233,7 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
     }
     html += `
       <div class="system_summary_planet">
-        ${planet_owner}:
+        ${planet_owner}
         <p style="margin-top:10px" />
         <div style='clear:both;margin-left:10px;margin-top:6px;'>
           ${this.returnInfantryOnPlanet(sys.p[i])} infantry
