@@ -63,7 +63,62 @@
     });
 
     this.menu.addMenuOption({
-      text : "Info",
+      text : "Cards",
+      id : "game-cards",
+      class : "game-cards",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-cards");
+      }
+    });
+    this.menu.addSubMenuOption("game-cards", {
+      text : "Strategy",
+      id : "game-strategy",
+      class : "game-strategy",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleStrategyMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-cards", {
+      text : "Tech",
+      id : "game-tech",
+      class : "game-tech",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.handleTechMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-cards", {
+      text : "Units",
+      id : "game-units",
+      class : "game-units",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleUnitsMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-cards", {
+      text : "Agendas",
+      id : "game-agendas",
+      class : "game-agendas",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleLawsMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-cards", {
+      text : "Objectives",
+      id : "game-vp",
+      class : "game-vp",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleObjectivesMenuItem();
+      }
+    });
+
+
+    this.menu.addMenuOption({
+      text : "Sectors",
       id : "game-info",
       class : "game-info",
       callback : function(app, game_mod) {
@@ -88,51 +143,8 @@
 	game_mod.handleInfoMenuItem();
       }
     });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Tech",
-      id : "game-tech",
-      class : "game-tech",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-        game_mod.handleTechMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Strategy",
-      id : "game-strategy",
-      class : "game-strategy",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleStrategyMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "VP",
-      id : "game-vp",
-      class : "game-vp",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleObjectivesMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Units",
-      id : "game-units",
-      class : "game-units",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleUnitsMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Laws",
-      id : "game-agendas",
-      class : "game-agendas",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleLawsMenuItem();
-      }
-    });
+
+
 
 
 

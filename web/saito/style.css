@@ -368,6 +368,15 @@ button i {
   position: relative;
 }
 
+#appstore-compile-btn {
+  max-width: 150px;
+  margin-top: 30px;
+}
+#appstore-end-compile-btn {
+  max-width: 150px;
+  margin-top: 30px;
+}
+
 .trigger-appstore-btn {
   font-weight: normal;
   border-bottom: 1px dashed black;

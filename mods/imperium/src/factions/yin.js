@@ -9,7 +9,7 @@
       tech		: 	["sarween-tools", "faction5-indoctrination", "faction5-devotion", "faction5-flagship"],
       background	: 	'faction5.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro		:	`<div style="font-weight:bold">One must conquer the turmoil within to conquer the turmoil without. Such is the will. Such is the law. So be it.</div>`
+      intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Yin Brotherhood, a monastic order of religious zealots whose eagerness to sacrifice their lives for the collective good makes them terrifying in one-on-one combat. Direct their self-destructive passion and you can win the Imperial Throne. Good luck!</div>`
     });
 
 
@@ -174,6 +174,7 @@
       name        	:       "Yin Flagship" ,
       faction     	:       "faction5",
       type      	:       "ability" ,
+      text        	:       "Wipes out all ships in sector when destroyed" ,
       unitDestroyed : function(imperium_self, attacker, unit) {
 	if (unit.type == "flagship") {
           if (imperium_self.doesPlayerHaveTech(unit.owner, "faction5-flagship")) {

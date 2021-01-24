@@ -244,8 +244,6 @@ playerTurn(stage = "main") {
     let playercol = "player_color_" + this.game.player;
 
     let html = '';
-//    html = '<div class="terminal_header sf-readable">[command: ' + this.game.players_info[this.game.player - 1].command_tokens + '] [strategy: ' + this.game.players_info[this.game.player - 1].strategy_tokens + '] [fleet: ' + this.game.players_info[this.game.player - 1].fleet_supply + ']</div>';
-//    html += '<p style="margin-top:20px"></p>';
     html += '<div class="terminal_header2 sf-readable"><div class="player_color_box ' + playercol + '"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
 
     if (this.canPlayerPass(this.game.player) == 1) {
@@ -305,14 +303,16 @@ playerTurn(stage = "main") {
     let tech_attach_menu_index = [];
 
 
-    let z = this.returnEventObjects();
-    for (let i = 0; i < z.length; i++) {
-      if (z[i].menuOptionTriggers(this, "main", this.game.player) == 1) {
-        let x = z[i].menuOption(this, "main", this.game.player);
-        html += x.html;
-        tech_attach_menu_index.push(i);
-        tech_attach_menu_triggers.push(x.event);
-        tech_attach_menu_events = 1;
+    if (this.game.state.active_player_moved == 1) {
+      let z = this.returnEventObjects();
+      for (let i = 0; i < z.length; i++) {
+        if (z[i].menuOptionTriggers(this, "main", this.game.player) == 1) {
+          let x = z[i].menuOption(this, "main", this.game.player);
+          html += x.html;
+          tech_attach_menu_index.push(i);
+          tech_attach_menu_triggers.push(x.event);
+          tech_attach_menu_events = 1;
+        }
       }
     }
 
@@ -353,7 +353,7 @@ playerTurn(stage = "main") {
       }
       if (action2 == "tutorial_produce_units") {
         imperium_self.tutorial_produce_clicked = 1;
-        imperium_self.playerAcknowledgeNotice("To produce units, select \"activate sector\" and choose a sector with a space dock (like your home system). You can only have as many non-fighter ships in any sector as your fleet supply, so move your ships out before producing more!", function () {
+        imperium_self.playerAcknowledgeNotice("To produce units, select \"activate sector\" and activate a sector with a space dock (like your home system). You can only have as many non-fighter ships in any sector as your fleet supply, so move your ships out before producing more!", function () {
           imperium_self.playerTurn();
         });
         return;
@@ -2254,9 +2254,14 @@ playerBuyTokens(stage = 0, resolve = 1) {
   }
 
   let html = '<div class="sf-readable">Do you wish to purchase any command or strategy tokens, or increase your fleet supply?</div><ul>';
+
   if (stage == 2) {
     html = '<div class="sf-readable">Leadership has been played. Do you wish to purchase any additional command or strategy tokens, or increase your fleet supply?</div><ul>';
+    if (imperium_self.game.state.round == 1)  {
+      html = `The Leadership strategy card has been played. This lets you spend 3 influence to purchase additional command tokens, strategy tokens or fleet supply. Do you wish to purchase any additional tokens: </p><ul>`;
+    }
   }
+
   html += '<li class="buildchoice textchoice" id="skip">Do Not Purchase</li>';
   html += '<li class="buildchoice textchoice" id="command">Command Tokens  +<span class="command_total">0</span></li>';
   html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens +<span class="strategy_total">0</span></li>';
@@ -2364,6 +2369,9 @@ playerBuyTokens(stage = 0, resolve = 1) {
   let html = '<div class="sf-readable">Do you wish to spend 1 strategy token to purchase 2 action cards?</div><ul>';
   if (stage == 2) {
     html = '<div class="sf-readable">Politics has been played: do you wish to spend 1 strategy token to purchase 2 action cards?</div><ul>';
+    if (imperium_self.game.state.round == 1) {
+      html = `${imperium_self.returnFaction(imperium_self.game.player)} has played the Politics strategy card. This lets you to spend 1 strategy token to purchase 2 action cards, which provide special one-time abilities. You have ${imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens} strategy tokens. Purchase action cards: </p><ul>`;
+    }
   }
   html += '<li class="buildchoice textchoice" id="yes">Purchase Action Cards</li>';
   html += '<li class="buildchoice textchoice" id="no">Do Not Purchase Action Cards</li>';
@@ -2722,6 +2730,8 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
   imperium_self.lockInterface();
 
   $('.buildchoice').off();
+  $('.buildchoice').on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.showUnit(s); });
+  $('.buildchoice').on('mouseleave', function () { let s = $(this).attr("id"); imperium_self.hideUnit(s); });
   $('.buildchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
@@ -2763,7 +2773,10 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
           mycallback(imperium_self.game.planets[planet].sector);
         }
       },
-      null
+      function() {
+        imperium_self.unlockInterface();
+        imperium_self.playerBuildInfrastructure(mycallback, stage);
+      },
     );
   });
 
@@ -2855,6 +2868,8 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
   imperium_self.lockInterface();
 
   $('.buildchoice').off();
+  $('.buildchoice').on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.showUnit(s); });
+  $('.buildchoice').on('mouseleave', function () { let s = $(this).attr("id"); imperium_self.hideUnit(s); });
   $('.buildchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
@@ -3083,14 +3098,12 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
 
     if (action == "no") {
       imperium_self.addMove("refuse_offer\t" + imperium_self.game.player + "\t" + faction_offering);
-      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " refuses trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
 
     if (action == "yes") {
       imperium_self.addMove("trade\t" + faction_offering + "\t" + imperium_self.game.player + "\t" + JSON.stringify(their_offer) + "\t" + JSON.stringify(my_offer));
-      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " accepts trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
@@ -3324,14 +3337,11 @@ playerSelectSector(mycallback, mode = 0) {
   // 0 = any sector
   // 1 = activated actor
   //
-
   let imperium_self = this;
 
+  $('.sector').off();
   $('.sector').on('click', function () {
-
-    console.log("de-activated sectors -- clicks should do nothing now...");
     $('.sector').off();
-
     let pid = $(this).attr("id");
     mycallback(pid);
   });

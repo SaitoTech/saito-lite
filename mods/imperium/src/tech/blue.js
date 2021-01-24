@@ -29,12 +29,10 @@
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
-console.log("player " + gainer + " -- gains " + tech);
         if (tech == "gravity-drive") {
           imperium_self.game.players_info[gainer-1].gravity_drive = 1;
           imperium_self.game.players_info[gainer-1].ship_move_bonus = 1;
         }
-console.log("ship move bonus updated to 1");
       },
     });
 
@@ -47,10 +45,14 @@ console.log("ship move bonus updated to 1");
       prereqs     	:       ['blue','blue'],
       text		: 	"You may perform two actions in any turn" ,
       onNewRound : function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].fleet_logistics_turn = 0;
+        if (imperium_self.doesPlayerHaveTech(player, "fleet-logistics")) {
+          imperium_self.game.players_info[player-1].fleet_logistics_turn = 0;
+        }
       },
       onNewTurn : function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].fleet_logistics_turn++;
+        if (imperium_self.doesPlayerHaveTech(player, "fleet-logistics")) {
+          imperium_self.game.players_info[player-1].fleet_logistics_turn++;
+	}
       },
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].fleet_logistics == undefined) {
@@ -68,18 +70,22 @@ console.log("ship move bonus updated to 1");
       },
       menuOption  :       function(imperium_self, menu, player) {
         if (menu == "main") {
-          return { event : 'fleetlogistics', html : '<li class="option" id="fleetlogistics">use fleet logistics</li>' };
+          if (imperium_self.doesPlayerHaveTech(player, "fleet-logistics")) {
+            return { event : 'fleetlogistics', html : '<li class="option" id="fleetlogistics">use fleet logistics</li>' };
+	  }
         }
         return {};
       },
       menuOptionTriggers:  function(imperium_self, menu, player) {
         if (menu == "main") {
+          if (imperium_self.doesPlayerHaveTech(player, "fleet-logistics")) {
 	  if (imperium_self.game.players_info[player-1].fleet_logistics_exhausted == 0) {
 	    if (imperium_self.game.players_info[player-1].fleet_logistics_turn < 2) {
 	      if (imperium_self.game.players_info[player-1].fleet_logistics == 1) {
                 return 1;
 	      }
 	    }
+	  }
 	  }
         }
         return 0;

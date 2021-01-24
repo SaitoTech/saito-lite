@@ -398,7 +398,7 @@ ACTION CARD - types
     this.importActionCard('reactor-meltdown', {
   	name : "Reactor Meltdown" ,
   	type : "action" ,
-  	text : "ACTION: Select a non-homeworld planet and destroy and destroy one Space Dock on that planet" ,
+  	text : "ACTION: Select a non-homeworld planet and destroy one Space Dock on that planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 

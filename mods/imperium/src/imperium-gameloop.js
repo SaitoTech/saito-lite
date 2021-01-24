@@ -501,9 +501,14 @@ console.log("interface is locked...");
 	  }
 	}
 
+
 	if (strategy_card_player != -1) {
 	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {
     	    imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+	  }
+	} else {
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].strategy_cards_played.includes(card)) {
+    	    imperium_self.game.players_info[imperium_self.game.player-1].strategy_cards_played.push(card);
 	  }
 	}
 
@@ -1253,8 +1258,8 @@ console.log(JSON.stringify(this.game.state.choices));
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
           this.game.queue.push("shownewobjectives");
-	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px">You are playing as ${this.factions[faction].name}. If you are new to Red Imperium, move a carrier with infantry into a sector beside your homeworld first turn and expand your empire...</div><div style="margin-top:10px;margin-bottom:10px;">Capture resource-rich planets to build ships and wage war. Capture influence-rich planets to purchase tokens for more moves. Good luck.</div>`);
-//          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
+//	  this.game.queue.push(`ACKNOWLEDGE\t<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px">You are playing as ${this.factions[faction].name}. If you are new to Red Imperium, move a carrier with infantry into a sector beside your homeworld first turn and expand your empire...</div><div style="margin-top:10px;margin-bottom:10px;">Capture resource-rich planets to build ships and wage war. Capture influence-rich planets to purchase tokens for more moves. Good luck.</div>`);
+          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	} else {
           this.game.queue.push("shownewobjectives");
         }
@@ -1362,10 +1367,21 @@ console.log(JSON.stringify(this.game.state.choices));
         this.overlay.showOverlay(this.app, this, this.returnNewObjectivesOverlay());
         try {
           document.getElementById("close-objectives-btn").onclick = () => {
-	    this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
-            document.getElementById("close-units-btn").onclick = () => {
-              this.overlay.hideOverlay(this.app, this);
-            }
+	    if (this.game.state.round == 1) {
+	      this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
+              document.getElementById("close-units-btn").onclick = () => {
+                this.overlay.hideOverlay(this.app, this);
+              }
+            } else {
+	      if (this.game.planets['new-byzantium'].owner != -1 ) {
+		this.overlay.showOverlay(this.app, this, this.returnNewAgendasOverlay());
+              	document.getElementById("close-agendas-btn").onclick = () => {
+                  this.overlay.hideOverlay(this.app, this);
+              	}
+              } else {
+                this.overlay.hideOverlay(this.app, this);
+              }
+	    }
           }
         } catch (err) {}
 
@@ -2173,6 +2189,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	if (type == "action_cards") {
           if (this.game.player == player && this.browser_active == 1) {
 	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
+	    document.getElementById("close-action-cards-btn").onclick = (e) => {
+	      this.overlay.hideOverlay();
+            }
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
@@ -2254,6 +2273,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	  }
   	  this.game.players_info[player-1].commodities += amount;
 	  if (this.game.players_info[player-1].commodities > this.game.players_info[player-1].commodity_limit) {
+  	    this.updateLog(this.returnFaction(player) + " capped at " + this.game.players_info[player-1].commodity_limit);
 	    this.game.players_info[player-1].commodities = this.game.players_info[player-1].commodity_limit;
 	  }
   	}

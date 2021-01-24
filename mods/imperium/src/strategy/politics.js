@@ -72,7 +72,7 @@
 	    // if New Byzantium is unoccupied, we skip the voting stage
 	    //
 	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-	      imperium_self.playerAcknowledgeNotice("You will receive two action cards after other players decided if they wish to purchase them. The Politics card will not trigger Agenda voting until until New Byzantium is occupied. Conquer the planet to earn 1 VP: ", function() {
+	      imperium_self.playerAcknowledgeNotice("You will receive two action cards. Once New Byzantium is occupied the Politics card will trigger agenda voting.", function() {
                 imperium_self.addMove("change_speaker\t"+chancellor);
 		imperium_self.endTurn();
 	      });
