@@ -1079,7 +1079,7 @@ console.log(JSON.stringify(this.game.state.choices));
 
 	    }
 
-            let html = '<p>How many votes do you wish to cast in the Galactic Senate:</p>';
+            let html = '<p style="margin-bottom:15px">Your voting strength is determined by your influence. Conquer more influence-rich planets to increase it. How many votes do you wish to cast in the Galactic Senate:</p>';
 	    for (let i = 1; i <= imperium_self.game.state.votes_available[imperium_self.game.player-1]; i++) {
               if (i == 1) {
 	        html += '<li class="option textchoice" id="'+i+'">'+i+' vote</li>';

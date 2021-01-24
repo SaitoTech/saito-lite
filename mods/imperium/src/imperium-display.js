@@ -75,7 +75,7 @@ Every turn you can:
 
 <p></p>
 
-Planets give you <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. The third hex on the board indicates planet type: industrial-green, cultural-blue, and hazardous-red.
+Planets give you <span class="resources_box">resources</span> and <span class="influence_box">influence</span>.
 
 <p></p>
 
@@ -89,17 +89,17 @@ use resources to build units and research technology.
 <div class="how_to_play_resources_entry">
 <b>INFLUENCE:</b>
 <p></p>
-influence is used to vote on laws and buy command tokens.
+use influence to vote on agendas and buy command tokens.
 </div>
 </div>
 
-<h2 style="clear:both;margin-top:35px;">Upgrade Faction:</h2>
+<h2 style="clear:both;margin-top:35px;">Faction Abilities:</h2>
 
 <img src="/imperium/img/factions/faction_dashboard.png" class="demo_planet_card" />
 
 <p></p>
 
-Each faction has special abilities, accessible through the faction dashboard. These show total available <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. They also show faction trade goods and commodities.
+Your faction dashboard shows your total available <span class="resources_box">resources</span> and <span class="influence_box">influence</span> and trade goods. Click on it to open a faction sheet showing your special abilities and upgrades. Every faction is different.
 
 <div style="padding-left:30px;padding-right:30px;">
 <div class="how_to_play_resources_entry">
@@ -227,9 +227,13 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
     <div class="grid-2">
   `;
   for (let i = 0; i < sys.p.length; i++) {
+    let planet_owner = "UNCONTROLLED";
+    if (sys.p[i].owner != -1) {
+      planet_owner = this.returnFaction(sys.p[i].owner-1);
+    }
     html += `
       <div class="system_summary_planet">
-        ${sys.p[i].name}:
+        ${planet_owner}:
         <p style="margin-top:10px" />
         <div style='clear:both;margin-left:10px;margin-top:6px;'>
           ${this.returnInfantryOnPlanet(sys.p[i])} infantry
@@ -252,46 +256,6 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
 }
 
      
-returnPlanetInformationHTML(planet) {
-      
-  let p = planet;
-  if (this.game.planets[planet]) { p = this.game.planets[planet]; }
-  let ionp = this.returnInfantryOnPlanet(p);
-  let ponp = this.returnPDSOnPlanet(p);
-  let sonp = this.returnSpaceDocksOnPlanet(p);
-  let powner = '';
-      
-  if(this.game.planets[planet].owner > 0) {
-    powner = "p" + this.game.planets[planet].owner;
-  } else { 
-    powner = "nowner";
-  }   
-      
-  let html = '';
-      
-  if (ionp > 0) {
-    html += '<div class="planet_infantry_count_label">Infantry</div><div class="planet_infantry_count">'+ionp+'</div>';
-  }   
-  
-  if (ponp > 0) {
-    html += '<div class="planet_pds_count_label">PDS</div><div class="planet_pds_count">'+ponp+'</div>';
-  }
-      
-  if (sonp > 0) {
-    html += '<div class="planet_spacedock_count_label">Space Doc</div><div class="planet_spacedock_count">'+sonp+'</div>';
-  }
-
-  if (ponp+sonp+ionp > 0) {
-    html = `<div class="sector_information_planetname ${powner}">${p.name}</div><div class="sector_information_planet_content">` + html;
-    html +=  `</div>`;
-  } else {
-    html = `<div class="sector_information_planetname ${powner}">${p.name}</div>`;
-  }
-
-  return html;
-
-}
-
 
 updateCombatLog(cobj) {
 
@@ -385,9 +349,12 @@ returnPlanetInformationHTML(planet) {
     html += '<div class="planet_spacedock_count_label">Space Doc</div><div class="planet_spacedock_count">'+sonp+'</div>';
   }
 
-  if (ponp+sonp+ionp > 0) {
-    html = `<div class="sector_information_planetname ${powner}">${p.name}</div><div class="sector_information_planet_content">` + html;
-    html +=  `</div>`;
+  if (this.game.planets[planet].bonus != "") {
+    html += '<div class="planet_tech_label tech_'+this.game.planets[planet].bonus+' bold">'+this.game.planets[planet].bonus+' TECH</div><div></div>';
+  }
+
+  if (ponp+sonp+ionp > 0 || this.game.planets[planet].bonus != "") {
+    html = `<div class="sector_information_planetname ${powner}">${p.name}</div><div class="sector_information_planet_content">` + html + `</div>`;
   } else {
     html = `<div class="sector_information_planetname ${powner}">${p.name}</div>`;
   }

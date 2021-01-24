@@ -2418,6 +2418,10 @@ input[type=range] {
   transform: scale(1.4);
 }
 
+.bold {
+  font-weight: heavy;
+}
+
 /* double planet */
 
 .bi .sector8, .bi .sector9, .bi .sector10, .bi .sector11, .bi .sector12, .bi .sector13, .bi .sector14, .bi .sector15, .bi .sector16, .bi .sector17, .bi .sector18, .bi .sector19, .bi .sector20, .bi .sector21, .bi .sector38, .bi .sector39, .bi .sector40, .bi .sector50, .bi .sector51 {

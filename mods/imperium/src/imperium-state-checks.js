@@ -2551,6 +2551,14 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
       if (sys.s.type == 4) { return 0; }
     }
 
+    //
+    // asteroid fields ?
+    //
+    if (this.doesPlayerHaveTech(player, "antimass-deflectors")) {
+      let sys = this.returnSectorAndPlanets(destination);
+      if (sys.s.type == 3) { return 0; }
+    }
+
 
     let imperium_self = this;
     let hops = 3;
@@ -2569,8 +2577,6 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
 
     obj.max_hops += obj.ship_move_bonus;
     obj.max_hops += obj.fleet_move_bonus;
-
-console.log("max hops is: " + obj.max_hops);
 
     let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
     sectors = x.sectors;
