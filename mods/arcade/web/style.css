@@ -360,6 +360,12 @@ body {
   overflow-y: auto;
 }
 
+.start-game-btn {
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .arcade-posts {
   padding-left: 0.5em;
   padding-top: 0.5em;
@@ -899,6 +905,9 @@ body {
   .start-game-btn {
     text-transform: capitalize;
     margin: 3em 0;
+    max-width: 240px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .start-game {
     background: #000;
