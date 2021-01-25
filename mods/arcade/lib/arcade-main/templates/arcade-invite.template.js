@@ -14,6 +14,18 @@ module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
       game_initialized = 1;
     }
   }
+  //
+  // trying to stop games from continue / cancel on load
+  //
+  if (app.options) {
+    if (app.options.games) {
+      for (let i = 0; i < app.options.games.length; i++) {
+	if (app.options.games[i].initializing == 1) {
+	  game_initialized = 0;
+	}
+      }
+    }
+  }
   let playersNeeded = invite.msg.players_needed > 4 ? 5: invite.msg.players_needed;
   let playersHtml = `<div class="playerInfo" style="">`;
   if (invite.msg.players.length > invite.msg.players_needed) {
