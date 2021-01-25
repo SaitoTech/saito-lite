@@ -103,6 +103,18 @@
 	    }
 	  }
 
+	 /*** add to include planets adjacent to units ***
+         let plsectors = this.returnSectorsWithPlayerUnits(player);
+         for (let i = 0; i < plsectors.length; i++) {
+	   if (!sectors.includes(plsectors[i])) {
+	      sectors.push(plsectors[i]);
+	      adjacent_sectors.push(plsectors[i]);
+           }
+         }
+	 *** add to include planets adjacent to units ***/
+
+
+
 	  //
 	  // get all planets adjacent to...
 	  //
@@ -192,7 +204,9 @@
       menuOptionTriggers:  function(imperium_self, menu, player) { 
         if (imperium_self.doesPlayerHaveTech(player, "faction3-quash") && menu == "main") {
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
-	    return 1;
+	    if (imperium_self.game.state.active_player_moved == 0) {
+	      return 1;
+	    }
 	  }
 	}
 	return 0;

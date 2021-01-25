@@ -2148,6 +2148,18 @@ console.log("P: " + planet);
 	    }
 	  }
 
+	 /*** add to include planets adjacent to units ***
+         let plsectors = this.returnSectorsWithPlayerUnits(player);
+         for (let i = 0; i < plsectors.length; i++) {
+	   if (!sectors.includes(plsectors[i])) {
+	      sectors.push(plsectors[i]);
+	      adjacent_sectors.push(plsectors[i]);
+           }
+         }
+	 *** add to include planets adjacent to units ***/
+
+
+
 	  //
 	  // get all planets adjacent to...
 	  //
@@ -2237,7 +2249,9 @@ console.log("P: " + planet);
       menuOptionTriggers:  function(imperium_self, menu, player) { 
         if (imperium_self.doesPlayerHaveTech(player, "faction3-quash") && menu == "main") {
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
-	    return 1;
+	    if (imperium_self.game.state.active_player_moved == 0) {
+	      return 1;
+	    }
 	  }
 	}
 	return 0;
@@ -6465,7 +6479,7 @@ ACTION CARD - types
     this.importActionCard('plague', {
   	name : "Plague" ,
   	type : "action" ,
-  	text : "ACTION: Select a planet and destroy infantry on that planet. Roll a dice for each infantry, and destroy those with rolls of 6 or higher." ,
+  	text : "ACTION: Select a planet. Roll a dice for each infantry on planet and destroy number of rolls 6 or higher." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -9246,7 +9260,45 @@ console.log("error initing chat: " + err);
       //
       // remove tiles in 3 player game
       //
-      if (this.totalPlayers <= 3) {
+      if (this.totalPlayers == 2) {
+        try {
+          $('#1_3').attr('id', '');
+          $('#1_4').attr('id', '');
+          $('#2_5').attr('id', '');
+          $('#3_1').attr('id', '');
+          $('#4_1').attr('id', '');
+          $('#4_2').attr('id', '');
+          $('#5_1').attr('id', '');
+          $('#5_2').attr('id', '');
+          $('#6_1').attr('id', '');
+          $('#6_2').attr('id', '');
+          $('#6_3').attr('id', '');
+          $('#6_4').attr('id', '');
+          $('#6_5').attr('id', '');
+          $('#7_1').attr('id', '');
+          $('#7_2').attr('id', '');
+          $('#7_3').attr('id', '');
+          $('#7_4').attr('id', '');
+        } catch (err) {}
+        delete this.game.board["1_3"];
+        delete this.game.board["1_4"];
+        delete this.game.board["2_5"];
+        delete this.game.board["3_1"];
+        delete this.game.board["4_1"];
+        delete this.game.board["4_2"];
+        delete this.game.board["5_1"];
+        delete this.game.board["5_2"];
+        delete this.game.board["6_1"];
+        delete this.game.board["6_2"];
+        delete this.game.board["6_3"];
+        delete this.game.board["6_4"];
+        delete this.game.board["6_5"];
+        delete this.game.board["7_1"];
+        delete this.game.board["7_2"];
+        delete this.game.board["7_3"];
+        delete this.game.board["7_4"];
+      }
+      if (this.totalPlayers == 3) {
         try {
           $('#1_3').attr('id', '');
           $('#1_4').attr('id', '');
@@ -13475,7 +13527,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	    }
 	    if (sys.s.units[player-1][unit_idx].strength <= 0) {
 
-	      this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name + " (destroyed)");
+	      this.updateLog(this.returnFaction(player) + " " + sys.s.units[player-1][unit_idx].name + " destroyed");
 	      sys.s.units[player-1][unit_idx].destroyed = 1;
 	      for (let z_index in z) {
 	        sys.s.units[player-1][unit_idx] = z[z_index].unitDestroyed(imperium_self, attacker, sys.s.units[player-1][unit_idx]);
@@ -13490,7 +13542,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	      }
 
 	    } else {
-	      this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name);
+	      this.updateLog(this.returnFaction(player) + " " + sys.s.units[player-1][unit_idx].name + " damaged");
 	    }
 	  } catch (err) {
 	    console.log("Error? Not all hits assigned: " + err);
@@ -13508,10 +13560,10 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
           let defender_forces = this.doesPlayerHaveShipsInSector(defender, sector);
 
           if (attacker_forces > 0 && defender_forces == 0) {
-            this.updateLog(this.returnFaction(attacker) + " wins the space combat");
+            this.updateLog(this.returnFaction(attacker) + " wins space combat");
           }
           if (attacker_forces == 0 && defender_forces == 0) {
-            this.updateLog(this.returnFaction(attacker) + " and " + this.returnFaction(defender) + " are obliterated in space combat");
+            this.updateLog(this.returnFaction(attacker) + " and " + this.returnFaction(defender) + " obliterated in space combat");
           }
 
 	}
@@ -21553,7 +21605,6 @@ playerDiscardActionCards(num) {
 //      return ["1_1", "2_1"];
     }
 
-
     if (players <= 3) {
       return ["1_1", "4_7", "7_1"];
     }
@@ -22795,10 +22846,6 @@ playerDiscardActionCards(num) {
       prereqs.splice(0, 1);
     }
 
-//
-//
-//
-console.log("PREREQS: " + prereqs);
 
     //
     // we don't meet the prereqs but have a skip

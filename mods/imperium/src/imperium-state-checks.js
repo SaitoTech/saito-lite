@@ -715,10 +715,6 @@
       prereqs.splice(0, 1);
     }
 
-//
-//
-//
-console.log("PREREQS: " + prereqs);
 
     //
     // we don't meet the prereqs but have a skip

@@ -375,7 +375,45 @@ console.log("error initing chat: " + err);
       //
       // remove tiles in 3 player game
       //
-      if (this.totalPlayers <= 3) {
+      if (this.totalPlayers == 2) {
+        try {
+          $('#1_3').attr('id', '');
+          $('#1_4').attr('id', '');
+          $('#2_5').attr('id', '');
+          $('#3_1').attr('id', '');
+          $('#4_1').attr('id', '');
+          $('#4_2').attr('id', '');
+          $('#5_1').attr('id', '');
+          $('#5_2').attr('id', '');
+          $('#6_1').attr('id', '');
+          $('#6_2').attr('id', '');
+          $('#6_3').attr('id', '');
+          $('#6_4').attr('id', '');
+          $('#6_5').attr('id', '');
+          $('#7_1').attr('id', '');
+          $('#7_2').attr('id', '');
+          $('#7_3').attr('id', '');
+          $('#7_4').attr('id', '');
+        } catch (err) {}
+        delete this.game.board["1_3"];
+        delete this.game.board["1_4"];
+        delete this.game.board["2_5"];
+        delete this.game.board["3_1"];
+        delete this.game.board["4_1"];
+        delete this.game.board["4_2"];
+        delete this.game.board["5_1"];
+        delete this.game.board["5_2"];
+        delete this.game.board["6_1"];
+        delete this.game.board["6_2"];
+        delete this.game.board["6_3"];
+        delete this.game.board["6_4"];
+        delete this.game.board["6_5"];
+        delete this.game.board["7_1"];
+        delete this.game.board["7_2"];
+        delete this.game.board["7_3"];
+        delete this.game.board["7_4"];
+      }
+      if (this.totalPlayers == 3) {
         try {
           $('#1_3').attr('id', '');
           $('#1_4').attr('id', '');
