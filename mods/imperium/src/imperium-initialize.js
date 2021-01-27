@@ -509,7 +509,6 @@ console.log("loading unit onto planet: " + this.factions[this.game.players_info[
 
 	let technologies = this.returnTechnology();
 
-
 	//
 	// assign starting technology
 	//
@@ -527,7 +526,7 @@ console.log("loading unit onto planet: " + this.factions[this.game.players_info[
           this.game.players_info[i].promissary_notes.push(promissary);
         }
 
-console.log("AND SAYING THE SYSTEM!");
+console.log("saving system and planets....");
         this.saveSystemAndPlanets(sys);
   
       }
@@ -565,7 +564,7 @@ console.log("AND SAYING THE SYSTEM!");
         this.game.queue.push("DECK\t4\t"+JSON.stringify(this.returnStageIPublicObjectives()));
         this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
         this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
-        this.game.queue.push("preloader");
+//        this.game.queue.push("preloader");
   
       }
     }
@@ -620,6 +619,9 @@ console.log("AND SAYING THE SYSTEM!");
       this.saveSystemAndPlanets(sys);
     }
 
+
+    let tmps3 = this.returnSectorAndPlanets("2_1"); 
+console.log(tmps3);
 
 
     //
@@ -710,7 +712,7 @@ try {
   async preloadImages() {
 
     var allImages = [	"img/starscape_background1.jpg", 
-                     	"img/ships/carrier_100x200.png", 
+                        "img/ships/carrier_100x200.png", 
                      	"img/ships/destroyer_100x200.png", 
                      	"img/ships/dreadnaught_100x200.png", 
                      	"img/ships/fighter_100x200.png", 

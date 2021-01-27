@@ -426,6 +426,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	//
   	// update sector
   	//
+        this.saveSystemAndPlanets(sys);
   	this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
 
@@ -2166,9 +2167,9 @@ console.log(JSON.stringify(this.game.state.choices));
 
         sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 1;
+
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
-
   	this.game.queue.splice(qe, 1);
 
   	return 1;
@@ -2245,13 +2246,18 @@ console.log(JSON.stringify(this.game.state.choices));
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
+console.log("A");
 	this.updateTokenDisplay();
+console.log("B");
 	this.updateLeaderboard();
+console.log("C");
 	this.displayFactionDashboard();
+console.log("D");
 
   	this.game.queue.splice(qe, 1);
 
 	// if action cards over limit
+console.log("display faction dashboard over!");
 	return this.handleActionCardLimit(player);
 
 

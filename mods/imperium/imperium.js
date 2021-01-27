@@ -9396,7 +9396,6 @@ console.log("loading unit onto planet: " + this.factions[this.game.players_info[
 
 	let technologies = this.returnTechnology();
 
-
 	//
 	// assign starting technology
 	//
@@ -9414,7 +9413,7 @@ console.log("loading unit onto planet: " + this.factions[this.game.players_info[
           this.game.players_info[i].promissary_notes.push(promissary);
         }
 
-console.log("AND SAYING THE SYSTEM!");
+console.log("saving system and planets....");
         this.saveSystemAndPlanets(sys);
   
       }
@@ -9452,7 +9451,7 @@ console.log("AND SAYING THE SYSTEM!");
         this.game.queue.push("DECK\t4\t"+JSON.stringify(this.returnStageIPublicObjectives()));
         this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
         this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
-        this.game.queue.push("preloader");
+//        this.game.queue.push("preloader");
   
       }
     }
@@ -9507,6 +9506,9 @@ console.log("AND SAYING THE SYSTEM!");
       this.saveSystemAndPlanets(sys);
     }
 
+
+    let tmps3 = this.returnSectorAndPlanets("2_1"); 
+console.log(tmps3);
 
 
     //
@@ -9597,7 +9599,7 @@ try {
   async preloadImages() {
 
     var allImages = [	"img/starscape_background1.jpg", 
-                     	"img/ships/carrier_100x200.png", 
+                        "img/ships/carrier_100x200.png", 
                      	"img/ships/destroyer_100x200.png", 
                      	"img/ships/dreadnaught_100x200.png", 
                      	"img/ships/fighter_100x200.png", 
@@ -10215,7 +10217,8 @@ handleSystemsMenuItem() {
     this.saveSystemAndPlanets(sys);
 console.log("in sector: " + sector);
 console.log("PLANET UNITS: " + JSON.stringify(sys.p[planet_idx].units[player-1]));
-console.log("added: " + unit_to_add.type + " for player " + this.returnFactionNickname(player));
+console.log("added 1: " + unit_to_add.type + " for player " + this.returnFactionNickname(player));
+console.log("added 2: " + JSON.stringify(unit_to_add));
     return JSON.stringify(unit_to_add);
   };
   loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson) {
@@ -11285,6 +11288,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	//
   	// update sector
   	//
+        this.saveSystemAndPlanets(sys);
   	this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
 
@@ -13025,9 +13029,9 @@ console.log(JSON.stringify(this.game.state.choices));
 
         sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 1;
+
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
-
   	this.game.queue.splice(qe, 1);
 
   	return 1;
@@ -13104,13 +13108,18 @@ console.log(JSON.stringify(this.game.state.choices));
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
+console.log("A");
 	this.updateTokenDisplay();
+console.log("B");
 	this.updateLeaderboard();
+console.log("C");
 	this.displayFactionDashboard();
+console.log("D");
 
   	this.game.queue.splice(qe, 1);
 
 	// if action cards over limit
+console.log("display faction dashboard over!");
 	return this.handleActionCardLimit(player);
 
 
@@ -25404,7 +25413,7 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
       if (sys.s.units[player-1][z] == null) {
 	sys.s.units[player-1].splice(z, 1);
       } else {
-        if (sys.s.units[player-1][z].destroyed == 1 || sys.s.units[player-1][z].strength == 0) {
+        if ((sys.s.units[player-1][z].destroyed == 1 || sys.s.units[player-1][z].strength == 0) && (sys.s.units[player-1][z].type != "spacedock" && sys.s.units[player-1][z].type != "pds")) {
           save_sector = 1;
           sys.s.units[player-1].splice(z, 1);
           z--;
@@ -25423,7 +25432,7 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
           if (sys.p[planet_idx].units[player-1][z] == null) {
 	    sys.p[planet_idx].units[player-1].splice(z, 1);
 	  } else {
-            if (sys.p[planet_idx].units[player-1][z].destroyed == 1 || sys.p[planet_idx].units[player-1][z].strength == 0) {
+            if ((sys.p[planet_idx].units[player-1][z].destroyed == 1 || sys.p[planet_idx].units[player-1][z].strength == 0) && (sys.p[planet_idx].units[player-1][z].type != "spacedock" && sys.p[planet_idx].units[player-1][z].type != "pds")) {
               save_sector = 1;
               sys.p[planet_idx].units[player-1].splice(z, 1);
               z--;
@@ -25455,7 +25464,7 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
       if (sys.p[planet_idx].units[player-1][z] == null) {
 	sys.p[planet_idx].units[player-1].splice(z, 1);
       } else {
-        if (sys.p[planet_idx].units[player-1][z].destroyed == 1 || sys.p[planet_idx].units[player-1][z].strength == 0) {
+        if ((sys.p[planet_idx].units[player-1][z].destroyed == 1 || sys.p[planet_idx].units[player-1][z].strength == 0) && (sys.p[planet_idx].units[player-1][z].type != "spacedock" && sys.p[planet_idx].units[player-1][z].type != "pds")) {
           sys.p[planet_idx].units[player-1].splice(z, 1);
           z--;
         }
@@ -26585,7 +26594,7 @@ displayFactionDashboard() {
     });
 
   } catch (err) {
-console.log("ERROR: ");
+console.log("ERROR: " + err);
   }
 }
 

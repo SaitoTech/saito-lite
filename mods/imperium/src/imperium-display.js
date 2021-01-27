@@ -1011,7 +1011,7 @@ displayFactionDashboard() {
     });
 
   } catch (err) {
-console.log("ERROR: ");
+console.log("ERROR: " + err);
   }
 }
 
