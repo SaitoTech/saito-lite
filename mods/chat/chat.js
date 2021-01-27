@@ -83,12 +83,9 @@ class Chat extends ModTemplate {
   //
   render(app, renderMode="") {
 
-console.log("REndering: " + renderMode + " -- " + this.renderMode);
-
     if (renderMode != "") { this.renderMode = renderMode; }
 
     if (this.renderMode == "chatroom") {
-console.log("rendering the chat room with the new message!");
       ChatRoom.render(app, this);
       ChatRoom.attachEvents(app, this);
       return;
@@ -303,6 +300,7 @@ console.log("rendering the chat room with the new message!");
 	   // serversaves
 	   //
            let archive = this.app.modules.returnModule("Archive");
+           routed_tx.transaction.ts = new Date().getTime();
            if (archive) { archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx); }     
 
            this.app.network.peers.forEach(p => {
