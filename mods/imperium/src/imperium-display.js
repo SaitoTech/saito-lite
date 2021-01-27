@@ -227,6 +227,7 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
     <div class="grid-2">
   `;
   for (let i = 0; i < sys.p.length; i++) {
+console.log("PLANET "+i+" " + JSON.stringify(sys.p[i]));
     let planet_owner = "UNCONTROLLED";
     if (sys.p[i].owner != -1) {
       planet_owner = this.returnFaction(sys.p[i].owner-1);
@@ -240,7 +241,7 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
           <br />
           ${this.returnPDSOnPlanet(sys.p[i])} PDS
           <br />
-          ${this.returnSpaceDocksOnPlanet(sys.p[i])} space docks
+          ${this.returnSpaceDocksOnPlanet(sys.p[i])} spacedocks
         </div>
       </div>
       <div class="system_summary_planet_card" style="background-image: url('${sys.p[i].img}');"></div>
@@ -346,7 +347,7 @@ returnPlanetInformationHTML(planet) {
   }
 
   if (sonp > 0) {
-    html += '<div class="planet_spacedock_count_label">Space Doc</div><div class="planet_spacedock_count">'+sonp+'</div>';
+    html += '<div class="planet_spacedock_count_label">Spacedock</div><div class="planet_spacedock_count">'+sonp+'</div>';
   }
 
   if (this.game.planets[planet].bonus != "") {

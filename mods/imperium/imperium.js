@@ -9390,6 +9390,7 @@ console.log("error initing chat: " + err);
           this.addSpaceUnit(i + 1, hwsectors[i], this.factions[this.game.players_info[i].faction].space_units[k]);
 	}
 	for (let k = 0; k < this.factions[this.game.players_info[i].faction].ground_units.length; k++) {
+console.log("loading unit onto planet: " + this.factions[this.game.players_info[i].faction].ground_units[k]);
           this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, this.factions[this.game.players_info[i].faction].ground_units[k]);
 	}
 
@@ -9413,6 +9414,7 @@ console.log("error initing chat: " + err);
           this.game.players_info[i].promissary_notes.push(promissary);
         }
 
+console.log("AND SAYING THE SYSTEM!");
         this.saveSystemAndPlanets(sys);
   
       }
@@ -10211,6 +10213,9 @@ handleSystemsMenuItem() {
     let unit_to_add = this.returnUnit(unitname, player);
     sys.p[planet_idx].units[player - 1].push(unit_to_add);
     this.saveSystemAndPlanets(sys);
+console.log("in sector: " + sector);
+console.log("PLANET UNITS: " + JSON.stringify(sys.p[planet_idx].units[player-1]));
+console.log("added: " + unit_to_add.type + " for player " + this.returnFactionNickname(player));
     return JSON.stringify(unit_to_add);
   };
   loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson) {
@@ -15036,12 +15041,12 @@ console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + thi
         let planet_idx   = mv[3];
 
         // JAN 26
-	let sys = this.returnSectorAndPlanets(sector);
-        for (let i = 0; i < this.game.players_info.length; i++) {
-          this.eliminateDestroyedUnitsInSector((i+1), sector);
-	}
-	this.saveSystemAndPlanets(sys);
-	this.updateSectorGraphics(sector);
+//	let sys = this.returnSectorAndPlanets(sector);
+//      for (let i = 0; i < this.game.players_info.length; i++) {
+//        this.eliminateDestroyedUnitsInSector((i+1), sector);
+//	}
+//	this.saveSystemAndPlanets(sys);
+//	this.updateSectorGraphics(sector);
 
 	if (this.game.state.space_combat_defender != -1) {
 	  let z = this.returnEventObjects();
@@ -16840,8 +16845,6 @@ playerAcknowledgeNotice(msg, mycallback) {
     }
 
   });
-
-console.log("DOne Now");
 
 }
 
@@ -24206,7 +24209,9 @@ console.log(JSON.stringify(return_obj));
   returnSpaceDocksOnPlanet(planet) {
     let total = 0;
     for (let i = 0; i < planet.units.length; i++) {
+console.log("player: " + (i+1));
       for (let k = 0; k < planet.units[i].length; k++) {
+console.log(planet.units[i][k].type);
 	if (planet.units[i][k].type == "spacedock") { total++; }
       }
     }
@@ -25796,6 +25801,7 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
     <div class="grid-2">
   `;
   for (let i = 0; i < sys.p.length; i++) {
+console.log("PLANET "+i+" " + JSON.stringify(sys.p[i]));
     let planet_owner = "UNCONTROLLED";
     if (sys.p[i].owner != -1) {
       planet_owner = this.returnFaction(sys.p[i].owner-1);
@@ -25809,7 +25815,7 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
           <br />
           ${this.returnPDSOnPlanet(sys.p[i])} PDS
           <br />
-          ${this.returnSpaceDocksOnPlanet(sys.p[i])} space docks
+          ${this.returnSpaceDocksOnPlanet(sys.p[i])} spacedocks
         </div>
       </div>
       <div class="system_summary_planet_card" style="background-image: url('${sys.p[i].img}');"></div>
@@ -25915,7 +25921,7 @@ returnPlanetInformationHTML(planet) {
   }
 
   if (sonp > 0) {
-    html += '<div class="planet_spacedock_count_label">Space Doc</div><div class="planet_spacedock_count">'+sonp+'</div>';
+    html += '<div class="planet_spacedock_count_label">Spacedock</div><div class="planet_spacedock_count">'+sonp+'</div>';
   }
 
   if (this.game.planets[planet].bonus != "") {

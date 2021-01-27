@@ -771,8 +771,6 @@ playerAcknowledgeNotice(msg, mycallback) {
 
   });
 
-console.log("DOne Now");
-
 }
 
 

@@ -99,6 +99,9 @@
     let unit_to_add = this.returnUnit(unitname, player);
     sys.p[planet_idx].units[player - 1].push(unit_to_add);
     this.saveSystemAndPlanets(sys);
+console.log("in sector: " + sector);
+console.log("PLANET UNITS: " + JSON.stringify(sys.p[planet_idx].units[player-1]));
+console.log("added: " + unit_to_add.type + " for player " + this.returnFactionNickname(player));
     return JSON.stringify(unit_to_add);
   };
   loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson) {

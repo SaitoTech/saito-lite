@@ -4182,12 +4182,12 @@ console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + thi
         let planet_idx   = mv[3];
 
         // JAN 26
-	let sys = this.returnSectorAndPlanets(sector);
-        for (let i = 0; i < this.game.players_info.length; i++) {
-          this.eliminateDestroyedUnitsInSector((i+1), sector);
-	}
-	this.saveSystemAndPlanets(sys);
-	this.updateSectorGraphics(sector);
+//	let sys = this.returnSectorAndPlanets(sector);
+//      for (let i = 0; i < this.game.players_info.length; i++) {
+//        this.eliminateDestroyedUnitsInSector((i+1), sector);
+//	}
+//	this.saveSystemAndPlanets(sys);
+//	this.updateSectorGraphics(sector);
 
 	if (this.game.state.space_combat_defender != -1) {
 	  let z = this.returnEventObjects();
