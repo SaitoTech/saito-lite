@@ -83,12 +83,14 @@
             }
             imperium_self.unlockInterface();
 
+            $('.option').off();
             let id = $(this).attr("id");
 
             if (id == "yes") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommodities\t"+imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
+	      imperium_self.endTurn();
             }
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());

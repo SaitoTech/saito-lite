@@ -10723,6 +10723,7 @@ alert("end of history!");
 
         if (this.game.deck[0].hand.length < 1) {
           this.addMove("ops\tus\tcia\t1");
+          this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
           this.addMove("notify\tUSSR has no cards to reveal");
           this.endTurn();
         } else {
@@ -10732,6 +10733,7 @@ alert("end of history!");
             revealed += this.game.deck[0].cards[this.game.deck[0].hand[i]].name;
           }
           this.addMove("ops\tus\tcia\t1");
+          this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
           this.addMove("notify\tUSSR holds: "+revealed);
           this.endTurn();
         }
@@ -11529,7 +11531,6 @@ alert("end of history!");
         for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
           let thiscard = twilight_self.game.deck[0].hand[i];
           if (thiscard != "china" && (!(this.game.state.headline == 1 && (thiscard == this.game.state.headline_opponent_card || thiscard == this.game.state.headline_card)))) {
-console.log("PUSHING: " + thiscard);
             available_cards.push(thiscard);
           }
         }
@@ -11537,6 +11538,7 @@ console.log("PUSHING: " + thiscard);
         if (available_cards.length == 0) {
           let burnrand = this.rollDice();
           this.addMove("ops\tus\tgrainsales\t2");
+          this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
           this.addMove("notify\tUSSR has no cards to discard");
           this.endTurn();
           return 0;
@@ -11544,15 +11546,12 @@ console.log("PUSHING: " + thiscard);
 
           twilight_self.rollDice(available_cards.length, function(roll) {
 
-console.log("ROLL: " + roll);
-
             roll = parseInt(roll)-1;
             let card = available_cards[roll];
 
-console.log("card: " + card);
-
             twilight_self.removeCardFromHand(card);
             twilight_self.addMove("grainsales\tussr\t"+card);
+            twilight_self.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
             twilight_self.addMove("notify\tUSSR shares "+twilight_self.game.deck[0].cards[card].name);
             twilight_self.endTurn();
           });
@@ -12105,6 +12104,7 @@ console.log("card: " + card);
         this.addMove("resolve\tKAL007");
         this.addMove("unlimit\tcoups");
         this.addMove("ops\tus\tKAL007\t4");
+        this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
         this.addMove("limit\tcoups");
         this.endTurn();
         return 0;
@@ -12311,6 +12311,7 @@ console.log("card: " + card);
 
         if (this.game.deck[0].hand.length < 1) {
           this.addMove("ops\tussr\tlonegunman\t1");
+          this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
           this.addMove("notify\tUS has no cards to reveal");
           this.endTurn();
         } else {
@@ -12320,6 +12321,7 @@ console.log("card: " + card);
             revealed += this.game.deck[0].cards[this.game.deck[0].hand[i]].name;
           }
           this.addMove("ops\tussr\tlonegunman\t1");
+          this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
           this.addMove("notify\tUS holds: "+revealed);
           this.endTurn();
         }

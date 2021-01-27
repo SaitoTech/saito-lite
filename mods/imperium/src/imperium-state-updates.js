@@ -255,7 +255,7 @@
       if (sys.s.units[player-1][z] == null) {
 	sys.s.units[player-1].splice(z, 1);
       } else {
-        if (sys.s.units[player-1][z].destroyed == 1) {
+        if (sys.s.units[player-1][z].destroyed == 1 || sys.s.units[player-1][z].strength == 0) {
           save_sector = 1;
           sys.s.units[player-1].splice(z, 1);
           z--;
@@ -274,7 +274,7 @@
           if (sys.p[planet_idx].units[player-1][z] == null) {
 	    sys.p[planet_idx].units[player-1].splice(z, 1);
 	  } else {
-            if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+            if (sys.p[planet_idx].units[player-1][z].destroyed == 1 || sys.p[planet_idx].units[player-1][z].strength == 0) {
               save_sector = 1;
               sys.p[planet_idx].units[player-1].splice(z, 1);
               z--;
@@ -306,7 +306,7 @@
       if (sys.p[planet_idx].units[player-1][z] == null) {
 	sys.p[planet_idx].units[player-1].splice(z, 1);
       } else {
-        if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+        if (sys.p[planet_idx].units[player-1][z].destroyed == 1 || sys.p[planet_idx].units[player-1][z].strength == 0) {
           sys.p[planet_idx].units[player-1].splice(z, 1);
           z--;
         }

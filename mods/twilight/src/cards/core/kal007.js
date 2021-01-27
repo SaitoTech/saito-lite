@@ -10,6 +10,7 @@
         this.addMove("resolve\tKAL007");
         this.addMove("unlimit\tcoups");
         this.addMove("ops\tus\tKAL007\t4");
+        this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
         this.addMove("limit\tcoups");
         this.endTurn();
         return 0;

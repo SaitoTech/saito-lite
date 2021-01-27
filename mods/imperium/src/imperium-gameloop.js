@@ -91,6 +91,17 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	}
 
 	//
+	// note we are done, to prevent reloads
+	//
+	if (mv[1] === "strategy") {
+	  if (mv[3]) {
+	    if (mv[3] === this.app.wallet.returnPublicKey()) {
+              this.game.state.playing_strategy_card_secondary = 0;
+	    }
+	  }
+	}
+
+	//
 	// this overwrites secondaries, we need to clear manually
 	// if we are playing the sceondary, we don't want to udpate status
 	//
@@ -124,7 +135,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	    for (let i = 0; i < this.game.confirms_players.length; i++) {
 	      for (let z = 0; z < still_to_move.length; z++) {
 		if (still_to_move[z] === this.game.confirms_players[i]) {
-console.log("resolve from: " + still_to_move[z]);
 		  still_to_move.splice(z, 1);
 	        }
 	      }
@@ -245,6 +255,38 @@ console.log("resolve from: " + still_to_move[z]);
 
 
 
+      if (mv[0] === "preloader") {
+
+	try {
+	  this.app.browser.addElementToDom(`
+		  <div class="background_loader" style="display:none">
+		    <img src="/imperium/img/starscape_background1.jpg" style="width:10px;height:10px" />
+		    <img src="/imperium/img/ships/carrier_100x200.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/ships/destroyer_100x200.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/ships/dreadnaught_100x200.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/ships/fighter_100x200.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/ships/infantry_100x200.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/strategy/BUILD.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/strategy/DIPLOMACY.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/strategy/EMPIRE.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/strategy/INITIATIVE.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/strategy/MILITARY.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/strategy/POLITICS.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/strategy/TECH.png" style="width:10px;height:10px" />
+		    <img src="/imperium/img/strategy/TRADE.png" style="width:10px;height:10px" />
+		  </div>
+	  `);
+	} catch (err) {}
+
+	this.preloadImages();
+
+  	this.game.queue.splice(qe, 1);
+	return 1;
+
+      }
+
+
+
       if (mv[0] === "announce_retreat") {
 
 	let player = parseInt(mv[1]);
@@ -273,7 +315,7 @@ console.log("resolve from: " + still_to_move[z]);
   	this.game.queue.splice(qe, 1);
 
 	if (this.game.state.retreat_cancelled == 1 || this.game.players_info[opponent-1].temporary_opponent_cannot_retreat == 1 || this.game.players_info[opponent-1].permanent_opponent_cannot_retreat == 1) {
-	  this.updateLog("Retreat is impossible. The remainder of the fleet returns to battle...");
+	  this.updateLog("Retreat impossible, the fleets turn to battle...");
 	  return 1; 
 	}
 
@@ -292,7 +334,7 @@ console.log("resolve from: " + still_to_move[z]);
         this.updateSectorGraphics(from);
         this.updateSectorGraphics(to);
 
-	imperium_self.updateLog(this.returnFaction(player) + " retreats from " + sys_from.s.sector + " to " + sys_to.s.sector);
+	imperium_self.updateLog(this.returnFactionNickname(player) + " retreats to " + sys_to.s.sector);
 
   	return 1;
   
@@ -353,7 +395,7 @@ console.log("resolve from: " + still_to_move[z]);
 	if (this.game.player == player) {
   	  this.playerContinueTurn(player, sector);
 	} else {
-	  this.updateStatus(this.returnFaction(player) + " has moved into " + this.game.sectors[this.game.board[sector].tile].name + " and is continuing their move.");
+	  this.updateStatus(this.returnFaction(player) + " has moved into " + this.game.sectors[this.game.board[sector].tile].name);
 	}
 
         return 0;
@@ -374,10 +416,10 @@ console.log("resolve from: " + still_to_move[z]);
 
   	if (planet_idx != -1) {
           this.addPlanetaryUnit(player, sector, planet_idx, unitname);
-	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname, player).name + " on " + sys.p[planet_idx].name, 120, 1);  // force message
+	  this.updateLog(this.returnFactionNickname(player) + " produces " + this.returnUnit(unitname, player).name + " on " + sys.p[planet_idx].name, 120, 1);  // force message
  	} else {
           this.addSpaceUnit(player, sector, unitname);
-	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname, player).name + " in " + sys.s.name, 120, 1); // force message
+	  this.updateLog(this.returnFactionNickname(player) + " produces " + this.returnUnit(unitname, player).name + " in " + sys.s.name, 120, 1); // force message
         }
 
 
@@ -513,7 +555,7 @@ console.log("interface is locked...");
 	}
 
   	if (stage == 1) {
-	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name);
+	  this.updateLog(this.returnFactionNickname(strategy_card_player) + " plays " + this.strategy_cards[card].name);
 	  this.updateStatus(this.returnFaction(strategy_card_player) + " is playing " + this.strategy_cards[card].name);
   	  this.playStrategyCardPrimary(strategy_card_player, card);
 	  return 0;
@@ -584,7 +626,10 @@ console.log("interface is locked...");
           }
         }
 
-        this.game.state.playing_strategy_card_secondary = 0;
+	//
+	// moving to resolve --> January 24, 2021
+	// this location seems wrong
+        //this.game.state.playing_strategy_card_secondary = 0;
 
         return 1;
       }
@@ -787,7 +832,7 @@ console.log("interface is locked...");
 	    }
 	    if (this.agenda_cards[agenda].elect == "player") { 
 	      is_player = 1;
-              this.updateLog(this.returnFaction(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+              this.updateLog(this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
 	    }
 	    if (this.agenda_cards[agenda].elect == "sector") { 
 	      is_sector = 1;
@@ -884,7 +929,7 @@ console.log("interface is locked...");
 
 
         if (vote == "abstain") {
-          this.updateLog(this.returnFaction(player) + " abstains");
+          this.updateLog(this.returnFactionNickname(player) + " abstains");
 	} else {
 
 	  let is_player = 0;
@@ -902,16 +947,16 @@ console.log("VOTING OPTIONS: ");
 console.log(JSON.stringify(this.game.state.choices));
 
 	  if (is_planet == 1) {
-            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
+            this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
 	  }
 	  if (is_sector == 1) {
-            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].name);
+            this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].name);
 	  }
 	  if (is_player == 1) {
-            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.returnFaction(this.game.state.choices[vote]));
+            this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.returnFaction(this.game.state.choices[vote]));
 	  }
 	  if (is_planet == 0 && is_sector == 0 && is_player == 0) {
-            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
+            this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
 	  }
         }
 
@@ -1443,7 +1488,7 @@ console.log(JSON.stringify(this.game.state.choices));
         if (this.stage_i_objectives[objective] != null) { objective_name = this.stage_i_objectives[objective].name; }
         if (this.stage_ii_objectives[objective] != null) { objective_name = this.stage_ii_objectives[objective].name; }
 
-  	this.updateLog(this.returnFaction(player)+" scores "+objective_name+" ("+vp+" VP)");
+  	this.updateLog(this.returnFactionNickname(player)+" scores "+objective_name+" ("+vp+" VP)");
 
   	this.game.players_info[player-1].vp += vp;
   	this.game.players_info[player-1].objectives_scored.push(objective);
@@ -1687,13 +1732,13 @@ console.log(JSON.stringify(this.game.state.choices));
         if (this.game.queue.length > 1) {
 	  if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
             let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
-	    this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
+	    this.updateLog(this.returnFactionNickname(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
 	  } else {
 	    let lmv = this.game.queue[this.game.queue.length-2].split("\t");
 	    let lplanet_idx = lmv[6];
 	    if (lplanet_idx != planet_idx) {
               let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
-	      this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
+	      this.updateLog(this.returnFactionNickname(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
 	    }
 	  }
 	}
@@ -2023,7 +2068,7 @@ console.log(JSON.stringify(this.game.state.choices));
 	    offering_html += log_offer;
 	    offering_html += '</div>';
 
-        log_offer = this.returnFaction(offering_faction) + " offers " + this.returnFaction(faction_to_consider) + " " + log_offer;
+        log_offer = this.returnFactionNickname(offering_faction) + " offers " + this.returnFaction(faction_to_consider) + " " + log_offer;
 	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);
@@ -2048,7 +2093,7 @@ console.log(JSON.stringify(this.game.state.choices));
 	  return 1;
 	}
 
-	this.updateLog(this.returnFaction(refusing_faction) + " spurns a trade offered by " + this.returnFaction(faction_that_offered));
+	this.updateLog(this.returnFactionNickname(refusing_faction) + " spurns trade offer");
 	this.displayFactionDashboard();
         return 1;
 
@@ -2077,13 +2122,11 @@ console.log(JSON.stringify(this.game.state.choices));
 
 	if (offer.promissaries) {
 	  for (let i = 0; i < offer.promissaries.length; i++) {
-console.log(this.returnFaction(offering_faction) + " gives " + offer.promissaries[i].promissary);
 	    this.givePromissary(offering_faction, faction_responding, offer.promissaries[i].promissary);
 	  }
 	}
 	if (response.promissaries) {
 	  for (let i = 0; i < response.promissaries.length; i++) {
-console.log(this.returnFaction(faction_responding) + " gives " + response.promissaries[i].promissary);
 	    this.givePromissary(faction_responding, offering_faction, response.promissaries[i].promissary);
 	  }
 	}
@@ -2224,7 +2267,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
         if (item === "strategycard") {
   
-  	  this.updateLog(this.returnFaction(player) + " takes " + this.strategy_cards[mv[3]].name);
+  	  this.updateLog(this.returnFactionNickname(player) + " takes " + this.strategy_cards[mv[3]].name);
 
 	  let strategy_card = mv[3];  
 	  for (let z_index in z) {
@@ -2244,7 +2287,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
         if (item === "tech" || item === "technology") {
 
-  	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
+  	  this.updateLog(this.returnFactionNickname(player) + " gains " + this.tech[mv[3]].name);
 
   	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
 	    this.game.players_info[player-1].tech.push(mv[3]);
@@ -2259,7 +2302,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	}
 
         if (item === "goods") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + amount + " trade goods");
+  	  this.updateLog(this.returnFactionNickname(player) + " gains " + amount + " trade goods");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainTradeGoods(imperium_self, player, amount);
   	  }
@@ -2267,20 +2310,20 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	}
 
         if (item === "commodities") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
+  	  this.updateLog(this.returnFactionNickname(player) + " gains " + mv[3] + " commodities");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainCommodities(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].commodities += amount;
 	  if (this.game.players_info[player-1].commodities > this.game.players_info[player-1].commodity_limit) {
-  	    this.updateLog(this.returnFaction(player) + " capped at " + this.game.players_info[player-1].commodity_limit);
+  	    this.updateLog(this.returnFactionNickname(player) + " capped at " + this.game.players_info[player-1].commodity_limit);
 	    this.game.players_info[player-1].commodities = this.game.players_info[player-1].commodity_limit;
 	  }
   	}
 
         if (item === "command") {
 	  if (parseInt(mv[3]) > 0) {
-  	    this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
+  	    this.updateLog(this.returnFactionNickname(player) + " gains " + mv[3] + " command tokens");
 	    for (let z_index in z) {
   	      amount = z[z_index].gainCommandTokens(imperium_self, player, amount);
   	    }
@@ -2289,7 +2332,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	}
         if (item === "strategy") {
 	  if (parseInt(mv[3]) > 0) {
-  	    this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
+  	    this.updateLog(this.returnFactionNickname(player) + " gains " + mv[3] + " strategy tokens");
 	    for (let z_index in z) {
   	      amount = z[z_index].gainStrategyTokens(imperium_self, player, amount);
   	    }
@@ -2303,7 +2346,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	      amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
   	    }
   	    this.game.players_info[player-1].fleet_supply += amount;
-  	    this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
+  	    this.updateLog(this.returnFactionNickname(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	  }
   	}
   
@@ -2320,7 +2363,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
       if (mv[0] === "pass") {
   	let player       = parseInt(mv[1]);
   	this.game.players_info[player-1].passed = 1;
-  	this.updateLog(this.returnFaction(player) + " has passed");
+  	this.updateLog(this.returnFactionNickname(player) + " has passed");
   	this.game.queue.splice(qe, 1);
   	return 1;  
       }
@@ -2393,7 +2436,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	  let roll = this.rollDice(10);
 	  if (roll <= 3) {
 
-	    this.updateLog("The Gravity Rift has destroyed your "+obj.name +" (roll: "+roll+")");
+	    this.updateLog("The Gravity Rift destroys "+this.returnFactionNickname(player)+" "+obj.name +" (roll: "+roll+")");
   	    this.game.queue.splice(qe, 1);
   	    this.updateSectorGraphics(sector_to);
   	    this.updateSectorGraphics(sector_from);
@@ -2401,7 +2444,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
 	  } else {
 
-	    this.updateLog("The Gravity Risk has accelerated your "+obj.name+" (roll: "+roll+")");
+	    this.updateLog("The Gravity Risk accelerates "+this.returnFactionNickname(player)+" "+obj.name+" (roll: "+roll+")");
 
 	  }
 
@@ -2416,19 +2459,17 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	  let sys2 = this.returnSectorAndPlanets(sector_to);
 	  let obj = JSON.parse(shipjson);
 
-	  let storage = "";
-	  let units_in_storage = this.returnUnitsInStorage(obj); 
-          if (units_in_storage.length > 0 ) {
-	    storage += ' (';
-	    for (let i = 0; i < units_in_storage.length; i++) {
-	      if (i > 0) { storage += ", "; }
-	      storage += units_in_storage[i].name;
-	    }
-	    storage += ')';
-          }
-	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name + storage);
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
+
+	  //
+	  // report fleet movement
+	  //
+	  let next_move = this.game.queue[qe-1].split("\t")[0];
+console.log("NEXT MOVE: " + next_move);
+	  if (next_move != "move") { this.updateLog(this.returnFactionNickname(player) + " moves " + this.returnPlayerFleetInSector(player, sector_to) + " into " + sys2.s.name); }
+
+
   	}
   
   	this.updateSectorGraphics(sector_to);
@@ -2513,7 +2554,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
 
-	this.updateLog(this.returnFaction(activating_player) + " activates " + this.returnSectorName(sector));
+	this.updateLog(this.returnFactionNickname(activating_player) + " activates " + this.returnSectorName(sector));
 	this.updateStatus(this.returnFaction(activating_player) + " activates " + this.returnSectorName(sector));
 
   	this.game.queue.splice(qe, 1);
@@ -2766,7 +2807,8 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
         this.updateSectorGraphics(sector);
 
-	this.updateLog(this.returnFaction(player) + " is preparing to fire PDS shots");
+	this.updateLog(this.returnFactionNickname(player) + " is preparing to fire PDS shots");
+	this.updateStatus(this.returnFaction(player) + " evaluating PDS defense");
 
 	if (this.game.player == player) {
           this.playerPlayPDSAttack(player, attacker, sector);        
@@ -2862,7 +2904,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
         this.updateSectorGraphics(sector);
 
-	this.updateLog(this.returnFaction(player) + " is preparing to fire PDS shots");
+	this.updateLog(this.returnFactionNickname(player) + " preparing to fire PDS");
 
 	if (this.game.player == player) {
           this.playerPlayPDSDefense(player, attacker, sector);        
@@ -3020,7 +3062,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	    }
 	    if (sys.s.units[player-1][unit_idx].strength <= 0) {
 
-	      this.updateLog(this.returnFaction(player) + " " + sys.s.units[player-1][unit_idx].name + " destroyed");
+	      this.updateLog(this.returnFactionNickname(player) + " " + sys.s.units[player-1][unit_idx].name + " destroyed");
 	      sys.s.units[player-1][unit_idx].destroyed = 1;
 	      for (let z_index in z) {
 	        sys.s.units[player-1][unit_idx] = z[z_index].unitDestroyed(imperium_self, attacker, sys.s.units[player-1][unit_idx]);
@@ -3035,7 +3077,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	      }
 
 	    } else {
-	      this.updateLog(this.returnFaction(player) + " " + sys.s.units[player-1][unit_idx].name + " damaged");
+	      this.updateLog(this.returnFactionNickname(player) + " " + sys.s.units[player-1][unit_idx].name + " damaged");
 	    }
 	  } catch (err) {
 	    console.log("Error? Not all hits assigned: " + err);
@@ -3053,10 +3095,10 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
           let defender_forces = this.doesPlayerHaveShipsInSector(defender, sector);
 
           if (attacker_forces > 0 && defender_forces == 0) {
-            this.updateLog(this.returnFaction(attacker) + " wins space combat");
+          //  this.updateLog(this.returnFaction(attacker) + " wins space combat");
           }
           if (attacker_forces == 0 && defender_forces == 0) {
-            this.updateLog(this.returnFaction(attacker) + " and " + this.returnFaction(defender) + " obliterated in space combat");
+          //  this.updateLog(this.returnFaction(attacker) + " and " + this.returnFaction(defender) + " obliterated in space combat");
           }
 
 	}
@@ -3066,7 +3108,10 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	// don't clear if we have more to remove
 	//
 	let tmpx = this.game.queue[this.game.queue.length-1].split("\t");
-	if (tmpx[0] === "assign_hit" && tmpx[5] === sector) {} else {
+	if (tmpx[0] === "assign_hit" && tmpx[5] === sector) {
+	  // JAN 26th
+          //this.eliminateDestroyedUnitsInSector(player, sector);
+	} else {
           this.eliminateDestroyedUnitsInSector(player, sector);
 	}
 
@@ -3123,6 +3168,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
 	    this.game.queue[le+1] = tmple;
+console.log("A");
 	    return 1;
 	  }
 	}
@@ -3138,6 +3184,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	let source	   = mv[7]; // pds // bombardment // space_combat // ground_combat // anti_fighter_barrage
         let sys 	   = this.returnSectorAndPlanets(sector);
 
+console.log("B");
 
 	this.game.state.assign_hits_queue_instruction = "";
         if (this.game.player == defender) {
@@ -3146,6 +3193,8 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
         this.game.queue.splice(qe, 1);
 
+console.log("C");
+
 	if (total_hits > 0 ) {
           this.updateStatus(this.returnFaction(defender) + " is assigning hits to units ... ");
 	}
@@ -3153,8 +3202,11 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
         if (this.game.state.assign_hits_to_cancel > 0) {
           total_hits -= this.game.state.assign_hits_to_cancel;
           this.game.state.assign_hits_to_cancel = 0;
+console.log("D");
 	  if (total_hits <= 0) { return 1; }
         }
+
+console.log("E");
 
 	if (planet_idx == "pds") {
 	  if (total_hits > 0) {
@@ -3196,6 +3248,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	}
 
 	if (type == "space") {
+console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + this.game.player);
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
@@ -3264,18 +3317,18 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
                 let survivors = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
                 if (survivors == 1) {
-                  this.updateLog(sys.p[planet_idx].name + " defended by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+                  this.updateLog(sys.p[planet_idx].name + " defended by " + this.returnFactionNickname(attacker) + " (" + survivors + " infantry)");
                 } else {
-                  this.updateLog(sys.p[planet_idx].name + " defended by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+                  this.updateLog(sys.p[planet_idx].name + " defended by " + this.returnFactionNickname(attacker) + " (" + survivors + " infantry)");
                 }
 
 	      } else {
 
                 let survivors = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
                 if (survivors == 1) {
-                  this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+                  this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFactionNickname(attacker) + " (" + survivors + " infantry)");
                 } else {
-                  this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+                  this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFactionNickname(attacker) + " (" + survivors + " infantry)");
                 }
 
                 //
@@ -3422,7 +3475,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
 	  total_shots += this.game.players_info[player-1].pds_combat_roll_bonus_shots;
 
-          this.updateLog(this.returnFaction(player) + " has " + total_shots + " PDS shots");
+          this.updateLog(this.returnFactionNickname(player) + " has " + total_shots + " PDS shots");
 
 
 	  for (let s = 0; s < total_shots; s++) {
@@ -3452,7 +3505,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	    }
 	  }
 
-	  //this.updateLog(this.returnFaction(player) + " has " + total_hits + " hits");
+	  //this.updateLog(this.returnFactionNickname(player) + " has " + total_hits + " hits");
 
 	  //
  	  // handle rerolls
@@ -3518,6 +3571,8 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
           // create an object with all this information to update our LOG
           //
           let combat_info = {};
+              combat_info.attacker        = player;
+              combat_info.hits_or_misses  = hits_or_misses;
               combat_info.hits_or_misses  = hits_or_misses;
               combat_info.units_firing    = units_firing;
               combat_info.hits_on         = hits_on;
@@ -3529,9 +3584,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
 
 	  if (total_hits == 1) {
-	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hit");
+	    this.updateLog(this.returnFactionNickname(attacker) + " takes " + total_hits + " hit");
 	  } else {
-	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hits");
+	    this.updateLog(this.returnFactionNickname(attacker) + " takes " + total_hits + " hits");
 	  }
 
 
@@ -3850,6 +3905,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	  // create an object with all this information to update our LOG
 	  //
 	  let combat_info = {};
+              combat_info.attacker        = attacker;
 	      combat_info.hits_or_misses  = hits_or_misses;
 	      combat_info.units_firing 	  = units_firing;
 	      combat_info.hits_on 	  = hits_on;
@@ -3865,9 +3921,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	  let restrictions = [];
 
 	  if (total_hits == 1) {
-  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hit");
+  	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hit");
 	  } else {
-  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hits");
+  	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hits");
 	  }
 	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tspace\t"+sector+"\tspace\t"+total_hits+"\tspace_combat");
 
@@ -4029,6 +4085,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	  // create an object with all this information to update our LOG
 	  //
 	  let combat_info = {};
+	      combat_info.attacker        = attacker;
 	      combat_info.hits_or_misses  = hits_or_misses;
 	      combat_info.units_firing 	  = units_firing;
 	      combat_info.hits_on 	  = hits_on;
@@ -4045,9 +4102,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	  let restrictions = [];
 
 	  if (total_hits == 1) {
-  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hit");
+  	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hit");
 	  } else {
-  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hits");
+  	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hits");
 	  }
 	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tground\t"+sector+"\t"+planet_idx+"\t"+total_hits+"\tground_combat");
 
@@ -4124,12 +4181,22 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
         let sector       = mv[2];
         let planet_idx   = mv[3];
 
+        // JAN 26
+	let sys = this.returnSectorAndPlanets(sector);
+        for (let i = 0; i < this.game.players_info.length; i++) {
+          this.eliminateDestroyedUnitsInSector((i+1), sector);
+	}
+	this.saveSystemAndPlanets(sys);
+	this.updateSectorGraphics(sector);
+
 	if (this.game.state.space_combat_defender != -1) {
 	  let z = this.returnEventObjects();
 	  for (let z_index in z) {
 	    z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
 	  }
 	}
+
+console.log("is there unresolved space combat? " + this.hasUnresolvedSpaceCombat(player, sector));
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
 	  if (this.game.player == player) {
@@ -4141,13 +4208,6 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	    return 0;
 	  }
 	} else {
-
-	  let sys = this.returnSectorAndPlanets(sector);
-	  if (sys.s.units[player-1].length > 0) {
-	    this.updateLog(this.returnFaction(player) + " succeeds in capturing the sector");
-	  } else {
-	    this.updateLog(this.returnFaction(player) + " fails to capture the sector");
-	  }
 
 	  if (this.game_space_combat_defender == 1) {
             this.game.queue.push("space_combat_over_player_menu\t"+this.game.state.space_combat_defender+"\t"+sector);
@@ -4338,9 +4398,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	  //
 	  // update log
 	  //
-          this.updateLog(this.returnFaction(attacker) + " launches anti-fighter barrage...");
-
-console.log("Player Has Ships in Setor!");
+          this.updateLog(this.returnFactionNickname(attacker) + " anti-fighter barrage...");
 
 	  let total_shots = 0;
 	  let total_hits = 0;
@@ -4356,15 +4414,10 @@ console.log("Player Has Ships in Setor!");
 	  //
 	  for (let i = 0; i < sys.s.units[attacker-1].length; i++) {
 	  // skip if unit is toast or lacks fighter barrage
-console.log("AFB: " + sys.s.units[attacker-1][i].anti_fighter_barrage);
 
           if (sys.s.units[attacker-1][i].strength > 0 && sys.s.units[attacker-1][i].anti_fighter_barrage > 0) {
 
-console.log("yup!");
-
             for (let b = 0; b < sys.s.units[attacker-1][i].anti_fighter_barrage; b++) {
-
-console.log("shot: " + (b+1));
 
 	      let roll = this.rollDice(10);
 
@@ -4465,6 +4518,7 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 	  // create an object with all this information to update our LOG
 	  //
 	  let combat_info = {};
+	      combat_info.attacker        = attacker;
 	      combat_info.hits_or_misses  = hits_or_misses;
 	      combat_info.units_firing 	  = units_firing;
 	      combat_info.hits_on 	  = hits_on;
@@ -4480,9 +4534,9 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 	  let restrictions = [];
 
 	  if (total_hits == 1) {
-  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hit");
+  	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hit");
 	  } else {
-  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hits");
+  	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hits");
 	  }
 	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tanti_fighter_barrage\t"+sector+"\tanti_fighter_barrage\t"+total_hits+"\tanti_fighter_barrage");
 
@@ -4825,7 +4879,7 @@ console.log("Z Index: " + JSON.stringify(z[z_index]));
         if (defender == -1) {
 
 	  if (sys.p[planet_idx].owner != player) {
-            this.updateLog(this.returnFaction(player) + " seizes " + sys.p[planet_idx].name);
+            this.updateLog(this.returnFactionNickname(player) + " seizes " + sys.p[planet_idx].name);
 	    this.updatePlanetOwner(sector, planet_idx, player);
 	  }
           return 1;
@@ -4842,9 +4896,9 @@ console.log("Z Index: " + JSON.stringify(z[z_index]));
 	//
 	// otherwise, have a round of ground combat
 	//
-        if (this.game.state.ground_combat_round == 1) {
-          this.updateLog(this.returnFaction(player) + " invades " + sys.p[planet_idx].name);
-	}
+        //if (this.game.state.ground_combat_round == 1) {
+        //  this.updateLog(this.returnFactionNickname(player) + " invades " + sys.p[planet_idx].name);
+	//}
 
         this.updateLog("GROUND COMBAT: round " + this.game.state.ground_combat_round);
 
@@ -4871,7 +4925,7 @@ console.log("Z Index: " + JSON.stringify(z[z_index]));
 	  this.game.state.active_player_moved = 1;
 	}
 
-	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p><div style='width:80%;font-size:1.0em;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:15px'>" + this.action_cards[card].text +'</div>');
+	this.updateLog(this.returnFactionNickname(player) + " plays " + this.action_cards[card].name + "<p></p><div style='width:80%;font-size:1.0em;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:15px'>" + this.action_cards[card].text +'</div>');
 
 	let cards = this.returnActionCards();
 	let played_card = cards[card];

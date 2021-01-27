@@ -516,15 +516,15 @@ playerPlayBombardment(attacker, sector, planet_idx) {
   // some laws prohibit bombardment against
   //
   if (this.game.state.bombardment_against_cultural_planets == 0 && sys.p[planet_idx].type == "cultural") {
-    this.updateLog("Bombardment is not possible against cultural planets. Skipping.");
+    this.updateLog("Bombardment not possible against cultural planets. Skipping.");
     this.endTurn();
   }
   if (this.game.state.bombardment_against_industrial_planets == 0 && sys.p[planet_idx].type == "industrial") {
-    this.updateLog("Bombardment is not possible against industrial planets. Skipping.");
+    this.updateLog("Bombardment not possible against industrial planets. Skipping.");
     this.endTurn();
   }
   if (this.game.state.bombardment_against_hazardous_planets == 0 && sys.p[planet_idx].type == "hazardous") {
-    this.updateLog("Bombardment is not possible against hazardous planets. Skipping.");
+    this.updateLog("Bombardment not possible against hazardous planets. Skipping.");
     this.endTurn();
   }
   //
@@ -542,9 +542,6 @@ playerPlayBombardment(attacker, sector, planet_idx) {
     imperium_self.endTurn();
     return 0;
   }
-
-
-
 
   html = '<div class="sf-readable">Do you wish to bombard ' + sys.p[planet_idx].name + '? </div><ul>';
 
@@ -773,6 +770,9 @@ playerAcknowledgeNotice(msg, mycallback) {
     }
 
   });
+
+console.log("DOne Now");
+
 }
 
 
@@ -838,7 +838,6 @@ playerAcknowledgeNotice(msg, mycallback) {
       }
     }
 
-
     if (action2 == "action") {
       imperium_self.playerSelectActionCard(function (card) {
         imperium_self.addMove(imperium_self.game.state.assign_hits_queue_instruction);
@@ -858,7 +857,7 @@ playerAcknowledgeNotice(msg, mycallback) {
         total_hits -= imperium_self.game.state.assign_hits_to_cancel;
         if (total_hits < 0) { total_hits = 0; }
         if (total_hits == 0) {
-          imperium_self.updateLog("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not take any hits");
+          imperium_self.updateLog("NOTIFY\t" + imperium_self.returnFactionNickname(imperium_self.game.player) + " does not take any hits");
           imperium_self.endTurn();
           return 0;
         }
@@ -936,6 +935,10 @@ playerAcknowledgeNotice(msg, mycallback) {
 
       if (maximum_assignable_hits == 0) {
         console.log("ERROR: you had no hits left to assign, bug?");
+        console.log("SHIPS: " + JSON.stringify(sys.s.units[imperium_self.game.player - 1]));
+//        imperium_self.eliminateDestroyedUnitsInSector(imperium_self.game.player, sector);
+//        imperium_self.saveSystemAndPlanets(sys);
+//        imperium_self.updateSectorGraphics(sector);
         imperium_self.endTurn();
         return 0;
       }
@@ -958,7 +961,6 @@ playerAcknowledgeNotice(msg, mycallback) {
         }
 
         imperium_self.addMove("assign_hit\t" + attacker + "\t" + defender + "\t" + imperium_self.game.player + "\tship\t" + sector + "\t" + ship_idx + "\t0"); // last argument --> player should not assign again 
-
 
         total_hits--;
         hits_assigned++;
@@ -1216,6 +1218,10 @@ playerPlaySpaceCombat(attacker, defender, sector) {
   this.game.state.space_combat_sector = sector;
 
   html = '<div class="sf-readable"><b>Space Combat: round ' + this.game.state.space_combat_round + ':</b><div class="combat_attacker">' + this.returnFaction(attacker) + '</div><div class="combat_attacker_fleet">' + this.returnPlayerFleetInSector(attacker, sector) + '</div><div class="combat_defender">' + this.returnFaction(defender) + '</div><div class="combat_defender_fleet">' + this.returnPlayerFleetInSector(defender, sector) + '</div><ul>';
+
+
+console.log("AF: " + this.returnPlayerFleetInSector(attacker, sector));
+console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
 
   let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards)
   if (ac.length > 0) {
@@ -4050,8 +4056,8 @@ console.log("HERE: " + JSON.stringify(obj.ships_and_sectors));
     }
     html += '<hr />';
     html += '<div id="confirm" class="option">click here to move</div>';
-    html += '<hr />';
-    html += '<div id="clear" class="option">clear selected</div>';
+//    html += '<hr />';
+//    html += '<div id="clear" class="option">clear selected</div>';
     html += '<hr />';
     imperium_self.updateStatus(html);
 
@@ -4421,8 +4427,8 @@ playerSelectInfantryToLand(sector) {
   html += '</div>';
 
   html += '<div id="confirm" class="option">click here to move</div>';
-  html += '<hr />';
-  html += '<div id="clear" class="option">clear selected</div>';
+//  html += '<hr />';
+//  html += '<div id="clear" class="option">clear selected</div>';
   imperium_self.updateStatus(html);
 
   $('.option').off();

@@ -83,9 +83,12 @@ class Chat extends ModTemplate {
   //
   render(app, renderMode="") {
 
+console.log("REndering: " + renderMode + " -- " + this.renderMode);
+
     if (renderMode != "") { this.renderMode = renderMode; }
 
-    if (renderMode == "chatroom") {
+    if (this.renderMode == "chatroom") {
+console.log("rendering the chat room with the new message!");
       ChatRoom.render(app, this);
       ChatRoom.attachEvents(app, this);
       return;
@@ -254,6 +257,13 @@ class Chat extends ModTemplate {
     let txmsg = tx.returnMessage();
     if (conf == 0) {
       if (txmsg.request == "chat message") {
+	//
+	// we manually update the TS ourselves to prevent re-orgs, this means sigs
+	// no longer validate on messages, but we should be able to recreate if needed
+	// by just testing timestamps around this time until we get a match. with that
+	// said this is TODO -- these changes for early usability.
+	//
+	tx.transaction.ts = new Date().getTime(); // <------- update TS before save
 	app.storage.saveTransactionByKey(txmsg.group_id, tx);
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
         this.receiveMessage(app, tx);
@@ -277,6 +287,7 @@ class Chat extends ModTemplate {
       switch (req.request) {
 
         case "chat message":
+	  tx.transaction.ts = new Date().getTime(); // <------- update TS before save
           this.receiveMessage(app, new saito.transaction(tx.transaction));
 	  //this.app.storage.saveTransaction(routed_tx);
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };

@@ -141,7 +141,7 @@ class Post extends ModTemplate {
     //
     // fetch posts from server
     //
-    let sql = `SELECT id, children, img, lite_tx FROM posts WHERE parent_id = "" ORDER BY ts DESC`;
+    let sql = `SELECT id, children, img, lite_tx FROM posts WHERE parent_id = "" ORDER BY ts DESC LIMIT 12`;
     this.sendPeerDatabaseRequestWithFilter(
 
         "Post" ,

@@ -15,6 +15,7 @@
 
         if (this.game.deck[0].hand.length < 1) {
           this.addMove("ops\tus\tcia\t1");
+          this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
           this.addMove("notify\tUSSR has no cards to reveal");
           this.endTurn();
         } else {
@@ -24,6 +25,7 @@
             revealed += this.game.deck[0].cards[this.game.deck[0].hand[i]].name;
           }
           this.addMove("ops\tus\tcia\t1");
+          this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
           this.addMove("notify\tUSSR holds: "+revealed);
           this.endTurn();
         }

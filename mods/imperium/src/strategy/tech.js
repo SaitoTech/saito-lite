@@ -30,7 +30,7 @@
 ;
           html = '<p>Technology has been played. Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
           if (imperium_self.game.state.round == 1) {
-            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has played the Technology strategy card. You may spend 4 resources and a strategy token to gain a permanent new unit or abilities. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability?</p><ul>`;
+            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has played the Technology strategy card. You may spend 4 resources and a strategy token to gain a permanent new unit or ability. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability?</p><ul>`;
           }
 
 	  if (
@@ -90,7 +90,7 @@
 
         } else {
 
-          if (imperium_self.game.player != strategy_card_player) { return; }
+          if (imperium_self.game.player != strategy_card_player) { return 0; }
 
 	  resources_to_spend = imperium_self.game.players_info[imperium_self.game.player-1].cost_of_technology_primary;
 
@@ -133,7 +133,7 @@
               imperium_self.playerSelectResources(resources_to_spend, function(success) {
                 if (success == 1) {
                   imperium_self.playerResearchTechnology(function(tech) {
-                    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+                    imperium_self.addMove("purchase\t"+imperium_self.game.player+"\ttechnology\t"+tech);
                     imperium_self.endTurn();
                   });
                 } else {

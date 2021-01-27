@@ -270,7 +270,7 @@ updateCombatLog(cobj) {
   let html = '';
       html += '<table class="combat_log">';
       html += '<tr>';
-      html += '<th class="combat_log_th"></th>';
+      html += `<th class="combat_log_th">${this.returnFactionNickname(cobj.attacker)}</th>`;
       html += '<th class="combat_log_th">HP</th>';
       html += '<th class="combat_log_th">Combat</th>';
       html += '<th class="combat_log_th">Roll</th>';
@@ -374,17 +374,17 @@ returnFactionDashboard() {
      <div data-id="${(i+1)}" class="dash-faction-name bk"></div>
       <div data-id="${(i+1)}" class="dash-faction-info">
 
-        <div data-id="${(i+1)}" class="dash-item resources">
+        <div data-id="${(i+1)}" class="dash-item tooltip dash-item-resources resources">
           <span data-id="${(i+1)}" class="avail"></span>
           <span data-id="${(i+1)}" class="total"></span>
         </div>
 
-        <div data-id="${(i+1)}" class="dash-item influence">
+        <div data-id="${(i+1)}" class="dash-item tooltip dash-item-influence influence">
           <span data-id="${(i+1)}" class="avail"></span>
           <span data-id="${(i+1)}" class="total"></span>
         </div>
 
-        <div data-id="${(i+1)}" class="dash-item trade">
+        <div data-id="${(i+1)}" class="dash-item tooltip dash-item-trade trade">
           <i data-id="${(i+1)}" class="fas fa-database pc white-stroke"></i>
           <div data-id="${(i+1)}" id="dash-item-goods" class="dash-item-goods">
             ${this.game.players_info[i].goods}
@@ -962,6 +962,7 @@ displayFactionDashboard() {
   let imperium_self = this;
 
   try {
+
     document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard();
     let pl = "";
     let fo = "";
@@ -990,7 +991,27 @@ displayFactionDashboard() {
 
     }
 
-  } catch (err) {}
+    $('.dash-item-resources').on('mouseenter', function() {
+      imperium_self.showHelpCard("resources");
+    }).on('mouseleave', function() {
+      imperium_self.hideHelpCard();
+    });
+
+    $('.dash-item-influence').on('mouseenter', function() {
+      imperium_self.showHelpCard("influence");
+    }).on('mouseleave', function() {
+      imperium_self.hideHelpCard();
+    });
+
+    $('.dash-item-trade').on('mouseenter', function() {
+      imperium_self.showHelpCard("trade");
+    }).on('mouseleave', function() {
+      imperium_self.hideHelpCard();
+    });
+
+  } catch (err) {
+console.log("ERROR: ");
+  }
 }
 
 
@@ -1162,9 +1183,8 @@ addUIEvents() {
   document.documentElement.style.setProperty('--my-color', `var(--p${this.game.player})`);
 
   this.displayFactionDashboard();
-
-
   var html = this.returnTokenDisplay(); 
+
   document.querySelector('.hud-header').append(this.app.browser.htmlToElement(html));
 
 }
@@ -1683,6 +1703,19 @@ updateSectorGraphics(sector) {
   removePlanetHighlight(sector, pid)  {
     this.hideSectorHighlight(sector);
   }
+  showHelpCard(type) {
+    let html = "";
+
+    if (type == "resources") { html = `<div style="width:100%; height: 100%"><img style="width:100%;height:auto;" src="/imperium/img/resources_dash_card.png" /></div>`; }
+    if (type == "influence") { html = `<div style="width:100%; height: 100%"><img style="width:100%;height:auto;" src="/imperium/img/influence_dash_card.png" /></div>`; }
+    if (type == "trade")     { html = `<div style="width:100%; height: 100%"><img style="width:100%;height:auto;" src="/imperium/img/trade_dash_card.png" /></div>`; }
+
+    this.cardbox.showCardboxHTML(null, html);
+  }
+  hideHelpCard(c) {
+    this.cardbox.hideCardbox(1);
+  }
+
   showActionCard(c) {
     let thiscard = this.action_cards[c];
     let html = `
