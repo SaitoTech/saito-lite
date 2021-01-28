@@ -1,4 +1,4 @@
-const SubstrateBasedCrypto = require("./lib/SubstrateBasedCrypto");
+const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto");
 
 const parityArchiveNodeEndpoint = 'wss://rpc.polkadot.io';
 const saitoEndpoint = 'ws://206.189.222.218:9932';

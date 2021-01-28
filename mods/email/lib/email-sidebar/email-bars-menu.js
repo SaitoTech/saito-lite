@@ -34,36 +34,37 @@ module.exports = EmailBarsMenu = {
       // These IDs are also present but I guess they serve no functional purpose:
       // email-nav-inbox email-nav-sent email-nav-trash email-apps crypto-apps
       emailBarsMenuInnerHTML = emailBarsMenuInnerHTML.replaceAll("email-nav-", "mobile-email-nav-");
-      
+
       app.browser.addElementToDom(`<div id="mobile" class="email-bars-menu" style="display:none;">
         <button class="super" id="mobile-email-compose-btn">SEND</button>
         ${emailBarsMenuInnerHTML}
       </div>`)
     }
-    
+
   },
   attachEvents(app, mod) {
     // attach events to cyrpto mod buttons
-    Array.from(document.getElementsByClassName('crypto-apps-item')).forEach((cryptoAppButton, i) => {
+    document.querySelectorAll('.crypto-apps-item').forEach((cryptoAppButton, i) => {
       cryptoAppButton.onclick = (e) => {
         // Set the state of email mod to something here so email-body.js does the right thing.
         let subPage = e.currentTarget.id.replace('email-nav-','').replace('mobile-','');
         window.location.hash = mod.goToLocation(`#page=crypto_page&subpage=${subPage}`);
       }
     });
-    Array.from(document.getElementsByClassName('email-navigator-item')).forEach((item) => {
+    document.querySelectorAll('.email-navigator-item').forEach((item) => {
       item.onclick = (e) => {
         let subPage = e.currentTarget.id.replace('email-nav-','').replace('mobile-','');
         window.location.hash = mod.goToLocation(`#page=email_list&subpage=${subPage}`);
       }
     });
 
-    Array.from(document.getElementsByClassName('email-apps-item'))
-      .forEach(item => item.addEventListener('click', (e) => {
+    document.querySelectorAll('.email-apps-item').forEach((item) => {
+      item.addEventListener('click', (e) => {
         let subPage = e.currentTarget.id.replace('email-nav-','').replace('mobile-','');
         window.location.hash = mod.goToLocation(`#page=email_appspace&subpage=${subPage}`);
-    }));
-    
+      });
+    });
+
     // Hide the menu bar if user clicks off of it or on a button in it
     let email_bars_menu = document.querySelector('#mobile.email-bars-menu');
     let emailSidebarHideCallback = () => {

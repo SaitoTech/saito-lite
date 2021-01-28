@@ -1,4 +1,4 @@
-const SubstrateBasedCrypto = require("./lib/SubstrateBasedCrypto");
+const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto");
 
 const parityArchiveNodeEndpoint = 'wss://kusama-rpc.polkadot.io/';
 const web3FoundationArchiveNodeEndpoint = 'wss://cc3-5.kusama.network/';
