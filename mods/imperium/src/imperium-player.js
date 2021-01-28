@@ -4467,8 +4467,6 @@ playerSelectInfantryToLand(sector) {
 
       imperium_self.updateStatus(html);
 
-alert("infantry avail: " + infantry_available_for_reassignment);
-
       $('.option').off();
       $('.option').on('click', function () {
 
