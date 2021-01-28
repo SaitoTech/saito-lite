@@ -53,9 +53,7 @@ class Archive extends ModTemplate {
         this.saveTransaction(req.data.tx, req.data.type);
       }
       if (req.data.request === "save_key") {
-console.log("into save tx by key being executed");
         if (!req.data.key) { return; }
-console.log("Save tx by key being executed with type: " + req.data.type);
         this.saveTransactionByKey(req.data.key, req.data.tx, req.data.type);
       }
       if (req.data.request === "load") {
