@@ -1,4 +1,4 @@
-const SubstrateBasedCrypto = require("./lib/SubstrateBasedCrypto");
+const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto");
 
 let kaoliniteTestServerEndpoint = "ws://138.197.202.211:9932";
 let saitoWestendEndpoint = "ws://178.128.181.212:9932";

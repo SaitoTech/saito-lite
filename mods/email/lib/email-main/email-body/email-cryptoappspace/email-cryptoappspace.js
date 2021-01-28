@@ -8,20 +8,27 @@ module.exports = EmailCryptoAppspace = {
     let loadPubkey = async(responseInterface) => {
       let address = await responseInterface.getAddress();
       document.querySelector(`.crypto-container .address`).innerHTML = address;
-    }      
-    
+    }
+
     try {
       let subPage = app.browser.parseHash(window.location.hash).subpage;
-      let modInterface = app.wallet.returnPreferredCryptoByName(subPage);
-      let preferredCryptoName = app.wallet.returnPreferredCryptoName(); 
-      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(modInterface, preferredCryptoName);  
+      let modInterface = app.wallet.returnCryptoModuleByName(subPage);
+      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(modInterface, subPage);
       loadBalance(modInterface);
-      loadPubkey(modInterface);  
+      loadPubkey(modInterface);
 
       document.querySelector(`.crypto-container .sendbutton`).onclick = () => {
         let howMuch = document.querySelector(`.crypto-container .howmuch`).value;
         let toAddress = document.querySelector(`.crypto-container .pubkeyto`).value;
-        modInterface.transfer(howMuch, toAddress);
+        try {
+          modInterface.transfer(howMuch, toAddress);
+          salert("Sent!");
+          document.querySelector(`.crypto-container .howmuch`).value = "";
+          document.querySelector(`.crypto-container .pubkeyto`).value = "";
+        } catch(error) {
+          salert(`Error sending transaction.\n{error}`);
+          //Transaction is temporarily banned
+        }
       }
       document.querySelectorAll(`.crypto-container .fa-star`).forEach((elem, i) => {
         elem.onclick = (event) => {

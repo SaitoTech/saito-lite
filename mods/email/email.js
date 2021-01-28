@@ -271,7 +271,7 @@ class Email extends ModTemplate {
 
   cacheAndRenderPreferredCryptoBalance() {
     this.preferredCryptoBalance = "loading...";
-    this.app.wallet.returnPreferredCryptoBalance().then((value) => {
+    this.app.wallet.returnPreferredCrypto().getBalance().then((value) => {
       this.preferredCryptoBalance = value;
       this.renderBalance();
     });
@@ -279,13 +279,13 @@ class Email extends ModTemplate {
   }
   async renderBalance() {
     if (document.getElementById("email-token")) { /// might not have rendered yet, no problem.
-      document.getElementById("email-token").innerHTML = " " + this.app.wallet.returnPreferredCryptoTicker();
-      document.getElementById("email-balance").innerHTML = await this.app.wallet.returnPreferredCryptoBalance();
+      document.getElementById("email-token").innerHTML = " " + this.app.wallet.returnPreferredCrypto().ticker;
+      document.getElementById("email-balance").innerHTML = await this.app.wallet.returnPreferredCrypto().getBalance();
     }
   }
   preferredCryptoChangeCallback() {
 //
-// TODO - removed Dec 30 
+// TODO - removed Dec 30
 //
 //    this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
 //    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
