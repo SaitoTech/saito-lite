@@ -260,7 +260,7 @@ class Chat extends ModTemplate {
 	// by just testing timestamps around this time until we get a match. with that
 	// said this is TODO -- these changes for early usability.
 	//
-	tx.transaction.ts = new Date().getTime(); // <------- update TS before save
+	//tx.transaction.ts = new Date().getTime(); // <------- update TS before save
 	app.storage.saveTransactionByKey(txmsg.group_id, tx);
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
         this.receiveMessage(app, tx);
@@ -284,7 +284,7 @@ class Chat extends ModTemplate {
       switch (req.request) {
 
         case "chat message":
-	  tx.transaction.ts = new Date().getTime(); // <------- update TS before save
+	  //tx.transaction.ts = new Date().getTime(); // <------- update TS before save
           this.receiveMessage(app, new saito.transaction(tx.transaction));
 	  //this.app.storage.saveTransaction(routed_tx);
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
@@ -300,7 +300,7 @@ class Chat extends ModTemplate {
 	   // serversaves
 	   //
            let archive = this.app.modules.returnModule("Archive");
-           routed_tx.transaction.ts = new Date().getTime();
+           //routed_tx.transaction.ts = new Date().getTime();
            if (archive) { archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx); }     
 
            this.app.network.peers.forEach(p => {
