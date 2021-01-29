@@ -1455,16 +1455,16 @@ console.log(JSON.stringify(this.game.state.choices));
 	    if (this.game.state.round == 1) {
 	      this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
               document.getElementById("close-units-btn").onclick = () => {
-                this.overlay.hideOverlay(this.app, this);
+                this.overlay.hideOverlay();
               }
             } else {
 	      if (this.game.planets['new-byzantium'].owner != -1 ) {
 		this.overlay.showOverlay(this.app, this, this.returnNewAgendasOverlay());
               	document.getElementById("close-agendas-btn").onclick = () => {
-                  this.overlay.hideOverlay(this.app, this);
+                  this.overlay.hideOverlay();
               	}
               } else {
-                this.overlay.hideOverlay(this.app, this);
+                this.overlay.hideOverlay();
               }
 	    }
           }
