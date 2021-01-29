@@ -71,6 +71,11 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       //
       if (mv[0] === "resolve") {
 
+console.log("executing resolve with existing: " + JSON.stringify(
+  this.game.confirms_players
+));
+
+
         let le = this.game.queue.length-2;
         let lmv = [];
         if (le >= 0) {
@@ -112,7 +117,24 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	if (mv[1] == lmv[0]) {
   	  if (mv[2] != undefined) {
 
-	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) { this.resetConfirmsNeeded(this.game.players_info.length); }
+	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) {
+	      if (mv[2] != -1) {
+		this.resetConfirmsNeeded(this.game.players_info.length); 
+	      } else {
+
+		//
+		// aggressively resolve, or we hit an error in some
+		// situations which cause looping of the strategy 
+		// card.
+		//
+	        this.resetConfirmsNeeded(0);
+console.log("MANUALLY CLEARING!");
+    	        this.game.queue.splice(this.game.queue.length-1);
+    	        this.game.queue.splice(this.game.queue.length-1);
+  	        return 1;
+
+	      }
+	    }
 
 	    //
 	    // set confirming player as inactive
@@ -124,6 +146,8 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	        this.game.confirms_players.push(mv[3]);
 	      }
 	    }
+
+console.log("confirming player set inactive: " + JSON.stringify(this.game.confirms_players));
 
 	    //
 	    //
@@ -157,7 +181,9 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
+console.log("resetting confs needed");
 	      this.resetConfirmsNeeded(0);
+	      // JAN 29
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
 
@@ -522,7 +548,9 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 
       if (mv[0] === "strategy") {
-  
+
+console.log("hitting strategy card execution point...");
+
 	this.updateLeaderboard();
 	this.updateTokenDisplay();
 
@@ -530,8 +558,11 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
+console.log("confirms players: " + JSON.stringify(this.game.confirms_players));
+
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
+console.log("we have played the strategy card secondary...");
 	    return 0;
 	  } else {
 	    //
@@ -555,6 +586,8 @@ console.log("interface is locked...");
 	  }
 	}
 
+console.log("hit this point...");
+
   	if (stage == 1) {
 	  this.updateLog(this.returnFactionNickname(strategy_card_player) + " plays " + this.strategy_cards[card].name);
 	  this.updateStatus(this.returnFaction(strategy_card_player) + " is playing " + this.strategy_cards[card].name);
@@ -565,6 +598,12 @@ console.log("interface is locked...");
 	  this.updateStatus("All factions have the opportunity to play " + this.strategy_cards[card].name);
 	  this.game.state.playing_strategy_card_secondary = 1;
   	  this.playStrategyCardSecondary(strategy_card_player, card);
+	  return 0;
+  	}
+  	if (stage == 3) {
+	  this.updateStatus("All factions have the opportunity to play " + this.strategy_cards[card].name);
+	  this.game.state.playing_strategy_card_secondary = 1;
+  	  this.playStrategyCardTertiary(strategy_card_player, card);
 	  return 0;
   	}
   
@@ -1221,8 +1260,8 @@ console.log(JSON.stringify(this.game.state.choices));
   	//
   	// SCORING
   	//
-        if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
-          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+        if (this.game.state.round >= 1 && this.game.state.round_scoring == 0) {
+          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t3\t"+1); // 3 ==> end-of-round tertiary
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
@@ -2239,7 +2278,7 @@ console.log(JSON.stringify(this.game.state.choices));
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
-	if (type == "secret_objectives") {
+	if (type === "secret_objectives" || type === "secret_objective") {
           if (this.game.player == player && this.browser_active == 1) {
 	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.slice(this.game.deck[5].hand.length-amount, this.game.deck[5].hand.length)));
 	  }

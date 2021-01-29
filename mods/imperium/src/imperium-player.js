@@ -2417,6 +2417,61 @@ playerBuyTokens(stage = 0, resolve = 1) {
     }
   });
 
+ }
+
+
+
+
+ playerBuySecretObjective(stage = 0, resolve = 1) {
+
+  let imperium_self = this;
+
+  let html = '<div class="sf-readable">Do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
+  if (stage == 2) {
+    html = '<div class="sf-readable">Politics has been played: do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
+    if (imperium_self.game.state.round == 1) {
+      html = `${imperium_self.returnFaction(imperium_self.game.player)} has played the Imperial strategy card. This lets you to spend 1 strategy token to purchase an additional secret bjective. You have ${imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens} strategy tokens. Purchase secret objective: </p><ul>`;
+    }
+  }
+  html += '<li class="buildchoice textchoice" id="yes">Purchase Secret Objective</li>';
+  html += '<li class="buildchoice textchoice" id="no">Do Not Purchase</li>';
+  html += '</ul>';
+
+  this.updateStatus(html);
+
+  imperium_self.lockInterface();
+
+  $('.buildchoice').off();
+  $('.buildchoice').on('click', function () {
+
+    if (!imperium_self.mayUnlockInterface()) {
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      return;
+    }
+    imperium_self.unlockInterface();
+
+    let id = $(this).attr("id");
+
+    if (id == "yes") {
+
+      imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addMove("gain\t" + imperium_self.game.player + "\tsecret_objective\t1");
+      imperium_self.addMove("DEAL\t6\t" + imperium_self.game.player + "\t1");
+      imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
+      imperium_self.endTurn();
+      imperium_self.updateStatus("submitted...");
+      return;
+
+    } else {
+
+      imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.endTurn();
+      imperium_self.updateStatus("submitted...");
+      return;
+
+    }
+  });
+
 }
 
 

@@ -157,13 +157,16 @@
 
 
 .new_secret_objective_overlay {
+  background-image: url(/imperium/img/starscape_background1.jpg);
   width: 50vw;
   height: auto;
   text-align:center;
   transform: scale(1.4);
   min-height: 30vh;
+  max-width: 50vw;
 }
 .new_secret_objective_overlay_title {
+  margin-top:15px;
   background: #3335;
   display: inline-block;
   color: white;

@@ -2995,12 +2995,10 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       text			:	"You may score a public objective. If you control New Byzantium gain 1 VP. Otherwise gain a secret objective.<hr />All players score objectives in Initiative Order" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        imperium_self.game.state.round_scoring = 1;
-
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
 
 	  let supplementary_scoring = function() {
-  	    imperium_self.playerAcknowledgeNotice("You will first be asked to score your public objective. The game will then precede and allow all players (including you) to score additional objectives in initiative order.", function() {
+  	    imperium_self.playerAcknowledgeNotice("You will first be asked to score your public objective. The game will then allow other players to purchase secret objectives.", function() {
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
                 imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
@@ -3015,7 +3013,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 	  };
 
 	  let supplementary_secret = function() {
-  	    imperium_self.playerAcknowledgeNotice("You will next be asked to score a public objective if you can. The game will then precede and allow all players (including you) to score additional objectives in initiative order.", function() {
+  	    imperium_self.playerAcknowledgeNotice("You will next be asked to score a public objective. The game will then allow other players to purchase secret objectives.", function() {
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
                 imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
@@ -3032,15 +3030,33 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 	  };
 
 	  if (imperium_self.game.planets['new-byzantium'].owner == strategy_card_player) {
-	    imperium_self.playerAcknowledgeNotice("Congratulations, Master of New Byzantium (+1 VP). Your power grows by the day. Surely it is only a matter of time before the Galaxy bows to your superiority and a Natural Order is restored to the universe", supplementary_scoring);
+	    imperium_self.playerAcknowledgeNotice("You are granted an additional Victory Point for controlling New Byzantium during Imperial Scoring", supplementary_scoring);
 	  } else {
-	    imperium_self.playerAcknowledgeNotice("As you do not control New Byzantium you will be issued a Secret Objective once the other factions have elected whether to spend a strategy token to purchase one", supplementary_secret);
+	    imperium_self.playerAcknowledgeNotice("As you do not control New Byzantium during Imperial Scoring, you will be issued an additional Secret Objective", supplementary_secret);
 	  }
         }
 
 	return 0;
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
+
+        imperium_self.game.state.playing_strategy_card_secondary = 1;
+
+        if (imperium_self.game.player == player) {
+          if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
+            imperium_self.playerBuySecretObjective(2);
+          } else {
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.endTurn();
+          }
+        }
+
+  	return 0;
+      },
+      strategyTertiaryEvent 	:	function(imperium_self, player, strategy_card_player) {
+
+        imperium_self.game.state.playing_strategy_card_secondary = 1;
+        imperium_self.game.state.round_scoring = 1;
 
 	if (player == imperium_self.game.player) {
 
@@ -3060,24 +3076,20 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 	      imperium_self.updateStatus("scoring completed");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 
-              //if (my_secret_vp == 0) { imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
               if (my_secret_vp > 0) { 
 		imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); 
 	      }
-              //if (vp == 0) { imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
               if (vp > 0) {
 		imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
 	      }
 
 	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
-              imperium_self.updateStatus("You have played the Imperial Secondary");
+              imperium_self.updateStatus("Waiting to update your Victory Points.");
               imperium_self.endTurn();
             }, 2);
           });
-
   	  return 0;
         }
-
       }
     });
 
@@ -10933,6 +10945,11 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       //
       if (mv[0] === "resolve") {
 
+console.log("executing resolve with existing: " + JSON.stringify(
+  this.game.confirms_players
+));
+
+
         let le = this.game.queue.length-2;
         let lmv = [];
         if (le >= 0) {
@@ -10974,7 +10991,24 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	if (mv[1] == lmv[0]) {
   	  if (mv[2] != undefined) {
 
-	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) { this.resetConfirmsNeeded(this.game.players_info.length); }
+	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) {
+	      if (mv[2] != -1) {
+		this.resetConfirmsNeeded(this.game.players_info.length); 
+	      } else {
+
+		//
+		// aggressively resolve, or we hit an error in some
+		// situations which cause looping of the strategy 
+		// card.
+		//
+	        this.resetConfirmsNeeded(0);
+console.log("MANUALLY CLEARING!");
+    	        this.game.queue.splice(this.game.queue.length-1);
+    	        this.game.queue.splice(this.game.queue.length-1);
+  	        return 1;
+
+	      }
+	    }
 
 	    //
 	    // set confirming player as inactive
@@ -10986,6 +11020,8 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	        this.game.confirms_players.push(mv[3]);
 	      }
 	    }
+
+console.log("confirming player set inactive: " + JSON.stringify(this.game.confirms_players));
 
 	    //
 	    //
@@ -11019,7 +11055,9 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
+console.log("resetting confs needed");
 	      this.resetConfirmsNeeded(0);
+	      // JAN 29
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
 
@@ -11384,7 +11422,9 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 
       if (mv[0] === "strategy") {
-  
+
+console.log("hitting strategy card execution point...");
+
 	this.updateLeaderboard();
 	this.updateTokenDisplay();
 
@@ -11392,8 +11432,11 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
+console.log("confirms players: " + JSON.stringify(this.game.confirms_players));
+
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
+console.log("we have played the strategy card secondary...");
 	    return 0;
 	  } else {
 	    //
@@ -11417,6 +11460,8 @@ console.log("interface is locked...");
 	  }
 	}
 
+console.log("hit this point...");
+
   	if (stage == 1) {
 	  this.updateLog(this.returnFactionNickname(strategy_card_player) + " plays " + this.strategy_cards[card].name);
 	  this.updateStatus(this.returnFaction(strategy_card_player) + " is playing " + this.strategy_cards[card].name);
@@ -11427,6 +11472,12 @@ console.log("interface is locked...");
 	  this.updateStatus("All factions have the opportunity to play " + this.strategy_cards[card].name);
 	  this.game.state.playing_strategy_card_secondary = 1;
   	  this.playStrategyCardSecondary(strategy_card_player, card);
+	  return 0;
+  	}
+  	if (stage == 3) {
+	  this.updateStatus("All factions have the opportunity to play " + this.strategy_cards[card].name);
+	  this.game.state.playing_strategy_card_secondary = 1;
+  	  this.playStrategyCardTertiary(strategy_card_player, card);
 	  return 0;
   	}
   
@@ -12083,8 +12134,8 @@ console.log(JSON.stringify(this.game.state.choices));
   	//
   	// SCORING
   	//
-        if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
-          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+        if (this.game.state.round >= 1 && this.game.state.round_scoring == 0) {
+          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t3\t"+1); // 3 ==> end-of-round tertiary
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
@@ -13101,7 +13152,7 @@ console.log(JSON.stringify(this.game.state.choices));
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
-	if (type == "secret_objectives") {
+	if (type === "secret_objectives" || type === "secret_objective") {
           if (this.game.player == player && this.browser_active == 1) {
 	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.slice(this.game.deck[5].hand.length-amount, this.game.deck[5].hand.length)));
 	  }
@@ -18486,6 +18537,61 @@ playerBuyTokens(stage = 0, resolve = 1) {
       imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gets action cards");
       imperium_self.addMove("gain\t" + imperium_self.game.player + "\taction_cards\t2");
       imperium_self.addMove("DEAL\t2\t" + imperium_self.game.player + "\t2");
+      imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
+      imperium_self.endTurn();
+      imperium_self.updateStatus("submitted...");
+      return;
+
+    } else {
+
+      imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.endTurn();
+      imperium_self.updateStatus("submitted...");
+      return;
+
+    }
+  });
+
+ }
+
+
+
+
+ playerBuySecretObjective(stage = 0, resolve = 1) {
+
+  let imperium_self = this;
+
+  let html = '<div class="sf-readable">Do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
+  if (stage == 2) {
+    html = '<div class="sf-readable">Politics has been played: do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
+    if (imperium_self.game.state.round == 1) {
+      html = `${imperium_self.returnFaction(imperium_self.game.player)} has played the Imperial strategy card. This lets you to spend 1 strategy token to purchase an additional secret bjective. You have ${imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens} strategy tokens. Purchase secret objective: </p><ul>`;
+    }
+  }
+  html += '<li class="buildchoice textchoice" id="yes">Purchase Secret Objective</li>';
+  html += '<li class="buildchoice textchoice" id="no">Do Not Purchase</li>';
+  html += '</ul>';
+
+  this.updateStatus(html);
+
+  imperium_self.lockInterface();
+
+  $('.buildchoice').off();
+  $('.buildchoice').on('click', function () {
+
+    if (!imperium_self.mayUnlockInterface()) {
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      return;
+    }
+    imperium_self.unlockInterface();
+
+    let id = $(this).attr("id");
+
+    if (id == "yes") {
+
+      imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addMove("gain\t" + imperium_self.game.player + "\tsecret_objective\t1");
+      imperium_self.addMove("DEAL\t6\t" + imperium_self.game.player + "\t1");
       imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
       imperium_self.endTurn();
       imperium_self.updateStatus("submitted...");
@@ -27434,6 +27540,16 @@ updateSectorGraphics(sector) {
     }
     return 0;
   }
+
+  playStrategyCardTertiary(player, card) {
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (this.strategy_cards[card]) {
+	this.strategy_cards[card].strategyTertiaryEvent(this, (i+1), player);
+      }
+    }
+    return 0;
+  }
+
 
 
 
