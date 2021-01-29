@@ -11,11 +11,6 @@ class Polkadot extends SubstrateBasedCrypto {
     this.description = 'Polkadot application layer for in-browser Polkadot applications. Install this module to make Polkadot your default in-browser cryptocurrency';
     this.categories = "Cryptocurrency";
   }
-
-  installModule(app) {
-    app.wallet.setPreferredCrypto("DOT");
-  }
-
 }
 
 module.exports = Polkadot;
