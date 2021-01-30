@@ -937,6 +937,15 @@ console.log("hit this point...");
 	//
 	this.game.queue.push("ACKNOWLEDGE\tThe Galactic Senate has settled on '"+this.returnNameFromIndex(winning_choice)+"'");
 
+
+	//
+	// REMOVE strategy card invocation
+	//
+	let lmv = this.game.queue[qe-1].split("\t");
+	if (lmv[0] === "strategy") {
+  	  this.game.queue.splice(qe-1, 1);
+	}
+
       }
 
 
@@ -1265,6 +1274,12 @@ console.log(JSON.stringify(this.game.state.choices));
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
+
+	  if (this.game.planets['new-byzantium'].owner != -1) {
+            this.game.queue.push("strategy\t"+"politics"+"\t"+this.game.state.speaker+"\t3\t"+1); // 3 ==> end-of-round tertiary
+            this.game.queue.push("ACKNOWLEDGE\t"+"The Galactic Senate has been re-established on New Byzantium, voting commences on the recent round of proposals");
+	  }
+
   	  this.game.state.round_scoring = 0;
 	  return 1;
   	} else {
@@ -2470,6 +2485,15 @@ console.log("display faction dashboard over!");
         let shipjson     = mv[5];
         let hazard 	 = mv[6];
 
+	//
+	// "already_moved"
+	//
+	let shipobj = JSON.parse(shipjson);
+	if (shipobj.already_moved) {
+	  delete shipobj.already_moved;
+	  shipjson = JSON.stringify(shipobj);
+	}
+
         //
 	//
 	// 
@@ -2511,9 +2535,7 @@ console.log("display faction dashboard over!");
 	  // report fleet movement
 	  //
 	  let next_move = this.game.queue[qe-1].split("\t")[0];
-console.log("NEXT MOVE: " + next_move);
 	  if (next_move != "move") { this.updateLog(this.returnFactionNickname(player) + " moves " + this.returnPlayerFleetInSector(player, sector_to) + " into " + sys2.s.name); }
-
 
   	}
   
@@ -4833,6 +4855,7 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 
         if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
           if (this.game.player == player) {
+            this.addMove("ground_combat_end\t"+player+"\t"+sector+"\t"+planet_idx);
             this.addMove("ground_combat_post\t"+player+"\t"+sector+"\t"+planet_idx);
             this.addMove("ground_combat\t"+player+"\t"+sector+"\t"+planet_idx);
             this.endTurn();
@@ -4883,9 +4906,6 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
         let planet_idx 	 = mv[3];
         let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
-
-
-console.log("Z Index: " + JSON.stringify(z[z_index]));
 
 	return z[z_index].groundCombatEvent(this, player, sector, planet_idx);
 
@@ -4939,13 +4959,9 @@ console.log("Z Index: " + JSON.stringify(z[z_index]));
 	this.game.state.ground_combat_defender = defender;
 
 	//
-	// otherwise, have a round of ground combat
+	// have a round of ground combat
 	//
-        //if (this.game.state.ground_combat_round == 1) {
-        //  this.updateLog(this.returnFactionNickname(player) + " invades " + sys.p[planet_idx].name);
-	//}
-
-        this.updateLog("GROUND COMBAT: round " + this.game.state.ground_combat_round);
+	this.updateLog("Round "+this.game.state.ground_combat_round+": " + this.returnPlayerInfantryOnPlanet(player, sys.p[planet_idx]) + " " + this.returnFactionNickname(player) + " infantry vs. " + this.returnPlayerInfantryOnPlanet(defender, sys.p[planet_idx]) + " " + this.returnFactionNickname(defender) + " infantry");
 
         this.game.queue.push("ground_combat_player_menu\t"+defender+"\t"+player+"\t"+sector+"\t"+planet_idx);
         this.game.queue.push("ground_combat_player_menu\t"+player+"\t"+defender+"\t"+sector+"\t"+planet_idx);

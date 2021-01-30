@@ -22,7 +22,7 @@
       strength 		:	1,
       can_be_stored	:	1,
       capacity_required :	1,
-      description	:	"Fighters are disposible ships deployed to protect capital ships. They must be transported on carriers or other ships with capacity.",
+      description	:	"Fighters are disposable ships deployed to protect capital ships. They must be transported on carriers or other ships with capacity.",
     });
 
 

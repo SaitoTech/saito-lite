@@ -28,7 +28,9 @@
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  if (sys.p[planet_idx].units[player-1].length > 0) {
             if (imperium_self.returnAvailableInfluence(player) >= 2) {
-	      return 1;
+	      if (imperium_self.game.state.ground_combat_round < 2) {
+	        return 1;
+	      }
             }
           }
         }
@@ -213,6 +215,7 @@
 this.playIndoctrination = function(imperium_self, player, sector, planet_idx, mycallback) {
 
   if (this.game.player != player) { return; }
+  if (this.game.player != player) { return; }
 
   let sys = imperium_self.returnSectorAndPlanets(sector);
   let planet = sys.p[planet_idx];
@@ -223,7 +226,11 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
     mycallback(imperium_self);
     return;
   }
-  if (sys.p[planet_idx].units[opponent].length <= 0) {
+
+console.log("planet is: " + sys.p[planet_idx].name);
+console.log("planet opponent units: " + sys.p[planet_idx].units[opponent-1].length);
+
+  if (sys.p[planet_idx].units[opponent-1].length <= 0) {
     mycallback(imperium_self);
     return;
   }
