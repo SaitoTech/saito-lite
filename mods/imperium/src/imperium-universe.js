@@ -109,8 +109,6 @@
       }
     }
  
-    planets['new-byzantium'].owner = 1;
-
     return planets;
   }
   

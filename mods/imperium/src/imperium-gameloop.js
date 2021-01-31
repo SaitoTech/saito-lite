@@ -3488,6 +3488,10 @@ console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + thi
 	let capital 	   = 0;
 	if (parseInt(mv[4])) { capital = 1; }
 
+	if (sector == undefined) {
+	  sector = this.game.state.activated_sector;
+        }
+
 	if (sector.indexOf("_") > 0) {
 	  let sys = this.returnSectorAndPlanets(sector);
 	  sector = sys.s.sector;
