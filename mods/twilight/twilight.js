@@ -2620,7 +2620,7 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
             if (this.game.state.eagle_has_landed == "us") { bonus_player = 2; }
 
             if (this.game.player != bonus_player) {
-              this.updateStatus(this.game.state.eagle_has_landed.toUpperCase() + " </span> <span>is deciding whether to discard a card");
+              this.updateStatus('div class="status-message" id="status-message">' + this.game.state.eagle_has_landed.toUpperCase() + " </span> <span>is deciding whether to discard a card</div>");
               return 0;
             }
 
@@ -2645,8 +2645,8 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
             //
             // DISCARD CARD
             //
-            let html  = '<div class="status_message">US may discard a card: (Eagle Has Landed)<ul>';
-            if (bonus_player == 1) { html  = '<div class="status_message">USSR may discard a card: (Bear Has Landed)<ul>'; }
+            let html  = '<div id="status-message" class="status-message">US may discard a card: (Eagle Has Landed)<ul>';
+            if (bonus_player == 1) { html  = '<div id="status-message" class="status-message">USSR may discard a card: (Bear Has Landed)<ul>'; }
                 html += '<li class="card" id="discard">discard card</li>';
                 html += '<li class="card" id="nope">do not discard</li>';
                 html += '</ul>';

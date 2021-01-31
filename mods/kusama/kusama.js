@@ -12,10 +12,6 @@ class Kusama extends SubstrateBasedCrypto {
     this.description = 'Kusama Polkadot testnet for Saito. Installing this module will make Kusama your default in-browser cryptocurrency.';
     this.categories = "Cryptocurrency";
   }
-
-  installModule(app) {
-    app.wallet.setPreferredCrypto("KSM");
-  }
 }
 
 module.exports = Kusama;

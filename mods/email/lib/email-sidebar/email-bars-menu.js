@@ -3,7 +3,7 @@ const EmailBarsMenuTemplate = require('./email-bars-menu.template');
 module.exports = EmailBarsMenu = {
 
   render(app, mod) {
-    
+
     document.querySelector('.email-bars-menu').innerHTML = EmailBarsMenuTemplate();
 
     let email_apps = document.querySelector(".email-apps");
@@ -16,12 +16,12 @@ module.exports = EmailBarsMenu = {
         email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" id="email-nav-${module.name}">${module.name}</li>`;
       }
     }
-    
+
     app.wallet.returnAvailableCryptos().forEach(async(responseInterface, i) => {
       if (responseInterface.name !== "Saito") {
         app.browser.addElementToDom(`<li id="email-nav-${responseInterface.name}" class="crypto-apps-item">
           ${responseInterface.ticker}
-        </li>`, "crypto-apps");  
+        </li>`, "crypto-apps");
       }
     });
 

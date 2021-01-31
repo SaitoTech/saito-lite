@@ -450,7 +450,7 @@
       text		:	"Discard 5 action cards from your hard" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	if (imperium_self.game.deck[1].hand.length >= 5) { return 1; }
+	if (imperium_self.returnPlayerActionCards(player).length >= 5) { return 1; }
 	return 0;
       },
       scoreObjective : function(imperium_self, player) { 

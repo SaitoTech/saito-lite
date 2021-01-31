@@ -21,6 +21,9 @@ addEventsToBoard() {
   let imperium_self = this;
   let pid = "";
 
+  let xpos = 0;
+  let ypos = 0;
+
 //
 // TODO remove jquery dependency
 //
@@ -33,7 +36,15 @@ try {
     pid = $(this).attr("id");
     imperium_self.hideSector(pid);
   });
-  $('.sector').on('click', function () {
+  $('.sector').on('mousedown', function (e) {
+    xpos = e.clientX;
+    ypos = e.clientY;
+    //pid = $(this).attr("id");
+    //imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnSectorInformationHTML(pid));
+  });
+  $('.sector').on('mouseup', function (e) {
+    if (Math.abs(xpos-e.clientX) > 4) { return; }
+    if (Math.abs(ypos-e.clientY) > 4) { return; }
     pid = $(this).attr("id");
     imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnSectorInformationHTML(pid));
   });
@@ -47,9 +58,7 @@ returnHowToPlayOverlay() {
 
     <div class="how_to_play_overlay" id="how_to_play_overlay">
 
-<h1>Basic Rules:</h1>
-
-You start with 3 command tokens, 3 fleet supply and 2 strategy tokens:
+Players start with 3 command tokens, 2 strategy tokens, and 3 fleet supply:
 
 <p></p>
 
@@ -57,7 +66,7 @@ You start with 3 command tokens, 3 fleet supply and 2 strategy tokens:
 
 <p></p>
 
-Every turn you can:
+Every turn players may:
 
   <ol class="demo_ordered_list">
     <li>Spend a command token to activate a sector</li>
@@ -65,11 +74,9 @@ Every turn you can:
         <li style="list-style:none">- to move ships into the sector</li>
         <li style="list-style:none">- to produce in the sector</li>
       </ul>
-    <li>Play your strategy card</li>
+    <li>Play a strategy card</li>
     <li>Pass</li>
   </ol>
-
-<h2 style="clear:both;margin-top:35px">Conquer Planets:</h2>
 
 <img src="/imperium/img/planets/BROUGHTON.png" class="demo_planet_card" />
 
@@ -99,7 +106,7 @@ use influence to vote on agendas and buy command tokens.
 
 <p></p>
 
-Your faction dashboard shows your total available <span class="resources_box">resources</span> and <span class="influence_box">influence</span> and trade goods. Click on it to open a faction sheet showing your special abilities and upgrades. Every faction is different.
+Your faction dashboard shows your total <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. Also shown are trade goods and commodities:
 
 <div style="padding-left:30px;padding-right:30px;">
 <div class="how_to_play_resources_entry">
@@ -114,6 +121,8 @@ trade goods can be spent instead of resources or influence.
 commodities are turned into trade goods by trading them with others.
 </div>
 </div>
+
+Click on any faction for a detailed sheet showing faction tech, planets and special abilities. Every faction is different. 
 
 	</div>
       </div>
@@ -882,7 +891,9 @@ returnObjectivesOverlay() {
       let obj = imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]];
       html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
                  <div class="objectives_card_name">${obj.name}</div>
-                 <div class="objectives_card_content">${obj.text}</div>
+                 <div class="objectives_card_content">${obj.text}
+		   <div class="objectives_secret_notice">secret</div>
+		 </div>
 	       </div>
       `;
     }

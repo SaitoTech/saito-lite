@@ -13,10 +13,10 @@ module.exports = EmailCryptoAppspace = {
     try {
       let subPage = app.browser.parseHash(window.location.hash).subpage;
       let modInterface = app.wallet.returnCryptoModuleByName(subPage);
-      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(modInterface, subPage);
+      let preferredCryptoMod = app.wallet.returnPreferredCrypto();
+      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(modInterface, preferredCryptoMod.name);
       loadBalance(modInterface);
       loadPubkey(modInterface);
-
       document.querySelector(`.crypto-container .sendbutton`).onclick = () => {
         let howMuch = document.querySelector(`.crypto-container .howmuch`).value;
         let toAddress = document.querySelector(`.crypto-container .pubkeyto`).value;
@@ -34,7 +34,7 @@ module.exports = EmailCryptoAppspace = {
         elem.onclick = (event) => {
           if (event.currentTarget.classList.contains("fa")) {
             event.currentTarget.classList.remove('fa');
-            app.wallet.setPreferredCrypto("SaitoCrypto");
+            app.wallet.setPreferredCrypto("Saito");
           } else {
             event.currentTarget.classList.add('fa');
             app.wallet.setPreferredCrypto(modInterface.name);

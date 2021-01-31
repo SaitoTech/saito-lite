@@ -71,6 +71,11 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       //
       if (mv[0] === "resolve") {
 
+console.log("executing resolve with existing: " + JSON.stringify(
+  this.game.confirms_players
+));
+
+
         let le = this.game.queue.length-2;
         let lmv = [];
         if (le >= 0) {
@@ -112,7 +117,24 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	if (mv[1] == lmv[0]) {
   	  if (mv[2] != undefined) {
 
-	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) { this.resetConfirmsNeeded(this.game.players_info.length); }
+	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) {
+	      if (mv[2] != -1) {
+		this.resetConfirmsNeeded(this.game.players_info.length); 
+	      } else {
+
+		//
+		// aggressively resolve, or we hit an error in some
+		// situations which cause looping of the strategy 
+		// card.
+		//
+	        this.resetConfirmsNeeded(0);
+console.log("MANUALLY CLEARING!");
+    	        this.game.queue.splice(this.game.queue.length-1);
+    	        this.game.queue.splice(this.game.queue.length-1);
+  	        return 1;
+
+	      }
+	    }
 
 	    //
 	    // set confirming player as inactive
@@ -124,6 +146,8 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	        this.game.confirms_players.push(mv[3]);
 	      }
 	    }
+
+console.log("confirming player set inactive: " + JSON.stringify(this.game.confirms_players));
 
 	    //
 	    //
@@ -157,7 +181,9 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
+console.log("resetting confs needed");
 	      this.resetConfirmsNeeded(0);
+	      // JAN 29
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
 
@@ -522,7 +548,9 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 
       if (mv[0] === "strategy") {
-  
+
+console.log("hitting strategy card execution point...");
+
 	this.updateLeaderboard();
 	this.updateTokenDisplay();
 
@@ -530,8 +558,11 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
+console.log("confirms players: " + JSON.stringify(this.game.confirms_players));
+
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
+console.log("we have played the strategy card secondary...");
 	    return 0;
 	  } else {
 	    //
@@ -555,6 +586,8 @@ console.log("interface is locked...");
 	  }
 	}
 
+console.log("hit this point...");
+
   	if (stage == 1) {
 	  this.updateLog(this.returnFactionNickname(strategy_card_player) + " plays " + this.strategy_cards[card].name);
 	  this.updateStatus(this.returnFaction(strategy_card_player) + " is playing " + this.strategy_cards[card].name);
@@ -565,6 +598,12 @@ console.log("interface is locked...");
 	  this.updateStatus("All factions have the opportunity to play " + this.strategy_cards[card].name);
 	  this.game.state.playing_strategy_card_secondary = 1;
   	  this.playStrategyCardSecondary(strategy_card_player, card);
+	  return 0;
+  	}
+  	if (stage == 3) {
+	  this.updateStatus("All factions have the opportunity to play " + this.strategy_cards[card].name);
+	  this.game.state.playing_strategy_card_secondary = 1;
+  	  this.playStrategyCardTertiary(strategy_card_player, card);
 	  return 0;
   	}
   
@@ -829,19 +868,19 @@ console.log("interface is locked...");
 
 	    if (this.agenda_cards[agenda].elect == "planet") { 
 	      is_planet = 1;
-              this.updateLog(this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
 	    }
 	    if (this.agenda_cards[agenda].elect == "player") { 
 	      is_player = 1;
-              this.updateLog(this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
 	    }
 	    if (this.agenda_cards[agenda].elect == "sector") { 
 	      is_sector = 1;
-              this.updateLog(this.game.sectors[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.sectors[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
 	    }
 
 	    if (is_sector == 0 && is_player == 0 && is_planet == 0) {
-              this.updateLog(this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
 	    }
           }
         }
@@ -898,6 +937,15 @@ console.log("interface is locked...");
 	//
 	this.game.queue.push("ACKNOWLEDGE\tThe Galactic Senate has settled on '"+this.returnNameFromIndex(winning_choice)+"'");
 
+
+	//
+	// REMOVE strategy card invocation
+	//
+	let lmv = this.game.queue[qe-1].split("\t");
+	if (lmv[0] === "strategy") {
+  	  this.game.queue.splice(qe-1, 1);
+	}
+
       }
 
 
@@ -945,6 +993,7 @@ console.log("interface is locked...");
 	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
 
 console.log("VOTING OPTIONS: ");
+console.log(votes + " --- " + vote);
 console.log(JSON.stringify(this.game.state.choices));
 
 	  if (is_planet == 1) {
@@ -1029,9 +1078,14 @@ console.log(JSON.stringify(this.game.state.choices));
         let who_is_next = 0;
 	let speaker_order = this.returnSpeakerOrder();
 
+console.log("SPEAKER ORDER: " + JSON.stringify(speaker_order));
+console.log("VOTED ON AGENDA: " + JSON.stringify(this.game.state.voted_on_agenda));
+
 	for (let i = 0; i < speaker_order.length; i++) {
 	  if (this.game.state.voted_on_agenda[speaker_order[i]-1][agenda_num] == 0) { 
-	    who_is_next = i+1;
+	    // FEB 1
+	    //who_is_next = i+1;
+	    who_is_next = speaker_order[i];
 	    i = this.game.players_info.length; 
 	  }
         }
@@ -1039,6 +1093,7 @@ console.log(JSON.stringify(this.game.state.choices));
 
         this.setPlayerActiveOnly(who_is_next);
 
+console.log("WHO IS NEXT? " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
@@ -1221,11 +1276,17 @@ console.log(JSON.stringify(this.game.state.choices));
   	//
   	// SCORING
   	//
-        if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
-          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+        if (this.game.state.round >= 1 && this.game.state.round_scoring == 0) {
+          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t3\t"+1); // 3 ==> end-of-round tertiary
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
+
+	  if (this.game.planets['new-byzantium'].owner != -1) {
+            this.game.queue.push("strategy\t"+"politics"+"\t"+this.game.state.speaker+"\t3\t"+1); // 3 ==> end-of-round tertiary
+            this.game.queue.push("ACKNOWLEDGE\t"+"The Galactic Senate has been re-established on New Byzantium, voting commences on the recent round of proposals");
+	  }
+
   	  this.game.state.round_scoring = 0;
 	  return 1;
   	} else {
@@ -1416,16 +1477,16 @@ console.log(JSON.stringify(this.game.state.choices));
 	    if (this.game.state.round == 1) {
 	      this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
               document.getElementById("close-units-btn").onclick = () => {
-                this.overlay.hideOverlay(this.app, this);
+                this.overlay.hideOverlay();
               }
             } else {
 	      if (this.game.planets['new-byzantium'].owner != -1 ) {
 		this.overlay.showOverlay(this.app, this, this.returnNewAgendasOverlay());
               	document.getElementById("close-agendas-btn").onclick = () => {
-                  this.overlay.hideOverlay(this.app, this);
+                  this.overlay.hideOverlay();
               	}
               } else {
-                this.overlay.hideOverlay(this.app, this);
+                this.overlay.hideOverlay();
               }
 	    }
           }
@@ -2090,7 +2151,8 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
 	if (faction_that_offered == this.game.player) {
-	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been spurned by "+this.returnFaction(refusing_faction));
+	  this.updateLog(this.returnFactionNickname(refusing_faction) + " spurns trade offer");
+	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been spurned by "+this.returnFactionNickname(refusing_faction));
 	  return 1;
 	}
 
@@ -2239,7 +2301,7 @@ console.log(JSON.stringify(this.game.state.choices));
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
-	if (type == "secret_objectives") {
+	if (type === "secret_objectives" || type === "secret_objective") {
           if (this.game.player == player && this.browser_active == 1) {
 	    this.overlay.showOverlay(this.app, this, this.returnNewSecretObjectiveOverlay(this.game.deck[5].hand.slice(this.game.deck[5].hand.length-amount, this.game.deck[5].hand.length)));
 	  }
@@ -2431,6 +2493,15 @@ console.log("display faction dashboard over!");
         let shipjson     = mv[5];
         let hazard 	 = mv[6];
 
+	//
+	// "already_moved"
+	//
+	let shipobj = JSON.parse(shipjson);
+	if (shipobj.already_moved) {
+	  delete shipobj.already_moved;
+	  shipjson = JSON.stringify(shipobj);
+	}
+
         //
 	//
 	// 
@@ -2472,9 +2543,7 @@ console.log("display faction dashboard over!");
 	  // report fleet movement
 	  //
 	  let next_move = this.game.queue[qe-1].split("\t")[0];
-console.log("NEXT MOVE: " + next_move);
 	  if (next_move != "move") { this.updateLog(this.returnFactionNickname(player) + " moves " + this.returnPlayerFleetInSector(player, sector_to) + " into " + sys2.s.name); }
-
 
   	}
   
@@ -3004,6 +3073,7 @@ console.log("NEXT MOVE: " + next_move);
 	      let units_destroyed = 0;
 
 	      for (let ii = 0; ii < planet.units[i].length && units_destroyed < destroy; ii++) {
+
 		let unit = planet.units[i][ii];
 
 		if (unit.type == "infantry") {
@@ -3019,10 +3089,12 @@ console.log("NEXT MOVE: " + next_move);
 	          //
 	          // record units destroyed this round
 	          //
-	          if (sys.s.units[i][ii].destroyed == 1) {
+	          try {
+	          if (planet.units[i][ii].destroyed == 1) {
 	  	    this.game.players_info[i].my_units_destroyed_this_combat_round.push(planet.units[i][ii].type);
 		    this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(planet.units[i][ii].type);
 	          }
+	 	  } catch (err) {}
 
         	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
@@ -4794,6 +4866,7 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 
         if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
           if (this.game.player == player) {
+            this.addMove("ground_combat_end\t"+player+"\t"+sector+"\t"+planet_idx);
             this.addMove("ground_combat_post\t"+player+"\t"+sector+"\t"+planet_idx);
             this.addMove("ground_combat\t"+player+"\t"+sector+"\t"+planet_idx);
             this.endTurn();
@@ -4844,9 +4917,6 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
         let planet_idx 	 = mv[3];
         let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
-
-
-console.log("Z Index: " + JSON.stringify(z[z_index]));
 
 	return z[z_index].groundCombatEvent(this, player, sector, planet_idx);
 
@@ -4900,13 +4970,9 @@ console.log("Z Index: " + JSON.stringify(z[z_index]));
 	this.game.state.ground_combat_defender = defender;
 
 	//
-	// otherwise, have a round of ground combat
+	// have a round of ground combat
 	//
-        //if (this.game.state.ground_combat_round == 1) {
-        //  this.updateLog(this.returnFactionNickname(player) + " invades " + sys.p[planet_idx].name);
-	//}
-
-        this.updateLog("GROUND COMBAT: round " + this.game.state.ground_combat_round);
+	this.updateLog("Round "+this.game.state.ground_combat_round+": " + this.returnPlayerInfantryOnPlanet(player, sys.p[planet_idx]) + " " + this.returnFactionNickname(player) + " infantry vs. " + this.returnPlayerInfantryOnPlanet(defender, sys.p[planet_idx]) + " " + this.returnFactionNickname(defender) + " infantry");
 
         this.game.queue.push("ground_combat_player_menu\t"+defender+"\t"+player+"\t"+sector+"\t"+planet_idx);
         this.game.queue.push("ground_combat_player_menu\t"+player+"\t"+defender+"\t"+sector+"\t"+planet_idx);

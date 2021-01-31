@@ -1598,7 +1598,7 @@ playerPlayGroundCombat(attacker, defender, sector, planet_idx) {
   let defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
 
   if (this.game.player == attacker) {
-    html = '<div class="sf-readable">You are invading ' + sys.p[planet_idx].name + ' with ' + attacker_forces + ' infantry. ' + this.returnFaction(defender) + ' has ' + defender_forces + ' infanty remaining. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </div><ul>';
+    html = '<div class="sf-readable">'+this.returnFactionNickname(attacker)+' are invading ' + sys.p[planet_idx].name + ' with ' + attacker_forces + ' infantry. ' + this.returnFactionNickname(defender) + ' is defending with ' + defender_forces + ' infantry. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </div><ul>';
   } else {
     html = '<div class="sf-readable">' + this.returnFaction(attacker) + ' has invaded ' + sys.p[planet_idx].name + ' with ' + attacker_forces + ' infantry. You have ' + defender_forces + ' infantry remaining. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </div><ul>';
   }
@@ -1997,7 +1997,7 @@ playerPlayPostAgendaStage(player, agenda, array_of_winning_options) {
     html = '<div class="sf-readable">No-one in the Senate bothered to show-up and vote, leaving the matter to be decided by the Speaker:</div><ul>';
   }
   if (array_of_winning_options.length > 1) {
-    html = '<div class="sf-readable">The voting has concluded in deadlock. As you leave the council, you see the Speaker smile and crumple a small note into his pocket:</div><ul>';
+    html = '<div class="sf-readable">The voting has concluded in deadlock. The Speaker must resolve the agenda:</div><ul>';
   }
 
   if (1 == 1) {
@@ -2084,6 +2084,7 @@ playerContinueTurn(player, sector) {
     html += '<li class="option" id="produce">produce units</li>';
     options_available++;
   }
+console.log("is is possible to invade? " + this.canPlayerInvadePlanet(player, sector) + " ---- " + this.game.tracker.invasion);
   if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
     if (sector == "new-byzantium" || sector == "4_4") {
       if ((imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player) + imperium_self.game.players_info[imperium_self.game.player - 1].goods) >= 6) {
@@ -2402,6 +2403,61 @@ playerBuyTokens(stage = 0, resolve = 1) {
       imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gets action cards");
       imperium_self.addMove("gain\t" + imperium_self.game.player + "\taction_cards\t2");
       imperium_self.addMove("DEAL\t2\t" + imperium_self.game.player + "\t2");
+      imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
+      imperium_self.endTurn();
+      imperium_self.updateStatus("submitted...");
+      return;
+
+    } else {
+
+      imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.endTurn();
+      imperium_self.updateStatus("submitted...");
+      return;
+
+    }
+  });
+
+ }
+
+
+
+
+ playerBuySecretObjective(stage = 0, resolve = 1) {
+
+  let imperium_self = this;
+
+  let html = '<div class="sf-readable">Do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
+  if (stage == 2) {
+    html = '<div class="sf-readable">The Imperial Strategy card has been played: do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
+    if (imperium_self.game.state.round == 1) {
+      html = `${imperium_self.returnFaction(imperium_self.game.player)} has played the Imperial strategy card. This lets you to spend 1 strategy token to purchase an additional secret bjective. You have ${imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens} strategy tokens. Purchase secret objective: </p><ul>`;
+    }
+  }
+  html += '<li class="buildchoice textchoice" id="yes">Purchase Secret Objective</li>';
+  html += '<li class="buildchoice textchoice" id="no">Do Not Purchase</li>';
+  html += '</ul>';
+
+  this.updateStatus(html);
+
+  imperium_self.lockInterface();
+
+  $('.buildchoice').off();
+  $('.buildchoice').on('click', function () {
+
+    if (!imperium_self.mayUnlockInterface()) {
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      return;
+    }
+    imperium_self.unlockInterface();
+
+    let id = $(this).attr("id");
+
+    if (id == "yes") {
+
+      imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addMove("gain\t" + imperium_self.game.player + "\tsecret_objective\t1");
+      imperium_self.addMove("DEAL\t6\t" + imperium_self.game.player + "\t1");
       imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
       imperium_self.endTurn();
       imperium_self.updateStatus("submitted...");
@@ -3086,7 +3142,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
   }
 
   let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. ';
-  html += 'They offer ' + offer_log;
+  html += offer_log;
   html += ': </div><ul>';
   html += `  <li class="option" id="yes">accept trade</li>`;
   html += `  <li class="option" id="no">refuse trade</li>`;
@@ -4467,8 +4523,6 @@ playerSelectInfantryToLand(sector) {
 
       imperium_self.updateStatus(html);
 
-alert("infantry avail: " + infantry_available_for_reassignment);
-
       $('.option').off();
       $('.option').on('click', function () {
 
@@ -4565,12 +4619,13 @@ playerInvadePlanet(player, sector) {
 
     if (planet_idx === "confirm") {
 
-/**
+/***
       if (landing_forces.length == 0) {
-	let sanity_check = confirm("Invade without any landing forces? Are you sure -- the invasion will fail.");
+	let sanity_check = confirm("Invade without landing forces? Are you sure -- the invasion will fail.");
 	if (!sanity_check) { return; }
       }
-**/
+***/
+
       for (let i = 0; i < planets_invaded.length; i++) {
 
         let owner = sys.p[planets_invaded[i]].owner;

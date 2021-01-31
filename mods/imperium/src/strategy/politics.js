@@ -7,31 +7,6 @@
       text			:	"Pick a new Speaker. Gain 2 action cards. Vote on two agendas if New Byzantium is controlled.<hr />Other players may spend a strategy token to purchase two action cards.",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player == player) {
-
-          //
-          // refresh votes --> total available
-          //
-          imperium_self.game.state.votes_available = [];
-          imperium_self.game.state.votes_cast = [];
-          imperium_self.game.state.how_voted_on_agenda = [];
-          imperium_self.game.state.voted_on_agenda = [];
-          imperium_self.game.state.voting_on_agenda = 0;
-
-          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-            imperium_self.game.state.votes_available.push(imperium_self.returnAvailableVotes(i+1));
-            imperium_self.game.state.votes_cast.push(0);
-            imperium_self.game.state.how_voted_on_agenda[i] = "abstain";
-            imperium_self.game.state.voted_on_agenda[i] = [];
-            //
-            // add extra 0s to ensure flexibility if extra agendas added
-            //
-            for (let z = 0; z < imperium_self.game.state.agendas_per_round+2; z++) {
-              imperium_self.game.state.voted_on_agenda[i].push(0);
-            }
-          }
-        }
-
         //
         // card player goes for primary
         //
@@ -71,14 +46,61 @@
 	    //
 	    // if New Byzantium is unoccupied, we skip the voting stage
 	    //
-	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-	      imperium_self.playerAcknowledgeNotice("You will receive two action cards. Once New Byzantium is occupied the Politics card will trigger agenda voting.", function() {
-                imperium_self.addMove("change_speaker\t"+chancellor);
-		imperium_self.endTurn();
-	      });
-	      return 0;
-	    }
+	    imperium_self.playerAcknowledgeNotice("You will receive two action cards once other players have decided whether to purchase action cards.", function() {
+              imperium_self.addMove("change_speaker\t"+chancellor);
+	      imperium_self.endTurn();
+	    });
+	    return 0;
 
+          });
+        }
+      },
+
+      strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
+
+        if (imperium_self.game.player == player) {
+          if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
+            imperium_self.playerBuyActionCards(2);
+          } else {
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.endTurn();
+          }
+        }
+      },
+
+      strategyTertiaryEvent 	:	function(imperium_self, player, strategy_card_player) {
+
+        let selected_agendas = [];
+        let laws = imperium_self.returnAgendaCards();
+        let laws_selected = 0;
+
+        if (imperium_self.game.player == player) {
+
+          //
+          // refresh votes --> total available
+          //
+          imperium_self.game.state.votes_available = [];
+          imperium_self.game.state.votes_cast = [];
+          imperium_self.game.state.how_voted_on_agenda = [];
+          imperium_self.game.state.voted_on_agenda = [];
+          imperium_self.game.state.voting_on_agenda = 0;
+
+          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+            imperium_self.game.state.votes_available.push(imperium_self.returnAvailableVotes(i+1));
+            imperium_self.game.state.votes_cast.push(0);
+            imperium_self.game.state.how_voted_on_agenda[i] = "abstain";
+            imperium_self.game.state.voted_on_agenda[i] = [];
+            //
+            // add extra 0s to ensure flexibility if extra agendas added
+            //
+            for (let z = 0; z < imperium_self.game.state.agendas_per_round+2; z++) {
+              imperium_self.game.state.voted_on_agenda[i].push(0);
+            }
+          }
+        }
+
+
+        if (imperium_self.game.player === strategy_card_player && player == strategy_card_player) {
 
             let html = '';
             if (imperium_self.game.state.agendas_per_round == 1) {
@@ -119,23 +141,9 @@
                   imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]);
                   imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
                 }
-                imperium_self.addMove("change_speaker\t"+chancellor);
                 imperium_self.endTurn();
               }
             });
-          });
-        }
-      },
-
-      strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
-
-        if (imperium_self.game.player == player) {
-          if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
-            imperium_self.playerBuyActionCards(2);
-          } else {
-            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-            imperium_self.endTurn();
-          }
         }
       },
 

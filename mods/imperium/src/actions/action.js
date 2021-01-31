@@ -767,7 +767,7 @@ ACTION CARD - types
               },
 	      function(player) {
                 imperium_self.addMove("expend\t"+player+"\tcommand\t"+"1");
-		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " loses one comand token");
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFactionNickname(player) + " loses one comand token");
 		imperium_self.endTurn();
 		return 0;
 	      },

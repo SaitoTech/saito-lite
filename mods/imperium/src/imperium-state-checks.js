@@ -1236,6 +1236,9 @@
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].locked == 0 && sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
     }
+
+console.log("prfp: " + planets_ripe_for_plucking + " --- p total? " + sys.p.length);
+
     if (planets_ripe_for_plucking == 0) { return 0; }
 
     //
@@ -1243,8 +1246,10 @@
     //
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
+console.log("examining: " + sys.s.units[player-1][i].type);
       for (let k = 0; k < unit.storage.length; k++) {
-        if (unit.storage[k].type == "infantry") {
+console.log("storage: " + unit.storage[k].type);  
+      if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
       }

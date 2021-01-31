@@ -157,13 +157,16 @@
 
 
 .new_secret_objective_overlay {
+  background-image: url(/imperium/img/starscape_background1.jpg);
   width: 50vw;
   height: auto;
   text-align:center;
   transform: scale(1.4);
   min-height: 30vh;
+  max-width: 50vw;
 }
 .new_secret_objective_overlay_title {
+  margin-top:15px;
   background: #3335;
   display: inline-block;
   color: white;
@@ -248,6 +251,7 @@
   width:80vw;
   height: auto;
   overflow-y: scroll;
+  max-height: 90vh;
 }
 .objectives_card_name {
   min-height: 60px;
@@ -409,6 +413,7 @@
   line-height: 2em;
   text-align: center;
   padding: 20px;
+  max-width: 800px;
 }
 .new_action_cards_title {
   font-size: 3em;
@@ -471,6 +476,9 @@
   z-index: 101;
 }
 
+.log {
+  cursor: pointer;
+}
 .combat_log_th {
   padding-right: 5px;
 }

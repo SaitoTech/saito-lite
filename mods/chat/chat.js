@@ -254,14 +254,22 @@ class Chat extends ModTemplate {
     let txmsg = tx.returnMessage();
     if (conf == 0) {
       if (txmsg.request == "chat message") {
+
 	//
 	// we manually update the TS ourselves to prevent re-orgs, this means sigs
 	// no longer validate on messages, but we should be able to recreate if needed
 	// by just testing timestamps around this time until we get a match. with that
 	// said this is TODO -- these changes for early usability.
 	//
-	tx.transaction.ts = new Date().getTime(); // <------- update TS before save
-	app.storage.saveTransactionByKey(txmsg.group_id, tx);
+	// update TS before save -- TODO -- find a better fix that doesn't break 
+	// our ability to validate the chat messages.
+	//
+        let modified_tx_obj = JSON.parse(JSON.stringify(tx.transaction));
+	let modified_tx = new saito.transaction(modified_tx_obj);
+	modified_tx.transaction.ts = new Date().getTime();
+
+	app.storage.saveTransactionByKey(txmsg.group_id, modified_tx);
+
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
         this.receiveMessage(app, tx);
       }
@@ -284,9 +292,20 @@ class Chat extends ModTemplate {
       switch (req.request) {
 
         case "chat message":
-	  tx.transaction.ts = new Date().getTime(); // <------- update TS before save
+
+	  //
+	  // update TS before save -- TODO -- find a better fix that doesn't break 
+	  // our ability to validate the chat messages.
+	  //
+          let modified_tx_obj = JSON.parse(JSON.stringify(tx.transaction));
+	  let modified_tx = new saito.transaction(modified_tx_obj);
+	  modified_tx.transaction.ts = new Date().getTime();
+
           this.receiveMessage(app, new saito.transaction(tx.transaction));
-	  //this.app.storage.saveTransaction(routed_tx);
+
+	  // JAN 29, prev commented out all but receiveMessage above
+	  this.app.storage.saveTransaction(modified_tx);
+
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
 
@@ -297,11 +316,18 @@ class Chat extends ModTemplate {
 	   let routed_tx_msg = routed_tx.returnMessage();
      
 	   //
+	   // update TS before save -- TODO -- find a better fix that doesn't break 
+	   // our ability to validate the chat messages.
+	   //
+           let modified_routed_tx_obj = JSON.parse(JSON.stringify(routed_tx.transaction));
+	   let modified_routed_tx = new saito.transaction(modified_routed_tx_obj);
+	   modified_routed_tx.transaction.ts = new Date().getTime();
+
+	   //
 	   // serversaves
 	   //
            let archive = this.app.modules.returnModule("Archive");
-           routed_tx.transaction.ts = new Date().getTime();
-           if (archive) { archive.saveTransactionByKey(routed_tx_msg.group_id, routed_tx); }     
+           if (archive) { archive.saveTransactionByKey(routed_tx_msg.group_id, modified_routed_tx); }     
 
            this.app.network.peers.forEach(p => {
              if (p.peer.publickey !== peer.peer.publickey) {

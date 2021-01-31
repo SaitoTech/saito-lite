@@ -38,4 +38,14 @@
     return 0;
   }
 
+  playStrategyCardTertiary(player, card) {
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (this.strategy_cards[card]) {
+	this.strategy_cards[card].strategyTertiaryEvent(this, (i+1), player);
+      }
+    }
+    return 0;
+  }
+
+
 
