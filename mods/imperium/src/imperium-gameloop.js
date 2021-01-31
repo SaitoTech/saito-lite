@@ -868,19 +868,19 @@ console.log("hit this point...");
 
 	    if (this.agenda_cards[agenda].elect == "planet") { 
 	      is_planet = 1;
-              this.updateLog(this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
 	    }
 	    if (this.agenda_cards[agenda].elect == "player") { 
 	      is_player = 1;
-              this.updateLog(this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
 	    }
 	    if (this.agenda_cards[agenda].elect == "sector") { 
 	      is_sector = 1;
-              this.updateLog(this.game.sectors[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.sectors[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
 	    }
 
 	    if (is_sector == 0 && is_player == 0 && is_planet == 0) {
-              this.updateLog(this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
 	    }
           }
         }
@@ -993,6 +993,7 @@ console.log("hit this point...");
 	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
 
 console.log("VOTING OPTIONS: ");
+console.log(votes + " --- " + vote);
 console.log(JSON.stringify(this.game.state.choices));
 
 	  if (is_planet == 1) {
@@ -1077,9 +1078,14 @@ console.log(JSON.stringify(this.game.state.choices));
         let who_is_next = 0;
 	let speaker_order = this.returnSpeakerOrder();
 
+console.log("SPEAKER ORDER: " + JSON.stringify(speaker_order));
+console.log("VOTED ON AGENDA: " + JSON.stringify(this.game.state.voted_on_agenda));
+
 	for (let i = 0; i < speaker_order.length; i++) {
 	  if (this.game.state.voted_on_agenda[speaker_order[i]-1][agenda_num] == 0) { 
-	    who_is_next = i+1;
+	    // FEB 1
+	    //who_is_next = i+1;
+	    who_is_next = speaker_order[i];
 	    i = this.game.players_info.length; 
 	  }
         }
@@ -1087,6 +1093,7 @@ console.log(JSON.stringify(this.game.state.choices));
 
         this.setPlayerActiveOnly(who_is_next);
 
+console.log("WHO IS NEXT? " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
@@ -2144,7 +2151,8 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
 	if (faction_that_offered == this.game.player) {
-	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been spurned by "+this.returnFaction(refusing_faction));
+	  this.updateLog(this.returnFactionNickname(refusing_faction) + " spurns trade offer");
+	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been spurned by "+this.returnFactionNickname(refusing_faction));
 	  return 1;
 	}
 
@@ -3065,6 +3073,7 @@ console.log("display faction dashboard over!");
 	      let units_destroyed = 0;
 
 	      for (let ii = 0; ii < planet.units[i].length && units_destroyed < destroy; ii++) {
+
 		let unit = planet.units[i][ii];
 
 		if (unit.type == "infantry") {
@@ -3080,10 +3089,12 @@ console.log("display faction dashboard over!");
 	          //
 	          // record units destroyed this round
 	          //
-	          if (sys.s.units[i][ii].destroyed == 1) {
+	          try {
+	          if (planet.units[i][ii].destroyed == 1) {
 	  	    this.game.players_info[i].my_units_destroyed_this_combat_round.push(planet.units[i][ii].type);
 		    this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(planet.units[i][ii].type);
 	          }
+	 	  } catch (err) {}
 
         	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 

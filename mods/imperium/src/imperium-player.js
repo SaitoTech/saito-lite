@@ -2429,7 +2429,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
 
   let html = '<div class="sf-readable">Do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
   if (stage == 2) {
-    html = '<div class="sf-readable">Politics has been played: do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
+    html = '<div class="sf-readable">The Imperial Strategy card has been played: do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
     if (imperium_self.game.state.round == 1) {
       html = `${imperium_self.returnFaction(imperium_self.game.player)} has played the Imperial strategy card. This lets you to spend 1 strategy token to purchase an additional secret bjective. You have ${imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens} strategy tokens. Purchase secret objective: </p><ul>`;
     }
@@ -3142,7 +3142,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
   }
 
   let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. ';
-  html += 'They offer ' + offer_log;
+  html += offer_log;
   html += ': </div><ul>';
   html += `  <li class="option" id="yes">accept trade</li>`;
   html += `  <li class="option" id="no">refuse trade</li>`;

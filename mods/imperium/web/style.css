@@ -251,6 +251,7 @@
   width:80vw;
   height: auto;
   overflow-y: scroll;
+  max-height: 90vh;
 }
 .objectives_card_name {
   min-height: 60px;
@@ -412,6 +413,7 @@
   line-height: 2em;
   text-align: center;
   padding: 20px;
+  max-width: 800px;
 }
 .new_action_cards_title {
   font-size: 3em;
@@ -474,6 +476,9 @@
   z-index: 101;
 }
 
+.log {
+  cursor: pointer;
+}
 .combat_log_th {
   padding-right: 5px;
 }

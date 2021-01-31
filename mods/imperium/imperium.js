@@ -849,7 +849,7 @@ console.log("returning upgraded carrier...");
           imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_exhausted"+"\t"+"int"+"\t"+"1");
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_active"+"\t"+"int"+"\t"+"1");
-          imperium_self.addMove("NOTIFY\t"+player+" activates graviton_laser_system");
+          imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(player)+" activates Graviton Laser System");
 	}
 	return 0;
       }
@@ -2415,6 +2415,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  if (sys.p[planet_idx].units[player-1].length > 0) {
             imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
+  	      imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
   	      imperium_self.endTurn();
             });
 	  } else {
@@ -2579,6 +2580,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 	    }
 	  }
 	}
+	return unit;
       },
     });
 
@@ -2601,14 +2603,10 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
     return;
   }
 
-console.log("planet is: " + sys.p[planet_idx].name);
-console.log("planet opponent units: " + sys.p[planet_idx].units[opponent-1].length);
-
   if (sys.p[planet_idx].units[opponent-1].length <= 0) {
     mycallback(imperium_self);
     return;
   }
-
 
   let html = "<div class='sf-readable'>Do you wish to spend 2 influence to convert 1 enemy infantry to your side?</div><ul>";
       html += '<li class="textchoice" id="yes">yes</li>';
@@ -4131,7 +4129,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       text		:	"Discard 5 action cards from your hard" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	if (imperium_self.game.deck[1].hand.length >= 5) { return 1; }
+	if (imperium_self.returnPlayerActionCards(player).length >= 5) { return 1; }
 	return 0;
       },
       scoreObjective : function(imperium_self, player) { 
@@ -7151,7 +7149,7 @@ ACTION CARD - types
               },
 	      function(player) {
                 imperium_self.addMove("expend\t"+player+"\tcommand\t"+"1");
-		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " loses one comand token");
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFactionNickname(player) + " loses one comand token");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -7763,9 +7761,9 @@ ACTION CARD - types
 	  if (imperium_self.game.player == action_card_player) {
 
 	    let html  = '<div class="sf-readable">Spend any number of trade goods to purchase additional votes: </div><ul>';
-	    for (let i = 0; i < imperium_self.game.players_info[action_card_player-1].goods+1; i++) {
-	      if (i == 1) { html   += '<li class="textchoice">'+i+' vote</li>'; }
-	      else { html   += '<li class="textchoice">'+i+' votes</li>'; }
+	    for (let i = 1; i <= imperium_self.game.players_info[action_card_player-1].goods+1; i++) {
+	      if (i == 1) { html   += '<li class="textchoice" id="1">'+i+' vote</li>'; }
+	      else { html   += '<li class="textchoice" id="'+i+'">'+i+' votes</li>'; }
 	    }
 	    html += '</ul>';
 
@@ -9294,6 +9292,7 @@ console.log("error initing chat: " + err);
           $('#1_3').attr('id', '');
           $('#1_4').attr('id', '');
           $('#2_4').attr('id', '');
+          $('#2_4').attr('id', '');
           $('#2_5').attr('id', '');
           $('#3_1').attr('id', '');
           $('#4_1').attr('id', '');
@@ -9333,20 +9332,26 @@ console.log("error initing chat: " + err);
         try {
           $('#1_3').attr('id', '');
           $('#1_4').attr('id', '');
+          $('#2_4').attr('id', '');
           $('#2_5').attr('id', '');
           $('#3_1').attr('id', '');
           $('#4_1').attr('id', '');
+          $('#4_2').attr('id', '');
           $('#5_1').attr('id', '');
+          $('#6_4').attr('id', '');
           $('#6_5').attr('id', '');
           $('#7_3').attr('id', '');
           $('#7_4').attr('id', '');
         } catch (err) {}
         delete this.game.board["1_3"];
         delete this.game.board["1_4"];
+        delete this.game.board["2_4"];
         delete this.game.board["2_5"];
         delete this.game.board["3_1"];
         delete this.game.board["4_1"];
+        delete this.game.board["4_2"];
         delete this.game.board["5_1"];
+        delete this.game.board["6_4"];
         delete this.game.board["6_5"];
         delete this.game.board["7_3"];
         delete this.game.board["7_4"];
@@ -11765,19 +11770,19 @@ console.log("hit this point...");
 
 	    if (this.agenda_cards[agenda].elect == "planet") { 
 	      is_planet = 1;
-              this.updateLog(this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
 	    }
 	    if (this.agenda_cards[agenda].elect == "player") { 
 	      is_player = 1;
-              this.updateLog(this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
 	    }
 	    if (this.agenda_cards[agenda].elect == "sector") { 
 	      is_sector = 1;
-              this.updateLog(this.game.sectors[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.sectors[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
 	    }
 
 	    if (is_sector == 0 && is_player == 0 && is_planet == 0) {
-              this.updateLog(this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+              this.updateLog("Agenda Outcome: " + this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
 	    }
           }
         }
@@ -11890,6 +11895,7 @@ console.log("hit this point...");
 	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
 
 console.log("VOTING OPTIONS: ");
+console.log(votes + " --- " + vote);
 console.log(JSON.stringify(this.game.state.choices));
 
 	  if (is_planet == 1) {
@@ -11974,9 +11980,14 @@ console.log(JSON.stringify(this.game.state.choices));
         let who_is_next = 0;
 	let speaker_order = this.returnSpeakerOrder();
 
+console.log("SPEAKER ORDER: " + JSON.stringify(speaker_order));
+console.log("VOTED ON AGENDA: " + JSON.stringify(this.game.state.voted_on_agenda));
+
 	for (let i = 0; i < speaker_order.length; i++) {
 	  if (this.game.state.voted_on_agenda[speaker_order[i]-1][agenda_num] == 0) { 
-	    who_is_next = i+1;
+	    // FEB 1
+	    //who_is_next = i+1;
+	    who_is_next = speaker_order[i];
 	    i = this.game.players_info.length; 
 	  }
         }
@@ -11984,6 +11995,7 @@ console.log(JSON.stringify(this.game.state.choices));
 
         this.setPlayerActiveOnly(who_is_next);
 
+console.log("WHO IS NEXT? " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
@@ -13041,7 +13053,8 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
 	if (faction_that_offered == this.game.player) {
-	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been spurned by "+this.returnFaction(refusing_faction));
+	  this.updateLog(this.returnFactionNickname(refusing_faction) + " spurns trade offer");
+	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been spurned by "+this.returnFactionNickname(refusing_faction));
 	  return 1;
 	}
 
@@ -13962,6 +13975,7 @@ console.log("display faction dashboard over!");
 	      let units_destroyed = 0;
 
 	      for (let ii = 0; ii < planet.units[i].length && units_destroyed < destroy; ii++) {
+
 		let unit = planet.units[i][ii];
 
 		if (unit.type == "infantry") {
@@ -13977,10 +13991,12 @@ console.log("display faction dashboard over!");
 	          //
 	          // record units destroyed this round
 	          //
-	          if (sys.s.units[i][ii].destroyed == 1) {
+	          try {
+	          if (planet.units[i][ii].destroyed == 1) {
 	  	    this.game.players_info[i].my_units_destroyed_this_combat_round.push(planet.units[i][ii].type);
 		    this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(planet.units[i][ii].type);
 	          }
+	 	  } catch (err) {}
 
         	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
@@ -18603,7 +18619,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
 
   let html = '<div class="sf-readable">Do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
   if (stage == 2) {
-    html = '<div class="sf-readable">Politics has been played: do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
+    html = '<div class="sf-readable">The Imperial Strategy card has been played: do you wish to spend 1 strategy token to purchase a Secret Objective?</div><ul>';
     if (imperium_self.game.state.round == 1) {
       html = `${imperium_self.returnFaction(imperium_self.game.player)} has played the Imperial strategy card. This lets you to spend 1 strategy token to purchase an additional secret bjective. You have ${imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens} strategy tokens. Purchase secret objective: </p><ul>`;
     }
@@ -19316,7 +19332,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
   }
 
   let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. ';
-  html += 'They offer ' + offer_log;
+  html += offer_log;
   html += ': </div><ul>';
   html += `  <li class="option" id="yes">accept trade</li>`;
   html += `  <li class="option" id="no">refuse trade</li>`;
@@ -21864,7 +21880,9 @@ playerDiscardActionCards(num) {
 
       }
     }
-  
+ 
+    planets['new-byzantium'].owner = 1;
+
     return planets;
   }
   
@@ -25775,6 +25793,9 @@ addEventsToBoard() {
   let imperium_self = this;
   let pid = "";
 
+  let xpos = 0;
+  let ypos = 0;
+
 //
 // TODO remove jquery dependency
 //
@@ -25787,7 +25808,15 @@ try {
     pid = $(this).attr("id");
     imperium_self.hideSector(pid);
   });
-  $('.sector').on('click', function () {
+  $('.sector').on('mousedown', function (e) {
+    xpos = e.clientX;
+    ypos = e.clientY;
+    //pid = $(this).attr("id");
+    //imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnSectorInformationHTML(pid));
+  });
+  $('.sector').on('mouseup', function (e) {
+    if (Math.abs(xpos-e.clientX) > 4) { return; }
+    if (Math.abs(ypos-e.clientY) > 4) { return; }
     pid = $(this).attr("id");
     imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnSectorInformationHTML(pid));
   });
@@ -25801,9 +25830,7 @@ returnHowToPlayOverlay() {
 
     <div class="how_to_play_overlay" id="how_to_play_overlay">
 
-<h1>Basic Rules:</h1>
-
-You start with 3 command tokens, 3 fleet supply and 2 strategy tokens:
+Players start with 3 command tokens, 2 strategy tokens, and 3 fleet supply:
 
 <p></p>
 
@@ -25811,7 +25838,7 @@ You start with 3 command tokens, 3 fleet supply and 2 strategy tokens:
 
 <p></p>
 
-Every turn you can:
+Every turn players may:
 
   <ol class="demo_ordered_list">
     <li>Spend a command token to activate a sector</li>
@@ -25819,11 +25846,9 @@ Every turn you can:
         <li style="list-style:none">- to move ships into the sector</li>
         <li style="list-style:none">- to produce in the sector</li>
       </ul>
-    <li>Play your strategy card</li>
+    <li>Play a strategy card</li>
     <li>Pass</li>
   </ol>
-
-<h2 style="clear:both;margin-top:35px">Conquer Planets:</h2>
 
 <img src="/imperium/img/planets/BROUGHTON.png" class="demo_planet_card" />
 
@@ -25853,7 +25878,7 @@ use influence to vote on agendas and buy command tokens.
 
 <p></p>
 
-Your faction dashboard shows your total available <span class="resources_box">resources</span> and <span class="influence_box">influence</span> and trade goods. Click on it to open a faction sheet showing your special abilities and upgrades. Every faction is different.
+Your faction dashboard shows your total <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. Also shown are trade goods and commodities:
 
 <div style="padding-left:30px;padding-right:30px;">
 <div class="how_to_play_resources_entry">
@@ -25868,6 +25893,8 @@ trade goods can be spent instead of resources or influence.
 commodities are turned into trade goods by trading them with others.
 </div>
 </div>
+
+Click on any faction for a detailed sheet showing faction tech, planets and special abilities. Every faction is different. 
 
 	</div>
       </div>
@@ -26636,7 +26663,9 @@ returnObjectivesOverlay() {
       let obj = imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]];
       html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
                  <div class="objectives_card_name">${obj.name}</div>
-                 <div class="objectives_card_content">${obj.text}</div>
+                 <div class="objectives_card_content">${obj.text}
+		   <div class="objectives_secret_notice">secret</div>
+		 </div>
 	       </div>
       `;
     }

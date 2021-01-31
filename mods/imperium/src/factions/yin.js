@@ -41,6 +41,7 @@
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  if (sys.p[planet_idx].units[player-1].length > 0) {
             imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
+  	      imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
   	      imperium_self.endTurn();
             });
 	  } else {
@@ -205,6 +206,7 @@
 	    }
 	  }
 	}
+	return unit;
       },
     });
 
@@ -227,14 +229,10 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
     return;
   }
 
-console.log("planet is: " + sys.p[planet_idx].name);
-console.log("planet opponent units: " + sys.p[planet_idx].units[opponent-1].length);
-
   if (sys.p[planet_idx].units[opponent-1].length <= 0) {
     mycallback(imperium_self);
     return;
   }
-
 
   let html = "<div class='sf-readable'>Do you wish to spend 2 influence to convert 1 enemy infantry to your side?</div><ul>";
       html += '<li class="textchoice" id="yes">yes</li>';
