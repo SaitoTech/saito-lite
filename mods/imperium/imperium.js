@@ -18343,7 +18343,7 @@ console.log("is is possible to invade? " + this.canPlayerInvadePlanet(player, se
 
     if (action2 == "trade") {
       imperium_self.addMove("continue\t" + player + "\t" + sector);
-      imperium_self.playerTrade();
+      imperium_self.playerTurn();
       return 0;
     }
 
@@ -19400,11 +19400,12 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
       }
 
       let html = "<div class='sf-readable'>Make an Offer: </div><ul>";
-      html += '<li id="to_offer" class="option">you give <span class="offer_total">'+offer_selected+'</span> commodities/goods</li>';
+      html += '<li id="to_offer" class="option">you give <span class="offer_total">'+offer_selected+'</span> trade goods</li>';
       html += '<li id="to_receive" class="option">you receive <span class="receive_total">'+receive_selected+'</span> trade goods</li>';
       html += '<li id="promissary_offer" class="option">you give <span class="give_promissary">'+offer_promissary_text+'</span></li>';
       html += '<li id="promissary_receive" class="option">you receive <span class="receive_promissary">'+receive_promissary_text+'</span></li>';
       html += '<li id="confirm" class="option">submit offer</li>';
+      html += '<li id="cancel" class="option">cancel</li>';
       html += '</ul>';
 
       imperium_self.updateStatus(html);
@@ -19417,6 +19418,10 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
         if (selected == "to_offer") { offer_selected++; if (offer_selected > max_offer) { offer_selected = 0; } }
         if (selected == "to_receive") { receive_selected++; if (receive_selected > max_receipt) { receive_selected = 0; } }
 
+	if (selected == "cancel") {
+	  imperium_self.playerTurn();
+	  return;
+	}
 	if (selected == "promissary_offer") {
 	  promissaryTradeInterface(imperium_self, player, 1, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
 	  return;

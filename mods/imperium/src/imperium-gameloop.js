@@ -3605,6 +3605,8 @@ console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + thi
 
 	    for (let i = 0; i < attacker_rerolls; i++) {
 
+console.log("PDS rerolls: " + attacker_rerolls);
+
 	      let lowest_combat_hit = 11;
 	      let lowest_combat_idx = 11;
 
