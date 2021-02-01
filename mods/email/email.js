@@ -30,14 +30,6 @@ class Email extends ModTemplate {
     this.emails.sent = [];
     //this.emails.trash = [];
 
-    // Need to bind to this so it can be used in callbacks
-//
-// TODO - removed Dec 31
-//
-//    this.preferredCryptoChangeCallback = this.preferredCryptoChangeCallback.bind(this);
-//    this.cacheAndRenderPreferredCryptoBalance = this.cacheAndRenderPreferredCryptoBalance.bind(this);    
-//    this.preferredCryptoBalance = "loading...";
-
     this.mods = [];
     this.appspace = 0;	// print email-body with appspace
 
@@ -72,6 +64,9 @@ class Email extends ModTemplate {
       }
       app.options.email.welcomesent = true;
       app.storage.saveOptions();
+      app.connection.on("set_preferred_crypto", (modname) => {
+        mod.cacheAndRenderPreferredCryptoBalance();
+      });
 
       
     }
@@ -110,14 +105,7 @@ class Email extends ModTemplate {
     
     // this.renderMain(app);
     // this.renderSidebar(app);
-    // 
-//
-// DEC 30 --- disabled as part of preferred module cleanup
-//
-//    this.app.wallet.subscribeToPreferredCryptoChangeEvent(this.preferredCryptoChangeCallback);
-//    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
-//    this.cacheAndRenderPreferredCryptoBalance();
-    
+    //
     window.addEventListener("hashchange", () => {
       this.rerender(app);
     });
@@ -153,6 +141,7 @@ class Email extends ModTemplate {
     }
     if(error) {
       console.log(error);
+      throw error;
     }
   }
   goToLocation(newHash){
@@ -270,7 +259,7 @@ class Email extends ModTemplate {
   }
 
   cacheAndRenderPreferredCryptoBalance() {
-    this.preferredCryptoBalance = "loading...";
+    this.preferredCryptoBalance = "...";
     this.app.wallet.returnPreferredCrypto().getBalance().then((value) => {
       this.preferredCryptoBalance = value;
       this.renderBalance();
@@ -278,18 +267,10 @@ class Email extends ModTemplate {
     this.renderBalance();
   }
   async renderBalance() {
-    if (document.getElementById("email-token")) { /// might not have rendered yet, no problem.
+    if (document.getElementById("email-token")) {
       document.getElementById("email-token").innerHTML = " " + this.app.wallet.returnPreferredCrypto().ticker;
-      document.getElementById("email-balance").innerHTML = await this.app.wallet.returnPreferredCrypto().getBalance();
+      document.getElementById("email-balance").innerHTML = this.preferredCryptoBalance
     }
-  }
-  preferredCryptoChangeCallback() {
-//
-// TODO - removed Dec 30
-//
-//    this.app.wallet.unsubscribeFromPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
-//    this.app.wallet.subscribeToPreferredCryptoBalanceChangeEvent(this.cacheAndRenderPreferredCryptoBalance);
-//    this.cacheAndRenderPreferredCryptoBalance();
   }
 }
 

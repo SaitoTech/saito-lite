@@ -34,7 +34,7 @@ module.exports = EmailHeader = {
         // errors here are handled in email-body.js
         break;
     }
-    mod.renderBalance();
+    mod.cacheAndRenderPreferredCryptoBalance();
   },
 
   attachEvents(app, mod) {
