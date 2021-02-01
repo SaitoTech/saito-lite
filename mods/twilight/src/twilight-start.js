@@ -5059,7 +5059,7 @@ console.log("available cards: " + cards_available + " -- " + this.game.state.eve
       // Flower Power
       //
       if (twilight_self.game.state.events.flowerpower == 1) {
-        if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+        if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
           if (player === "us") {
             twilight_self.addMove("notify\tFlower Power triggered by "+card);
             twilight_self.addMove("vp\tussr\t2\t1");
@@ -5086,7 +5086,7 @@ console.log("available cards: " + cards_available + " -- " + this.game.state.eve
     // Flower Power
     //
     if (twilight_self.game.state.events.flowerpower == 1) {
-      if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+      if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
         if (player === "us") {
           twilight_self.addMove("notify\tFlower Power triggered by "+card);
           twilight_self.addMove("vp\tussr\t2\t1");
