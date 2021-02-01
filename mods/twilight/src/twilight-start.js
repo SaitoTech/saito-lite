@@ -6141,18 +6141,16 @@ this.startClock();
           }
         }
       }
-      if (this.game.state.events.deathsquads == 2) {
-        if (this.game.state.events.deathsquads >= 1) {
-	  let roll_modifier = this.game.state.events.deathsquads;
-          if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
-            if (player == "ussr") {
-              this.updateLog("Latin American Death Squads triggers: USSR -"+roll_modifier+" modifier");
-              roll -= roll_modifier;
-            }
-            if (player == "us")   {
-              this.updateLog("Latin American Death Squads triggers: US "+roll_modifier+" modifier");
-              roll += roll_modifier;
-            }
+      if (this.game.state.events.deathsquads >= 1) {
+        let roll_modifier = this.game.state.events.deathsquads;
+        if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
+          if (player == "ussr") {
+            this.updateLog("Latin American Death Squads triggers: USSR -"+roll_modifier+" modifier");
+            roll -= roll_modifier;
+          }
+          if (player == "us")   {
+            this.updateLog("Latin American Death Squads triggers: US "+roll_modifier+" modifier");
+            roll += roll_modifier;
           }
         }
       }
