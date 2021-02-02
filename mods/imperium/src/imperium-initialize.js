@@ -496,7 +496,7 @@ console.log("error initing chat: " + err);
         let strongest_planet_resources = 0;
         for (z = 0; z < sys.p.length; z++) {
   	  sys.p[z].owner = (i+1);
-   	  if (sys.p[z].resources < strongest_planet_resources) {
+   	  if (sys.p[z].resources > strongest_planet_resources) {
   	    strongest_planet = z;
   	    strongest_planet_resources = sys.p[z].resources;
   	  }

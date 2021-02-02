@@ -22,9 +22,11 @@
 	let cultural = 0;
 	let industrial = 0;
 
-	let planetcards = imperium_self.returnPlayerPlanetCards();
+	let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
 	for (let i = 0; i < planetcards.length; i++) {
+	  let p = imperium_self.game.planets[planetcards[i]];
+console.log("planet: " + p.name + " -- " + p.type);
 	  if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
 	  if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
 	  if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
@@ -143,7 +145,7 @@
         let industrial = 0;
         let diplomatic = 0;
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }

@@ -200,7 +200,7 @@
       },
       spaceCombatEvent : function(imperium_self, player, sector) {
 	imperium_self.game.players_info[player-1].target_units = ['carrier','destroyer','cruiser','dreadnaught','flagship','warsun'];
-	imperium_self.game.queue.push("destroy_ships\t"+player+"\t"+"3");
+	imperium_self.game.queue.push("destroy_ships\t"+player+"\t"+"1"+"\t"+imperium_self.game.state.activated_sector);
 	return 1;
       },
     });

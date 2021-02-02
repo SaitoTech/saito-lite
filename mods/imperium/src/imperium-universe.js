@@ -16,7 +16,7 @@
     planets['planet7']  = { type : "hazardous" , img : "/imperium/img/planets/ZONDOR.png" , name : "Zondor" , resources : 3 , influence : 1 , bonus : ""  }
     planets['planet8']  = { type : "hazardous" , img : "/imperium/img/planets/CALTHREX.png" , name : "Calthrex" , resources : 2 , influence : 3 , bonus : ""  }
     planets['planet9']  = { type : "cultural" , img : "/imperium/img/planets/SOUNDRA-IV.png" , name : "Soundra IV" , resources : 1 , influence : 3 , bonus : ""  }
-    planets['planet10'] = { type : "industrial" , img : "/imperium/img/planets/UDON-I.png" , name : "Udon I" , resources : 1 , influence : 1 , bonus : "blue"  }
+    planets['planet10'] = { type : "cultural" , img : "/imperium/img/planets/VIGOR.png" , name : "Vigor" , resources : 1 , influence : 1 , bonus : ""  }
     planets['planet11'] = { type : "cultural" , img : "/imperium/img/planets/UDON-II.png" , name : "Udon II" , resources : 1 , influence : 2 , bonus : ""  }
     planets['planet12'] = { type : "cultural" , img : "/imperium/img/planets/NEW-JYLANX.png" , name : "New Jylanx" , resources : 2 , influence : 0 , bonus : ""  }
     planets['planet13'] = { type : "cultural" , img : "/imperium/img/planets/TERRA-CORE.png" , name : "Terra Core" , resources : 0 , influence : 2 , bonus : ""  }
@@ -151,7 +151,7 @@
     sectors['sector9']         = { img : "/imperium/img/sectors/sector9.png" , 	   	   name : "Londrak / Citadel" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet3','planet4'] }
     sectors['sector10']        = { img : "/imperium/img/sectors/sector10.png" , 	   name : "Belvedyr / Shriva" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet5','planet6'] }
     sectors['sector11']        = { img : "/imperium/img/sectors/sector11.png" , 	   name : "Zondor / Calthrex" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet7','planet8'] }
-    sectors['sector12']        = { img : "/imperium/img/sectors/sector12.png" , 	   name : "Soundra-IV / Udon-I" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet9','planet10'] }
+    sectors['sector12']        = { img : "/imperium/img/sectors/sector12.png" , 	   name : "Soundra-IV / Vigor" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet9','planet10'] }
     sectors['sector15']        = { img : "/imperium/img/sectors/sector15.png" , 	   name : "Granton / Harkon" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet15','planet16'] }
     sectors['sector16']        = { img : "/imperium/img/sectors/sector16.png" , 	   name : "New Illia / Lazaks Curse" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet17','planet18'] }
     sectors['sector18']        = { img : "/imperium/img/sectors/sector18.png" , 	   name : "Siren's End / Riftview" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet21','planet22'] }
@@ -409,8 +409,8 @@
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {

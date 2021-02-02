@@ -411,7 +411,7 @@
               law_to_push.option = winning_choice;
           imperium_self.game.state.laws.push(law_to_push);
 
-          imperium_self.game.players_info[imperium_self.game.state.crown_of_emphidia-1].vp += 1;
+          imperium_self.game.players_info[imperium_self.game.state.crown_of_emphidia_player-1].vp += 1;
           imperium_self.updateLeaderboard();
           imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.crown_of_emphidia_player) + " gains 1 VP from Crown of Emphidia");
 

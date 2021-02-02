@@ -134,7 +134,7 @@
 	      for (let y = 0; y < sys.p.length; y++) {
 	        let planet_uncontrolled = 0;
 	        if (sys.p[y].owner != player) {
-		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
+		  if (!imperium_self.doesPlanetHaveInfantry(sys.p[y])) {
 	  	    seizable_planets.push(sys.p[y].planet);
 	          }
 	        }
@@ -164,7 +164,10 @@
 	    	  imperium_self.endTurn();
                   return 0;
                 },
-                null
+	        function() {
+	    	  imperium_self.endTurn();
+                  return 0;
+		}
               );
             }
             return 0;

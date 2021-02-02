@@ -1914,6 +1914,8 @@ console.log("WHO IS NEXT? " + who_is_next);
 	  this.updatePlanetOwner(sector, planet_idx, player);
 	}
 
+        this.updateSectorGraphics(sector);
+
   	return 1;
   
       }
@@ -3149,10 +3151,12 @@ console.log("display faction dashboard over!");
 	      //
 	      // record units destroyed this round
 	      //
+	      try {
 	      if (sys.s.units[player-1][unit_idx].destroyed == 1) {
 		this.game.players_info[player-1].my_units_destroyed_this_combat_round.push(sys.s.units[player-1][unit_idx].type);
 		this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(sys.s.units[player-1][unit_idx].type);
 	      }
+	      } catch (err) {}
 
 	    } else {
 	      this.updateLog(this.returnFactionNickname(player) + " " + sys.s.units[player-1][unit_idx].name + " damaged");

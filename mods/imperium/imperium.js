@@ -550,7 +550,7 @@ class Imperium extends GameTemplate {
       },
       spaceCombatEvent : function(imperium_self, player, sector) {
 	imperium_self.game.players_info[player-1].target_units = ['carrier','destroyer','cruiser','dreadnaught','flagship','warsun'];
-	imperium_self.game.queue.push("destroy_ships\t"+player+"\t"+"3");
+	imperium_self.game.queue.push("destroy_ships\t"+player+"\t"+"1"+"\t"+imperium_self.game.state.activated_sector);
 	return 1;
       },
     });
@@ -2179,7 +2179,7 @@ console.log("P: " + planet);
 	      for (let y = 0; y < sys.p.length; y++) {
 	        let planet_uncontrolled = 0;
 	        if (sys.p[y].owner != player) {
-		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
+		  if (!imperium_self.doesPlanetHaveInfantry(sys.p[y])) {
 	  	    seizable_planets.push(sys.p[y].planet);
 	          }
 	        }
@@ -2209,7 +2209,10 @@ console.log("P: " + planet);
 	    	  imperium_self.endTurn();
                   return 0;
                 },
-                null
+	        function() {
+	    	  imperium_self.endTurn();
+                  return 0;
+		}
               );
             }
             return 0;
@@ -4305,9 +4308,11 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	let cultural = 0;
 	let industrial = 0;
 
-	let planetcards = imperium_self.returnPlayerPlanetCards();
+	let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
 	for (let i = 0; i < planetcards.length; i++) {
+	  let p = imperium_self.game.planets[planetcards[i]];
+console.log("planet: " + p.name + " -- " + p.type);
 	  if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
 	  if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
 	  if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
@@ -4426,7 +4431,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         let industrial = 0;
         let diplomatic = 0;
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
@@ -5971,7 +5976,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
               law_to_push.option = winning_choice;
           imperium_self.game.state.laws.push(law_to_push);
 
-          imperium_self.game.players_info[imperium_self.game.state.crown_of_emphidia-1].vp += 1;
+          imperium_self.game.players_info[imperium_self.game.state.crown_of_emphidia_player-1].vp += 1;
           imperium_self.updateLeaderboard();
           imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.crown_of_emphidia_player) + " gains 1 VP from Crown of Emphidia");
 
@@ -9408,7 +9413,7 @@ console.log("error initing chat: " + err);
         let strongest_planet_resources = 0;
         for (z = 0; z < sys.p.length; z++) {
   	  sys.p[z].owner = (i+1);
-   	  if (sys.p[z].resources < strongest_planet_resources) {
+   	  if (sys.p[z].resources > strongest_planet_resources) {
   	    strongest_planet = z;
   	    strongest_planet_resources = sys.p[z].resources;
   	  }
@@ -12816,6 +12821,8 @@ console.log("WHO IS NEXT? " + who_is_next);
 	  this.updatePlanetOwner(sector, planet_idx, player);
 	}
 
+        this.updateSectorGraphics(sector);
+
   	return 1;
   
       }
@@ -14051,10 +14058,12 @@ console.log("display faction dashboard over!");
 	      //
 	      // record units destroyed this round
 	      //
+	      try {
 	      if (sys.s.units[player-1][unit_idx].destroyed == 1) {
 		this.game.players_info[player-1].my_units_destroyed_this_combat_round.push(sys.s.units[player-1][unit_idx].type);
 		this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(sys.s.units[player-1][unit_idx].type);
 	      }
+	      } catch (err) {}
 
 	    } else {
 	      this.updateLog(this.returnFactionNickname(player) + " " + sys.s.units[player-1][unit_idx].name + " damaged");
@@ -14390,6 +14399,10 @@ console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + thi
 	let capital 	   = 0;
 	if (parseInt(mv[4])) { capital = 1; }
 
+	if (sector == undefined) {
+	  sector = this.game.state.activated_sector;
+        }
+
 	if (sector.indexOf("_") > 0) {
 	  let sys = this.returnSectorAndPlanets(sector);
 	  sector = sys.s.sector;
@@ -14506,6 +14519,8 @@ console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + thi
 	    }
 
 	    for (let i = 0; i < attacker_rerolls; i++) {
+
+console.log("PDS rerolls: " + attacker_rerolls);
 
 	      let lowest_combat_hit = 11;
 	      let lowest_combat_idx = 11;
@@ -16248,7 +16263,7 @@ returnPlayers(num = 0) {
     players[i].can_intervene_in_action_card = 0;
     players[i].secret_objectives_in_hand = 0;
     players[i].action_cards_in_hand = 0;
-    players[i].action_cards_per_round = 2;
+    players[i].action_cards_per_round = 1;
     players[i].action_card_limit = 7;
     players[i].action_cards_played = [];
     players[i].new_tokens_per_round = 2;
@@ -18105,7 +18120,7 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
 
   let imperium_self = this;
   let html = '';
-  let relevant_action_cards = ["pre_agenda"];
+  let relevant_action_cards = ["pre_agenda", "rider"];
   let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
   if (this.doesPlayerHaveRider(imperium_self.game.player)) {
@@ -21793,7 +21808,7 @@ playerDiscardActionCards(num) {
     planets['planet7']  = { type : "hazardous" , img : "/imperium/img/planets/ZONDOR.png" , name : "Zondor" , resources : 3 , influence : 1 , bonus : ""  }
     planets['planet8']  = { type : "hazardous" , img : "/imperium/img/planets/CALTHREX.png" , name : "Calthrex" , resources : 2 , influence : 3 , bonus : ""  }
     planets['planet9']  = { type : "cultural" , img : "/imperium/img/planets/SOUNDRA-IV.png" , name : "Soundra IV" , resources : 1 , influence : 3 , bonus : ""  }
-    planets['planet10'] = { type : "industrial" , img : "/imperium/img/planets/UDON-I.png" , name : "Udon I" , resources : 1 , influence : 1 , bonus : "blue"  }
+    planets['planet10'] = { type : "cultural" , img : "/imperium/img/planets/VIGOR.png" , name : "Vigor" , resources : 1 , influence : 1 , bonus : ""  }
     planets['planet11'] = { type : "cultural" , img : "/imperium/img/planets/UDON-II.png" , name : "Udon II" , resources : 1 , influence : 2 , bonus : ""  }
     planets['planet12'] = { type : "cultural" , img : "/imperium/img/planets/NEW-JYLANX.png" , name : "New Jylanx" , resources : 2 , influence : 0 , bonus : ""  }
     planets['planet13'] = { type : "cultural" , img : "/imperium/img/planets/TERRA-CORE.png" , name : "Terra Core" , resources : 0 , influence : 2 , bonus : ""  }
@@ -21886,8 +21901,6 @@ playerDiscardActionCards(num) {
       }
     }
  
-    planets['new-byzantium'].owner = 1;
-
     return planets;
   }
   
@@ -21930,7 +21943,7 @@ playerDiscardActionCards(num) {
     sectors['sector9']         = { img : "/imperium/img/sectors/sector9.png" , 	   	   name : "Londrak / Citadel" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet3','planet4'] }
     sectors['sector10']        = { img : "/imperium/img/sectors/sector10.png" , 	   name : "Belvedyr / Shriva" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet5','planet6'] }
     sectors['sector11']        = { img : "/imperium/img/sectors/sector11.png" , 	   name : "Zondor / Calthrex" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet7','planet8'] }
-    sectors['sector12']        = { img : "/imperium/img/sectors/sector12.png" , 	   name : "Soundra-IV / Udon-I" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet9','planet10'] }
+    sectors['sector12']        = { img : "/imperium/img/sectors/sector12.png" , 	   name : "Soundra-IV / Vigor" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet9','planet10'] }
     sectors['sector15']        = { img : "/imperium/img/sectors/sector15.png" , 	   name : "Granton / Harkon" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet15','planet16'] }
     sectors['sector16']        = { img : "/imperium/img/sectors/sector16.png" , 	   name : "New Illia / Lazaks Curse" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet17','planet18'] }
     sectors['sector18']        = { img : "/imperium/img/sectors/sector18.png" , 	   name : "Siren's End / Riftview" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet21','planet22'] }
@@ -22188,8 +22201,8 @@ playerDiscardActionCards(num) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {
@@ -25659,8 +25672,6 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
 
-console.log("at start of hits loop");  
-
       //
       // find weakest unit
       //
@@ -25668,54 +25679,34 @@ console.log("at start of hits loop");
       let weakest_unit_idx = -1;
 
       for (let z = 0; z < sys.p[planet_idx].units[defender-1].length; z++) {
-console.log("z: " + z);
         let unit = sys.p[planet_idx].units[defender-1][z];
-
-console.log("z10");
-
-console.log(JSON.stringify(unit));
         if (unit != undefined) {
           if (unit.strength > 0 && weakest_unit_idx == -1 && unit.destroyed == 0) {
-console.log("z101");
   	    weakest_unit = sys.p[planet_idx].units[defender-1].strength;
-console.log("z102");
   	    weakest_unit_idx = z;
-console.log("z103");
           }
-
-console.log("z11");
 
           if (unit.strength > 0 && unit.strength < weakest_unit && weakest_unit_idx != -1) {
   	    weakest_unit = unit.strength;
   	    weakest_unit_idx = z;
           }
         }
-console.log("z12");
-
       }
   
       //
       // and assign 1 hit
       //
-console.log("assigning hit to: " + weakest_unit_idx);
-console.log("units: " + JSON.stringify(sys.p[planet_idx].units[defender-1]));
-
       if (weakest_unit_idx > -1) {
         sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength--;
-console.log("UNIT IS: " + JSON.stringify(sys.p[planet_idx].units[defender-1][weakest_unit_idx]));
         if (sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength <= 0) {
           ground_forces_destroyed++;
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
 	  for (z_index in z) {
-console.log(z[z_index].name);
             sys.p[planet_idx].units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.p[planet_idx].units[defender-1][weakest_unit_idx]);
-console.log("done");
 	  }
         }
       }
     }
-
-console.log("unit destroyed!");
 
     this.saveSystemAndPlanets(sys);
     return ground_forces_destroyed;
@@ -25757,11 +25748,9 @@ console.log("unit destroyed!");
         if (sys.s.units[defender-1][weakest_unit_idx].strength <= 0) {
 	  ships_destroyed++;
           sys.s.units[defender-1][weakest_unit_idx].destroyed = 1;
-
 	  for (z_index in z) {
             sys.s.units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.s.units[defender-1][weakest_unit_idx]);
 	  }
-
         }
       }
     }

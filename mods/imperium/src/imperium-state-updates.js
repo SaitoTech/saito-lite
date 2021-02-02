@@ -328,8 +328,6 @@
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
 
-console.log("at start of hits loop");  
-
       //
       // find weakest unit
       //
@@ -337,54 +335,34 @@ console.log("at start of hits loop");
       let weakest_unit_idx = -1;
 
       for (let z = 0; z < sys.p[planet_idx].units[defender-1].length; z++) {
-console.log("z: " + z);
         let unit = sys.p[planet_idx].units[defender-1][z];
-
-console.log("z10");
-
-console.log(JSON.stringify(unit));
         if (unit != undefined) {
           if (unit.strength > 0 && weakest_unit_idx == -1 && unit.destroyed == 0) {
-console.log("z101");
   	    weakest_unit = sys.p[planet_idx].units[defender-1].strength;
-console.log("z102");
   	    weakest_unit_idx = z;
-console.log("z103");
           }
-
-console.log("z11");
 
           if (unit.strength > 0 && unit.strength < weakest_unit && weakest_unit_idx != -1) {
   	    weakest_unit = unit.strength;
   	    weakest_unit_idx = z;
           }
         }
-console.log("z12");
-
       }
   
       //
       // and assign 1 hit
       //
-console.log("assigning hit to: " + weakest_unit_idx);
-console.log("units: " + JSON.stringify(sys.p[planet_idx].units[defender-1]));
-
       if (weakest_unit_idx > -1) {
         sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength--;
-console.log("UNIT IS: " + JSON.stringify(sys.p[planet_idx].units[defender-1][weakest_unit_idx]));
         if (sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength <= 0) {
           ground_forces_destroyed++;
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
 	  for (z_index in z) {
-console.log(z[z_index].name);
             sys.p[planet_idx].units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.p[planet_idx].units[defender-1][weakest_unit_idx]);
-console.log("done");
 	  }
         }
       }
     }
-
-console.log("unit destroyed!");
 
     this.saveSystemAndPlanets(sys);
     return ground_forces_destroyed;
@@ -426,11 +404,9 @@ console.log("unit destroyed!");
         if (sys.s.units[defender-1][weakest_unit_idx].strength <= 0) {
 	  ships_destroyed++;
           sys.s.units[defender-1][weakest_unit_idx].destroyed = 1;
-
 	  for (z_index in z) {
             sys.s.units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.s.units[defender-1][weakest_unit_idx]);
 	  }
-
         }
       }
     }

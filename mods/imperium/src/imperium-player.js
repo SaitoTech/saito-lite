@@ -58,7 +58,7 @@ returnPlayers(num = 0) {
     players[i].can_intervene_in_action_card = 0;
     players[i].secret_objectives_in_hand = 0;
     players[i].action_cards_in_hand = 0;
-    players[i].action_cards_per_round = 2;
+    players[i].action_cards_per_round = 1;
     players[i].action_card_limit = 7;
     players[i].action_cards_played = [];
     players[i].new_tokens_per_round = 2;
@@ -1915,7 +1915,7 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
 
   let imperium_self = this;
   let html = '';
-  let relevant_action_cards = ["pre_agenda"];
+  let relevant_action_cards = ["pre_agenda", "rider"];
   let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
   if (this.doesPlayerHaveRider(imperium_self.game.player)) {
