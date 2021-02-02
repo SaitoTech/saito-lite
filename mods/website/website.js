@@ -49,16 +49,35 @@ class Website extends ModTemplate {
       this.mre.render(this.app, this, ModalRegisterEmail.MODES.NEWSLETTER);
       this.mre.attachEvents(this.app, this);
     }
-    let doPrivsaleSignup = app.browser.parseHash(window.location.hash).private_sale;
+    this.initializePrivateSaleOverlay();
+  }
+  doPrivateSaleOverlay() {
+    let doPrivsaleSignup = this.app.browser.parseHash(window.location.hash).private_sale;
     if(doPrivsaleSignup) {
-      this.mre = new ModalRegisterEmail(app);
+      this.mre = new ModalRegisterEmail(this.app);
       this.mre.render(this.app, this, ModalRegisterEmail.MODES.PRIVATESALE);
       this.mre.attachEvents(this.app, this);
-      window.location.hash = app.browser.removeFromHash(window.location.hash, "private_sale");
+      window.location.hash = this.app.browser.removeFromHash(window.location.hash, "private_sale");
     }
-    
   }
-
-  // shouldAffixCallbackToModule() { return 1; }
+  initializePrivateSaleOverlay() {
+    window.addEventListener("hashchange", () => {
+      this.doPrivateSaleOverlay();
+    });
+    let oldHash = window.location.hash;
+    window.location.hash = `#`;
+    window.location.hash = oldHash;
+  }
+  triggerPrivateSaleOverlay() {
+    window.location.hash = this.app.browser.modifyHash(oldHash, {private_sale: "1"});
+  }
+  respondTo(type) {
+    if (type == "private_sale_overlay") {
+      let obj = {};
+      obj.initializePrivateSaleOverlay = this.initializePrivateSaleOverlay.bind(this);
+      obj.triggerPrivateSaleOverlay = this.triggerPrivateSaleOverlay.bind(this);
+      return obj;
+    }
+  }
 }
 module.exports = Website;

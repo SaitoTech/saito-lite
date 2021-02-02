@@ -117,13 +117,9 @@ class Arcade extends ModTemplate {
 
   initializeHTML(app) {
     this.header = new SaitoHeader(app, this);
-    let doPubsaleSignup = app.browser.parseHash(window.location.hash).private_sale;
-    if(doPubsaleSignup) {
-      let mre = new ModalRegisterEmail(app);
-      mre.render(this.app, this, ModalRegisterEmail.MODES.PUBLICSALE);
-      mre.attachEvents(this.app, this);
-      window.location.hash = app.browser.removeFromHash(window.location.hash, "private_sale");
-    }
+    app.modules.getRespondTos("private_sale_overlay").forEach((moduleResponse, i) => {
+      moduleResponse.initializePrivateSaleOverlay();
+    });
   }
 
 
