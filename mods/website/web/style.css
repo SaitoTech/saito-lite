@@ -114,9 +114,9 @@ h2, h5 {
 }
 
 .parallax-back {
-  -webkit-transform: translateZ(-0.5px) scale(1.33);
-  transform: translateZ(-0.5px) scale(1.33);
-  z-index: -1;
+   /* -webkit-transform: translateZ(-0.5px) scale(1.33);
+  transform: translateZ(-0.5px) scale(1.33); */
+  z-index: -1; 
 }
 
 .parallax-logo {
