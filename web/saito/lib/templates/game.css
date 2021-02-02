@@ -947,5 +947,10 @@ input#game_board_sizer {
 }
 
 
-
+.chat-header {
+  display: none;
+}
+.chat-list {
+  display: none;
+}
 
