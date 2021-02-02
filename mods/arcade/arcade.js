@@ -119,6 +119,7 @@ class Arcade extends ModTemplate {
     this.header = new SaitoHeader(app, this);
     app.modules.getRespondTos("private_sale_overlay").forEach((moduleResponse, i) => {
       moduleResponse.initializePrivateSaleOverlay();
+      //moduleResponse.triggerPrivateSaleOverlay();
     });
   }
 

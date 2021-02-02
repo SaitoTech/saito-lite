@@ -69,7 +69,7 @@ class Website extends ModTemplate {
     window.location.hash = oldHash;
   }
   triggerPrivateSaleOverlay() {
-    window.location.hash = this.app.browser.modifyHash(oldHash, {private_sale: "1"});
+    window.location.hash = this.app.browser.modifyHash(window.location.hash, {private_sale: "1"});
   }
   respondTo(type) {
     if (type == "private_sale_overlay") {
