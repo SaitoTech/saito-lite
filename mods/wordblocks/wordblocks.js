@@ -94,6 +94,102 @@ class Wordblocks extends GameTemplate {
       mod.respondTo('chat-manager').render(this.app, this);
     });
 
+
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
+
+
+
+    let main_menu_added = 0;
+    let community_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+        for (let ii = 0; ii < this.game.players.length; ii++) {
+          if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+            // add main menu
+            if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+                id : "game-chat",
+                class : "game-chat",
+                callback : function(app, game_mod) {
+                  game_mod.menu.showSubMenu("game-chat");
+                }
+              })
+              main_menu_added = 1;
+            }
+
+            if (community_menu_added == 0) {
+              this.menu.addSubMenuOption("game-chat", {
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
+                callback : function(app, game_mod) {
+                  game_mod.menu.hideSubMenus();
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.openChatBox();
+                }
+              });
+              community_menu_added = 1;
+            }
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = "Player "+(ii+1);
+            let chatmod = this.app.modules.mods[i];
+
+            this.menu.addSubMenuOption("game-chat", {
+              text : name,
+              id : "game-chat-"+(ii+1),
+              class : "game-chat-"+(ii+1),
+              callback : function(app, game_mod) {
+                game_mod.menu.hideSubMenus();
+                chatmod.createChatGroup(members, name);
+                chatmod.openChatBox(gid);
+                chatmod.sendEvent('chat-render-request', {});
+                chatmod.saveChat();
+              }
+            });
+          }
+        }
+      }
+    }
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        app.browser.requestFullscreen();
+      }
+    });
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
     this.hud.render(app, this);
 
     try {
@@ -511,7 +607,13 @@ if (this.game.player != 0) {
     });
 
     $('.slot').off();
-    $('.slot').on('click', function () {
+    $('.slot').on('mousedown', function (e) {
+      xpos = e.clientX;
+      ypos = e.clientY;
+    });
+    $('.slot').on('mouseup', function (e) {
+      if (Math.abs(xpos-e.clientX) > 4) { return; }
+      if (Math.abs(ypos-e.clientY) > 4) { return; }
       let divname = $(this).attr("id");
       let html = `
         <div class="tile-placement-controls">
