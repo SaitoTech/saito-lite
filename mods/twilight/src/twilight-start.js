@@ -5763,6 +5763,8 @@ this.startClock();
     this.playerFinishedPlacingInfluence();
 
     var twilight_self = this;
+    let xpos = 0;
+    let ypos = 0;
 
     for (var i in this.countries) {
 
@@ -5799,7 +5801,14 @@ this.startClock();
         if (player == "us") {
 
           $(divname).off();
-          $(divname).on('click', function() {
+          $(divname).on('mousedown', function (e) {
+            xpos = e.clientX;
+            ypos = e.clientY;
+          });
+          $(divname).on('mouseup', function (e) {
+            if (Math.abs(xpos-e.clientX) > 4) { return; }
+            if (Math.abs(ypos-e.clientY) > 4) { return; }
+            //$(divname).on('click', function() {
 
             let countryname = $(this).attr('id');
 
@@ -5861,7 +5870,14 @@ this.startClock();
         } else {
 
           $(divname).off();
-          $(divname).on('click', function() {
+          $(divname).on('mousedown', function (e) {
+            xpos = e.clientX;
+            ypos = e.clientY;
+          });
+          $(divname).on('mouseup', function (e) {
+            if (Math.abs(xpos-e.clientX) > 4) { return; }
+            if (Math.abs(ypos-e.clientY) > 4) { return; }
+            //$(divname).on('click', function() {
 
             let countryname = $(this).attr('id');
 
