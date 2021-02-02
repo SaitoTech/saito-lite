@@ -1673,9 +1673,7 @@ console.log(JSON.stringify(return_obj));
   returnSpaceDocksOnPlanet(planet) {
     let total = 0;
     for (let i = 0; i < planet.units.length; i++) {
-console.log("player: " + (i+1));
       for (let k = 0; k < planet.units[i].length; k++) {
-console.log(planet.units[i][k].type);
 	if (planet.units[i][k].type == "spacedock") { total++; }
       }
     }

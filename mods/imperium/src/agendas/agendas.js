@@ -393,7 +393,8 @@
 	  //
 	  // also - destroy the planet and increase its resource value
 	  //
-	  let planetidx = options[winning_choice].planet;
+	  //let planetidx = options[winning_choice];
+	  let planetidx = winning_choice;
 
 	  for (let i = 0; i < imperium_self.game.planets[planetidx].units.length; i++) {
 	    let destroy = 1;

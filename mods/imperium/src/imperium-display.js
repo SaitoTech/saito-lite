@@ -218,7 +218,6 @@ returnSectorInformationHTML(sector) {
   html += sys.s.name;
   html += "</div>";
   let units_html = "";
-console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
   for (let i = 0; i < sys.s.units.length; i++) {
     if (sys.s.units[i].length > 0) {
       units_html += this.returnPlayerFleetInSector((i+1), sector);
@@ -236,7 +235,6 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
     <div class="grid-2">
   `;
   for (let i = 0; i < sys.p.length; i++) {
-console.log("PLANET "+i+" " + JSON.stringify(sys.p[i]));
     let planet_owner = "UNCONTROLLED";
     if (sys.p[i].owner != -1) {
       planet_owner = this.returnFaction(sys.p[i].owner-1);
