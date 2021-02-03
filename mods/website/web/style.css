@@ -62,6 +62,10 @@ a:hover {
   color: var(--saito-orange);
 }
 
+.mobile {
+  display: none;
+}
+
 .header-mobile-menu {
   padding: 0 17px;
   font-weight: bolder;
@@ -969,6 +973,12 @@ h2, h5 {
   html {
     font-size: 10px;
   }
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: initial;
+  }
   .header-nav {
     width: 100%;
     padding: 0 2rem;
@@ -983,16 +993,14 @@ h2, h5 {
     align-items: center;
   }
   .person-wrapper {
-    display: flex;
+    display: none;
   }
   .section1 .buttonWrapper a:first-child .btn {
     margin-right: unset;
   }
-
   .section1 .littleIcon {
     margin: 0;
   }
-
   section {
     max-width: initial;
     min-width: initial;
@@ -1172,15 +1180,17 @@ h2, h5 {
   }
   .header-wrapper .header-mini-wallet {
     width: 100%;
-    justify-content: space-between;
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0 1em;
   }
   .header-wrapper .header-mini-wallet a {
     margin-right: 20px;
   }
   .header-wrapper .header-mini-wallet>.header-username {
-    display: none;
+    display: initial;
   }
-  .header-wrapper .header-mini-wallet .left .logoImage {
+  .header-wrapper .logoImage {
     margin-right: 0;
   }
   /* settings-dropdown styles */
@@ -1195,6 +1205,13 @@ h2, h5 {
     background-color: #f4f4f4;
     height: 1px;
   }
+}
+
+.loading {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  font-size: 26px;
 }
 
 /* from saito css */
@@ -1230,28 +1247,28 @@ h2, h5 {
   display: none;
 }
 
-.header-mini-wallet {
+.header-icon-links {
   display: flex;
   align-items: center;
 }
 
-.header-mini-wallet .left {
+.header-icon-links .left {
   display: flex;
   align-items: center;
 }
 
-.header-mini-wallet .left .logoImage {
+.left .logoImage {
   width: 89px;
   height: 30px;
 }
 
-.header-mini-wallet a:hover {
+.header-icon-links a:hover {
   transform: scale(1.1);
   transform-origin: center;
   color: #000;
 }
 
-.header-mini-wallet a {
+.header-icon-links a {
   height: 80px;
   line-height: 80px;
   font-size: 16px;
@@ -1261,33 +1278,35 @@ h2, h5 {
   text-decoration: none;
 }
 
-.header-mini-wallet .logo {
+.header-icon-links .logo {
   display: flex;
   align-items: center;
   margin-right: 80px;
 }
 
-.header-mini-wallet .right {
+.header-icon-links .left {
   display: flex;
   align-items: center;
 }
 
-.header-mini-wallet .right .language-image {
+.header-icon-links .left .language-image {
   width: 18px;
   height: 18px;
   margin-right: 7px;
 }
 
-.header-mini-wallet .right .language-info {
-  font-size: 18px;
+.header-icon-links .left .language-info {
+  font-size: 14px;
   font-weight: 600;
 }
 
 .header-mini-wallet .header-username {
-  max-width: 100px;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 16px;
+  text-align: right;
 }
 
 .header-mini-wallet .header-icon {
@@ -1336,8 +1355,8 @@ h2, h5 {
 #settings-dropdown {
   position: absolute;
   top: 8rem;
-  right: -32rem;
-  width: 30.4rem;
+  right: -42rem;
+  width: 40rem;
   height: 55rem;
   background: #FFFFFF;
   box-shadow: -1rem 0rem 2rem 0rem rgba(205, 205, 205, 0.5);
@@ -1377,8 +1396,8 @@ h2, h5 {
 }
 
 .header-profile-photo {
-  width: 4rem;
-  height: 4rem;
+  width: 6rem;
+  height: 6rem;
   border: 0.1rem solid rgba(28, 28, 35, 0.34);
 }
 
@@ -1387,10 +1406,12 @@ h2, h5 {
 }
 
 .account-info .profile-public-key {
-  width: 14rem;
+  width: calc(100% - 70px);
+  max-width: 36rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  font-size: 18px;
 }
 
 .account-info .saito-select {
@@ -1405,8 +1426,9 @@ h2, h5 {
 
 .account-info #header-token-select {
   margin-top: 0.8rem;
-  width: 9rem;
+  width: 20rem;
   border: none;
+  font-size: 20px;
 }
 
 .settings-fas-icon {
@@ -1441,11 +1463,11 @@ h2, h5 {
 
 .wallet-action-row {
   height: 1.6rem;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 400;
   color: #1C1C23;
-  margin-bottom: 1.8rem;
   box-sizing: content-box;
+  padding: 1rem 5px;
 }
 
 .wallet-action-row:last-child {
@@ -1489,6 +1511,23 @@ h2, h5 {
 .header-dropdown a {
   text-decoration: none;
   color: black;
+}
+
+.mobile-menu {
+  margin: 0 0 20px 0;
+}
+
+.mobile-menu a {
+  font-size: 18px;
+  margin: 0 10px 0 0;
+  color: var(--saito-orange);
+  font-weight: 900;
+}
+
+.mobile-menu a:hover {
+  color: var(--saito-red);
+  transform: scale(1.2);
+  transform-origin: center;
 }
 
 #back-button {

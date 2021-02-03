@@ -31,26 +31,38 @@ class Website extends ModTemplate {
 
 
     let html = `
-    <div class="left">
+    <div class="left desktop">
     <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
     <a alt="the Saito Arcade" href="https://saito.io/arcade">Arcade</a>
     <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
     <a alt="links to get involved" href="#getinvolved">Community</a>
     <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+    <a class="language-info" alt="中文" href="website/CN" href="/website/CN">中文 
+    <!--img class="language-image" alt="icon" src="/website/img/cn_Icon.png"></img-->
+    </a>
   </div>
   <div class="right">
-    
-    <a class="language-info" alt="中文" href="website/CN" href="/website/CN>中文 
-      <img class="language-image" alt="icon" src="/website/img/cn_Icon.png"></img>
-    </a>
-    <div class="header-mobile-menu">⋮</div>
+    <!--div class="header-mobile-menu">⋮</div-->
   </div>
-  
   `;
     if(document.querySelector('.header-icon-links')) {
-      app.browser.prependElementToDom(html, document.querySelector('.header-mini-wallet'));
+      app.browser.prependElementToDom(html, document.querySelector('.header-icon-links'));
     }
+
+    html = `
+    <div class="mobile-menu">
+     <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
+     <a alt="links to get involved" href="#getinvolved">Community</a>
+     <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+    </div>
+    <hr/>
+    `;
     
+    if(document.querySelector('.header-dropdown')) {
+      app.browser.prependElementToDom(html, document.querySelector('.header-dropdown'));
+    }
+
+
     document.querySelectorAll('website-newsletter-subscribe').forEach((element) => {
       element.onclick = (e) => {
         this.mre = new ModalRegisterEmail(app);
