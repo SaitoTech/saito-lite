@@ -29,26 +29,37 @@ class Website extends ModTemplate {
     this.header.render(app, this);
     this.header.attachEvents(app, this);
 
-    var el = document.querySelector('.all');
-    var head = document.querySelector('.header-home');
-    var head_nav = document.querySelector('.header-nav');
-    head.classList.add('small-head');
-    head_nav.classList.add('small-head');
-    el.addEventListener('scroll', () => {
-      if (el.scrollTop > 100) {
-        head.classList.remove('small-head');
-        head_nav.classList.remove('small-head');
-      } else {
-        head.classList.add('small-head');
-        head_nav.classList.add('small-head');
+
+    let html = `
+    <div class="left">
+    <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
+    <a alt="the Saito Arcade" href="https://saito.io/arcade">Arcade</a>
+    <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
+    <a alt="links to get involved" href="#getinvolved">Community</a>
+    <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+  </div>
+  <div class="right">
+    
+    <a class="language-info" alt="中文" href="website/CN" href="/website/CN>中文 
+      <img class="language-image" alt="icon" src="/website/img/cn_Icon.png"></img>
+    </a>
+    <div class="header-mobile-menu">⋮</div>
+  </div>
+  
+  `;
+    if(document.querySelector('.header-icon-links')) {
+      app.browser.prependElementToDom(html, document.querySelector('.header-mini-wallet'));
+    }
+    
+    document.querySelectorAll('website-newsletter-subscribe').forEach((element) => {
+      element.onclick = (e) => {
+        this.mre = new ModalRegisterEmail(app);
+        this.mre.render(this.app, this, ModalRegisterEmail.MODES.NEWSLETTER);
+        this.mre.attachEvents(this.app, this);
       }
     });
+
     
-    document.getElementById("website-newsletter-subscribe").onclick = (e) => {
-      this.mre = new ModalRegisterEmail(app);
-      this.mre.render(this.app, this, ModalRegisterEmail.MODES.NEWSLETTER);
-      this.mre.attachEvents(this.app, this);
-    }
     let doPrivsaleSignup = app.browser.parseHash(window.location.hash).private_sale;
     if(doPrivsaleSignup) {
       this.mre = new ModalRegisterEmail(app);
