@@ -73,10 +73,12 @@
 
       if (us_bg > ussr_bg) {
         this.game.state.events.kitchendebates = 1;
+        this.updateLog("US controls "+us_bg + " battlegrounds and USSR controls "+ ussr_bg +" battlegrounds");
         this.updateLog("US gains 2 VP and pokes USSR in chest...");
         this.game.state.vp += 2;
         this.updateVictoryPoints();
       } else {
+        this.updateLog("US controls "+us_bg + " battlegrounds and USSR controls "+ ussr_bg +" battlegrounds");
         this.updateLog("US does not have more battleground countries than USSR...");
       }
 
