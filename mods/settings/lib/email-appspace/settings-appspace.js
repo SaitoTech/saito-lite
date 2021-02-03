@@ -131,11 +131,14 @@ module.exports = SettingsAppspace = {
 
     try {
     document.getElementById('restore-account-btn').onclick = async(e) => {
+      document.getElementById('file-input').addEventListener('change', function(e) {
 
-        //let confirm_password = await sconfirm("Did you encrypt this backup with a password. Click cancel if not:");
+        var file = e.target.files[0];
+
+
         let password_prompt = "";
-
         /*
+        //let confirm_password = await sconfirm("Did you encrypt this backup with a password. Click cancel if not:");
         if (confirm_password) {
 
           password_prompt = await sprompt("Please provide the password you used to encrypt this backup:");
@@ -146,7 +149,6 @@ module.exports = SettingsAppspace = {
         } else {
           password_prompt = "";
         }
-        */
 
         password_prompt = await sprompt("Enter encryption password (blank for no password):");
 
@@ -156,9 +158,9 @@ module.exports = SettingsAppspace = {
           salert("Wallet Restore Cancelled");
           return;
         }
+        */
         
-
-        let selectedFile = this.files[0];
+        let selectedFile = e.target.files[0];
         var wallet_reader = new FileReader();
         wallet_reader.onloadend = function () {
 
@@ -189,15 +191,16 @@ module.exports = SettingsAppspace = {
             // and reload
             //
             salert("Restoration Complete ... click to reload Saito");
-            window.location = window.location;
+            window.location.reload();
           } catch (err) {
             salert("Error decrypting wallet file. Password incorrect");
           }
         };
 
         wallet_reader.readAsBinaryString(selectedFile);
-
-      };
+      });
+      document.querySelector('#file-input').click();
+    };
     } catch (err) {}
 
 

@@ -90,10 +90,15 @@
 	  if (imperium_self.game.player == action_card_player) {
 
 	    let html  = '<div class="sf-readable">Spend any number of trade goods to purchase additional votes: </div><ul>';
-	    for (let i = 1; i <= imperium_self.game.players_info[action_card_player-1].goods+1; i++) {
-	      if (i == 1) { html   += '<li class="textchoice" id="1">'+i+' vote</li>'; }
-	      else { html   += '<li class="textchoice" id="'+i+'">'+i+' votes</li>'; }
-	    }
+	    if (imperium_self.game.players_info[action_card_player-1].goods > 0) {
+	      html   += '<li class="textchoice" id="0">0 votes</li>';
+	      for (let i = 1; i <= imperium_self.game.players_info[action_card_player-1].goods+1; i++) {
+	        if (i == 1) { html   += '<li class="textchoice" id="1">'+i+' vote</li>'; }
+	        else { html   += '<li class="textchoice" id="'+i+'">'+i+' votes</li>'; }
+	      }
+	    } else {
+	      html   += '<li class="textchoice" id="0">0 votes</li>';
+            }
 	    html += '</ul>';
 
 	    imperium_self.updateStatus(html);

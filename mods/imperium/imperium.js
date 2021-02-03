@@ -5123,7 +5123,8 @@ console.log("planet: " + p.name + " -- " + p.type);
 	  //
 	  // also - destroy the planet and increase its resource value
 	  //
-	  let planetidx = options[winning_choice].planet;
+	  //let planetidx = options[winning_choice];
+	  let planetidx = winning_choice;
 
 	  for (let i = 0; i < imperium_self.game.planets[planetidx].units.length; i++) {
 	    let destroy = 1;
@@ -7766,10 +7767,15 @@ ACTION CARD - types
 	  if (imperium_self.game.player == action_card_player) {
 
 	    let html  = '<div class="sf-readable">Spend any number of trade goods to purchase additional votes: </div><ul>';
-	    for (let i = 1; i <= imperium_self.game.players_info[action_card_player-1].goods+1; i++) {
-	      if (i == 1) { html   += '<li class="textchoice" id="1">'+i+' vote</li>'; }
-	      else { html   += '<li class="textchoice" id="'+i+'">'+i+' votes</li>'; }
-	    }
+	    if (imperium_self.game.players_info[action_card_player-1].goods > 0) {
+	      html   += '<li class="textchoice" id="0">0 votes</li>';
+	      for (let i = 1; i <= imperium_self.game.players_info[action_card_player-1].goods+1; i++) {
+	        if (i == 1) { html   += '<li class="textchoice" id="1">'+i+' vote</li>'; }
+	        else { html   += '<li class="textchoice" id="'+i+'">'+i+' votes</li>'; }
+	      }
+	    } else {
+	      html   += '<li class="textchoice" id="0">0 votes</li>';
+            }
 	    html += '</ul>';
 
 	    imperium_self.updateStatus(html);
@@ -13039,7 +13045,7 @@ console.log("WHO IS NEXT? " + who_is_next);
 	    offering_html += log_offer;
 	    offering_html += '</div>';
 
-        log_offer = this.returnFactionNickname(offering_faction) + " offers " + this.returnFaction(faction_to_consider) + " " + log_offer;
+        log_offer = this.returnFactionNickname(offering_faction) + " offers " + this.returnFactionNickname(faction_to_consider) + " " + log_offer;
 	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);
@@ -18494,7 +18500,8 @@ playerBuyTokens(stage = 0, resolve = 1) {
   $('.buildchoice').off();
   $('.buildchoice').on('click', function () {
 
-    if (!imperium_self.mayUnlockInterface()) {
+    if (1) {
+    //if (!imperium_self.mayUnlockInterface()) {
       salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
@@ -24404,9 +24411,7 @@ console.log(JSON.stringify(return_obj));
   returnSpaceDocksOnPlanet(planet) {
     let total = 0;
     for (let i = 0; i < planet.units.length; i++) {
-console.log("player: " + (i+1));
       for (let k = 0; k < planet.units[i].length; k++) {
-console.log(planet.units[i][k].type);
 	if (planet.units[i][k].type == "spacedock") { total++; }
       }
     }
@@ -25984,7 +25989,6 @@ returnSectorInformationHTML(sector) {
   html += sys.s.name;
   html += "</div>";
   let units_html = "";
-console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
   for (let i = 0; i < sys.s.units.length; i++) {
     if (sys.s.units[i].length > 0) {
       units_html += this.returnPlayerFleetInSector((i+1), sector);
@@ -26002,7 +26006,6 @@ console.log("UNITS IN SYSTEM: " + JSON.stringify(sys.s.units));
     <div class="grid-2">
   `;
   for (let i = 0; i < sys.p.length; i++) {
-console.log("PLANET "+i+" " + JSON.stringify(sys.p[i]));
     let planet_owner = "UNCONTROLLED";
     if (sys.p[i].owner != -1) {
       planet_owner = this.returnFaction(sys.p[i].owner-1);

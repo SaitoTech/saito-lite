@@ -5,6 +5,8 @@ module.exports = SettingsAppspaceTemplate = (app) => {
   if (email_registered == "") { email_registered = `<span id="register-email-btn" style="cursor:pointer" class="register-email-btn">register an email address</span>`; }
   if (identifier_registered == "") { identifier_registered = `<span id="register-identifier-btn" style="cursor:pointer" class="register-identifier-btn">register a username</span>`; }
 
+  let modules_html = "Wallet Outdated - module selection not supported";
+  try {
   let modules_html = app.options.modules
     .map((mod, i) => {
       let CHECKED = mod.active ? 'CHECKED': '';
@@ -22,7 +24,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
       `;
     })
     .join('');
-
+  } catch (err) {}
 
   let balance_link = "";
   app.modules.mods.forEach(mod => {
@@ -46,6 +48,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
           <button id="backup-account-btn" class="backup-account-btn"">Backup Wallet</button>
           <button id="restore-account-btn" class="restore-account-btn">Restore Wallet</button>
           <button id="restore-privatekey-btn" class="restore-privatekey-btn">Import Private Key</button>
+          <input id="file-input" class="file-input" type="file" name="name" style="display:none;" />
         </div>
 
         ${balance_link}

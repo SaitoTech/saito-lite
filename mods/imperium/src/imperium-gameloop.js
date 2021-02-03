@@ -142,8 +142,10 @@ console.log("MANUALLY CLEARING!");
 	    for (let i = 0; i < this.game.players.length; i++) {
 	      if (this.game.players[i] === mv[3]) {
 	        this.setPlayerInactive((i+1));
-  	        this.game.confirms_received += parseInt(mv[2]);
-  	        this.game.confirms_players.push(mv[3]);
+		if (!this.game.confirms_players.includes(mv[3])) {
+  	          this.game.confirms_received += parseInt(mv[2]);
+  	          this.game.confirms_players.push(mv[3]);
+	        }
 	      }
 	    }
 
@@ -2132,7 +2134,7 @@ console.log("WHO IS NEXT? " + who_is_next);
 	    offering_html += log_offer;
 	    offering_html += '</div>';
 
-        log_offer = this.returnFactionNickname(offering_faction) + " offers " + this.returnFaction(faction_to_consider) + " " + log_offer;
+        log_offer = this.returnFactionNickname(offering_faction) + " offers " + this.returnFactionNickname(faction_to_consider) + " " + log_offer;
 	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);
