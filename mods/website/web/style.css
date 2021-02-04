@@ -509,123 +509,22 @@ section {
 
 .sectionWrapper5 {
   width: 100%;
-  height: 82rem;
+  height: 60rem;
   margin-top: 13.1rem;
   background: url("/website/img/Roadmap_bg.png") no-repeat;
-  background-size: 100% 82rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 60rem;
 }
 
-.section5 {
-  position: relative;
-}
-
-.section5 .title {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 8rem;
-  text-align: center;
-  font-size: 3rem;
-  font-weight: bold;
-  color: #FFFFFF;
-}
-
-.section5 .line {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 6.2rem;
-  width: 17rem;
-  height: 0.6rem;
-  background-color: rgba(205, 205, 205, 0.3);
-  border-radius: 0.4rem;
-}
-
-.section5 .line:after {
-  content: "";
-  position: absolute;
-  z-index: 9;
-  width: 7rem;
-  height: 0.6rem;
-  top: 0;
-  left: 0;
-  background: #FFFFFF;
-  border-radius: 0.4rem;
-}
-
-.section5 .number {
-  position: absolute;
-  top: 45%;
-  font-size: 3rem;
-  font-weight: bold;
-  color: #FFFFFF;
-  left: -7rem;
-}
-
-.section5 .itemWrapper {
-  display: flex;
-  justify-content: center;
-  height: 82rem;
-}
-
-.section5 .itemWrapper .item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 18.2rem;
-  margin-right: 6.6rem;
-}
-
-.section5 .itemWrapper .item:last-child {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0;
-}
-
-.section5 .item .titleTop, .section5 .item .titleBottom {
-  width: 19.2rem;
-  height: 6.8rem;
-  line-height: 3.1rem;
-  font-size: 18px;
-  font-weight: bold;
-  color: #FFFFFF;
-  text-align: center;
-  box-sizing: content-box;
-}
-
-.section5 .item .titleTop {
-  padding-bottom: 2.4rem;
-}
-
-.section5 .item .titleBottom {
-  padding-top: 1.6rem;
-}
-
-.section5 .itemWrapper .item .line_icon {
-  width: 1px;
-  height: 11.5rem;
-}
-
-.section5 .itemWrapper .item .icon {
-  width: 3.4rem;
-  height: 3.4rem;
+.sectionWrapper5#swiperMobile5 {
+  height: 50rem;
+  background-image: url("/website/img/road_bg.png");
+  background-size: 100% 50rem;
 }
 
 .swiperContainner5 {
   position: relative;
-}
-
-.sectionWrapperMobile5 {
-  width: 100%;
-  height: 50rem;
-  background-image: url("/website/img/road_bg.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 50rem;
 }
 
 .swiperContainner5 .title {
@@ -639,11 +538,16 @@ section {
   color: #FFFFFF;
 }
 
+.swiperContainner5.desktop .title {
+  top: 5rem;
+  font-size: 3rem;
+}
+
 .swiper-wrapper .swiper-slide {
   position: relative;
 }
 
-.sectionWrapperMobile5 .titleTop, .sectionWrapperMobile5 .titleBottom {
+.sectionWrapper5 .titleTop, .sectionWrapper5 .titleBottom {
   position: absolute;
   width: 10.2rem;
   height: auto;
@@ -655,31 +559,62 @@ section {
   box-sizing: border-box;
 }
 
-.sectionWrapperMobile5 .swiper-slide {
+.sectionWrapper5 .titleTop, .sectionWrapper5 .titleBottom {
+  position: absolute;
+  width: 10.2rem;
+  height: auto;
+  line-height: 2.1rem;
+  font-size: 18px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.sectionWrapper5#swiperDesktop5 .titleTop, .sectionWrapper5#swiperDesktop5 .titleBottom {
+  width: 19.2rem;
+  height: 6.8rem;
+  line-height: 2.5rem;
+  font-size: 18px;
+}
+
+.sectionWrapper5 .swiper-slide {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
 
-.sectionWrapperMobile5 .swiper-slide-prev, .sectionWrapperMobile5 .swiper-slide-next {
+.sectionWrapper5 .swiper-slide {
   transform: scale(0.8);
 }
 
-.sectionWrapperMobile5 .titleTop {
+.sectionWrapper5 .swiper-slide-active {
+  transform: initial;
+}
+
+.sectionWrapper5 .titleTop {
   top: 8rem;
 }
 
-.sectionWrapperMobile5 .titleBottom {
+.sectionWrapper5 .titleBottom {
   bottom: 7rem;
 }
 
-.sectionWrapperMobile5 .line_icon {
+.sectionWrapper5#swiperDesktop5 .titleTop {
+  top: 14rem;
+}
+
+.sectionWrapper5#swiperDesktop5 .titleBottom {
+  bottom: 12rem;
+}
+
+.sectionWrapper5 .line_icon {
   width: 1px;
   height: 9.2rem;
 }
 
-.sectionWrapperMobile5 .icon {
+.sectionWrapper5 .icon {
   width: 2.72rem;
   height: 2.72rem;
 }
@@ -688,8 +623,17 @@ section {
   bottom: 2.5rem;
 }
 
-.swiperContainner5 {
+.swiperContainner5.mobile {
   display: none;
+  overflow-x: hidden;
+}
+
+.swiperContainner5.desktop .sectionWrapper5 {
+  width: 100%;
+  height: 60rem;
+  margin-top: 13.1rem;
+  background: url("/website/img/Roadmap_bg.png") no-repeat;
+  background-size: 100% 60rem;
 }
 
 /* Part six */
@@ -1148,11 +1092,10 @@ h2, h5 {
     width: 18.8rem;
   }
   /* Part five */
-  .sectionWrapper5 {
+  .all .swiperContainner5.desktop {
     display: none;
-  }
-  .swiperContainner5 {
-    overflow-x: hidden;
+  }  
+  .all .swiperContainner5.mobile {
     display: block;
   }
   /* Part six */
