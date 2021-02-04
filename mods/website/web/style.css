@@ -918,6 +918,9 @@ h2, h5 {
   html {
     font-size: 8px;
   }
+  .header-wrapper .header-icon-links a {
+    margin-right: 30px;
+  }
   .header-wrapper .header-mini-wallet .logo {
     margin-right: 40px;
   }
@@ -979,6 +982,7 @@ h2, h5 {
   .mobile {
     display: initial;
   }
+
   .header-nav {
     width: 100%;
     padding: 0 2rem;
@@ -1182,7 +1186,7 @@ h2, h5 {
     width: 100%;
     display: flex;
     flex-direction: row-reverse;
-    padding: 0 1em;
+    padding-right: 1rem;
   }
   .header-wrapper .header-mini-wallet a {
     margin-right: 20px;
@@ -1199,17 +1203,53 @@ h2, h5 {
     right: -104vw;
     padding: 4rem 4.8rem;
   }
-  #settings-dropdown hr {
-    margin: 3rem 0;
-    border: none;
-    background-color: #f4f4f4;
-    height: 1px;
+  #saito-header #settings-dropdown hr {
+    margin: 2rem 0 ;
+  }
+
+  #settings-dropdown .wallet-action-row {
+    font-size: 22px;
+    padding: 0.5rem 5px;
+  }
+
+  #settings-dropdown .account-info .profile-public-key {
+    width: calc(60vw);
+  }
+
+  #settings-dropdown .mobile-menu {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .header-wrapper #settings-dropdown {
+    padding: 4rem 3.8rem;
+  }
+  #settings-dropdown .wallet-action-row {
+    font-size: 16px;
+    padding: 0.5rem 5px;
+  }
+
+  #settings-dropdown .mobile-menu a {
+    font-size: 16px;
+    margin-right: 6px;
+  }
+
+  .header-wrapper .header-icon-links .logo {
+    margin-right: 20px;
+  }
+  #settings-dropdown .account-info .profile-public-key {
+    width: 17rem;
+  }
+  #settings-dropdown .account-info #header-token-select {
+    width: 17rem;
   }
 }
 
 .loading {
   position: absolute;
-  top: 2em;
+  top: 1em;
   left: 2em;
   font-size: 26px;
 }
@@ -1355,13 +1395,17 @@ h2, h5 {
 #settings-dropdown {
   position: absolute;
   top: 8rem;
-  right: -42rem;
-  width: 40rem;
-  height: 55rem;
+  right: -46rem;
+  width: 44rem;
+  height: auto;
   background: #FFFFFF;
   box-shadow: -1rem 0rem 2rem 0rem rgba(205, 205, 205, 0.5);
-  padding: 4rem;
+  padding: 3px 4rem;
   transition: all 500ms ease;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #4442;
 }
 
 #settings-dropdown hr {
@@ -1411,7 +1455,7 @@ h2, h5 {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .account-info .saito-select {
@@ -1429,6 +1473,7 @@ h2, h5 {
   width: 20rem;
   border: none;
   font-size: 20px;
+  background: transparent;
 }
 
 .settings-fas-icon {
@@ -1462,20 +1507,20 @@ h2, h5 {
 }
 
 .wallet-action-row {
-  height: 1.6rem;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 400;
   color: #1C1C23;
   box-sizing: content-box;
-  padding: 1rem 5px;
+  padding: 0.5rem 5px;
 }
 
 .wallet-action-row:last-child {
   margin-bottom: 0;
 }
 
-.wallet-action-row:hover {
+#settings-dropdown .wallet-action-row:hover {
   background-color: var(--saito-skyline-grey);
+  padding: 0.5rem 14px;
 }
 
 .wallet-action-row i {
@@ -1513,15 +1558,15 @@ h2, h5 {
   color: black;
 }
 
-.mobile-menu {
-  margin: 0 0 20px 0;
-}
-
 .mobile-menu a {
   font-size: 18px;
   margin: 0 10px 0 0;
   color: var(--saito-orange);
   font-weight: 900;
+}
+
+.mobile-menu a:last-child {
+  margin: 0;
 }
 
 .mobile-menu a:hover {

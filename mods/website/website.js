@@ -50,10 +50,11 @@ class Website extends ModTemplate {
     }
 
     html = `
-    <div class="mobile-menu">
+    <div class="mobile-menu mobile">
      <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
      <a alt="links to get involved" href="#getinvolved">Community</a>
      <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+     <a class="language-info" alt="中文" href="website/CN" href="/website/CN">中文</a> 
     </div>
     <hr/>
     `;
