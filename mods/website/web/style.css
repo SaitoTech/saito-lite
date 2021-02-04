@@ -1565,7 +1565,7 @@ h2, h5 {
 
 
 .chat-box-header-title {
-  font-size: 17.28px;
-  line-height: 7px;
+  font-size: 17.28px !important;
+  line-height: 7px !important;
   color: #fff;
 }
