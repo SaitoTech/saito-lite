@@ -126,6 +126,22 @@ a:hover {
   background: rgba(0, 0, 0, .4);
 }
 
+/* .sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 40vw;
+  padding: 2.8rem 2rem;
+  background-color: #000;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+} */
+
 .sidebar .menu_list {
   width: 2.4rem;
   height: 2.4rem;
