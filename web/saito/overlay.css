@@ -100,7 +100,7 @@
 
 .welcome-modal-wrapper {
   display: grid;
-  grid-template-columns: 6fr 1fr;
+  grid-template-columns: 3fr 1fr;
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   background-image: url(/saito/img/dreamscape.png);
   background-position: 0em;

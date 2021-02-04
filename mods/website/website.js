@@ -64,7 +64,8 @@ class Website extends ModTemplate {
     }
 
 
-    document.querySelectorAll('website-newsletter-subscribe').forEach((element) => {
+    console.log(document.querySelectorAll('.website-newsletter-subscribe'));
+    document.querySelectorAll('.website-newsletter-subscribe').forEach((element) => {
       element.onclick = (e) => {
         this.mre = new ModalRegisterEmail(app);
         this.mre.render(this.app, this, ModalRegisterEmail.MODES.NEWSLETTER);
@@ -76,6 +77,7 @@ class Website extends ModTemplate {
   }
   doPrivateSaleOverlay() {
     let doPrivsaleSignup = this.app.browser.parseHash(window.location.hash).private_sale;
+    
     if(doPrivsaleSignup) {
       this.mre = new ModalRegisterEmail(this.app);
       this.mre.render(this.app, this, ModalRegisterEmail.MODES.PRIVATESALE);
