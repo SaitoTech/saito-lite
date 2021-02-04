@@ -1586,3 +1586,35 @@ h2, h5 {
 .logo {
   height: 3em;
 }
+
+
+.saito-overlay input[type=text], input[type=number], input[type=password], input[type=date] {
+  border: none;
+  padding: 10px 5px;
+  border-radius: 0px;
+  font-size: 1.2em;
+  border-bottom: 1px solid var(--saito-cyber-black-wash);
+}
+
+.saito-overlay button {
+  cursor: pointer;
+  margin-right: 8px;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #3066BE;
+  color: #FFF;
+  transition: all 0.5s;
+}
+
+.saito-overlay button:last-child {
+  margin-right: 0;
+}
+
+.saito-overlay button:hover {
+  background-color: #60AFFF;
+}
+
+.saito-overlay button:focus {
+  outline: none;
+}
