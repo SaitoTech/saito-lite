@@ -933,7 +933,6 @@ h2, h5 {
   .mobile {
     display: initial;
   }
-
   .header-nav {
     width: 100%;
     padding: 0 2rem;
@@ -1094,7 +1093,7 @@ h2, h5 {
   /* Part five */
   .all .swiperContainner5.desktop {
     display: none;
-  }  
+  }
   .all .swiperContainner5.mobile {
     display: block;
   }
@@ -1151,18 +1150,15 @@ h2, h5 {
     padding: 4rem 4.8rem;
   }
   #saito-header #settings-dropdown hr {
-    margin: 2rem 0 ;
+    margin: 2rem 0;
   }
-
   #settings-dropdown .wallet-action-row {
     font-size: 22px;
     padding: 0.5rem 5px;
   }
-
   #settings-dropdown .account-info .profile-public-key {
     width: calc(60vw);
   }
-
   #settings-dropdown .mobile-menu {
     display: flex;
     align-items: center;
@@ -1177,12 +1173,10 @@ h2, h5 {
     font-size: 16px;
     padding: 0.5rem 5px;
   }
-
   #settings-dropdown .mobile-menu a {
     font-size: 16px;
     margin-right: 6px;
   }
-
   .header-wrapper .header-icon-links .logo {
     margin-right: 20px;
   }
@@ -1531,7 +1525,6 @@ h2, h5 {
   height: 3em;
 }
 
-
 .saito-overlay input[type=text], input[type=number], input[type=password], input[type=date] {
   border: none;
   padding: 10px 5px;
@@ -1561,4 +1554,18 @@ h2, h5 {
 
 .saito-overlay button:focus {
   outline: none;
+}
+
+/* CHAT */
+
+.chat-box {
+  position: fixed;
+  bottom: 0;
+}
+
+
+.chat-box-header-title {
+  font-size: 17.28px;
+  line-height: 7px;
+  color: #fff;
 }
