@@ -39,8 +39,6 @@ try {
   $('.sector').on('mousedown', function (e) {
     xpos = e.clientX;
     ypos = e.clientY;
-    //pid = $(this).attr("id");
-    //imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnSectorInformationHTML(pid));
   });
   $('.sector').on('mouseup', function (e) {
     if (Math.abs(xpos-e.clientX) > 4) { return; }
@@ -237,7 +235,7 @@ returnSectorInformationHTML(sector) {
   for (let i = 0; i < sys.p.length; i++) {
     let planet_owner = "UNCONTROLLED";
     if (sys.p[i].owner != -1) {
-      planet_owner = this.returnFaction(sys.p[i].owner-1);
+      planet_owner = this.returnFactionNickname(sys.p[i].owner);
     }
     html += `
       <div class="system_summary_planet">
