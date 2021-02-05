@@ -82,7 +82,7 @@
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == undefined) {
           imperium_self.game.players_info[player-1].x89_bacterial_weapon = 0;
-          imperium_self.game.players_info[gainer-1].x89_bacterial_weapon_exhausted = 0;
+          imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted = 0;
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {

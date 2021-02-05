@@ -71,6 +71,8 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       //
       if (mv[0] === "resolve") {
 
+console.log("hitting resolve");
+
 console.log("executing resolve with existing: " + JSON.stringify(
   this.game.confirms_players
 ));
@@ -1385,6 +1387,7 @@ console.log("WHO IS NEXT? " + who_is_next);
   	  // ALLOCATE TOKENS
   	  //
           this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
+	  this.playing_token_allocation = 0; // <--- ensure load
           this.game.queue.push("resetconfirmsneeded\t"+this.game.players_info.length);
 	}
 
@@ -1542,11 +1545,14 @@ console.log("WHO IS NEXT? " + who_is_next);
   
 
       if (mv[0] === "score") {
-  
+
+console.log("hit here");  
+
   	let player       = parseInt(mv[1]);
   	let vp 		 = parseInt(mv[2]);
   	let objective    = mv[3];
         let objective_name = objective;
+        let player_return_value = 1;
 
         if (this.secret_objectives[objective] != null) { objective_name = this.secret_objectives[objective].name; }
         if (this.stage_i_objectives[objective] != null) { objective_name = this.stage_i_objectives[objective].name; }
@@ -1568,15 +1574,21 @@ console.log("WHO IS NEXT? " + who_is_next);
   	this.game.queue.splice(qe, 1);
 
         if (this.stage_i_objectives[objective] != undefined) {
-	  return this.stage_i_objectives[objective].scoreObjective(this, player);
+	  player_return_value = this.stage_i_objectives[objective].scoreObjective(this, player);
 	}
         if (this.stage_ii_objectives[objective] != undefined) {
-	  return this.stage_ii_objectives[objective].scoreObjective(this, player);
+	  player_return_value = this.stage_ii_objectives[objective].scoreObjective(this, player);
 	}
         if (this.secret_objectives[objective] != undefined) {
-	  return this.secret_objectives[objective].scoreObjective(this, player);
+	  player_return_value = this.secret_objectives[objective].scoreObjective(this, player);
 	}
 
+	if (player == this.game.player) {
+console.log("hitting: " + player_return_value);
+	  return player_return_value;
+        }
+
+console.log("return 1");
   	return 1;
 
       }
@@ -2312,18 +2324,13 @@ console.log("WHO IS NEXT? " + who_is_next);
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
-console.log("A");
 	this.updateTokenDisplay();
-console.log("B");
 	this.updateLeaderboard();
-console.log("C");
 	this.displayFactionDashboard();
-console.log("D");
 
   	this.game.queue.splice(qe, 1);
 
 	// if action cards over limit
-console.log("display faction dashboard over!");
 	return this.handleActionCardLimit(player);
 
 
