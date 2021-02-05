@@ -103,6 +103,15 @@
       class : "game-agendas",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
+	game_mod.handleAgendasMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-cards", {
+      text : "Laws",
+      id : "game-laws",
+      class : "game-laws",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
 	game_mod.handleLawsMenuItem();
       }
     });
@@ -295,7 +304,6 @@ console.log("error initing chat: " + err);
     //
     // this.tech
     // this.factions
-    // this.units
     // this.strategy_cards
     // this.agenda_cards
     // this.action_cards

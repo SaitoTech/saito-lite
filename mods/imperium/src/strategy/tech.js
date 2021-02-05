@@ -181,7 +181,6 @@
           return options;
         },
         onPass : function(imperium_self, winning_choice) {
-console.log("WINNIGN CHOICE: " + winning_choice);
 	  let player_number = 0;
 	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
 	    if (imperium_self.returnFaction(i+1) == winning_choice) { player_number = i; }
@@ -189,6 +188,9 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           imperium_self.game.state.minister_of_technology = 1;
           imperium_self.game.state.minister_of_technology_player = player_number+1;
           imperium_self.game.players_info[player_number].permanent_research_technology_card_must_not_spend_resources = 1;
+
+	  imperium_self.game.state.laws.push({ agenda : "minister-of-technology" , option : winning_choice });
+
         }
   });
 

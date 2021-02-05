@@ -84,6 +84,23 @@
 
 
 
+  returnNameOfUnknown(name) {
+
+    if (this.tech[name] != undefined) { return this.tech[name].name; }
+    if (this.strategy_cards[name] != undefined) { return this.strategy_cards[name].name; }
+    if (this.game.planets[name] != undefined) { return this.game.planets[name].name; }
+    if (this.agenda_cards[name] != undefined) { return this.agenda_cards[name].name; }
+    if (this.action_cards[name] != undefined) { return this.action_cards[name].name; }
+    if (this.stage_i_objectives[name] != undefined) { return this.stage_i_objectives[name].name; }
+    if (this.stage_ii_objectives[name] != undefined) { return this.stage_ii_objectives[name].name; }
+    if (this.secret_objectives[name] != undefined) { return this.secret_objectives[name].name; }
+    if (this.promissary_notes[name] != undefined) { return this.promissary_notes[name].name; }
+
+    return name;
+
+  }
+
+
   returnNameFromIndex(idx=null) {
     if (idx == null) { return ""; }
     if (idx.indexOf("planet") == 0) { if (this.game.planets[idx]) { return this.game.planets[idx].name; } }

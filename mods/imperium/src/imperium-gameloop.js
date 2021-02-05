@@ -1286,10 +1286,11 @@ console.log("WHO IS NEXT? " + who_is_next);
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
 
-	  if (this.game.planets['new-byzantium'].owner != -1) {
+// HACK
+//	  if (this.game.planets['new-byzantium'].owner != -1) {
             this.game.queue.push("strategy\t"+"politics"+"\t"+this.game.state.speaker+"\t3\t"+1); // 3 ==> end-of-round tertiary
             this.game.queue.push("ACKNOWLEDGE\t"+"The Galactic Senate has been re-established on New Byzantium, voting commences on the recent round of proposals");
-	  }
+//	  }
 
   	  this.game.state.round_scoring = 0;
 	  return 1;

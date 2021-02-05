@@ -3528,7 +3528,6 @@ console.log("1 - 1 - 4")
           return options;
         },
         onPass : function(imperium_self, winning_choice) {
-console.log("WINNIGN CHOICE: " + winning_choice);
 	  let player_number = 0;
 	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
 	    if (imperium_self.returnFaction(i+1) == winning_choice) { player_number = i; }
@@ -3536,6 +3535,9 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           imperium_self.game.state.minister_of_technology = 1;
           imperium_self.game.state.minister_of_technology_player = player_number+1;
           imperium_self.game.players_info[player_number].permanent_research_technology_card_must_not_spend_resources = 1;
+
+	  imperium_self.game.state.laws.push({ agenda : "minister-of-technology" , option : winning_choice });
+
         }
   });
 
@@ -4870,6 +4872,9 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	      }
 	    }
 	  }
+
+	  imperium_self.game.state.laws.push({ agenda : "homeland-defense-act" , option : winning_choice });
+
 	},
         handleGameLoop : function(imperium_self, qe, mv) {
 
@@ -6191,8 +6196,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
   });
 
 
-
-
   this.importAgendaCard('colonial-redistribution', {
         name : "Colonial Redistribution" ,
         type : "Law" ,
@@ -6211,6 +6214,8 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           imperium_self.game.state.colonial_redistribution = 1;
           imperium_self.game.state.colonial_redistribution_planet = winning_choice;
 	  imperium_self.game.queue.push("colonial_redistribution\t"+winning_choice);
+
+	  imperium_self.game.state.laws.push({ agenda : "colonial-redistribution" , option : winning_choice });
 
 	  return 0;
 
@@ -6338,7 +6343,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
-
   this.importAgendaCard('public-execution', {
 
         name : "Public Execution" ,
@@ -6444,7 +6448,6 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
         return 1;
       }
   });
-
 
 
 
@@ -9088,6 +9091,15 @@ ACTION CARD - types
       class : "game-agendas",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
+	game_mod.handleAgendasMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-cards", {
+      text : "Laws",
+      id : "game-laws",
+      class : "game-laws",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
 	game_mod.handleLawsMenuItem();
       }
     });
@@ -9280,7 +9292,6 @@ console.log("error initing chat: " + err);
     //
     // this.tech
     // this.factions
-    // this.units
     // this.strategy_cards
     // this.agenda_cards
     // this.action_cards
@@ -10096,6 +10107,9 @@ handleTechMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnTechOverlay());
 }
 
+handleAgendasMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnAgendasOverlay());
+}
 handleLawsMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnLawsOverlay());
 }
@@ -12261,10 +12275,11 @@ console.log("WHO IS NEXT? " + who_is_next);
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
 
-	  if (this.game.planets['new-byzantium'].owner != -1) {
+// HACK
+//	  if (this.game.planets['new-byzantium'].owner != -1) {
             this.game.queue.push("strategy\t"+"politics"+"\t"+this.game.state.speaker+"\t3\t"+1); // 3 ==> end-of-round tertiary
             this.game.queue.push("ACKNOWLEDGE\t"+"The Galactic Senate has been re-established on New Byzantium, voting commences on the recent round of proposals");
-	  }
+//	  }
 
   	  this.game.state.round_scoring = 0;
 	  return 1;
@@ -22912,6 +22927,23 @@ playerDiscardActionCards(num, mycallback=null) {
 
 
 
+  returnNameOfUnknown(name) {
+
+    if (this.tech[name] != undefined) { return this.tech[name].name; }
+    if (this.strategy_cards[name] != undefined) { return this.strategy_cards[name].name; }
+    if (this.game.planets[name] != undefined) { return this.game.planets[name].name; }
+    if (this.agenda_cards[name] != undefined) { return this.agenda_cards[name].name; }
+    if (this.action_cards[name] != undefined) { return this.action_cards[name].name; }
+    if (this.stage_i_objectives[name] != undefined) { return this.stage_i_objectives[name].name; }
+    if (this.stage_ii_objectives[name] != undefined) { return this.stage_ii_objectives[name].name; }
+    if (this.secret_objectives[name] != undefined) { return this.secret_objectives[name].name; }
+    if (this.promissary_notes[name] != undefined) { return this.promissary_notes[name].name; }
+
+    return name;
+
+  }
+
+
   returnNameFromIndex(idx=null) {
     if (idx == null) { return ""; }
     if (idx.indexOf("planet") == 0) { if (this.game.planets[idx]) { return this.game.planets[idx].name; } }
@@ -26285,10 +26317,27 @@ returnLawsOverlay() {
   if (this.game.state.laws.length > 0) {
       html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i]].text}</div></li>`;
+        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i].agenda].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i].agenda].text}</div><div class="overlay_law_option">${this.returnNameOfUnknown(this.game.state.laws[i].option)}</div></li>`;
       }
       html += '</ul>';
   }
+
+  if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
+      html += '<div class="overlay_laws_header">There are no laws in force or agendas up for consideration at this time.</div>';
+  }
+
+  html += '</div>';
+
+  return html;
+
+}
+
+
+
+returnAgendasOverlay() {
+
+  let laws = this.returnAgendaCards();
+  let html = '<div class="overlay_laws_container">';
 
   if (this.game.state.agendas.length > 0) {
       html += '<div class="overlay_laws_list">';
