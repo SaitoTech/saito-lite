@@ -193,11 +193,27 @@ class Twilight extends GameTemplate {
 
   }
 
-
+  
 
   handleStatsMenu() {
 
     let twilight_self = this;
+
+    let us_bg = 0;
+    let ussr_bg = 0;
+
+    for (var i in twilight_self.countries) {
+      let countryname  = i;
+      let divname      = '#'+i;
+  
+      if ( twilight_self.countries[countryname].bg == 1 ){
+  
+          if (this.isControlled("us", i) == 1) {us_bg++}
+          if (this.isControlled("ussr", i) == 1) {ussr_bg++}
+      }
+  }
+
+
     let html =
     `
       <div class="game-overlay-menu statistics-overlay" id="game-overlay-menu">
@@ -222,7 +238,12 @@ class Twilight extends GameTemplate {
 	    <td><b>Scoring Cards</b></td>
 	    <td>${this.game.state.stats.us_scorings}</td>
 	    <td>${this.game.state.stats.ussr_scorings}</td>
-	  </tr>
+    </tr>
+    <tr>
+      <td><b>Battlegrounds Controlled</b></td>
+      <td>${us_bg}</td>
+      <td>${ussr_bg}</td>
+    </tr>
 	  <tr>
 	    <td><b>Coups</b></td>
 	    <td>`;

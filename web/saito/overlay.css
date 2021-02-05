@@ -1,0 +1,209 @@
+
+.saito-overlay-backdrop {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #444;
+  opacity: 0.4;
+  z-index: 100;
+  min-width: 350px;
+}
+
+.saito-overlay {
+  font-size: 16px;
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  z-index: 1000;
+  padding: 10px;
+}
+
+.saito-overlay-closebox {
+  display: none;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: 0px;
+  border-radius: 50%;
+  top: 0px;
+  background-color: white;
+  z-index: 100;
+}
+
+.saito-overlay-closebox-btn {
+  display: block;
+  height: 32px;
+  width: 32px;
+  color: red;
+  font-size: 31px;
+}
+
+.saito-overlay-closebox-btn:hover {
+  transform: scale(1.0);
+}
+
+.game-overlay {
+  z-index: 9010;
+}
+
+.game-overlay-backdrop {
+  z-index: 9000;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.saito-overlay-menu {
+  padding: 10px;
+  background-color: whitesmoke;
+  opacity: 0.8;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.saito-overlay-menu ul li {
+  width: 100%;
+  line-height: 3.5em;
+  border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
+  text-align: -webkit-match-parent;
+  display: list-item;
+  list-style: none;
+  padding: 0 1em;
+}
+
+.saito-overlay-menu ul li:hover {
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75), -2px -2px 5px #eee;
+  background: #0001;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .saito-overlay {
+    width: 95vw;
+  }
+}
+
+
+
+
+
+
+
+
+.welcome-modal-wrapper {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
+  background-image: url(/saito/img/dreamscape.png);
+  background-position: 0em;
+  background-size: cover;
+  width: 80vw;
+}
+/* 
+.welcome-invite-box {
+  min-width: 200px;
+  min-height: 120px;
+  max-width: 325px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  border: 1px solid;
+  margin: 1em;
+}
+
+.welcome-invite-box i {
+  margin: 1em;
+} */
+
+.welcome-modal-exit {
+  padding: 1.5em;
+  background: #333d;
+  color: var(--saito-skyline-grey);
+  position: relative;
+  cursor: pointer;
+}
+
+.welcome-modal-exit .fa-arrow-right {
+  margin: auto;
+  font-size: 5vw;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+}
+
+.welcome-modal-header {
+  font-size: 2em;
+}
+
+.welcome-modal-main {}
+
+.welcome-modal-info {
+  clear: both;
+}
+
+.welcome-modal-action {
+  padding: 1.5em;
+  color: var(--saito-skyline-grey);
+}
+
+.welcome-modal-action p {
+  line-height: 1.5em;
+}
+
+.welcome-modal-signup {
+  margin: 1em 0;
+  display: flex;
+}
+
+.welcome-modal-explanation {
+  font-size: 0.8em;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 1em;
+  line-height: 1.3em;
+}
+
+#signup {
+  margin: 0;
+  width: 15px;
+  height: 21px;
+}
+
+.welcome-modal-action button:hover {
+  border-color: #fff;
+}
+
+/* mobile modals */
+
+@media only screen and (max-width: 900px) {
+  .welcome-modal-wrapper {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+  .modal-content-blank {
+    width: 100%;
+  }
+  .welcome-modal-exit .fa-arrow-right {
+    font-size: 80px;
+    bottom: 2px;
+  }
+  .welcome-modal-action {
+    padding: 0.81em;
+  }
+  i.fas.fa-arrow-right {
+    right: -1em;
+  }
+}
+

@@ -1235,7 +1235,7 @@ div#message-wrapper {
 
 .profile-register-link {
   font-style: italic;
-  pointer: cursor;
+  cursor: pointer;
   width: 250px;
   padding: 5px 0px 2px 0px;
 }

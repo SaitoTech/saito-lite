@@ -18,7 +18,7 @@ module.exports = PostMain = {
     if (!document.querySelector(".post-main")) { 
       app.browser.addElementToDom(PostMainTemplate(app, mod), "post-container"); 
     }
-    for (let i = 0; i < mod.posts.length; i++) {
+    for (let i = mod.posts.length-1; i >= 0; i--) {
       this.addPost(app, mod, mod.posts[i]);
     }
 
