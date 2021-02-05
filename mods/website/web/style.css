@@ -243,7 +243,7 @@ section {
 }
 
 .section1 .left .crumbs {
-  margin-top: 5rem;
+  margin: 5rem 0 0 0;
 }
 
 .section1 .left .crumbs a {
@@ -700,7 +700,7 @@ section {
 
 .littleIcon .itemImage {
   font-size: 24px;
-  margin: 0 12px;
+  margin: 0 24px 0 0;
 }
 
 .section6 .copyright {
