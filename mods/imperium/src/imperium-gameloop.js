@@ -573,7 +573,7 @@ console.log("we have played the strategy card secondary...");
 	    // if our interface is locked, we're processing the secondary already
 	    //
 	    if (this.lock_interface == 1) {
-console.log("interface is locked...");
+console.log("interface is locked in strategy gameloop code...");
 	      return 0;
 	    }
 	  }
@@ -1573,6 +1573,7 @@ console.log("hit here");
 
   	this.game.queue.splice(qe, 1);
 
+	/***** FEB 4 - scoring handled in Imperium now
         if (this.stage_i_objectives[objective] != undefined) {
 	  player_return_value = this.stage_i_objectives[objective].scoreObjective(this, player);
 	}
@@ -1582,13 +1583,12 @@ console.log("hit here");
         if (this.secret_objectives[objective] != undefined) {
 	  player_return_value = this.secret_objectives[objective].scoreObjective(this, player);
 	}
+	*****/
 
 	if (player == this.game.player) {
-console.log("hitting: " + player_return_value);
-	  return player_return_value;
+	  return 1;
         }
 
-console.log("return 1");
   	return 1;
 
       }
@@ -1636,7 +1636,7 @@ console.log("return 1");
   	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
   	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
   	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
-  
+
   	  //
   	  // TODO -- ROUND 1 players only select 1
   	  //

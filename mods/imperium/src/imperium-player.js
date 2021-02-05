@@ -2610,7 +2610,9 @@ canPlayerScoreVictoryPoints(player, card = "", deck = 1) {
   if (deck == 1) {
     let objectives = this.returnStageIPublicObjectives();
     if (objectives[card] != "") {
+console.log("can we: " + card);
       if (objectives[card].canPlayerScoreVictoryPoints(imperium_self, player) == 1) { return 1; }
+console.log("nope");
     }
   }
 
@@ -2688,13 +2690,17 @@ playerScoreSecretObjective(imperium_self, mycallback, stage = 0) {
 playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
 
   let html = '';
-  html += '<div class="sf-readable">Do you wish to score any victory points? </div><ul>';
+  html += '<div class="sf-readable">Do you wish to score any public objectives? </div><ul>';
+
+console.log(imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored);
 
   // Stage I Public Objectives
   for (let i = 0; i < imperium_self.game.state.stage_i_objectives.length; i++) {
 
     if (!imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored.includes(imperium_self.game.state.stage_i_objectives[i])) {
       if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_i_objectives[i], 1)) {
+console.log("Here we are able to score!");
+console.log(JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round));
         if (!imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored_this_round.includes(imperium_self.game.state.stage_i_objectives[i])) {
           html += '1 VP Public Objective: <li class="option stage1" id="' + imperium_self.game.state.stage_i_objectives[i] + '">' + imperium_self.game.deck[3].cards[imperium_self.game.state.stage_i_objectives[i]].name + '</li>';
         }
@@ -4798,11 +4804,20 @@ playerActivateSystem() {
   let imperium_self = this;
   let html = "Select a sector to activate: ";
   let activated_once = 0;
+  let xpos = 0;
+  let ypos = 0;
 
   imperium_self.updateStatus(html);
 
   $('.sector').off();
-  $('.sector').on('click', function () {
+  $('.sector').on('mousedown', function (e) {
+    xpos = e.clientX;
+    ypos = e.clientY;
+  });
+  $('.sector').on('mouseup', function (e) {
+
+    if (Math.abs(xpos-e.clientX) > 4) { return; }
+    if (Math.abs(ypos-e.clientY) > 4) { return; }
 
     //
     // only allowed 1 at a time
@@ -5541,7 +5556,7 @@ playerSelectUnitInSectorFilter(msg, sector, filter_func, mycallback = null, canc
 
 
 
-playerDiscardActionCards(num) {
+playerDiscardActionCards(num, mycallback=null) {
 
   let imperium_self = this;
 
@@ -5574,8 +5589,13 @@ playerDiscardActionCards(num) {
     imperium_self.addMove("lose\t" + imperium_self.game.player + "\taction_cards\t1");
 
     if (num == 0) {
-      imperium_self.updateStatus("discarding...");
-      imperium_self.endTurn();
+
+      if (mycallback == null) {
+        imperium_self.updateStatus("discarding...");
+        imperium_self.endTurn();
+      } else {
+	mycallback();
+      }
     }
 
   });
