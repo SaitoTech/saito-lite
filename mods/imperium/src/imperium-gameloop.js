@@ -3044,6 +3044,10 @@ console.log("hit here");
 	if (type == "ground") {
 	  sys.p[planet_idx].units[destroyee-1][unit_idx].strength = 0;
 	  sys.p[planet_idx].units[destroyee-1][unit_idx].destroyed = 1;
+
+	  if (sys.p[planet_idx].units[destroyee-1][unit_idx].type === "spacedock" || sys.p[planet_idx].units[destroyee-1][unit_idx].type === "pds") {
+	    sys.p[planet_idx].units[destroyee-1].splice(unit_idx, 1);
+	  }
 	}
 
 	//

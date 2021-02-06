@@ -535,13 +535,13 @@
 
   this.importAgendaCard('seeds-of-an-empire', {
   	name : "Seeds of an Empire" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: the player(s) with the most VP gain a VP. AGAINST: the players with the least VP gain a VP" ,
         returnAgendaOptions : function(imperium_self) { return ['for','against']; },
 	onPass : function(imperium_self, winning_choice) {
 
 	  let io = imperium_self.returnInitiativeOrder();
- 
+
 	  //
 	  // highest VP
 	  //
@@ -765,6 +765,11 @@
 	    }
 	  }
 	  imperium_self.game.players_info[imperium_self.game.state.minister_of_policy_player-1].action_cards_bonus_when_issued++;
+	  let law_to_push = {};
+	      law_to_push.agenda = "minister-of-policy";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
         }
   });
 
@@ -781,6 +786,10 @@
 	      imperium_self.game.players_info[i].action_card_limit = 3;
 	    }
 	  }
+	  let law_to_push = {};
+	      law_to_push.agenda = "executive-sanctions";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
   });
@@ -814,6 +823,10 @@
 	    imperium_self.units["infantry"].cost = 1;
 	    imperium_self.units["fighter"].cost = 1;
 	  }
+	  let law_to_push = {};
+	      law_to_push.agenda = "restricted-conscription";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
   });
@@ -829,6 +842,10 @@
 	  if (this.returnAgendaOptions(imperium_self)[winning_choice] == "support") {
 	    imperium_self.game.state.wormholes_open = 0;
 	  }
+	  let law_to_push = {};
+	      law_to_push.agenda = "wormhole-travel-ban";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
   });

@@ -2,7 +2,7 @@
 
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "Elected Player draws one secret objective" ,
         returnAgendaOptions : function(imperium_self) {
 	  let options = [];
@@ -35,7 +35,7 @@
 
   this.importAgendaCard('economic-equality', {
   	name : "Economic Equality" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: all players discard all trade goods, AGAINST: players lose all trade goods and then gain 5 trade goods. " ,
         returnAgendaOptions : function(imperium_self) {
 	  return ["for","against"];
@@ -72,7 +72,7 @@
 
   this.importAgendaCard('mutiny', {
   	name : "Mutiny" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: all who vote FOR gain 1 VP, AGAINST: all players who vote FOR lose 1 VP" ,
         returnAgendaOptions : function(imperium_self) {
 	  return ["for","against"];
@@ -141,6 +141,11 @@
             imperium_self.game.state.bombardment_against_cultural_planets = 0;
 	  }
 
+	  let law_to_push = {};
+	      law_to_push.agenda = "conventions-of-war";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
 	  return 1;
 
 	},
@@ -152,7 +157,7 @@
 
   this.importAgendaCard('swords-to-ploughshares', {
   	name : "Swords to Ploughshares" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: everyone destroys half their infantry (round up) on every planet, AGAINST: everyone gains 1 infantry each planet" ,
         returnAgendaOptions : function(imperium_self) {
 	  return ["for","against"];
@@ -491,6 +496,11 @@
           imperium_self.game.planets[winning_choice].influence+=2;
           imperium_self.updateLog(imperium_self.game.planets[winning_choice].name + " increases influence value by 2");
 
+	  let law_to_push = {};
+	      law_to_push.agenda = "senate-sanctuary";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
 	  return 1;
 
         }
@@ -636,7 +646,7 @@
 
   this.importAgendaCard('compensated-disarmament', {
         name : "Compensated Disarmament" ,
-        type : "Law" ,
+        type : "Directive" ,
         elect : "planet" ,
         text : "Destroy all ground forces on planet. For each infantry destroyed planet owner gains 1 trade good" ,
         returnAgendaOptions : function(imperium_self) {
