@@ -2403,7 +2403,7 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["marshall","wwby","duckandcover","degaulle","saltnegotiations","africa", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["howilearned","wwby","duckandcover","degaulle","saltnegotiations","africa", "centralamerica", "europe", "asia"];
             } else {
               this.game.deck[0].hand = ["cia", "missileenvy", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
