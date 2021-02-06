@@ -146,7 +146,19 @@ module.exports = ArcadeMain = {
     //
     app.browser.addIdentifiersToDom();
 
+    //
+    //
+    //
+    try {
+console.log("Supported? " + navigator.userAgent);
+      if (app.browser.isSupportedBrowser(navigator.userAgent) == 0) {
+console.log("nope -- displaying banner");
+        document.querySelector('.alert-banner').style.display = "block";
+      }
+    } catch (err) {}
+
   },
+
 
   attachEvents(app, mod) {
 
