@@ -41,7 +41,6 @@
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  if (sys.p[planet_idx].units[player-1].length > 0) {
             imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
-  	      imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
   	      imperium_self.endTurn();
             });
 	  } else {
@@ -250,6 +249,7 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
     if (action2 === "yes") {
       imperium_self.addMove("destroy_infantry_on_planet"+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+1);
       imperium_self.addMove("add_infantry_to_planet"+"\t"+player+"\t"+planet.planet+"\t"+1);
+      imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
       mycallback(imperium_self);
       return;
     }

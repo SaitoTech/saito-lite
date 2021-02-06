@@ -573,7 +573,7 @@ console.log("we have played the strategy card secondary...");
 	    // if our interface is locked, we're processing the secondary already
 	    //
 	    if (this.lock_interface == 1) {
-console.log("interface is locked...");
+console.log("interface is locked in strategy gameloop code...");
 	      return 0;
 	    }
 	  }
@@ -1286,10 +1286,11 @@ console.log("WHO IS NEXT? " + who_is_next);
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
 
-	  if (this.game.planets['new-byzantium'].owner != -1) {
+// HACK
+//	  if (this.game.planets['new-byzantium'].owner != -1) {
             this.game.queue.push("strategy\t"+"politics"+"\t"+this.game.state.speaker+"\t3\t"+1); // 3 ==> end-of-round tertiary
             this.game.queue.push("ACKNOWLEDGE\t"+"The Galactic Senate has been re-established on New Byzantium, voting commences on the recent round of proposals");
-	  }
+//	  }
 
   	  this.game.state.round_scoring = 0;
 	  return 1;
@@ -1573,6 +1574,7 @@ console.log("hit here");
 
   	this.game.queue.splice(qe, 1);
 
+	/***** FEB 4 - scoring handled in Imperium now
         if (this.stage_i_objectives[objective] != undefined) {
 	  player_return_value = this.stage_i_objectives[objective].scoreObjective(this, player);
 	}
@@ -1582,13 +1584,12 @@ console.log("hit here");
         if (this.secret_objectives[objective] != undefined) {
 	  player_return_value = this.secret_objectives[objective].scoreObjective(this, player);
 	}
+	*****/
 
 	if (player == this.game.player) {
-console.log("hitting: " + player_return_value);
-	  return player_return_value;
+	  return 1;
         }
 
-console.log("return 1");
   	return 1;
 
       }
@@ -1636,7 +1637,7 @@ console.log("return 1");
   	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
   	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
   	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
-  
+
   	  //
   	  // TODO -- ROUND 1 players only select 1
   	  //

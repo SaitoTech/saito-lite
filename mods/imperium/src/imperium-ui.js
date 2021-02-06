@@ -38,6 +38,9 @@ handleTechMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnTechOverlay());
 }
 
+handleAgendasMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnAgendasOverlay());
+}
 handleLawsMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnLawsOverlay());
 }

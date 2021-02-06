@@ -81,26 +81,78 @@
 	    my_secret_vp = vp;
 	    my_secret_objective = objective;
 
-	    imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
             imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
 
 	      imperium_self.updateStatus("scoring completed");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 
               if (my_secret_vp > 0) { 
-		imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); 
-	      }
-              if (vp > 0) {
-		imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
+		
+                if (imperium_self.secret_objectives[objective] != undefined) {
+                  imperium_self.secret_objectives[objective].scoreObjective(imperium_self, player, function() {
+
+		    imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); 
+
+              	    if (vp > 0) {
+
+        	      if (imperium_self.stage_i_objectives[objective] != undefined) {
+        		imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
+console.log("1 - 1 - 1")
+			  imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
+	    		  imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(my_secret_objective);
+	      		  imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+			  imperium_self.endTurn();
+			});
+        	      }
+        	      if (imperium_self.stage_ii_objectives[objective] != undefined) {
+        		imperium_self.stage_ii_objectives[objective].scoreObjective(imperium_self, player, function() {
+console.log("1 - 1 - 2")
+			  imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
+	    		  imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(my_secret_objective);
+	      		  imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+			  imperium_self.endTurn();
+			});
+        	      } 
+
+		    } else {
+
+	    	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(my_secret_objective);
+		      imperium_self.endTurn();
+
+		    }
+		  });
+                }
+		return 0;
 	      }
 
-	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
-              imperium_self.updateStatus("Waiting to update your Victory Points.");
-              imperium_self.endTurn();
+              if (vp > 0) {
+        	if (imperium_self.stage_i_objectives[objective] != undefined) {
+        	  imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
+console.log("1 - 1 - 3")
+		    imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
+	            imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+		    imperium_self.endTurn();
+		  });
+        	}
+        	if (imperium_self.stage_ii_objectives[objective] != undefined) {
+        	  imperium_self.stage_ii_objectives[objective].scoreObjective(imperium_self, player, function() {
+console.log("1 - 1 - 4")
+		    imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
+	            imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+		    imperium_self.endTurn();
+		  });
+        	}
+	      } else {
+
+	        imperium_self.endTurn();
+
+	      }
             }, 2);
+
           });
   	  return 0;
         }
       }
     });
+
 

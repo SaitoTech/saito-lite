@@ -78,6 +78,9 @@
 	      }
 	    }
 	  }
+
+	  imperium_self.game.state.laws.push({ agenda : "homeland-defense-act" , option : winning_choice });
+
 	},
         handleGameLoop : function(imperium_self, qe, mv) {
 
@@ -829,7 +832,6 @@
 	  return 1;
 	},
   });
-
 
 
 

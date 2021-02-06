@@ -39,8 +39,6 @@ try {
   $('.sector').on('mousedown', function (e) {
     xpos = e.clientX;
     ypos = e.clientY;
-    //pid = $(this).attr("id");
-    //imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnSectorInformationHTML(pid));
   });
   $('.sector').on('mouseup', function (e) {
     if (Math.abs(xpos-e.clientX) > 4) { return; }
@@ -237,7 +235,7 @@ returnSectorInformationHTML(sector) {
   for (let i = 0; i < sys.p.length; i++) {
     let planet_owner = "UNCONTROLLED";
     if (sys.p[i].owner != -1) {
-      planet_owner = this.returnFaction(sys.p[i].owner-1);
+      planet_owner = this.returnFactionNickname(sys.p[i].owner);
     }
     html += `
       <div class="system_summary_planet">
@@ -426,10 +424,27 @@ returnLawsOverlay() {
   if (this.game.state.laws.length > 0) {
       html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i]].text}</div></li>`;
+        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i].agenda].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i].agenda].text}</div><div class="overlay_law_option">${this.returnNameOfUnknown(this.game.state.laws[i].option)}</div></li>`;
       }
       html += '</ul>';
   }
+
+  if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
+      html += '<div class="overlay_laws_header">There are no laws in force or agendas up for consideration at this time.</div>';
+  }
+
+  html += '</div>';
+
+  return html;
+
+}
+
+
+
+returnAgendasOverlay() {
+
+  let laws = this.returnAgendaCards();
+  let html = '<div class="overlay_laws_container">';
 
   if (this.game.state.agendas.length > 0) {
       html += '<div class="overlay_laws_list">';

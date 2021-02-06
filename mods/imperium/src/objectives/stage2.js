@@ -7,10 +7,10 @@
         if (imperium_self.returnAvailableTradeGoods(player) >= 10) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
         imperium_self.game.players_info[player-1].goods -= 10;
 	imperium_self.displayFactionDashboard();
-        return 1;
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('display-of-dominance', {
@@ -37,8 +37,8 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('technological-empire', {
@@ -61,8 +61,8 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('establish-galactic-currency', {
@@ -73,13 +73,14 @@
         if (imperium_self.returnAvailableResources(player) >= 16) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectResources(16, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+	    mycallback(success);
           });
-        }
-        return 0;
+        } else {
+	  mycallback(0);
+	}
       },
   });
   this.importStageIIPublicObjective('master-of-science', {
@@ -112,8 +113,8 @@
         if (achieve_two >= 4) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
 
   });
@@ -141,8 +142,8 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+        mycallback(1);
       },
   });
   this.importStageIIPublicObjective('advanced-technologies', {
@@ -160,8 +161,8 @@
         if (unit_upgrades >= 3) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('colonial-dominance', {
@@ -188,8 +189,8 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('power-broker', {
@@ -200,17 +201,18 @@
         if (imperium_self.returnAvailableInfluence(player) >= 16) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectInfluence(16, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+            mycallback(success);
           });
-        }
-        return 0;
+        } else {
+	  mycallback(0);
+	}
       },
   });
   this.importStageIIPublicObjective('cultural-revolution', {
-      name 	: 	"A Cultural Revolution" ,
+      name 	: 	"Cultural Revolution" ,
       img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Spend 6 command or strategy tokens when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
@@ -220,10 +222,11 @@
       scoreObjective : function(imperium_self, player) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectStrategyAndCommandTokens(6, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+            mycallback(success);
           });
-        }
-        return 0;
+        } else {
+	  mycallback(0);
+	}
       },
   });
   

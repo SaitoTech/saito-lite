@@ -22,8 +22,8 @@
 	if (imperium_self.game.state.secret_objective_military_catastrophe == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -58,8 +58,8 @@
 	if (imperium_self.game.state.secret_objective_flagship_dominance == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -106,8 +106,8 @@
 	if (imperium_self.game.state.secret_objective_nuke_from_orbit == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -157,8 +157,8 @@
 	if (imperium_self.game.state.secret_objective_anti_imperialism == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -243,8 +243,8 @@
 	if (imperium_self.game.state.secret_objective_end_their_suffering == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -272,8 +272,8 @@
 	}
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -308,8 +308,8 @@
 	if (imperium_self.game.state.secret_objective_close_the_trap == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -330,8 +330,8 @@
 	if (ships_in_systems > 5) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -356,8 +356,8 @@
 	if (pds_units_in_play > 3) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -381,8 +381,8 @@
 	if (docks_in_play > 2) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -401,8 +401,8 @@
 	if (alpha == 1 && beta == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('fleet-of-terror', {
@@ -422,8 +422,8 @@
 	if (dreadnaughts >= 5) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -439,8 +439,8 @@
         if (cultural >= 4) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -453,11 +453,14 @@
 	if (imperium_self.returnPlayerActionCards(player).length >= 5) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
+      scoreObjective : function(imperium_self, player, mycallback) { 
 	if (imperium_self.game.player == player) {
-	  imperium_self.playerDiscardActionCards(5);
+	  imperium_self.playerDiscardActionCards(5, function() {
+	    mycallback(1);
+	  });
+	} else {
+	  mycallback(0);
 	}
-	return 0;
       }
   });
 
@@ -475,8 +478,8 @@
 	if (sectors_without_planets >= 3) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -508,8 +511,8 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+        mycallback(1);
       },
   });
   this.importSecretObjective('penal-colonies', {
@@ -523,8 +526,8 @@
         if (hazardous >= 4) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('master-of-production', {
@@ -538,8 +541,8 @@
         if (industrial >= 4) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('faction-technologies', {
@@ -555,8 +558,8 @@
         if (factiontech >= 2) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('occupy-new-byzantium', {
@@ -569,8 +572,8 @@
 	}
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('cast-a-long-shadow', {
@@ -595,8 +598,8 @@
        
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 

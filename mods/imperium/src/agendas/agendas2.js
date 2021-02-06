@@ -1,4 +1,5 @@
 
+
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
   	type : "Law" ,
@@ -563,8 +564,6 @@
   });
 
 
-
-
   this.importAgendaCard('colonial-redistribution', {
         name : "Colonial Redistribution" ,
         type : "Law" ,
@@ -583,6 +582,8 @@
           imperium_self.game.state.colonial_redistribution = 1;
           imperium_self.game.state.colonial_redistribution_planet = winning_choice;
 	  imperium_self.game.queue.push("colonial_redistribution\t"+winning_choice);
+
+	  imperium_self.game.state.laws.push({ agenda : "colonial-redistribution" , option : winning_choice });
 
 	  return 0;
 
@@ -710,7 +711,6 @@
 
 
 
-
   this.importAgendaCard('public-execution', {
 
         name : "Public Execution" ,
@@ -816,7 +816,6 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
         return 1;
       }
   });
-
 
 
 
