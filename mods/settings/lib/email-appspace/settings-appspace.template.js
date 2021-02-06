@@ -7,7 +7,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
   let modules_html = "Wallet Outdated - module selection not supported";
   try {
-  let modules_html = app.options.modules
+  modules_html = app.options.modules
     .map((mod, i) => {
       let CHECKED = mod.active ? 'CHECKED': '';
       return `
@@ -24,7 +24,10 @@ module.exports = SettingsAppspaceTemplate = (app) => {
       `;
     })
     .join('');
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+    modules_html = "Wallet Outdated - module selection not supported";
+  }
 
   let balance_link = "";
   app.modules.mods.forEach(mod => {
