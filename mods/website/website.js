@@ -75,12 +75,11 @@ class Website extends ModTemplate {
         this.mre.attachEvents(this.app, this);
       }
     });
-
     this.initializePrivateSaleOverlay();
+
   }
   doPrivateSaleOverlay() {
     let doPrivsaleSignup = this.app.browser.parseHash(window.location.hash).private_sale;
-    
     if(doPrivsaleSignup) {
       this.mre = new ModalRegisterEmail(this.app);
       this.mre.render(this.app, this, ModalRegisterEmail.MODES.PRIVATESALE);
