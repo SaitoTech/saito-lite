@@ -92,12 +92,9 @@
 }
 
 
-
-
-
-
-
-
+/* Modal overlay
+ * user for newsletter/private sale/ register username modal dialog
+ */
 .welcome-modal-wrapper {
   display: grid;
   grid-template-columns: 3fr 1fr;

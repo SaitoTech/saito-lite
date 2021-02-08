@@ -32,18 +32,18 @@ class Website extends ModTemplate {
 
     let html = `
     <div class="left desktop">
-    <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
-    <a alt="the Saito Arcade" href="https://saito.io/arcade">Arcade</a>
-    <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
-    <a alt="links to get involved" href="#getinvolved">Community</a>
-    <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
-    <a class="language-info" alt="中文" href="website/CN" href="/website/CN">中文 
-    <!--img class="language-image" alt="icon" src="/website/img/cn_Icon.png"></img-->
-    </a>
-  </div>
-  <div class="right">
-    <!--div class="header-mobile-menu">⋮</div-->
-  </div>
+      <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
+      <a alt="the Saito Arcade" href="/arcade">Arcade</a>
+      <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
+      <a alt="links to get involved" href="#getinvolved">Community</a>
+      <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+      <a class="language-info" alt="中文" href="website/CN" href="/website/CN">中文 
+      <!--img class="language-image" alt="icon" src="/website/img/cn_Icon.png"></img-->
+      </a>
+    </div>
+    <div class="right">
+      <!--div class="header-mobile-menu">⋮</div-->
+    </div>
   `;
     if(document.querySelector('.header-icon-links')) {
       app.browser.prependElementToDom(html, document.querySelector('.header-icon-links'));
@@ -58,13 +58,31 @@ class Website extends ModTemplate {
     </div>
     <hr/>
     `;
+
+    document.querySelectorAll('#whitepaperLink').forEach((element) => {
+      element.onclick = (event) => {
+        app.browser.logMatomoEventAndNavigate("/saito-whitepaper.pdf", "Navigation", "Click", "HomepageWhitepaperLink");
+      }
+    });
+    document.querySelectorAll('#litepaperLink').forEach((element) => {
+      element.onclick = (event) => {
+        app.browser.logMatomoEventAndNavigate("/saito-litepaper.pdf", "Navigation", "Click", "HomepageLitepaperLink");
+      }
+    });
+    document.querySelectorAll('#arcadeLink').forEach((element) => {
+      element.onclick = (event) => {
+        app.browser.logMatomoEventAndNavigate("/arcade", "Navigation", "Click", "HomepageArcadeLink");
+      }
+    });
+    document.querySelectorAll('#developersLink').forEach((element) => {
+      element.onclick = (event) => {
+        app.browser.logMatomoEventAndNavigate("https://org.saito.tech/developers", "Navigation", "Click", "HomepageDevelopersLink");
+      }
+    });
     
     if(document.querySelector('.header-dropdown')) {
       app.browser.prependElementToDom(html, document.querySelector('.header-dropdown'));
     }
-
-
-    console.log(document.querySelectorAll('.website-newsletter-subscribe'));
     document.querySelectorAll('.website-newsletter-subscribe').forEach((element) => {
       element.onclick = (e) => {
         this.mre = new ModalRegisterEmail(app);
@@ -72,12 +90,11 @@ class Website extends ModTemplate {
         this.mre.attachEvents(this.app, this);
       }
     });
-
     this.initializePrivateSaleOverlay();
+
   }
   doPrivateSaleOverlay() {
     let doPrivsaleSignup = this.app.browser.parseHash(window.location.hash).private_sale;
-    
     if(doPrivsaleSignup) {
       this.mre = new ModalRegisterEmail(this.app);
       this.mre.render(this.app, this, ModalRegisterEmail.MODES.PRIVATESALE);

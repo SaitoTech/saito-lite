@@ -96,43 +96,38 @@ module.exports = ArcadeGameDetails = {
     // create game
     //
     document.getElementById('game-invite-btn').addEventListener('click', (e) => {
+      try {
+        let options = getOptions();
+        app.browser.logMatomoEvent("ArcadeInvite", "CreateNewInvite", options.gamename);
+        let gamemod = app.modules.returnModule(options.gamename);
+        let gamedata = {
+          name: gamemod.name,
+          slug: gamemod.returnSlug(),
+          options: gamemod.returnFormattedGameOptions(options),
+          options_html: gamemod.returnGameRowOptionsHTML(options),
+          players_needed: document.querySelector('.game-wizard-players-select').value,
+        };
 
-try {
+        let players_needed = document.querySelector('.game-wizard-players-select').value;
 
-      let options = getOptions();
+        if (players_needed == 1) {
+          mod.launchSinglePlayerGame(app, data, gamedata);
+          return;
+        } else {
+          mod.overlay.hideOverlay();
+          document.getElementById('background-shim').destroy();
 
-console.log("OPTIONS: " + JSON.stringify(options));
+          let newtx = mod.createOpenTransaction(gamedata);
+          mod.app.network.propagateTransaction(newtx);
+          mod.renderArcadeMain(app, mod);
 
-      let gamemod = app.modules.returnModule(options.gamename);
+        }
 
-      let gamedata = {
-        name: gamemod.name,
-        slug: gamemod.returnSlug(),
-        options: gamemod.returnFormattedGameOptions(options),
-        options_html: gamemod.returnGameRowOptionsHTML(options),
-        players_needed: document.querySelector('.game-wizard-players-select').value,
-      };
+      } catch (err) {
 
-      let players_needed = document.querySelector('.game-wizard-players-select').value;
-
-      if (players_needed == 1) {
-        mod.launchSinglePlayerGame(app, data, gamedata);
-        return;
-      } else {
-        mod.overlay.hideOverlay();
-        document.getElementById('background-shim').destroy();
-
-        let newtx = mod.createOpenTransaction(gamedata);
-        mod.app.network.propagateTransaction(newtx);
-        mod.renderArcadeMain(app, mod);
+      alert("error: " + err);
 
       }
-
-} catch (err) {
-
-alert("error: " + err);
-
-}
 
       return false;
 

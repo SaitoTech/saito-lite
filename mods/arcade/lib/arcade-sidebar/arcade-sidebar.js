@@ -50,17 +50,15 @@ module.exports = ArcadeSidebar = {
       document.getElementById("games-add-game").onclick = () => {
         let appstore_mod = app.modules.returnModule("AppStore");
         if (appstore_mod) {
-	  let options = { search : "" , category : "Entertainment" , featured : 1 };
+          let options = { search : "" , category : "Entertainment" , featured : 1 };
           appstore_mod.openAppstoreOverlay(options);
         }
       };
     }
-
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
       game.addEventListener('click', (e) => {
-
-        
         let gameName = e.currentTarget.id;
+        app.browser.logMatomoEvent("ArcadeSidebar", "InviteCreateClick", gameName);
         let doGameDetails = () => {
           let tx = new saito.transaction();
           tx.msg.game = gameName;
