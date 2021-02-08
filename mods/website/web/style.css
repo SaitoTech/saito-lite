@@ -221,7 +221,7 @@ section {
   font-size: 2.1rem;
   font-weight: bold;
   color: #FFFFFF;
-  padding: 0.15rem 0 0 0;
+  padding: 5px 0 0 0;
 }
 
 .section1 .buttonWrapper a:first-child .btn {
@@ -246,7 +246,7 @@ section {
   margin: 5rem 0 0 0;
 }
 
-.section1 .left .crumbs a, .section1 .left .crumbs span.link {
+.section1 .left .crumbs a {
   font-size: 18px;
   font-weight: 400;
   text-decoration: none;
@@ -644,6 +644,10 @@ section {
   background: #000;
 }
 
+.sectionWrapper6 a.language {
+  display: flex;
+}
+
 .section6 {
   display: flex;
   flex-direction: column;
@@ -985,7 +989,7 @@ h2, h5 {
   }
   .section1 .left .desc {
     flex-direction: column;
-    margin-top: 4rem;
+    margin: 4rem auto 0;
     width: 25.3rem;
     font-size: 2.4rem;
     font-weight: bold;
