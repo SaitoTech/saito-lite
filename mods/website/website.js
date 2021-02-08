@@ -33,7 +33,7 @@ class Website extends ModTemplate {
     let html = `
     <div class="left desktop">
       <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
-      <a alt="the Saito Arcade" href="https://saito.io/arcade">Arcade</a>
+      <a alt="the Saito Arcade" href="/arcade">Arcade</a>
       <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
       <a alt="links to get involved" href="#getinvolved">Community</a>
       <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
@@ -61,10 +61,25 @@ class Website extends ModTemplate {
 
     document.querySelectorAll('#whitepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEvent("Navigation", "Click", "Whitepaper");
-        window.location = "/saito-whitepaper.pdf";
+        app.browser.logMatomoEventAndNavigate("/saito-whitepaper.pdf", "Navigation", "Click", "HomepageWhitepaperLink");
       }
     });
+    document.querySelectorAll('#litepaperLink').forEach((element) => {
+      element.onclick = (event) => {
+        app.browser.logMatomoEventAndNavigate("/saito-litepaper.pdf", "Navigation", "Click", "HomepageLitepaperLink");
+      }
+    });
+    document.querySelectorAll('#arcadeLink').forEach((element) => {
+      element.onclick = (event) => {
+        app.browser.logMatomoEventAndNavigate("/arcade", "Navigation", "Click", "HomepageArcadeLink");
+      }
+    });
+    document.querySelectorAll('#developersLink').forEach((element) => {
+      element.onclick = (event) => {
+        app.browser.logMatomoEventAndNavigate("https://org.saito.tech/developers", "Navigation", "Click", "HomepageDevelopersLink");
+      }
+    });
+    
     if(document.querySelector('.header-dropdown')) {
       app.browser.prependElementToDom(html, document.querySelector('.header-dropdown'));
     }

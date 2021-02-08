@@ -63,7 +63,6 @@ class Matomo extends ModTemplate {
       let obj = {};
       obj.push = (category, action, name, value = null) => {
         if(_paq) {
-          console.log("Pushing to matomo");
           if(value) {
             _paq.push(['trackEvent', category, action, name, value]);
           } else {

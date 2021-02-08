@@ -27,6 +27,8 @@ module.exports = ArcadePosts = {
 
     document.querySelectorAll('.arcade-post-title, .arcade-post-comments').forEach(el => {
       el.onclick = (e) => {
+        let clickLocation = e.currentTarget.id.replace("arcade-post-", "");
+        app.browser.logMatomoEvent("ArcadePosts", "PostViewClick", clickLocation);
         let sig = e.currentTarget.getAttribute("data-id");
         PostView.render(app, mod, sig);
         PostView.attachEvents(app, mod, sig);

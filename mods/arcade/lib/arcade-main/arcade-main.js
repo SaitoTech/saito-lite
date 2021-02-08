@@ -52,6 +52,7 @@ module.exports = ArcadeMain = {
     //
     tabNames.forEach((tabButtonName, i) => {
       document.querySelector("#tab-button-" + tabButtonName).onclick = () => {
+        app.browser.logMatomoEvent("Arcade", "TabNavigationClick", tabButtonName);
         tabNames.forEach((tabName, i) => {
           if (tabName === tabButtonName) {
             document.querySelector("#" + tabName + "-hero").classList.remove("arcade-tab-hidden");
@@ -107,7 +108,7 @@ module.exports = ArcadeMain = {
 
             let game_sig = e.currentTarget.getAttribute("data-sig");
             let game_cmd = e.currentTarget.getAttribute("data-cmd");
-
+            app.browser.logMatomoEvent("Arcade", "InviteButtonClick", game_cmd);
             if (game_cmd === "delete") {
               arcade_main_self.deleteGame(app, mod, game_sig);
               return;
