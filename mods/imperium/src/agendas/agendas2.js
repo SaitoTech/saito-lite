@@ -496,11 +496,6 @@
           imperium_self.game.planets[winning_choice].influence+=2;
           imperium_self.updateLog(imperium_self.game.planets[winning_choice].name + " increases influence value by 2");
 
-	  let law_to_push = {};
-	      law_to_push.agenda = "senate-sanctuary";
-	      law_to_push.option = winning_choice;
-	  imperium_self.game.state.laws.push(law_to_push);
-
 	  return 1;
 
         }

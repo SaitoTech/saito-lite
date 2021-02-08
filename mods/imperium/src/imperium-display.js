@@ -600,6 +600,12 @@ returnUnitsOverlay() {
   } else {
     let player = this.game.players_info[this.game.player-1];
 
+    html += `
+      <div style="width:100%;text-align:center"><div class="units-overlay-title">Your Units</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text">check available upgrades in your faction overlay...</div></div>
+      <div class="unit-table">
+    `;
+
     if (imperium_self.doesPlayerHaveTech(this.game.player, "infantry-ii")) {
       units.push("infantry-ii");
     } else {
@@ -725,7 +731,18 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
-  let obj = this.units[unittype];
+  let preobj = this.units[unittype];
+
+  let obj = JSON.parse(JSON.stringify(preobj));
+
+  obj.owner = this.game.player;
+
+console.log("upgrading the unit: " + this.game.player + " -- unit -- " + obj.owner);
+
+  obj = this.upgradeUnit(obj, this.game.player);
+
+console.log("UPGRADING IT");
+
   if (!obj) { return ""; }
 
   if (this.game.state.round == 1) {

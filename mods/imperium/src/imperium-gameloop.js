@@ -1286,11 +1286,10 @@ console.log("WHO IS NEXT? " + who_is_next);
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
 
-// HACK
-//	  if (this.game.planets['new-byzantium'].owner != -1) {
+	  if (this.game.planets['new-byzantium'].owner != -1) {
             this.game.queue.push("strategy\t"+"politics"+"\t"+this.game.state.speaker+"\t3\t"+1); // 3 ==> end-of-round tertiary
             this.game.queue.push("ACKNOWLEDGE\t"+"The Galactic Senate has been re-established on New Byzantium, voting commences on the recent round of proposals");
-//	  }
+	  }
 
   	  this.game.state.round_scoring = 0;
 	  return 1;
@@ -2826,6 +2825,8 @@ console.log("hit here");
       //////////////////////
       if (mv[0] === "pds_space_attack") {  
 
+console.log("PDS SPACE ATTACK");
+
   	let attacker     = mv[1];
         let sector       = mv[2];
 	let z		 = this.returnEventObjects();
@@ -3036,6 +3037,8 @@ console.log("hit here");
 
 	let sys = this.returnSectorAndPlanets(sector);
 	let z = this.returnEventObjects();
+console.log("UNIT_IDX: " + unit_idx);
+console.log("UNITS: " + JSON.stringify(sys.s.units[destroyee-1]));
 
 	if (type == "space") {
 	  sys.s.units[destroyee-1][unit_idx].strength = 0;
@@ -3051,9 +3054,16 @@ console.log("hit here");
 	}
 
 	//
+	// we only de-array the units if we aren't destroying another unit
+	//
+	let lmv = this.game.queue[qe-1].split("\t");
+	if (lmv[0] !== "destroy_unit") {
+          this.eliminateDestroyedUnitsInSector(destroyee, sector);
+	}
+
+	//
 	// re-display sector
 	//
-        this.eliminateDestroyedUnitsInSector(destroyee, sector);
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -4291,19 +4301,21 @@ console.log("PDS rerolls: " + attacker_rerolls);
 //	this.saveSystemAndPlanets(sys);
 //	this.updateSectorGraphics(sector);
 
-	if (this.game.state.space_combat_defender != -1) {
-	  let z = this.returnEventObjects();
-	  for (let z_index in z) {
-	    z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
-	  }
-	}
 
-console.log("is there unresolved space combat? " + this.hasUnresolvedSpaceCombat(player, sector));
+console.log("AT THE END OF SPACE COMBAT!");
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
 	  if (this.game.player == player) {
 	    this.addMove("space_combat_post\t"+player+"\t"+sector);
 	    this.addMove("space_combat\t"+player+"\t"+sector);
+
+	    if (this.game.state.space_combat_defender != -1) {
+	      let z = this.returnEventObjects();
+	      for (let z_index in z) {
+	        z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
+	      }
+	    }
+
 	    this.endTurn();
 	    return 0;
 	  } else {
@@ -4318,7 +4330,18 @@ console.log("is there unresolved space combat? " + this.hasUnresolvedSpaceCombat
 	  }
 
  	  this.game.queue.splice(qe, 1);
-	  return 1;
+
+	  if (this.game.player == player) {
+            if (this.game.state.space_combat_defender != -1) {
+              let z = this.returnEventObjects();
+              for (let z_index in z) {
+                z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
+              }
+            }
+	    this.endTurn();
+	  }
+
+	  return 0;
 	}
 
   	return 1;

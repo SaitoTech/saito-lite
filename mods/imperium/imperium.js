@@ -1664,9 +1664,9 @@ console.log("P: " + planet);
       name		: 	"Sardakk N'Orr",
       nickname		: 	"Sardakk",
       homeworld		: 	"sector53",
-      space_units	: 	["carrier","carrier","cruiser"],
+      space_units	: 	["carrier","carrier","cruiser","dreadnaught","dreadnaught"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-flagship"],
+      tech		: 	["faction4-unrelenting", "faction4-exotrireme-ii", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Sardaak N'Orr, an overpowered faction known for its raw strength in combat. Your brutal power makes you an intimidating faction on the board. Good luck!</div>`
@@ -1730,7 +1730,9 @@ console.log("P: " + planet);
       text	  :	  "A more powerful dreadnaught" ,
       prereqs     :       [],
       initialize :       function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i = 0;
+        if (imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i == undefined) {
+          imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i = 0;
+        }
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
         imperium_self.game.players_info[gainer-1].faction4_advanced_dreadnaught_i = 1;
@@ -1744,6 +1746,7 @@ console.log("P: " + planet);
 	  unit.strength = 2;
 	  unit.bombardment_rolls = 2;
 	  unit.bombardment_combat = 4;
+	  unit.description = "The Exotrireme I is a more powerful dreadnaught not vulnerable to Direct Hit cards";
         }
 
         return unit;
@@ -1763,7 +1766,9 @@ console.log("P: " + planet);
       prereqs     :       ["blue","blue","yellow"],
       text	  :	  "A much more powerful dreadnaught" ,
       initialize :       function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii = 0;
+        if (imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii == undefined) {
+          imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii = 0;
+        }
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
         imperium_self.game.players_info[gainer-1].faction4_advanced_dreadnaught_ii = 1;
@@ -1778,10 +1783,78 @@ console.log("P: " + planet);
 	  unit.strength = 2;
 	  unit.bombardment_rolls = 2;
 	  unit.bombardment_combat = 4;
+	  unit.description = "The Exotrireme II is a more powerful dreadnaught not vulnerable to Direct Hit cards. It may be destroyed after a round of space combat to destroy up to two opponent ships.";
         }
         return unit;
       },
+      spaceCombatRoundEnd :    function(imperium_self, attacker, defender, sector) {
+        if (imperium_self.doesPlayerHaveTech(attacker, "faction4-exotrireme-ii")) {
+	  if (imperium_self.doesSectorContainPlayerUnit(attacker, sector, "dreadnaught")) {
+	    imperium_self.addMove("faction4_exotrireme_ii_sacrifice\t"+attacker+"\t"+sector);
+	  }
+	}
+        if (imperium_self.doesPlayerHaveTech(defender, "faction4-exotrireme-ii")) {
+	  if (imperium_self.doesSectorContainPlayerUnit(defender, sector, "dreadnaught")) {
+	    imperium_self.addMove("faction4_exotrireme_ii_sacrifice\t"+defender+"\t"+sector);
+	  }
+	}
+	return 1;
+      },
+      handleGameLoop : function(imperium_self, qe, mv) {
 
+        if (mv[0] == "faction4_exotrireme_ii_sacrifice") {
+
+          let player_to_go = parseInt(mv[1]);
+          let sector = imperium_self.returnSectorAndPlanets(mv[2]);
+
+	  if (player_to_go == imperium_self.game.player) {
+
+            html = '<div class="sf-readable">Do you wish to sacrifice a Dreadnaught to destroy up to 2 opponent ships?</div><ul>';
+            html += '<li class="option" id="yes">sacrifice Dreadnaught</li>';
+            html += '<li class="option" id="no">do not sacrifice</li>';
+            html += '</ul>';
+
+	    imperium_self.updateStatus(html);
+
+            $('.option').on('click', function () {
+
+	      let action2 = $(this).attr("id");
+
+	      if (action2 === "no") {
+	        imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+	        imperium_self.endTurn();
+	        return 0;
+	      }
+
+	      if (action2 === "yes") {
+	        imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+ 	        imperium_self.addMove("faction4_exotrireme_ii_picktwo\t"+imperium_self.game.player+"\t"+mv[2]);
+	        imperium_self.endTurn();
+	        return 0;
+	      }
+	    });
+	  }
+	  return 0;
+        }
+
+
+
+        if (mv[0] == "faction4_exotrireme_ii_picktwo") {
+
+          let player_to_go = parseInt(mv[1]);
+          let sector = imperium_self.returnSectorAndPlanets(mv[2]);
+
+	  if (player_to_go == imperium_self.game.player) {
+	    imperium_self.addMove("resolve\tfaction4_exotrireme_ii_picktwo");
+	    imperium_self.playerDestroyOpponentShips(player_to_go, 2, mv[2]);
+	  } else {
+	    imperium_self.updateStatus("Exotrireme II engaging in suicide assault");
+	  }
+
+	  return 0;
+
+        }
+      }
     });
 
 
@@ -5329,13 +5402,13 @@ console.log("1 - 1 - 4")
 
   this.importAgendaCard('seeds-of-an-empire', {
   	name : "Seeds of an Empire" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: the player(s) with the most VP gain a VP. AGAINST: the players with the least VP gain a VP" ,
         returnAgendaOptions : function(imperium_self) { return ['for','against']; },
 	onPass : function(imperium_self, winning_choice) {
 
 	  let io = imperium_self.returnInitiativeOrder();
- 
+
 	  //
 	  // highest VP
 	  //
@@ -5559,6 +5632,11 @@ console.log("1 - 1 - 4")
 	    }
 	  }
 	  imperium_self.game.players_info[imperium_self.game.state.minister_of_policy_player-1].action_cards_bonus_when_issued++;
+	  let law_to_push = {};
+	      law_to_push.agenda = "minister-of-policy";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
         }
   });
 
@@ -5575,6 +5653,10 @@ console.log("1 - 1 - 4")
 	      imperium_self.game.players_info[i].action_card_limit = 3;
 	    }
 	  }
+	  let law_to_push = {};
+	      law_to_push.agenda = "executive-sanctions";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
   });
@@ -5608,6 +5690,10 @@ console.log("1 - 1 - 4")
 	    imperium_self.units["infantry"].cost = 1;
 	    imperium_self.units["fighter"].cost = 1;
 	  }
+	  let law_to_push = {};
+	      law_to_push.agenda = "restricted-conscription";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
   });
@@ -5623,6 +5709,10 @@ console.log("1 - 1 - 4")
 	  if (this.returnAgendaOptions(imperium_self)[winning_choice] == "support") {
 	    imperium_self.game.state.wormholes_open = 0;
 	  }
+	  let law_to_push = {};
+	      law_to_push.agenda = "wormhole-travel-ban";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
   });
@@ -5634,7 +5724,7 @@ console.log("1 - 1 - 4")
 
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "Elected Player draws one secret objective" ,
         returnAgendaOptions : function(imperium_self) {
 	  let options = [];
@@ -5667,7 +5757,7 @@ console.log("1 - 1 - 4")
 
   this.importAgendaCard('economic-equality', {
   	name : "Economic Equality" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: all players discard all trade goods, AGAINST: players lose all trade goods and then gain 5 trade goods. " ,
         returnAgendaOptions : function(imperium_self) {
 	  return ["for","against"];
@@ -5704,7 +5794,7 @@ console.log("1 - 1 - 4")
 
   this.importAgendaCard('mutiny', {
   	name : "Mutiny" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: all who vote FOR gain 1 VP, AGAINST: all players who vote FOR lose 1 VP" ,
         returnAgendaOptions : function(imperium_self) {
 	  return ["for","against"];
@@ -5773,6 +5863,11 @@ console.log("1 - 1 - 4")
             imperium_self.game.state.bombardment_against_cultural_planets = 0;
 	  }
 
+	  let law_to_push = {};
+	      law_to_push.agenda = "conventions-of-war";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
 	  return 1;
 
 	},
@@ -5784,7 +5879,7 @@ console.log("1 - 1 - 4")
 
   this.importAgendaCard('swords-to-ploughshares', {
   	name : "Swords to Ploughshares" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: everyone destroys half their infantry (round up) on every planet, AGAINST: everyone gains 1 infantry each planet" ,
         returnAgendaOptions : function(imperium_self) {
 	  return ["for","against"];
@@ -6268,7 +6363,7 @@ console.log("1 - 1 - 4")
 
   this.importAgendaCard('compensated-disarmament', {
         name : "Compensated Disarmament" ,
-        type : "Law" ,
+        type : "Directive" ,
         elect : "planet" ,
         text : "Destroy all ground forces on planet. For each infantry destroyed planet owner gains 1 trade good" ,
         returnAgendaOptions : function(imperium_self) {
@@ -10786,11 +10881,13 @@ handleSystemsMenuItem() {
   
 
   upgradeUnit(unit, player_to_upgrade) {
+
     let z = this.returnEventObjects();
     //
     // we need to keep capacity
     //
     let old_storage = unit.storage;
+console.log("UNIT OWNER: " + unit.owner);
     for (let z_index in z) { unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
     unit.storage = old_storage;
     return unit;
@@ -12275,11 +12372,10 @@ console.log("WHO IS NEXT? " + who_is_next);
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
 
-// HACK
-//	  if (this.game.planets['new-byzantium'].owner != -1) {
+	  if (this.game.planets['new-byzantium'].owner != -1) {
             this.game.queue.push("strategy\t"+"politics"+"\t"+this.game.state.speaker+"\t3\t"+1); // 3 ==> end-of-round tertiary
             this.game.queue.push("ACKNOWLEDGE\t"+"The Galactic Senate has been re-established on New Byzantium, voting commences on the recent round of proposals");
-//	  }
+	  }
 
   	  this.game.state.round_scoring = 0;
 	  return 1;
@@ -13815,6 +13911,8 @@ console.log("hit here");
       //////////////////////
       if (mv[0] === "pds_space_attack") {  
 
+console.log("PDS SPACE ATTACK");
+
   	let attacker     = mv[1];
         let sector       = mv[2];
 	let z		 = this.returnEventObjects();
@@ -14025,6 +14123,8 @@ console.log("hit here");
 
 	let sys = this.returnSectorAndPlanets(sector);
 	let z = this.returnEventObjects();
+console.log("UNIT_IDX: " + unit_idx);
+console.log("UNITS: " + JSON.stringify(sys.s.units[destroyee-1]));
 
 	if (type == "space") {
 	  sys.s.units[destroyee-1][unit_idx].strength = 0;
@@ -14033,12 +14133,23 @@ console.log("hit here");
 	if (type == "ground") {
 	  sys.p[planet_idx].units[destroyee-1][unit_idx].strength = 0;
 	  sys.p[planet_idx].units[destroyee-1][unit_idx].destroyed = 1;
+
+	  if (sys.p[planet_idx].units[destroyee-1][unit_idx].type === "spacedock" || sys.p[planet_idx].units[destroyee-1][unit_idx].type === "pds") {
+	    sys.p[planet_idx].units[destroyee-1].splice(unit_idx, 1);
+	  }
+	}
+
+	//
+	// we only de-array the units if we aren't destroying another unit
+	//
+	let lmv = this.game.queue[qe-1].split("\t");
+	if (lmv[0] !== "destroy_unit") {
+          this.eliminateDestroyedUnitsInSector(destroyee, sector);
 	}
 
 	//
 	// re-display sector
 	//
-        this.eliminateDestroyedUnitsInSector(destroyee, sector);
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -15276,19 +15387,21 @@ console.log("PDS rerolls: " + attacker_rerolls);
 //	this.saveSystemAndPlanets(sys);
 //	this.updateSectorGraphics(sector);
 
-	if (this.game.state.space_combat_defender != -1) {
-	  let z = this.returnEventObjects();
-	  for (let z_index in z) {
-	    z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
-	  }
-	}
 
-console.log("is there unresolved space combat? " + this.hasUnresolvedSpaceCombat(player, sector));
+console.log("AT THE END OF SPACE COMBAT!");
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
 	  if (this.game.player == player) {
 	    this.addMove("space_combat_post\t"+player+"\t"+sector);
 	    this.addMove("space_combat\t"+player+"\t"+sector);
+
+	    if (this.game.state.space_combat_defender != -1) {
+	      let z = this.returnEventObjects();
+	      for (let z_index in z) {
+	        z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
+	      }
+	    }
+
 	    this.endTurn();
 	    return 0;
 	  } else {
@@ -15303,7 +15416,18 @@ console.log("is there unresolved space combat? " + this.hasUnresolvedSpaceCombat
 	  }
 
  	  this.game.queue.splice(qe, 1);
-	  return 1;
+
+	  if (this.game.player == player) {
+            if (this.game.state.space_combat_defender != -1) {
+              let z = this.returnEventObjects();
+              for (let z_index in z) {
+                z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
+              }
+            }
+	    this.endTurn();
+	  }
+
+	  return 0;
 	}
 
   	return 1;
@@ -17481,6 +17605,88 @@ playerDestroyShips(player, total, sector, capital = 0) {
 
     if (total_hits == 0 || hits_assigned >= maximum_assignable_hits) {
       imperium_self.updateStatus("Notifying players of hits assignment...");
+      imperium_self.endTurn();
+    }
+
+  });
+}
+
+
+//
+// destroy opponent ships (not assigning hits)
+//
+playerDestroyOpponentShips(player, total, sector, capital = 0) {
+
+  let imperium_self = this;
+  let ships_destroyed = 0;
+  let maximum_destroyable_ships = 0;
+  let sys = imperium_self.returnSectorAndPlanets(sector);
+  let opponent = imperium_self.returnOpponentInSector(player, sector);
+
+  if (opponent == -1) {
+    this.addMove("NOTIFY\t" + this.returnFactionNickname(opponent) + " has no ships to destroy");
+    this.endTurn();
+    return 0;
+  }
+
+  html = '<div class="sf-readable">You may destroy ' + total + ' ships in opponent fleet:</div><ul>';
+
+  let total_targetted_units = 0;
+  let targetted_units = imperium_self.game.players_info[imperium_self.game.player - 1].target_units;
+
+  if (capital == 1) {
+    targetted_units = [];
+    targetted_units.push("destroyer");
+    targetted_units.push("carrier");
+    targetted_units.push("destroyer");
+    targetted_units.push("cruiser");
+    targetted_units.push("dreadnaught");
+    targetted_units.push("warsun");
+    targetted_units.push("flagship");
+  }
+
+  for (let i = 0; i < sys.s.units[opponent-1].length; i++) {
+    let unit = sys.s.units[opponent-1][i];
+    maximum_destroyable_ships++;
+    if (targetted_units.includes(unit.type)) { total_targetted_units++; }
+    html += '<li class="textchoice player_ship_' + i + '" id="' + i + '">' + unit.name + '</li>';
+  }
+  html += '</ul>';
+
+  if (maximum_destroyable_ships == 0) {
+    this.addMove("NOTIFY\t" + this.returnFactionNickname(opponent) + " has no ships to destroy");
+    this.endTurn();
+    return 0;
+  }
+
+  imperium_self.updateStatus(html);
+
+  $('.textchoice').off();
+  $('.textchoice').on('click', function () {
+
+   let ship_idx = $(this).attr("id");
+    let selected_unit = sys.s.units[opponent - 1][ship_idx];
+
+    if (total_targetted_units > 0) {
+      if (!targetted_units.includes(selected_unit.type)) {
+        salert("You must first destroy the required unit types");
+        return;
+      } else {
+        total_targetted_units--;
+      }
+    }
+
+    imperium_self.addMove("destroy_unit\t" + opponent + "\t" + player + "\t" + "space\t" + sector + "\t" + "0" + "\t" + ship_idx + "\t1");
+
+    selected_unit.strength = 0;;
+    selected_unit.destroyed = 0;
+    $(this).remove();
+
+    total--;
+    ships_destroyed++;
+
+    if (total == 0 || ships_destroyed >= maximum_destroyable_ships) {
+      imperium_self.updateStatus("Notifying players of destroyed ships...");
       imperium_self.endTurn();
     }
 
@@ -22313,8 +22519,8 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-      return ["1_1", "4_7"];
-//      return ["1_1", "2_1"];
+//     return ["1_1", "4_7"];
+      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {
@@ -26493,6 +26699,12 @@ returnUnitsOverlay() {
   } else {
     let player = this.game.players_info[this.game.player-1];
 
+    html += `
+      <div style="width:100%;text-align:center"><div class="units-overlay-title">Your Units</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text">check available upgrades in your faction overlay...</div></div>
+      <div class="unit-table">
+    `;
+
     if (imperium_self.doesPlayerHaveTech(this.game.player, "infantry-ii")) {
       units.push("infantry-ii");
     } else {
@@ -26618,7 +26830,18 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
-  let obj = this.units[unittype];
+  let preobj = this.units[unittype];
+
+  let obj = JSON.parse(JSON.stringify(preobj));
+
+  obj.owner = this.game.player;
+
+console.log("upgrading the unit: " + this.game.player + " -- unit -- " + obj.owner);
+
+  obj = this.upgradeUnit(obj, this.game.player);
+
+console.log("UPGRADING IT");
+
   if (!obj) { return ""; }
 
   if (this.game.state.round == 1) {

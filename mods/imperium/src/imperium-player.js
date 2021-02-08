@@ -1191,6 +1191,88 @@ playerDestroyShips(player, total, sector, capital = 0) {
 }
 
 
+//
+// destroy opponent ships (not assigning hits)
+//
+playerDestroyOpponentShips(player, total, sector, capital = 0) {
+
+  let imperium_self = this;
+  let ships_destroyed = 0;
+  let maximum_destroyable_ships = 0;
+  let sys = imperium_self.returnSectorAndPlanets(sector);
+  let opponent = imperium_self.returnOpponentInSector(player, sector);
+
+  if (opponent == -1) {
+    this.addMove("NOTIFY\t" + this.returnFactionNickname(opponent) + " has no ships to destroy");
+    this.endTurn();
+    return 0;
+  }
+
+  html = '<div class="sf-readable">You may destroy ' + total + ' ships in opponent fleet:</div><ul>';
+
+  let total_targetted_units = 0;
+  let targetted_units = imperium_self.game.players_info[imperium_self.game.player - 1].target_units;
+
+  if (capital == 1) {
+    targetted_units = [];
+    targetted_units.push("destroyer");
+    targetted_units.push("carrier");
+    targetted_units.push("destroyer");
+    targetted_units.push("cruiser");
+    targetted_units.push("dreadnaught");
+    targetted_units.push("warsun");
+    targetted_units.push("flagship");
+  }
+
+  for (let i = 0; i < sys.s.units[opponent-1].length; i++) {
+    let unit = sys.s.units[opponent-1][i];
+    maximum_destroyable_ships++;
+    if (targetted_units.includes(unit.type)) { total_targetted_units++; }
+    html += '<li class="textchoice player_ship_' + i + '" id="' + i + '">' + unit.name + '</li>';
+  }
+  html += '</ul>';
+
+  if (maximum_destroyable_ships == 0) {
+    this.addMove("NOTIFY\t" + this.returnFactionNickname(opponent) + " has no ships to destroy");
+    this.endTurn();
+    return 0;
+  }
+
+  imperium_self.updateStatus(html);
+
+  $('.textchoice').off();
+  $('.textchoice').on('click', function () {
+
+   let ship_idx = $(this).attr("id");
+    let selected_unit = sys.s.units[opponent - 1][ship_idx];
+
+    if (total_targetted_units > 0) {
+      if (!targetted_units.includes(selected_unit.type)) {
+        salert("You must first destroy the required unit types");
+        return;
+      } else {
+        total_targetted_units--;
+      }
+    }
+
+    imperium_self.addMove("destroy_unit\t" + opponent + "\t" + player + "\t" + "space\t" + sector + "\t" + "0" + "\t" + ship_idx + "\t1");
+
+    selected_unit.strength = 0;;
+    selected_unit.destroyed = 0;
+    $(this).remove();
+
+    total--;
+    ships_destroyed++;
+
+    if (total == 0 || ships_destroyed >= maximum_destroyable_ships) {
+      imperium_self.updateStatus("Notifying players of destroyed ships...");
+      imperium_self.endTurn();
+    }
+
+  });
+}
+
+
 
 
 

@@ -4,9 +4,9 @@
       name		: 	"Sardakk N'Orr",
       nickname		: 	"Sardakk",
       homeworld		: 	"sector53",
-      space_units	: 	["carrier","carrier","cruiser"],
+      space_units	: 	["carrier","carrier","cruiser","dreadnaught","dreadnaught"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-flagship"],
+      tech		: 	["faction4-unrelenting", "faction4-exotrireme-ii", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Sardaak N'Orr, an overpowered faction known for its raw strength in combat. Your brutal power makes you an intimidating faction on the board. Good luck!</div>`
@@ -70,7 +70,9 @@
       text	  :	  "A more powerful dreadnaught" ,
       prereqs     :       [],
       initialize :       function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i = 0;
+        if (imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i == undefined) {
+          imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i = 0;
+        }
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
         imperium_self.game.players_info[gainer-1].faction4_advanced_dreadnaught_i = 1;
@@ -84,6 +86,7 @@
 	  unit.strength = 2;
 	  unit.bombardment_rolls = 2;
 	  unit.bombardment_combat = 4;
+	  unit.description = "The Exotrireme I is a more powerful dreadnaught not vulnerable to Direct Hit cards";
         }
 
         return unit;
@@ -103,7 +106,9 @@
       prereqs     :       ["blue","blue","yellow"],
       text	  :	  "A much more powerful dreadnaught" ,
       initialize :       function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii = 0;
+        if (imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii == undefined) {
+          imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii = 0;
+        }
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
         imperium_self.game.players_info[gainer-1].faction4_advanced_dreadnaught_ii = 1;
@@ -118,10 +123,78 @@
 	  unit.strength = 2;
 	  unit.bombardment_rolls = 2;
 	  unit.bombardment_combat = 4;
+	  unit.description = "The Exotrireme II is a more powerful dreadnaught not vulnerable to Direct Hit cards. It may be destroyed after a round of space combat to destroy up to two opponent ships.";
         }
         return unit;
       },
+      spaceCombatRoundEnd :    function(imperium_self, attacker, defender, sector) {
+        if (imperium_self.doesPlayerHaveTech(attacker, "faction4-exotrireme-ii")) {
+	  if (imperium_self.doesSectorContainPlayerUnit(attacker, sector, "dreadnaught")) {
+	    imperium_self.addMove("faction4_exotrireme_ii_sacrifice\t"+attacker+"\t"+sector);
+	  }
+	}
+        if (imperium_self.doesPlayerHaveTech(defender, "faction4-exotrireme-ii")) {
+	  if (imperium_self.doesSectorContainPlayerUnit(defender, sector, "dreadnaught")) {
+	    imperium_self.addMove("faction4_exotrireme_ii_sacrifice\t"+defender+"\t"+sector);
+	  }
+	}
+	return 1;
+      },
+      handleGameLoop : function(imperium_self, qe, mv) {
 
+        if (mv[0] == "faction4_exotrireme_ii_sacrifice") {
+
+          let player_to_go = parseInt(mv[1]);
+          let sector = imperium_self.returnSectorAndPlanets(mv[2]);
+
+	  if (player_to_go == imperium_self.game.player) {
+
+            html = '<div class="sf-readable">Do you wish to sacrifice a Dreadnaught to destroy up to 2 opponent ships?</div><ul>';
+            html += '<li class="option" id="yes">sacrifice Dreadnaught</li>';
+            html += '<li class="option" id="no">do not sacrifice</li>';
+            html += '</ul>';
+
+	    imperium_self.updateStatus(html);
+
+            $('.option').on('click', function () {
+
+	      let action2 = $(this).attr("id");
+
+	      if (action2 === "no") {
+	        imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+	        imperium_self.endTurn();
+	        return 0;
+	      }
+
+	      if (action2 === "yes") {
+	        imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+ 	        imperium_self.addMove("faction4_exotrireme_ii_picktwo\t"+imperium_self.game.player+"\t"+mv[2]);
+	        imperium_self.endTurn();
+	        return 0;
+	      }
+	    });
+	  }
+	  return 0;
+        }
+
+
+
+        if (mv[0] == "faction4_exotrireme_ii_picktwo") {
+
+          let player_to_go = parseInt(mv[1]);
+          let sector = imperium_self.returnSectorAndPlanets(mv[2]);
+
+	  if (player_to_go == imperium_self.game.player) {
+	    imperium_self.addMove("resolve\tfaction4_exotrireme_ii_picktwo");
+	    imperium_self.playerDestroyOpponentShips(player_to_go, 2, mv[2]);
+	  } else {
+	    imperium_self.updateStatus("Exotrireme II engaging in suicide assault");
+	  }
+
+	  return 0;
+
+        }
+      }
     });
 
 
