@@ -221,7 +221,7 @@ section {
   font-size: 2.1rem;
   font-weight: bold;
   color: #FFFFFF;
-  padding: 5px 0 0 0;
+  padding: 0.15rem 0 0 0;
 }
 
 .section1 .buttonWrapper a:first-child .btn {
@@ -246,7 +246,7 @@ section {
   margin: 5rem 0 0 0;
 }
 
-.section1 .left .crumbs a {
+.section1 .left .crumbs a, .section1 .left .crumbs span.link {
   font-size: 18px;
   font-weight: 400;
   text-decoration: none;
