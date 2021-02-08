@@ -1563,8 +1563,8 @@ h2, h5 {
 /* CHAT */
 
 .chat-box {
-  position: fixed;
-  bottom: 0;
+  position: fixed !important;
+  bottom: 0 !important;
 }
 
 
