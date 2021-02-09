@@ -193,7 +193,14 @@ module.exports = SettingsAppspace = {
             salert("Restoration Complete ... click to reload Saito");
             window.location.reload();
           } catch (err) {
-            salert("Error decrypting wallet file. Password incorrect");
+            if(err.name == "SyntaxError") {
+              salert("Error reading wallet file. Did you upload the correct file?");
+            } else if(false) {// put this back when we support encrypting wallet backups again...
+              salert("Error decrypting wallet file. Password incorrect");
+            } else {
+              salert("Unknown error<br/>" + err);  
+            }
+            
           }
         };
 

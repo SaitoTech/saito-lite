@@ -416,15 +416,15 @@ class Chat extends ModTemplate {
       if (blocks.length == 0) {
         if (last_message_sender == "") {
           block.push(txs[idx]);
-	} else {
-          if (txs[idx].isFrom(last_message_sender)) {
-	    block.push(txs[idx]);
-          } else {
-	    blocks.push(block);
-	    block = [];
-	    block.push(txs[idx]);
-	  }
-	}
+        } else {
+                if (txs[idx].isFrom(last_message_sender)) {
+            block.push(txs[idx]);
+                } else {
+            blocks.push(block);
+            block = [];
+            block.push(txs[idx]);
+          }
+        }
         last_message_sender = txs[idx].transaction.from[0].add;
       } else {
         if (txs[idx].isFrom(last_message_sender)) {
@@ -483,8 +483,8 @@ class Chat extends ModTemplate {
     //
     if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
       if (app.keys.hasSharedSecret(tx.transaction.to[0].add)) {
-	tx.decryptMessage(app);
-	txmsg = tx.returnMessage();
+        tx.decryptMessage(app);
+        txmsg = tx.returnMessage();
       }
     }
 
@@ -503,8 +503,8 @@ class Chat extends ModTemplate {
       let members = [];
       for (let x = 0; x < tx.transaction.to.length; x++) { 
         if (!members.includes(tx.transaction.to[x].add)) {
-	  members.push(tx.transaction.to[x].add); 
-	}
+          members.push(tx.transaction.to[x].add); 
+        }
       }
       members.sort();
       let group_id = this.app.crypto.hash(members.join('_'));
@@ -527,7 +527,7 @@ class Chat extends ModTemplate {
     try {
       let chat_box_id = "#chat-box-"+txmsg.group_id;
       if (!document.querySelector(chat_box_id)) {
-	chat_on_page = 0;
+        chat_on_page = 0;
       }
     } catch (err) {
     }
@@ -537,9 +537,9 @@ class Chat extends ModTemplate {
     this.groups.forEach(group => {
       try {
         if (group.id == txmsg.group_id) {
-	  //
-	  // only add if not from me, otherwise will be encrypted for others
-	  //
+          //
+          // only add if not from me, otherwise will be encrypted for others
+          //
           if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
             let identifier = app.keys.returnIdentifierByPublicKey(tx.transaction.from[0].add);
             let title =  identifier ? identifier : tx.transaction.from[0].add;
@@ -550,7 +550,7 @@ class Chat extends ModTemplate {
             let title =  identifier ? identifier : this.app.wallet.returnPublicKey();
             group.txs.push(tx);
             app.browser.sendNotification(title, message, 'chat-message-notification');
-	  }
+          }
         }
       } catch (err) {
         console.log("ERROR 113234: chat error receiving message: " + err);
@@ -560,23 +560,23 @@ class Chat extends ModTemplate {
     if (chat_on_page == 0) {
       if (!tx.isFrom(this.app.wallet.returnPublicKey())) {
         this.openChatBox(txmsg.group_id);
-	try {
-	  if (this.isOtherInputActive() == 0) {
-	    document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
-	    if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
-              document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
-	    }
-	  }
-	} catch (err) {}
+        try {
+          if (this.isOtherInputActive() == 0) {
+            document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+            if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
+                    document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+            }
+          }
+        } catch (err) {}
       }
     } else {
       try {
-	if (this.isOtherInputActive() == 0) {
-          document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
-	  if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
-            document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
-	  }
-	}
+        if (this.isOtherInputActive() == 0) {
+                document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+          if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
+                  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+          }
+        }
       } catch (err) {}
     }
 

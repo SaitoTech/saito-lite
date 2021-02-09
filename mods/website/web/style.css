@@ -1567,9 +1567,15 @@ h2, h5 {
   bottom: 0 !important;
 }
 
-
 .chat-box-header-title {
   font-size: 17.28px !important;
   line-height: 7px !important;
   color: #fff;
+}
+
+div.chat-header {
+  display: none;
+}
+.chat-list {
+  display: none;
 }
