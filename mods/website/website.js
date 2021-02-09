@@ -29,60 +29,34 @@ class Website extends ModTemplate {
     this.header.render(app, this);
     this.header.attachEvents(app, this);
 
-
-    let html = `
-    <div class="left desktop">
-      <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
-      <a alt="the Saito Arcade" href="/arcade">Arcade</a>
-      <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
-      <a alt="links to get involved" href="#getinvolved">Community</a>
-      <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
-      <a class="language-info" alt="中文" href="website/CN" href="/website/CN">中文 
-      <!--img class="language-image" alt="icon" src="/website/img/cn_Icon.png"></img-->
-      </a>
-    </div>
-    <div class="right">
-      <!--div class="header-mobile-menu">⋮</div-->
-    </div>
-  `;
     if(document.querySelector('.header-icon-links')) {
-      app.browser.prependElementToDom(html, document.querySelector('.header-icon-links'));
+      app.browser.prependElementToDom(document.querySelector("#header-icon-links-hidden").innerHTML, document.querySelector('.header-icon-links'));
     }
-
-    html = `
-    <div class="mobile-menu mobile">
-     <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
-     <a alt="links to get involved" href="#getinvolved">Community</a>
-     <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
-     <a class="language-info" alt="中文" href="website/CN" href="/website/CN">中文</a> 
-    </div>
-    <hr/>
-    `;
-
+    if(document.querySelector('.header-dropdown')) {
+      app.browser.prependElementToDom(document.querySelector("#header-dropdown-hidden").innerHTML, document.querySelector('.header-dropdown'));
+    }
+    
     document.querySelectorAll('#whitepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/saito-whitepaper.pdf", "Navigation", "Click", "HomepageWhitepaperLink");
+        app.browser.logMatomoEventAndNavigate("/saito-whitepaper.pdf", "Navigation", "NavigationClick", "HomepageWhitepaperLink");
       }
     });
     document.querySelectorAll('#litepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/saito-litepaper.pdf", "Navigation", "Click", "HomepageLitepaperLink");
+        app.browser.logMatomoEventAndNavigate("/saito-litepaper.pdf", "Navigation", "NavigationClick", "HomepageLitepaperLink");
       }
     });
     document.querySelectorAll('#arcadeLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/arcade", "Navigation", "Click", "HomepageArcadeLink");
+        app.browser.logMatomoEventAndNavigate("/arcade", "Navigation", "NavigationClick", "HomepageArcadeLink");
       }
     });
     document.querySelectorAll('#developersLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("https://org.saito.tech/developers", "Navigation", "Click", "HomepageDevelopersLink");
+        app.browser.logMatomoEventAndNavigate("https://org.saito.tech/developers", "Navigation", "NavigationClick", "HomepageDevelopersLink");
       }
     });
     
-    if(document.querySelector('.header-dropdown')) {
-      app.browser.prependElementToDom(html, document.querySelector('.header-dropdown'));
-    }
     document.querySelectorAll('.website-newsletter-subscribe').forEach((element) => {
       element.onclick = (e) => {
         this.mre = new ModalRegisterEmail(app);
@@ -91,8 +65,8 @@ class Website extends ModTemplate {
       }
     });
     this.initializePrivateSaleOverlay();
-
   }
+  
   doPrivateSaleOverlay() {
     let doPrivsaleSignup = this.app.browser.parseHash(window.location.hash).private_sale;
     if(doPrivsaleSignup) {

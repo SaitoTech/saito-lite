@@ -22,8 +22,10 @@ class Matomo extends ModTemplate {
       // just to be 100% sure the tracking isn't inserted multiple times.
       if(!this.alreadyAdded) {
         this.alreadyAdded = true;
-        if (window.location || true) {
-          // tracking for website localhost
+        if (window.location != "saito.io") {
+          // Tracking for website localhost. This is for dev/testing purposes.
+          // This will load on all locations that are not saito.io but will only track if the domain looks like 'localhost'(this is configured on matomo)
+          // Note that this will also be blocked by adblockers so you'll need to disable them if you want to test locally.
           var _paq = window._paq = window._paq || [];
           /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
           _paq.push(['trackPageView']);
@@ -61,12 +63,15 @@ class Matomo extends ModTemplate {
   respondTo(type) {
     if (type == "matomo_event_push") {
       let obj = {};
-      obj.push = (category, action, name, value = null) => {
+      obj.push = (category, action, name = null, value = null) => {
         if(_paq) {
           if(value) {
+            // sending null or empty name here is fine.
             _paq.push(['trackEvent', category, action, name, value]);
+          } else if(name) {
+            _paq.push(['trackEvent', category, action, name]);  
           } else {
-            _paq.push(['trackEvent', category, action, name]);
+            _paq.push(['trackEvent', category, action]);
           }
         }
       }

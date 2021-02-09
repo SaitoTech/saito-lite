@@ -94,7 +94,7 @@ console.log("scrolling to the bottom!");
       document.querySelector(".chat-room-submit-button").onclick = (e) => {
           e.preventDefault();
           if (msg_input.value == '') { return; }
-          app.browser.logMatomoEvent("ArcadeChat", "CreateMessage", "OnClick");
+          app.browser.logMatomoEvent("Chat", "ArcadeChatSendMessage", "OnClick");
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
           mod.receiveMessage(app, newtx, "chatroom");
@@ -105,7 +105,7 @@ console.log("scrolling to the bottom!");
       document.querySelector(".chat-room-submit-button").ontouch = (e) => {
           e.preventDefault();
           if (msg_input.value == '') { return; }
-          app.browser.logMatomoEvent("ArcadeChat", "CreateMessage", "OnTouch");
+          app.browser.logMatomoEvent("Chat", "ArcadeChatSendMessage", "OnTouch");
           let newtx = mod.createMessage(group_id, msg_input.value);
           mod.sendMessage(app, newtx);
           mod.receiveMessage(app, newtx, "chatroom");
