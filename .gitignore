@@ -43,6 +43,8 @@ web/saito/*.wasm
 
 mods/covid/bundler/
 
+mods/popup
+mods/popup/*
 mods/appstore/mods/*
 mods/appstore/bundler
 mods/appstore/bundler/*
