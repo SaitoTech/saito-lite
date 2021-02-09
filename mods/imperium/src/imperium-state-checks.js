@@ -837,6 +837,42 @@
     return fleet;
   }
 
+
+  returnShipInformation(ship) {
+
+    let text = ship.name;
+
+    for (let i = 1; i < ship.strength; i++) {
+      if (i == 1) { text += ' ('; }
+      text += '*';
+      if (i == (ship.strength-1)) { text += ')'; }
+    }
+
+    let fighters = 0;
+    let infantry = 0;
+    for (let i = 0; i < ship.storage.length; i++) {
+      if (sys.s.units[player-1][i].storage[ii].type == "infantry") {
+        infantry++;
+      }
+      if (sys.s.units[player-1][i].storage[ii].type == "fighter") {
+        fighters++;
+      }
+    }
+    if ((fighters+infantry) > 0) {
+      text += ' (';
+      if (infantry > 0) { text += infantry + "i"; }
+      if (fighters > 0) {
+        if (infantry > 0) { text += ", "; }
+        text += fighters + "f";
+      }
+      text += ')';
+    }
+
+    return text;
+
+  }
+
+
   returnTotalResources(player) {
   
     let array_of_cards = this.returnPlayerPlanetCards(player);
@@ -1254,8 +1290,6 @@
       if (sys.p[i].locked == 0 && sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
     }
 
-console.log("prfp: " + planets_ripe_for_plucking + " --- p total? " + sys.p.length);
-
     if (planets_ripe_for_plucking == 0) { return 0; }
 
     //
@@ -1263,9 +1297,7 @@ console.log("prfp: " + planets_ripe_for_plucking + " --- p total? " + sys.p.leng
     //
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
-console.log("examining: " + sys.s.units[player-1][i].type);
       for (let k = 0; k < unit.storage.length; k++) {
-console.log("storage: " + unit.storage[k].type);  
       if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
@@ -1671,8 +1703,6 @@ console.log("storage: " + unit.storage[k].type);
     
     let return_obj = { sectors : sectors , distance : distance , hazards : hazards };
 
-console.log(JSON.stringify(return_obj));
-
     return return_obj;
   }
   
@@ -2000,7 +2030,6 @@ console.log(JSON.stringify(return_obj));
     //
     // what are the range of my PDS shots
     //
-
     for (let i = 0; i < battery.length; i++) {
       if (battery[i].owner == player) { 
         if (battery[i].sector != sector) {
@@ -2056,7 +2085,7 @@ console.log(JSON.stringify(return_obj));
     let battery = [];
   
     for (let i = 0; i < sectors.length; i++) {
-  
+
       let sys = this.returnSectorAndPlanets(sectors[i]);
 
       //
@@ -2081,6 +2110,7 @@ console.log(JSON.stringify(return_obj));
       if (sys != null) {
         for (let j = 0; j < sys.p.length; j++) {
           for (let k = 0; k < sys.p[j].units.length; k++) {
+
 
   	  if (k != attacker-1) {
   	      for (let z = 0; z < sys.p[j].units[k].length; z++) {
@@ -2228,9 +2258,6 @@ console.log(JSON.stringify(return_obj));
     let tech_skips = [];
     let planet_cards = this.returnPlayerPlanetCards(player, mode);
     for (let i = 0; i < planet_cards.length; i++) {
-
-console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planets[planet_cards[i]]);
-
       if (this.game.planets[planet_cards[i]].bonus.indexOf("blue") > -1) {
 	tech_skips.push({color:"blue",planet:planet_cards[i]});
       }

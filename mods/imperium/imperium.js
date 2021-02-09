@@ -1664,9 +1664,9 @@ console.log("P: " + planet);
       name		: 	"Sardakk N'Orr",
       nickname		: 	"Sardakk",
       homeworld		: 	"sector53",
-      space_units	: 	["carrier","carrier","cruiser","dreadnaught","dreadnaught"],
-      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting", "faction4-exotrireme-ii", "faction4-flagship"],
+      space_units	: 	["carrier","carrier","cruiser","dreadnaught","dreadnaught","fighter","fighter","fighter"],
+      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds-ii","spacedock"],
+      tech		: 	["faction4-unrelenting", "faction4-exotrireme-ii", "faction4-flagship", "pds-ii"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Sardaak N'Orr, an overpowered faction known for its raw strength in combat. Your brutal power makes you an intimidating faction on the board. Good luck!</div>`
@@ -1805,12 +1805,39 @@ console.log("P: " + planet);
         if (mv[0] == "faction4_exotrireme_ii_sacrifice") {
 
           let player_to_go = parseInt(mv[1]);
-          let sector = imperium_self.returnSectorAndPlanets(mv[2]);
+          let sys = imperium_self.returnSectorAndPlanets(mv[2]);
+          let opponent = imperium_self.returnOpponentInSector(player_to_go, mv[2]);
 
 	  if (player_to_go == imperium_self.game.player) {
 
+	    if (opponent == -1) {
+	      imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+
+	      imperium_self.addMove("NOTIFY\tNo target ships for Sardakk Exotrireme II faction ability");
+	      imperium_self.endTurn();
+	      return 0;
+	    }
+
+	    let anything_to_kill = 0;
+	    for (let i = 0; i < sys.s.units[opponent-1].length; i++) {
+	      if (sys.s.units[opponent-1][i].strength > 0) {
+	        anything_to_kill = 1;
+	      }
+	    }
+
+	    if (anything_to_kill == 0) {
+	      imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+	      imperium_self.addMove("NOTIFY\tNo target ships for Sardakk Exotrireme II action ability");
+	      imperium_self.endTurn();
+	      return 0;
+	    }
+
             html = '<div class="sf-readable">Do you wish to sacrifice a Dreadnaught to destroy up to 2 opponent ships?</div><ul>';
-            html += '<li class="option" id="yes">sacrifice Dreadnaught</li>';
+	    for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
+	      if (sys.s.units[imperium_self.game.player-1][i].type == "dreadnaught") {
+                html += `<li class="option" id="${i}">sacrifice ${imperium_self.returnShipInformation(sys.s.units[imperium_self.game.player-1][i])}</li>`;
+	      }
+	    }
             html += '<li class="option" id="no">do not sacrifice</li>';
             html += '</ul>';
 
@@ -1826,12 +1853,12 @@ console.log("P: " + planet);
 	        return 0;
 	      }
 
-	      if (action2 === "yes") {
-	        imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
- 	        imperium_self.addMove("faction4_exotrireme_ii_picktwo\t"+imperium_self.game.player+"\t"+mv[2]);
-	        imperium_self.endTurn();
-	        return 0;
-	      }
+	      imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+ 	      imperium_self.addMove("faction4_exotrireme_ii_picktwo\t"+imperium_self.game.player+"\t"+mv[2]);
+ 	      imperium_self.addMove("NOTIFY\tSardakk sacrifies Exotritreme II to destroy opponent ships");
+ 	      imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"space"+"\t"+mv[2]+"\t"+"0"+"\t"+action2+"\t"+"1");
+	      imperium_self.endTurn();
+	      return 0;
 	    });
 	  }
 	  return 0;
@@ -1842,7 +1869,7 @@ console.log("P: " + planet);
         if (mv[0] == "faction4_exotrireme_ii_picktwo") {
 
           let player_to_go = parseInt(mv[1]);
-          let sector = imperium_self.returnSectorAndPlanets(mv[2]);
+          let sys = imperium_self.returnSectorAndPlanets(mv[2]);
 
 	  if (player_to_go == imperium_self.game.player) {
 	    imperium_self.addMove("resolve\tfaction4_exotrireme_ii_picktwo");
@@ -13927,6 +13954,9 @@ console.log("PDS SPACE ATTACK");
 	this.resetTargetUnits();
 
   	for (let i = 0; i < speaker_order.length; i++) {
+
+console.log("Does PDS Space Attack Trigger?");
+
 	  for (let k = 0; k < z.length; k++) {
 	    if (z[k].pdsSpaceAttackTriggers(this, attacker, speaker_order[i], sector) == 1) {
 	      this.game.queue.push("pds_space_attack_event\t"+speaker_order[i]+"\t"+attacker+"\t"+sector+"\t"+k);
@@ -13961,10 +13991,22 @@ console.log("PDS SPACE ATTACK");
   	this.game.queue.splice(qe, 1);
 
         this.updateSectorGraphics(sector);
+	
+	let opponent = this.returnOpponentInSector(attacker, sector);
 
-	if (this.doesPlayerHavePDSUnitsWithinRange(attacker, attacker, sector) == 1) {
+	if (opponent == -1) { return 1; }
+
+console.log("are we the attacker? " + attacker + " -- " + this.game.player);
+console.log("does " + attacker + " have PDS units in range of " + sector);
+console.log("A");
+console.log("do we? " + this.doesPlayerHavePDSUnitsWithinRange(opponent, attacker, sector));
+console.log("B");
+
+	if (this.doesPlayerHavePDSUnitsWithinRange(opponent, attacker, sector) == 1) {
+console.log("adding to menu");
 	  this.game.queue.push("pds_space_attack_player_menu\t"+attacker+"\t"+attacker+"\t"+sector);
         }
+console.log("and out...");
 
   	return 1;
 
@@ -14123,8 +14165,6 @@ console.log("PDS SPACE ATTACK");
 
 	let sys = this.returnSectorAndPlanets(sector);
 	let z = this.returnEventObjects();
-console.log("UNIT_IDX: " + unit_idx);
-console.log("UNITS: " + JSON.stringify(sys.s.units[destroyee-1]));
 
 	if (type == "space") {
 	  sys.s.units[destroyee-1][unit_idx].strength = 0;
@@ -15378,17 +15418,6 @@ console.log("PDS rerolls: " + attacker_rerolls);
   	let player       = mv[1];
         let sector       = mv[2];
         let planet_idx   = mv[3];
-
-        // JAN 26
-//	let sys = this.returnSectorAndPlanets(sector);
-//      for (let i = 0; i < this.game.players_info.length; i++) {
-//        this.eliminateDestroyedUnitsInSector((i+1), sector);
-//	}
-//	this.saveSystemAndPlanets(sys);
-//	this.updateSectorGraphics(sector);
-
-
-console.log("AT THE END OF SPACE COMBAT!");
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
 	  if (this.game.player == player) {
@@ -17621,7 +17650,10 @@ playerDestroyOpponentShips(player, total, sector, capital = 0) {
   let ships_destroyed = 0;
   let maximum_destroyable_ships = 0;
   let sys = imperium_self.returnSectorAndPlanets(sector);
+
   let opponent = imperium_self.returnOpponentInSector(player, sector);
+
+console.log("OUR PLAYER IS " + player + " -- so the opponent is: " + opponent);
 
   if (opponent == -1) {
     this.addMove("NOTIFY\t" + this.returnFactionNickname(opponent) + " has no ships to destroy");
@@ -17676,7 +17708,7 @@ playerDestroyOpponentShips(player, total, sector, capital = 0) {
       }
     }
 
-    imperium_self.addMove("destroy_unit\t" + opponent + "\t" + player + "\t" + "space\t" + sector + "\t" + "0" + "\t" + ship_idx + "\t1");
+    imperium_self.addMove("destroy_unit\t" + player + "\t" + opponent + "\t" + "space\t" + sector + "\t" + "0" + "\t" + ship_idx + "\t1");
 
     selected_unit.strength = 0;;
     selected_unit.destroyed = 0;
@@ -21378,9 +21410,9 @@ playerActivateSystem() {
 
         if (action2 === "yes") {
           sys.s.activated[imperium_self.game.player - 1] = 1;
+          imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
           imperium_self.addMove("pds_space_attack_post\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("pds_space_attack\t" + imperium_self.game.player + "\t" + pid);
-          imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
           imperium_self.addMove("activate_system\t" + imperium_self.game.player + "\t" + pid);
           imperium_self.addMove("expend\t" + imperium_self.game.player + "\t" + "command" + "\t" + 1);
           imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "1");
@@ -23886,6 +23918,42 @@ playerDiscardActionCards(num, mycallback=null) {
     return fleet;
   }
 
+
+  returnShipInformation(ship) {
+
+    let text = ship.name;
+
+    for (let i = 1; i < ship.strength; i++) {
+      if (i == 1) { text += ' ('; }
+      text += '*';
+      if (i == (ship.strength-1)) { text += ')'; }
+    }
+
+    let fighters = 0;
+    let infantry = 0;
+    for (let i = 0; i < ship.storage.length; i++) {
+      if (sys.s.units[player-1][i].storage[ii].type == "infantry") {
+        infantry++;
+      }
+      if (sys.s.units[player-1][i].storage[ii].type == "fighter") {
+        fighters++;
+      }
+    }
+    if ((fighters+infantry) > 0) {
+      text += ' (';
+      if (infantry > 0) { text += infantry + "i"; }
+      if (fighters > 0) {
+        if (infantry > 0) { text += ", "; }
+        text += fighters + "f";
+      }
+      text += ')';
+    }
+
+    return text;
+
+  }
+
+
   returnTotalResources(player) {
   
     let array_of_cards = this.returnPlayerPlanetCards(player);
@@ -25046,10 +25114,11 @@ console.log(JSON.stringify(return_obj));
     //
     let battery = this.returnPDSWithinRange(attacker, sector, sectors, distance);
 
+console.log("BATTERY: " + JSON.stringify(battery));
+
     //
     // what are the range of my PDS shots
     //
-
     for (let i = 0; i < battery.length; i++) {
       if (battery[i].owner == player) { 
         if (battery[i].sector != sector) {
@@ -25105,6 +25174,8 @@ console.log(JSON.stringify(return_obj));
     let battery = [];
   
     for (let i = 0; i < sectors.length; i++) {
+
+console.log("examining: " + sectors[i]);
   
       let sys = this.returnSectorAndPlanets(sectors[i]);
 
@@ -25131,9 +25202,13 @@ console.log(JSON.stringify(return_obj));
         for (let j = 0; j < sys.p.length; j++) {
           for (let k = 0; k < sys.p[j].units.length; k++) {
 
+console.log("examining units of player " + (k+1));
+
   	  if (k != attacker-1) {
   	      for (let z = 0; z < sys.p[j].units[k].length; z++) {
+console.log("TESTING THIS UNIT: " + sys.p[j].units[k][z].type);
     	        if (sys.p[j].units[k][z].type == "pds") {
+console.log("pds with range: " + sys.p[j].units[k][z].range);
   		  if (sys.p[j].units[k][z].range >= distance[i]) {
   	            let pds = {};
   	                pds.range = sys.p[j].units[k][z].range;
@@ -27463,7 +27538,15 @@ updateSectorGraphics(sector) {
   if (sector.indexOf("_") == -1) { sector = sys.s.tile; }
 
   for (let i = 0; i < this.game.players_info.length; i++) {
-    this.eliminateDestroyedUnitsInSector((i+1), sector);
+    if (this.game.queue.length > 0) {
+      let lmv = this.game.queue[this.game.queue.length-1].split("\t");
+      //
+      // don't prune if midway through destroying units, as causes array issues
+      //
+      if (lmv[0] !== "destroy_unit" && lmv[0] !== "assign_hit") {
+        this.eliminateDestroyedUnitsInSector((i+1), sector);
+      }
+    }
   }
 
 

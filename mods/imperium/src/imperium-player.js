@@ -1200,7 +1200,10 @@ playerDestroyOpponentShips(player, total, sector, capital = 0) {
   let ships_destroyed = 0;
   let maximum_destroyable_ships = 0;
   let sys = imperium_self.returnSectorAndPlanets(sector);
+
   let opponent = imperium_self.returnOpponentInSector(player, sector);
+
+console.log("OUR PLAYER IS " + player + " -- so the opponent is: " + opponent);
 
   if (opponent == -1) {
     this.addMove("NOTIFY\t" + this.returnFactionNickname(opponent) + " has no ships to destroy");
@@ -1255,7 +1258,7 @@ playerDestroyOpponentShips(player, total, sector, capital = 0) {
       }
     }
 
-    imperium_self.addMove("destroy_unit\t" + opponent + "\t" + player + "\t" + "space\t" + sector + "\t" + "0" + "\t" + ship_idx + "\t1");
+    imperium_self.addMove("destroy_unit\t" + player + "\t" + opponent + "\t" + "space\t" + sector + "\t" + "0" + "\t" + ship_idx + "\t1");
 
     selected_unit.strength = 0;;
     selected_unit.destroyed = 0;
@@ -4957,9 +4960,9 @@ playerActivateSystem() {
 
         if (action2 === "yes") {
           sys.s.activated[imperium_self.game.player - 1] = 1;
+          imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
           imperium_self.addMove("pds_space_attack_post\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("pds_space_attack\t" + imperium_self.game.player + "\t" + pid);
-          imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
           imperium_self.addMove("activate_system\t" + imperium_self.game.player + "\t" + pid);
           imperium_self.addMove("expend\t" + imperium_self.game.player + "\t" + "command" + "\t" + 1);
           imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "1");

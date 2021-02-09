@@ -4,9 +4,9 @@
       name		: 	"Sardakk N'Orr",
       nickname		: 	"Sardakk",
       homeworld		: 	"sector53",
-      space_units	: 	["carrier","carrier","cruiser","dreadnaught","dreadnaught"],
-      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting", "faction4-exotrireme-ii", "faction4-flagship"],
+      space_units	: 	["carrier","carrier","cruiser","dreadnaught","dreadnaught","fighter","fighter","fighter"],
+      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds-ii","spacedock"],
+      tech		: 	["faction4-unrelenting", "faction4-exotrireme-ii", "faction4-flagship", "pds-ii"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Sardaak N'Orr, an overpowered faction known for its raw strength in combat. Your brutal power makes you an intimidating faction on the board. Good luck!</div>`
@@ -145,12 +145,39 @@
         if (mv[0] == "faction4_exotrireme_ii_sacrifice") {
 
           let player_to_go = parseInt(mv[1]);
-          let sector = imperium_self.returnSectorAndPlanets(mv[2]);
+          let sys = imperium_self.returnSectorAndPlanets(mv[2]);
+          let opponent = imperium_self.returnOpponentInSector(player_to_go, mv[2]);
 
 	  if (player_to_go == imperium_self.game.player) {
 
+	    if (opponent == -1) {
+	      imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+
+	      imperium_self.addMove("NOTIFY\tNo target ships for Sardakk Exotrireme II faction ability");
+	      imperium_self.endTurn();
+	      return 0;
+	    }
+
+	    let anything_to_kill = 0;
+	    for (let i = 0; i < sys.s.units[opponent-1].length; i++) {
+	      if (sys.s.units[opponent-1][i].strength > 0) {
+	        anything_to_kill = 1;
+	      }
+	    }
+
+	    if (anything_to_kill == 0) {
+	      imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+	      imperium_self.addMove("NOTIFY\tNo target ships for Sardakk Exotrireme II action ability");
+	      imperium_self.endTurn();
+	      return 0;
+	    }
+
             html = '<div class="sf-readable">Do you wish to sacrifice a Dreadnaught to destroy up to 2 opponent ships?</div><ul>';
-            html += '<li class="option" id="yes">sacrifice Dreadnaught</li>';
+	    for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
+	      if (sys.s.units[imperium_self.game.player-1][i].type == "dreadnaught") {
+                html += `<li class="option" id="${i}">sacrifice ${imperium_self.returnShipInformation(sys.s.units[imperium_self.game.player-1][i])}</li>`;
+	      }
+	    }
             html += '<li class="option" id="no">do not sacrifice</li>';
             html += '</ul>';
 
@@ -166,12 +193,12 @@
 	        return 0;
 	      }
 
-	      if (action2 === "yes") {
-	        imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
- 	        imperium_self.addMove("faction4_exotrireme_ii_picktwo\t"+imperium_self.game.player+"\t"+mv[2]);
-	        imperium_self.endTurn();
-	        return 0;
-	      }
+	      imperium_self.addMove("resolve\tfaction4_exotrireme_ii_sacrifice");
+ 	      imperium_self.addMove("faction4_exotrireme_ii_picktwo\t"+imperium_self.game.player+"\t"+mv[2]);
+ 	      imperium_self.addMove("NOTIFY\tSardakk sacrifies Exotritreme II to destroy opponent ships");
+ 	      imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"space"+"\t"+mv[2]+"\t"+"0"+"\t"+action2+"\t"+"1");
+	      imperium_self.endTurn();
+	      return 0;
 	    });
 	  }
 	  return 0;
@@ -182,7 +209,7 @@
         if (mv[0] == "faction4_exotrireme_ii_picktwo") {
 
           let player_to_go = parseInt(mv[1]);
-          let sector = imperium_self.returnSectorAndPlanets(mv[2]);
+          let sys = imperium_self.returnSectorAndPlanets(mv[2]);
 
 	  if (player_to_go == imperium_self.game.player) {
 	    imperium_self.addMove("resolve\tfaction4_exotrireme_ii_picktwo");

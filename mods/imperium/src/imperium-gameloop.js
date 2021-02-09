@@ -71,13 +71,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       //
       if (mv[0] === "resolve") {
 
-console.log("hitting resolve");
-
-console.log("executing resolve with existing: " + JSON.stringify(
-  this.game.confirms_players
-));
-
-
         let le = this.game.queue.length-2;
         let lmv = [];
         if (le >= 0) {
@@ -130,7 +123,6 @@ console.log("executing resolve with existing: " + JSON.stringify(
 		// card.
 		//
 	        this.resetConfirmsNeeded(0);
-console.log("MANUALLY CLEARING!");
     	        this.game.queue.splice(this.game.queue.length-1);
     	        this.game.queue.splice(this.game.queue.length-1);
   	        return 1;
@@ -151,7 +143,6 @@ console.log("MANUALLY CLEARING!");
 	      }
 	    }
 
-console.log("confirming player set inactive: " + JSON.stringify(this.game.confirms_players));
 
 	    //
 	    //
@@ -185,7 +176,6 @@ console.log("confirming player set inactive: " + JSON.stringify(this.game.confir
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
-console.log("resetting confs needed");
 	      this.resetConfirmsNeeded(0);
 	      // JAN 29
     	      this.game.queue.splice(qe-1, 2);
@@ -553,8 +543,6 @@ console.log("resetting confs needed");
 
       if (mv[0] === "strategy") {
 
-console.log("hitting strategy card execution point...");
-
 	this.updateLeaderboard();
 	this.updateTokenDisplay();
 
@@ -562,18 +550,14 @@ console.log("hitting strategy card execution point...");
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
-console.log("confirms players: " + JSON.stringify(this.game.confirms_players));
-
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
-console.log("we have played the strategy card secondary...");
 	    return 0;
 	  } else {
 	    //
 	    // if our interface is locked, we're processing the secondary already
 	    //
 	    if (this.lock_interface == 1) {
-console.log("interface is locked in strategy gameloop code...");
 	      return 0;
 	    }
 	  }
@@ -590,7 +574,6 @@ console.log("interface is locked in strategy gameloop code...");
 	  }
 	}
 
-console.log("hit this point...");
 
   	if (stage == 1) {
 	  this.updateLog(this.returnFactionNickname(strategy_card_player) + " plays " + this.strategy_cards[card].name);
@@ -996,10 +979,6 @@ console.log("hit this point...");
 	  if (elected_choice.indexOf("planet") == 0 || elected_choice.indexOf("new-byzantium") == 0) { is_planet = 1; }
 	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
 
-console.log("VOTING OPTIONS: ");
-console.log(votes + " --- " + vote);
-console.log(JSON.stringify(this.game.state.choices));
-
 	  if (is_planet == 1) {
             this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
 	  }
@@ -1082,9 +1061,6 @@ console.log(JSON.stringify(this.game.state.choices));
         let who_is_next = 0;
 	let speaker_order = this.returnSpeakerOrder();
 
-console.log("SPEAKER ORDER: " + JSON.stringify(speaker_order));
-console.log("VOTED ON AGENDA: " + JSON.stringify(this.game.state.voted_on_agenda));
-
 	for (let i = 0; i < speaker_order.length; i++) {
 	  if (this.game.state.voted_on_agenda[speaker_order[i]-1][agenda_num] == 0) { 
 	    // FEB 1
@@ -1096,8 +1072,6 @@ console.log("VOTED ON AGENDA: " + JSON.stringify(this.game.state.voted_on_agenda
 
 
         this.setPlayerActiveOnly(who_is_next);
-
-console.log("WHO IS NEXT? " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
@@ -1545,8 +1519,6 @@ console.log("WHO IS NEXT? " + who_is_next);
   
 
       if (mv[0] === "score") {
-
-console.log("hit here");  
 
   	let player       = parseInt(mv[1]);
   	let vp 		 = parseInt(mv[2]);
@@ -2825,8 +2797,6 @@ console.log("hit here");
       //////////////////////
       if (mv[0] === "pds_space_attack") {  
 
-console.log("PDS SPACE ATTACK");
-
   	let attacker     = mv[1];
         let sector       = mv[2];
 	let z		 = this.returnEventObjects();
@@ -2841,6 +2811,7 @@ console.log("PDS SPACE ATTACK");
 	this.resetTargetUnits();
 
   	for (let i = 0; i < speaker_order.length; i++) {
+
 	  for (let k = 0; k < z.length; k++) {
 	    if (z[k].pdsSpaceAttackTriggers(this, attacker, speaker_order[i], sector) == 1) {
 	      this.game.queue.push("pds_space_attack_event\t"+speaker_order[i]+"\t"+attacker+"\t"+sector+"\t"+k);
@@ -2875,8 +2846,12 @@ console.log("PDS SPACE ATTACK");
   	this.game.queue.splice(qe, 1);
 
         this.updateSectorGraphics(sector);
+	
+	let opponent = this.returnOpponentInSector(attacker, sector);
 
-	if (this.doesPlayerHavePDSUnitsWithinRange(attacker, attacker, sector) == 1) {
+	if (opponent == -1) { return 1; }
+
+	if (this.doesPlayerHavePDSUnitsWithinRange(opponent, attacker, sector) == 1) {
 	  this.game.queue.push("pds_space_attack_player_menu\t"+attacker+"\t"+attacker+"\t"+sector);
         }
 
@@ -3037,8 +3012,6 @@ console.log("PDS SPACE ATTACK");
 
 	let sys = this.returnSectorAndPlanets(sector);
 	let z = this.returnEventObjects();
-console.log("UNIT_IDX: " + unit_idx);
-console.log("UNITS: " + JSON.stringify(sys.s.units[destroyee-1]));
 
 	if (type == "space") {
 	  sys.s.units[destroyee-1][unit_idx].strength = 0;
@@ -3274,7 +3247,6 @@ console.log("UNITS: " + JSON.stringify(sys.s.units[destroyee-1]));
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
 	    this.game.queue[le+1] = tmple;
-console.log("A");
 	    return 1;
 	  }
 	}
@@ -3290,16 +3262,12 @@ console.log("A");
 	let source	   = mv[7]; // pds // bombardment // space_combat // ground_combat // anti_fighter_barrage
         let sys 	   = this.returnSectorAndPlanets(sector);
 
-console.log("B");
-
 	this.game.state.assign_hits_queue_instruction = "";
         if (this.game.player == defender) {
 	  this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
 	}
 
         this.game.queue.splice(qe, 1);
-
-console.log("C");
 
 	if (total_hits > 0 ) {
           this.updateStatus(this.returnFaction(defender) + " is assigning hits to units ... ");
@@ -3308,11 +3276,8 @@ console.log("C");
         if (this.game.state.assign_hits_to_cancel > 0) {
           total_hits -= this.game.state.assign_hits_to_cancel;
           this.game.state.assign_hits_to_cancel = 0;
-console.log("D");
 	  if (total_hits <= 0) { return 1; }
         }
-
-console.log("E");
 
 	if (planet_idx == "pds") {
 	  if (total_hits > 0) {
@@ -3354,7 +3319,6 @@ console.log("E");
 	}
 
 	if (type == "space") {
-console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + this.game.player);
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
@@ -3636,8 +3600,6 @@ console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + thi
 	    }
 
 	    for (let i = 0; i < attacker_rerolls; i++) {
-
-console.log("PDS rerolls: " + attacker_rerolls);
 
 	      let lowest_combat_hit = 11;
 	      let lowest_combat_idx = 11;
@@ -4293,17 +4255,6 @@ console.log("PDS rerolls: " + attacker_rerolls);
         let sector       = mv[2];
         let planet_idx   = mv[3];
 
-        // JAN 26
-//	let sys = this.returnSectorAndPlanets(sector);
-//      for (let i = 0; i < this.game.players_info.length; i++) {
-//        this.eliminateDestroyedUnitsInSector((i+1), sector);
-//	}
-//	this.saveSystemAndPlanets(sys);
-//	this.updateSectorGraphics(sector);
-
-
-console.log("AT THE END OF SPACE COMBAT!");
-
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
 	  if (this.game.player == player) {
 	    this.addMove("space_combat_post\t"+player+"\t"+sector);
@@ -4575,8 +4526,6 @@ console.log("AT THE END OF SPACE COMBAT!");
 	      }
 
   	    }
-
-console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 
 	    //
  	    // handle rerolls

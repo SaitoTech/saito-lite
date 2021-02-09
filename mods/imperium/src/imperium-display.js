@@ -1364,7 +1364,15 @@ updateSectorGraphics(sector) {
   if (sector.indexOf("_") == -1) { sector = sys.s.tile; }
 
   for (let i = 0; i < this.game.players_info.length; i++) {
-    this.eliminateDestroyedUnitsInSector((i+1), sector);
+    if (this.game.queue.length > 0) {
+      let lmv = this.game.queue[this.game.queue.length-1].split("\t");
+      //
+      // don't prune if midway through destroying units, as causes array issues
+      //
+      if (lmv[0] !== "destroy_unit" && lmv[0] !== "assign_hit") {
+        this.eliminateDestroyedUnitsInSector((i+1), sector);
+      }
+    }
   }
 
 
