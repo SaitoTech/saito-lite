@@ -38,22 +38,27 @@ class Website extends ModTemplate {
     
     document.querySelectorAll('#whitepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/saito-whitepaper.pdf", "Navigation", "NavigationClick", "HomepageWhitepaperLink");
+        app.browser.logMatomoEventAndNavigate("/saito-whitepaper.pdf", "Navigation", "HomepageNavigationClick", "HomepageWhitepaperLink");
       }
     });
     document.querySelectorAll('#litepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/saito-litepaper.pdf", "Navigation", "NavigationClick", "HomepageLitepaperLink");
+        app.browser.logMatomoEventAndNavigate("/saito-litepaper.pdf", "Navigation", "HomepageNavigationClick", "HomepageLitepaperLink");
       }
     });
     document.querySelectorAll('#arcadeLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/arcade", "Navigation", "NavigationClick", "HomepageArcadeLink");
+        app.browser.logMatomoEventAndNavigate("/arcade", "Navigation", "HomepageNavigationClick", "HomepageArcadeLink");
       }
     });
     document.querySelectorAll('#developersLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("https://org.saito.tech/developers", "Navigation", "NavigationClick", "HomepageDevelopersLink");
+        app.browser.logMatomoEventAndNavigate("https://org.saito.tech/developers", "Navigation", "HomepageNavigationClick", "HomepageDevelopersLink");
+      }
+    });
+    document.querySelectorAll('.left.desktop .logo').forEach((element) => {
+      element.onclick = (event) => {
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HeaderLogoHomepageLink");
       }
     });
     

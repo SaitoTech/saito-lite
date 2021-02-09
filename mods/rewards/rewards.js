@@ -38,13 +38,6 @@ class Rewards extends ModTemplate {
     this.description = "User activity reward program module.";
     this.categories = "UI Promotions";
 
-    //
-    // we want this running in all browsers
-    //
-    if (app.BROWSER == 1) {
-      this.browser_active = 1;
-    }
-
   }
 
   returnServices() {
