@@ -25,8 +25,11 @@ module.exports = SettingsAppspaceTemplate = (app) => {
     })
     .join('');
   } catch (err) {
-    console.log(err);
-    modules_html = "Wallet Outdated - module selection not supported";
+    if(err.message.startsWith("Cannot read property 'map'")) {
+      modules_html = "Initialization error. Refresh page should fix this.";
+    } else {
+      modules_html = `Unknown error<br/>${err}`;
+    }
   }
 
   let balance_link = "";

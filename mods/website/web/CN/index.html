@@ -35,8 +35,9 @@
   <link rel="apple-touch-icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png">
 
   <title>Saito.io</title>
-
+  
   <link rel="stylesheet" href="/saito/overlay.css" />
+  <link rel="stylesheet" href="/saito/salert.css" />
   <link rel="stylesheet" href="/website/style.css" />
   <link rel="stylesheet" type="text/css" href="/chat/css/email-chat.css">
   <link rel="stylesheet" href="/website/css/swiper.min.css">
@@ -44,6 +45,33 @@
 
 <body>
   <div class="loading">加载Saito区块链...</div>
+  <div style="display:none;">
+    <div id="header-icon-links-hidden">
+      <!-- This will be copied into the header by website.js -->
+      <div class="left desktop">
+        <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
+        <a alt="the Saito Arcade" href="/arcade">Arcade</a>
+        <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
+        <a alt="links to get involved" href="#getinvolved">Community</a>
+        <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+        <a class="language-info" alt="中文" href="/">English 
+        <!--img class="language-image" alt="icon" src="/website/img/cn_Icon.png"></img-->
+        </a>
+      </div>
+      <div class="right">
+        <!--div class="header-mobile-menu">⋮</div-->
+      </div>
+    </div>
+    <div id="header-dropdown-hidden">
+      <div class="mobile-menu mobile">
+       <a alt="developer resources" href="https://org.saito.tech/developers">Developers</a>
+       <a alt="links to get involved" href="#getinvolved">Community</a>
+       <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+       <a class="language-info" alt="中文" href="/">English</a> 
+      </div>
+      <hr/>
+    </div>
+  </div>
   <div class="all">
     <div class="sectionWrapper1">
       <section id="section1" class="section1">
