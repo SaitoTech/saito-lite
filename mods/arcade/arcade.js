@@ -1864,7 +1864,6 @@ console.log("i: " + i + " --- tx id: " + data[i].id);
 console.log("steps comparison: " + future_tx.msg.step.game + " -- vs -- " + game_mod.game.step.game);
 
 	    if (future_tx.msg.step.game <= game_mod.game.step.game && future_tx.msg.step.game <= game_mod.game.step.players[future_tx.transaction.from[0].add]) {
-console.log("not adding this tx");
 	      already_contains_move = 1;
 	    }
 	  }
@@ -1876,7 +1875,6 @@ console.log("not adding this tx");
 
 	game_mod.saveGame(game_mod.game.id);	
 	game_mod.saveFutureMoves(game_mod.game.id);	
-console.log("POST: " + game_mod.game.id);
 
 	if (mycallback != null) { mycallback(game_mod); }
 
