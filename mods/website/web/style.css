@@ -1529,6 +1529,21 @@ h2, h5 {
   height: 3em;
 }
 
+#weixinqr-overlay{
+  background-color: white;
+  margin: 0.5em;
+  padding: 4em 2em;
+}
+
+@media only screen and (max-width: 600px) {
+  #weixinqr-overlay img {
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+/* Overlay */
 .saito-overlay input[type=text], input[type=number], input[type=password], input[type=date] {
   border: none;
   padding: 10px 5px;
