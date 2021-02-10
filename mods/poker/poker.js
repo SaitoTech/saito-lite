@@ -891,7 +891,7 @@ class Poker extends GameTemplate {
         // not -1 to start with small blind
 
         // big blind last before the flop
-        if (this.game.state.flipped == 0) {
+        if (this.game.state.flipped == 0 && this.game.state.plays_since_last_raise < this.game.players.length) {
           for (let i = this.game.state.big_blind_player; i <= (this.game.state.big_blind_player + this.game.players.length - 1); i++) {
             let player_to_go = (i % this.game.players.length);
             if (player_to_go == 0) { player_to_go = this.game.players.length; }
