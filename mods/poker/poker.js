@@ -485,6 +485,14 @@ class Poker extends GameTemplate {
       }
 
 
+      //
+      // turns "resolve"
+      //
+      if (mv[0] === "resolve") {
+        this.game.queue.splice(qe-1, 2);
+	return 1;
+      }
+
 
       if (mv[0] === "turn") {
 
@@ -621,11 +629,12 @@ class Poker extends GameTemplate {
         this.game.state.turn++;
 
         if (this.game.state.passed[player_to_go - 1] == 1) {
+	  //
+	  // we auto-clear without need for player to broadcast
+	  // 
           this.game.queue.splice(qe, 1);
           return 1;
         } else {
-
-          this.game.queue.splice(qe, 1);
 
           //
           // if this is the first turn
@@ -886,12 +895,14 @@ class Poker extends GameTemplate {
           for (let i = this.game.state.big_blind_player; i <= (this.game.state.big_blind_player + this.game.players.length - 1); i++) {
             let player_to_go = (i % this.game.players.length);
             if (player_to_go == 0) { player_to_go = this.game.players.length; }
+console.log("1: pushing " + player_to_go);
             this.game.queue.push("turn\t" + player_to_go);
           }
         } else {
           for (let i = this.game.state.button_player; i <= (this.game.state.button_player + this.game.players.length - 1); i++) {
             let player_to_go = (i % this.game.players.length);
             if (player_to_go == 0) { player_to_go = this.game.players.length; }
+console.log("2: pushing " + player_to_go);
             this.game.queue.push("turn\t" + player_to_go);
           }
         }
@@ -1062,6 +1073,8 @@ class Poker extends GameTemplate {
     if (this.browser_active == 0) { return; }
 
     let poker_self = this;
+
+    poker_self.addMove("resolve\tturn");
 
     this.displayBoard();
 
