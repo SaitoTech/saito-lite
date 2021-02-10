@@ -479,7 +479,8 @@ class Poker extends GameTemplate {
         this.showSplash("<h1>Game Over: " + this.game.state.player_names[mv[1] - 1] + " wins!</h1>" + this.updateHTML);
         this.game.winner = this.game.players[mv[1] - 1];
         this.resignGame(this.game.id); //post to leaderboard - ignore 'resign'
-        this.saveGame(this.game.id);
+	// FEB 10
+        //this.saveGame(this.game.id);
         return 0;
       }
 
@@ -652,13 +653,13 @@ class Poker extends GameTemplate {
         if (this.game.state.flipped === 0) {
           this.updateLog("*** HOLE CARDS *** ["+this.cardToHuman(this.game.deck[0].hand[0])+" "+this.cardToHuman(this.game.deck[0].hand[1])+"]");
         }
-              if (this.game.state.flipped === 3) {
+        if (this.game.state.flipped === 3) {
           this.updateLog("*** FLOP *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"]");
         }
-              if (this.game.state.flipped === 4) {
+        if (this.game.state.flipped === 4) {
           this.updateLog("*** TURN *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"] ["+this.cardToHuman(this.game.pool[0].hand[3])+"]");
         }
-              if (this.game.state.flipped === 5) {
+        if (this.game.state.flipped === 5) {
           this.updateLog("*** TURN *** ["+this.cardToHuman(this.game.pool[0].hand[0])+" "+this.cardToHuman(this.game.pool[0].hand[1])+" "+this.cardToHuman(this.game.pool[0].hand[2])+"] ["+this.cardToHuman(this.game.pool[0].hand[3])+"] ["+this.cardToHuman(this.game.pool[0].hand[4])+"]");
         }
 
