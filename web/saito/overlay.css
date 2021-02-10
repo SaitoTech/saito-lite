@@ -1,6 +1,6 @@
 
 .saito-overlay-backdrop {
-  position: absolute;
+  position: fixed;
   display: none;
   top: 0;
   left: 0;
@@ -14,7 +14,7 @@
 
 .saito-overlay {
   font-size: 16px;
-  position: absolute;
+  position: fixed;
   display: inline-block;
   left: 50%;
   top: 50%;
