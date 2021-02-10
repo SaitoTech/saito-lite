@@ -1664,9 +1664,9 @@ console.log("P: " + planet);
       name		: 	"Sardakk N'Orr",
       nickname		: 	"Sardakk",
       homeworld		: 	"sector53",
-      space_units	: 	["carrier","carrier","cruiser","dreadnaught","dreadnaught","fighter","fighter","fighter"],
-      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds-ii","spacedock"],
-      tech		: 	["faction4-unrelenting", "faction4-exotrireme-ii", "faction4-flagship", "pds-ii"],
+      space_units	: 	["carrier","carrier","cruiser"],
+      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","spacedock"],
+      tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Sardaak N'Orr, an overpowered faction known for its raw strength in combat. Your brutal power makes you an intimidating faction on the board. Good luck!</div>`
@@ -11184,13 +11184,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       //
       if (mv[0] === "resolve") {
 
-console.log("hitting resolve");
-
-console.log("executing resolve with existing: " + JSON.stringify(
-  this.game.confirms_players
-));
-
-
         let le = this.game.queue.length-2;
         let lmv = [];
         if (le >= 0) {
@@ -11243,7 +11236,6 @@ console.log("executing resolve with existing: " + JSON.stringify(
 		// card.
 		//
 	        this.resetConfirmsNeeded(0);
-console.log("MANUALLY CLEARING!");
     	        this.game.queue.splice(this.game.queue.length-1);
     	        this.game.queue.splice(this.game.queue.length-1);
   	        return 1;
@@ -11264,7 +11256,6 @@ console.log("MANUALLY CLEARING!");
 	      }
 	    }
 
-console.log("confirming player set inactive: " + JSON.stringify(this.game.confirms_players));
 
 	    //
 	    //
@@ -11298,7 +11289,6 @@ console.log("confirming player set inactive: " + JSON.stringify(this.game.confir
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
-console.log("resetting confs needed");
 	      this.resetConfirmsNeeded(0);
 	      // JAN 29
     	      this.game.queue.splice(qe-1, 2);
@@ -11666,8 +11656,6 @@ console.log("resetting confs needed");
 
       if (mv[0] === "strategy") {
 
-console.log("hitting strategy card execution point...");
-
 	this.updateLeaderboard();
 	this.updateTokenDisplay();
 
@@ -11675,18 +11663,14 @@ console.log("hitting strategy card execution point...");
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
-console.log("confirms players: " + JSON.stringify(this.game.confirms_players));
-
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
-console.log("we have played the strategy card secondary...");
 	    return 0;
 	  } else {
 	    //
 	    // if our interface is locked, we're processing the secondary already
 	    //
 	    if (this.lock_interface == 1) {
-console.log("interface is locked in strategy gameloop code...");
 	      return 0;
 	    }
 	  }
@@ -11703,7 +11687,6 @@ console.log("interface is locked in strategy gameloop code...");
 	  }
 	}
 
-console.log("hit this point...");
 
   	if (stage == 1) {
 	  this.updateLog(this.returnFactionNickname(strategy_card_player) + " plays " + this.strategy_cards[card].name);
@@ -12109,10 +12092,6 @@ console.log("hit this point...");
 	  if (elected_choice.indexOf("planet") == 0 || elected_choice.indexOf("new-byzantium") == 0) { is_planet = 1; }
 	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
 
-console.log("VOTING OPTIONS: ");
-console.log(votes + " --- " + vote);
-console.log(JSON.stringify(this.game.state.choices));
-
 	  if (is_planet == 1) {
             this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
 	  }
@@ -12195,9 +12174,6 @@ console.log(JSON.stringify(this.game.state.choices));
         let who_is_next = 0;
 	let speaker_order = this.returnSpeakerOrder();
 
-console.log("SPEAKER ORDER: " + JSON.stringify(speaker_order));
-console.log("VOTED ON AGENDA: " + JSON.stringify(this.game.state.voted_on_agenda));
-
 	for (let i = 0; i < speaker_order.length; i++) {
 	  if (this.game.state.voted_on_agenda[speaker_order[i]-1][agenda_num] == 0) { 
 	    // FEB 1
@@ -12209,8 +12185,6 @@ console.log("VOTED ON AGENDA: " + JSON.stringify(this.game.state.voted_on_agenda
 
 
         this.setPlayerActiveOnly(who_is_next);
-
-console.log("WHO IS NEXT? " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
@@ -12658,8 +12632,6 @@ console.log("WHO IS NEXT? " + who_is_next);
   
 
       if (mv[0] === "score") {
-
-console.log("hit here");  
 
   	let player       = parseInt(mv[1]);
   	let vp 		 = parseInt(mv[2]);
@@ -13938,8 +13910,6 @@ console.log("hit here");
       //////////////////////
       if (mv[0] === "pds_space_attack") {  
 
-console.log("PDS SPACE ATTACK");
-
   	let attacker     = mv[1];
         let sector       = mv[2];
 	let z		 = this.returnEventObjects();
@@ -13954,8 +13924,6 @@ console.log("PDS SPACE ATTACK");
 	this.resetTargetUnits();
 
   	for (let i = 0; i < speaker_order.length; i++) {
-
-console.log("Does PDS Space Attack Trigger?");
 
 	  for (let k = 0; k < z.length; k++) {
 	    if (z[k].pdsSpaceAttackTriggers(this, attacker, speaker_order[i], sector) == 1) {
@@ -13996,17 +13964,9 @@ console.log("Does PDS Space Attack Trigger?");
 
 	if (opponent == -1) { return 1; }
 
-console.log("are we the attacker? " + attacker + " -- " + this.game.player);
-console.log("does " + attacker + " have PDS units in range of " + sector);
-console.log("A");
-console.log("do we? " + this.doesPlayerHavePDSUnitsWithinRange(opponent, attacker, sector));
-console.log("B");
-
 	if (this.doesPlayerHavePDSUnitsWithinRange(opponent, attacker, sector) == 1) {
-console.log("adding to menu");
 	  this.game.queue.push("pds_space_attack_player_menu\t"+attacker+"\t"+attacker+"\t"+sector);
         }
-console.log("and out...");
 
   	return 1;
 
@@ -14400,7 +14360,6 @@ console.log("and out...");
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
 	    this.game.queue[le+1] = tmple;
-console.log("A");
 	    return 1;
 	  }
 	}
@@ -14416,16 +14375,12 @@ console.log("A");
 	let source	   = mv[7]; // pds // bombardment // space_combat // ground_combat // anti_fighter_barrage
         let sys 	   = this.returnSectorAndPlanets(sector);
 
-console.log("B");
-
 	this.game.state.assign_hits_queue_instruction = "";
         if (this.game.player == defender) {
 	  this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
 	}
 
         this.game.queue.splice(qe, 1);
-
-console.log("C");
 
 	if (total_hits > 0 ) {
           this.updateStatus(this.returnFaction(defender) + " is assigning hits to units ... ");
@@ -14434,11 +14389,8 @@ console.log("C");
         if (this.game.state.assign_hits_to_cancel > 0) {
           total_hits -= this.game.state.assign_hits_to_cancel;
           this.game.state.assign_hits_to_cancel = 0;
-console.log("D");
 	  if (total_hits <= 0) { return 1; }
         }
-
-console.log("E");
 
 	if (planet_idx == "pds") {
 	  if (total_hits > 0) {
@@ -14480,7 +14432,6 @@ console.log("E");
 	}
 
 	if (type == "space") {
-console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + this.game.player);
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
@@ -14762,8 +14713,6 @@ console.log("total hits: " + total_hits + " -----> " + defender + " ---> " + thi
 	    }
 
 	    for (let i = 0; i < attacker_rerolls; i++) {
-
-console.log("PDS rerolls: " + attacker_rerolls);
 
 	      let lowest_combat_hit = 11;
 	      let lowest_combat_idx = 11;
@@ -15690,8 +15639,6 @@ console.log("PDS rerolls: " + attacker_rerolls);
 	      }
 
   	    }
-
-console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 
 	    //
  	    // handle rerolls
@@ -22551,8 +22498,8 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//     return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+     return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {
@@ -24371,8 +24318,6 @@ playerDiscardActionCards(num, mycallback=null) {
       if (sys.p[i].locked == 0 && sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
     }
 
-console.log("prfp: " + planets_ripe_for_plucking + " --- p total? " + sys.p.length);
-
     if (planets_ripe_for_plucking == 0) { return 0; }
 
     //
@@ -24380,9 +24325,7 @@ console.log("prfp: " + planets_ripe_for_plucking + " --- p total? " + sys.p.leng
     //
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
-console.log("examining: " + sys.s.units[player-1][i].type);
       for (let k = 0; k < unit.storage.length; k++) {
-console.log("storage: " + unit.storage[k].type);  
       if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
@@ -24788,8 +24731,6 @@ console.log("storage: " + unit.storage[k].type);
     
     let return_obj = { sectors : sectors , distance : distance , hazards : hazards };
 
-console.log(JSON.stringify(return_obj));
-
     return return_obj;
   }
   
@@ -25114,8 +25055,6 @@ console.log(JSON.stringify(return_obj));
     //
     let battery = this.returnPDSWithinRange(attacker, sector, sectors, distance);
 
-console.log("BATTERY: " + JSON.stringify(battery));
-
     //
     // what are the range of my PDS shots
     //
@@ -25175,8 +25114,6 @@ console.log("BATTERY: " + JSON.stringify(battery));
   
     for (let i = 0; i < sectors.length; i++) {
 
-console.log("examining: " + sectors[i]);
-  
       let sys = this.returnSectorAndPlanets(sectors[i]);
 
       //
@@ -25202,13 +25139,10 @@ console.log("examining: " + sectors[i]);
         for (let j = 0; j < sys.p.length; j++) {
           for (let k = 0; k < sys.p[j].units.length; k++) {
 
-console.log("examining units of player " + (k+1));
 
   	  if (k != attacker-1) {
   	      for (let z = 0; z < sys.p[j].units[k].length; z++) {
-console.log("TESTING THIS UNIT: " + sys.p[j].units[k][z].type);
     	        if (sys.p[j].units[k][z].type == "pds") {
-console.log("pds with range: " + sys.p[j].units[k][z].range);
   		  if (sys.p[j].units[k][z].range >= distance[i]) {
   	            let pds = {};
   	                pds.range = sys.p[j].units[k][z].range;
@@ -25352,9 +25286,6 @@ console.log("pds with range: " + sys.p[j].units[k][z].range);
     let tech_skips = [];
     let planet_cards = this.returnPlayerPlanetCards(player, mode);
     for (let i = 0; i < planet_cards.length; i++) {
-
-console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planets[planet_cards[i]]);
-
       if (this.game.planets[planet_cards[i]].bonus.indexOf("blue") > -1) {
 	tech_skips.push({color:"blue",planet:planet_cards[i]});
       }

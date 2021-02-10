@@ -611,6 +611,8 @@ class Arcade extends ModTemplate {
           }
       }
 
+
+
       //
       // cancel open games
       //
@@ -707,9 +709,23 @@ class Arcade extends ModTemplate {
 
     }
 
-
     super.handlePeerRequest(app, message, peer, mycallback);
   }
+
+
+
+  doesGameExistLocally(game_id) {
+    if (this.app.options) {
+      if (this.app.options.games) {
+        for (let i = 0; i < this.app.options.games.length; i++) {
+          if (this.app.options.games[i].id === game_id) { return 1; }
+        }
+      }
+    }
+    return 0;
+  }
+
+
 
 
   async receiveGameoverRequest(blk, tx, conf, app) {
