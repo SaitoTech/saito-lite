@@ -63,6 +63,7 @@
 
   returnPlayersWithLowestVP() {
 
+    let imperium_self = this;
     let lowest_vp = 1000;
     let array_of_leaders = [];
     let p = imperium_self.game.players_info;
