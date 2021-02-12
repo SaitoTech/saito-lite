@@ -3848,7 +3848,7 @@ console.log("1 - 1 - 4")
       },
     });
 
-/****
+
   this.importSecretObjective('military-catastrophe', {
       name 		: 	"Military Catastrophe" ,
       text		:	"Destroy the flagship of another player" ,
@@ -3875,7 +3875,6 @@ console.log("1 - 1 - 4")
 	mycallback(1);
       }
   });
-****/
 
 
   this.importSecretObjective('flagship-dominance', {
@@ -3912,7 +3911,6 @@ console.log("1 - 1 - 4")
       }
   });
 
-/****
 
 
   this.importSecretObjective('nuke-them-from-orbit', {
@@ -3929,7 +3927,7 @@ console.log("1 - 1 - 4")
 	imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 0;
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let planet = sys.p[planet_idx];
-	let infantry_on_planet = returnInfantryOnPlanet(planet);
+	let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	for (let i = 0; i < planet.units.length; i++) {
 	  if (planet.units[i].length > 0) {
 	    if ((i+1) != bombarding_player) {
@@ -3944,7 +3942,7 @@ console.log("1 - 1 - 4")
 	if (imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked > 0) {
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
-	  let infantry_on_planet = returnInfantryOnPlanet(planet);
+	  let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	  if (infantry_on_planet == 0) {
 	    imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 1;
 	  }
@@ -3960,7 +3958,6 @@ console.log("1 - 1 - 4")
       }
   });
 
-****/
 
   this.importSecretObjective('anti-imperialism', {
       name 		: 	"Anti-Imperialism" ,
@@ -3972,22 +3969,17 @@ console.log("1 - 1 - 4")
         return 0; 
       },
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+        imperium_self.game.state.secret_objective_anti_imperialism = 0;
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
 
 	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
-
-console.log("I AM VICTORIOUS< ARE THEY THE MOST VP LEADER? " + players_with_most_vp);
- 
 	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
 	  }
 	}
 	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
-
-console.log("I AM VICTORIOUS< ARE THEY THE MOST VP LEADER? " + players_with_most_vp);
- 
 	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
 	  }
 	}
@@ -4019,7 +4011,6 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
       }
   });
 
-/****
 
   this.importSecretObjective('end-their-suffering', {
       name 		: 	"End Their Suffering" ,
@@ -4467,7 +4458,6 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
 
 
 
-***/
 
 /***
   this.importStageIPublicObjective('manage-to-breathe', {
@@ -5575,6 +5565,12 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
     	        let factions = imperium_self.returnFactions();
                 if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
     	        return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
+  	      }
+	      imperium_self.returnFactionNicknamePreGalacticThreat = imperium_self.returnFactionNickname;
+	      imperium_self.returnFactionName = function(imperium_self, player) {
+    	        let factions = imperium_self.returnFactions();
+                if (imperium_self.game.state.galactic_threat_player == player) { return "Threat"; }
+    	        return imperium_self.returnFactionNicknamePreGalacticThreat(imperium_self, player);
   	      }
 	    }
 	  }
@@ -8133,8 +8129,8 @@ ACTION CARD - types
 	    let elect = imperium_self.agenda_cards[active_agenda].elect;
             let msg  = 'On which choice do you wish to place your Leadership rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choice);
-	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Leadership Rider on "+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choices[choice]);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium.self.game.player)+" has placed a Leadership Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -8156,7 +8152,7 @@ ACTION CARD - types
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
   	type : "rider" ,
-  	text : "Bet on agenda outcome to destroy all PDS units on any planet" ,
+  	text : "Bet on agenda outcome to have others activate system with planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -8167,8 +8163,8 @@ ACTION CARD - types
 
             let msg  = 'On which choice do you wish to place your Diplomacy rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choice);
-	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Diplomacy Rider on "+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choices[choice]);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Diplomacy Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -8192,7 +8188,7 @@ ACTION CARD - types
                 for (let b = 0; b < imperium_self.game.players_info.length; b++) {
                   imperium_self.addMove("activate\t"+(b+1)+"\t"+sector);
                 }
-                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFactionNickname(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -8218,8 +8214,8 @@ ACTION CARD - types
             let elect = imperium_self.agenda_cards[active_agenda].elect;
             let msg  = 'On which choice do you wish to place your Politics rider?';
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"politics-rider"+"\t"+choice);
-              imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Politics Rider on "+choice);
+              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"politics-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Politics Rider on "+choices[choice]);
               imperium_self.endTurn();
             });
           }
@@ -8272,8 +8268,8 @@ ACTION CARD - types
 
             let msg = 'On which choice do you wish to place the Construction rider?';
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"construction-rider"+"\t"+choice);
-              imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Construction Rider on "+choice);
+              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"construction-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Construction Rider on "+choices[choice]);
               imperium_self.endTurn();
             });
 
@@ -8305,7 +8301,7 @@ ACTION CARD - types
     this.importActionCard('trade-rider', {
   	name : "Trade Rider" ,
   	type : "rider" ,
-  	text : "Bet on agenda outcome to Select a planet and destroy all PDS units on that planet" ,
+  	text : "Bet on agenda outcome to receive 5 trade goods" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -8316,7 +8312,8 @@ ACTION CARD - types
 	    let choices = imperium_self.agenda_cards[active_agenda].returnAgendaOptions(imperium_self);
 	    let elect = imperium_self.agenda_cards[active_agenda].elect;
 	    imperium_self.playerSelectChoice(html, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"trade-rider"+"\t"+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"trade-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Trade Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -8325,7 +8322,7 @@ ACTION CARD - types
 	},
 	playActionCardEvent(imperium_self, player, action_card_player, card) {
 	  imperium_self.game.queue.push("purchase\t"+action_card_player+"\t"+"goods"+"\t"+5);
-	  imperium_self.game.queue.push(returnFaction(imperium_self.game.player) + " gains 5 Trade Goods through their Trade Rider");
+	  imperium_self.game.queue.push("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " gains 5 Trade Goods through their Trade Rider");
 	  return 1;
 	}
     });
@@ -8347,7 +8344,8 @@ ACTION CARD - types
             let choices = imperium_self.agenda_cards[active_agenda].returnAgendaOptions(imperium_self);
             let elect = imperium_self.agenda_cards[active_agenda].elect;
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"warfare-rider"+"\t"+choice);
+              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"warfare-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Warfare Rider on "+choices[choice]);
               imperium_self.endTurn();
             });
           }
@@ -8393,7 +8391,8 @@ ACTION CARD - types
 	    let choices = imperium_self.agenda_cards[active_agenda].returnAgendaOptions(imperium_self);
 	    let elect = imperium_self.agenda_cards[active_agenda].elect;
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"technology-rider"+"\t"+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"technology-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Technology Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -8425,8 +8424,8 @@ ACTION CARD - types
 
             let msg = 'On which choice do you wish to place the Imperial rider?';	
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"imperial-rider"+"\t"+choice);
-	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed an Imperial Rider on "+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"imperial-rider"+"\t"+choices[choice]);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed an Imperial Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 
@@ -12133,7 +12132,8 @@ console.log(this.game.player + " --- " + player);
             this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].name);
 	  }
 	  if (is_player == 1) {
-            this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.returnFaction(this.game.state.choices[vote]));
+console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
+            this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
 	  }
 	  if (is_planet == 0 && is_sector == 0 && is_player == 0) {
             this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
@@ -13809,6 +13809,9 @@ console.log(this.game.player + " --- " + player);
 	let agenda = mv[1];
 
   	this.game.queue.splice(qe, 1);
+
+        this.updateLog("Agenda: " + this.agenda_cards[agenda].name + "<p></p><div style='width:80%;font-size:1.0em;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:15px'>" + this.agenda_cards[agenda].text +'</div>');
+
 
 	//
 	// clear all riders
@@ -18435,7 +18438,7 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
   let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
   if (this.doesPlayerHaveRider(imperium_self.game.player)) {
-    html = '<div class="sf-readable">With your Rider depending on how the other players vote, your emissaries track the mood in the Senate closely...:</div><ul>';
+    html = '<div class="sf-readable">With your riders depending on how the other factions vote, your emissaries track the mood in the Senate closely...:</div><ul>';
   } else {
     html = '<div class="sf-readable">As the Senators gather to vote on ' + this.agenda_cards[agenda].name + ', your emissaries nervously tally the votes in their head:</div><ul>';
   }
@@ -18584,8 +18587,6 @@ playerContinueTurn(player, sector) {
   let imperium_self = this;
   let options_available = 0;
 
-alert("PCT");
-
   if (this.game.tracker.invasion == undefined) { this.game.tracker = this.returnPlayerTurnTracker(); this.game.tracker.activate_system = 1; }
 
   //
@@ -18602,7 +18603,6 @@ alert("PCT");
     html += '<li class="option" id="produce">produce units</li>';
     options_available++;
   }
-console.log("is is possible to invade? " + this.canPlayerInvadePlanet(player, sector) + " ---- " + this.game.tracker.invasion);
   if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
     if (sector == "new-byzantium" || sector == "4_4") {
       if ((imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player) + imperium_self.game.players_info[imperium_self.game.player - 1].goods) >= 6) {
@@ -20031,12 +20031,12 @@ playerSelectInfluence(cost, mycallback) {
 
   let html = "<div class='sf-readable'>Select " + cost + " in influence: </div><ul>";
   for (let z = 0; z < array_of_cards.length; z++) {
-    html += '<li class="cardchoice" id="cardchoice_' + array_of_cards[z] + '">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
+    html += '<li class="cardchoice cardchoice-card" id="cardchoice_' + array_of_cards[z] + '">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
   }
   if (1 == imperium_self.game.players_info[imperium_self.game.player - 1].goods) {
-    html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade good</li>';
+    html += '<li class="textchoice" id="trade_goods" style="clear:both">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade good</li>';
   } else {
-    html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade goods</li>';
+    html += '<li class="textchoice" id="trade_goods" style="clear:both">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade goods</li>';
   }
   html += '</ul>';
 
@@ -20167,12 +20167,12 @@ playerSelectResources(cost, mycallback) {
 
   let html = "<div class='sf-readable'>Select " + cost + " in resources: </div><ul>";
   for (let z = 0; z < array_of_cards.length; z++) {
-    html += '<li class="cardchoice" id="cardchoice_' + array_of_cards[z] + '">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
+    html += '<li class="cardchoice cardchoice-card" id="cardchoice_' + array_of_cards[z] + '">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
   }
   if (1 == imperium_self.game.players_info[imperium_self.game.player - 1].goods) {
-    html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade good</li>';
+    html += '<li class="textchoice" id="trade_goods" style="clear:both">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade good</li>';
   } else {
-    html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade goods</li>';
+    html += '<li class="textchoice" id="trade_goods" style="clear:both">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade goods</li>';
   }
   html += '</ul>';
 
@@ -22327,13 +22327,13 @@ playerDiscardActionCards(num, mycallback=null) {
     //sectors['sector17']        = { img : "/imperium/img/sectors/sector17.png" , 	   name : "Sector 17" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet19','planet20'] }
     //sectors['sector21']        = { img : "/imperium/img/sectors/sector21.png" , 	   name : "Sector 21" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet27','planet28'] }
     //sectors['sector23']        = { img : "/imperium/img/sectors/sector23.png" , 	   name : "Sector 23" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet30'] }
-    //sectors['sector24']        = { img : "/imperium/img/sectors/sector24.png" , 	   name : "Sector 24" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet31'] }
+    sectors['sector24']        = { img : "/imperium/img/sectors/sector24.png" , 	   name : "Sector 24" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet31'] }
     //sectors['sector30']        = { img : "/imperium/img/sectors/sector30.png" , 	   name : "Sector 30" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet37'] }
     //sectors['sector45']        = { img : "/imperium/img/sectors/sector45.png" , 	   name : "Sector 45" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet50'] } 
     //sectors['sector61']        = { img : "/imperium/img/sectors/sector61.png" , 	   name : "Sector 61" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet62'] } // weird ring
     //sectors['sector63']        = { img : "/imperium/img/sectors/sector63.png" , 	   name : "Sector 63" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet64'] }
     //sectors['sector64']        = { img : "/imperium/img/sectors/sector64.png" , 	   name : "Sector 64" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet65'] }
-    //sectors['sector66']        = { img : "/imperium/img/sectors/sector66.png" , 	   name : "Sector 66" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet67'] }
+    sectors['sector66']        = { img : "/imperium/img/sectors/sector66.png" , 	   name : "Sector 66" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet67'] }
     //sectors['sector68']        = { img : "/imperium/img/sectors/sector68.png" , 	   name : "Sector 68" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet69','planet70'] }
     //sectors['sector70']        = { img : "/imperium/img/sectors/sector70.png" , 	   name : "Sector 70" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet72'] }
 
@@ -22552,8 +22552,8 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//     return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+     return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {

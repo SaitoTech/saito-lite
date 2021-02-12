@@ -11,8 +11,8 @@
 	    let elect = imperium_self.agenda_cards[active_agenda].elect;
             let msg  = 'On which choice do you wish to place your Leadership rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choice);
-	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Leadership Rider on "+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choices[choice]);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium.self.game.player)+" has placed a Leadership Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -34,7 +34,7 @@
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
   	type : "rider" ,
-  	text : "Bet on agenda outcome to destroy all PDS units on any planet" ,
+  	text : "Bet on agenda outcome to have others activate system with planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -45,8 +45,8 @@
 
             let msg  = 'On which choice do you wish to place your Diplomacy rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choice);
-	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Diplomacy Rider on "+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choices[choice]);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Diplomacy Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -70,7 +70,7 @@
                 for (let b = 0; b < imperium_self.game.players_info.length; b++) {
                   imperium_self.addMove("activate\t"+(b+1)+"\t"+sector);
                 }
-                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFactionNickname(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -96,8 +96,8 @@
             let elect = imperium_self.agenda_cards[active_agenda].elect;
             let msg  = 'On which choice do you wish to place your Politics rider?';
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"politics-rider"+"\t"+choice);
-              imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Politics Rider on "+choice);
+              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"politics-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Politics Rider on "+choices[choice]);
               imperium_self.endTurn();
             });
           }
@@ -150,8 +150,8 @@
 
             let msg = 'On which choice do you wish to place the Construction rider?';
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"construction-rider"+"\t"+choice);
-              imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Construction Rider on "+choice);
+              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"construction-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Construction Rider on "+choices[choice]);
               imperium_self.endTurn();
             });
 
@@ -183,7 +183,7 @@
     this.importActionCard('trade-rider', {
   	name : "Trade Rider" ,
   	type : "rider" ,
-  	text : "Bet on agenda outcome to Select a planet and destroy all PDS units on that planet" ,
+  	text : "Bet on agenda outcome to receive 5 trade goods" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -194,7 +194,8 @@
 	    let choices = imperium_self.agenda_cards[active_agenda].returnAgendaOptions(imperium_self);
 	    let elect = imperium_self.agenda_cards[active_agenda].elect;
 	    imperium_self.playerSelectChoice(html, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"trade-rider"+"\t"+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"trade-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Trade Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -203,7 +204,7 @@
 	},
 	playActionCardEvent(imperium_self, player, action_card_player, card) {
 	  imperium_self.game.queue.push("purchase\t"+action_card_player+"\t"+"goods"+"\t"+5);
-	  imperium_self.game.queue.push(returnFaction(imperium_self.game.player) + " gains 5 Trade Goods through their Trade Rider");
+	  imperium_self.game.queue.push("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " gains 5 Trade Goods through their Trade Rider");
 	  return 1;
 	}
     });
@@ -225,7 +226,8 @@
             let choices = imperium_self.agenda_cards[active_agenda].returnAgendaOptions(imperium_self);
             let elect = imperium_self.agenda_cards[active_agenda].elect;
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"warfare-rider"+"\t"+choice);
+              imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"warfare-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Warfare Rider on "+choices[choice]);
               imperium_self.endTurn();
             });
           }
@@ -271,7 +273,8 @@
 	    let choices = imperium_self.agenda_cards[active_agenda].returnAgendaOptions(imperium_self);
 	    let elect = imperium_self.agenda_cards[active_agenda].elect;
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"technology-rider"+"\t"+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"technology-rider"+"\t"+choices[choice]);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Technology Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -303,8 +306,8 @@
 
             let msg = 'On which choice do you wish to place the Imperial rider?';	
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
-	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"imperial-rider"+"\t"+choice);
-	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed an Imperial Rider on "+choice);
+	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"imperial-rider"+"\t"+choices[choice]);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed an Imperial Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 

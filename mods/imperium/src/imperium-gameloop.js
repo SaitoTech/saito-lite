@@ -2666,6 +2666,9 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 
   	this.game.queue.splice(qe, 1);
 
+        this.updateLog("Agenda: " + this.agenda_cards[agenda].name + "<p></p><div style='width:80%;font-size:1.0em;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:15px'>" + this.agenda_cards[agenda].text +'</div>');
+
+
 	//
 	// clear all riders
 	//

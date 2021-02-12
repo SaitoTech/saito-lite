@@ -1591,6 +1591,11 @@ body {
   text-transform: uppercase;
 }
 
+.status ul .cardchoice-card {
+  display: inline-block;
+  width: auto;
+}
+
 .cardchoice {
   cursor: pointer;
   margin-right: 10px;

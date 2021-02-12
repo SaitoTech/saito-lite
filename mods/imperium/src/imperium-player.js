@@ -2004,7 +2004,7 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
   let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
   if (this.doesPlayerHaveRider(imperium_self.game.player)) {
-    html = '<div class="sf-readable">With your Rider depending on how the other players vote, your emissaries track the mood in the Senate closely...:</div><ul>';
+    html = '<div class="sf-readable">With your riders depending on how the other factions vote, your emissaries track the mood in the Senate closely...:</div><ul>';
   } else {
     html = '<div class="sf-readable">As the Senators gather to vote on ' + this.agenda_cards[agenda].name + ', your emissaries nervously tally the votes in their head:</div><ul>';
   }
@@ -3597,12 +3597,12 @@ playerSelectInfluence(cost, mycallback) {
 
   let html = "<div class='sf-readable'>Select " + cost + " in influence: </div><ul>";
   for (let z = 0; z < array_of_cards.length; z++) {
-    html += '<li class="cardchoice" id="cardchoice_' + array_of_cards[z] + '">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
+    html += '<li class="cardchoice cardchoice-card" id="cardchoice_' + array_of_cards[z] + '">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
   }
   if (1 == imperium_self.game.players_info[imperium_self.game.player - 1].goods) {
-    html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade good</li>';
+    html += '<li class="textchoice" id="trade_goods" style="clear:both">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade good</li>';
   } else {
-    html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade goods</li>';
+    html += '<li class="textchoice" id="trade_goods" style="clear:both">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade goods</li>';
   }
   html += '</ul>';
 
@@ -3733,12 +3733,12 @@ playerSelectResources(cost, mycallback) {
 
   let html = "<div class='sf-readable'>Select " + cost + " in resources: </div><ul>";
   for (let z = 0; z < array_of_cards.length; z++) {
-    html += '<li class="cardchoice" id="cardchoice_' + array_of_cards[z] + '">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
+    html += '<li class="cardchoice cardchoice-card" id="cardchoice_' + array_of_cards[z] + '">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
   }
   if (1 == imperium_self.game.players_info[imperium_self.game.player - 1].goods) {
-    html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade good</li>';
+    html += '<li class="textchoice" id="trade_goods" style="clear:both">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade good</li>';
   } else {
-    html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade goods</li>';
+    html += '<li class="textchoice" id="trade_goods" style="clear:both">' + imperium_self.game.players_info[imperium_self.game.player - 1].goods + ' trade goods</li>';
   }
   html += '</ul>';
 

@@ -77,7 +77,7 @@
 	imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 0;
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let planet = sys.p[planet_idx];
-	let infantry_on_planet = returnInfantryOnPlanet(planet);
+	let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	for (let i = 0; i < planet.units.length; i++) {
 	  if (planet.units[i].length > 0) {
 	    if ((i+1) != bombarding_player) {
@@ -92,7 +92,7 @@
 	if (imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked > 0) {
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
-	  let infantry_on_planet = returnInfantryOnPlanet(planet);
+	  let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	  if (infantry_on_planet == 0) {
 	    imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 1;
 	  }
