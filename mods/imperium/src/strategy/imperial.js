@@ -76,20 +76,28 @@
 
           imperium_self.game.state.round_scoring = 2;
 
-          imperium_self.playerScoreSecretObjective(imperium_self, function(imperium_self, vp, objective) {
+          imperium_self.playerScoreSecretObjective(imperium_self, function(x, vp, objective) {
 
 	    my_secret_vp = vp;
 	    my_secret_objective = objective;
 
-            imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
+console.log("elected to score: " + my_secret_vp + " and " + my_secret_objective);
+
+            imperium_self.playerScoreVictoryPoints(imperium_self, function(x, vp, objective) {
+
+console.log("out of playerScoreVictoryPoints in Tertiary");
 
 	      imperium_self.updateStatus("scoring completed");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 
               if (my_secret_vp > 0) { 
+console.log("A");
 		
-                if (imperium_self.secret_objectives[objective] != undefined) {
-                  imperium_self.secret_objectives[objective].scoreObjective(imperium_self, player, function() {
+                if (imperium_self.secret_objectives[my_secret_objective] != undefined) {
+console.log("ABOUT TO SCORE SECRET!");
+                  imperium_self.secret_objectives[my_secret_objective].scoreObjective(imperium_self, player, function() {
+
+console.log("AND SCORED!");
 
 		    imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); 
 

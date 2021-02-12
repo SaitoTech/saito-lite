@@ -39,6 +39,7 @@
   }
   returnPlayersWithHighestVP() {
 
+    let imperium_self = this;
     let highest_vp = 0;
     let array_of_leaders = [];
     let p = imperium_self.game.players_info;

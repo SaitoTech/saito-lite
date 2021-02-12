@@ -54,6 +54,14 @@
       z.push(this.action_cards[i]);
     }
 
+
+    //
+    // unscored secret objectives (action phase tracking)
+    //
+    for (let i in this.secret_objectives) {
+      z.push(this.secret_objectives[i]);
+    }
+
     return z;
 
   }

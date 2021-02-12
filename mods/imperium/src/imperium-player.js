@@ -2169,7 +2169,6 @@ playerContinueTurn(player, sector) {
     html += '<li class="option" id="produce">produce units</li>';
     options_available++;
   }
-console.log("is is possible to invade? " + this.canPlayerInvadePlanet(player, sector) + " ---- " + this.game.tracker.invasion);
   if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
     if (sector == "new-byzantium" || sector == "4_4") {
       if ((imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player) + imperium_self.game.players_info[imperium_self.game.player - 1].goods) >= 6) {
@@ -2237,13 +2236,13 @@ console.log("is is possible to invade? " + this.canPlayerInvadePlanet(player, se
     }
 
     if (action2 == "trade") {
-      imperium_self.addMove("continue\t" + player + "\t" + sector);
+      imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
       imperium_self.playerTurn();
       return 0;
     }
 
     if (action2 == "land") {
-      imperium_self.addMove("continue\t" + player + "\t" + sector);
+      imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
       imperium_self.playerSelectInfantryToLand(sector);
       return 0;
     }
@@ -2297,7 +2296,7 @@ console.log("is is possible to invade? " + this.canPlayerInvadePlanet(player, se
     if (action2 == "action") {
       imperium_self.playerSelectActionCard(function (card) {
         imperium_self.game.tracker.action_card = 1;
-        imperium_self.addMove("continue\t" + player + "\t" + sector);
+        imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
         imperium_self.addMove("action_card_post\t" + imperium_self.game.player + "\t" + card);
         imperium_self.addMove("action_card\t" + imperium_self.game.player + "\t" + card);
         imperium_self.addMove("lose\t" + imperium_self.game.player + "\taction_cards\t1");
@@ -2312,8 +2311,8 @@ console.log("is is possible to invade? " + this.canPlayerInvadePlanet(player, se
 
     if (action2 == "score") {
       imperium_self.playerScoreActionStageVictoryPoints(imperium_self, function (imperium_self, vp, objective) {
-        imperium_self.addMove("continue\t" + player + "\t" + sector);
-        if (vp > 0) { imperium_self.addMove("score\t" + player + "\t" + vp + "\t" + objective); }
+        imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
+        if (vp > 0) { imperium_self.addMove("score\t" + imperium_self.game.player + "\t" + vp + "\t" + objective); }
         imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored_this_round.push(objective);
         imperium_self.endTurn();
         return;
@@ -2617,9 +2616,13 @@ canPlayerScoreActionStageVictoryPoints(player) {
   // Secret Objectives - Action Phase
   //
   for (let i = 0; i < imperium_self.game.deck[5].hand.length; i++) {
+console.log("i: " + i + " -- " + imperium_self.game.deck[5].hand[i]);
     if (!imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
+console.log("unscored!");
       if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
+console.log("we can score it...");
         if (imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]].phase === "action") {
+console.log("and it is in the action phase...");
           html += '<li class="option secret3" id="' + imperium_self.game.deck[5].hand[i] + '">' + imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]].name + '</li>';
         }
       }
@@ -2709,9 +2712,12 @@ console.log("nope");
   }
 
   if (deck == 3) {
+console.log("131232333333");
     let objectives = this.returnSecretObjectives();
     if (objectives[card] != "") {
+console.log("shall we see?");
       if (objectives[card].canPlayerScoreVictoryPoints(imperium_self, player) == 1) { return 1; }
+console.log("nooooo!");
     }
   }
 
@@ -2766,6 +2772,7 @@ playerScoreSecretObjective(imperium_self, mycallback, stage = 0) {
       if (imperium_self.secret_objectives[objective]) {
         if (imperium_self.secret_objectives[objective].vp > 1) { vp = imperium_self.secret_objectives[objective].vp; }
       }
+console.log("CALLBACK AS: " + vp + " -- " + objective);
       mycallback(imperium_self, vp, objective);
     }
   });
@@ -2840,16 +2847,17 @@ console.log(JSON.stringify(imperium_self.game.players_info[imperium_self.game.pl
     if ($(this).hasClass("secret3")) { objective_type = 3; }
 
     if (action === "no") {
+console.log("ENDING WITH NO");
       mycallback(imperium_self, 0, "");
-
     } else {
+console.log("ENDING WITH YES");
 
       let objective = action;
       let vp = 1;
       if (imperium_self.stage_ii_objectives[objective]) {
         if (imperium_self.stage_ii_objectives[objective].vp > 1) { vp = imperium_self.stage_ii_objectives[objective].vp; }
       }
-
+console.log("ENDING WITH YES");
       mycallback(imperium_self, vp, objective);
 
     }
@@ -4139,8 +4147,6 @@ playerSelectUnitsToMove(destination) {
 
   obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards);
 
-console.log("HERE: " + JSON.stringify(obj.ships_and_sectors));
-
   let updateInterface = function (imperium_self, obj, updateInterface) {
 
     let subjective_distance_adjustment = 0;
@@ -5044,7 +5050,7 @@ playerPostActivateSystem(sector) {
     }
 
     if (action2 == "land") {
-      imperium_self.addMove("continue\t" + player + "\t" + sector);
+      imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
       imperium_self.playerSelectInfantryToLand(sector);
       return 0;
     }

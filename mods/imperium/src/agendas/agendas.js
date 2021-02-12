@@ -654,6 +654,12 @@
                 if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
     	        return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
   	      }
+	      imperium_self.returnFactionNicknamePreGalacticThreat = imperium_self.returnFactionNickname;
+	      imperium_self.returnFactionName = function(imperium_self, player) {
+    	        let factions = imperium_self.returnFactions();
+                if (imperium_self.game.state.galactic_threat_player == player) { return "Threat"; }
+    	        return imperium_self.returnFactionNicknamePreGalacticThreat(imperium_self, player);
+  	      }
 	    }
 	  }
 	},

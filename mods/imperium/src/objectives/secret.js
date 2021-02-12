@@ -1,5 +1,4 @@
 
-
   this.importSecretObjective('military-catastrophe', {
       name 		: 	"Military Catastrophe" ,
       text		:	"Destroy the flagship of another player" ,
@@ -26,7 +25,6 @@
 	mycallback(1);
       }
   });
-
 
 
   this.importSecretObjective('flagship-dominance', {
@@ -62,7 +60,6 @@
 	mycallback(1);
       }
   });
-
 
 
 
@@ -122,16 +119,17 @@
         return 0; 
       },
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+        imperium_self.game.state.secret_objective_anti_imperialism = 0;
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
 
 	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
-	  if (sys.s.units[defender-1].length == 0) {
+	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
 	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
 	  }
 	}
 	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
-	  if (sys.s.units[attacker-1].length == 0) {
+	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
 	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
 	  }
 	}
@@ -154,6 +152,7 @@
 	return 0;
       },
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_objective_anti_imperialism);
 	if (imperium_self.game.state.secret_objective_anti_imperialism == 1) { return 1; }
 	return 0;
       },
@@ -161,7 +160,6 @@
 	mycallback(1);
       }
   });
-
 
 
   this.importSecretObjective('end-their-suffering', {
@@ -515,6 +513,9 @@
         mycallback(1);
       },
   });
+
+
+
   this.importSecretObjective('penal-colonies', {
       name 		: 	"Penal Colonies" ,
       text		:	"Control four planets with hazardous conditions" ,
@@ -602,6 +603,9 @@
 	mycallback(1);
       }
   });
+
+
+
 
 
 

@@ -412,6 +412,8 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	//
   	this.updateSectorGraphics(sector);
 
+console.log(this.game.player + " --- " + player);
+
 	if (this.game.player == player) {
   	  this.playerContinueTurn(player, sector);
 	} else {
@@ -986,7 +988,8 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
             this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].name);
 	  }
 	  if (is_player == 1) {
-            this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.returnFaction(this.game.state.choices[vote]));
+console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
+            this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
 	  }
 	  if (is_planet == 0 && is_sector == 0 && is_player == 0) {
             this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
