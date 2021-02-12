@@ -179,11 +179,11 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
 	  if (sys.s.units[defender-1].length == 0) {
 	    if (players_with_most_vp.includes(defender)) { 
 	      // does the player have any units left?
-	      for (let i in this.game.sectors) {
-		if (this.game.sectors[i].units[defender-1].length > 0) { return; }
+	      for (let i in imperium_self.game.sectors) {
+		if (imperium_self.game.sectors[i].units[defender-1].length > 0) { return; }
 	      }
-	      for (let i in this.game.planets) {
-		if (this.game.planets[i].units[defender-1].length > 0) { return; }
+	      for (let i in imperium_self.game.planets) {
+		if (imperium_self.game.planets[i].units[defender-1].length > 0) { return; }
 	      }
 	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
 	    }
@@ -192,11 +192,11 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
 	if (imperium_self.game.player == defender) {
 	  if (sys.s.units[attacker-1].length == 0) {
 	    if (players_with_lowest_vp.includes(attacker)) { 
-	      for (let i in this.game.sectors) {
-		if (this.game.sectors[i].units[attacker-1].length > 0) { return; }
+	      for (let i in imperium_self.game.sectors) {
+		if (imperium_self.game.sectors[i].units[attacker-1].length > 0) { return; }
 	      }
-	      for (let i in this.game.planets) {
-		if (this.game.planets[i].units[attacker-1].length > 0) { return; }
+	      for (let i in imperium_self.game.planets) {
+		if (imperium_self.game.planets[i].units[attacker-1].length > 0) { return; }
 	      }
 	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
 	    }
@@ -212,11 +212,11 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
 	  if (planetunits[defender-1].length == 0) {
 	    if (players_with_most_vp.includes(defender)) { 
 	      // does the player have any units left?
-	      for (let i in this.game.sectors) {
-		if (this.game.sectors[i].units[defender-1].length > 0) { return; }
+	      for (let i in imperium_self.game.sectors) {
+		if (imperium_self.game.sectors[i].units[defender-1].length > 0) { return; }
 	      }
-	      for (let i in this.game.planets) {
-		if (this.game.planets[i].units[defender-1].length > 0) { return; }
+	      for (let i in imperium_self.game.planets) {
+		if (imperium_self.game.planets[i].units[defender-1].length > 0) { return; }
 	      }
 	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
 	    }
@@ -225,11 +225,11 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
 	if (imperium_self.game.player == defender) {
 	  if (planet.units[attacker-1].length == 0) {
 	    if (players_with_lowest_vp.includes(attacker)) { 
-	      for (let i in this.game.sectors) {
-		if (this.game.sectors[i].units[attacker-1].length > 0) { return; }
+	      for (let i in imperium_self.game.sectors) {
+		if (imperium_self.game.sectors[i].units[attacker-1].length > 0) { return; }
 	      }
-	      for (let i in this.game.planets) {
-		if (this.game.planets[i].units[attacker-1].length > 0) { return; }
+	      for (let i in imperium_self.game.planets) {
+		if (imperium_self.game.planets[i].units[attacker-1].length > 0) { return; }
 	      }
 	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
 	    }
@@ -287,13 +287,13 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
-	  if (sys.s.units[defender-1].length == 0) {
-	    
+	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
+	    imperium_self.game.state.secret_objective_close_the_trap = 1;
 	  }
 	}
 	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
-	  if (sys.s.units[attacker-1].length == 0) {
-	    imperium_self.game.state.secret_
+	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
+	    imperium_self.game.state.secret_objective_close_the_trap = 1;
 	  }
 	}
 
