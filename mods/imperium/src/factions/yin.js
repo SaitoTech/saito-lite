@@ -247,11 +247,18 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
       return;
     }
     if (action2 === "yes") {
-      imperium_self.addMove("destroy_infantry_on_planet"+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+1);
-      imperium_self.addMove("add_infantry_to_planet"+"\t"+player+"\t"+planet.planet+"\t"+1);
-      imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
-      mycallback(imperium_self);
-      return;
+
+      imperium_self.playerSelectInfluence(2, function (success) {
+
+        if (success == 1) {
+          imperium_self.addMove("destroy_infantry_on_planet"+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+1);
+          imperium_self.addMove("add_infantry_to_planet"+"\t"+player+"\t"+planet.planet+"\t"+1);
+          imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
+        } else {
+          mycallback(imperium_self);
+          return;
+        }
+      });
     }
   });
 }

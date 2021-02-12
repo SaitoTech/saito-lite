@@ -447,7 +447,7 @@
 
   this.importSecretObjective('act-of-espionage', {
       name 		: 	"Act of Espionage" ,
-      text		:	"Discard 5 action cards from your hard" ,
+      text		:	"Discard five action cards from your hard" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
 	if (imperium_self.returnPlayerActionCards(player).length >= 5) { return 1; }

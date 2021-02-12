@@ -4688,6 +4688,7 @@ playerInvadePlanet(player, sector) {
   let space_transport_used = 0;
 
   let landing_forces = [];
+  let landing_on_planet_idx = [];
   let planets_invaded = [];
 
   html = '<div class="sf-readable">Which planet(s) do you invade: </div><ul>';
@@ -4722,19 +4723,27 @@ playerInvadePlanet(player, sector) {
       }
 ***/
 
+console.log("LF: " + JSON.stringify(landing_forces));
+console.log("PI: " + JSON.stringify(planets_invaded));
+
       for (let i = 0; i < planets_invaded.length; i++) {
 
-        let owner = sys.p[planets_invaded[i]].owner;
+	if (landing_on_planet_idx.includes(planets_invaded[i])) {
 
-        imperium_self.prependMove("bombardment\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("bombardment_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("bombardment_post\t" + owner + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("planetary_defense\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("planetary_defense_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("ground_combat_start\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("ground_combat\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("ground_combat_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("ground_combat_end\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            let owner = sys.p[planets_invaded[i]].owner;
+
+            imperium_self.prependMove("bombardment\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("bombardment_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("bombardment_post\t" + owner + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("planetary_defense\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("planetary_defense_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("ground_combat_start\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("ground_combat\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("ground_combat_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("ground_combat_end\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+
+        }
+
       }
 
       imperium_self.prependMove("continue\t" + imperium_self.game.player + "\t" + sector);
@@ -4870,8 +4879,10 @@ playerInvadePlanet(player, sector) {
 
         for (let y = 0; y < landing_forces.length; y++) {
           imperium_self.addMove("land\t" + imperium_self.game.player + "\t" + 1 + "\t" + landing_forces[y].sector + "\t" + landing_forces[y].source + "\t" + landing_forces[y].source_idx + "\t" + landing_forces[y].planet_idx + "\t" + landing_forces[y].unitjson);
+	  if (!landing_on_planet_idx.includes(landing_forces[y].planet_idx)) { landing_on_planet_idx.push(landing_forces[y].planet_idx); }
         };
         landing_forces = [];
+	
 
         $('.status').show();
         $('.status-overlay').hide();

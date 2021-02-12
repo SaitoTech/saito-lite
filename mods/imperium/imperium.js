@@ -236,24 +236,23 @@ class Imperium extends GameTemplate {
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "neural-motivator") {
+        if (tech == "dacxive-animators") {
           imperium_self.game.players_info[gainer-1].dacxive_animators = 1;
-          imperium_self.game.players_info[gainer-1].action_cards_bonus_when_issued = 1;
         }
       },
       groundCombatRoundEnd : function(imperium_self, attacker, defender, sector, planet_idx) {
         let attacker_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
         let defender_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
-	if (imperium_self.doesPlayerHaveTech(attacker, "dacxive-animators")) {
-	  if (attacker_forces > defender_forces && defender_forces == 0) {
-	   imperium_self.addPlanetaryUnit(attacker, sector, planet_idx, "infantry");
-	   imperium_self.updateLog(imperium_self.returnFaction(attacker) + " reinforces infantry with Dacxive Animators");
-	  }
-	}
+	//if (imperium_self.doesPlayerHaveTech(attacker, "dacxive-animators")) {
+	//  if (attacker_forces > defender_forces && defender_forces == 0) {
+	//    imperium_self.addPlanetaryUnit(attacker, sector, planet_idx, "infantry");
+	//    imperium_self.updateLog(imperium_self.returnFaction(attacker) + " reinforces infantry with Dacxive Animators");
+	//  }
+	//}
 	if (imperium_self.doesPlayerHaveTech(defender, "dacxive-animators")) {
 	  if (attacker_forces < defender_forces && attacker_forces == 0) {
-	   imperium_self.addPlanetaryUnit(defender, sector, planet_idx, "infantry");
-	   imperium_self.updateLog(imperium_self.returnFaction(defender) + " reinforces infantry with Dacxive Animators");
+	    imperium_self.addPlanetaryUnit(defender, sector, planet_idx, "infantry");
+	    imperium_self.updateLog(imperium_self.returnFaction(defender) + " reinforces infantry with Dacxive Animators");
 	  }
 	}
       },
@@ -2724,11 +2723,18 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
       return;
     }
     if (action2 === "yes") {
-      imperium_self.addMove("destroy_infantry_on_planet"+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+1);
-      imperium_self.addMove("add_infantry_to_planet"+"\t"+player+"\t"+planet.planet+"\t"+1);
-      imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
-      mycallback(imperium_self);
-      return;
+
+      imperium_self.playerSelectInfluence(2, function (success) {
+
+        if (success == 1) {
+          imperium_self.addMove("destroy_infantry_on_planet"+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+1);
+          imperium_self.addMove("add_infantry_to_planet"+"\t"+player+"\t"+planet.planet+"\t"+1);
+          imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
+        } else {
+          mycallback(imperium_self);
+          return;
+        }
+      });
     }
   });
 }
@@ -4283,7 +4289,7 @@ console.log("1 - 1 - 4")
 
   this.importSecretObjective('act-of-espionage', {
       name 		: 	"Act of Espionage" ,
-      text		:	"Discard 5 action cards from your hard" ,
+      text		:	"Discard five action cards from your hard" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
 	if (imperium_self.returnPlayerActionCards(player).length >= 5) { return 1; }
@@ -10237,6 +10243,10 @@ handleLawsMenuItem() {
 }
 handleUnitsMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
+  let imperium_self = this;
+  $('#close-units-btn').on('click', function() {
+    imperium_self.overlay.hideOverlay();
+  });
 }
 handleStrategyMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnStrategyOverlay());
@@ -13926,7 +13936,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	for (let i = 0; i < speaker_order.length; i++) {
 
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].pdsSpaceAttackTriggers(this, attacker, speaker_order[i], sector) == 1) {
+	    if (z[k].pdsSpaceAttackTriggers(this, attacker, speaker_order[i], sector) == 1 && this.returnOpponentInSector(attacker, sector) > -1) {
 	      this.game.queue.push("pds_space_attack_event\t"+speaker_order[i]+"\t"+attacker+"\t"+sector+"\t"+k);
             }
           }
@@ -15867,7 +15877,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	//
 	// defense
 	//
-	if (planet_owner == player) {
+	if (planet_owner == this.game.player && planet_owner == player) {
 	  this.playerPlayBombardment(player, sector, planet_idx);
 	  return 0;
 	}
@@ -21085,6 +21095,7 @@ playerInvadePlanet(player, sector) {
   let space_transport_used = 0;
 
   let landing_forces = [];
+  let landing_on_planet_idx = [];
   let planets_invaded = [];
 
   html = '<div class="sf-readable">Which planet(s) do you invade: </div><ul>';
@@ -21119,19 +21130,27 @@ playerInvadePlanet(player, sector) {
       }
 ***/
 
+console.log("LF: " + JSON.stringify(landing_forces));
+console.log("PI: " + JSON.stringify(planets_invaded));
+
       for (let i = 0; i < planets_invaded.length; i++) {
 
-        let owner = sys.p[planets_invaded[i]].owner;
+	if (landing_on_planet_idx.includes(planets_invaded[i])) {
 
-        imperium_self.prependMove("bombardment\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("bombardment_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("bombardment_post\t" + owner + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("planetary_defense\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("planetary_defense_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("ground_combat_start\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("ground_combat\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("ground_combat_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
-        imperium_self.prependMove("ground_combat_end\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            let owner = sys.p[planets_invaded[i]].owner;
+
+            imperium_self.prependMove("bombardment\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("bombardment_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("bombardment_post\t" + owner + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("planetary_defense\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("planetary_defense_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("ground_combat_start\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("ground_combat\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("ground_combat_post\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+            imperium_self.prependMove("ground_combat_end\t" + imperium_self.game.player + "\t" + sector + "\t" + planets_invaded[i]);
+
+        }
+
       }
 
       imperium_self.prependMove("continue\t" + imperium_self.game.player + "\t" + sector);
@@ -21267,8 +21286,10 @@ playerInvadePlanet(player, sector) {
 
         for (let y = 0; y < landing_forces.length; y++) {
           imperium_self.addMove("land\t" + imperium_self.game.player + "\t" + 1 + "\t" + landing_forces[y].sector + "\t" + landing_forces[y].source + "\t" + landing_forces[y].source_idx + "\t" + landing_forces[y].planet_idx + "\t" + landing_forces[y].unitjson);
+	  if (!landing_on_planet_idx.includes(landing_forces[y].planet_idx)) { landing_on_planet_idx.push(landing_forces[y].planet_idx); }
         };
         landing_forces = [];
+	
 
         $('.status').show();
         $('.status-overlay').hide();
@@ -22256,7 +22277,7 @@ playerDiscardActionCards(num, mycallback=null) {
     sectors['sector32']        = { img : "/imperium/img/sectors/sector32.png" , 	   name : "Yssari-II" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet39'] }
     sectors['sector38']        = { img : "/imperium/img/sectors/sector38.png" , 	   name : "Lorstruck / Industryl" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet41','planet42'] }
     sectors['sector39']        = { img : "/imperium/img/sectors/sector39.png" , 	   name : "Mechanix / Hearthslough" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet43','planet44'] }
-    sectors['sector40']        = { img : "/imperium/img/sectors/sector40.png" , 	   name : "Incarth / Aandor" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet46','planet45'] }
+    sectors['sector40']        = { img : "/imperium/img/sectors/sector40.png" , 	   name : "Aandor / Incarth" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet46','planet45'] }
     sectors['sector41']        = { img : "/imperium/img/sectors/sector41.png" , 	   name : "Hope's Lure" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet40'] }
     sectors['sector42']        = { img : "/imperium/img/sectors/sector42.png" , 	   name : "Quandam" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet47'] }
     sectors['sector43']        = { img : "/imperium/img/sectors/sector43.png" , 	   name : "Brest" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet48'] }
@@ -22538,8 +22559,8 @@ playerDiscardActionCards(num, mycallback=null) {
         state.agendas = [];
 	state.vp_target = 14;
 
-	if (this.game.options.vp) {
-	  state.vp_target = parseInt(this.game.options.vp);
+	if (this.game.options.game_length) {
+	  state.vp_target = parseInt(this.game.options.game_length);
         } 
        
 	//
@@ -27429,6 +27450,20 @@ updateLeaderboard() {
   let factions = this.returnFactions();
 
   try {
+
+    //
+    // hide unnecessary VP entries
+    //
+    try {
+      if (this.game.state.vp_target < 14) {
+        for (let i = 14; i > this.game.state.vp_target; i--) {
+          let leaderboard_div = "."+i+"-points"; 
+          document.querySelector(leaderboard_div).style.display = "none";
+        }
+      }
+    } catch (err) { 
+    }
+
 
     document.querySelector('.round').innerHTML = this.game.state.round;
     document.querySelector('.turn').innerHTML = this.game.state.turn;

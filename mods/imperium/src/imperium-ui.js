@@ -46,6 +46,10 @@ handleLawsMenuItem() {
 }
 handleUnitsMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
+  let imperium_self = this;
+  $('#close-units-btn').on('click', function() {
+    imperium_self.overlay.hideOverlay();
+  });
 }
 handleStrategyMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnStrategyOverlay());

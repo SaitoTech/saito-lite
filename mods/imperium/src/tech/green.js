@@ -29,24 +29,23 @@
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "neural-motivator") {
+        if (tech == "dacxive-animators") {
           imperium_self.game.players_info[gainer-1].dacxive_animators = 1;
-          imperium_self.game.players_info[gainer-1].action_cards_bonus_when_issued = 1;
         }
       },
       groundCombatRoundEnd : function(imperium_self, attacker, defender, sector, planet_idx) {
         let attacker_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
         let defender_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
-	if (imperium_self.doesPlayerHaveTech(attacker, "dacxive-animators")) {
-	  if (attacker_forces > defender_forces && defender_forces == 0) {
-	   imperium_self.addPlanetaryUnit(attacker, sector, planet_idx, "infantry");
-	   imperium_self.updateLog(imperium_self.returnFaction(attacker) + " reinforces infantry with Dacxive Animators");
-	  }
-	}
+	//if (imperium_self.doesPlayerHaveTech(attacker, "dacxive-animators")) {
+	//  if (attacker_forces > defender_forces && defender_forces == 0) {
+	//    imperium_self.addPlanetaryUnit(attacker, sector, planet_idx, "infantry");
+	//    imperium_self.updateLog(imperium_self.returnFaction(attacker) + " reinforces infantry with Dacxive Animators");
+	//  }
+	//}
 	if (imperium_self.doesPlayerHaveTech(defender, "dacxive-animators")) {
 	  if (attacker_forces < defender_forces && attacker_forces == 0) {
-	   imperium_self.addPlanetaryUnit(defender, sector, planet_idx, "infantry");
-	   imperium_self.updateLog(imperium_self.returnFaction(defender) + " reinforces infantry with Dacxive Animators");
+	    imperium_self.addPlanetaryUnit(defender, sector, planet_idx, "infantry");
+	    imperium_self.updateLog(imperium_self.returnFaction(defender) + " reinforces infantry with Dacxive Animators");
 	  }
 	}
       },

@@ -1325,6 +1325,20 @@ updateLeaderboard() {
 
   try {
 
+    //
+    // hide unnecessary VP entries
+    //
+    try {
+      if (this.game.state.vp_target < 14) {
+        for (let i = 14; i > this.game.state.vp_target; i--) {
+          let leaderboard_div = "."+i+"-points"; 
+          document.querySelector(leaderboard_div).style.display = "none";
+        }
+      }
+    } catch (err) { 
+    }
+
+
     document.querySelector('.round').innerHTML = this.game.state.round;
     document.querySelector('.turn').innerHTML = this.game.state.turn;
 

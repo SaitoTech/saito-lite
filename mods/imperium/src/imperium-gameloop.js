@@ -2813,7 +2813,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	for (let i = 0; i < speaker_order.length; i++) {
 
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].pdsSpaceAttackTriggers(this, attacker, speaker_order[i], sector) == 1) {
+	    if (z[k].pdsSpaceAttackTriggers(this, attacker, speaker_order[i], sector) == 1 && this.returnOpponentInSector(attacker, sector) > -1) {
 	      this.game.queue.push("pds_space_attack_event\t"+speaker_order[i]+"\t"+attacker+"\t"+sector+"\t"+k);
             }
           }
@@ -4754,7 +4754,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	//
 	// defense
 	//
-	if (planet_owner == player) {
+	if (planet_owner == this.game.player && planet_owner == player) {
 	  this.playerPlayBombardment(player, sector, planet_idx);
 	  return 0;
 	}

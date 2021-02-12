@@ -16,8 +16,8 @@
         state.agendas = [];
 	state.vp_target = 14;
 
-	if (this.game.options.vp) {
-	  state.vp_target = parseInt(this.game.options.vp);
+	if (this.game.options.game_length) {
+	  state.vp_target = parseInt(this.game.options.game_length);
         } 
        
 	//
