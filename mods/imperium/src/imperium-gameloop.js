@@ -4690,8 +4690,13 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 
         this.updateSectorGraphics(sector);
 
+console.log("Here we go: " + attacker + " / " + defender);
+
 	if (this.game.player == attacker) {
           this.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
+	}
+	if (this.game.player == defender) {
+          this.playerPlayGroundCombat(defender, attacker, sector, planet_idx);
 	}
 
         return 0;
