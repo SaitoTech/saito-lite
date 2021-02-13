@@ -318,7 +318,7 @@
     for (let i = 0; i < as.length; i++) {
       let addsec = 0;
       if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
-      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(as[i], player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
       if (addsec == 1) { retreat_sectors.push(as[i]); }
     }
 
@@ -330,10 +330,13 @@
     let as = this.returnAdjacentSectors(sector);
 
     for (let i = 0; i < as.length; i++) {
-      if (this.game.board[as[i]]) {
+console.log("examine: " + as[i]);
+console.log("a: " + this.doesSectorContainPlayerShips(player, as[i]));
+console.log("b: " + this.doesSectorContainNonPlayerShips(player, as[i]));
+console.log("c: " + this.doesSectorContainPlanetOwnedByPlayer(as[i], player));
         if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-        if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-      }
+        if (this.doesSectorContainPlanetOwnedByPlayer(as[i], player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
+console.log("done");
     }
 
     return 0;

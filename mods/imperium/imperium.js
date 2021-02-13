@@ -9659,7 +9659,6 @@ console.log("error initing chat: " + err);
           this.addSpaceUnit(i + 1, hwsectors[i], this.factions[this.game.players_info[i].faction].space_units[k]);
 	}
 	for (let k = 0; k < this.factions[this.game.players_info[i].faction].ground_units.length; k++) {
-console.log("loading unit onto planet: " + this.factions[this.game.players_info[i].faction].ground_units[k]);
           this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, this.factions[this.game.players_info[i].faction].ground_units[k]);
 	}
 
@@ -9682,7 +9681,6 @@ console.log("loading unit onto planet: " + this.factions[this.game.players_info[
           this.game.players_info[i].promissary_notes.push(promissary);
         }
 
-console.log("saving system and planets....");
         this.saveSystemAndPlanets(sys);
   
       }
@@ -10949,7 +10947,6 @@ handleSystemsMenuItem() {
     // we need to keep capacity
     //
     let old_storage = unit.storage;
-console.log("UNIT OWNER: " + unit.owner);
     for (let z_index in z) { unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
     unit.storage = old_storage;
     return unit;
@@ -11459,15 +11456,29 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 	let player = parseInt(mv[1]);
 	let opponent = parseInt(mv[2]);
-
-        this.updateStatus(this.returnFaction(player) + " announces a retreat");
-
         let from = mv[3];
         let to = mv[4];
-
   	this.game.queue.splice(qe, 1);
 
-	this.playerRespondToRetreat(player, opponent);
+	//
+	// insert prospective retreat into game queue
+	//
+	let retreat_inserted = 0;
+	for (let i = this.game.queue.length-1; i >= 0; i--) {
+	  let lmv = this.game.queue[i].split("\t")[0];
+	  if (lmv === "space_combat_end") {
+  	    this.game.queue.splice(i+1, 0, "retreat\t"+player+"\t"+opponent+"\t"+from+"\t"+to);
+	  }
+	}
+
+
+        this.updateStatus(this.returnFactionNickname(player) + " announces a retreat");
+
+	if (this.game.player === opponent) {
+	  this.playerRespondToRetreat(player, opponent, from, to);
+	} else {
+	  this.updateStatus(this.returnFaction(opponent) + " responding to " + this.returnFaction(player) + " retreat");
+	}
 
 	return 0;
 
@@ -11483,7 +11494,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	this.game.queue.splice(qe, 1);
 
 	if (this.game.state.retreat_cancelled == 1 || this.game.players_info[opponent-1].temporary_opponent_cannot_retreat == 1 || this.game.players_info[opponent-1].permanent_opponent_cannot_retreat == 1) {
-	  this.updateLog("Retreat impossible, the fleets turn to battle...");
+	  this.updateLog("With retreat impossible, the fleets turns to battle...");
 	  return 1; 
 	}
 
@@ -11502,7 +11513,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         this.updateSectorGraphics(from);
         this.updateSectorGraphics(to);
 
-	imperium_self.updateLog(this.returnFactionNickname(player) + " retreats to " + sys_to.s.sector);
+	imperium_self.updateLog(this.returnFactionNickname(player) + " retreats to " + sys_to.s.name);
 
   	return 1;
   
@@ -15400,6 +15411,8 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 	this.resetTargetUnits();
         this.game.state.space_combat_attacker = -1;
         this.game.state.space_combat_defender = -1;
+        this.game.state.space_combat_retreats = [];
+
 
   	return 1;
       }
@@ -15761,12 +15774,14 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 	  //
 	  let restrictions = [];
 
+	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tanti_fighter_barrage\t"+sector+"\tanti_fighter_barrage\t"+total_hits+"\tanti_fighter_barrage");
 	  if (total_hits == 1) {
   	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hit");
+	    this.game.queue.push("ACKNOWLEDGE\t"+imperium_self.returnFaction(attacker)+" launches anti-fighter-barrage ("+total_hits+" hit)");
 	  } else {
   	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hits");
+	    this.game.queue.push("ACKNOWLEDGE\t"+imperium_self.returnFaction(attacker)+" launches anti-fighter-barrage ("+total_hits+" hits)");
 	  }
-	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tanti_fighter_barrage\t"+sector+"\tanti_fighter_barrage\t"+total_hits+"\tanti_fighter_barrage");
 
         } // does have anti fighter barrage in sector
         } // does have ships in sector
@@ -17745,10 +17760,6 @@ playerPlaySpaceCombat(attacker, defender, sector) {
 
   html = '<div class="sf-readable"><b>Space Combat: round ' + this.game.state.space_combat_round + ':</b><div class="combat_attacker">' + this.returnFaction(attacker) + '</div><div class="combat_attacker_fleet">' + this.returnPlayerFleetInSector(attacker, sector) + '</div><div class="combat_defender">' + this.returnFaction(defender) + '</div><div class="combat_defender_fleet">' + this.returnPlayerFleetInSector(defender, sector) + '</div><ul>';
 
-
-console.log("AF: " + this.returnPlayerFleetInSector(attacker, sector));
-console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
-
   let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards)
   if (ac.length > 0) {
     html += '<li class="option" id="attack">continue</li>';
@@ -17760,13 +17771,9 @@ console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
   //
   // can I retreat
   //
-  console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? " + imperium_self.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector));
   if (this.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector)) {
-    console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? " + imperium_self.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector));
     html += '<li class="option" id="retreat">announce retreat</li>';
   }
-
-
 
   let tech_attach_menu_events = 0;
   let tech_attach_menu_triggers = [];
@@ -17828,7 +17835,8 @@ console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
 
         let html = '<div clss="sf-readable">Retreat into which Sector? </div><ul>';
         for (let i = 0; i < retreat_options.length; i++) {
-          html += '<li class="option" id="' + i + '">' + sector + '</li>';
+	  let sys = imperium_self.returnSectorAndPlanets(retreat_options[i]);
+          html += '<li class="option" id="' + i + '">' + sys.s.name + '</li>';
         }
         html += '</ul>';
 
@@ -17840,7 +17848,7 @@ console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
           let opt = $(this).attr("id");
           let retreat_to_sector = retreat_options[opt];
 
-          imperium_self.addMove("retreat\t" + imperium_self.game.player + "\t" + opponent + "\t" + sector + "\t" + retreat_to_sector);
+          imperium_self.addMove("announce_retreat\t" + imperium_self.game.player + "\t" + opponent + "\t" + sector + "\t" + retreat_to_sector);
           imperium_self.endTurn();
           return 0;
         });
@@ -17857,9 +17865,6 @@ console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
 
 
 
-//
-// ground combat is over -- provide options for scoring cards, action cards
-//
 playerRespondToRetreat(player, opponent, from, to) {
 
   let imperium_self = this;
@@ -17867,14 +17872,12 @@ playerRespondToRetreat(player, opponent, from, to) {
   let relevant_action_cards = ["retreat"];
   let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
 
-  if (ac.length == 0) {
-    this.playerAcknowledgeNotice("Your opponent has announced a retreat into " + sys.s.sector + " at teh end of this round of combat");
-    return;
+  let html = '<div class="sf-readable">Your opponent has announced a retreat into ' + sys.s.name + ' at the end of this round of combat: </div><p></p><ul>';
+  if (ac.length > 0) {
+    html += '<li class="option" id="action">play action card</li>';
   }
-
-  let html = '<div class="sf-readable">Your opponent has announced a retreat into ' + sys.s.sector + ' at teh end of this round of combat: </div>';
-  html += '<li class="option" option="action">play action card</li>';
-  html += '<li class="option" option="permit">permit retreat</li>';
+  html += '<li class="option" id="permit">permit retreat</li>';
+  html += '</ul>';
 
   let tech_attach_menu_events = 0;
   let tech_attach_menu_triggers = [];
@@ -22561,7 +22564,7 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//     return ["1_1", "4_7"];
+//    return ["1_1", "4_7"];
       return ["1_1", "2_1"];
     }
 
@@ -23417,7 +23420,7 @@ playerDiscardActionCards(num, mycallback=null) {
     for (let i = 0; i < as.length; i++) {
       let addsec = 0;
       if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
-      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(as[i], player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
       if (addsec == 1) { retreat_sectors.push(as[i]); }
     }
 
@@ -23429,10 +23432,13 @@ playerDiscardActionCards(num, mycallback=null) {
     let as = this.returnAdjacentSectors(sector);
 
     for (let i = 0; i < as.length; i++) {
-      if (this.game.board[as[i]]) {
+console.log("examine: " + as[i]);
+console.log("a: " + this.doesSectorContainPlayerShips(player, as[i]));
+console.log("b: " + this.doesSectorContainNonPlayerShips(player, as[i]));
+console.log("c: " + this.doesSectorContainPlanetOwnedByPlayer(as[i], player));
         if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-        if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-      }
+        if (this.doesSectorContainPlanetOwnedByPlayer(as[i], player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
+console.log("done");
     }
 
     return 0;

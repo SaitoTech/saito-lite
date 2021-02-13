@@ -518,7 +518,6 @@ console.log("error initing chat: " + err);
           this.addSpaceUnit(i + 1, hwsectors[i], this.factions[this.game.players_info[i].faction].space_units[k]);
 	}
 	for (let k = 0; k < this.factions[this.game.players_info[i].faction].ground_units.length; k++) {
-console.log("loading unit onto planet: " + this.factions[this.game.players_info[i].faction].ground_units[k]);
           this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, this.factions[this.game.players_info[i].faction].ground_units[k]);
 	}
 
@@ -541,7 +540,6 @@ console.log("loading unit onto planet: " + this.factions[this.game.players_info[
           this.game.players_info[i].promissary_notes.push(promissary);
         }
 
-console.log("saving system and planets....");
         this.saveSystemAndPlanets(sys);
   
       }

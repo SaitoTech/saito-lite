@@ -311,15 +311,29 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 	let player = parseInt(mv[1]);
 	let opponent = parseInt(mv[2]);
-
-        this.updateStatus(this.returnFaction(player) + " announces a retreat");
-
         let from = mv[3];
         let to = mv[4];
-
   	this.game.queue.splice(qe, 1);
 
-	this.playerRespondToRetreat(player, opponent);
+	//
+	// insert prospective retreat into game queue
+	//
+	let retreat_inserted = 0;
+	for (let i = this.game.queue.length-1; i >= 0; i--) {
+	  let lmv = this.game.queue[i].split("\t")[0];
+	  if (lmv === "space_combat_end") {
+  	    this.game.queue.splice(i+1, 0, "retreat\t"+player+"\t"+opponent+"\t"+from+"\t"+to);
+	  }
+	}
+
+
+        this.updateStatus(this.returnFactionNickname(player) + " announces a retreat");
+
+	if (this.game.player === opponent) {
+	  this.playerRespondToRetreat(player, opponent, from, to);
+	} else {
+	  this.updateStatus(this.returnFaction(opponent) + " responding to " + this.returnFaction(player) + " retreat");
+	}
 
 	return 0;
 
@@ -335,7 +349,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
   	this.game.queue.splice(qe, 1);
 
 	if (this.game.state.retreat_cancelled == 1 || this.game.players_info[opponent-1].temporary_opponent_cannot_retreat == 1 || this.game.players_info[opponent-1].permanent_opponent_cannot_retreat == 1) {
-	  this.updateLog("Retreat impossible, the fleets turn to battle...");
+	  this.updateLog("With retreat impossible, the fleets turns to battle...");
 	  return 1; 
 	}
 
@@ -354,7 +368,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         this.updateSectorGraphics(from);
         this.updateSectorGraphics(to);
 
-	imperium_self.updateLog(this.returnFactionNickname(player) + " retreats to " + sys_to.s.sector);
+	imperium_self.updateLog(this.returnFactionNickname(player) + " retreats to " + sys_to.s.name);
 
   	return 1;
   
@@ -4252,6 +4266,8 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 	this.resetTargetUnits();
         this.game.state.space_combat_attacker = -1;
         this.game.state.space_combat_defender = -1;
+        this.game.state.space_combat_retreats = [];
+
 
   	return 1;
       }
@@ -4613,12 +4629,14 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 	  //
 	  let restrictions = [];
 
+	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tanti_fighter_barrage\t"+sector+"\tanti_fighter_barrage\t"+total_hits+"\tanti_fighter_barrage");
 	  if (total_hits == 1) {
   	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hit");
+	    this.game.queue.push("ACKNOWLEDGE\t"+imperium_self.returnFaction(attacker)+" launches anti-fighter-barrage ("+total_hits+" hit)");
 	  } else {
   	    this.updateLog(this.returnFactionNickname(attacker) + ":  " + total_hits + " hits");
+	    this.game.queue.push("ACKNOWLEDGE\t"+imperium_self.returnFaction(attacker)+" launches anti-fighter-barrage ("+total_hits+" hits)");
 	  }
-	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tanti_fighter_barrage\t"+sector+"\tanti_fighter_barrage\t"+total_hits+"\tanti_fighter_barrage");
 
         } // does have anti fighter barrage in sector
         } // does have ships in sector

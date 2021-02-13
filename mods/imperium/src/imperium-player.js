@@ -1302,10 +1302,6 @@ playerPlaySpaceCombat(attacker, defender, sector) {
 
   html = '<div class="sf-readable"><b>Space Combat: round ' + this.game.state.space_combat_round + ':</b><div class="combat_attacker">' + this.returnFaction(attacker) + '</div><div class="combat_attacker_fleet">' + this.returnPlayerFleetInSector(attacker, sector) + '</div><div class="combat_defender">' + this.returnFaction(defender) + '</div><div class="combat_defender_fleet">' + this.returnPlayerFleetInSector(defender, sector) + '</div><ul>';
 
-
-console.log("AF: " + this.returnPlayerFleetInSector(attacker, sector));
-console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
-
   let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards)
   if (ac.length > 0) {
     html += '<li class="option" id="attack">continue</li>';
@@ -1317,13 +1313,9 @@ console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
   //
   // can I retreat
   //
-  console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? " + imperium_self.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector));
   if (this.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector)) {
-    console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? " + imperium_self.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector));
     html += '<li class="option" id="retreat">announce retreat</li>';
   }
-
-
 
   let tech_attach_menu_events = 0;
   let tech_attach_menu_triggers = [];
@@ -1385,7 +1377,8 @@ console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
 
         let html = '<div clss="sf-readable">Retreat into which Sector? </div><ul>';
         for (let i = 0; i < retreat_options.length; i++) {
-          html += '<li class="option" id="' + i + '">' + sector + '</li>';
+	  let sys = imperium_self.returnSectorAndPlanets(retreat_options[i]);
+          html += '<li class="option" id="' + i + '">' + sys.s.name + '</li>';
         }
         html += '</ul>';
 
@@ -1397,7 +1390,7 @@ console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
           let opt = $(this).attr("id");
           let retreat_to_sector = retreat_options[opt];
 
-          imperium_self.addMove("retreat\t" + imperium_self.game.player + "\t" + opponent + "\t" + sector + "\t" + retreat_to_sector);
+          imperium_self.addMove("announce_retreat\t" + imperium_self.game.player + "\t" + opponent + "\t" + sector + "\t" + retreat_to_sector);
           imperium_self.endTurn();
           return 0;
         });
@@ -1414,9 +1407,6 @@ console.log("DF: " + this.returnPlayerFleetInSector(defender, sector));
 
 
 
-//
-// ground combat is over -- provide options for scoring cards, action cards
-//
 playerRespondToRetreat(player, opponent, from, to) {
 
   let imperium_self = this;
@@ -1424,14 +1414,12 @@ playerRespondToRetreat(player, opponent, from, to) {
   let relevant_action_cards = ["retreat"];
   let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
 
-  if (ac.length == 0) {
-    this.playerAcknowledgeNotice("Your opponent has announced a retreat into " + sys.s.sector + " at teh end of this round of combat");
-    return;
+  let html = '<div class="sf-readable">Your opponent has announced a retreat into ' + sys.s.name + ' at the end of this round of combat: </div><p></p><ul>';
+  if (ac.length > 0) {
+    html += '<li class="option" id="action">play action card</li>';
   }
-
-  let html = '<div class="sf-readable">Your opponent has announced a retreat into ' + sys.s.sector + ' at teh end of this round of combat: </div>';
-  html += '<li class="option" option="action">play action card</li>';
-  html += '<li class="option" option="permit">permit retreat</li>';
+  html += '<li class="option" id="permit">permit retreat</li>';
+  html += '</ul>';
 
   let tech_attach_menu_events = 0;
   let tech_attach_menu_triggers = [];

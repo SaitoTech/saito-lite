@@ -557,7 +557,6 @@
     // we need to keep capacity
     //
     let old_storage = unit.storage;
-console.log("UNIT OWNER: " + unit.owner);
     for (let z_index in z) { unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
     unit.storage = old_storage;
     return unit;
