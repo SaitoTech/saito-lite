@@ -2875,6 +2875,341 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 
 
 
+    this.importFaction('faction6', {
+      id		:	"faction6" ,
+      name		: 	"Yssaril Tribes",
+      nickname		: 	"Yssaril",
+      homeworld		: 	"sector21",
+      space_units	: 	["carrier","carrier","cruiser","fighter","fighter"],
+      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
+      tech		: 	["neural-motivator", "faction6-stall-tactics", "faction6-scheming", "faction6-crafty","faction6-transparasteel-plating","faction6-mageon-implants","faction6-flagship"],
+      background	: 	'faction6.jpg' ,
+      promissary_notes	:	["trade","political","ceasefire","throne"],
+      intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Yssaril Tribe, a primitive race of swamp-dwelling creatures whose fast instincts and almost unerring ability to change tactics on-the-fly lead many to suspect more is at work than their primitive appearance belies. Good luck!</div>`
+    });
+
+
+
+
+
+
+    this.importTech("faction6-stall-tactics", {
+
+      name        :       "Stall Tactics" ,
+      faction     :       "faction6",
+      type      :         "ability" ,
+      text        :       "Discard an Action Card to stall one turn" ,
+      initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].stall_tactics == undefined) {
+          imperium_self.game.players_info[player-1].stall_tactics = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction6-stall-tactics") {
+          imperium_self.game.players_info[gainer-1].stall_tactics = 1;
+        }
+      },
+      menuOption  :       function(imperium_self, menu, player) {
+        let x = {};
+        if (menu === "main") {
+          x.event = 'stalltactics';
+          x.html = '<li class="option" id="stalltactics">discard action card (stall)</li>';
+        }
+        return x;
+      },
+      menuOptionTriggers:  function(imperium_self, menu, player) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction6-stall-tactics") && menu === "main") {
+	  let ac = imperium_self.returnPlayerActionCards(player);
+	  if (ac.length > 0) {
+            return 1;
+          }
+        }
+        return 0;
+      },
+      menuOptionActivated:  function(imperium_self, menu, player) {
+
+        if (imperium_self.game.player == player) {
+	  imperium_self.playerDiscardActionCards(1, function() {
+            imperium_self.endTurn();
+            return 0;
+	  });
+	}
+
+	return 0;
+      }
+    });
+
+
+
+
+
+    this.importTech("faction6-crafty", {
+
+      name        :       "Crafty" ,
+      faction     :       "faction6",
+      type        :       "ability" ,
+      text        :       "Unlimited action cards. Game effects cannot change." ,
+      onNewRound     :    function(imperium_self, player) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction6-crafty")) {
+          imperium_self.game.players_info[player-1].action_card_limit = 1000;
+        }
+      },
+    });
+
+
+
+
+
+
+    this.importTech("faction6-scheming", {
+
+      name        :       "Scheming" ,
+      faction     :       "faction6",
+      type        :       "ability" ,
+      text        :       "Receive bonus card when gaining action cards, then discard one" ,
+      initialize  :       function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].faction6_scheming == null) {
+          imperium_self.game.players_info[player-1].faction6_scheming = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction6-scheming") {
+          imperium_self.game.players_info[gainer-1].faction6_scheming = 1;
+        }
+      },
+      gainActionCards : function(imperium_self, player, amount) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction6-scheming")) {
+          imperium_self.game.queue.push("yssaril_action_card_discard\t"+player+"\t1");
+          imperium_self.game.queue.push("gain\t"+imperium_self.game.player+"\taction_cards"+"\t"+1+"\t"+"0");
+          imperium_self.game.queue.push("DEAL\t2\t"+player+"\t1");
+          imperium_self.game.queue.push("NOTIFY\t" + imperium_self.returnFaction(player) + " gains bonus action card and must discard one");
+	}
+        return 1;
+      },
+      handleGameLoop : function(imperium_self, qe, mv) {
+
+        if (mv[0] == "yssaril_action_card_discard") {
+
+          let player = parseInt(mv[1]);
+          let num = parseInt(mv[2]);
+          imperium_self.game.queue.splice(qe, 1);
+
+	  if (imperium_self.game.player === player) {
+	    imperium_self.playerDiscardActionCards(num, function() {
+	      imperium_self.endTurn();
+	    });
+	  }
+
+          return 0;
+        }
+      }
+    });
+
+
+
+
+
+
+
+    //
+    // players that have passed cannot play action cards during your turn
+    //
+    this.importTech('faction6-transparasteel-plating', {
+      name        :       "Transparasteel Plating" ,
+      faction     :       "faction6",
+      prereqs     :       ["green"] ,
+      color       :       "green" ,
+      type        :       "special" ,
+      text        :       "Selectively terminate action cards from players who have passed on your turn" ,
+      initialize  :       function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].transparasteel_plating == null) {
+          imperium_self.game.players_info[player-1].transparasteel_plating = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction6-transparasteel-plating") {
+          imperium_self.game.players_info[gainer-1].transparasteel_plating = 1;
+        }
+      },
+      playActionCardTriggers : function(imperium_self, player, action_card_player, card) {
+        if (imperium_self.game.players_info[player-1].transparasteel_plating == 1) {
+	  if (imperium_self.game.player == player && action_card_player != player && imperium_self.game.players_info[action_card_player-1].passed == 1) {
+	    return 1;
+	  }
+	}
+	return 0; 
+      },
+      playActionCardEvent : function(imperium_self, player, action_card_player, card) {
+        if (imperium_self.game.player == player) {
+          // remove action card
+          imperium_self.addMove("resolve\t"+"action_card");
+          imperium_self.addMove("resolve\t"+"action_card_post");
+          imperium_self.addMove("expend\t"+imperium_self.game.player+"strategy"+"1");
+          imperium_self.endTurn();
+        }
+        return 0;
+      },
+    });
+
+
+
+
+    this.importTech('faction6-mageon-implants', {
+      name        :       "Mageon Implants" ,
+      faction     :       "faction6",
+      prereqs     :       ["green","green","green"] ,
+      color       :       "green" ,
+      type        :       "special" ,
+      text        :       "Exhaust to look at other players action cards and take one." ,
+      initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].mageon_implants == undefined) {
+          imperium_self.game.players_info[player-1].mageon_implants = 0;
+          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+        }
+      },
+      onNewRound : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].maeon_implants == 1) {
+          imperium_self.game.players_info[player-1].mageon_implants = 0;
+          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction6-mageon-implants") {
+          imperium_self.game.players_info[player-1].mageon_implants = 1;
+          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+        }
+      },
+      menuOption  :       function(imperium_self, menu, player) {
+        if (menu == "main") {
+          return { event : 'mageonimplants', html : '<li class="option" id="mageonimplants">exhaust mageon implants</li>' };
+        }
+        return {};
+      },
+      menuOptionTriggers:  function(imperium_self, menu, player) {
+        if (menu == "main" && imperium_self.game.players_info[player-1].mageon_implants_exhausted == 0 && imperium_self.game.players_info[player-1].mageon_implants == 1) {
+          return 1;
+        }
+        return 0;
+      },
+      menuOptionActivated:  function(imperium_self, menu, player) {
+
+        imperium_self.playerSelectPlayerWithFilter(
+          "Select a player from which to take an action card (if possible): " ,
+          function(player) {
+            if (player != imperium_self.game.player) { return 1; } return 0;
+          },
+          function(player) {
+            imperium_self.addMove("pull\t"+imperium_self.game.player+"\t"+player+"\t"+"action"+"\t"+"random");
+            imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " pulls a random action card from " + imperium_self.returnFaction(player));
+            imperium_self.endTurn();
+            return 0;
+          },
+          function() {
+            imperium_self.playerTurn();
+          }
+        );
+
+        return 0;
+      }
+    });
+
+
+
+
+    
+    this.importTech("faction6-flagship", {
+      name        	:       "Yssaril Flagship" ,
+      faction     	:       "faction6",
+      type      	:       "ability" ,
+      text        	:       "May move through sectors containing other ships" ,
+      upgradeUnit :       function(imperium_self, player, unit) {
+        if (imperium_self.doesPlayerHaveTech(unit.owner, "faction6-flagship") && unit.type == "flagship") {
+          unit.may_fly_through_sectors_containing_other_ships = 1;
+        }
+        return unit;
+      },
+    });
+
+
+
+
+/****
+
+this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_core=0) {
+
+  if (imperium_self.game.player != player) { return 0; }
+
+  let sys = imperium_self.returnSectorAndPlanets(sector);
+  let opponent = imperium_self.returnOpponentInSector(player, sector);
+
+  let can_sacrifice_destroyer = imperium_self.doesSectorContainPlayerUnit(player, sector, "destroyer");
+  let can_sacrifice_cruiser = imperium_self.doesSectorContainPlayerUnit(player, sector, "cruiser");
+ 
+  if (can_sacrifice_destroyer != 1 && can_sacrifice_cruiser != 1) {
+    mycallback(imperium_self);
+    return;
+  }
+  if (opponent == -1) {
+    mycallback(imperium_self);
+    return;
+  }
+
+
+  let html = "<div class='sf-readable'>Do you wish to sacrifice a Destroyer or Cruiser to assign 1 hit to an enemy ship?</div><ul>";
+  if (can_sacrifice_destroyer) {
+      html += '<li class="textchoice" id="destroyer">sacrifice destroyer</li>';
+  }
+  if (can_sacrifice_cruiser) {
+      html += '<li class="textchoice" id="cruiser">sacrifice cruiser</li>';
+  }
+      html += '<li class="textchoice" id="no">no</li>';
+      html += '</ul>';
+  imperium_self.updateStatus(html);
+
+  $('.textchoice').off();
+  $('.textchoice').on('click', function () {
+    let action2 = $(this).attr("id");
+    if (action2 === "no") {
+      mycallback(imperium_self);
+      return;
+    }
+    if (action2 === "destroyer") {
+
+      let unit_idx = 0;
+      for (let i = 0; i < sys.s.units[player-1].length; i++) {
+	if (sys.s.units[player-1][i].type == "destroyer") {
+	  unit_idx = i;
+        }
+      }
+
+      imperium_self.addMove("destroy_unit"+"\t"+player+"\t"+player+"\t"+"space"+"\t"+sector+"\t"+0+"\t"+unit_idx+"\t"+1);
+      imperium_self.playDevotionAssignHit(imperium_self, player, sector, mycallback, impulse_core);
+      return;
+    }
+    if (action2 === "cruiser") {
+
+      let unit_idx = 0;
+      for (let i = 0; i < sys.s.units[player-1].length; i++) {
+	if (sys.s.units[player-1][i].type == "cruiser") {
+	  unit_idx = i;
+        }
+      }
+
+      imperium_self.addMove("destroy_unit"+"\t"+player+"\t"+player+"\t"+"space"+"\t"+sector+"\t"+0+"\t"+unit_idx+"\t"+1);
+      imperium_self.playDevotionAssignHit(imperium_self, player, sector, mycallback, impulse_core);
+      return;
+    }
+  });
+
+  return 0;
+}
+
+*****/
+
+
+
+
+
 
     this.importStrategyCard("construction", {
       name     			:       "Construction",
@@ -3940,10 +4275,8 @@ console.log("1 - 1 - 4")
       },
       planetaryDefenseTriggers :  function(imperium_self, player, sector, planet_idx) {
 	if (imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked > 0) {
-console.log("sector is: " + sector);
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
-console.log("planname: " + planet.name);
 	  let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	  if (infantry_on_planet == 0) {
 	    imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 1;
@@ -4005,7 +4338,6 @@ console.log("planname: " + planet.name);
 	return 0;
       },
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_objective_anti_imperialism);
 	if (imperium_self.game.state.secret_objective_anti_imperialism == 1) { return 1; }
 	return 0;
       },
@@ -4063,7 +4395,7 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
 	let players_with_lowest_vp = imperium_self.returnPlayersWithLowestVP();
 
 	if (imperium_self.game.player == attacker) {
-	  if (planetunits[defender-1].length == 0) {
+	  if (planet.units[defender-1].length == 0) {
 	    if (players_with_lowest_vp.includes(defender)) { 
 	      // does the player have any units left?
 	      for (let i in imperium_self.game.sectors) {
@@ -10415,6 +10747,7 @@ handleSystemsMenuItem() {
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
     if (obj.extension == null)		{ obj.extension = 0; }			// 1 if replacing other unit as upgrade
+    if (obj.may_fly_through_sectors_containing_other_ships == null) { obj.may_fly_through_sectors_containing_other_ships = 0; }
     if (obj.description == null)	{ obj.description = ""; }		// shown on unit sheet
     if (obj.anti_fighter_barrage ==null){ obj.anti_fighter_barrage = 0; }
     if (obj.anti_fighter_barrage_combat ==null){ obj.anti_fighter_barrage_combat = 0; }
@@ -10724,7 +11057,7 @@ handleSystemsMenuItem() {
 
 
 
-  returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards) {  
+  returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable) {  
 
     let imperium_self = this;
     let ships_and_sectors = [];
@@ -10753,11 +11086,13 @@ handleSystemsMenuItem() {
           for (let k = 0; k < sys.s.units[this.game.player-1].length; k++) {
             let this_ship = sys.s.units[this.game.player-1][k];
             if (this_ship.move >= distance[i]) {
-    	      x.adjusted_distance.push(distance[i]);
-              x.ships.push(this_ship);
-	      x.hazards.push(hazards[i]);
-              x.ship_idxs.push(k);
-              x.sector = sectors[i];
+	      if (hoppable[i] != -1 || this_ship.may_fly_through_sectors_containing_other_ships == 1) {
+      	        x.adjusted_distance.push(distance[i]);
+                x.ships.push(this_ship);
+	        x.hazards.push(hazards[i]);
+                x.ship_idxs.push(k);
+                x.sector = sectors[i];
+              }
             }
           }
 
@@ -13440,9 +13775,12 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
   	let player       = parseInt(mv[1]);
         let type         = mv[2];
         let amount       = parseInt(mv[3]);
+        let run_events   = 1;
+	if (mv[4] === "0") { run_events = 0; }
 	let z            = this.returnEventObjects();
 
 	if (type == "action_cards") {
+
           if (this.game.player == player && this.browser_active == 1) {
 	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
 	    document.getElementById("close-action-cards-btn").onclick = (e) => {
@@ -13450,6 +13788,14 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
             }
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
+
+	  if (run_events == 1) {
+	    z = this.returnEventObjects();
+	    for (let z_index in z) {
+  	      z[z_index].gainActionCards(imperium_self, player, amount);
+  	    }
+  	  }
+
 	}
 	if (type === "secret_objectives" || type === "secret_objective") {
           if (this.game.player == player && this.browser_active == 1) {
@@ -16443,6 +16789,7 @@ console.log("Here we go: " + attacker + " / " + defender);
               <option value="faction3">XXcha Kingdom</option>
               <option value="faction4">Sardakk N'Orr</option>
               <option value="faction5">Brotherhood of Yin</option>
+              <option value="faction6">Ysarril Tribes</option>
             </select>
       `;
     }
@@ -16759,10 +17106,9 @@ playerTurn(stage = "main") {
     let tech_attach_menu_events = 0;
     let tech_attach_menu_triggers = [];
     let tech_attach_menu_index = [];
-
+    let z = this.returnEventObjects();
 
     if (this.game.state.active_player_moved == 1) {
-      let z = this.returnEventObjects();
       for (let i = 0; i < z.length; i++) {
         if (z[i].menuOptionTriggers(this, "main", this.game.player) == 1) {
           let x = z[i].menuOption(this, "main", this.game.player);
@@ -20555,6 +20901,7 @@ playerSelectUnitsToMove(destination) {
   let sectors = [];
   let distance = [];
   let hazards = [];
+  let hoppable = [];
   let fighters_loaded = 0;
   let infantry_loaded = 0;
 
@@ -20574,6 +20921,7 @@ playerSelectUnitsToMove(destination) {
   sectors = x.sectors;
   distance = x.distance;
   hazards = x.hazards;
+  hoppable = x.hoppable;
 
   for (let i = 0; i < distance.length; i++) {
     if (obj.ship_move_bonus > 0) {
@@ -20591,7 +20939,7 @@ playerSelectUnitsToMove(destination) {
     obj.distance_adjustment += obj.fleet_move_bonus;
   }
 
-  obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards);
+  obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable);
 
   let updateInterface = function (imperium_self, obj, updateInterface) {
 
@@ -22337,7 +22685,6 @@ playerDiscardActionCards(num, mycallback=null) {
 
     //sectors['sector14']        = { img : "/imperium/img/sectors/sector14.png" , 	   name : "Sector 14" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet13','planet14'] }
     //sectors['sector17']        = { img : "/imperium/img/sectors/sector17.png" , 	   name : "Sector 17" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet19','planet20'] }
-    //sectors['sector21']        = { img : "/imperium/img/sectors/sector21.png" , 	   name : "Sector 21" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet27','planet28'] }
     //sectors['sector23']        = { img : "/imperium/img/sectors/sector23.png" , 	   name : "Sector 23" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet30'] }
     sectors['sector24']        = { img : "/imperium/img/sectors/sector24.png" , 	   name : "Sector 24" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet31'] }
     //sectors['sector30']        = { img : "/imperium/img/sectors/sector30.png" , 	   name : "Sector 30" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet37'] }
@@ -22354,6 +22701,7 @@ playerDiscardActionCards(num, mycallback=null) {
     sectors['sector52']        = { img : "/imperium/img/sectors/sector52.png" , 	   name : "Sol Homeworld" , type : 0 , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet57'] }
     sectors['sector53']        = { img : "/imperium/img/sectors/sector53.png" , 	   name : "Sardaak Homeworld" , type : 0 , hw : 1 , wormhole: 0 , mr : 0 , planets : ['planet58'] }
     sectors['sector13']        = { img : "/imperium/img/sectors/sector13.png" , 	   name : "Yin Homeworld" , type : 0 , hw : 1 , wormhole : 0, mr : 0 , planets : ['planet11','planet12'] }
+    sectors['sector21']        = { img : "/imperium/img/sectors/sector21.png" , 	   name : "Ysarril Homeworld" , type : 0 , hw : 1 , wormhole : 0, mr : 0 , planets : ['planet27','planet28'] }
 
     for (var i in sectors) {
 
@@ -22564,7 +22912,7 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//    return ["1_1", "4_7"];
+//      return ["1_1", "4_7"];
       return ["1_1", "2_1"];
     }
 
@@ -22777,6 +23125,9 @@ playerDiscardActionCards(num, mycallback=null) {
     if (obj.gainTechnology == null) {
       obj.gainTechnology = function(imperium_self, gainer, tech) { return 1; }
     }
+    if (obj.gainActionCards == null) {
+      obj.gainActionCards = function(imperium_self, gainer, amount) { return 1; }
+    }
     if (obj.gainFleetSupply == null) {
       obj.gainFleetSupply = function(imperium_self, gainer, amount) { return amount; }
     }
@@ -22942,8 +23293,6 @@ playerDiscardActionCards(num, mycallback=null) {
     }
 
 
-
-
     ////////////////////
     // Victory Points //
     ////////////////////
@@ -22961,7 +23310,6 @@ playerDiscardActionCards(num, mycallback=null) {
     if (obj.returnPDSUnitsWithinRange == null) {
       obj.returnPDSUnitsWithinRange = function(imperium_self, player, attacker, defender, sector, battery) { return battery; }
     }
-
 
 
 
@@ -24523,13 +24871,17 @@ console.log("done");
     let sectors = [];
     let distance = [];
     let hazards = [];
+    let hoppable = [];
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
 
     let add_at_end = [];
 
+console.log("pushing: " + destination + " as " + 1);
+
     sectors.push(destination);
     distance.push(0);
     hazards.push("");
+    hoppable.push(1);
 
   
     //
@@ -24565,9 +24917,20 @@ console.log("done");
 	    if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships == 1) {
 	    } else {
 	      if (this.doesSectorContainNonPlayerShips(player, tmp[k])) {
-	        can_hop_through_this_sector = 0;
+	        can_hop_through_this_sector = -1;
+console.log("now that we are here we can see sector: " + sectors[k] + " is unhoppable");
+		hoppable[k] = -1;
 	      }
 	    }
+
+
+	    //
+	    // EXISTING UNHOPPABLE = NEIGHBOURS UNHOPPABLE
+	    //
+	    if (hoppable[k] == -1) {
+	      can_hop_through_this_sector = -1;
+	    }
+
 
 
             //
@@ -24616,7 +24979,8 @@ console.log("done");
 	  if (tmp[k] == destination) { can_hop_through_this_sector = 1; }
 
 
-	  if (can_hop_through_this_sector == 1) {
+
+	  if (can_hop_through_this_sector == -1) {
 
 	    //
 	    // board adjacency 
@@ -24625,6 +24989,8 @@ console.log("done");
             for (let m = 0; m < neighbours.length; m++) {
     	      if (!sectors.includes(neighbours[m]))  {
   	        sectors.push(neighbours[m]);
+  	        hoppable.push(-1);
+console.log("1 pushing: " + neighbours[m] + " as " + -1);
 		if (hazard_description === "rift") {
                   distance.push(i);
 		} else {
@@ -24646,6 +25012,8 @@ console.log("done");
 		}
 		if (insert_anew == 1) {
 		  sectors.push(neighbours[m]);
+  	          hoppable.push(-1);
+console.log("2 pushing: " + neighbours + " as " + -1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -24663,6 +25031,8 @@ console.log("done");
 	      if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
   	        if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
   	          sectors.push(this.game.state.temporary_adjacency[z][1]);
+console.log("3 pushing: " + this.game.state.temporary_adjacency[z][1] + " as " + -1);
+  	          hoppable.push(-1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -24684,6 +25054,8 @@ console.log("done");
                   }
                   if (insert_anew == 1) {
                     sectors.push(neighbours[m]);
+console.log("4 pushing: " + neighbours[m] + " as " + -1);
+                    hoppable.push(-1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
 		    } else {
@@ -24697,6 +25069,142 @@ console.log("done");
 	      if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
   	        if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
   	          sectors.push(this.game.state.temporary_adjacency[z][0]);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hoppable.push(-1);
+		  hazards.push(hazard_description);
+console.log("5 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " + -1);
+  	        } else {
+
+		  //
+		  // if the included sector contains a RIFT or punishing sector and we have found it
+		  // through a "clean" route, we want to add that separately so it is not marked as 
+		  // only accessible through a hazardous path
+		  //
+		  let insert_anew = 1;
+                  for (let zz = 0; zz < sectors.length; zz++) {
+                    if (sectors[zz] == this.game.state.temporary_adjacency[z][0]) {
+                      if (hazards[zz] == hazard_description) { insert_anew = 0; }
+                    }
+                  }
+                  if (insert_anew == 1) {
+                    sectors.push(this.game.state.temporary_adjacency[z][0]);
+console.log("6 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " + -1);
+                    hoppable.push(-1);
+		    if (hazard_description === "rift") {
+                      distance.push(i);
+		    } else {
+                      distance.push(i+1);
+		    }
+                    hazards.push(hazard_description);
+                  }
+		}
+	      }
+  	    }
+	  }
+
+
+
+
+
+	  if (can_hop_through_this_sector == 1) {
+
+	    //
+	    // board adjacency 
+	    //
+            let neighbours = s[tmp[k]].neighbours;
+            for (let m = 0; m < neighbours.length; m++) {
+    	      if (!sectors.includes(neighbours[m]))  {
+  	        sectors.push(neighbours[m]);
+  	        hoppable.push(1);
+console.log("7 pushing: " + neighbours[m] + " as " + 1);
+		if (hazard_description === "rift") {
+                  distance.push(i);
+		} else {
+                  distance.push(i+1);
+		}
+		hazards.push(hazard_description);
+  	      } else {
+
+		//
+		// if the included sector is non-hoppable and this new version is clean, we want
+		// to update the existing sector so that it is not marked as unhoppable (i.e. all
+		// of the ships will be able to move.
+		//
+		// AND
+		//
+		// if the included sector contains a RIFT or punishing sector and we have found it
+		// through a "clean" route, we want to update the existing sector so that it is not
+		// marked as hazardous
+		//
+		let insert_anew = 1;
+		for (let zz = 0; zz < sectors.length; zz++) {
+		  if (sectors[zz] == neighbours[m]) {
+		    if (hazards[zz] == hazard_description) { insert_anew = 0; }
+		    if (hoppable[zz] == -1) { insert_anew = 1; }
+		  }
+		}
+		if (insert_anew == 1) {
+		  sectors.push(neighbours[m]);
+console.log("8 pushing: " + neighbours[m] + " as " + 1);
+  	          hoppable.push(1);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hazards.push(hazard_description);
+		}
+	      }
+            }
+
+	    //
+	    // temporary adjacency 
+	    //
+            for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
+	      if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
+  	        if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
+  	          sectors.push(this.game.state.temporary_adjacency[z][1]);
+  	          hoppable.push(1);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hazards.push(hazard_description);
+  	        } else {
+
+		  //
+		  // if the included sector contains a RIFT or punishing sector and we have found it
+		  // through a "clean" route, we want to update the existing sector so that it is not
+		  // marked as hazardous
+		  //
+		  let insert_anew = 1;
+                  for (let zz = 0; zz < sectors.length; zz++) {
+                    if (sectors[zz] == this.game.state.temporary_adjacency[z][1]) {
+                      if (hazards[zz] == hazard_description) { insert_anew = 0; }
+                    }
+                  }
+                  if (insert_anew == 1) {
+                    sectors.push(neighbours[m]);
+  	            hoppable.push(1);
+		    if (hazard_description === "rift") {
+                      distance.push(i);
+		    } else {
+                      distance.push(i+1);
+		    }
+                    hazards.push(hazard_description);
+                  }
+
+	        }
+	      }
+	      if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
+  	        if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
+  	          sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	          hoppable.push(1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -24718,6 +25226,7 @@ console.log("done");
                   }
                   if (insert_anew == 1) {
                     sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	            hoppable.push(1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
 		    } else {
@@ -24729,13 +25238,14 @@ console.log("done");
 		}
 	      }
   	    }
-	  }
+	  } // if can_hop == 1
+
 	}
       }
     }
 
     //
-    // one more shot for any sectors marked as gravity rift (+1)
+    // one more shot for any sectors marked as gravity rift (+1) / max-hop
     //
     for (let i = 0; i < sectors.length; i++) {
 
@@ -24755,6 +25265,10 @@ console.log("done");
           let neighbours = s[sectors[i]].neighbours;
           for (let m = 0; m < neighbours.length; m++) {
     	    if (!sectors.includes(neighbours[m]))  {
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+	      hoppable.push(1);
   	      sectors.push(neighbours[m]);
   	      distance.push(hops);
 	      hazards.push("rift");
@@ -24770,6 +25284,10 @@ console.log("done");
   	        sectors.push(this.game.state.temporary_adjacency[z][1]);
   	        distance.push(hops);
 	        hazards.push("rift");
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+		hoppable.push(1);
   	      }
 	    }
 	    if (sectors[i] == this.game.state.temporary_adjacency[z][1]) {
@@ -24777,6 +25295,10 @@ console.log("done");
   	        sectors.push(this.game.state.temporary_adjacency[z][0]);
   	        distance.push(hops);
 	        hazards.push("rift");
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+		hoppable.push(1);
 	      }
   	    }
           }
@@ -24795,6 +25317,7 @@ console.log("done");
         for (let k = 0; k < sectors.length; k++) {
 	  if (sectors[i] === sectors[k] && distance[i] >= distance[k] && i != k) {
 	    sectors.splice(i, 1);
+	    hoppable.splice(i, 1);
 	    distance.splice(i, 1);
 	    hazards.splice(i, 1);
 	    i--;
@@ -24805,8 +25328,34 @@ console.log("done");
       }
     }
 
+
+
+    //
+    // remove unhoppable paths that are uncompetitive with hoppable paths
+    //
+    sectors_to_process = sectors.length;
+    for (let i = 0; i < sectors_to_process; i++) {
+      if (hoppable[i] == -1) {
+        for (let k = 0; k < sectors.length; k++) {
+          if (sectors[i] === sectors[k] && hoppable[k] == 1 && i != k && distance[i] >= distance[k]) {
+            sectors.splice(i, 1);
+	    hoppable.splice(i, 1);
+            distance.splice(i, 1);
+            hazards.splice(i, 1);
+            i--;
+            sectors_to_process--;
+            k = sectors.length+2;
+          }
+        }
+      }
+    }
+
+
     
-    let return_obj = { sectors : sectors , distance : distance , hazards : hazards };
+    let return_obj = { sectors : sectors , distance : distance , hazards : hazards , hoppable : hoppable };
+
+console.log("\n------------------------");
+console.log("HOPPABLE: " + JSON.stringify(return_obj));
 
     return return_obj;
   }
@@ -25750,8 +26299,8 @@ console.log("done");
     }
 
     obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards); 
-
     if (obj.ships_and_sectors.length > 0) { return 1; }
+
     return 0;
 
   }
@@ -26913,7 +27462,11 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
+console.log("type: " + unittype);
+
   let preobj = this.units[unittype];
+
+console.log(JSON.stringify(this.units[unittype]));
 
   let obj = JSON.parse(JSON.stringify(preobj));
 

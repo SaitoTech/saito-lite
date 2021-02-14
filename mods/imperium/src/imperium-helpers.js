@@ -159,6 +159,7 @@
               <option value="faction3">XXcha Kingdom</option>
               <option value="faction4">Sardakk N'Orr</option>
               <option value="faction5">Brotherhood of Yin</option>
+              <option value="faction6">Ysarril Tribes</option>
             </select>
       `;
     }

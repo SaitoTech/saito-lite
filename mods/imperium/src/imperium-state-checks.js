@@ -1421,13 +1421,17 @@ console.log("done");
     let sectors = [];
     let distance = [];
     let hazards = [];
+    let hoppable = [];
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
 
     let add_at_end = [];
 
+console.log("pushing: " + destination + " as " + 1);
+
     sectors.push(destination);
     distance.push(0);
     hazards.push("");
+    hoppable.push(1);
 
   
     //
@@ -1463,9 +1467,20 @@ console.log("done");
 	    if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships == 1) {
 	    } else {
 	      if (this.doesSectorContainNonPlayerShips(player, tmp[k])) {
-	        can_hop_through_this_sector = 0;
+	        can_hop_through_this_sector = -1;
+console.log("now that we are here we can see sector: " + sectors[k] + " is unhoppable");
+		hoppable[k] = -1;
 	      }
 	    }
+
+
+	    //
+	    // EXISTING UNHOPPABLE = NEIGHBOURS UNHOPPABLE
+	    //
+	    if (hoppable[k] == -1) {
+	      can_hop_through_this_sector = -1;
+	    }
+
 
 
             //
@@ -1514,7 +1529,8 @@ console.log("done");
 	  if (tmp[k] == destination) { can_hop_through_this_sector = 1; }
 
 
-	  if (can_hop_through_this_sector == 1) {
+
+	  if (can_hop_through_this_sector == -1) {
 
 	    //
 	    // board adjacency 
@@ -1523,6 +1539,8 @@ console.log("done");
             for (let m = 0; m < neighbours.length; m++) {
     	      if (!sectors.includes(neighbours[m]))  {
   	        sectors.push(neighbours[m]);
+  	        hoppable.push(-1);
+console.log("1 pushing: " + neighbours[m] + " as " + -1);
 		if (hazard_description === "rift") {
                   distance.push(i);
 		} else {
@@ -1544,6 +1562,8 @@ console.log("done");
 		}
 		if (insert_anew == 1) {
 		  sectors.push(neighbours[m]);
+  	          hoppable.push(-1);
+console.log("2 pushing: " + neighbours + " as " + -1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -1561,6 +1581,8 @@ console.log("done");
 	      if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
   	        if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
   	          sectors.push(this.game.state.temporary_adjacency[z][1]);
+console.log("3 pushing: " + this.game.state.temporary_adjacency[z][1] + " as " + -1);
+  	          hoppable.push(-1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -1582,6 +1604,8 @@ console.log("done");
                   }
                   if (insert_anew == 1) {
                     sectors.push(neighbours[m]);
+console.log("4 pushing: " + neighbours[m] + " as " + -1);
+                    hoppable.push(-1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
 		    } else {
@@ -1595,6 +1619,142 @@ console.log("done");
 	      if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
   	        if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
   	          sectors.push(this.game.state.temporary_adjacency[z][0]);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hoppable.push(-1);
+		  hazards.push(hazard_description);
+console.log("5 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " + -1);
+  	        } else {
+
+		  //
+		  // if the included sector contains a RIFT or punishing sector and we have found it
+		  // through a "clean" route, we want to add that separately so it is not marked as 
+		  // only accessible through a hazardous path
+		  //
+		  let insert_anew = 1;
+                  for (let zz = 0; zz < sectors.length; zz++) {
+                    if (sectors[zz] == this.game.state.temporary_adjacency[z][0]) {
+                      if (hazards[zz] == hazard_description) { insert_anew = 0; }
+                    }
+                  }
+                  if (insert_anew == 1) {
+                    sectors.push(this.game.state.temporary_adjacency[z][0]);
+console.log("6 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " + -1);
+                    hoppable.push(-1);
+		    if (hazard_description === "rift") {
+                      distance.push(i);
+		    } else {
+                      distance.push(i+1);
+		    }
+                    hazards.push(hazard_description);
+                  }
+		}
+	      }
+  	    }
+	  }
+
+
+
+
+
+	  if (can_hop_through_this_sector == 1) {
+
+	    //
+	    // board adjacency 
+	    //
+            let neighbours = s[tmp[k]].neighbours;
+            for (let m = 0; m < neighbours.length; m++) {
+    	      if (!sectors.includes(neighbours[m]))  {
+  	        sectors.push(neighbours[m]);
+  	        hoppable.push(1);
+console.log("7 pushing: " + neighbours[m] + " as " + 1);
+		if (hazard_description === "rift") {
+                  distance.push(i);
+		} else {
+                  distance.push(i+1);
+		}
+		hazards.push(hazard_description);
+  	      } else {
+
+		//
+		// if the included sector is non-hoppable and this new version is clean, we want
+		// to update the existing sector so that it is not marked as unhoppable (i.e. all
+		// of the ships will be able to move.
+		//
+		// AND
+		//
+		// if the included sector contains a RIFT or punishing sector and we have found it
+		// through a "clean" route, we want to update the existing sector so that it is not
+		// marked as hazardous
+		//
+		let insert_anew = 1;
+		for (let zz = 0; zz < sectors.length; zz++) {
+		  if (sectors[zz] == neighbours[m]) {
+		    if (hazards[zz] == hazard_description) { insert_anew = 0; }
+		    if (hoppable[zz] == -1) { insert_anew = 1; }
+		  }
+		}
+		if (insert_anew == 1) {
+		  sectors.push(neighbours[m]);
+console.log("8 pushing: " + neighbours[m] + " as " + 1);
+  	          hoppable.push(1);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hazards.push(hazard_description);
+		}
+	      }
+            }
+
+	    //
+	    // temporary adjacency 
+	    //
+            for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
+	      if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
+  	        if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
+  	          sectors.push(this.game.state.temporary_adjacency[z][1]);
+  	          hoppable.push(1);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hazards.push(hazard_description);
+  	        } else {
+
+		  //
+		  // if the included sector contains a RIFT or punishing sector and we have found it
+		  // through a "clean" route, we want to update the existing sector so that it is not
+		  // marked as hazardous
+		  //
+		  let insert_anew = 1;
+                  for (let zz = 0; zz < sectors.length; zz++) {
+                    if (sectors[zz] == this.game.state.temporary_adjacency[z][1]) {
+                      if (hazards[zz] == hazard_description) { insert_anew = 0; }
+                    }
+                  }
+                  if (insert_anew == 1) {
+                    sectors.push(neighbours[m]);
+  	            hoppable.push(1);
+		    if (hazard_description === "rift") {
+                      distance.push(i);
+		    } else {
+                      distance.push(i+1);
+		    }
+                    hazards.push(hazard_description);
+                  }
+
+	        }
+	      }
+	      if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
+  	        if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
+  	          sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	          hoppable.push(1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -1616,6 +1776,7 @@ console.log("done");
                   }
                   if (insert_anew == 1) {
                     sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	            hoppable.push(1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
 		    } else {
@@ -1627,13 +1788,14 @@ console.log("done");
 		}
 	      }
   	    }
-	  }
+	  } // if can_hop == 1
+
 	}
       }
     }
 
     //
-    // one more shot for any sectors marked as gravity rift (+1)
+    // one more shot for any sectors marked as gravity rift (+1) / max-hop
     //
     for (let i = 0; i < sectors.length; i++) {
 
@@ -1653,6 +1815,10 @@ console.log("done");
           let neighbours = s[sectors[i]].neighbours;
           for (let m = 0; m < neighbours.length; m++) {
     	    if (!sectors.includes(neighbours[m]))  {
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+	      hoppable.push(1);
   	      sectors.push(neighbours[m]);
   	      distance.push(hops);
 	      hazards.push("rift");
@@ -1668,6 +1834,10 @@ console.log("done");
   	        sectors.push(this.game.state.temporary_adjacency[z][1]);
   	        distance.push(hops);
 	        hazards.push("rift");
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+		hoppable.push(1);
   	      }
 	    }
 	    if (sectors[i] == this.game.state.temporary_adjacency[z][1]) {
@@ -1675,6 +1845,10 @@ console.log("done");
   	        sectors.push(this.game.state.temporary_adjacency[z][0]);
   	        distance.push(hops);
 	        hazards.push("rift");
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+		hoppable.push(1);
 	      }
   	    }
           }
@@ -1693,6 +1867,7 @@ console.log("done");
         for (let k = 0; k < sectors.length; k++) {
 	  if (sectors[i] === sectors[k] && distance[i] >= distance[k] && i != k) {
 	    sectors.splice(i, 1);
+	    hoppable.splice(i, 1);
 	    distance.splice(i, 1);
 	    hazards.splice(i, 1);
 	    i--;
@@ -1703,8 +1878,34 @@ console.log("done");
       }
     }
 
+
+
+    //
+    // remove unhoppable paths that are uncompetitive with hoppable paths
+    //
+    sectors_to_process = sectors.length;
+    for (let i = 0; i < sectors_to_process; i++) {
+      if (hoppable[i] == -1) {
+        for (let k = 0; k < sectors.length; k++) {
+          if (sectors[i] === sectors[k] && hoppable[k] == 1 && i != k && distance[i] >= distance[k]) {
+            sectors.splice(i, 1);
+	    hoppable.splice(i, 1);
+            distance.splice(i, 1);
+            hazards.splice(i, 1);
+            i--;
+            sectors_to_process--;
+            k = sectors.length+2;
+          }
+        }
+      }
+    }
+
+
     
-    let return_obj = { sectors : sectors , distance : distance , hazards : hazards };
+    let return_obj = { sectors : sectors , distance : distance , hazards : hazards , hoppable : hoppable };
+
+console.log("\n------------------------");
+console.log("HOPPABLE: " + JSON.stringify(return_obj));
 
     return return_obj;
   }
@@ -2648,8 +2849,8 @@ console.log("done");
     }
 
     obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards); 
-
     if (obj.ships_and_sectors.length > 0) { return 1; }
+
     return 0;
 
   }

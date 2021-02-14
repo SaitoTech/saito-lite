@@ -2295,9 +2295,12 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
   	let player       = parseInt(mv[1]);
         let type         = mv[2];
         let amount       = parseInt(mv[3]);
+        let run_events   = 1;
+	if (mv[4] === "0") { run_events = 0; }
 	let z            = this.returnEventObjects();
 
 	if (type == "action_cards") {
+
           if (this.game.player == player && this.browser_active == 1) {
 	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
 	    document.getElementById("close-action-cards-btn").onclick = (e) => {
@@ -2305,6 +2308,14 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
             }
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
+
+	  if (run_events == 1) {
+	    z = this.returnEventObjects();
+	    for (let z_index in z) {
+  	      z[z_index].gainActionCards(imperium_self, player, amount);
+  	    }
+  	  }
+
 	}
 	if (type === "secret_objectives" || type === "secret_objective") {
           if (this.game.player == player && this.browser_active == 1) {

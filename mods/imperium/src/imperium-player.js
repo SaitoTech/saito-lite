@@ -301,10 +301,9 @@ playerTurn(stage = "main") {
     let tech_attach_menu_events = 0;
     let tech_attach_menu_triggers = [];
     let tech_attach_menu_index = [];
-
+    let z = this.returnEventObjects();
 
     if (this.game.state.active_player_moved == 1) {
-      let z = this.returnEventObjects();
       for (let i = 0; i < z.length; i++) {
         if (z[i].menuOptionTriggers(this, "main", this.game.player) == 1) {
           let x = z[i].menuOption(this, "main", this.game.player);
@@ -4097,6 +4096,7 @@ playerSelectUnitsToMove(destination) {
   let sectors = [];
   let distance = [];
   let hazards = [];
+  let hoppable = [];
   let fighters_loaded = 0;
   let infantry_loaded = 0;
 
@@ -4116,6 +4116,7 @@ playerSelectUnitsToMove(destination) {
   sectors = x.sectors;
   distance = x.distance;
   hazards = x.hazards;
+  hoppable = x.hoppable;
 
   for (let i = 0; i < distance.length; i++) {
     if (obj.ship_move_bonus > 0) {
@@ -4133,7 +4134,7 @@ playerSelectUnitsToMove(destination) {
     obj.distance_adjustment += obj.fleet_move_bonus;
   }
 
-  obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards);
+  obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable);
 
   let updateInterface = function (imperium_self, obj, updateInterface) {
 

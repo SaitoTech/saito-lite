@@ -25,6 +25,7 @@
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
     if (obj.extension == null)		{ obj.extension = 0; }			// 1 if replacing other unit as upgrade
+    if (obj.may_fly_through_sectors_containing_other_ships == null) { obj.may_fly_through_sectors_containing_other_ships = 0; }
     if (obj.description == null)	{ obj.description = ""; }		// shown on unit sheet
     if (obj.anti_fighter_barrage ==null){ obj.anti_fighter_barrage = 0; }
     if (obj.anti_fighter_barrage_combat ==null){ obj.anti_fighter_barrage_combat = 0; }
@@ -334,7 +335,7 @@
 
 
 
-  returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards) {  
+  returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable) {  
 
     let imperium_self = this;
     let ships_and_sectors = [];
@@ -363,11 +364,13 @@
           for (let k = 0; k < sys.s.units[this.game.player-1].length; k++) {
             let this_ship = sys.s.units[this.game.player-1][k];
             if (this_ship.move >= distance[i]) {
-    	      x.adjusted_distance.push(distance[i]);
-              x.ships.push(this_ship);
-	      x.hazards.push(hazards[i]);
-              x.ship_idxs.push(k);
-              x.sector = sectors[i];
+	      if (hoppable[i] != -1 || this_ship.may_fly_through_sectors_containing_other_ships == 1) {
+      	        x.adjusted_distance.push(distance[i]);
+                x.ships.push(this_ship);
+	        x.hazards.push(hazards[i]);
+                x.ship_idxs.push(k);
+                x.sector = sectors[i];
+              }
             }
           }
 

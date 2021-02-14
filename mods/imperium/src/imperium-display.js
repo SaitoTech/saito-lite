@@ -731,7 +731,11 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
+console.log("type: " + unittype);
+
   let preobj = this.units[unittype];
+
+console.log(JSON.stringify(this.units[unittype]));
 
   let obj = JSON.parse(JSON.stringify(preobj));
 

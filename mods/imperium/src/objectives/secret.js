@@ -90,10 +90,8 @@
       },
       planetaryDefenseTriggers :  function(imperium_self, player, sector, planet_idx) {
 	if (imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked > 0) {
-console.log("sector is: " + sector);
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
-console.log("planname: " + planet.name);
 	  let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	  if (infantry_on_planet == 0) {
 	    imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 1;
@@ -155,7 +153,6 @@ console.log("planname: " + planet.name);
 	return 0;
       },
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_objective_anti_imperialism);
 	if (imperium_self.game.state.secret_objective_anti_imperialism == 1) { return 1; }
 	return 0;
       },
@@ -213,7 +210,7 @@ console.log("IS ANTI_IMPERIALISM SCORABLE?" + imperium_self.game.state.secret_ob
 	let players_with_lowest_vp = imperium_self.returnPlayersWithLowestVP();
 
 	if (imperium_self.game.player == attacker) {
-	  if (planetunits[defender-1].length == 0) {
+	  if (planet.units[defender-1].length == 0) {
 	    if (players_with_lowest_vp.includes(defender)) { 
 	      // does the player have any units left?
 	      for (let i in imperium_self.game.sectors) {

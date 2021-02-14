@@ -104,6 +104,9 @@
     if (obj.gainTechnology == null) {
       obj.gainTechnology = function(imperium_self, gainer, tech) { return 1; }
     }
+    if (obj.gainActionCards == null) {
+      obj.gainActionCards = function(imperium_self, gainer, amount) { return 1; }
+    }
     if (obj.gainFleetSupply == null) {
       obj.gainFleetSupply = function(imperium_self, gainer, amount) { return amount; }
     }
@@ -269,8 +272,6 @@
     }
 
 
-
-
     ////////////////////
     // Victory Points //
     ////////////////////
@@ -288,7 +289,6 @@
     if (obj.returnPDSUnitsWithinRange == null) {
       obj.returnPDSUnitsWithinRange = function(imperium_self, player, attacker, defender, sector, battery) { return battery; }
     }
-
 
 
 
