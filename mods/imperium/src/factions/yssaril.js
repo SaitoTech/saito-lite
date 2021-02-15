@@ -35,7 +35,6 @@
       },
       menuOption  :       function(imperium_self, menu, player) {
         let x = {};
-console.log("HERE: " + menu);
         if (menu === "main") {
           x.event = 'stalltactics';
           x.html = '<li class="option" id="stalltactics">discard action card (stall)</li>';
@@ -55,6 +54,9 @@ console.log("HERE: " + menu);
 
         if (imperium_self.game.player == player) {
 	  imperium_self.playerDiscardActionCards(1, function() {
+            imperium_self.addMove("resolve\tplay");
+            imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "0");
+            imperium_self.addMove("player_end_turn\t" + imperium_self.game.player);
             imperium_self.endTurn();
             return 0;
 	  });
@@ -278,6 +280,13 @@ console.log("HERE: " + menu);
 
               let opt = $(this).attr("id");
 
+
+	      if (opt === "skip") {
+		imperium_self.playerTurn();	
+		return 0;
+	      }
+
+	      imperium_self.addMove("setvar\tplayers\t"+imperium_self.game.player+"\t"+"mageon_implants_exhausted"+"\t"+"int"+"\t"+"1");
               imperium_self.addMove("pull\t"+imperium_self.game.player+"\t"+faction6_target+"\t"+"action"+"\t"+faction6_target_cards[opt]);
               imperium_self.endTurn();
               return 0;

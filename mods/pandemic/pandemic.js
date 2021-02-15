@@ -268,6 +268,7 @@ class Pandemic extends GameTemplate {
                 class : "game-chat-community",
                 callback : function(app, game_mod) {
                   game_mod.menu.hideSubMenus();
+                  chatmod.mute_community_chat = 0;
                   chatmod.sendEvent('chat-render-request', {});
                   chatmod.openChatBox();
                 }
