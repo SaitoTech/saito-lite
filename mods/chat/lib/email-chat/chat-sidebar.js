@@ -25,9 +25,12 @@ module.exports = ChatSidebar = {
       // open chat window if clicked
       //
       document.querySelectorAll(".chat-row").forEach(row => {
-	      row.onclick = (e) => {
-          let chatName = document.querySelector(`#${e.currentTarget.id} .chat-group-name`).innerHTML;
-          app.browser.logMatomoEvent("Chat", "ArcadeSidebarChatOpenedClick", chatName);
+	row.onclick = (e) => {
+          let chatNameDiv = `#${e.currentTarget.id} .chat-group-name`;
+// document throws error in Chrome here for some unGodly reason
+//          let chatName = document.querySelector(chatNameDiv).innerHTML;
+//          app.browser.logMatomoEvent("Chat", "ArcadeSidebarChatOpenedClick", chatName);
+	  mod.mute_community_chat = 0;
           mod.openChatBox(e.currentTarget.id);
         };
       });

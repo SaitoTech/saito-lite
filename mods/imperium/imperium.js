@@ -9745,6 +9745,7 @@ ACTION CARD - types
                 callback : function(app, game_mod) {
                   game_mod.menu.hideSubMenus();
                   chatmod.sendEvent('chat-render-request', {});
+		  chatmod.mute_community_chat = 0;
                   chatmod.openChatBox();
                 }
               });
