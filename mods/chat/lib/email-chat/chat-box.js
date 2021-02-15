@@ -27,33 +27,33 @@ module.exports = ChatBox = {
         //
         // how many messages -- max 100 in community chat
         //
-	while (mod.groups[idx].txs.length > 100) {
-	  mod.groups[idx].txs.shift();
-	}
+        while (mod.groups[idx].txs.length > 100) {
+          mod.groups[idx].txs.shift();
+        }
 
 
-	let message_blocks = mod.createMessageBlocks(mod.groups[idx]);
-	let first_comment_sig = "";
+        let message_blocks = mod.createMessageBlocks(mod.groups[idx]);
+        let first_comment_sig = "";
 
-        for (let i = 0; i < message_blocks.length; i++) {
+              for (let i = 0; i < message_blocks.length; i++) {
 
-	  let html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
+          let html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
 
-	  if (i == message_blocks.length-1) {
-	
-	    let first_comment_sig = "first_comment_sig";
-	    if (message_blocks[i].length > 0) { first_comment_sig = app.crypto.hash(message_blocks[i][0].transaction.sig); }
+          if (i == message_blocks.length-1) {
 
-	    // recreate html after destroying so existing entries are output (template checks to avoid dupes)
-	    try {document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){};
-	    html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
-	    chat_box_main.innerHTML += html;
+            let first_comment_sig = "first_comment_sig";
+            if (message_blocks[i].length > 0) { first_comment_sig = app.crypto.hash(message_blocks[i][0].transaction.sig); }
 
-	  } else {
+            // recreate html after destroying so existing entries are output (template checks to avoid dupes)
+            try {document.getElementById(`chat-message-set-${first_comment_sig}`).destroy();}catch(err){};
+            html = ChatBoxMessageBlockTemplate(app, mod, mod.groups[idx], message_blocks[i]);
+            chat_box_main.innerHTML += html;
 
-	    chat_box_main.innerHTML += html;
+          } else {
 
-	  }
+            chat_box_main.innerHTML += html;
+
+          }
 
   }
         document.querySelectorAll('img.img-prev').forEach(img => {
@@ -70,16 +70,19 @@ module.exports = ChatBox = {
       //
       document.querySelectorAll(`#${id}`).forEach(el => {
         app.browser.addDragAndDropFileUploadToElement(el.id, function(filesrc) {
+          
           let group_id = el.id.split('chat-box-main-')[1];
           let img = document.createElement('img');
           img.classList.add('img-prev');
           img.src = filesrc;
-
-          let newtx = mod.createMessage(group_id, img.outerHTML);
-          mod.sendMessage(app, newtx);
-          mod.receiveMessage(app, newtx);
-          //chat_self.addMessage(app, mod, newtx);
-
+          let msg = img.outerHTML;
+          if(msg.length > 2*1024*1024) {
+            salert("Image too large");
+          } else {
+            let newtx = mod.createMessage(group_id, img.outerHTML);
+            mod.sendMessage(app, newtx);
+            mod.receiveMessage(app, newtx);
+          }
        }, false); // false = no drag-and-drop image click
      });
     },
@@ -292,9 +295,9 @@ return;
 
       for (let i = 0; i < mod.groups.length; i++) {
         if (document.getElementById(`chat-box-${mod.groups[i].id}`)) { 
-	  chatboxen_open++;
-	  pixen_consumed += document.getElementById(`chat-box-${mod.groups[i].id}`).getBoundingClientRect().width;
-	}
+          chatboxen_open++;
+          pixen_consumed += document.getElementById(`chat-box-${mod.groups[i].id}`).getBoundingClientRect().width;
+        }
       }
 
       if (chatboxen_open == 0) {

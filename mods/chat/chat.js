@@ -29,7 +29,7 @@ class Chat extends ModTemplate {
     this.mute_community_chat = 0;
 
     this.icon_fa = "far fa-comments";
-
+    this.inTransitImageMsgSig = null;
   }
 
 
@@ -349,6 +349,13 @@ class Chat extends ModTemplate {
 
 
   sendMessage(app, tx) {
+    if(tx.msg.message.substring(0,4) == "<img") {
+      if(this.inTransitImageMsgSig != null) {
+        salert("Image already being sent");
+        return;
+      }
+      this.inTransitImageMsgSig = tx.transaction.sig;
+    }
     let recipient = app.network.peers[0].peer.publickey;
     let relay_mod = app.modules.returnModule('Relay');
 
@@ -369,10 +376,10 @@ class Chat extends ModTemplate {
     for (let i = 0; i < this.groups.length; i++) {
       if (group_id === this.groups[i].id) {
         for (let z = 0; z < this.groups[i].members.length; z++) {
-	  if (!members.includes(this.groups[i].members[z])) {
-	    members.push(this.groups[i].members[z]);
-	  }
-	}
+          if (!members.includes(this.groups[i].members[z])) {
+            members.push(this.groups[i].members[z]);
+          }
+        }
       }
     }
 
@@ -389,7 +396,6 @@ class Chat extends ModTemplate {
     for (let i = 1; i < members.length; i++) {
       newtx.transaction.to.push(this.app.wallet.createSlip(members[i]));
     }
-
     newtx.msg = {
       module: "Chat",
       request: "chat message",
@@ -477,7 +483,9 @@ class Chat extends ModTemplate {
 
 
   receiveMessage(app, tx, renderMode="") {
-
+    if(this.inTransitImageMsgSig == tx.transaction.sig) {
+      this.inTransitImageMsgSig = null;
+    }
     let txmsg = tx.returnMessage();
 
     //
