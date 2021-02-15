@@ -303,7 +303,7 @@ playerTurn(stage = "main") {
     let tech_attach_menu_index = [];
     let z = this.returnEventObjects();
 
-    if (this.game.state.active_player_moved == 1) {
+    if (this.game.state.active_player_moved == 0) {
       for (let i = 0; i < z.length; i++) {
         if (z[i].menuOptionTriggers(this, "main", this.game.player) == 1) {
           let x = z[i].menuOption(this, "main", this.game.player);
@@ -5676,6 +5676,7 @@ playerDiscardActionCards(num, mycallback=null) {
     $('.totalnum').html(num);
     $(this).remove();
 
+    imperium_self.hideActionCard(action2);
     imperium_self.game.players_info[imperium_self.game.player - 1].action_cards_played.push(ac_in_hand[action2]);
     imperium_self.addMove("lose\t" + imperium_self.game.player + "\taction_cards\t1");
 

@@ -77,6 +77,18 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	  lmv = this.game.queue[le].split("\t");
 	}
 
+
+	//
+	// doubled resolve-plays
+	//
+	if (mv[1] === "play" && lmv[0] === "resolve") {
+	  if (lmv[1] === "play") {
+    	    this.game.queue.splice(qe, 1);
+  	    return 1;
+	  }
+	}
+
+
 	//
 	// token allocation workaround
 	//
@@ -2007,6 +2019,22 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 	    } else {
 	      let roll = this.rollDice();
 	    }
+	  } else {
+
+	    if (this.game.player == pullee) {
+
+	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+	        if (this.game.deck[1].hand[i] === details) {
+	          this.game.deck[1].hand.splice(i, 1);
+	        }
+	      }
+
+	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+details);
+	      this.addMove("NOTIFY\t" + this.returnFaction(puller) + " pulls " + this.action_cards[details].name);
+	      this.endTurn();
+
+	    }
+
 	  }
   	}
   
@@ -5119,6 +5147,7 @@ console.log("Here we go: " + attacker + " / " + defender);
 
 
       for (let i in z) {
+console.log("tried: " + z[i].name);
         if (!z[i].handleGameLoop(imperium_self, qe, mv)) { return 0; }
       }
 

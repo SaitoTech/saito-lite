@@ -337,6 +337,8 @@
 
   returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable) {  
 
+console.log(JSON.stringify(hoppable));
+
     let imperium_self = this;
     let ships_and_sectors = [];
     for (let i = 0; i < sectors.length; i++) {
@@ -364,6 +366,9 @@
           for (let k = 0; k < sys.s.units[this.game.player-1].length; k++) {
             let this_ship = sys.s.units[this.game.player-1][k];
             if (this_ship.move >= distance[i]) {
+
+console.log("h: " + hoppable[i]);
+
 	      if (hoppable[i] != -1 || this_ship.may_fly_through_sectors_containing_other_ships == 1) {
       	        x.adjusted_distance.push(distance[i]);
                 x.ships.push(this_ship);

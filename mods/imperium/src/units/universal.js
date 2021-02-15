@@ -95,7 +95,7 @@
       name     		:       "Flagship",
       type     		:       "flagship",
       cost 		:	8,
-      move 		:	2,
+      move 		:	1,
       capacity 		:	1,
       combat 		:	7,
       strength 		:	2,

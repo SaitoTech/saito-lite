@@ -18,11 +18,15 @@ class Chat extends ModTemplate {
     this.description = "Saito instant-messaging client and application platform";
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
-
+ 
     this.header = null;
-
     this.renderMode = "none";
     this.relay_moves_onchain_if_possible = 1;
+
+    //
+    // if someone closes community chat, don't pop it back open
+    //
+    this.mute_community_chat = 0;
 
     this.icon_fa = "far fa-comments";
 
@@ -610,16 +614,18 @@ class Chat extends ModTemplate {
 
     if (this.renderMode != "email" && this.renderMode != "none") { return; }
 
-
     if (group_id == null) {
-       //
-       // open community chat if possible
-       //
-       let group = this.returnCommunityChat();
-       if (group == undefined || group == null) { return; }
-       if (group.id == undefined || group.id == null) { return; }
-       this.openChatBox(group.id);
-       return; 
+      let group = this.returnCommunityChat();
+      if (group == undefined || group == null) { return; }
+      if (group.id == undefined || group.id == null) { return; }
+      this.openChatBox(group.id);
+      return; 
+    }
+
+    let community_chat_group = this.returnCommunityChat();
+//alert(community_chat_group.id + " -- " + group_id + " -- " + this.mute_community_chat);
+    if (community_chat_group.id == group_id && this.mute_community_chat == 1) {
+      return;
     }
 
     if (document.getElementById(`chat-box-${group_id}`)) {

@@ -2814,6 +2814,7 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
     let sectors = [];
     let distance = [];
     let hazards = [];
+    let hoppable = [];
 
     let obj = {};
     obj.max_hops = 2;
@@ -2831,6 +2832,7 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
     sectors = x.sectors;
     distance = x.distance;
     hazards = x.hazards;
+    hoppable = x.hoppable;
 
     for (let i = 0; i < distance.length; i++) {
       if (obj.ship_move_bonus > 0) {
@@ -2848,7 +2850,7 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
       obj.distance_adjustment += obj.fleet_move_bonus;
     }
 
-    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards); 
+    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable); 
     if (obj.ships_and_sectors.length > 0) { return 1; }
 
     return 0;

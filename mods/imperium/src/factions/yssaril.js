@@ -35,6 +35,7 @@
       },
       menuOption  :       function(imperium_self, menu, player) {
         let x = {};
+console.log("HERE: " + menu);
         if (menu === "main") {
           x.event = 'stalltactics';
           x.html = '<li class="option" id="stalltactics">discard action card (stall)</li>';
@@ -111,7 +112,6 @@
         return 1;
       },
       handleGameLoop : function(imperium_self, qe, mv) {
-
         if (mv[0] == "yssaril_action_card_discard") {
 
           let player = parseInt(mv[1]);
@@ -126,6 +126,7 @@
 
           return 0;
         }
+	return 1;
       }
     });
 
@@ -188,19 +189,19 @@
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].mageon_implants == undefined) {
           imperium_self.game.players_info[player-1].mageon_implants = 0;
-          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+          imperium_self.game.players_info[player-1].mageon_implants_exhausted = 0;
         }
       },
       onNewRound : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].maeon_implants == 1) {
-          imperium_self.game.players_info[player-1].mageon_implants = 0;
-          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+        if (imperium_self.game.players_info[player-1].mageon_implants == 1) {
+          imperium_self.game.players_info[player-1].mageon_implants = 1;
+          imperium_self.game.players_info[player-1].mageon_implants_exhausted = 0;
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "faction6-mageon-implants") {
-          imperium_self.game.players_info[player-1].mageon_implants = 1;
-          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+          imperium_self.game.players_info[gainer-1].mageon_implants = 1;
+          imperium_self.game.players_info[gainer-1].mageon_implants_exhausted = 0;
         }
       },
       menuOption  :       function(imperium_self, menu, player) {
@@ -223,7 +224,7 @@
             if (player != imperium_self.game.player) { return 1; } return 0;
           },
           function(player) {
-            imperium_self.addMove("pull\t"+imperium_self.game.player+"\t"+player+"\t"+"action"+"\t"+"random");
+            imperium_self.addMove("faction6_choose_card_triggered\t"+imperium_self.game.player+"\t"+player);
             imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " pulls a random action card from " + imperium_self.returnFaction(player));
             imperium_self.endTurn();
             return 0;
@@ -234,7 +235,62 @@
         );
 
         return 0;
+      },
+      handleGameLoop : function(imperium_self, qe, mv) {
+
+        if (mv[0] == "faction6_choose_card_triggered") {
+
+          let faction6_player = parseInt(mv[1]);
+          let faction6_target = parseInt(mv[2]);
+          imperium_self.game.queue.splice(qe, 1);
+
+	  if (imperium_self.game.player === faction6_target) {
+	    let ac = imperium_self.returnPlayerActionCards();
+	    imperium_self.addMove("faction6_choose_card_return\t"+faction6_player+"\t"+faction6_target+"\t"+JSON.stringify(ac));
+	    imperium_self.endTurn();
+	  }
+
+          return 0;
+        }
+
+        if (mv[0] == "faction6_choose_card_return") {
+
+          let faction6_player = parseInt(mv[1]);
+          let faction6_target = parseInt(mv[2]);
+          let faction6_target_cards = JSON.parse(mv[3]);
+
+          imperium_self.game.queue.splice(qe, 1);
+
+	  if (imperium_self.game.player === faction6_player) {
+
+    	    let html = '<div class="" style="margin-bottom:10px">Select ' + imperium_self.returnFactionNickname(faction6_target) + ' action card:</div><ul>';
+	    for (let i = 0; i < faction6_target_cards.length; i++) {
+      	      html += `<li class="option" id="${i}">${imperium_self.action_cards[faction6_target_cards[i]].name}</li>`;
+	    }
+	    html += `<li class="option" id="cancel">skip</li>`;
+
+	    imperium_self.updateStatus(html);
+
+            $('.option').off();
+            $('.option').on('click', function () {
+
+	      $('.option').off();
+
+              let opt = $(this).attr("id");
+
+              imperium_self.addMove("pull\t"+imperium_self.game.player+"\t"+faction6_target+"\t"+"action"+"\t"+faction6_target_cards[opt]);
+              imperium_self.endTurn();
+              return 0;
+
+            });
+	  }
+
+          return 0;
+        }
+
+	return 1;
       }
+
     });
 
 
@@ -249,6 +305,7 @@
       upgradeUnit :       function(imperium_self, player, unit) {
         if (imperium_self.doesPlayerHaveTech(unit.owner, "faction6-flagship") && unit.type == "flagship") {
           unit.may_fly_through_sectors_containing_other_ships = 1;
+          unit.move = 3;
         }
         return unit;
       },
@@ -257,11 +314,23 @@
 
 
 
+
+
+
 /****
+
+this.playMageonImplants = function(imperium_self, player, target, mycallback) {
+
+  if (imperium_self.game.player != player) { return 0; }
+
+
+
+}
+
+
 
 this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_core=0) {
 
-  if (imperium_self.game.player != player) { return 0; }
 
   let sys = imperium_self.returnSectorAndPlanets(sector);
   let opponent = imperium_self.returnOpponentInSector(player, sector);

@@ -1033,7 +1033,7 @@ console.log("P: " + planet);
       name     		:       "Flagship",
       type     		:       "flagship",
       cost 		:	8,
-      move 		:	2,
+      move 		:	1,
       capacity 		:	1,
       combat 		:	7,
       strength 		:	2,
@@ -2880,7 +2880,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       name		: 	"Yssaril Tribes",
       nickname		: 	"Yssaril",
       homeworld		: 	"sector21",
-      space_units	: 	["carrier","carrier","cruiser","fighter","fighter"],
+      space_units	: 	["carrier","carrier","cruiser","fighter","fighter","flagship"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
       tech		: 	["neural-motivator", "faction6-stall-tactics", "faction6-scheming", "faction6-crafty","faction6-transparasteel-plating","faction6-mageon-implants","faction6-flagship"],
       background	: 	'faction6.jpg' ,
@@ -2911,6 +2911,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       },
       menuOption  :       function(imperium_self, menu, player) {
         let x = {};
+console.log("HERE: " + menu);
         if (menu === "main") {
           x.event = 'stalltactics';
           x.html = '<li class="option" id="stalltactics">discard action card (stall)</li>';
@@ -2987,7 +2988,6 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
         return 1;
       },
       handleGameLoop : function(imperium_self, qe, mv) {
-
         if (mv[0] == "yssaril_action_card_discard") {
 
           let player = parseInt(mv[1]);
@@ -3002,6 +3002,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 
           return 0;
         }
+	return 1;
       }
     });
 
@@ -3064,19 +3065,19 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].mageon_implants == undefined) {
           imperium_self.game.players_info[player-1].mageon_implants = 0;
-          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+          imperium_self.game.players_info[player-1].mageon_implants_exhausted = 0;
         }
       },
       onNewRound : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].maeon_implants == 1) {
-          imperium_self.game.players_info[player-1].mageon_implants = 0;
-          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+        if (imperium_self.game.players_info[player-1].mageon_implants == 1) {
+          imperium_self.game.players_info[player-1].mageon_implants = 1;
+          imperium_self.game.players_info[player-1].mageon_implants_exhausted = 0;
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "faction6-mageon-implants") {
-          imperium_self.game.players_info[player-1].mageon_implants = 1;
-          imperium_self.game.players_info[player-1].mageon_implanets_exhausted = 0;
+          imperium_self.game.players_info[gainer-1].mageon_implants = 1;
+          imperium_self.game.players_info[gainer-1].mageon_implants_exhausted = 0;
         }
       },
       menuOption  :       function(imperium_self, menu, player) {
@@ -3099,7 +3100,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
             if (player != imperium_self.game.player) { return 1; } return 0;
           },
           function(player) {
-            imperium_self.addMove("pull\t"+imperium_self.game.player+"\t"+player+"\t"+"action"+"\t"+"random");
+            imperium_self.addMove("faction6_choose_card_triggered\t"+imperium_self.game.player+"\t"+player);
             imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " pulls a random action card from " + imperium_self.returnFaction(player));
             imperium_self.endTurn();
             return 0;
@@ -3110,7 +3111,62 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
         );
 
         return 0;
+      },
+      handleGameLoop : function(imperium_self, qe, mv) {
+
+        if (mv[0] == "faction6_choose_card_triggered") {
+
+          let faction6_player = parseInt(mv[1]);
+          let faction6_target = parseInt(mv[2]);
+          imperium_self.game.queue.splice(qe, 1);
+
+	  if (imperium_self.game.player === faction6_target) {
+	    let ac = imperium_self.returnPlayerActionCards();
+	    imperium_self.addMove("faction6_choose_card_return\t"+faction6_player+"\t"+faction6_target+"\t"+JSON.stringify(ac));
+	    imperium_self.endTurn();
+	  }
+
+          return 0;
+        }
+
+        if (mv[0] == "faction6_choose_card_return") {
+
+          let faction6_player = parseInt(mv[1]);
+          let faction6_target = parseInt(mv[2]);
+          let faction6_target_cards = JSON.parse(mv[3]);
+
+          imperium_self.game.queue.splice(qe, 1);
+
+	  if (imperium_self.game.player === faction6_player) {
+
+    	    let html = '<div class="" style="margin-bottom:10px">Select ' + imperium_self.returnFactionNickname(faction6_target) + ' action card:</div><ul>';
+	    for (let i = 0; i < faction6_target_cards.length; i++) {
+      	      html += `<li class="option" id="${i}">${imperium_self.action_cards[faction6_target_cards[i]].name}</li>`;
+	    }
+	    html += `<li class="option" id="cancel">skip</li>`;
+
+	    imperium_self.updateStatus(html);
+
+            $('.option').off();
+            $('.option').on('click', function () {
+
+	      $('.option').off();
+
+              let opt = $(this).attr("id");
+
+              imperium_self.addMove("pull\t"+imperium_self.game.player+"\t"+faction6_target+"\t"+"action"+"\t"+faction6_target_cards[opt]);
+              imperium_self.endTurn();
+              return 0;
+
+            });
+	  }
+
+          return 0;
+        }
+
+	return 1;
       }
+
     });
 
 
@@ -3125,6 +3181,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       upgradeUnit :       function(imperium_self, player, unit) {
         if (imperium_self.doesPlayerHaveTech(unit.owner, "faction6-flagship") && unit.type == "flagship") {
           unit.may_fly_through_sectors_containing_other_ships = 1;
+          unit.move = 3;
         }
         return unit;
       },
@@ -3133,11 +3190,23 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 
 
 
+
+
+
 /****
+
+this.playMageonImplants = function(imperium_self, player, target, mycallback) {
+
+  if (imperium_self.game.player != player) { return 0; }
+
+
+
+}
+
+
 
 this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_core=0) {
 
-  if (imperium_self.game.player != player) { return 0; }
 
   let sys = imperium_self.returnSectorAndPlanets(sector);
   let opponent = imperium_self.returnOpponentInSector(player, sector);
@@ -11059,6 +11128,8 @@ handleSystemsMenuItem() {
 
   returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable) {  
 
+console.log(JSON.stringify(hoppable));
+
     let imperium_self = this;
     let ships_and_sectors = [];
     for (let i = 0; i < sectors.length; i++) {
@@ -11086,6 +11157,9 @@ handleSystemsMenuItem() {
           for (let k = 0; k < sys.s.units[this.game.player-1].length; k++) {
             let this_ship = sys.s.units[this.game.player-1][k];
             if (this_ship.move >= distance[i]) {
+
+console.log("h: " + hoppable[i]);
+
 	      if (hoppable[i] != -1 || this_ship.may_fly_through_sectors_containing_other_ships == 1) {
       	        x.adjusted_distance.push(distance[i]);
                 x.ships.push(this_ship);
@@ -11556,6 +11630,18 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	}
+
+
+	//
+	// doubled resolve-plays
+	//
+	if (mv[1] === "play" && lmv[0] === "resolve") {
+	  if (lmv[1] === "play") {
+    	    this.game.queue.splice(qe, 1);
+  	    return 1;
+	  }
+	}
+
 
 	//
 	// token allocation workaround
@@ -13487,6 +13573,22 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 	    } else {
 	      let roll = this.rollDice();
 	    }
+	  } else {
+
+	    if (this.game.player == pullee) {
+
+	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+	        if (this.game.deck[1].hand[i] === details) {
+	          this.game.deck[1].hand.splice(i, 1);
+	        }
+	      }
+
+	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+details);
+	      this.addMove("NOTIFY\t" + this.returnFaction(puller) + " pulls " + this.action_cards[details].name);
+	      this.endTurn();
+
+	    }
+
 	  }
   	}
   
@@ -16599,6 +16701,7 @@ console.log("Here we go: " + attacker + " / " + defender);
 
 
       for (let i in z) {
+console.log("tried: " + z[i].name);
         if (!z[i].handleGameLoop(imperium_self, qe, mv)) { return 0; }
       }
 
@@ -17108,7 +17211,7 @@ playerTurn(stage = "main") {
     let tech_attach_menu_index = [];
     let z = this.returnEventObjects();
 
-    if (this.game.state.active_player_moved == 1) {
+    if (this.game.state.active_player_moved == 0) {
       for (let i = 0; i < z.length; i++) {
         if (z[i].menuOptionTriggers(this, "main", this.game.player) == 1) {
           let x = z[i].menuOption(this, "main", this.game.player);
@@ -22481,6 +22584,7 @@ playerDiscardActionCards(num, mycallback=null) {
     $('.totalnum').html(num);
     $(this).remove();
 
+    imperium_self.hideActionCard(action2);
     imperium_self.game.players_info[imperium_self.game.player - 1].action_cards_played.push(ac_in_hand[action2]);
     imperium_self.addMove("lose\t" + imperium_self.game.player + "\taction_cards\t1");
 
@@ -23032,6 +23136,8 @@ playerDiscardActionCards(num, mycallback=null) {
     for (let i = 0; i < this.game.players_info.length; i++) {
       for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
 	if (this.tech[this.game.players_info[i].tech[j]] != undefined) {
+console.log("TECH: " + this.game.players_info[i].tech[j]);
+
 	  if (!zz.includes(this.game.players_info[i].tech[j])) {
             z.push(this.tech[this.game.players_info[i].tech[j]]);
             zz.push(this.game.players_info[i].tech[j]);
@@ -26264,6 +26370,7 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
     let sectors = [];
     let distance = [];
     let hazards = [];
+    let hoppable = [];
 
     let obj = {};
     obj.max_hops = 2;
@@ -26281,6 +26388,7 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
     sectors = x.sectors;
     distance = x.distance;
     hazards = x.hazards;
+    hoppable = x.hoppable;
 
     for (let i = 0; i < distance.length; i++) {
       if (obj.ship_move_bonus > 0) {
@@ -26298,7 +26406,7 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
       obj.distance_adjustment += obj.fleet_move_bonus;
     }
 
-    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards); 
+    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable); 
     if (obj.ships_and_sectors.length > 0) { return 1; }
 
     return 0;
