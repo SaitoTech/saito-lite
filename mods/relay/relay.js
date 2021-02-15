@@ -28,6 +28,14 @@ class Relay extends ModTemplate {
   }
 
 
+  sendRelayMessage2(tx) {
+     //app.network.peers[0].peer.publickey
+    // let relayTx = new saito.transaction();
+    // relayTx.msg = tx;
+    console.log("sendRelayMessage2");
+    this.app.network.peers[0].sendRequest("relay peer message2", tx);
+  }
+  
   //
   // currently a 1-hop function, should abstract to take an array of
   // recipients and permit multi-hop transaction construction.
@@ -95,8 +103,9 @@ class Relay extends ModTemplate {
         //
         // forward to peer
         //
-        peer.sendRequestWithCallback("relay peer message", tx2.transaction, function(res) {
-        });
+        // peer.sendRequestWithCallback("relay peer message", tx2.transaction, function(res) {
+        // });
+        peer.sendRequest("relay peer message", tx2.transaction);
 
       }
       }
@@ -113,7 +122,13 @@ class Relay extends ModTemplate {
   // database queries inbound here
   //
   async handlePeerRequest(app, message, peer, mycallback=null) {
-
+    
+    if (message.request === "relay peer message2") {
+      if(message.data && message.data.msg && message.data.msg.request) {
+        
+        this.app.network.sendRequest(message.data.msg.request, new saito.transaction(message.data));
+      }
+    }
     try {
 
       let relay_self = app.modules.returnModule("Relay");
