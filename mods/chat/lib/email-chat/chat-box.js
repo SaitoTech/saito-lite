@@ -64,13 +64,12 @@ module.exports = ChatBox = {
 
     },
 
-    attachDragAndDropEvents(app, mod) {
+    attachDragAndDropEvents(id, app, mod) {
       //
       // drag and drop images into chat window
       //
-      document.querySelectorAll(".chat-box-main").forEach(el => {
+      document.querySelectorAll(`#${id}`).forEach(el => {
         app.browser.addDragAndDropFileUploadToElement(el.id, function(filesrc) {
-          console.log("addDragAndDropFileUploadToElement");
           let group_id = el.id.split('chat-box-main-')[1];
           let img = document.createElement('img');
           img.classList.add('img-prev');
@@ -301,13 +300,13 @@ return;
       if (chatboxen_open == 0) {
         if (!document.querySelector('.chat-box')) {
           app.browser.addElementToDom(ChatBoxTemplate(group));
-          this.attachDragAndDropEvents(app, mod);
+          this.attachDragAndDropEvents(`chat-box-main-${group.id}`, app, mod);
         } 
       } else {
         let boxel = document.getElementById(`chat-box-${group.id}`);
         if (!boxel) {
           app.browser.addElementToDom(ChatBoxTemplate(group));
-          this.attachDragAndDropEvents(app, mod);
+          this.attachDragAndDropEvents(`chat-box-main-${group.id}`, app, mod);
         }
         let newchatbox = document.getElementById(`chat-box-${group.id}`);
         newchatbox.style.right = pixen_consumed + (20*chatboxen_open) + "px";
