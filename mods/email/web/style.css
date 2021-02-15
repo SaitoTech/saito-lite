@@ -99,18 +99,16 @@ hr {
 .email-header .email-inbox-header-holder {
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: 50% 50%;
   grid-template-areas: "header header" "icons .";
   grid-gap: 0.3em;
 }
 
 .email-icons {
   justify-self: start;
-  display: grid;
+  display: inline-block;
   grid-auto-flow: column;
   justify-items: start;
   align-items: start;
-  
 }
 .email-header .email-inbox-header-holder .email-box-name {
   border-bottom: 1px solid var(--saito-cyber-black);
@@ -148,7 +146,7 @@ hr {
 
 .email-main {
   display: grid;
-  grid-template-rows: 4em calc(100vh - 10.1em);
+  grid-template-rows: 2.2em calc(100vh - 10.1em);
   padding-right: 0.5em;
 }
 

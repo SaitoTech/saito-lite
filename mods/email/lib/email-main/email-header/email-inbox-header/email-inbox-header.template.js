@@ -7,8 +7,8 @@ module.exports = EmailInboxHeaderTemplate = (app, mod, boxname) => {
 
         <div class="email-icons">
           <input id="email-select-icon" type="checkbox">
-          <i id="email-delete-icon" class="icon-med far fa-trash-alt"></i>
-          <i id="email-bars-icon" class="icon-med fas fa-bars"></i>
+          <i id="email-delete-icon" class="far fa-trash-alt"></i>
+          <i id="email-bars-icon" class="fas fa-bars"></i>
         </div>
 
       </div>
