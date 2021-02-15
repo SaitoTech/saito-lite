@@ -101,21 +101,10 @@ hr {
   grid-template-columns: 50% 50%;
   grid-template-rows: 50% 50%;
   grid-template-areas: "header header" "icons .";
-  grid-gap: 0.3em;
 }
 
-.email-icons {
-  justify-self: start;
-  display: grid;
-  grid-auto-flow: column;
-  justify-items: start;
-  align-items: start;
-  
-}
-.email-header .email-inbox-header-holder .email-box-name {
-  border-bottom: 1px solid var(--saito-cyber-black);
-}
 .email-box-name {
+  padding-top: 0.5em;
   align-self: end;
   font-family: visuelt-medium;
   font-size: 1.9em;
@@ -133,8 +122,27 @@ hr {
   margin: unset;
   line-height: 0;
 }
+
+.email-icons {
+  /* display: grid; */
+  /* grid-auto-flow: column; */
+  padding-bottom: 0.5em;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  width: 100%;
+  border-bottom: 1px solid var(--saito-cyber-black);
+}
+
+#email-select-icon {
+  width: 20px;
+  height: 20px;
+  justify-self: left;
+  margin: 0em 0.4em 0em 0em;
+}
+
 .email-header .email-inbox-header-holder .email-balance {
-    border-bottom: 1px solid var(--saito-cyber-black);
+  border-bottom: 1px solid var(--saito-cyber-black);
 }
 .email-balance {
   justify-self: right;
@@ -148,7 +156,7 @@ hr {
 
 .email-main {
   display: grid;
-  grid-template-rows: 4em calc(100vh - 10.1em);
+  grid-template-rows: 4.2em calc(100vh - 10.1em);
   padding-right: 0.5em;
 }
 
@@ -236,13 +244,6 @@ hr {
   grid-gap: 1em;
 }
 
-#email-select-icon {
-  margin-left: 0.5em;
-  width: 20px;
-  height: 20px;
-  justify-self: left;
-  
-}
 
 #email-delete-icon {
   cursor: pointer;
