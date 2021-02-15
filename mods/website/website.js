@@ -49,22 +49,22 @@ class Website extends ModTemplate {
     });
     document.querySelectorAll('#whitepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/saito-whitepaper.pdf", "Navigation", "HomepageNavigationClick", "HomepageWhitepaperLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HomepageWhitepaperLink");
       }
     });
     document.querySelectorAll('#litepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/saito-litepaper.pdf", "Navigation", "HomepageNavigationClick", "HomepageLitepaperLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HomepageLitepaperLink");
       }
     });
     document.querySelectorAll('#arcadeLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("/arcade", "Navigation", "HomepageNavigationClick", "HomepageArcadeLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HomepageArcadeLink");
       }
     });
     document.querySelectorAll('#developersLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEventAndNavigate("https://org.saito.tech/developers", "Navigation", "HomepageNavigationClick", "HomepageDevelopersLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HomepageDevelopersLink");
       }
     });
     document.querySelectorAll('.left.desktop .logo').forEach((element) => {

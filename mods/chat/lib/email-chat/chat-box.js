@@ -4,7 +4,6 @@ const ChatBoxMessageBlockTemplate = require('./../templates/chat-box-message-blo
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
 const linkifyHtml = require('markdown-linkify');
-
 module.exports = ChatBox = {
 
     render(app, mod) {
@@ -65,7 +64,25 @@ module.exports = ChatBox = {
 
     },
 
+    attachDragAndDropEvents(id, app, mod) {
+      //
+      // drag and drop images into chat window
+      //
+      document.querySelectorAll(`#${id}`).forEach(el => {
+        app.browser.addDragAndDropFileUploadToElement(el.id, function(filesrc) {
+          let group_id = el.id.split('chat-box-main-')[1];
+          let img = document.createElement('img');
+          img.classList.add('img-prev');
+          img.src = filesrc;
 
+          let newtx = mod.createMessage(group_id, img.outerHTML);
+          mod.sendMessage(app, newtx);
+          mod.receiveMessage(app, newtx);
+          //chat_self.addMessage(app, mod, newtx);
+
+       }, false); // false = no drag-and-drop image click
+     });
+    },
     attachEvents(app, mod) {
 
       let chat_self = this;
@@ -241,24 +258,8 @@ module.exports = ChatBox = {
 
 
 
-      //
-      // drag and drop images into chat window
-      //
-      document.querySelectorAll(".chat-box-main").forEach(el => {
-        app.browser.addDragAndDropFileUploadToElement(el.id, function(filesrc) {
 
-	  let group_id = el.id.split('chat-box-main-')[1];
-    let img = document.createElement('img');
-              img.classList.add('img-prev');
-              img.src = filesrc;
 
-          let newtx = mod.createMessage(group_id, img.outerHTML);
-          mod.sendMessage(app, newtx);
-          mod.receiveMessage(app, newtx);
-          //chat_self.addMessage(app, mod, newtx);
-
-	}, false); // false = no drag-and-drop image click
-      });
 
 
       //
@@ -297,12 +298,18 @@ return;
       }
 
       if (chatboxen_open == 0) {
-        if (!document.querySelector('.chat-box')) { app.browser.addElementToDom(ChatBoxTemplate(group)); } 
+        if (!document.querySelector('.chat-box')) {
+          app.browser.addElementToDom(ChatBoxTemplate(group));
+          this.attachDragAndDropEvents(`chat-box-main-${group.id}`, app, mod);
+        } 
       } else {
-	let boxel = document.getElementById(`chat-box-${group.id}`);
-	if (!boxel) { app.browser.addElementToDom(ChatBoxTemplate(group)); }
-	let newchatbox = document.getElementById(`chat-box-${group.id}`);
-	newchatbox.style.right = pixen_consumed + (20*chatboxen_open) + "px";
+        let boxel = document.getElementById(`chat-box-${group.id}`);
+        if (!boxel) {
+          app.browser.addElementToDom(ChatBoxTemplate(group));
+          this.attachDragAndDropEvents(`chat-box-main-${group.id}`, app, mod);
+        }
+        let newchatbox = document.getElementById(`chat-box-${group.id}`);
+        newchatbox.style.right = pixen_consumed + (20*chatboxen_open) + "px";
       }
 
       this.attachEvents(app, mod);
