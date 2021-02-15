@@ -194,9 +194,9 @@ class Chat extends ModTemplate {
       txs[i].decryptMessage(app);
       let txmsg = txs[i].returnMessage();
       for (let z = 0; z < this.groups.length; z++) {
-	if (this.groups[z].id === txmsg.group_id) {
+        if (this.groups[z].id === txmsg.group_id) {
           app.blockchain.binaryInsert(this.groups[z].txs, txs[i], (a, b) => { return a.transaction.ts - b.transaction.ts; })
-	}
+        }
       }
     }
 
@@ -206,16 +206,16 @@ class Chat extends ModTemplate {
     //
     for (let i = 0; i < this.groups.length; i++) {
       if (this.renderMode == "email") {
-	if (this.groups[i].txs.length > 0) {
-	  this.updateLastMessage(this.groups[i].id, this.groups[i].txs[this.groups[i].txs.length-1].returnMessage().message, this.groups[i].txs[this.groups[i].txs.length-1].transaction.ts);
-        } else {
-	  this.updateLastMessage(this.groups[i].id, "new chat");
-	}
+        if (this.groups[i].txs.length > 0) {
+          this.updateLastMessage(this.groups[i].id, this.groups[i].txs[this.groups[i].txs.length-1].returnMessage().message, this.groups[i].txs[this.groups[i].txs.length-1].transaction.ts);
+              } else {
+          this.updateLastMessage(this.groups[i].id, "new chat");
+        }
       }
       if (this.renderMode == "main") {
-	if (this.groups[i].txs.length > 0) {
-	  this.updateLastMessage(this.groups[i].id, this.groups[i].txs[this.groups[i].txs.length-1].returnMessage().message, this.groups[i].txs[this.groups[i].txs.length-1].transaction.ts);
-	}
+        if (this.groups[i].txs.length > 0) {
+          this.updateLastMessage(this.groups[i].id, this.groups[i].txs[this.groups[i].txs.length-1].returnMessage().message, this.groups[i].txs[this.groups[i].txs.length-1].transaction.ts);
+        }
       }
     }
 
@@ -254,25 +254,25 @@ class Chat extends ModTemplate {
   // onchain messages --> eeceiveMessage()
   //
   onConfirmation(blk, tx, conf, app) {
+    
     tx.decryptMessage(app);
     let txmsg = tx.returnMessage();
     if (conf == 0) {
       if (txmsg.request == "chat message") {
-
-	//
-	// we manually update the TS ourselves to prevent re-orgs, this means sigs
-	// no longer validate on messages, but we should be able to recreate if needed
-	// by just testing timestamps around this time until we get a match. with that
-	// said this is TODO -- these changes for early usability.
-	//
-	// update TS before save -- TODO -- find a better fix that doesn't break 
-	// our ability to validate the chat messages.
-	//
+        //
+        // we manually update the TS ourselves to prevent re-orgs, this means sigs
+        // no longer validate on messages, but we should be able to recreate if needed
+        // by just testing timestamps around this time until we get a match. with that
+        // said this is TODO -- these changes for early usability.
+        //
+        // update TS before save -- TODO -- find a better fix that doesn't break 
+        // our ability to validate the chat messages.
+        //
         let modified_tx_obj = JSON.parse(JSON.stringify(tx.transaction));
-	let modified_tx = new saito.transaction(modified_tx_obj);
-	modified_tx.transaction.ts = new Date().getTime();
+        let modified_tx = new saito.transaction(modified_tx_obj);
+        modified_tx.transaction.ts = new Date().getTime();
 
-	app.storage.saveTransactionByKey(txmsg.group_id, modified_tx);
+        app.storage.saveTransactionByKey(txmsg.group_id, modified_tx);
 
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
         this.receiveMessage(app, tx);
@@ -285,7 +285,6 @@ class Chat extends ModTemplate {
   // peer messages --> receiveMessage() 
   //
   async handlePeerRequest(app, req, peer, mycallback) {
-
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 
@@ -297,18 +296,18 @@ class Chat extends ModTemplate {
 
         case "chat message":
 
-	  //
-	  // update TS before save -- TODO -- find a better fix that doesn't break 
-	  // our ability to validate the chat messages.
-	  //
+          //
+          // update TS before save -- TODO -- find a better fix that doesn't break 
+          // our ability to validate the chat messages.
+          //
           let modified_tx_obj = JSON.parse(JSON.stringify(tx.transaction));
-	  let modified_tx = new saito.transaction(modified_tx_obj);
-	  modified_tx.transaction.ts = new Date().getTime();
+          let modified_tx = new saito.transaction(modified_tx_obj);
+          modified_tx.transaction.ts = new Date().getTime();
 
           this.receiveMessage(app, new saito.transaction(tx.transaction));
 
-	  // JAN 29, prev commented out all but receiveMessage above
-	  this.app.storage.saveTransaction(modified_tx);
+          // JAN 29, prev commented out all but receiveMessage above
+          this.app.storage.saveTransaction(modified_tx);
 
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
@@ -316,20 +315,20 @@ class Chat extends ModTemplate {
         case "chat broadcast message":
      
            let routed_tx = new saito.transaction(tx.transaction);
-	   routed_tx.decryptMessage(this.app);
-	   let routed_tx_msg = routed_tx.returnMessage();
-     
-	   //
-	   // update TS before save -- TODO -- find a better fix that doesn't break 
-	   // our ability to validate the chat messages.
-	   //
-           let modified_routed_tx_obj = JSON.parse(JSON.stringify(routed_tx.transaction));
-	   let modified_routed_tx = new saito.transaction(modified_routed_tx_obj);
-	   modified_routed_tx.transaction.ts = new Date().getTime();
+           routed_tx.decryptMessage(this.app);
+           let routed_tx_msg = routed_tx.returnMessage();
+           
+           //
+           // update TS before save -- TODO -- find a better fix that doesn't break 
+           // our ability to validate the chat messages.
+           //
+                 let modified_routed_tx_obj = JSON.parse(JSON.stringify(routed_tx.transaction));
+           let modified_routed_tx = new saito.transaction(modified_routed_tx_obj);
+           modified_routed_tx.transaction.ts = new Date().getTime();
 
-	   //
-	   // serversaves
-	   //
+           //
+           // serversaves
+           //
            let archive = this.app.modules.returnModule("Archive");
            if (archive) { archive.saveTransactionByKey(routed_tx_msg.group_id, modified_routed_tx); }     
 
@@ -350,16 +349,15 @@ class Chat extends ModTemplate {
 
 
   sendMessage(app, tx) {
-
     let recipient = app.network.peers[0].peer.publickey;
     let relay_mod = app.modules.returnModule('Relay');
 
     tx = this.app.wallet.signAndEncryptTransaction(tx);
-
     if (this.relay_moves_onchain_if_possible == 1) {
       this.app.network.propagateTransaction(tx);
     }
     relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
+    //relay_mod.sendRelayMessage2(tx);
   }
 
 

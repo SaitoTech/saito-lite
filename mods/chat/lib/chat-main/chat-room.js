@@ -75,20 +75,20 @@ console.log("scrolling to the bottom!");
           mod.receiveMessage(app, newtx, "chatroom"); // rendermode
           //chat_self.addMessage(app, mod, group_id, newtx);
           msg_input.value = '';
-	  document.querySelector("#input.chat-room-input").focus();
-	  document.querySelector("#input.chat-room-input").select();
+          document.querySelector("#input.chat-room-input").focus();
+          document.querySelector("#input.chat-room-input").select();
         }
       });
 
 
       document.getElementById("back-button").onclick = (e) => {
-	mod.renderMode = "main";
-	mod.render(app, "main");
+        mod.renderMode = "main";
+        mod.render(app, "main");
       }
 
       document.getElementById("back-button").ontouch = (e) => {
-	mod.renderMode = "main";
-	mod.render(app, "main");
+        mod.renderMode = "main";
+        mod.render(app, "main");
       }
 
       document.querySelector(".chat-room-submit-button").onclick = (e) => {

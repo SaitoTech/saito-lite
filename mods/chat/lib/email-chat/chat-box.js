@@ -4,7 +4,6 @@ const ChatBoxMessageBlockTemplate = require('./../templates/chat-box-message-blo
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
 const linkifyHtml = require('markdown-linkify');
-
 module.exports = ChatBox = {
 
     render(app, mod) {

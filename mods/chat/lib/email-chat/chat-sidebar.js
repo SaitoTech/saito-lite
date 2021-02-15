@@ -13,8 +13,8 @@ module.exports = ChatSidebar = {
 
       for (let i = 0; i < mod.groups.length; i++) {
         if (!document.getElementById(mod.groups[i].id)) { 
-	  app.browser.addElementToDom(ChatSidebarContactTemplate(app, mod.groups[i]), "chat-list" );
-	}
+          app.browser.addElementToDom(ChatSidebarContactTemplate(app, mod.groups[i]), "chat-list" );
+        }
       }
 
     },
@@ -26,8 +26,13 @@ module.exports = ChatSidebar = {
       //
       document.querySelectorAll(".chat-row").forEach(row => {
 	      row.onclick = (e) => {
-          let chatName = document.querySelector(`#${e.currentTarget.id} .chat-group-name`).innerHTML;
-          app.browser.logMatomoEvent("Chat", "ArcadeSidebarChatOpenedClick", chatName);
+          try {
+            let chatName = document.querySelector(`#${e.currentTarget.id} .chat-group-name`).innerHTML;
+            app.browser.logMatomoEvent("Chat", "ArcadeSidebarChatOpenedClick", chatName);
+          } catch (e) {
+            // This sometimes fails if the id is formed a certain way the querySelector throws an error..
+            app.browser.logMatomoEvent("Chat", "ArcadeSidebarChatOpenedClick", "unknownChat");
+          }
           mod.openChatBox(e.currentTarget.id);
         };
       });
@@ -36,8 +41,8 @@ module.exports = ChatSidebar = {
       // add contact modal if + clicked
       //
       document.getElementById("email-chat-add-contact").onclick = (e) => {
-	mod.modal_add_user.render(app, mod);
-	mod.modal_add_user.attachEvents(app, mod);
+        mod.modal_add_user.render(app, mod);
+        mod.modal_add_user.attachEvents(app, mod);
       };
 
     },
