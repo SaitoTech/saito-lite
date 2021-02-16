@@ -34,6 +34,7 @@ module.exports = ChatSidebar = {
             // This sometimes fails if the id is formed a certain way the querySelector throws an error..
             app.browser.logMatomoEvent("Chat", "ArcadeSidebarChatOpenedClick", "unknownChat");
           }
+          mod.mute_community_chat = 0;
           mod.openChatBox(e.currentTarget.id);
         };
       });
