@@ -30,8 +30,8 @@
     if (obj.anti_fighter_barrage ==null){ obj.anti_fighter_barrage = 0; }
     if (obj.anti_fighter_barrage_combat ==null){ obj.anti_fighter_barrage_combat = 0; }
     if (obj.temporary_combat_modifier == null) { obj.temporary_combat_modifier = 0; } // some action cards manipulate
-    if (obj.bombardment_rolls == null)  { obj.bombardment = 0; } // 0 means no bombardment abilities
-    if (obj.bombardment_combat == null) { obj.bombardment = -1; } // hits on N
+    if (obj.bombardment_rolls == null)  { obj.bombardment_rolls = 0; } // 0 means no bombardment abilities
+    if (obj.bombardment_combat == null) { obj.bombardment_combat = -1; } // hits on N
 
 
     obj = this.addEvents(obj);

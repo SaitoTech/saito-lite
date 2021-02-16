@@ -135,7 +135,9 @@
       text	  :	  "A more sophisticated carrier" ,
       prereqs     :       ["blue","blue"],
       initialize :       function(imperium_self, player) {
-	imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii = 0;
+        if (imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii == undefined) {
+	  imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii = 0;
+	}
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
 	imperium_self.game.players_info[gainer-1].faction1_advanced_carrier_ii = 1;

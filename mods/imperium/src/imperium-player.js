@@ -129,6 +129,7 @@ returnPlayers(num = 0) {
     players[i].may_player_produce_without_spacedock = 0;
     players[i].may_player_produce_without_spacedock_production_limit = 0;
     players[i].may_player_produce_without_spacedock_cost_limit = 0;
+    players[i].may_produce_warsuns = 0;
 
     //
     // must target certain units when assigning hits, if possible
@@ -2998,7 +2999,7 @@ console.log("ENDING WITH YES");
     html += '<li class="buildchoice" id="flagship">Flagship - <span class="flagship_total">0</span></li>';
   }
   if (imperium_self.game.players_info[imperium_self.game.player - 1].may_produce_warsuns == 1) {
-    if (available_resources >= 8) {
+    if (available_resources >= 12) {
       html += '<li class="buildchoice" id="warsun">War Sun - <span class="warsun_total">0</span></li>';
     }
   }
