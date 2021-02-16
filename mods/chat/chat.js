@@ -27,6 +27,8 @@ class Chat extends ModTemplate {
     // if someone closes community chat, don't pop it back open
     //
     this.mute_community_chat = 0;
+    //this.max_msg_size = 1*1024*1024;
+    this.max_msg_size = 1*300*1024;
 
     this.icon_fa = "far fa-comments";
     this.inTransitImageMsgSig = null;
@@ -349,15 +351,16 @@ class Chat extends ModTemplate {
 
 
   sendMessage(app, tx) {
-    if(tx.msg.message.substring(0,4) == "<img") {
-      if(this.inTransitImageMsgSig != null) {
+
+    if (tx.msg.message.substring(0,4) == "<img") {
+      if (this.inTransitImageMsgSig != null) {
         console.log("Image already being sent");
         salert("Image already being sent");
         return;
       }
       this.inTransitImageMsgSig = tx.transaction.sig;
     }
-    if(app.network.peers.length > 0) {
+     if (app.network.peers.length > 0) {
       let recipient = app.network.peers[0].peer.publickey;
       let relay_mod = app.modules.returnModule('Relay');
 

@@ -65,6 +65,7 @@ module.exports = ChatBox = {
     },
 
     attachDragAndDropEvents(id, app, mod) {
+
       //
       // drag and drop images into chat window
       //
@@ -76,8 +77,8 @@ module.exports = ChatBox = {
           img.classList.add('img-prev');
           img.src = filesrc;
           let msg = img.outerHTML;
-          if(msg.length > 2*1024*1024) {
-            salert("Image too large");
+          if (msg.length > mod.max_msg_size) {
+            salert("Image too large: 220kb max");
           } else {
             let newtx = mod.createMessage(group_id, img.outerHTML);
             mod.sendMessage(app, newtx);
