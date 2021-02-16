@@ -52,28 +52,26 @@ let EmailCryptoAppspace = {
       let address = await responseInterface.getAddress();
       document.querySelector('.crypto-container .address').innerHTML = address;
     }
-    if(document.querySelector('.crypto-container')) {
-      let cryptoMod = this.getCryptoMod(app);
-      let preferredCryptoMod = app.wallet.returnPreferredCrypto();
-      document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(cryptoMod, preferredCryptoMod.name);
-      loadBalance(cryptoMod);
-      loadPubkey(cryptoMod);
-      
-      document.querySelector(`.crypto-container .sendbutton`).onclick = () => {
-        let howMuch = document.querySelector(`.crypto-container .howmuch`).value;
-        let toAddress = document.querySelector(`.crypto-container .pubkeyto`).value;
-        try {
-          let cryptoMod = this.getCryptoMod(app);
-          cryptoMod.transfer(howMuch, toAddress);
-          salert("Sent!");
-          document.querySelector(`.crypto-container .howmuch`).value = "";
-          document.querySelector(`.crypto-container .pubkeyto`).value = "";
-        } catch(error) {
-          // TODO if error looks like 'Transaction is temporarily banned', this 
-          // is just a double broadcast and we can inform the user with a more
-          // friendly message...
-          salert(`Error sending transaction.\n{error}`);
-        }
+    let cryptoMod = this.getCryptoMod(app);
+    let preferredCryptoMod = app.wallet.returnPreferredCrypto();
+    document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(cryptoMod, preferredCryptoMod.name);
+    loadBalance(cryptoMod);
+    loadPubkey(cryptoMod);
+    
+    document.querySelector(`.crypto-container .sendbutton`).onclick = () => {
+      let howMuch = document.querySelector(`.crypto-container .howmuch`).value;
+      let toAddress = document.querySelector(`.crypto-container .pubkeyto`).value;
+      try {
+        let cryptoMod = this.getCryptoMod(app);
+        cryptoMod.transfer(howMuch, toAddress);
+        salert("Sent!");
+        document.querySelector(`.crypto-container .howmuch`).value = "";
+        document.querySelector(`.crypto-container .pubkeyto`).value = "";
+      } catch(error) {
+        // TODO if error looks like 'Transaction is temporarily banned', this 
+        // is just a double broadcast and we can inform the user with a more
+        // friendly message...
+        salert(`Error sending transaction.\n{error}`);
       }
       document.querySelectorAll(`.crypto-container .fa-star`).forEach((elem, i) => {
         elem.onclick = (event) => {

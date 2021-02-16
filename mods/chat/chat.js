@@ -351,20 +351,27 @@ class Chat extends ModTemplate {
   sendMessage(app, tx) {
     if(tx.msg.message.substring(0,4) == "<img") {
       if(this.inTransitImageMsgSig != null) {
+        console.log("Image already being sent");
         salert("Image already being sent");
         return;
       }
       this.inTransitImageMsgSig = tx.transaction.sig;
     }
-    let recipient = app.network.peers[0].peer.publickey;
-    let relay_mod = app.modules.returnModule('Relay');
+    if(app.network.peers.length > 0) {
+      let recipient = app.network.peers[0].peer.publickey;
+      let relay_mod = app.modules.returnModule('Relay');
 
-    tx = this.app.wallet.signAndEncryptTransaction(tx);
-    if (this.relay_moves_onchain_if_possible == 1) {
-      this.app.network.propagateTransaction(tx);
+      tx = this.app.wallet.signAndEncryptTransaction(tx);
+      if (this.relay_moves_onchain_if_possible == 1) {
+        this.app.network.propagateTransaction(tx);
+      }
+      relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
+      //relay_mod.sendRelayMessage2(tx);  
+    } else {
+      console.log("Connection to chat server lost");
+      salert("Connection to chat server lost");
     }
-    relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
-    //relay_mod.sendRelayMessage2(tx);
+    
   }
 
 
