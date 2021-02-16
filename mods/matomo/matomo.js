@@ -22,7 +22,7 @@ class Matomo extends ModTemplate {
       // just to be 100% sure the tracking isn't inserted multiple times.
       if(!this.alreadyAdded) {
         this.alreadyAdded = true;
-        if (window.location != "saito.io") {
+        if (window.location.hostname === "localhost") {
           // Tracking for website localhost. This is for dev/testing purposes.
           // This will load on all locations that are not saito.io but will only track if the domain looks like 'localhost'(this is configured on matomo)
           // Note that this will also be blocked by adblockers so you'll need to disable them if you want to test locally.
