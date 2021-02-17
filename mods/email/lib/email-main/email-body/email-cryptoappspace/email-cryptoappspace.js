@@ -73,20 +73,19 @@ let EmailCryptoAppspace = {
         // friendly message...
         salert(`Error sending transaction.\n{error}`);
       }
-      document.querySelectorAll(`.crypto-container .fa-star`).forEach((elem, i) => {
-        elem.onclick = (event) => {
-          if (event.currentTarget.classList.contains("fa")) {
-            event.currentTarget.classList.remove('fa');
-            app.wallet.setPreferredCrypto("Saito");
-          } else {
-            event.currentTarget.classList.add('fa');
-            let cryptoMod = this.getCryptoMod(app);
-            app.wallet.setPreferredCrypto(cryptoMod.name);
-          }
-        }
-      });
     }
-    
+    document.querySelectorAll(`.crypto-container .fa-star`).forEach((elem, i) => {
+      elem.onclick = (event) => {
+        if (event.currentTarget.classList.contains("fa")) {
+          event.currentTarget.classList.remove('fa');
+          app.wallet.setPreferredCrypto("Saito");
+        } else {
+          event.currentTarget.classList.add('fa');
+          let cryptoMod = this.getCryptoMod(app);
+          app.wallet.setPreferredCrypto(cryptoMod.name);
+        }
+      }
+    });
   }
   
 }
