@@ -1658,191 +1658,6 @@ console.log("P: " + planet);
 
 
 
-    this.importFaction('faction7', {
-      id		:	"faction7" ,
-      name		: 	"Embers of Muaat",
-      nickname		: 	"Muaat",
-      homeworld		: 	"sector21",
-      space_units	: 	["warsun","fighter","fighter"],
-      ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
-      tech		: 	["plasma-scoring", "faction7-star-forge", "faction7-gashlai-physiology", "faction7-magmus-reactor","faction7-advanced-warsun-ii","faction7-flagship"],
-      background	: 	'faction7.jpg' ,
-      promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Yssaril Tribe, a primitive race of swamp-dwelling creatures whose fast instincts and almost unerring ability to change tactics on-the-fly lead many to suspect more is at work than their primitive appearance belies. Good luck!</div>`
-    });
-
-
-
-
-
-
-    this.importTech("faction7-star-forge", {
-
-      name        :       "Star Forge" ,
-      faction     :       "faction7",
-      type      :         "ability" ,
-      text        :       "Spend 1 strategy token to place 2 fighters or a destroy in sector with your warsun" ,
-      initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].star_forge == undefined) {
-          imperium_self.game.players_info[player-1].star_forge = 0;
-        }
-      },
-      gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "faction7-star-forge") {
-          imperium_self.game.players_info[gainer-1].star_forge = 1;
-        }
-      },
-      menuOption  :       function(imperium_self, menu, player) {
-        let x = {};
-        if (menu === "main") {
-          x.event = 'starforge';
-          x.html = '<li class="option" id="starforge">star forge</li>';
-        }
-        return x;
-      },
-      menuOptionTriggers:  function(imperium_self, menu, player) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction7-star-forge") && menu === "main") {
-          return 1;
-        }
-        return 0;
-      },
-      menuOptionActivated:  function(imperium_self, menu, player) {
-
-        if (imperium_self.game.player == player) {
-
-	  //
-	  // star forge logic
-	  //
-          imperium_self.playerSelectSectorWithFilter(
-            "Star Forge spends 1 strategy token to drop 2 fighters or 1 destroyer in a sector containing your War Sun: " ,
-            function(sector) {
-	      return imperium_self.doesSectorContainPlayerUnit(imperium_self.game.player, sector, "warsun");
-            },
-            function(sector) {
-
-              imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t-1\tdestroyer\t"+sector);
-              imperium_self.addMove("NOTIFY\tStar Forge adds destroyer to "+sector);
-              imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"strategy"+"\t"+"1");
-              imperium_self.endTurn();
-              return 0;
-
-            },
-            function() {
-              imperium_self.playerTurn();
-            }
-          );
-
-          return 0;
-
-        };
-
-	return 0;
-      }
-    });
-
-
-
-
-
-
-
-
-    this.importTech("faction7-gashlai-physiology", {
-
-      name        :       "Gashlai Physiology" ,
-      faction     :       "faction7",
-      type        :       "ability" ,
-      text        :       "Player may move through supernovas" ,
-      initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].gashlai_physiology == undefined) {
-          imperium_self.game.players_info[player-1].gashlai_physiology = 0;
-        }
-      },
-      gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "faction7-gashlai-physiology") {
-          imperium_self.game.players_info[gainer-1].gashlai_physiology = 1;
-	  imperium_self.game.players_info[gainer-1].fly_through_supernovas = 1;
-        }
-      },
-    });
-
-
-
-
-
-
-
-
-    this.importTech("faction7-magmus-reactor", {
-
-      name        :       "Magmus Reactor" ,
-      faction     :       "faction7",
-      type        :       "special" ,
-      text        :       "Player may move into supernovas" ,
-      initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].magmus_reactor == undefined) {
-          imperium_self.game.players_info[player-1].magmus_reactor = 0;
-        }
-      },
-      gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "faction7-magmus-reactor") {
-          imperium_self.game.players_info[gainer-1].magmus_reactor = 1;
-	  imperium_self.game.players_info[gainer-1].move_into_supernovas = 1;
-        }
-      },
-    });
-
-
-
-
-
-
-    this.importTech("faction7-flagship", {
-      name        	:       "Muaat Flagship" ,
-      faction     	:       "faction7",
-      type      	:       "ability" ,
-      text        	:       "May spend 1 strategy token to place a cruiser in your flagship system" ,
-    });
-
-
-
-    this.importTech("faction7-advanced-warsun-ii", {
-
-      name        :       "Advanced Warsun II" ,
-      faction     :       "faction7",
-      replaces    :       "warsun",
-      unit        :       1 ,
-      type      :         "special",
-      text        :       "A more dangerous and mobile warsun" ,
-      prereqs     :       ["red","red","red","yellow"],
-      initialize :       function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].faction7_advanced_warsun_ii == undefined) {
-          imperium_self.game.players_info[player-1].faction7_advanced_warsun_ii = 0;
-	}
-      },
-      gainTechnology :       function(imperium_self, gainer, tech) {
-        imperium_self.game.players_info[gainer-1].faction7_advanced_warsun_ii = 1;
-      },
-      upgradeUnit :       function(imperium_self, player, unit) {
-
-        if (imperium_self.game.players_info[unit.owner-1].faction7_advanced_warsun_ii == 1 && unit.type == "warsun") {
-          unit.cost = 10;
-          unit.combat = 3;
-          unit.move = 3;
-          unit.capacity = 6;
-	  unit.bombardment_rolls = 3;
-	  unit.bombardment_combat = 3;
-        }
-
-        return unit;
-      },
-
-    });
-
-
-
-
-
     this.importFaction('faction4', {
       id		:	"faction4" ,
       name		: 	"Sardakk N'Orr",
@@ -22887,6 +22702,10 @@ playerDiscardActionCards(num, mycallback=null) {
     planets['planet70'] = { type : "hazardous" , img : "/imperium/img/planets/LEGUIN.png" , name : "Leguin" , resources : 0 , influence : 1 , bonus : ""  }		// sector 69
     planets['planet71'] = { type : "cultural" , img : "/imperium/img/planets/SIGURDS-CRADLE.png" , name : "Sigurd's Cradle" , resources : 1 , influence : 3 , bonus : ""  }	// sector 70
     planets['planet72'] = { type : "cultural" , img : "/imperium/img/planets/KLENCORY.png" , name : "Klencory" , resources : 2 , influence : 2 , bonus : ""  }		// sector 71
+    planets['planet73'] = { type : "homeworld" , img : "/imperium/img/planets/ALTAIR-IV.png" , name : "Altair-IV" , resources : 4 , influence : 4 , bonus : ""  }		// sector 71
+    planets['planet74'] = { type : "homeworld" , img : "/imperium/img/planets/MUASYM.png" , name : "Muasym" , resources : 4 , influence : 1 , bonus : ""  }		// sector 71
+    planets['planet75'] = { type : "homeworld" , img : "/imperium/img/planets/SARRON.png" , name : "Sarron" , resources : 1 , influence : 2 , bonus : ""  }		// sector 71
+    planets['planet76'] = { type : "homeworld" , img : "/imperium/img/planets/REPTILLION.png" , name : "Reptillion" , resources : 2 , influence : 3 , bonus : ""  }		// sector 71
 
     for (var i in planets) {
 
@@ -23004,8 +22823,10 @@ playerDiscardActionCards(num, mycallback=null) {
     sectors['sector51']        = { img : "/imperium/img/sectors/sector51.png" , 	   name : "XXCha Homeworld" , type : 0 , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet55','planet56'] }
     sectors['sector52']        = { img : "/imperium/img/sectors/sector52.png" , 	   name : "Sol Homeworld" , type : 0 , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet57'] }
     sectors['sector53']        = { img : "/imperium/img/sectors/sector53.png" , 	   name : "Sardaak Homeworld" , type : 0 , hw : 1 , wormhole: 0 , mr : 0 , planets : ['planet58'] }
-    sectors['sector13']        = { img : "/imperium/img/sectors/sector13.png" , 	   name : "Yin Homeworld" , type : 0 , hw : 1 , wormhole : 0, mr : 0 , planets : ['planet11','planet12'] }
-    sectors['sector21']        = { img : "/imperium/img/sectors/sector21.png" , 	   name : "Ysarril Homeworld" , type : 0 , hw : 1 , wormhole : 0, mr : 0 , planets : ['planet27','planet28'] }
+    sectors['sector74']        = { img : "/imperium/img/sectors/sector13.png" , 	   name : "Yin Homeworld" , type : 0 , hw : 1 , wormhole : 0, mr : 0 , planets : ['planet73'] }
+    sectors['sector75']        = { img : "/imperium/img/sectors/sector21.png" , 	   name : "Ysarril Homeworld" , type : 0 , hw : 1 , wormhole : 0, mr : 0 , planets : ['planet76','planet75'] }
+    sectors['sector76']        = { img : "/imperium/img/sectors/sector21.png" , 	   name : "Muaat Homeworld" , type : 0 , hw : 1 , wormhole : 0, mr : 0 , planets : ['planet74'] }
+
 
     for (var i in sectors) {
 
