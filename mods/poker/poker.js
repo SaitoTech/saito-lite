@@ -557,10 +557,7 @@ class Poker extends GameTemplate {
           // if everyone has folded - start a new round
           this.startNextRound();
 
-          this.game.queue.push("PAY" + "\t" + this.game.state.player_pot[this.game.player - 1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
-          //          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
-          //          newtx = this.app.wallet.signTransaction(newtx);
-          //          this.app.network.propagateTransaction(newtx);
+//          this.game.queue.push("PAY" + "\t" + this.game.state.player_pot[this.game.player - 1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
 
           return 1;
         }
@@ -795,7 +792,7 @@ class Poker extends GameTemplate {
               //
               // non-winners send wagers to winner
               //
-              round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1] / winners.length) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
+//              round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1] / winners.length) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
 
             }
           } else {
@@ -806,7 +803,7 @@ class Poker extends GameTemplate {
             this.updateLog(this.game.state.player_names[winners[0]] + " wins " + this.game.state.pot);
             this.game.state.player_credit[winners[0]] += this.game.state.pot;
 
-            round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1]) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
+//            round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1]) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
             //
             // non-winners send wagers to winner
             //
@@ -980,7 +977,7 @@ class Poker extends GameTemplate {
           //
           // everyone should send anything they owe to winner
           //
-          this.game.queue.push("PAY" + "\t" + this.game.state.player_pot[this.game.player - 1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date.getTime()) + "\t" + "SAITO");
+//          this.game.queue.push("PAY" + "\t" + this.game.state.player_pot[this.game.player - 1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date.getTime()) + "\t" + "SAITO");
 
 
         }
