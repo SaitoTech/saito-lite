@@ -3,7 +3,7 @@
       id		:	"faction5" ,
       name		: 	"Yin Brotherhood",
       nickname		: 	"Yin",
-      homeworld		: 	"sector13",
+      homeworld		: 	"sector74",
       space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
       tech		: 	["sarween-tools", "faction5-indoctrination", "faction5-devotion", "faction5-flagship"],

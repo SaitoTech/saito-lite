@@ -1076,7 +1076,7 @@ returnFactionSheet(imperium_self, player=null) {
   if (player != null) { player_class = "p"+player; border_color = "bc"+player;  }
 
   let html = `
-      <div class="faction_sheet_container ${player_class} ${border_color}" style="overflow-y:scroll;padding:15px;;width:90vw;height:90vh;background-image:url('/imperium/img/factions/faction${player}.jpg');background-size:cover;">
+      <div class="faction_sheet_container ${player_class} ${border_color}" style="overflow-y:scroll;padding:15px;;width:90vw;height:90vh;background-image:url('/imperium/img/factions/${imperium_self.game.players_info[player-1].faction}.jpg');background-size:cover;">
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
           <div class="faction_sheet_token_box_title">Command</div>
           <div class="faction_sheet_token_box_title">Strategy</div>
