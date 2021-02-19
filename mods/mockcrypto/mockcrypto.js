@@ -23,12 +23,12 @@ class MockCrypto extends AbstractCryptoModule {
   }
   returnBalance() {
     return new Promise((resolve, reject) => {
-      let minDelay = 100;
+      let minDelay = 3000;
       let maxDelay = 3000;
       let delay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
       let minBalance = 100;
       let maxBalance = 3000;
-      let balance = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+      let balance = Math.floor(Math.random() * (maxBalance - minBalance + 1)) + minBalance;
       setTimeout(() => {
         resolve(balance);
       }, delay);
