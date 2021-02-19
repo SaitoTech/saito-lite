@@ -22,7 +22,7 @@ For details of the architecture, see our [architecture document](saito-dot-integ
 
 The project is a work-in-progress and subject to change, but a general idea of the direction can be seen from the current proposed milestones, which will most certainly change in their details but not in general functionality.
 
-### Current Prototypal APIs(Milestone 1)
+### Current Prototypal APIs(Milestone 1) DEPRECATED
 
 The current API is implemented through a type-free system in our Modules API called respondTo. Modules that wish to appear as 3rd party cryptocurrencies within the Saito Ecosystem can simply implement the appropriate respondTo interface(which we call is_cryptocurrency) and their Module will be interoperable with Saito and Saito's libraries.
 

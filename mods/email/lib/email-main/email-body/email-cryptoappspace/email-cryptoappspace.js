@@ -40,16 +40,16 @@ let EmailCryptoAppspace = {
   
   getCryptoMod(app) {
     let subPage = app.browser.parseHash(window.location.hash).subpage;
-    let cryptoMod = app.wallet.returnCryptoModuleByName(subPage);
+    let cryptoMod = app.modules.returnModule(subPage);
     return cryptoMod;
   },
   async rerender(app) {
     let loadBalance = async(responseInterface) => {
-      let balance = await responseInterface.getBalance();
+      let balance = await responseInterface.returnBalance();
       document.querySelector(`.crypto-container .balance`).innerHTML = balance;
     }
     let loadPubkey = async(responseInterface) => {
-      let address = await responseInterface.getAddress();
+      let address = await responseInterface.returnAddress();
       document.querySelector('.crypto-container .address').innerHTML = address;
     }
     let cryptoMod = this.getCryptoMod(app);

@@ -260,7 +260,7 @@ class Email extends ModTemplate {
 
   cacheAndRenderPreferredCryptoBalance() {
     this.preferredCryptoBalance = "...";
-    this.app.wallet.returnPreferredCrypto().getBalance().then((value) => {
+    this.app.wallet.returnPreferredCrypto().returnBalance().then((value) => {
       this.preferredCryptoBalance = value;
       this.renderBalance();
     });
