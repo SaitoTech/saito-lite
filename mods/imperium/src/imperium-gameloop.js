@@ -3867,6 +3867,7 @@
 	    }
 	  }
 
+console.log("bomb: " + JSON.stringify(hits_or_misses));
 
 	  if (hits_to_assign == 1) {
 	    this.updateLog("Bombardment produces " + hits_to_assign + " hit");
@@ -4851,7 +4852,7 @@
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].planetaryDefenseTriggers(this, player, sector) == 1) {
+	    if (z[k].planetaryDefenseTriggers(this, player, sector, planet_idx) == 1) {
               this.game.queue.push("planetary_defense_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }

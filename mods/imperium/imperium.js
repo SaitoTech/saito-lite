@@ -3104,7 +3104,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       name		: 	"Yssaril Tribes",
       nickname		: 	"Yssaril",
       homeworld		: 	"sector75",
-      space_units	: 	["carrier","carrier","cruiser","fighter","fighter","flagship"],
+      space_units	: 	["carrier","carrier","cruiser","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
       //tech		: 	["neural-motivator", "faction6-stall-tactics", "faction6-scheming", "faction6-crafty","faction6-transparasteel-plating","faction6-mageon-implants","faction6-flagship"],
       tech		: 	["neural-motivator", "faction6-stall-tactics", "faction6-scheming", "faction6-crafty","faction6-flagship"],
@@ -4579,7 +4579,9 @@ console.log("1 - 1 - 4")
       planetaryDefenseTriggers :  function(imperium_self, player, sector, planet_idx) {
 	if (imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked > 0) {
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
+console.log("PIDX: " + planet_idx);
 	  let planet = sys.p[planet_idx];
+console.log("PLANET: " + JSON.stringify(planet));
 	  let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	  if (infantry_on_planet == 0) {
 	    imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 1;
@@ -4634,7 +4636,7 @@ console.log("1 - 1 - 4")
 	  }
 	}
 	if (imperium_self.game.player == defender && planet.units[defender-1].length > 0) {
-	  if (plenet.units[attacker-1].length == 0) {
+	  if (planet.units[attacker-1].length == 0) {
 	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
 	  }
 	}
@@ -11797,8 +11799,6 @@ console.log("h: " + hoppable[i]);
     let imperium_self = this;
     let z = imperium_self.returnEventObjects();
 
-console.log("QUEUE: " + JSON.stringify(this.game.queue));
-
     if (this.game.queue.length > 0) {
 
       imperium_self.saveGame(imperium_self.game.id);
@@ -11807,8 +11807,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("MOVE IS: " + mv[0]);
-  
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
   	  salert("Game Over");
@@ -12217,8 +12215,6 @@ console.log("MOVE IS: " + mv[0]);
 
       if (mv[0] === "continue") {  
 
-console.log("CONTINUING!");
-
   	let player = mv[1];
   	let sector = mv[2];
 
@@ -12231,10 +12227,7 @@ console.log("CONTINUING!");
   	//
   	this.updateSectorGraphics(sector);
 
-console.log("WHO CONTINUES: " + this.game.player + " --- " + player);
-
 	if (this.game.player == player) {
-console.log(" ... me");
   	  this.playerContinueTurn(player, sector);
 	} else {
 	  this.updateStatus(this.returnFaction(player) + " has moved into " + this.game.sectors[this.game.board[sector].tile].name);
@@ -12808,7 +12801,6 @@ console.log(" ... me");
             this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].name);
 	  }
 	  if (is_player == 1) {
-console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
             this.updateLog(this.returnFactionNickname(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
 	  }
 	  if (is_planet == 0 && is_sector == 0 && is_player == 0) {
@@ -15666,6 +15658,7 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
 	    }
 	  }
 
+console.log("bomb: " + JSON.stringify(hits_or_misses));
 
 	  if (hits_to_assign == 1) {
 	    this.updateLog("Bombardment produces " + hits_to_assign + " hit");
@@ -15879,7 +15872,6 @@ console.log("PLAYERS: " + JSON.stringify(this.game.state.choices));
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	  if (lmv[0] === "ground_combat_player_menu") {
-console.log("SWITCHING GCPM AND INFANTRY FIRE");
 	    let tmple = this.game.queue[le];
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
@@ -16546,23 +16538,10 @@ console.log("SWITCHING GCPM AND INFANTRY FIRE");
 
         this.updateSectorGraphics(sector);
 
-console.log("Here we go: " + attacker + " / " + defender);
-
 	if (this.game.player == attacker) {
-console.log("we are the attacker so we play ground combat");
           this.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
-return 0;
+	  return 0;
 	}
-console.log("noping out");
-
-//
-// executes for each player as attacker, so do not double trigger
-//
-//	if (this.game.player == defender) {
-//          this.playerPlayGroundCombat(defender, attacker, sector, planet_idx);
-//	}
-
-console.log("gameloop returning zero");
 
         return 0;
       }
@@ -16664,7 +16643,7 @@ console.log("gameloop returning zero");
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].planetaryDefenseTriggers(this, player, sector) == 1) {
+	    if (z[k].planetaryDefenseTriggers(this, player, sector, planet_idx) == 1) {
               this.game.queue.push("planetary_defense_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }
@@ -16725,8 +16704,6 @@ console.log("gameloop returning zero");
 
       }
       if (mv[0] === "ground_combat_end") {
-
-console.log("EXECUTING Ground Combat End!");
 
   	let player       = mv[1];
         let sector       = mv[2];
@@ -16971,25 +16948,10 @@ console.log("EXECUTING Ground Combat End!");
 
       }
 
-
-
-
       for (let i in z) {
-console.log("tried: " + z[i].name);
         if (!z[i].handleGameLoop(imperium_self, qe, mv)) { return 0; }
       }
 
-
-
-
-
-
-
-
-
-
-
-  
       //
       // avoid infinite loops
       //
@@ -17606,7 +17568,6 @@ playerPlayActionCardMenu(action_card_player, card, action_cards_played = []) {
     html += '<ul>';
 
     let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
-    console.log("AC: " + JSON.stringify(ac));
     if (ac.length > 0) {
       html += '<li class="option" id="cont">continue</li>';
       html += '<li class="option" id="action">play action card</li>';
@@ -17890,7 +17851,6 @@ playerAcknowledgeNotice(msg, mycallback) {
       html += '</ul>';
 
       if (maximum_assignable_hits == 0) {
-        console.log("ERROR: you had no hits left to assign, bug?");
         imperium_self.endTurn();
         return 0;
       }
@@ -18071,8 +18031,6 @@ playerAcknowledgeNotice(msg, mycallback) {
 
       for (let i = 0; i < sys.s.units[imperium_self.game.player - 1].length; i++) {
         if (sys.s.units[imperium_self.game.player - 1][i].destroyed == 0 && sys.s.units[imperium_self.game.player - 1][i].strength > 0) {
-
-          console.log("INDEX: " + i + " --- ship: " + sys.s.units[imperium_self.game.player - 1][i].type);
 
           let unit = sys.s.units[imperium_self.game.player - 1][i];
           maximum_assignable_hits++;
@@ -18385,8 +18343,6 @@ playerDestroyOpponentShips(player, total, sector, capital = 0) {
   let sys = imperium_self.returnSectorAndPlanets(sector);
 
   let opponent = imperium_self.returnOpponentInSector(player, sector);
-
-console.log("OUR PLAYER IS " + player + " -- so the opponent is: " + opponent);
 
   if (opponent == -1) {
     this.addMove("NOTIFY\t" + this.returnFactionNickname(opponent) + " has no ships to destroy");
@@ -18843,9 +18799,6 @@ playerPlaySpaceCombatOver(player, sector) {
 //
 playerPlayGroundCombat(attacker, defender, sector, planet_idx) {
 
-console.log("in player play ground combat");
-
-
   let imperium_self = this;
   let sys = this.returnSectorAndPlanets(sector);
   let html = '';
@@ -18856,10 +18809,10 @@ console.log("in player play ground combat");
   let attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
   let defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
 
-  if (this.game.player == attacker) {
+  if (sys.p[planet_idx].owner != attacker) {
     html = '<div class="sf-readable">'+this.returnFactionNickname(attacker)+' are invading ' + sys.p[planet_idx].name + ' with ' + attacker_forces + ' infantry. ' + this.returnFactionNickname(defender) + ' is defending with ' + defender_forces + ' infantry. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </div><ul>';
   } else {
-    html = '<div class="sf-readable">' + this.returnFaction(attacker) + ' has invaded ' + sys.p[planet_idx].name + ' with ' + attacker_forces + ' infantry. You have ' + defender_forces + ' infantry remaining. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </div><ul>';
+    html = '<div class="sf-readable">' + this.returnFactionNickname(defender) + ' are invading ' + sys.p[planet_idx].name + ' with ' + defender_forces + ' infantry. You have ' + attacker_forces + ' infantry remaining. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </div><ul>';
   }
 
   let ac = this.returnPlayerActionCards(this.game.player, ["combat", "ground_combat"])
@@ -18877,9 +18830,7 @@ console.log("in player play ground combat");
 
   let z = this.returnEventObjects();
   for (let i = 0; i < z.length; i++) {
-console.log("Trigger Event?" + z[i].name);
     if (z[i].menuOptionTriggers(this, "ground_combat", this.game.player) == 1) {
-console.log("yes!");
       let x = z[i].menuOption(this, "ground_combat", this.game.player);
       html += x.html;
       tech_attach_menu_index.push(i);
@@ -18889,16 +18840,10 @@ console.log("yes!");
   }
   html += '</ul>';
 
-console.log("and update status");
-
   this.updateStatus(html);
-
-console.log("waiting for reaction!");
 
   $('.option').off();
   $('.option').on('click', function () {
-
-console.log("option is clicked");
 
     let action2 = $(this).attr("id");
 
@@ -18909,7 +18854,6 @@ console.log("option is clicked");
       for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
         if (action2 == tech_attach_menu_triggers[i]) {
           $(this).remove();
-          console.log("execute: " + z[tech_attach_menu_index[i]].name);
           z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "ground_combat", imperium_self.game.player);
         }
       }
@@ -18931,7 +18875,6 @@ console.log("option is clicked");
       //
       // ships_fire needs to make sure it permits any opponents to fire...
       //
-console.log("prepending infantry_fire in imperium_player");
       imperium_self.prependMove("infantry_fire\t" + attacker + "\t" + defender + "\t" + sector + "\t" + planet_idx);
       imperium_self.endTurn();
     }
@@ -19338,8 +19281,6 @@ playerContinueTurn(player, sector) {
   let imperium_self = this;
   let options_available = 0;
 
-console.log("player continue turn enter");
-
   if (this.game.tracker.invasion == undefined) { this.game.tracker = this.returnPlayerTurnTracker(); this.game.tracker.activate_system = 1; }
 
   //
@@ -19356,7 +19297,6 @@ console.log("player continue turn enter");
     html += '<li class="option" id="produce">produce units</li>';
     options_available++;
   }
-console.log("pcte2");
   if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
     if (sector == "new-byzantium" || sector == "4_4") {
       if ((imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player) + imperium_self.game.players_info[imperium_self.game.player - 1].goods) >= 6) {
@@ -19368,7 +19308,6 @@ console.log("pcte2");
       options_available++;
     }
   }
-console.log("pcte3");
   if (this.canPlayerLandInfantry(player, sector) && this.game.tracker.invasion == 0) {
     html += '<li class="option" id="land">reassign infantry</li>';
     options_available++;
@@ -19376,7 +19315,6 @@ console.log("pcte3");
   if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
     html += '<li class="option" id="trade">trade</li>';
   }
-console.log("pcte4");
 
   //if (this.canPlayerPlayActionCard(player) && this.game.tracker.action_card == 0) {
   //  html += '<li class="option" id="action">action card</li>';
@@ -19390,7 +19328,6 @@ console.log("pcte4");
   let z = this.returnEventObjects();
   for (let i = 0; i < z.length; i++) {
     if (z[i].menuOptionTriggers(this, "continue", this.game.player) == 1) {
-console.log("mot");
       let x = z[i].menuOption(this, "continue", this.game.player);
       html += x.html;
       tech_attach_menu_index.push(i);
@@ -19402,10 +19339,7 @@ console.log("mot");
   html += '<li class="option" id="endturn">end turn</li>';
   html += '</ul>';
 
-console.log("player continue turn updating status");
-
   this.updateStatus(html);
-console.log("player continue turn status updated");
   $('.option').on('click', function () {
 
     let action2 = $(this).attr("id");
@@ -19808,13 +19742,9 @@ canPlayerScoreActionStageVictoryPoints(player) {
   // Secret Objectives - Action Phase
   //
   for (let i = 0; i < imperium_self.game.deck[5].hand.length; i++) {
-console.log("i: " + i + " -- " + imperium_self.game.deck[5].hand[i]);
     if (!imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
-console.log("unscored!");
       if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
-console.log("we can score it...");
         if (imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]].phase === "action") {
-console.log("and it is in the action phase...");
           html += '<li class="option secret3" id="' + imperium_self.game.deck[5].hand[i] + '">' + imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]].name + '</li>';
         }
       }
@@ -19959,7 +19889,6 @@ playerScoreSecretObjective(imperium_self, mycallback, stage = 0) {
       if (imperium_self.secret_objectives[objective]) {
         if (imperium_self.secret_objectives[objective].vp > 1) { vp = imperium_self.secret_objectives[objective].vp; }
       }
-console.log("CALLBACK AS: " + vp + " -- " + objective);
       mycallback(imperium_self, vp, objective);
     }
   });
@@ -19971,15 +19900,11 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
   let html = '';
   html += '<div class="sf-readable">Do you wish to score any public objectives? </div><ul>';
 
-console.log(imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored);
-
   // Stage I Public Objectives
   for (let i = 0; i < imperium_self.game.state.stage_i_objectives.length; i++) {
 
     if (!imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored.includes(imperium_self.game.state.stage_i_objectives[i])) {
       if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_i_objectives[i], 1)) {
-console.log("Here we are able to score!");
-console.log(JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round));
         if (!imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored_this_round.includes(imperium_self.game.state.stage_i_objectives[i])) {
           html += '1 VP Public Objective: <li class="option stage1" id="' + imperium_self.game.state.stage_i_objectives[i] + '">' + imperium_self.game.deck[3].cards[imperium_self.game.state.stage_i_objectives[i]].name + '</li>';
         }
@@ -20034,17 +19959,13 @@ console.log(JSON.stringify(imperium_self.game.players_info[imperium_self.game.pl
     if ($(this).hasClass("secret3")) { objective_type = 3; }
 
     if (action === "no") {
-console.log("ENDING WITH NO");
       mycallback(imperium_self, 0, "");
     } else {
-console.log("ENDING WITH YES");
-
       let objective = action;
       let vp = 1;
       if (imperium_self.stage_ii_objectives[objective]) {
         if (imperium_self.stage_ii_objectives[objective].vp > 1) { vp = imperium_self.stage_ii_objectives[objective].vp; }
       }
-console.log("ENDING WITH YES");
       mycallback(imperium_self, vp, objective);
 
     }
@@ -20996,8 +20917,6 @@ playerSelectResources(cost, mycallback) {
 
 playerSelectActionCard(mycallback, cancel_callback, types = []) {
 
-  console.log("WHAT TYPE: " + JSON.stringify(types));
-
   let imperium_self = this;
   let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
   if (array_of_cards.length == 0) {
@@ -21203,7 +21122,6 @@ playerRemoveInfantryFromPlanets(player, total = 1, mycallback) {
             ii = total_units_on_planet + 2; // 0 as player_moves below because we have removed above
             imperium_self.addMove("remove_infantry_from_planet\t" + player + "\t" + infantry_to_remove[i].planet + "\t" + "0");
             imperium_self.addMove("NOTIFY\tREMOVING INFANTRY FROM PLANET: " + infantry_to_remove[i].planet);
-            console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
           }
         }
       }
@@ -21459,7 +21377,6 @@ playerSelectUnitsToMove(destination) {
       //
       $(this).css("font-weight", "bold");
       this.classList.add("ship_selected");
-      console.log(this);
 
       //
       //  figure out if we need to load infantry / fighters
@@ -21875,8 +21792,6 @@ playerSelectInfantryToLand(sector) {
 
 playerInvadePlanet(player, sector) {
 
-console.log("EXECUTING PLAYER INVADE PLANET");
-
   let imperium_self = this;
   let sys = this.returnSectorAndPlanets(sector);
 
@@ -21919,9 +21834,6 @@ console.log("EXECUTING PLAYER INVADE PLANET");
 	if (!sanity_check) { return; }
       }
 ***/
-
-console.log("LF: " + JSON.stringify(landing_forces));
-console.log("PI: " + JSON.stringify(planets_invaded));
 
       for (let i = 0; i < planets_invaded.length; i++) {
 
@@ -22785,7 +22697,6 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
       return 0;
     }
     if (action === "none") {
-      console.log("NONE!");
       let unit_to_return = { sector: "", planet_idx: "", unit_idx: -1, unit: null }
       mycallback(unit_to_return);
       return;
