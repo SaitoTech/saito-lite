@@ -2340,7 +2340,9 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
 
 
   returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx) {
-  
+
+    if (player == -1) { return 0; }  
+
     let sys = this.returnSectorAndPlanets(sector);
     let num = 0;
 
@@ -2798,7 +2800,7 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
     //
     // asteroid fields ?
     //
-    if (this.doesPlayerHaveTech(player, "antimass-deflectors")) {
+    if (!this.doesPlayerHaveTech(player, "antimass-deflectors")) {
       let sys = this.returnSectorAndPlanets(destination);
       if (sys.s.type == 3) { return 0; }
     }

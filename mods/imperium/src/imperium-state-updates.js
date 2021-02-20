@@ -199,8 +199,6 @@
       }
     }
 
-
-
     //
     // new_owner does not need to be provided if the player has units on the planet
     //

@@ -3,10 +3,10 @@
       id		:	"faction7" ,
       name		: 	"Embers of Muaat",
       nickname		: 	"Muaat",
-      homeworld		: 	"sector74",
+      homeworld		: 	"sector76",
       space_units	: 	["warsun","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
-      tech		: 	["plasma-scoring", "faction7-star-forge", "faction7-gashlai-physiology", "faction7-magmus-reactor","faction7-advanced-warsun-ii","faction7-flagship"],
+      tech		: 	["plasma-scoring", "faction7-star-forge", "faction7-gashlai-physiology", "faction7-advanced-warsun-i","faction7-flagship"],
       background	: 	'faction7.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Yssaril Tribe, a primitive race of swamp-dwelling creatures whose fast instincts and almost unerring ability to change tactics on-the-fly lead many to suspect more is at work than their primitive appearance belies. Good luck!</div>`
@@ -146,6 +146,42 @@
     });
 
 
+    this.importTech("faction7-advanced-warsun-i", {
+
+      name        :       "Advanced Warsun I" ,
+      faction     :       "faction7",
+      replaces    :       "warsun",
+      unit        :       1 ,
+      type      :         "special",
+      text        :       "A more dangerous and mobile warsun" ,
+      prereqs     :       [],
+      initialize :       function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].faction7_advanced_warsun_i == undefined) {
+          imperium_self.game.players_info[player-1].faction7_advanced_warsun_i = 0;
+	}
+      },
+      gainTechnology :       function(imperium_self, gainer, tech) {
+        imperium_self.game.players_info[gainer-1].faction7_advanced_warsun_i = 1;
+      },
+      upgradeUnit :       function(imperium_self, player, unit) {
+
+        if (imperium_self.game.players_info[unit.owner-1].faction7_advanced_warsun_i == 1 && unit.type == "warsun") {
+          unit.cost = 12;
+          unit.combat = 3;
+          unit.move = 1;
+          unit.capacity = 6;
+	  unit.bombardment_rolls = 3;
+	  unit.bombardment_combat = 3;
+        }
+
+        return unit;
+      },
+
+    });
+
+
+
+
 
     this.importTech("faction7-advanced-warsun-ii", {
 
@@ -179,6 +215,7 @@
       },
 
     });
+
 
 
 
