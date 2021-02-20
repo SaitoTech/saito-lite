@@ -1421,13 +1421,10 @@
 
     let add_at_end = [];
 
-console.log("pushing: " + destination + " as " + 1);
-
     sectors.push(destination);
     distance.push(0);
     hazards.push("");
     hoppable.push(1);
-
   
     //
     // find which systems within move distance (hops)
@@ -1535,7 +1532,6 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
     	      if (!sectors.includes(neighbours[m]))  {
   	        sectors.push(neighbours[m]);
   	        hoppable.push(-1);
-console.log("1 pushing: " + neighbours[m] + " as " + -1);
 		if (hazard_description === "rift") {
                   distance.push(i);
 		} else {
@@ -1558,7 +1554,6 @@ console.log("1 pushing: " + neighbours[m] + " as " + -1);
 		if (insert_anew == 1) {
 		  sectors.push(neighbours[m]);
   	          hoppable.push(-1);
-console.log("2 pushing: " + neighbours + " as " + -1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -1576,7 +1571,6 @@ console.log("2 pushing: " + neighbours + " as " + -1);
 	      if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
   	        if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
   	          sectors.push(this.game.state.temporary_adjacency[z][1]);
-console.log("3 pushing: " + this.game.state.temporary_adjacency[z][1] + " as " + -1);
   	          hoppable.push(-1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
@@ -1599,7 +1593,6 @@ console.log("3 pushing: " + this.game.state.temporary_adjacency[z][1] + " as " +
                   }
                   if (insert_anew == 1) {
                     sectors.push(neighbours[m]);
-console.log("4 pushing: " + neighbours[m] + " as " + -1);
                     hoppable.push(-1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
@@ -1621,7 +1614,6 @@ console.log("4 pushing: " + neighbours[m] + " as " + -1);
 		  }
 		  hoppable.push(-1);
 		  hazards.push(hazard_description);
-console.log("5 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " + -1);
   	        } else {
 
 		  //
@@ -1637,7 +1629,6 @@ console.log("5 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " +
                   }
                   if (insert_anew == 1) {
                     sectors.push(this.game.state.temporary_adjacency[z][0]);
-console.log("6 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " + -1);
                     hoppable.push(-1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
@@ -1665,7 +1656,6 @@ console.log("6 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " +
     	      if (!sectors.includes(neighbours[m]))  {
   	        sectors.push(neighbours[m]);
   	        hoppable.push(1);
-console.log("7 pushing: " + neighbours[m] + " as " + 1);
 		if (hazard_description === "rift") {
                   distance.push(i);
 		} else {
@@ -1694,7 +1684,6 @@ console.log("7 pushing: " + neighbours[m] + " as " + 1);
 		}
 		if (insert_anew == 1) {
 		  sectors.push(neighbours[m]);
-console.log("8 pushing: " + neighbours[m] + " as " + 1);
   	          hoppable.push(1);
 		  if (hazard_description === "rift") {
                     distance.push(i);

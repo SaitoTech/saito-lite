@@ -448,6 +448,33 @@
 
 
 
+      if (mv[0] === "post_production") {
+
+console.log("----------------------------");
+console.log("---------- X X X -----------");
+console.log("----------------------------");
+
+	let player = mv[1];
+	let sector = mv[2];
+	let stuff = mv[3];
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+        for (let i = 0; i < speaker_order.length; i++) {
+          for (let k = 0; k < z.length; k++) {
+            z[k].postProduction(imperium_self, player, sector, stuff);
+          }
+        }
+	
+	return 1;
+
+      }
+
+
+
+
       if (mv[0] === "produce") {
   
   	let player       = mv[1];

@@ -1665,7 +1665,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector76",
       space_units	: 	["warsun","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
-      tech		: 	["plasma-scoring", "faction7-star-forge", "faction7-gashlai-physiology", "faction7-advanced-warsun-i","faction7-flagship"],
+      tech		: 	["plasma-scoring", "faction7-star-forge", "faction7-gashlai-physiology", "faction7-advanced-warsun-i","faction7-flagship", "faction7-magmus-reactor"],
       background	: 	'faction7.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Yssaril Tribe, a primitive race of swamp-dwelling creatures whose fast instincts and almost unerring ability to change tactics on-the-fly lead many to suspect more is at work than their primitive appearance belies. Good luck!</div>`
@@ -1778,7 +1778,7 @@ console.log("P: " + planet);
       name        :       "Magmus Reactor" ,
       faction     :       "faction7",
       type        :       "special" ,
-      text        :       "Player may move into supernovas" ,
+      text        :       "Player may move into supernovas. Gain 1 trade good producing with Warsun or adjacent to Supernova" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].magmus_reactor == undefined) {
           imperium_self.game.players_info[player-1].magmus_reactor = 0;
@@ -1790,6 +1790,25 @@ console.log("P: " + planet);
 	  imperium_self.game.players_info[gainer-1].move_into_supernovas = 1;
         }
       },
+      postProduction : function(imperium_self, player, sector, stuff) {
+	if (imperium_self.game.players_info[player-1].magmus_reactor == 1) {
+          let as = imperium_self.returnAdjacentSectors(sector);
+	  let give_bonus = 0;
+          if (imperium_self.doesSectorContainPlayerUnit(player, sector, "warsun")) { give_bonus = 1; }
+	  if (give_bonus == 0) {
+            for (let i = 0; i < as.length; i++) {
+  	      let sys = imperium_self.returnSectorAndPlanets(as[i]);
+	      if (sys.s.type == 4) { give_bonus = 1; }
+	    }
+	  }
+	  if (give_bonus == 1) {
+	    imperium_self.updateLog("Muatt gains 1 trade good from Magmus Reactor - producing in a sector with a Warsun or adjacent to a Supernova");
+            imperium_self.game.players_info[player-1].goods += 1;
+            imperium_self.updateTokenDisplay();
+            imperium_self.displayFactionDashboard();
+	  }
+	}
+      }
     });
 
 
@@ -11365,8 +11384,6 @@ handleSystemsMenuItem() {
 
   returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable) {  
 
-console.log(JSON.stringify(hoppable));
-
     let imperium_self = this;
     let ships_and_sectors = [];
     for (let i = 0; i < sectors.length; i++) {
@@ -11394,9 +11411,6 @@ console.log(JSON.stringify(hoppable));
           for (let k = 0; k < sys.s.units[this.game.player-1].length; k++) {
             let this_ship = sys.s.units[this.game.player-1][k];
             if (this_ship.move >= distance[i]) {
-
-console.log("h: " + hoppable[i]);
-
 	      if (hoppable[i] != -1 || this_ship.may_fly_through_sectors_containing_other_ships == 1) {
       	        x.adjusted_distance.push(distance[i]);
                 x.ships.push(this_ship);
@@ -12236,6 +12250,33 @@ console.log("h: " + hoppable[i]);
         return 0;
 
       }
+
+
+
+      if (mv[0] === "post_production") {
+
+console.log("----------------------------");
+console.log("---------- X X X -----------");
+console.log("----------------------------");
+
+	let player = mv[1];
+	let sector = mv[2];
+	let stuff = mv[3];
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+        for (let i = 0; i < speaker_order.length; i++) {
+          for (let k = 0; k < z.length; k++) {
+            z[k].postProduction(imperium_self, player, sector, stuff);
+          }
+        }
+	
+	return 1;
+
+      }
+
 
 
 
@@ -20175,6 +20216,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       imperium_self.playerSelectResources(total_cost, function (success) {
 
         if (success == 1) {
+          imperium_self.addMove("post_production\t" + imperium_self.game.player + "\t" + sector + "\t" + JSON.stringify(stuff_to_build));
           for (let y = 0; y < stuff_to_build.length; y++) {
             let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(imperium_self.game.player, sector);
             if (stuff_to_build[y] != "infantry") { planet_idx = -1; }
@@ -23494,6 +23536,12 @@ playerDiscardActionCards(num, mycallback=null) {
     if (obj.groundCombatRoundEnd == null) {
       obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
     }
+    //
+    // synchronous -- must return 1
+    //
+    if (obj.postProduction == null) {
+      obj.postProduction = function(imperium_self, player, sector) { return 1; }
+    }
 
 
     ////////////////////
@@ -25186,13 +25234,10 @@ playerDiscardActionCards(num, mycallback=null) {
 
     let add_at_end = [];
 
-console.log("pushing: " + destination + " as " + 1);
-
     sectors.push(destination);
     distance.push(0);
     hazards.push("");
     hoppable.push(1);
-
   
     //
     // find which systems within move distance (hops)
@@ -25300,7 +25345,6 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
     	      if (!sectors.includes(neighbours[m]))  {
   	        sectors.push(neighbours[m]);
   	        hoppable.push(-1);
-console.log("1 pushing: " + neighbours[m] + " as " + -1);
 		if (hazard_description === "rift") {
                   distance.push(i);
 		} else {
@@ -25323,7 +25367,6 @@ console.log("1 pushing: " + neighbours[m] + " as " + -1);
 		if (insert_anew == 1) {
 		  sectors.push(neighbours[m]);
   	          hoppable.push(-1);
-console.log("2 pushing: " + neighbours + " as " + -1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -25341,7 +25384,6 @@ console.log("2 pushing: " + neighbours + " as " + -1);
 	      if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
   	        if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
   	          sectors.push(this.game.state.temporary_adjacency[z][1]);
-console.log("3 pushing: " + this.game.state.temporary_adjacency[z][1] + " as " + -1);
   	          hoppable.push(-1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
@@ -25364,7 +25406,6 @@ console.log("3 pushing: " + this.game.state.temporary_adjacency[z][1] + " as " +
                   }
                   if (insert_anew == 1) {
                     sectors.push(neighbours[m]);
-console.log("4 pushing: " + neighbours[m] + " as " + -1);
                     hoppable.push(-1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
@@ -25386,7 +25427,6 @@ console.log("4 pushing: " + neighbours[m] + " as " + -1);
 		  }
 		  hoppable.push(-1);
 		  hazards.push(hazard_description);
-console.log("5 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " + -1);
   	        } else {
 
 		  //
@@ -25402,7 +25442,6 @@ console.log("5 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " +
                   }
                   if (insert_anew == 1) {
                     sectors.push(this.game.state.temporary_adjacency[z][0]);
-console.log("6 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " + -1);
                     hoppable.push(-1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
@@ -25430,7 +25469,6 @@ console.log("6 pushing: " + this.game.state.temporary_adjacency[z][0] + " as " +
     	      if (!sectors.includes(neighbours[m]))  {
   	        sectors.push(neighbours[m]);
   	        hoppable.push(1);
-console.log("7 pushing: " + neighbours[m] + " as " + 1);
 		if (hazard_description === "rift") {
                   distance.push(i);
 		} else {
@@ -25459,7 +25497,6 @@ console.log("7 pushing: " + neighbours[m] + " as " + 1);
 		}
 		if (insert_anew == 1) {
 		  sectors.push(neighbours[m]);
-console.log("8 pushing: " + neighbours[m] + " as " + 1);
   	          hoppable.push(1);
 		  if (hazard_description === "rift") {
                     distance.push(i);

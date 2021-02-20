@@ -119,7 +119,7 @@
       name        :       "Magmus Reactor" ,
       faction     :       "faction7",
       type        :       "special" ,
-      text        :       "Player may move into supernovas" ,
+      text        :       "Player may move into supernovas. Gain 1 trade good producing with Warsun or adjacent to Supernova" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].magmus_reactor == undefined) {
           imperium_self.game.players_info[player-1].magmus_reactor = 0;
@@ -131,6 +131,25 @@
 	  imperium_self.game.players_info[gainer-1].move_into_supernovas = 1;
         }
       },
+      postProduction : function(imperium_self, player, sector, stuff) {
+	if (imperium_self.game.players_info[player-1].magmus_reactor == 1) {
+          let as = imperium_self.returnAdjacentSectors(sector);
+	  let give_bonus = 0;
+          if (imperium_self.doesSectorContainPlayerUnit(player, sector, "warsun")) { give_bonus = 1; }
+	  if (give_bonus == 0) {
+            for (let i = 0; i < as.length; i++) {
+  	      let sys = imperium_self.returnSectorAndPlanets(as[i]);
+	      if (sys.s.type == 4) { give_bonus = 1; }
+	    }
+	  }
+	  if (give_bonus == 1) {
+	    imperium_self.updateLog("Muatt gains 1 trade good from Magmus Reactor - producing in a sector with a Warsun or adjacent to a Supernova");
+            imperium_self.game.players_info[player-1].goods += 1;
+            imperium_self.updateTokenDisplay();
+            imperium_self.displayFactionDashboard();
+	  }
+	}
+      }
     });
 
 

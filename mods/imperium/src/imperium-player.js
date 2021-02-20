@@ -3030,6 +3030,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       imperium_self.playerSelectResources(total_cost, function (success) {
 
         if (success == 1) {
+          imperium_self.addMove("post_production\t" + imperium_self.game.player + "\t" + sector + "\t" + JSON.stringify(stuff_to_build));
           for (let y = 0; y < stuff_to_build.length; y++) {
             let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(imperium_self.game.player, sector);
             if (stuff_to_build[y] != "infantry") { planet_idx = -1; }

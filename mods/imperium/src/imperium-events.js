@@ -158,6 +158,12 @@
     if (obj.groundCombatRoundEnd == null) {
       obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
     }
+    //
+    // synchronous -- must return 1
+    //
+    if (obj.postProduction == null) {
+      obj.postProduction = function(imperium_self, player, sector) { return 1; }
+    }
 
 
     ////////////////////
