@@ -137,7 +137,8 @@
             <label for="game_length ">Game Length:</label>
             <select name="game_length">
               <option value="4">4 VP</option>
-              <option value="8" selected>8 VP</option>
+              <option value="8">8 VP</option>
+              <option value="10" selected>10 VP</option>
               <option value="12">12 VP</option>
               <option value="14">14 VP</option>
             </select>
