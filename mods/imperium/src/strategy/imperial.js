@@ -58,6 +58,7 @@
             imperium_self.playerBuySecretObjective(2);
           } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
             imperium_self.endTurn();
           }
         }
@@ -89,6 +90,7 @@ console.log("out of playerScoreVictoryPoints in Tertiary");
 
 	      imperium_self.updateStatus("scoring completed");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
 
               if (my_secret_vp > 0) { 
 console.log("A");

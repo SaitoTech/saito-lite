@@ -1477,6 +1477,7 @@ console.log("P: " + planet);
 
 		  if (id === "no") {
                     imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                    imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
 		    imperium_self.endTurn();
 		    return 0;
 		  }
@@ -1484,6 +1485,7 @@ console.log("P: " + planet);
                   imperium_self.playerResearchTechnology(function(tech) {
 
                     imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                    imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
                     imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
 
 
@@ -1665,7 +1667,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector76",
       space_units	: 	["warsun","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
-      tech		: 	["plasma-scoring", "faction7-star-forge", "faction7-gashlai-physiology", "faction7-advanced-warsun-i","faction7-flagship", "faction7-magmus-reactor"],
+      tech		: 	["plasma-scoring", "faction7-star-forge", "faction7-gashlai-physiology", "faction7-advanced-warsun-i","faction7-flagship"],
       background	: 	'faction7.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Yssaril Tribe, a primitive race of swamp-dwelling creatures whose fast instincts and almost unerring ability to change tactics on-the-fly lead many to suspect more is at work than their primitive appearance belies. Good luck!</div>`
@@ -3591,6 +3593,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
  
             if (id == "yes") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
               imperium_self.playerBuildInfrastructure((sector) => {
                 imperium_self.addMove("activate\t"+imperium_self.game.player+"\t"+sector);
@@ -3600,6 +3603,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
             }
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }
@@ -3716,6 +3720,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
 
                 if (action2 === "cancel") {
                   imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	          imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
                   imperium_self.endTurn();
                   return;
                 }
@@ -3738,6 +3743,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
 
                 if (choices_selected >= max_choices) {
                   imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	          imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
                   imperium_self.endTurn();
                 }
 
@@ -3746,6 +3752,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
 
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	      imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }
@@ -3818,6 +3825,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
             imperium_self.playerBuySecretObjective(2);
           } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
             imperium_self.endTurn();
           }
         }
@@ -3849,6 +3857,7 @@ console.log("out of playerScoreVictoryPoints in Tertiary");
 
 	      imperium_self.updateStatus("scoring completed");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
 
               if (my_secret_vp > 0) { 
 console.log("A");
@@ -4028,6 +4037,7 @@ console.log("1 - 1 - 4")
             imperium_self.playerBuyActionCards(2);
           } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
             imperium_self.endTurn();
           }
         }
@@ -4185,6 +4195,7 @@ console.log("1 - 1 - 4")
 
 	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.playerSelectResources(resources_to_spend, function(success) {
                 if (success == 1) {
                   imperium_self.playerResearchTechnology(function(tech) {
@@ -4199,6 +4210,7 @@ console.log("1 - 1 - 4")
             }
             if (id === "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }
@@ -4248,6 +4260,7 @@ console.log("1 - 1 - 4")
             if (id == "yes") {
 	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 0;
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.playerSelectResources(resources_to_spend, function(success) {
                 if (success == 1) {
                   imperium_self.playerResearchTechnology(function(tech) {
@@ -4260,6 +4273,7 @@ console.log("1 - 1 - 4")
             }
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }
@@ -4396,6 +4410,7 @@ console.log("1 - 1 - 4")
 
 	  if (imperium_self.game.players_info[imperium_self.game.player-1].commodities == imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit) {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
 	    imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " already has commodities and skips trade secondary");
 	    imperium_self.endTurn();
 	    return 0;
@@ -4420,12 +4435,14 @@ console.log("1 - 1 - 4")
 
             if (id == "yes") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommodities\t"+imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
 	      imperium_self.endTurn();
             }
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }
@@ -4496,6 +4513,7 @@ console.log("1 - 1 - 4")
             }
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }
@@ -11952,8 +11970,7 @@ handleSystemsMenuItem() {
 	      if (this.game.players[i] === mv[3]) {
 	        this.setPlayerInactive((i+1));
 		if (!this.game.confirms_players.includes(mv[3])) {
-  	          this.game.confirms_received += parseInt(mv[2]);
-  	          this.game.confirms_players.push(mv[3]);
+		  this.addPublickeyConfirm(mv[3], parseInt(mv[2]));
 	        }
 	      }
 	    }
@@ -17202,13 +17219,11 @@ returnPlayers(num = 0) {
 
     var keys = Object.keys(factions);
     let rf = keys[this.rollDice(keys.length) - 1];
-    let delete_as_assigned = 1;
 
     if (i == 0) {
       if (this.game.options.player1 != undefined) {
         if (this.game.options.player1 != "random") {
           rf = this.game.options.player1;
-          delete_as_assigned = 0;
         }
       }
     }
@@ -17216,7 +17231,6 @@ returnPlayers(num = 0) {
       if (this.game.options.player2 != undefined) {
         if (this.game.options.player2 != "random") {
           rf = this.game.options.player2;
-          delete_as_assigned = 0;
         }
       }
     }
@@ -17224,7 +17238,6 @@ returnPlayers(num = 0) {
       if (this.game.options.player3 != undefined) {
         if (this.game.options.player3 != "random") {
           rf = this.game.options.player3;
-          delete_as_assigned = 0;
         }
       }
     }
@@ -17232,12 +17245,25 @@ returnPlayers(num = 0) {
       if (this.game.options.player4 != undefined) {
         if (this.game.options.player4 != "random") {
           rf = this.game.options.player4;
-          delete_as_assigned = 0;
+        }
+      }
+    }
+    if (i == 4) {
+      if (this.game.options.player5 != undefined) {
+        if (this.game.options.player5 != "random") {
+          rf = this.game.options.player5;
+        }
+      }
+    }
+    if (i == 5) {
+      if (this.game.options.player6 != undefined) {
+        if (this.game.options.player6 != "random") {
+          rf = this.game.options.player6;
         }
       }
     }
 
-    if (delete_as_assigned) { delete factions[rf]; }
+    delete factions[rf];
 
 
     players[i] = {};
@@ -19563,6 +19589,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
 
       if (resolve == 1) {
         imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+        imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
       }
 
       imperium_self.playerSelectInfluence(total_cost, function (success) {
@@ -19651,6 +19678,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
     if (id == "yes") {
 
       imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
       imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gets action cards");
       imperium_self.addMove("gain\t" + imperium_self.game.player + "\taction_cards\t2");
       imperium_self.addMove("DEAL\t2\t" + imperium_self.game.player + "\t2");
@@ -19662,6 +19690,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
     } else {
 
       imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
       imperium_self.endTurn();
       imperium_self.updateStatus("submitted...");
       return;
@@ -19707,6 +19736,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
     if (id == "yes") {
 
       imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
       imperium_self.addMove("gain\t" + imperium_self.game.player + "\tsecret_objective\t1");
       imperium_self.addMove("DEAL\t6\t" + imperium_self.game.player + "\t1");
       imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
@@ -19717,6 +19747,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
     } else {
 
       imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+      imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
       imperium_self.endTurn();
       imperium_self.updateStatus("submitted...");
       return;
@@ -20210,6 +20241,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
         imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
       } else {
         imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
+        imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
         imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
       }
 

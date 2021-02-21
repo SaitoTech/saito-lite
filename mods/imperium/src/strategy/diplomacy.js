@@ -104,6 +104,7 @@
 
                 if (action2 === "cancel") {
                   imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	          imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
                   imperium_self.endTurn();
                   return;
                 }
@@ -126,6 +127,7 @@
 
                 if (choices_selected >= max_choices) {
                   imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	          imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
                   imperium_self.endTurn();
                 }
 
@@ -134,6 +136,7 @@
 
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	      imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }

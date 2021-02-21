@@ -147,8 +147,7 @@
 	      if (this.game.players[i] === mv[3]) {
 	        this.setPlayerInactive((i+1));
 		if (!this.game.confirms_players.includes(mv[3])) {
-  	          this.game.confirms_received += parseInt(mv[2]);
-  	          this.game.confirms_players.push(mv[3]);
+		  this.addPublickeyConfirm(mv[3], parseInt(mv[2]));
 	        }
 	      }
 	    }
