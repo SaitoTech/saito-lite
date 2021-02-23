@@ -104,7 +104,7 @@ module.exports = EmailForm = {
             }
         }
 
-        email_to = await mod.addrController.returnPublicKey(email_to);
+        email_to = await mod.returnPublicKey(email_to);
 
         let newtx = app.wallet.returnBalance() > 0 ?
             app.wallet.createUnsignedTransactionWithDefaultFee(email_to, email_amount) :

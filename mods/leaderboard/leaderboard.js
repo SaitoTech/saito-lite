@@ -2,7 +2,6 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const LeaderboardArcadeInfobox = require('./lib/arcade-infobox/arcade-infobox');
 const Header = require('../../lib/ui/header/header');
-const AddressController = require('../../lib/ui/menu/address-controller');
 
 const Elo = require('elo-rank');
 
@@ -27,7 +26,6 @@ class Leaderboard extends ModTemplate {
     this.carousel_timer = null;
     this.carousel_speed = 8000;
 
-    this.addrController = new AddressController(app);
     this.identifiers_to_fetch = [];
   }
 
