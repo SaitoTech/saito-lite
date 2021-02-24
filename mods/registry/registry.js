@@ -77,7 +77,7 @@ class Registry extends ModTemplate {
         }
 
         newtx.msg.module   	= "Registry";
-        newtx.msg.request	= "register";
+        //newtx.msg.request	= "register";
         newtx.msg.identifier	= identifier + domain;
 
         newtx = this.app.wallet.signTransaction(newtx);
@@ -106,7 +106,7 @@ class Registry extends ModTemplate {
       if (!regex.test(identifier)) { salert("Alphanumeric Characters only"); return false; }
 
       newtx.msg.module   	= "Registry";
-      newtx.msg.request	= "register";
+      //newtx.msg.request	= "register";
       newtx.msg.identifier	= identifier + domain;
 
       newtx = this.app.wallet.signTransaction(newtx);

@@ -12,8 +12,8 @@ module.exports = EmailDetailTemplate = (app, mod) => {
     let message	= selected_email.returnMessage();
     let subject   = message.title;
 
-    let hr_from = mod.addrController.returnAddressHTML(from);
-    let hr_to   = mod.addrController.returnAddressHTML(to);
+    let hr_from = mod.returnAddressHTML(from);
+    let hr_to   = mod.returnAddressHTML(to);
 
     if (hr_from != "") { from = hr_from; }
     if (hr_to != "")   { to   = hr_to; }

@@ -16,7 +16,7 @@ module.exports = EmailList = {
       if(inbox_emails){
         inbox_emails.forEach(tx => {
           document.querySelector('.email-list').innerHTML +=
-              EmailListRowTemplate(tx, mod.addrController.returnAddressHTML(tx.transaction.from[0].add), helpers);
+              EmailListRowTemplate(tx, mod.returnAddressHTML(tx.transaction.from[0].add), helpers);
         });
       } else {
         mod.locationErrorFallback(`No emails found.`, `No emails found in ${subpage}`);

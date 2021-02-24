@@ -3,7 +3,6 @@ const EmailMain = require('./lib/email-main/email-main');
 const EmailSidebar = require('./lib/email-sidebar/email-sidebar');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 
-const AddressController = require('../../lib/ui/menu/address-controller');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -34,9 +33,6 @@ class Email extends ModTemplate {
     this.appspace = 0;	// print email-body with appspace
 
     this.count = 0;
-
-    // add our address controller
-    this.addrController = new AddressController(app, this.returnMenuItems());
 
   }
 
@@ -271,6 +267,30 @@ class Email extends ModTemplate {
       document.getElementById("email-token").innerHTML = " " + this.app.wallet.returnPreferredCrypto().ticker;
       document.getElementById("email-balance").innerHTML = this.preferredCryptoBalance
     }
+  }
+  returnAddressHTML(key) {
+    let identifier = this.app.keys.returnIdentifierByPublicKey(key);
+    let id = !identifier ? key : identifier
+    return `<span class="saito-address saito-address-${key}">${id}</span>`
+  }
+
+  async returnAddressHTMLPromise(key) {
+    let identifier = await this.returnIdentifier(key);
+    let id = !identifier ? key : identifier
+    return `<span class="saito-address saito-address-${key}">${id}</span>`
+  }
+  async returnPublicKey(addr_input) {
+    if (this.app.crypto.isPublicKey(addr_input)) { return addr_input }
+    try {
+      var resp = await this.app.keys.fetchPublicKeyPromise(addr_input);
+    } catch(err) {
+      console.error(err);
+    }
+    if (resp.rows) {
+      let record = resp.rows[0];
+      return record.publickey ? record.publickey : record;
+    }
+    return null
   }
 }
 

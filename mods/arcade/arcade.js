@@ -3,12 +3,11 @@ const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeSidebar = require('./lib/arcade-sidebar/arcade-sidebar');
-const AddressController = require('../../lib/ui/menu/address-controller');
+//const AddressController = require('../../lib/ui/menu/address-controller');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const getMockGames = require('./mockinvites.js');
 const ArcadeContainerTemplate = require('./lib/arcade-main/templates/arcade-container.template');
 const ModalRegisterEmail = require('../../lib/saito/ui/modal-register-email/modal-register-email');
-// const ArcadeCreateGameOverlay = require('./lib/arcade-create-game-overlay/arcade-create-game-overlay');
 
 fetch = require("node-fetch");
 
@@ -38,8 +37,7 @@ class Arcade extends ModTemplate {
 
     this.description = "A place to find, play and manage games!";
     this.categories = "Games Utilities";
-    this.addrController = new AddressController(app);
-
+    
     this.header = null;
     this.overlay = null;
     
