@@ -46,7 +46,7 @@ class Twilight extends GameTemplate {
 
     this.moves           = [];
     this.cards    	 = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     //
     // newbie mode
@@ -610,6 +610,7 @@ console.log(err);
       	        callback : function(app, game_mod) {
 	  	  game_mod.menu.hideSubMenus();
         	  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.mute_community_chat = 0;
 		  chatmod.openChatBox();
     	        }
               });
@@ -2233,6 +2234,11 @@ console.log("place: " + mv[1] + " -- " + player);
 	    if (mv[2] == "opponent_cards_in_hand") {
               this.game.state.opponent_cards_in_hand = parseInt(mv[3]);
 	    }
+	    if (mv[3]) {
+	      if (mv[3] == "back_button_cancelled") {
+                this.game.state.back_button_cancelled = parseInt(mv[4]);
+	      }
+	    }
           }
           this.game.queue.splice(qe, 1);
         }
@@ -2995,7 +3001,6 @@ if (this.game.player == 0) {
           //
           // back button functions again
           //
-console.log("resetging bbc");
           this.game.state.back_button_cancelled = 0;
 
           //
@@ -3725,10 +3730,6 @@ console.log("resetging bbc");
       if (twilight_self.game.state.headline == 1) { bind_back_button_state = false; }
       if (twilight_self.game.state.back_button_cancelled == 1) { bind_back_button_state = false; }
 
-console.log("event_before_ops: " + twilight_self.game.state.event_before_ops);
-console.log("headline: " + twilight_self.game.state.headline);
-console.log("back_button_cancelled: " + twilight_self.game.state.back_button_cancelled);
-
       let html = twilight_self.formatPlayOpsStatus(player, ops, bind_back_button_state); // back button
       twilight_self.updateStatus(html);
 
@@ -4195,7 +4196,6 @@ this.startClock();
     // remove back button from forced gameplay
     //
     if (selected_card != null) { 
-console.log("SELECTED CARD NOT NULL: bbc");
       this.game.state.back_button_cancelled = 1; 
     }
 
@@ -6397,7 +6397,6 @@ console.log("CONTROL IS: " + control);
     //
     // cancel back button on subsequent cards picks
     //
-//console.log("END TURN -- bbc");
     //this.game.state.back_button_cancelled = 1;
 
 
@@ -14105,6 +14104,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
       if (ussr_roll > us_roll) { is_winner = 1; }
 
       if (is_winner == 0) {
+        this.updateLog("<span>Summit: no winner</span>");
         return 1;
       } else {
 
@@ -14122,8 +14122,10 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
           twilight_self.addMove("resolve\tsummit");
 
           if (us_roll > ussr_roll) {
+            twilight_self.updateLog("<span>US receives 2 VP from Summit</span>");
             twilight_self.addMove("vp\tus\t2");
           } else {
+            twilight_self.updateLog("<span>USSR receives 2 VP from Summit</span>");
             twilight_self.addMove("vp\tussr\t2");
           }
 
@@ -14138,12 +14140,14 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
               twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\traise");
+              twilight_self.addMove("notify\tDEFCON is raised by 1");
               twilight_self.endTurn();
             }
             if (action2 == "lower") {
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
               twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\tlower");
+              twilight_self.addMove("notify\tDEFCON is lowered by 1");
               twilight_self.endTurn();
             }
             if (action2 == "same") {

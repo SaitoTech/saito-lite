@@ -2230,6 +2230,8 @@ console.log("----------------------------");
 	if (offering_faction == this.game.player) {
 	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
 	}
+        
+	this.updateLog(this.returnFactionNickname(faction_responding) + " accepts trade offer");
 
         this.game.players_info[offering_faction-1].traded_this_turn = 1;
         this.game.players_info[faction_responding-1].traded_this_turn = 1;
@@ -2436,6 +2438,7 @@ console.log("----------------------------");
   	  }
 	  this.game.players_info[player-1].goods += amount;
   	}
+
 
         if (item === "commodities") {
   	  this.updateLog(this.returnFactionNickname(player) + " gains " + mv[3] + " commodities");
@@ -2950,8 +2953,23 @@ console.log("----------------------------");
 
         this.updateSectorGraphics(sector);
 
-	this.updateLog(this.returnFactionNickname(player) + " is preparing to fire PDS shots");
-	this.updateStatus(this.returnFaction(player) + " evaluating PDS defense");
+        let defender = -1;
+        let sys = imperium_self.returnSectorAndPlanets(sector);
+        for (let i = 0; i < sys.s.units.length; i++) {
+          if ((i + 1) != attacker) {
+            if (sys.s.units[i].length > 0) {
+              defender = (i + 1);
+            }
+          }
+        }
+
+        //
+        // everyone skips if nothing to attack
+        //
+        if (defender == -1) {
+	  return 1;
+        }
+
 
 	if (this.game.player == player) {
           this.playerPlayPDSAttack(player, attacker, sector);        

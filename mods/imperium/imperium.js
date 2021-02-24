@@ -1240,7 +1240,7 @@ console.log("P: " + planet);
     this.importPromissary("trade", {
       name        :       "Trade Promissary" ,
       faction	  :	  -1,
-      text	  :	  "When the owner replenishes commodities, you may trigger this to gain their commodities as trade goods" ,
+      text	  :	  "When the owner replenishes commodities, this promissary triggers and you gain their commodities as trade goods" ,
       gainCommodities	:	function(imperium_self, player, amount) {
 	let promissary_name = imperium_self.game.players_info[player-1].faction + "-" + "trade";
 	let pprom = imperium_self.returnPromissaryPlayer(promissary_name);
@@ -14053,6 +14053,8 @@ console.log("----------------------------");
 	if (offering_faction == this.game.player) {
 	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
 	}
+        
+	this.updateLog(this.returnFactionNickname(faction_responding) + " accepts trade offer");
 
         this.game.players_info[offering_faction-1].traded_this_turn = 1;
         this.game.players_info[faction_responding-1].traded_this_turn = 1;
@@ -14259,6 +14261,7 @@ console.log("----------------------------");
   	  }
 	  this.game.players_info[player-1].goods += amount;
   	}
+
 
         if (item === "commodities") {
   	  this.updateLog(this.returnFactionNickname(player) + " gains " + mv[3] + " commodities");
@@ -14773,8 +14776,23 @@ console.log("----------------------------");
 
         this.updateSectorGraphics(sector);
 
-	this.updateLog(this.returnFactionNickname(player) + " is preparing to fire PDS shots");
-	this.updateStatus(this.returnFaction(player) + " evaluating PDS defense");
+        let defender = -1;
+        let sys = imperium_self.returnSectorAndPlanets(sector);
+        for (let i = 0; i < sys.s.units.length; i++) {
+          if ((i + 1) != attacker) {
+            if (sys.s.units[i].length > 0) {
+              defender = (i + 1);
+            }
+          }
+        }
+
+        //
+        // everyone skips if nothing to attack
+        //
+        if (defender == -1) {
+	  return 1;
+        }
+
 
 	if (this.game.player == player) {
           this.playerPlayPDSAttack(player, attacker, sector);        
@@ -17164,7 +17182,8 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
             <label for="game_length ">Game Length:</label>
             <select name="game_length">
               <option value="4">4 VP</option>
-              <option value="8" selected>8 VP</option>
+              <option value="8">8 VP</option>
+              <option value="10" selected>10 VP</option>
               <option value="12">12 VP</option>
               <option value="14">14 VP</option>
             </select>
@@ -23301,8 +23320,8 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {

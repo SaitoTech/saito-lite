@@ -46,7 +46,7 @@ class Twilight extends GameTemplate {
 
     this.moves           = [];
     this.cards    	 = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     //
     // newbie mode
@@ -2234,6 +2234,11 @@ console.log("place: " + mv[1] + " -- " + player);
 	    if (mv[2] == "opponent_cards_in_hand") {
               this.game.state.opponent_cards_in_hand = parseInt(mv[3]);
 	    }
+	    if (mv[3]) {
+	      if (mv[3] == "back_button_cancelled") {
+                this.game.state.back_button_cancelled = parseInt(mv[4]);
+	      }
+	    }
           }
           this.game.queue.splice(qe, 1);
         }
@@ -2996,7 +3001,6 @@ if (this.game.player == 0) {
           //
           // back button functions again
           //
-console.log("resetging bbc");
           this.game.state.back_button_cancelled = 0;
 
           //
@@ -3726,10 +3730,6 @@ console.log("resetging bbc");
       if (twilight_self.game.state.headline == 1) { bind_back_button_state = false; }
       if (twilight_self.game.state.back_button_cancelled == 1) { bind_back_button_state = false; }
 
-console.log("event_before_ops: " + twilight_self.game.state.event_before_ops);
-console.log("headline: " + twilight_self.game.state.headline);
-console.log("back_button_cancelled: " + twilight_self.game.state.back_button_cancelled);
-
       let html = twilight_self.formatPlayOpsStatus(player, ops, bind_back_button_state); // back button
       twilight_self.updateStatus(html);
 
@@ -4196,7 +4196,6 @@ this.startClock();
     // remove back button from forced gameplay
     //
     if (selected_card != null) { 
-console.log("SELECTED CARD NOT NULL: bbc");
       this.game.state.back_button_cancelled = 1; 
     }
 
@@ -6398,7 +6397,6 @@ console.log("CONTROL IS: " + control);
     //
     // cancel back button on subsequent cards picks
     //
-//console.log("END TURN -- bbc");
     //this.game.state.back_button_cancelled = 1;
 
 

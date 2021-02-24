@@ -2600,7 +2600,8 @@ console.log("H: " + h);
 
   returnGameOptionsHTML() {
 
-    return `
+    let options_html = `
+
             <label for="stake">Initial Stake:</label>
             <select name="stake">
               <option value="100">100</option>
@@ -2608,6 +2609,21 @@ console.log("H: " + h);
               <option value="1000" selected="selected">1000</option>
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
+            </select>
+
+            <select name="crypto">
+              <option value="" selected="selected">none</option>
+              <option value="SAITO">SAITO</option>
+    `;
+
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].ticker != "" && this.app.modules.mods[i].ticker != undefined) {
+        options_html += `<option value="${this.app.modules.mods[i].ticker}" selected="selected">${this.app.modujles.mods[i].ticker}</option>`;
+      }
+    }
+
+    options_html += `
+
             </select>
 
             <label for="observer_mode">Observer Mode:</label>
@@ -2618,9 +2634,9 @@ console.log("H: " + h);
 
       <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 
-
     `;
 
+     return options_html;
   }
 
 

@@ -34,6 +34,7 @@
       if (ussr_roll > us_roll) { is_winner = 1; }
 
       if (is_winner == 0) {
+        this.updateLog("<span>Summit: no winner</span>");
         return 1;
       } else {
 
@@ -51,8 +52,10 @@
           twilight_self.addMove("resolve\tsummit");
 
           if (us_roll > ussr_roll) {
+            twilight_self.updateLog("<span>US receives 2 VP from Summit</span>");
             twilight_self.addMove("vp\tus\t2");
           } else {
+            twilight_self.updateLog("<span>USSR receives 2 VP from Summit</span>");
             twilight_self.addMove("vp\tussr\t2");
           }
 
@@ -67,12 +70,14 @@
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
               twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\traise");
+              twilight_self.addMove("notify\tDEFCON is raised by 1");
               twilight_self.endTurn();
             }
             if (action2 == "lower") {
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
               twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\tlower");
+              twilight_self.addMove("notify\tDEFCON is lowered by 1");
               twilight_self.endTurn();
             }
             if (action2 == "same") {
