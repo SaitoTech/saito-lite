@@ -108,7 +108,7 @@
       gainActionCards : function(imperium_self, player, amount) {
         if (imperium_self.doesPlayerHaveTech(player, "faction6-scheming")) {
           imperium_self.game.queue.push("yssaril_action_card_discard\t"+player+"\t1");
-          imperium_self.game.queue.push("gain\t"+imperium_self.game.player+"\taction_cards"+"\t"+1+"\t"+"0");
+          imperium_self.game.queue.push("gain\t"+player+"\taction_cards"+"\t"+1+"\t"+"0");
           imperium_self.game.queue.push("DEAL\t2\t"+player+"\t1");
           imperium_self.game.queue.push("NOTIFY\t" + imperium_self.returnFaction(player) + " gains bonus action card and must discard one");
 	}
