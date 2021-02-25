@@ -50,7 +50,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
       <div class="settings-wallet-management">
 
-        <div style="margin-top:20px;margin-bottom:30px;" class="settings-buttons">
+        <div class="settings-buttons">
           <button id="backup-account-btn" class="backup-account-btn"">Backup Wallet</button>
           <button id="restore-account-btn" class="restore-account-btn">Restore Wallet</button>
           <button id="restore-privatekey-btn" class="restore-privatekey-btn">Import Private Key</button>
