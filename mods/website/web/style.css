@@ -1466,7 +1466,7 @@ h2, h5 {
 
 #settings-dropdown .wallet-action-row:hover {
   background-color: var(--saito-skyline-grey);
-  padding: 0.5rem 14px;
+  color: #444;
 }
 
 .wallet-action-row i {
