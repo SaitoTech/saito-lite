@@ -140,6 +140,7 @@
 	      }
 	    }
 
+
 	    //
 	    // set confirming player as inactive
 	    //
@@ -147,7 +148,8 @@
 	      if (this.game.players[i] === mv[3]) {
 	        this.setPlayerInactive((i+1));
 		if (!this.game.confirms_players.includes(mv[3])) {
-		  this.addPublickeyConfirm(mv[3], parseInt(mv[2]));
+		  this.game.confirms_received += parseInt(mv[2]);
+		  this.game.confirms_players.push(mv[3]);
 	        }
 	      }
 	    }
@@ -601,7 +603,7 @@ console.log("----------------------------");
   	let stage = parseInt(mv[3]);  
 
 	if (this.game.state.playing_strategy_card_secondary == 1) {
-	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
+	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey()) || this.game.tmp_confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	    return 0;
 	  } else {
 	    //

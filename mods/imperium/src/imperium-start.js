@@ -29,6 +29,8 @@ class Imperium extends GameTemplate {
     this.game.confirms_needed   = 0;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
+    this.game.tmp_confirms_received = 0;
+    this.game.tmp_confirms_players  = [];
     
     //
     // not specific to THIS game

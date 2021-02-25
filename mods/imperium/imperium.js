@@ -29,6 +29,8 @@ class Imperium extends GameTemplate {
     this.game.confirms_needed   = 0;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
+    this.game.tmp_confirms_received = 0;
+    this.game.tmp_confirms_players  = [];
     
     //
     // not specific to THIS game
@@ -3229,7 +3231,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
       gainActionCards : function(imperium_self, player, amount) {
         if (imperium_self.doesPlayerHaveTech(player, "faction6-scheming")) {
           imperium_self.game.queue.push("yssaril_action_card_discard\t"+player+"\t1");
-          imperium_self.game.queue.push("gain\t"+imperium_self.game.player+"\taction_cards"+"\t"+1+"\t"+"0");
+          imperium_self.game.queue.push("gain\t"+player+"\taction_cards"+"\t"+1+"\t"+"0");
           imperium_self.game.queue.push("DEAL\t2\t"+player+"\t1");
           imperium_self.game.queue.push("NOTIFY\t" + imperium_self.returnFaction(player) + " gains bonus action card and must discard one");
 	}
@@ -11963,6 +11965,7 @@ handleSystemsMenuItem() {
 	      }
 	    }
 
+
 	    //
 	    // set confirming player as inactive
 	    //
@@ -11970,7 +11973,8 @@ handleSystemsMenuItem() {
 	      if (this.game.players[i] === mv[3]) {
 	        this.setPlayerInactive((i+1));
 		if (!this.game.confirms_players.includes(mv[3])) {
-		  this.addPublickeyConfirm(mv[3], parseInt(mv[2]));
+		  this.game.confirms_received += parseInt(mv[2]);
+		  this.game.confirms_players.push(mv[3]);
 	        }
 	      }
 	    }
@@ -12424,7 +12428,7 @@ console.log("----------------------------");
   	let stage = parseInt(mv[3]);  
 
 	if (this.game.state.playing_strategy_card_secondary == 1) {
-	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
+	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey()) || this.game.tmp_confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	    return 0;
 	  } else {
 	    //
@@ -17155,6 +17159,8 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
     this.game.confirms_needed   = num;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
+    this.game.tmp_confirms_received = 0;
+    this.game.tmp_confirms_players  = [];
 
     // if confirms in the number of players, we set them all as active
     if (this.game.confirms_needed == this.game.players_info.length) {
