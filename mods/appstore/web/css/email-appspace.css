@@ -216,6 +216,15 @@
   left: -2px;
 }
 
+@media only screen and (max-width: 900px) {
+  #appstore-publish-moddrop {
+    width: 100%;
+  }
+  #appstore-publish-moddrop-inside{
+      width: 100%;
+  }
+
+}
 .submit-file-btn-box {
   width: 400px;
   height: auto;

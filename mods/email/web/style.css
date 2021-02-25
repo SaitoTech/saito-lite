@@ -8,7 +8,6 @@
 }
 .email-payment-btn {
   float: right;
-  padding: 10px;
 }
 .email-payment-btn:hover {
   cursor: pointer;
@@ -138,9 +137,9 @@ hr {
 }
 
 .email-detail-left-options {
-  /* grid-gap: 0.5em;
+  
   grid-template-columns: 2em auto;
-  align-items: center; */
+  
 }
 
 .email-detail-right-options {
@@ -551,6 +550,11 @@ hr {
     align-items: center;
     grid-gap: 0.3em;
     font-size: 1.2em;
+  }
+  .email-icons-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 0.2em;
   }
   .email-bars-menu {
     position: absolute;
