@@ -5182,6 +5182,7 @@ console.log("PLANET: " + JSON.stringify(planet));
 	mycallback(1);
       },
   });
+***/
 
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
@@ -5334,7 +5335,6 @@ console.log("PLANET: " + JSON.stringify(planet));
       },
   });
 
-***/
 
   this.importStageIPublicObjective('grand-gesture', {
       name 	: 	"A Grand Gesture" ,
@@ -5355,7 +5355,7 @@ console.log("PLANET: " + JSON.stringify(planet));
       },
   });
 
-/***
+
   this.importStageIPublicObjective('establish-trade-outposts', {
       name 	: 	"Establish Trade Outposts" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -5389,7 +5389,7 @@ console.log("PLANET: " + JSON.stringify(planet));
       },
   });
 
-***/
+
 
 
   this.importStageIIPublicObjective('master-of-commerce', {
