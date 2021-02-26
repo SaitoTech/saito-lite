@@ -1,9 +1,12 @@
 
+/*****
     this.importActionCard('confusing-legal-text', {
   	name : "Confusing Legal Text" ,
   	type : "post_agenda" ,
   	text : "After the speaker has cast his votes, pick another player to win if you are the leading candidate" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+//	    imperium_self.game.state.votes_cast[bribing_player-1].votes += goods_spent;
 
 	  if (imperium_self.agenda_cards[card].elect === "player") {
 
@@ -66,6 +69,8 @@
 	  return 1;
 	}
     });
+****/
+
 
     this.importActionCard('distinguished-councillor', {
   	name : "Distinguished Coucillor" ,

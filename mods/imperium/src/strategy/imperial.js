@@ -12,30 +12,73 @@
   	    imperium_self.playerAcknowledgeNotice("You will first be asked to score your public objective. The game will then allow other players to purchase secret objectives.", function() {
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
-                imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
-                imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
-                if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
-		imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
-                imperium_self.addMove("score\t"+imperium_self.game.player+"\t"+"1"+"\t"+"new-byzantium");
-		imperium_self.updateStatus("scoring completed");
-                imperium_self.endTurn();
+
+console.log(vp + " --- " + objective);
+
+                if (vp > 0 && (imperium_self.stage_i_objectives[objective] != undefined || imperium_self.stage_ii_objectives[objective] != undefined)) {
+
+console.log("HERE FOLLOW-UP");
+
+                  if (imperium_self.stage_i_objectives[objective] != undefined) {
+                    imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
+	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
+	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+	  	      imperium_self.updateStatus("scoring completed");
+                      imperium_self.endTurn();
+		    });
+		  } else {
+                    imperium_self.stage_ii_objectives[objective].scoreObjective(imperium_self, player, function() {
+	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
+	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+	  	      imperium_self.updateStatus("scoring completed");
+                      imperium_self.endTurn();
+		    });
+		  }
+		} else {
+                  imperium_self.addMove("score\t"+imperium_self.game.player+"\t"+"1"+"\t"+"new-byzantium");
+		  imperium_self.updateStatus("scoring completed");
+                  imperium_self.endTurn();
+		}
               }, 1);
             });
 	  };
+
+
+
+
 
 	  let supplementary_secret = function() {
   	    imperium_self.playerAcknowledgeNotice("You will next be asked to score a public objective. The game will then allow other players to purchase secret objectives.", function() {
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
-                imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
-                imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
-                if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
-		imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
-                imperium_self.addMove("gain\t"+strategy_card_player+"\tsecret_objectives\t1");
-                for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-                  imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1");
-                }
-                imperium_self.endTurn();
+
+console.log(vp + " --2-- " + objective);
+
+                if (vp > 0 && (imperium_self.stage_i_objectives[objective] != undefined || imperium_self.stage_ii_objectives[objective] != undefined)) {
+
+console.log("HERE 2");
+
+                  if (imperium_self.stage_i_objectives[objective] != undefined) {
+                    imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
+	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
+	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+	  	      imperium_self.updateStatus("scoring completed");
+                      for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
+                      imperium_self.endTurn();
+		    });
+		  } else {
+                    imperium_self.stage_ii_objectives[objective].scoreObjective(imperium_self, player, function() {
+	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
+	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+	  	      imperium_self.updateStatus("scoring completed");
+                      for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
+                      imperium_self.endTurn();
+		    });
+		  }
+		} else {
+                  for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
+                  imperium_self.endTurn();
+		}
               }, 1);
             });
 	  };
@@ -82,24 +125,16 @@
 	    my_secret_vp = vp;
 	    my_secret_objective = objective;
 
-console.log("elected to score: " + my_secret_vp + " and " + my_secret_objective);
-
             imperium_self.playerScoreVictoryPoints(imperium_self, function(x, vp, objective) {
-
-console.log("out of playerScoreVictoryPoints in Tertiary");
 
 	      imperium_self.updateStatus("scoring completed");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
 
               if (my_secret_vp > 0) { 
-console.log("A");
 		
                 if (imperium_self.secret_objectives[my_secret_objective] != undefined) {
-console.log("ABOUT TO SCORE SECRET!");
                   imperium_self.secret_objectives[my_secret_objective].scoreObjective(imperium_self, player, function() {
-
-console.log("AND SCORED!");
 
 		    imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); 
 
@@ -107,7 +142,6 @@ console.log("AND SCORED!");
 
         	      if (imperium_self.stage_i_objectives[objective] != undefined) {
         		imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
-console.log("1 - 1 - 1")
 			  imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
 	    		  imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(my_secret_objective);
 	      		  imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
@@ -116,7 +150,6 @@ console.log("1 - 1 - 1")
         	      }
         	      if (imperium_self.stage_ii_objectives[objective] != undefined) {
         		imperium_self.stage_ii_objectives[objective].scoreObjective(imperium_self, player, function() {
-console.log("1 - 1 - 2")
 			  imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
 	    		  imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(my_secret_objective);
 	      		  imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
@@ -138,7 +171,6 @@ console.log("1 - 1 - 2")
               if (vp > 0) {
         	if (imperium_self.stage_i_objectives[objective] != undefined) {
         	  imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
-console.log("1 - 1 - 3")
 		    imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
 	            imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 		    imperium_self.endTurn();
@@ -146,7 +178,6 @@ console.log("1 - 1 - 3")
         	}
         	if (imperium_self.stage_ii_objectives[objective] != undefined) {
         	  imperium_self.stage_ii_objectives[objective].scoreObjective(imperium_self, player, function() {
-console.log("1 - 1 - 4")
 		    imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
 	            imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 		    imperium_self.endTurn();

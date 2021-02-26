@@ -10,7 +10,6 @@
 	mycallback(1);
       },
   });
-***/
 
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
@@ -163,6 +162,7 @@
       },
   });
 
+***/
 
   this.importStageIPublicObjective('grand-gesture', {
       name 	: 	"A Grand Gesture" ,
@@ -183,6 +183,7 @@
       },
   });
 
+/***
   this.importStageIPublicObjective('establish-trade-outposts', {
       name 	: 	"Establish Trade Outposts" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -215,3 +216,6 @@
 	}
       },
   });
+
+***/
+

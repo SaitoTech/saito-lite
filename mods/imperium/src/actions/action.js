@@ -192,6 +192,8 @@ ACTION CARD - types
 
 
 
+
+/*****
     this.importActionCard('repeal-law', {
   	name : "Repeal Law" ,
   	type : "action" ,
@@ -248,6 +250,8 @@ ACTION CARD - types
 	  return 1;
         }
     });
+***/
+
 
     this.importActionCard('veto', {
   	name : "Veto" ,
