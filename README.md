@@ -167,4 +167,4 @@ To connect to the Saito Network please contact us at:
 
 * network@saito.tech
 * [Discord](https://discord.gg/QjeXTC3)
-* [Telegram](https://t.me/joinchat/BOSYOk_BR8HIqp-scldlEA)
+* [Telegram](https://t.me/SaitoIO)
