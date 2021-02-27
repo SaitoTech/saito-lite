@@ -12122,6 +12122,8 @@ handleSystemsMenuItem() {
 	    x.rider 	= mv[2];
 	    x.choice 	= mv[3];
 
+console.log("RIDER: " + x.player + " -- " + x.rider + " -- " + x.choice);
+
 	this.game.state.riders.push(x);  
 
   	this.game.queue.splice(qe, 1);
@@ -12773,6 +12775,8 @@ console.log("----------------------------");
 	    let is_planet = 0;
 	    let is_player = 0;
 	    let is_sector = 0;
+
+console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 
 	    if (this.agenda_cards[agenda].elect == "planet") { 
 	      is_planet = 1;

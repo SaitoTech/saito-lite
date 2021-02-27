@@ -21,6 +21,21 @@ body {
   scrollbar-shadow-color: #868686;
 }
 
+
+.stats-overlay {
+  min-width: 220px;
+  min-height: 200px;
+  overflow-y: scroll;
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+.stats-overlay table {
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:auto;
+  margin-bottom: auto;
+}
+
 .link {
   border-bottom: 1px dashed;
   cursor: pointer;

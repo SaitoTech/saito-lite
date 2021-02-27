@@ -36,13 +36,16 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
     html += `<div data-id="${sig}" id="post-view-edit" class="post-view-edit">edit</div>`;
   }
 
-   html += `
+  let comment_filler = '<div class="post-loader-spinner loader" id="post-loader-spinner"></div>';
+  if (tx.msg.comment) { comment_filler = tx.msg.comment; }
+
+  html += `
         <div data-id="${sig}" id="post-view-report" class="post-view-report">report</div>
       </div>
-  
-      <div data-id="${sig}" id="post-view-parent-comment" class="post-view-parent-comment">${tx.msg.comment}</div>
+      <div data-id="${sig}" id="post-view-parent-comment" class="post-view-parent-comment">${comment_filler}</div>
     </div>
-    `;
+  `;
+
 
     if (tx.msg.images.length > 0) {
       html += '<div id="post-view-gallery" class="post-view-gallery">';
@@ -54,7 +57,7 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
       html += '<div id="post-view-gallery" style="display:none" class="post-view-gallery"></div>';
     }
 
-    html += `
+  html += `
     <div id="post-view-comments" class="post-view-comments">
     </div>
     <div id="post-view-leave-comment" class="post-view-leave-comment">

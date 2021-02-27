@@ -113,6 +113,15 @@ class Wordblocks extends GameTemplate {
       }
     });
     this.menu.addSubMenuOption("game-game", {
+      text : "Stats",
+      id : "game-stats",
+      class : "game-stats",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnStatsOverlay());
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
       text : "Exit",
       id : "game-exit",
       class : "game-exit",
@@ -211,6 +220,45 @@ class Wordblocks extends GameTemplate {
     } catch (err) {}
 
   }
+
+
+
+  returnStatsOverlay() {
+
+    let html = '';
+
+    html += '<div class="stats-overlay">';
+    html += '<table cellspacing="10px" rowspacing="10px">';
+    html += '<tr>';
+    for (let i = 0; i < this.game.opponents.length+1; i++) {
+      html += `<td>Player ${(i+1)}</td>`;
+    }
+    html += '</tr>';
+
+    html += '<tr>';
+    for (let i = 0; i < this.game.opponents.length+1; i++) {
+      let words_scored_html = '<table>';
+      for (let z = 0; z < this.game.words_played[i].length; z++) {
+	words_scored_html += '<tr><td>' + this.game.words_played[i][z].word + '</td><td>' + this.game.words_played[i][z].score + '</td></tr>';
+      }
+      words_scored_html += '</table>';
+      html += `<td>${words_scored_html}</td>`;
+    }
+    html += '</tr><tr>';
+    for (let i = 0; i < this.game.opponents.length+1; i++) {
+      html += `<td>${this.game.score[$(i+1)]}</td>`;
+    }
+    html += '</tr>';
+    html += '</table>';
+    html += '</div>';
+
+    return html;
+
+  }
+
+
+
+
 
   initializeGame(game_id) {
 
@@ -323,11 +371,18 @@ class Wordblocks extends GameTemplate {
 
     if (this.game.score == undefined) {
       this.game.score = [];
-
       for (let i = 0; i < players; i++) {
         this.game.score[i] = 0;
       }
     }
+
+    if (this.game.words_played == undefined) {
+      this.game.words_played = [];
+      for (let i = 0; i < players; i++) {
+        this.game.words_played[i] = [];
+      }
+    }
+
 
     var op = 0;
     for (let i = 0; i < players; i++) {
@@ -1676,6 +1731,7 @@ if (this.game.player != 0) {
         return 1;
       }
 
+
       //
       // place word player x y [horizontal/vertical]
       //
@@ -1693,7 +1749,16 @@ if (this.game.player != 0) {
           score = this.scoreWord(word, player, orient, x, y);
           this.exhaustWord(word, orient, x, y);
           this.addScoreToPlayer(player, score);
-        }
+
+	  this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
+
+        } else {
+
+          score = this.scoreWord(word, player, orient, x, y);
+	  this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
+
+	}
+
 
         if (wordblocks_self.game.over == 1) {
           return;
