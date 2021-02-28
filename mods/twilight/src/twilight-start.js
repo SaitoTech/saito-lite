@@ -7926,12 +7926,8 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
         scoring = this.calculateControlledBattlegroundCountries(scoring, as_bg_countries);
 
-console.log("HEE: " + JSON.stringify(scoring));
-
         scoring.us.total = scoring.us.bg;
         scoring.ussr.total = scoring.ussr.bg;
-
-console.log("SCORING: " + JSON.stringify(scoring));
 
         scoring = this.calculateControlledCountries(scoring, as_countries);
 
@@ -7969,7 +7965,7 @@ console.log("SCORING: " + JSON.stringify(scoring));
 	  // Shuttle Diplomacy also removes adjacency of Japan if controlled
 	  //
           if (this.game.state.events.shuttlediplomacy == 1) {
-	    console.log("Shuttle Diplomacy removes USSR control of Japan, which also eliminates adjacency while scoring.");
+	    this.updateLog("USSR loses Japan/US-adjacency with Shuttle Diplomacy");
           } else {
 	    scoring.ussr.vp++; 
 	  }

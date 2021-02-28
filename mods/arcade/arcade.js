@@ -3,7 +3,6 @@ const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeSidebar = require('./lib/arcade-sidebar/arcade-sidebar');
-//const AddressController = require('../../lib/ui/menu/address-controller');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const getMockGames = require('./mockinvites.js');
 const ArcadeContainerTemplate = require('./lib/arcade-main/templates/arcade-container.template');
@@ -408,7 +407,6 @@ class Arcade extends ModTemplate {
         // do not process if transaction is not for us
         //
         if (!tx.isTo(app.wallet.returnPublicKey())) { 
-
           return;
         }
 
@@ -572,6 +570,8 @@ class Arcade extends ModTemplate {
       let txmsg = tx.returnMessage();
       let conf = 0;
       let blk = null;
+
+console.log("arcade spv update: " + JSON.stringify(txmsg));
 
       //
       // open msgs -- public invitations
@@ -1425,6 +1425,7 @@ class Arcade extends ModTemplate {
       }
     });
 
+/*** FEB 28 -- crypt issue? deleting game from options after init?
     if (this.app.options) {
       if (this.app.options.games) {
         for (let i = 0; i < this.app.options.games.length; i++) {
@@ -1435,7 +1436,7 @@ class Arcade extends ModTemplate {
         }
       }
     }
-
+***/
     this.renderArcadeMain(this.app, this);
   }
 
