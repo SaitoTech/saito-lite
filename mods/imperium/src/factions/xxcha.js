@@ -6,7 +6,7 @@
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship","faction3-field-nullification"],
       background	: 	'faction3.jpg',
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the XXCha Kingdom, a faction which excels in diplomacy and defensive weaponry. With the proper alliances and political maneuvers your faction you can be a contender for the Imperial Throne. Good luck!</div>`
@@ -222,7 +222,6 @@
           html += 'Select one agenda to quash in the Galactic Senate.<ul>';
           for (i = 0; i < imperium_self.game.state.agendas.length; i++) {
 	    if (imperium_self.game.state.agendas[i] != "") {
-console.log("agenda: " + imperium_self.game.state.agendas[i]);
               html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
             }
           }
@@ -296,11 +295,18 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
           imperium_self.game.players_info[player-1].field_nullification = 0;
+          imperium_self.game.players_info[player-1].field_nullification_exhausted = 0;
+        }
+      },
+      onNewRound     :    function(imperium_self, player) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction3-field-nullification")) {
+          imperium_self.game.players_info[player-1].field_nullification_exhausted = 0;
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "faction3-field-nullification") {
           imperium_self.game.players_info[gainer-1].field_nullification = 1;
+          imperium_self.game.players_info[player-1].field_nullification_exhausted = 0;
         }
       },
       activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
@@ -310,11 +316,21 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 	return 0;
       },
       activateSystemEvent : function(imperium_self, activating_player, player, sector) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction3-field-nullification") && player != activating_player) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction3-field-nullification")) {
+
+	  if (imperium_self.game.players_info[player-1].field_nullification_exhausted == 1) { return 1; }
+
+	  if (imperium_self.game.player != player) {
+	    imperium_self.updateStatus(imperium_self.returnFaction(player) + " is deciding whether to use Nullification Fields");
+	    return 0;
+	  }
+
 	  let html = 'Do you wish to use Field Nullification to terminate this player\'s turn? <ul>';
 	  html += '<li class="textchoice" id="yes">activate nullification field</li>';
 	  html += '<li class="textchoice" id="no">do not activate</li>';
 	  html += '</ul>';
+
+	  imperium_self.updateStatus(html);
 
 	  $('.textchoice').off();
 	  $('.textchoice').on('click', function() {
@@ -322,6 +338,10 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 	    let choice = $(this).attr("id");
 
 	    if (choice == "yes") {
+              imperium_self.addMove("resolve\tplay");
+              imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "0");
+              imperium_self.addMove("player_end_turn\t" + imperium_self.game.player);
+	      imperium_self.addMove("field_nullification\t"+player+"\t"+activating_player+"\t"+sector);
 	      imperium_self.endTurn();
 	    }
 	    if (choice == "no") {
@@ -329,6 +349,21 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 	    }
 	  });
 	  return 0;
+        }
+	return 1;
+      },
+      handleGameLoop : function(imperium_self, qe, mv) {
+        if (mv[0] == "field_nullification") {
+
+          let player = parseInt(mv[1]);
+          let activating_player = parseInt(mv[2]);
+	  let sector = mv[3];
+          imperium_self.game.queue.splice(qe, 1);
+
+	  imperium_self.updateLog(imperium_self.returnFactionNickname(player) + " uses Nullification Fields to end " + imperium_self.returnFactionNickname(activating_player) + " turn");
+
+          return 1;
+
         }
 	return 1;
       }
