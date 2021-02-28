@@ -304,28 +304,33 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
         }
       },
       activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
-	if (imperium_self.doesSectorContainPlayerShips(imperium_self.game.player, sector)) { return 1; }
+        if (imperium_self.doesPlayerHaveTech(player, "faction3-field-nullification")) {
+	  if (imperium_self.doesSectorContainPlayerShips(player, sector)) { return 1; }
+	}
 	return 0;
       },
       activateSystemEvent : function(imperium_self, activating_player, player, sector) {
-	let html = 'Do you wish to use Field Nullification to terminate this player\'s turn? <ul>';
-	html += '<li class="textchoice" id="yes">activate nullification field</li>';
-	html += '<li class="textchoice" id="no">do not activate</li>';
-	html += '</ul>';
+        if (imperium_self.doesPlayerHaveTech(player, "faction3-field-nullification") && player != activating_player) {
+	  let html = 'Do you wish to use Field Nullification to terminate this player\'s turn? <ul>';
+	  html += '<li class="textchoice" id="yes">activate nullification field</li>';
+	  html += '<li class="textchoice" id="no">do not activate</li>';
+	  html += '</ul>';
 
-	$('.textchoice').off();
-	$('.textchoice').on('click', function() {
+	  $('.textchoice').off();
+	  $('.textchoice').on('click', function() {
 
-	  let choice = $(this).attr("id");
+	    let choice = $(this).attr("id");
 
-	  if (choice == "yes") {
-	    imperium_self.endTurn();
-	  }
-	  if (choice == "no") {
-	    imperium_self.endTurn();
-	  }
-	});
-	return 0;
+	    if (choice == "yes") {
+	      imperium_self.endTurn();
+	    }
+	    if (choice == "no") {
+	      imperium_self.endTurn();
+	    }
+	  });
+	  return 0;
+        }
+	return 1;
       }
     });
 
