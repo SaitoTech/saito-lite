@@ -594,7 +594,9 @@ console.log("arcade spv update: " + JSON.stringify(txmsg));
       // join msgs -- add myself to game list
       //
       if (txmsg.request == "join") {
+console.log("joining game on open list...");
         this.joinGameOnOpenList(tx);
+console.log("and processing join request");
         this.receiveJoinRequest(blk, tx, conf, app);
       }
 
@@ -1510,8 +1512,12 @@ console.log("arcade spv update: " + JSON.stringify(txmsg));
       }
     }
 
-    if (this.browser_active == 1) {
-      this.render(this.app);
+    try {
+      if (this.browser_active == 1) {
+        this.render(this.app);
+      }
+    } catch (err) {
+       console.log("Non-fatal error rendering open game list");
     }
 
 
