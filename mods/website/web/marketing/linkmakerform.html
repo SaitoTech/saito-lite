@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    
+    <div style="display: grid; grid-template-columns: 10% auto">
+      <span>campaign*:</span><input id="campaign" type="text" placeholder="PublicSale"/>
+      <span>channel*: </span><input id="channel" type="text" placeholder="PartnerABC"/>
+      <span>sub-channel*: </span><input id="sub" type="text" placeholder="WeChat"/>
+      <span>redirect: </span><input id="redirect" type="text" placeholder="/arcade"/>
+      <span>* => required</span><span></span>
+      <button id="button" type="button" value="Ok">Go</button><span></span>
+    </div>
+    <div id="output"></div>
+  </body>
+  <script>
+    document.getElementById('button').onclick = () => {
+      console.log("asdf");
+      console.log(document.getElementById("campaign").value);
+      let campaign = document.getElementById("campaign").value;
+      let channel = document.getElementById("channel").value;
+      let sub = document.getElementById("sub").value;
+      let redirect = document.getElementById("redirect").value;
+      if(redirect){
+        document.getElementById("output").innerHTML = `http://saito.io/l/${campaign}/${channel}/${sub}?=${redirect}`;  
+      } else {
+        document.getElementById("output").innerHTML = `http://saito.io/l/${campaign}/${channel}/${sub}`;  
+      }
+    };
+  </script>
+</html>

@@ -98,7 +98,7 @@ module.exports = ArcadeGameDetails = {
     document.getElementById('game-invite-btn').addEventListener('click', (e) => {
       try {
         let options = getOptions();
-        app.browser.logMatomoEvent("Arcade", "ArcadeCreateNewInvite", options.gamename);
+        app.browser.logMatomoEvent("Arcade", "ArcadeCreateNewInvite", "ArcadeCreateNewInvite", options.gamename);
         let gamemod = app.modules.returnModule(options.gamename);
         let gamedata = {
           name: gamemod.name,
