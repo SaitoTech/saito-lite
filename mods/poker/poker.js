@@ -497,6 +497,8 @@ class Poker extends GameTemplate {
 
       if (mv[0] === "turn") {
 
+console.log("CRYPTO: " + this.game.crypto);
+
         let player_to_go = parseInt(mv[1]);
         this.displayBoard();
 
@@ -547,17 +549,27 @@ class Poker extends GameTemplate {
           }
 
           //
-          // if only one player, everyone else settles
-          // everyone should send anything they owe to winner
+          // everyone settles with winner if needed
           //
-          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
-          newtx = this.app.wallet.signTransaction(newtx);
-          this.app.network.propagateTransaction(newtx);
+console.log("SEND A");
+console.log("do we have a crypto set: " + this.game.crypto);
+	  if (this.game.crypto != "") {
+            for (let i = 0; i < this.game.players; i++) {
+console.log("for player: " + (i+1));
+	      if (this.game.state.player_pot[i] > 0) {
+console.log("PLAYER OWES STHING");
+	        if ((this.game.player-1) == player_left_idx) {
+                  this.game.queue.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+	        } else {
+                  this.game.queue.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+                  this.game.queue.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+		}
+	      }
+            }
+          }
 
           // if everyone has folded - start a new round
           this.startNextRound();
-
-//          this.game.queue.push("PAY" + "\t" + this.game.state.player_pot[this.game.player - 1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
 
           return 1;
         }
@@ -792,8 +804,11 @@ class Poker extends GameTemplate {
               //
               // non-winners send wagers to winner
               //
-//              round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1] / winners.length) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
-
+	      if (this.game.crypto != "") {
+salert("SEND B");
+                this.game.queue.push("RECEIVE" + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[this.game.player-1]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+                this.game.queue.push("SEND" + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[this.game.player-1]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+              }
             }
           } else {
 
@@ -803,7 +818,12 @@ class Poker extends GameTemplate {
             this.updateLog(this.game.state.player_names[winners[0]] + " wins " + this.game.state.pot);
             this.game.state.player_credit[winners[0]] += this.game.state.pot;
 
-//            round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1]) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
+	    if (this.game.crypto != "") {
+salert("SEND C");
+              this.game.queue.push("RECEIVE" + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[this.game.player-1] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+              this.game.queue.push("SEND" + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[this.game.player-1] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+	    }
+
             //
             // non-winners send wagers to winner
             //
@@ -977,8 +997,22 @@ class Poker extends GameTemplate {
           //
           // everyone should send anything they owe to winner
           //
-//          this.game.queue.push("PAY" + "\t" + this.game.state.player_pot[this.game.player - 1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date.getTime()) + "\t" + "SAITO");
-
+console.log("SEND D");
+console.log("do we have a crypto set: " + this.game.crypto);
+	  if (this.game.crypto != "") {
+            for (let i = 0; i < this.game.players; i++) {
+console.log("for player: " + (i+1));
+	      if (this.game.state.player_pot[i] > 0) {
+console.log("PLAYER OWES STHING");
+	        if ((this.game.player-1) == player_left_idx) {
+                  this.game.queue.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+	        } else {
+                  this.game.queue.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+                  this.game.queue.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+		}
+	      }
+            }
+          }
 
         }
       }
@@ -1316,6 +1350,8 @@ console.log("this raise: " + this_raise);
     state.small_blind_paid = 0;
     state.required_pot = 0;
     state.last_raise = state.big_blind;
+
+    if (this.game.options.crypto != undefined) { this.game.crypto = this.game.options.crypto; }
 
     for (let i = 0; i < num_of_players; i++) {
       state.passed[i] = 0;
@@ -2612,7 +2648,7 @@ console.log("H: " + h);
             </select>
 
             <select name="crypto">
-              <option value="" selected="selected">none</option>
+              <option value="" selected>none</option>
               <option value="SAITO">SAITO</option>
     `;
 
@@ -2623,7 +2659,6 @@ console.log("H: " + h);
     }
 
     options_html += `
-
             </select>
 
             <label for="observer_mode">Observer Mode:</label>
@@ -2644,6 +2679,9 @@ console.log("H: " + h);
     let new_options = {};
     for (var index in options) {
       if (index == "stake") {
+        new_options[index] = options[index];
+      }
+      if (index == "crypto") {
         new_options[index] = options[index];
       }
     }

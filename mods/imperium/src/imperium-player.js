@@ -4171,16 +4171,16 @@ playerSelectUnitsToMove(destination) {
 
         if (already_moved == 1) {
           if (rift_passage == 0) {
-            html += `<li id="sector_${i}_${ii}" class=""><b>${obj.ships_and_sectors[i].ships[ii].name}</b></li>`;
+            html += `<li id="sector_${i}_${ii}" class=""><b>${imperium_self.returnShipInformation(obj.ships_and_sectors[i].ships[ii])}</b></li>`;
 	  } else {
-            html += `<li id="sector_${i}_${ii}" class=""><b>${obj.ships_and_sectors[i].ships[ii].name}</b> - rift</li>`;
+            html += `<li id="sector_${i}_${ii}" class=""><b>${imperium_self.returnShipInformation(obj.ships_and_sectors[i].ships[ii])}</b> - rift</li>`;
 	  }
         } else {
           if (obj.ships_and_sectors[i].ships[ii].move - (obj.ships_and_sectors[i].adjusted_distance[ii] + spent_distance_boost) >= 0) {
             if (rift_passage == 0) {
-	      html += `<li id="sector_${i}_${ii}" class="option">${obj.ships_and_sectors[i].ships[ii].name}</li>`;
+	      html += `<li id="sector_${i}_${ii}" class="option">${imperium_self.returnShipInformation(obj.ships_and_sectors[i].ships[ii])}</li>`;
             } else {
-	      html += `<li id="sector_${i}_${ii}" class="option">${obj.ships_and_sectors[i].ships[ii].name} - rift</li>`;
+	      html += `<li id="sector_${i}_${ii}" class="option">${imperium_self.returnShipInformation(obj.ships_and_sectors[i].ships[ii])} - rift</li>`;
 	    }
           }
         }
@@ -5409,6 +5409,7 @@ playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, 
     }
   }
 
+// HACK
   for (let p = 0; p < sys.p.length; p++) {
     for (let k = 0; k < sys.p[p].units[imperium_self.game.player - 1].length; k++) {
       if (filter_func(sys.p[p].units[imperium_self.game.player - 1][k])) {

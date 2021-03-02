@@ -145,7 +145,11 @@
                 imperium_self.endTurn();
               }
             });
-        }
+        } else {
+
+	  imperium_self.updateStatus("The Speaker is selecting two Agendas for consideration by the Senate");
+
+	}
       },
 
     });

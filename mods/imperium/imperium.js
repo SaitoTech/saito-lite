@@ -2613,7 +2613,6 @@ console.log("P: " + planet);
           html += 'Select one agenda to quash in the Galactic Senate.<ul>';
           for (i = 0; i < imperium_self.game.state.agendas.length; i++) {
 	    if (imperium_self.game.state.agendas[i] != "") {
-console.log("agenda: " + imperium_self.game.state.agendas[i]);
               html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
             }
           }
@@ -2754,20 +2753,6 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 
 	  imperium_self.updateLog(imperium_self.returnFactionNickname(player) + " uses Nullification Fields to end " + imperium_self.returnFactionNickname(activating_player) + " turn");
 
-console.log("QUEUE: " + JSON.stringify(imperium_self.game.queue));
-/****
-	  for (let i = imperium_self.game.queue.length-1; i > 0; i--) {
-	    let lqe = imperium_self.game.queue[i];
-console.log("testing : " + lqe);
-	    let lmv = lqe.split("\t");
-	    imperium_self.game.queue.splice(i, 1);
-	    if (lmv[0] === "play") {
-console.log("returning 1");
-              return 1;
-	    }
-	  }
-****/
-console.log("returning 0");
           return 1;
 
         }
@@ -4207,7 +4192,11 @@ console.log("HERE 2");
                 imperium_self.endTurn();
               }
             });
-        }
+        } else {
+
+	  imperium_self.updateStatus("The Speaker is selecting two Agendas for consideration by the Senate");
+
+	}
       },
 
     });
@@ -21502,16 +21491,16 @@ playerSelectUnitsToMove(destination) {
 
         if (already_moved == 1) {
           if (rift_passage == 0) {
-            html += `<li id="sector_${i}_${ii}" class=""><b>${obj.ships_and_sectors[i].ships[ii].name}</b></li>`;
+            html += `<li id="sector_${i}_${ii}" class=""><b>${imperium_self.returnShipInformation(obj.ships_and_sectors[i].ships[ii])}</b></li>`;
 	  } else {
-            html += `<li id="sector_${i}_${ii}" class=""><b>${obj.ships_and_sectors[i].ships[ii].name}</b> - rift</li>`;
+            html += `<li id="sector_${i}_${ii}" class=""><b>${imperium_self.returnShipInformation(obj.ships_and_sectors[i].ships[ii])}</b> - rift</li>`;
 	  }
         } else {
           if (obj.ships_and_sectors[i].ships[ii].move - (obj.ships_and_sectors[i].adjusted_distance[ii] + spent_distance_boost) >= 0) {
             if (rift_passage == 0) {
-	      html += `<li id="sector_${i}_${ii}" class="option">${obj.ships_and_sectors[i].ships[ii].name}</li>`;
+	      html += `<li id="sector_${i}_${ii}" class="option">${imperium_self.returnShipInformation(obj.ships_and_sectors[i].ships[ii])}</li>`;
             } else {
-	      html += `<li id="sector_${i}_${ii}" class="option">${obj.ships_and_sectors[i].ships[ii].name} - rift</li>`;
+	      html += `<li id="sector_${i}_${ii}" class="option">${imperium_self.returnShipInformation(obj.ships_and_sectors[i].ships[ii])} - rift</li>`;
 	    }
           }
         }
@@ -22740,6 +22729,7 @@ playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, 
     }
   }
 
+// HACK
   for (let p = 0; p < sys.p.length; p++) {
     for (let k = 0; k < sys.p[p].units[imperium_self.game.player - 1].length; k++) {
       if (filter_func(sys.p[p].units[imperium_self.game.player - 1][k])) {
@@ -24822,10 +24812,10 @@ playerDiscardActionCards(num, mycallback=null) {
     let fighters = 0;
     let infantry = 0;
     for (let i = 0; i < ship.storage.length; i++) {
-      if (sys.s.units[player-1][i].storage[ii].type == "infantry") {
+      if (ship.storage[i].type == "infantry") {
         infantry++;
       }
-      if (sys.s.units[player-1][i].storage[ii].type == "fighter") {
+      if (ship.storage[i].type == "fighter") {
         fighters++;
       }
     }

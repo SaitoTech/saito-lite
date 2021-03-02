@@ -849,10 +849,10 @@
     let fighters = 0;
     let infantry = 0;
     for (let i = 0; i < ship.storage.length; i++) {
-      if (sys.s.units[player-1][i].storage[ii].type == "infantry") {
+      if (ship.storage[i].type == "infantry") {
         infantry++;
       }
-      if (sys.s.units[player-1][i].storage[ii].type == "fighter") {
+      if (ship.storage[i].type == "fighter") {
         fighters++;
       }
     }
