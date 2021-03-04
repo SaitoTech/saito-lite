@@ -13,13 +13,11 @@ module.exports = ArcadeSidebar = {
     if (!document.getElementById("arcade-container")) { app.browser.addElementToDom(ArcadeContainerTemplate()); }
     if (!document.querySelector(".arcade-sidebar")) { app.browser.addElementToDom(ArcadeSidebarTemplate(), "arcade-container"); }
 
-
     app.modules.respondTo("email-chat").forEach(module => {
       if (module != null) {
         module.respondTo('email-chat').render(app, module);
       }
     });
-
 
     // let arcade_sidebar_apps_loaded = 0;
     // app.modules.respondTo("arcade-sidebar").forEach(module => {

@@ -1,5 +1,6 @@
-var saito = require('../../lib/saito/saito');
-var ModTemplate = require('../../lib/templates/modtemplate');
+const path = require('path');
+const saito = require('../../lib/saito/saito');
+const ModTemplate = require('../../lib/templates/modtemplate');
 const ModalRegisterEmail = require('../../lib/saito/ui/modal-register-email/modal-register-email');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
@@ -110,6 +111,20 @@ class Website extends ModTemplate {
       obj.triggerPrivateSaleOverlay = this.triggerPrivateSaleOverlay.bind(this);
       return obj;
     }
+  }
+  webServer(app, expressapp, express) {
+
+    super.webServer(app, expressapp, express);
+
+    expressapp.get('/l/:campaign/:channel/:subchannel', async (req, res) => {
+      res.sendFile(path.join(__dirname + '/web/marketing/marketing.html'));
+    });
+    expressapp.get('/l/matomohelpers.js', async (req, res) => {
+      res.sendFile(path.join(__dirname + "../../../mods/matomo/matomoHelpers.js"));
+    });
+    expressapp.get('/l/maketrackinglink', async (req, res) => {
+      res.sendFile(path.join(__dirname + '/web/marketing/linkmakerform.html'));
+    });
   }
 }
 module.exports = Website;

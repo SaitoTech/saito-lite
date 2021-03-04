@@ -108,7 +108,7 @@ module.exports = ArcadeMain = {
 
             let game_sig = e.currentTarget.getAttribute("data-sig");
             let game_cmd = e.currentTarget.getAttribute("data-cmd");
-            app.browser.logMatomoEvent("Arcade", "ArcadeInviteButtonClick", game_cmd);
+            app.browser.logMatomoEvent("Arcade", "ArcadeAcceptInviteButtonClick", game_cmd);
             if (game_cmd === "delete") {
               arcade_main_self.deleteGame(app, mod, game_sig);
               return;
