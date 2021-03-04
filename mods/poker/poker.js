@@ -25,6 +25,7 @@ class Poker extends GameTemplate {
     this.interface = 1;
     this.boardgameWidth = 5100;
 
+    this.settlement = [];
     this.updateHTML = "";
 
     return this;
@@ -383,6 +384,7 @@ class Poker extends GameTemplate {
     this.game.state.last_raise = this.game.state.big_blind;
     this.game.state.required_pot = this.game.state.big_blind;
 
+
     for (let i = 0; i < this.game.players.length; i++) {
       this.game.state.passed[i] = 0;
       this.game.state.player_pot[i] = 0;
@@ -415,7 +417,6 @@ class Poker extends GameTemplate {
           this.game.state.player_credit.splice(i, 1);
           this.game.state.passed.splice(i, 1);
           this.removePlayer(this.game.players[i]);
-
 
           if (this.game.state.big_blind_player > this.game.players.length) {
             this.game.state.big_blind_player = 1;
@@ -451,6 +452,16 @@ class Poker extends GameTemplate {
 
     this.initializeQueue();
 
+    if (this.game.crypto !="") {
+      for (let i = 0; i < this.settlement.length; i++) {
+        this.game.queue.push(this.settlement[i]);
+      }
+    }
+
+console.log("WE HAVE NEW QUEUE OF: " + this.game.queue);
+
+    this.settlement = [];
+
     this.displayBoard();
 
   }
@@ -468,6 +479,8 @@ class Poker extends GameTemplate {
       let qe = this.game.queue.length - 1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
+
+console.log("poker queue: " + this.game.queue);
 
       if (mv[0] == "notify") {
         this.updateLog(mv[1]);
@@ -548,28 +561,33 @@ console.log("CRYPTO: " + this.game.crypto);
             }
           }
 
-          //
-          // everyone settles with winner if needed
-          //
-console.log("SEND A");
-console.log("do we have a crypto set: " + this.game.crypto);
-	  if (this.game.crypto != "") {
-            for (let i = 0; i < this.game.players; i++) {
-console.log("for player: " + (i+1));
-	      if (this.game.state.player_pot[i] > 0) {
-console.log("PLAYER OWES STHING");
-	        if ((this.game.player-1) == player_left_idx) {
-                  this.game.queue.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-	        } else {
-                  this.game.queue.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-                  this.game.queue.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-		}
-	      }
-            }
-          }
+
+	 //
+   	 // everyone settles with winner if needed
+   	 //
+   	 if (this.game.crypto != "") {
+    	   for (let i = 0; i < this.game.players.length; i++) {
+    	     if (this.game.state.player_pot[i] > 0) {
+	       if ((this.game.player-1) == player_left_idx) {
+		 if (i != player_left_idx) {
+                   this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+		 }
+	       } else {
+		 if (i != player_left_idx) {
+            	   this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+            	   this.settlement.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+	         }
+	       }
+	     }
+           }
+         }
+
 
           // if everyone has folded - start a new round
           this.startNextRound();
+
+console.log("QUEUE AFTER START NEXT ROUND");
+console.log(this.game.queue);
 
           return 1;
         }
@@ -783,7 +801,6 @@ console.log("PLAYER OWES STHING");
           //
           // report winner
           //
-          let round_settlement = [];
           if (winners.length > 1) {
 
             //
@@ -805,9 +822,12 @@ console.log("PLAYER OWES STHING");
               // non-winners send wagers to winner
               //
 	      if (this.game.crypto != "") {
-salert("SEND B");
-                this.game.queue.push("RECEIVE" + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[this.game.player-1]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-                this.game.queue.push("SEND" + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[this.game.player-1]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+	        for (let ii = 0; ii < this.game.players; ii++) {
+		  if ((!winners.includes(ii)) && this.game.state.player_pot[ii] > 0) {
+                    this.settlement.push("RECEIVE" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[ii]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+                    this.settlement.push("SEND" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[ii]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+		  }
+	        }
               }
             }
           } else {
@@ -819,24 +839,17 @@ salert("SEND B");
             this.game.state.player_credit[winners[0]] += this.game.state.pot;
 
 	    if (this.game.crypto != "") {
-salert("SEND C");
-              this.game.queue.push("RECEIVE" + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[this.game.player-1] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-              this.game.queue.push("SEND" + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[this.game.player-1] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+	      for (let ii = 0; ii < this.game.players; ii++) {
+	        if ((!winners.includes(ii)) && this.game.state.player_pot[ii] > 0) {
+                  this.settlement.push("RECEIVE" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[ii] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+                  this.settlement.push("SEND" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[ii] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+	        }
+	      }
 	    }
-
-            //
-            // non-winners send wagers to winner
-            //
-            //let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[0]], this.game.state.player_pot[this.game.player - 1]);
-            //newtx = this.app.wallet.signTransaction(newtx);
-            //this.app.network.propagateTransaction(newtx);
 
           }
           this.startNextRound();
 
-          for (let i = 0; i < round_settlement.length; i++) {
-            this.game.queue.push(round_settlement[i]);
-          }
           return 1;
         }
 
@@ -991,28 +1004,29 @@ salert("SEND C");
 
           this.game.state.player_credit[player_left_idx] = this.game.state.pot;
 
-          // that fold closed out the hand.
-          this.startNextRound();
 
-          //
-          // everyone should send anything they owe to winner
-          //
-console.log("SEND D");
-console.log("do we have a crypto set: " + this.game.crypto);
-	  if (this.game.crypto != "") {
-            for (let i = 0; i < this.game.players; i++) {
-console.log("for player: " + (i+1));
-	      if (this.game.state.player_pot[i] > 0) {
-console.log("PLAYER OWES STHING");
+	  //
+   	  // everyone settles with winner if needed
+   	  //
+   	  if (this.game.crypto != "") {
+    	    for (let i = 0; i < this.game.players.length; i++) {
+    	      if (i != player_left_idx) {
 	        if ((this.game.player-1) == player_left_idx) {
-                  this.game.queue.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+		  if (i != player_left_idx) {
+                    this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+		  }
 	        } else {
-                  this.game.queue.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-                  this.game.queue.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-		}
+		  if (i != player_left_idx) {
+              	    this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+            	    this.settlement.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+	          }
+	        }
 	      }
             }
           }
+
+          // that fold closed out the hand.
+          this.startNextRound();
 
         }
       }
