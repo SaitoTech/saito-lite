@@ -50,27 +50,27 @@ class Website extends ModTemplate {
     });
     document.querySelectorAll('#whitepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEvent("Navigation", "Navigation", "HomepageNavigationClick", "HomepageWhitepaperLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HomepageWhitepaperLink");
       }
     });
     document.querySelectorAll('#litepaperLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEvent("Navigation", "Navigation", "HomepageNavigationClick", "HomepageLitepaperLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HomepageLitepaperLink");
       }
     });
     document.querySelectorAll('#arcadeLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEvent("Navigation", "Navigation", "HomepageNavigationClick", "HomepageArcadeLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HomepageArcadeLink");
       }
     });
     document.querySelectorAll('#developersLink').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEvent("Navigation", "Navigation", "HomepageNavigationClick", "HomepageDevelopersLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HomepageDevelopersLink");
       }
     });
     document.querySelectorAll('.left.desktop .logo').forEach((element) => {
       element.onclick = (event) => {
-        app.browser.logMatomoEvent("Navigation", "Navigation", "HomepageNavigationClick", "HeaderLogoHomepageLink");
+        app.browser.logMatomoEvent("Navigation", "HomepageNavigationClick", "HeaderLogoHomepageLink");
       }
     });
     
@@ -116,7 +116,7 @@ class Website extends ModTemplate {
 
     super.webServer(app, expressapp, express);
 
-    expressapp.get('/l/:campaign/:channel', async (req, res) => {
+    expressapp.get('/l/:campaign/:channel/:subchannel', async (req, res) => {
       res.sendFile(path.join(__dirname + '/web/marketing/marketing.html'));
     });
     expressapp.get('/l/matomohelpers.js', async (req, res) => {

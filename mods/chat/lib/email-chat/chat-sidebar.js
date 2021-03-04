@@ -29,10 +29,10 @@ module.exports = ChatSidebar = {
 	  mod.mute_community_chat = 0;
           try {
             let chatName = document.querySelector(`#${e.currentTarget.id} .chat-group-name`).innerHTML;
-            app.browser.logMatomoEvent("Chat", "ChatOpen", "ArcadeSidebarChatOpenedClick", chatName);
+            app.browser.logMatomoEvent("Chat", "ArcadeSidebarChatOpenedClick", chatName);
           } catch (e) {
             // This sometimes fails if the id is formed a certain way the querySelector throws an error..
-            app.browser.logMatomoEvent("Chat", "ChatOpen", "ArcadeSidebarChatOpenedClick", "unknownChat");
+            app.browser.logMatomoEvent("Chat", "ArcadeSidebarChatOpenedClick", "unknownChat");
           }
           mod.openChatBox(e.currentTarget.id);
         };

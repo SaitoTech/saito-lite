@@ -21,7 +21,7 @@ module.exports = GameLoader = {
           let game_id = e.currentTarget.id;
           for (let i = 0; i < app.options.games.length; i++) {
             if (app.options.games[i].id == game_id) {
-              app.browser.logMatomoEvent("Arcade", "ArcadeStartGame", "StartGameClick", app.options.games[i].module);
+              app.browser.logMatomoEvent("Arcade", "StartGameClick", app.options.games[i].module);
               app.options.games[i].ts = new Date().getTime();
               app.options.games[i].initialize_game_run = 0;
               app.storage.saveOptions();

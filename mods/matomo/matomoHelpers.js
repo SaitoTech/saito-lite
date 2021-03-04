@@ -36,7 +36,12 @@ export function addToDOM() {
   }
   _paq.push(['enableJSErrorTracking']);
 }
-export function logToMatomo(category, action, name = null, value = null) {
+
+export function logToMatomo(category, action, name, value = 0) {
+  if(value && typeof value != Number) {
+    console.log("matomo value field must be a number");
+    return;
+  }
   if(_paq) {
     if(value) {
       // sending null or empty name here is fine.
@@ -46,6 +51,12 @@ export function logToMatomo(category, action, name = null, value = null) {
     } else {
       _paq.push(['trackEvent', category, action]);
     }
+  
   }
 }
+
+export function pushFunctionToMatomo(callback) {
+  _paq.push([callback]);
+}
+
 //module.exports = addToDOM;

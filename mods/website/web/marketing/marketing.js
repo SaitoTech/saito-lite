@@ -1,16 +1,14 @@
-import {addToDOM} from '/l/matomohelpers.js';
+import {pushFunctionToMatomo, logToMatomo, addToDOM} from '/l/matomohelpers.js';
+
 const queryString = window.location.search;console.log(addToDOM);
 const urlParams = new URLSearchParams(window.location.search);
-
-console.log(window.location.pathname);
-
-// logToMatomo("")
-// ?product=shirt&color=blue&newuser&size=m
+let urlTokens = window.location.pathname.split("/")
 addToDOM();
-//logToMatomo("Tracking", "Redirect")
-// if(urlParams.get("r")) {
-//   window.location.href = urlParams.get("r");
-// } else {
-//   window.location.href = "/";
-// }
-
+logToMatomo(urlTokens[2], urlTokens[3], urlTokens[4]);
+pushFunctionToMatomo(() => {
+  if(urlParams.get("r")) {
+    window.location.href = urlParams.get("r");
+  } else {
+    window.location.href = "/";
+  }
+});

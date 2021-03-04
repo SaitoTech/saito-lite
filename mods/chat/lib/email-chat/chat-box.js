@@ -116,7 +116,7 @@ module.exports = ChatBox = {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
             e.preventDefault();
             if (msg_input.value == '') { return; }
-            app.browser.logMatomoEvent("Chat", "ChatMessage", "ArcadeChatSendMessage", "PressedEnter");
+            app.browser.logMatomoEvent("Chat", "ArcadeChatSendMessage", "PressedEnter");
             let newtx = mod.createMessage(group_id, msg_input.value);
             mod.sendMessage(app, newtx);
             mod.receiveMessage(app, newtx);
