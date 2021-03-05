@@ -374,6 +374,14 @@ class Poker extends GameTemplate {
     if (this.game.state.small_blind_player < 1) { this.game.state.small_blind_player = this.game.players.length; }
     if (this.game.state.button_player < 1) { this.game.state.button_player = this.game.players.length; }
 
+    if (this.game.state.tournament_blinds_level_up > 0) {
+      this.game.state.tournament_blinds_per_level--;
+      if (this.game.state.tournament_blinds_per_level < 0) {
+	this.game.state.tournament_blinds_per_level = this.game.state.tournament_blinds_per_level_max;
+      }
+    }
+
+
     this.game.state.flipped = 0;
     this.game.state.plays_since_last_raise = -1;
     this.game.state.started = 0;
@@ -458,8 +466,6 @@ class Poker extends GameTemplate {
       }
     }
 
-console.log("WE HAVE NEW QUEUE OF: " + this.game.queue);
-
     this.settlement = [];
 
     this.displayBoard();
@@ -479,8 +485,6 @@ console.log("WE HAVE NEW QUEUE OF: " + this.game.queue);
       let qe = this.game.queue.length - 1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
-
-console.log("poker queue: " + this.game.queue);
 
       if (mv[0] == "notify") {
         this.updateLog(mv[1]);
@@ -509,8 +513,6 @@ console.log("poker queue: " + this.game.queue);
 
 
       if (mv[0] === "turn") {
-
-console.log("CRYPTO: " + this.game.crypto);
 
         let player_to_go = parseInt(mv[1]);
         this.displayBoard();
@@ -585,9 +587,6 @@ console.log("CRYPTO: " + this.game.crypto);
 
           // if everyone has folded - start a new round
           this.startNextRound();
-
-console.log("QUEUE AFTER START NEXT ROUND");
-console.log(this.game.queue);
 
           return 1;
         }
@@ -1365,6 +1364,15 @@ console.log("this raise: " + this_raise);
     state.required_pot = 0;
     state.last_raise = state.big_blind;
 
+    state.tournament_blinds_per_level = 12;
+    state.tournament_blinds_per_level_max = 12;
+
+    if (this.game.options.blinds === "increase") {
+      state.tournament_blinds_level_up = 1;
+    } else {
+      state.tournament_blinds_level_up = 0;
+    }
+
     if (this.game.options.crypto != undefined) { this.game.crypto = this.game.options.crypto; }
 
     for (let i = 0; i < num_of_players; i++) {
@@ -1384,8 +1392,16 @@ console.log("this raise: " + this_raise);
     }
     for (let i = 0; i < num_of_players; i++) {
       state.player_credit[i] = 100;
-      if (this.game.options.stake != undefined) { state.player_credit[i] = this.game.options.stake; }
+      if (this.game.options.stake != undefined) { state.player_credit[i] = parseInt(this.game.options.stake); }
     }
+
+    if (this.game.options.big_blind != undefined) {
+      state.big_blind = parseInt(this.game.options.big_blind);
+      state.small_blind = state.big_blind/2;
+      state.last_raise = parseInt(state.big_blind);
+    }
+
+console.log("STATE: " + JSON.stringify(state));
 
     return state;
 
@@ -2603,10 +2619,8 @@ console.log("this raise: " + this_raise);
   }
 
   cardToHuman(card) {
-console.log("card: " + card);
     let h = this.game.deck[0].cards[card].name;
     h = h.replace(".png", "");
-console.log("H: " + h);
     h = h.replace("13", "K");
     h = h.replace("12", "Q");
     h = h.replace("11", "J");
@@ -2660,6 +2674,19 @@ console.log("H: " + h);
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
             </select>
+            
+            <label for="big_blind">Starting Blinds:</label>
+            <select name="big_blind">
+              <option value="1">1</option>
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="40">40</option>
+              <option value="60">60</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="400">400</option>
+            </select>
 
             <select name="crypto">
               <option value="" selected>none</option>
@@ -2674,6 +2701,13 @@ console.log("H: " + h);
 
     options_html += `
             </select>
+
+            <label for="stake">Blinds:</label>
+            <select name="blinds">
+              <option value="static">static blinds</option>
+              <option value="increase">increasing blinds</option>
+            </select>
+
 
             <label for="observer_mode">Observer Mode:</label>
             <select name="observer">
@@ -2696,6 +2730,12 @@ console.log("H: " + h);
         new_options[index] = options[index];
       }
       if (index == "crypto") {
+        new_options[index] = options[index];
+      }
+      if (index == "blinds") {
+        new_options[index] = options[index];
+      }
+      if (index == "big_blind") {
         new_options[index] = options[index];
       }
     }
@@ -2757,6 +2797,78 @@ console.log("H: " + h);
 
   }
 
+
+
+  increaseBlinds() {
+
+    if (this.game.state.big_blind == 1) {
+      this.game.state.small_blind = 0.75;
+      this.game.state.big_blind = 1.25;
+      return 1;
+    }
+    if (this.game.state.big_blind == 1.25) {
+      this.game.state.small_blind = 1.25;
+      this.game.state.big_blind = 2.5;
+      return 1;
+    }
+    if (this.game.state.big_blind == 2.5) {
+      this.game.state.small_blind = 2.5;
+      this.game.state.big_blind = 5;
+      return 1;
+    }
+    if (this.game.state.big_blind == 5) {
+      this.game.state.small_blind = 5;
+      this.game.state.big_blind = 10;
+      return 1;
+    }
+    if (this.game.state.big_blind == 10) {
+      this.game.state.small_blind = 10;
+      this.game.state.big_blind = 20;
+      return 1;
+    }
+    if (this.game.state.big_blind == 20) {
+      this.game.state.small_blind = 20;
+      this.game.state.big_blind = 40;
+      return 1;
+    }
+    if (this.game.state.big_blind == 40) {
+      this.game.state.small_blind = 30;
+      this.game.state.big_blind = 60;
+      return 1;
+    }
+    if (this.game.state.big_blind == 60) {
+      this.game.state.small_blind = 50;
+      this.game.state.big_blind = 100;
+      return 1;
+    }
+    if (this.game.state.big_blind == 100) {
+      this.game.state.small_blind = 100;
+      this.game.state.big_blind = 200;
+      return 1;
+    }
+    if (this.game.state.big_blind == 200) {
+      this.game.state.small_blind = 150;
+      this.game.state.big_blind = 300;
+      return 1;
+    }
+    if (this.game.state.big_blind == 300) {
+      this.game.state.small_blind = 200;
+      this.game.state.big_blind = 400;
+      return 1;
+    }
+    if (this.game.state.big_blind == 400) {
+      this.game.state.small_blind = 400;
+      this.game.state.big_blind = 800;
+      return 1;
+    }
+    if (this.game.state.big_blind == 800) {
+      this.game.state.small_blind = 800;
+      this.game.state.big_blind = 1600;
+      return 1;
+    }
+
+    return;
+  }
 
 
 }
