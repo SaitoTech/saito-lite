@@ -377,6 +377,7 @@ class Poker extends GameTemplate {
     if (this.game.state.tournament_blinds_level_up > 0) {
       this.game.state.tournament_blinds_per_level--;
       if (this.game.state.tournament_blinds_per_level < 0) {
+	this.updateLog("Blinds increased to: " + game.state.big_blind + "/" + game.state.small_blind);
 	this.game.state.tournament_blinds_per_level = this.game.state.tournament_blinds_per_level_max;
       }
     }
