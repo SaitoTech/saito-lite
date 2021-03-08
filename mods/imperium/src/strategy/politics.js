@@ -101,7 +101,7 @@
         }
 
 
-        if (imperium_self.game.player === strategy_card_player && player == strategy_card_player) {
+        if (imperium_self.game.player === imperium_self.game.state.speaker) {
 
             let html = '';
             if (imperium_self.game.state.agendas_per_round == 1) {
