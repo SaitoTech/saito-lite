@@ -23,7 +23,6 @@ class Website extends ModTemplate {
   }
 
   initializeHTML(app) {
-    console.log("initializeHTML");
     if (this.header == null) {
       this.header = new SaitoHeader(app, this);
     }
@@ -106,7 +105,6 @@ class Website extends ModTemplate {
   }
   respondTo(type) {
     if (type == "private_sale_overlay") {
-      console.log("ASDF");
       let obj = {};
       obj.initializePrivateSaleOverlay = this.initializePrivateSaleOverlay.bind(this);
       obj.triggerPrivateSaleOverlay = this.triggerPrivateSaleOverlay.bind(this);
