@@ -214,7 +214,7 @@ section {
 
 .section1 .left .buttonWrapper {
   display: flex;
-  margin-top: 3.5rem;
+  margin-top: 5rem;
 }
 
 .section1 .buttonWrapper .btn {
@@ -225,7 +225,7 @@ section {
   font-size: 2.1rem;
   font-weight: bold;
   color: #FFFFFF;
-  padding: 2.5px 0 0 0;
+  padding: 5px 0 0 0;
 }
 
 .section1 .buttonWrapper a:first-child .btn {
@@ -239,7 +239,7 @@ section {
 
 .section1 .left .content {
   width: 64.6rem;
-  margin-top: 3.5rem;
+  margin-top: 5rem;
   line-height: 3rem;
   font-size: 18px;
   font-weight: 400;
@@ -723,14 +723,14 @@ section {
   height: 2rem;
   font-size: 16px;
   font-weight: 400;
-  color: whitesmoke; 
+  color: #5E5E5E;
 }
 
 .section6 .copyright .right {
   display: flex;
   align-items: center;
   font-size: 18px;
-  color: whitesmoke;
+  color: #5E5E5E;
 }
 
 .section6 .copyright .right .email {
@@ -746,7 +746,7 @@ section {
 .section6 .copyright .right a {
   font-size: 18px;
   font-weight: 400;
-  color: whitesmoke;
+  color: #5E5E5E;
   text-decoration: none;
 }
 

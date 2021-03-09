@@ -3104,7 +3104,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
       //
       // destroys a unit
       //
-      if (mv[0] === "destroy_unit") {
+      if (mv[0] === "destroy_unit" || mv[0] === "destroy") {
 
         let destroyer    = parseInt(mv[1]);
         let destroyee    = parseInt(mv[2]);

@@ -116,6 +116,31 @@ class Archive extends ModTemplate {
       await this.app.storage.executeDatabase(sql, params, "archive");
     }
 
+    //
+    // prune periodically
+    //
+    if (Math.random() < 0.0001) { this.pruneOldData(); }
+
+  }
+
+
+  async pruneOldTransactions() {
+
+    let ts = (new Date().getTime()) - 100000000;
+    let sql = "DELETE FROM txs WHERE tx < $ts AND type = $type";
+    let params = {
+        $ts		:	ts ,
+        $type		:	"Chat"
+    };
+    this.app.storage.executeDatabase(sql, params, "archive");
+
+  }
+
+
+  async pruneOldTransactions() {
+
+    let ts = (new Date().getTime()) - 100000000;
+    let sql = "DELETE FROM txs WHERE tx < $ts AND type = $type";
   }
 
 
@@ -132,6 +157,11 @@ class Archive extends ModTemplate {
       $type:	msgtype
     };
     await this.app.storage.executeDatabase(sql, params, "archive");
+
+    //
+    // prune periodically
+    //
+    if (Math.random() < 0.0001) { this.pruneOldData(); }
 
   }
 
