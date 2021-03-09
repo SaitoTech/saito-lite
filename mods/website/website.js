@@ -23,7 +23,7 @@ class Website extends ModTemplate {
   }
 
   initializeHTML(app) {
-
+    console.log("initializeHTML");
     if (this.header == null) {
       this.header = new SaitoHeader(app, this);
     }
@@ -113,9 +113,12 @@ class Website extends ModTemplate {
     }
   }
   webServer(app, expressapp, express) {
-
-    super.webServer(app, expressapp, express);
-
+    console.log("***** website webServer ******");
+    console.log(__dirname);
+    console.log(this.dirname);
+    expressapp.use("/", express.static(`${__dirname}/../../mods/website/web`));
+    // TODO: change every reference in the site from /website/* to /* and remove this line
+    expressapp.use("/website/", express.static(`${__dirname}/../../mods/website/web`));
     expressapp.get('/l/:campaign/:channel/:subchannel', async (req, res) => {
       res.sendFile(path.join(__dirname + '/web/marketing/marketing.html'));
     });
