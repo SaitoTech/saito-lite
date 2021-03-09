@@ -10,8 +10,11 @@ class WebsiteCN extends Website {
     this.categories = "Utilities Communications";
     return this;
   }
+  respondTo(type) {
+    // we don't want to respond to things twice, website.js will still be installed on the client side.
+  }
   webServer(app, expressapp, express) {
-    expressapp.use("/", express.static(`${__dirname}/../../mods/${this.dirname}/web/CN`));
+    expressapp.use("/", express.static(`${__dirname}/../../mods/${this.dirname}/web/`));
     super.webServer(app, expressapp, express);
   }
 }
