@@ -238,6 +238,9 @@
     if (obj.returnAgendaOptions == null) {
       obj.returnAgendaOptions = function(imperium_self) { return ['support','oppose']; }
     }
+    if (obj.repealAgenda == null) {
+      obj.repealAgenda = function(imperium_self) { return 1; }
+    }
     //
     // when an agenda is resolved (passes) --> not necessarily if it is voted in favour
     // for permanent game effects, run initialize after setting a var if you want to have

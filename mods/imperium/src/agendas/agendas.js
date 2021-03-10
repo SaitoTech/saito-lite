@@ -30,6 +30,26 @@
 	  imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.shard_of_the_throne_player) + " gains the Shard of the Throne (1VP)");
 
 	},
+        repealAgenda(imperium_self) {
+
+	  //
+	  // remove from active play
+	  //
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+	    if (imperium_self.game.state.laws[i].agenda === "shard-of-the-throne") {
+	      imperium_self.game.state.laws.splice(i, 1);
+	      i--;
+	    }  
+	  }
+
+	  //
+	  // unset the player
+	  //
+	  imperium_self.game.state.shard_of_the_throne_player = -2;
+
+	  return 1;
+
+        },
         spaceCombatRoundEnd : function(imperium_self, attacker, defender, sector) {
 	  if (defender == imperium_self.game.state.shard_of_the_throne_player) {
 	    if (!imperium_self.doesPlayerHaveShipsInSector(defender, sector)) {
@@ -82,6 +102,27 @@
 	  imperium_self.game.state.laws.push({ agenda : "homeland-defense-act" , option : winning_choice });
 
 	},
+        repealAgenda(imperium_self) {
+
+          //
+          // remove from active play
+          //
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "homeland-defense-act") {
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          //
+          // unset the player
+          //
+          imperium_self.game.state.homeland_defense_act = 0;
+	  imperium_self.game.state.pds_limit_per_planet = 2; // limit back
+
+          return 1;
+
+        },
         handleGameLoop : function(imperium_self, qe, mv) {
 
           if (mv[0] == "destroy_a_pds") {
@@ -158,7 +199,34 @@
 	    imperium_self.updateLog(imperium_self.returnFaction(owner) + " gains 1 VP from Holy Planet of Ixth");
 	  }
 
-	}
+	},
+        repealAgenda(imperium_self) {
+
+          //
+          // remove from active play
+          //
+	  let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "holy-planet-of-ixth") {
+	      winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          //
+          // unset the player
+          //
+	  if (winning_choice != null) {
+            imperium_self.game.state.holy_planet_of_ixth = 0;
+            imperium_self.game.state.holy_planet_of_ixth_planet = -1;
+	    imperium_self.game.planets[winning_choce].locked = 0;
+	  }
+
+          return 1;
+
+        },
   });
 
 
@@ -172,6 +240,32 @@
           return imperium_self.returnPlanetsOnBoard(function(planet) {
             if (planet.type === "industrial") { return 1; } return 0;
           });
+        },
+        repealAgenda(imperium_self) {
+
+          //
+          // remove from active play
+          //
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "research-team-biotic") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          //
+          // unset the planet
+          //
+          if (winning_choice != null) {
+            imperium_self.game.state.research_team_biotic = 0;
+            imperium_self.game.state.research_team_biotic_planet = -1;
+          }
+
+          return 1;
+
         },
         onPass : function(imperium_self, winning_choice) {
           imperium_self.game.state.research_team_biotic = 1;
@@ -225,6 +319,32 @@
               law_to_push.option = winning_choice;
           imperium_self.game.state.laws.push(law_to_push);
         },
+	repealAgenda(imperium_self) {
+
+          //
+          // remove from active play
+          //
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "research-team-cybernetic") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          //
+          // unset the planet
+          //
+          if (winning_choice != null) {
+            imperium_self.game.state.research_team_cybernetic = 0;
+            imperium_self.game.state.research_team_cybernetic_planet = -1;
+          }
+
+          return 1;
+
+        },
         menuOption  :       function(imperium_self, menu, player) {
           if (menu == "main" && imperium_self.game.planets[imperium_self.game.state.research_team_cybernetic_planet].owner == player) {
             return { event : 'research_team_cybernetic', html : '<li class="option" id="research_team_cybernetic">use cybernetic (yellow) tech-skip</li>' };
@@ -260,6 +380,32 @@
           return imperium_self.returnPlanetsOnBoard(function(planet) {
             if (planet.type === "industrial") { return 1; } return 0;
           });
+        },
+        repealAgenda(imperium_self) {
+
+          //
+          // remove from active play
+          //
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "research-team-propulsion") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          //
+          // unset the planet
+          //
+          if (winning_choice != null) {
+            imperium_self.game.state.research_team_propulsion = 0;
+            imperium_self.game.state.research_team_propulsion_planet = -1;
+          }
+
+          return 1;
+
         },
         onPass : function(imperium_self, winning_choice) {
           imperium_self.game.state.research_team_propulsion = 1;
@@ -304,6 +450,32 @@
           return imperium_self.returnPlanetsOnBoard(function(planet) {
             if (planet.type === "industrial") { return 1; } return 0;
           });
+        },
+        repealAgenda(imperium_self) {
+
+          //
+          // remove from active play
+          //
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "research-team-warfare") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          //
+          // unset the planet
+          //
+          if (winning_choice != null) {
+            imperium_self.game.state.research_team_warfare = 0;
+            imperium_self.game.state.research_team_warfare_planet = -1;
+          }
+
+          return 1;
+
         },
         onPass : function(imperium_self, winning_choice) {
           imperium_self.game.state.research_team_warfare = 1;
@@ -358,9 +530,6 @@
 	      law_to_push.option = winning_choice;
 	  imperium_self.game.state.laws.push(law_to_push);
 
-	  //
-	  // also - destroy the planet and increase its resource value
-	  //
 	  imperium_self.game.planets[winning_choice].units = []; 
 	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
 	    imperium_self.game.planets[winning_choice].units.push([]);
@@ -368,7 +537,34 @@
 
 	  imperium_self.game.planets[winning_choice].locked = 1;
 
-	}
+	},
+        repealAgenda(imperium_self) {
+
+          //
+          // remove from active play
+          //
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "demilitarized-zone") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          //
+          // unset the planet
+          //
+          if (winning_choice != null) {
+            imperium_self.game.state.demilitarized_zone = 0;
+            imperium_self.game.state.demilitarized_zone_planet = -1;
+	    imperium_self.game.planets[winning_choice].locked = 0;
+          }
+
+          return 1;
+
+        },
   });
 
   this.importAgendaCard('core-mining', {
@@ -381,6 +577,28 @@
 	    if (planet.type === "hazardous") { return 1; } return 0; 
 	  });
 	},
+        repealAgenda(imperium_self) {
+
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "core-mining") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+
+          if (winning_choice != null) {
+            imperium_self.game.state.core_mining = 0;
+            imperium_self.game.state.core_mining_planet = -1;
+	    imperium_self.game.planets[winning_choice].locked = 0;
+	    imperium_self.game.planets[winning_choice].resources -= 2;
+          }
+          return 1;
+
+        },
 	onPass : function(imperium_self, winning_choice) {
 	  imperium_self.game.state.core_mining = 1;
 	  imperium_self.game.state.core_mining_planet = winning_choice;
@@ -426,6 +644,24 @@
   	type : "Law" ,
   	text : "FOR: players must destroy a capital ship in order to research a technology using the Technology card. AGAINST: at the start of the next round, each player exhausts one planet for each technology they have." ,
         returnAgendaOptions : function(imperium_self) { return ['for','against']; },
+        repealAgenda(imperium_self) {
+
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "anti-intellectual-revolution") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          let techcard = imperium_self.strategy_cards['technology'];
+	  if (techcard.strategyPrimaryEventBackup) { techcard.strategyPrimaryEvent = techcard.strategyPrimaryEventBackup; }
+
+          return 1;
+
+        },
 	initialize : function(imperium_self, winning_choice) {
 
           if (winning_choice === "for") {
@@ -468,6 +704,7 @@
                 });
               }
             };
+	    techcard.strategyPrimaryEventBackup = old_tech_func;
             techcard.strategyPrimaryEvent = new_tech_func;
           }
 
@@ -491,7 +728,7 @@
 
   this.importAgendaCard('unconventional-measures', {
   	name : "Unconventional Measures" ,
-  	type : "Law" ,
+  	type : "Directive" ,
   	text : "FOR: each player that votes 'for' draws 2 action cards. AGAINST: each player that votes 'for' discards their action cards." ,
         returnAgendaOptions : function(imperium_self) { return ['for','against']; },
 	onPass : function(imperium_self, winning_choice) {
@@ -629,7 +866,25 @@
 	    imperium_self.game.state.laws.push(law_to_push);
 	    this.initialize(imperium_self);
 	  }
-	}
+	},
+        repealAgenda(imperium_self) {
+
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) { 
+            if (imperium_self.game.state.laws[i].agenda === "space-cadet") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+          
+	  imperium_self.game.state.space_cadet = 0;
+          imperium_self.returnFactionName = imperium_self.returnFactionNamePreSpaceCadet;
+
+          return 1;
+
+        }
   });
 
 
@@ -677,7 +932,28 @@
 	      law_to_push.option = winning_choice;
 	  imperium_self.game.state.laws.push(law_to_push);
 	  this.initialize(imperium_self);
-	}
+	},
+        repealAgenda(imperium_self) {
+
+	  let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) { 
+            if (imperium_self.game.state.laws[i].agenda === "galactic-threat") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+          
+          imperium_self.game.state.galactic_threat = 0;
+          imperium_self.game.state.galactic_threat_initialized = 0;
+	  if (imperium_self.returnFactionNamePreGalacticThreat) {
+            imperium_self.returnFactionName = imperium_self.returnFactionNamePreGalacticThreat;
+	  }
+
+          return 1;
+
+        }
   });
 
 
@@ -744,7 +1020,27 @@
 	      law_to_push.agenda = "committee-formation";
 	      law_to_push.option = winning_choice;
 	  imperium_self.game.state.laws.push(law_to_push);
-	}
+	},
+        repealAgenda(imperium_self) {
+
+	  let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "committee_formation") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          imperium_self.game.state.committee_formation = 0;
+          imperium_self.game.state.committee_formation_player = -1;
+          imperium_self.returnFactionName = imperium_self.returnFactionNamePreGalacticThreat;
+          
+          return 1;
+
+        }
+
   });
 
 
@@ -776,6 +1072,25 @@
 	      law_to_push.option = winning_choice;
 	  imperium_self.game.state.laws.push(law_to_push);
 
+        },
+        repealAgenda(imperium_self) {
+
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "minister-of-policy") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          imperium_self.game.state.minister_of_policy = 0;
+	  imperium_self.game.players_info[imperium_self.game.state.minister_of_policy_player-1].action_cards_bonus_when_issued--;
+          imperium_self.game.state.minister_of_policy_player = -1;
+
+          return 1;
+
         }
   });
 
@@ -798,6 +1113,28 @@
 	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
+        repealAgenda(imperium_self) {
+
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "executive-sanctions") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (imperium_self.game.players_info[i].action_card_limit == 3) {
+	      imperium_self.game.players_info[i].action_card_limit = 7;
+	    }
+	  }
+
+          return 1;
+
+        }
+
   });
 
   this.importAgendaCard('fleet-limitations', {
@@ -815,6 +1152,26 @@
 	  }
 	  return 1;
 	},
+        repealAgenda(imperium_self) {
+
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "fleet-limitations") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    imperium_self.game.players_info[i].fleet_supply_limit = 16;
+          }
+
+          return 1;
+
+        }
+
   });
 
 
@@ -835,6 +1192,24 @@
 	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
+        repealAgenda(imperium_self) {
+
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "restricted-conscription") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          imperium_self.units["infantry"].cost = 0.5;
+          imperium_self.units["fighter"].cost = 0.5;
+
+          return 1;
+
+        }
   });
 
 
@@ -854,6 +1229,24 @@
 	  imperium_self.game.state.laws.push(law_to_push);
 	  return 1;
 	},
+        repealAgenda(imperium_self) {
+          
+          let winning_choice = null;
+          
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "wormhole-travel-ban") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+          
+          imperium_self.game.state.wormholes_open = 1;;
+          
+          return 1;
+
+        }
+
   });
 
 

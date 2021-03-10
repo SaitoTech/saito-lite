@@ -149,6 +149,24 @@
 	  return 1;
 
 	},
+        repealAgenda(imperium_self) {
+          
+          let winning_choice = null;
+          
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "conventions-of-war") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+          
+          imperium_self.game.state.bombardment_against_cultural_planets = 1;          
+
+          return 1;
+
+        }
+
   });
 
 
@@ -302,6 +320,14 @@
 
 	  imperium_self.game.state.new_constitution = 1;
 
+	  //
+	  // repeal any laws in plan
+	  //
+	  for (let i = imperium_self.game.state.laws.length-1; i > 0; i--) {
+	    let saved_agenda = imperium_self.game.state.laws[i].agenda;
+	    imperium_self.game.agenda_cards[saved_agenda].repealAgenda(imperium_self);
+	  }
+
 	  let players_to_research_tech = [];
 
           if (winning_choice === "for") {
@@ -422,6 +448,24 @@
           imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.crown_of_emphidia_player) + " gains 1 VP from Crown of Emphidia");
 
         },
+        repealAgenda(imperium_self) {
+          
+          let winning_choice = null;
+          
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "crown-of-emphidia") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+          
+          imperium_self.game.state.crown_of_emphidia = -1;
+          imperium_self.game.state.crown_of_emphidia_player = -1;
+          
+          return 1;
+
+        },
         groundCombatRoundEnd : function(imperium_self, attacker, defender, sector, planet_idx) {
           if (defender == imperium_self.game.state.crown_of_emphidia_player) {
             if (!imperium_self.doesPlayerHaveInfantryOnPlanet(defender, sector, planet_idx)) {
@@ -468,7 +512,32 @@
 
 	  return 1;
 
-        }
+        },
+        repealAgenda(imperium_self) {
+
+          let winning_choice = null;
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "terraforming-initiative") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;
+            }
+          }
+
+          imperium_self.game.state.terraforming_initiative = -1;
+	  if (winning_choice) {
+            if (imperium_self.game.planets[winning_choice]) {
+              imperium_self.game.planets[winning_choice].resources--;
+              imperium_self.game.planets[winning_choice].influence--;
+            }
+	  }
+	  imperium_self.game.state.terraforming_initiative_planet = -1;
+
+          return 1;
+
+        },
+
   });
 
 
@@ -481,6 +550,29 @@
           return imperium_self.returnPlanetsOnBoard(function(planet) {
             if (planet.type === "cultural") { return 1; } return 0;
           });
+        },
+        repealAgenda(imperium_self) {
+  
+          let winning_choice = null;     
+
+          for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+            if (imperium_self.game.state.laws[i].agenda === "senate-sanctuary") {
+              winning_choice = imperium_self.game.state.laws[i].option;
+              imperium_self.game.state.laws.splice(i, 1);
+              i--;    
+            }
+          }
+
+          if (winning_choice) {
+            if (imperium_self.game.planets[winning_choice]) {
+              imperium_self.game.planets[winning_choice].influence -= 2;
+            }
+          }
+          imperium_self.game.state.senate_sanctuary = 0;
+          imperium_self.game.state.senate_sanctuary_planet = -1;
+
+          return 1;
+
         },
         onPass : function(imperium_self, winning_choice) {
           imperium_self.game.state.senate_sanctuary = 1;
@@ -571,7 +663,7 @@
 
   this.importAgendaCard('colonial-redistribution', {
         name : "Colonial Redistribution" ,
-        type : "Law" ,
+        type : "Directive" ,
         elect : "planet" ,
         text : "Elect a cultural, industrial or hazardous planet. Destroy all units on the planet. Planet owner chooses a player with the fewest VP to gain control of the planet and gain 1 infantry on it. If no-one controls that planet, the Speaker chooses the recipient." ,
         returnAgendaOptions : function(imperium_self) {

@@ -192,8 +192,6 @@ ACTION CARD - types
 
 
 
-
-/*****
     this.importActionCard('repeal-law', {
   	name : "Repeal Law" ,
   	type : "action" ,
@@ -239,8 +237,8 @@ ACTION CARD - types
             imperium_self.game.queue.splice(qe, 1);
 	    for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
 	      if (imperium_self.game.state.laws[i] == card) {
-		imperium_self.game.state.laws.splice(i, 1);
-		i--;
+		imperium_self.game.agenda_cards[card].repealAgenda(imperium_self);
+	        return 1;
 	      }
 	    }
 
@@ -250,7 +248,7 @@ ACTION CARD - types
 	  return 1;
         }
     });
-***/
+
 
 
     this.importActionCard('veto', {
