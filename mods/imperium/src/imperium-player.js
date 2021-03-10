@@ -2051,7 +2051,7 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
         imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
       }, function () {
         imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
-      }, ["rider"]);
+      }, ["pre_agenda", "rider"]);
     }
 
     if (action2 == "skip") {

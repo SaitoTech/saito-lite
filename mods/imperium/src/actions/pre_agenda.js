@@ -5,7 +5,7 @@
     this.importActionCard('assassinate-representative', {
   	name : "Assassinate Representative" ,
   	type : "pre_agenda" ,
-  	text : "Chose a player. That player cannot vote on the Agenda" ,
+  	text : "Choose a player. That player cannot vote on the Agenda" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (action_card_player == imperium_self.game.player) {

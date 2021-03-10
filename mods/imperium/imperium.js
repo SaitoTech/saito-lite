@@ -2334,7 +2334,7 @@ console.log("P: " + planet);
       faction     :       "faction1",
       replaces    :       "carrier-ii",
       unit        :       1 ,
-      type	:	"special",
+      type	  :	"special",
       text	  :	  "A more sophisticated carrier" ,
       prereqs     :       ["blue","blue"],
       initialize :       function(imperium_self, player) {
@@ -2366,10 +2366,10 @@ console.log("P: " + planet);
       faction     :       "faction1",
       replaces    :       "infantry-ii",
       unit        :       1 ,
-      type	:	"special",
+      type	  :  	  "special",
       text	  :	  "Battle-hardened infantry" ,
       prereqs     :       ["green","green"],
-      initialize :       function(imperium_self, player) {
+      initialize  :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_infantry_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
@@ -4148,7 +4148,7 @@ console.log("HERE 2");
         }
 
 
-        if (imperium_self.game.player === strategy_card_player && player == strategy_card_player) {
+        if (imperium_self.game.player === imperium_self.game.state.speaker) {
 
             let html = '';
             if (imperium_self.game.state.agendas_per_round == 1) {
@@ -15017,7 +15017,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
       //
       // destroys a unit
       //
-      if (mv[0] === "destroy_unit") {
+      if (mv[0] === "destroy_unit" || mv[0] === "destroy") {
 
         let destroyer    = parseInt(mv[1]);
         let destroyee    = parseInt(mv[2]);
@@ -24540,6 +24540,7 @@ playerDiscardActionCards(num, mycallback=null) {
   canPlayerResearchTechnology(tech) {
 
     let mytech = this.game.players_info[this.game.player-1].tech;
+    let myfaction = this.game.players_info[this.game.player-1].faction;
     if (mytech.includes(tech)) { return 0; }
  
     if (this.tech[tech] == undefined) {
@@ -24550,16 +24551,20 @@ playerDiscardActionCards(num, mycallback=null) {
     let prereqs = JSON.parse(JSON.stringify(this.tech[tech].prereqs));
     let techfaction = this.tech[tech].faction;
     let techtype = this.tech[tech].type;
+    let techreplaces = this.tech[tech].replaces;
     let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
 
     //
     // do we have tech that replaces this? if so skip
     //
-    for (let i = 0; i < mytech.length; i++) {
-      if (this.tech[mytech[i]].replaces == techtype) {
-	return 0;
+    for (let untech in this.tech) {
+      if (this.tech[untech].faction == myfaction) {
+        if (this.tech[untech].replaces == tech) {
+          return 0;
+        } 
       }
     }
+
 
     //
     // we can use tech to represent researchable
@@ -28374,11 +28379,27 @@ returnFactionSheet(imperium_self, player=null) {
      html += `
       <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
     `;
+    //
+    // tech we have
+    //
     for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
       let techname = imperium_self.game.players_info[player-1].tech[i];
       let tech = imperium_self.tech[techname];
       if (tech.type != "ability") {
         html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card");
+      }
+    }
+    //
+    // faction tech we do not have... yet
+    //
+    for (i in imperium_self.tech) {
+      let tech = imperium_self.tech[i];
+      if (tech.type == "special") {
+	if (!imperium_self.game.players_info[player-1].tech.includes(i)) {
+ 	  if (imperium_self.game.players_info[player-1].faction == tech.faction) {
+            html += imperium_self.returnTechCardHTML(i, "faction_sheet_tech_card faction_sheet_unearned_tech");
+	  }
+	}
       }
     }
     html += `</div>`;

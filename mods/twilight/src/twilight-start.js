@@ -46,7 +46,7 @@ class Twilight extends GameTemplate {
 
     this.moves           = [];
     this.cards    	 = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     //
     // newbie mode
@@ -2039,7 +2039,6 @@ console.log("CARD: " + card);
         }
         if (mv[0] === "coup") {
 
-
           let card = "";
           if (mv.length >= 5) { card = mv[4]; }
 
@@ -2409,9 +2408,9 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["missileenvy","wwby","duckandcover","degaulle","saltnegotiations","africa", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["redscare","wwby","duckandcover","degaulle","saltnegotiations","africa", "centralamerica", "europe", "asia"];
             } else {
-              this.game.deck[0].hand = ["cia", "howilearned", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["nato", "naziscientist", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -6115,8 +6114,12 @@ this.startClock();
             ops++;
           }
           if (player == "ussr" && twilight_self.game.state.events.vietnam_revolts == 1 && twilight_self.game.countries[countryname].region == "seasia") {
-            twilight_self.updateLog("Vietnam Revolts bonus OP added to Southeast Asia coup...");
-            ops++;
+	    if (twilight_self.returnOpsOfCard(card) == 1 && twilight_self.game.state.events.redscare_player1 >= 1) {
+              twilight_self.updateLog("Vietnam Revolts bonus OP removed by Red Purge");
+	    } else { 
+              twilight_self.updateLog("Vietnam Revolts bonus OP added to Southeast Asia coup...");
+              ops++;
+            }
           }
 
           // twilight_self.displayModal("Coup launched in " + twilight_self.game.countries[countryname].name);
@@ -6208,7 +6211,6 @@ this.startClock();
 
 
     let control = this.countries[countryname].control;
-console.log("CONTROL IS: " + control);
     let winning = parseInt(roll) + parseInt(ops) - parseInt(control * 2);
 
 

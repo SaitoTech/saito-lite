@@ -577,6 +577,7 @@
   canPlayerResearchTechnology(tech) {
 
     let mytech = this.game.players_info[this.game.player-1].tech;
+    let myfaction = this.game.players_info[this.game.player-1].faction;
     if (mytech.includes(tech)) { return 0; }
  
     if (this.tech[tech] == undefined) {
@@ -587,16 +588,20 @@
     let prereqs = JSON.parse(JSON.stringify(this.tech[tech].prereqs));
     let techfaction = this.tech[tech].faction;
     let techtype = this.tech[tech].type;
+    let techreplaces = this.tech[tech].replaces;
     let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
 
     //
     // do we have tech that replaces this? if so skip
     //
-    for (let i = 0; i < mytech.length; i++) {
-      if (this.tech[mytech[i]].replaces == techtype) {
-	return 0;
+    for (let untech in this.tech) {
+      if (this.tech[untech].faction == myfaction) {
+        if (this.tech[untech].replaces == tech) {
+          return 0;
+        } 
       }
     }
+
 
     //
     // we can use tech to represent researchable

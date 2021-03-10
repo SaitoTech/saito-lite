@@ -120,7 +120,7 @@
       name     		:       "Infantry II",
       type     		:       "infantry",
       cost 		:	0.5,
-      combat 		:	8,
+      combat 		:	7,
       strength 		:	1,
       space		:	0,
       ground		:	1,

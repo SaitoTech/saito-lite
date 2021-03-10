@@ -1146,6 +1146,10 @@ body {
   margin: 1em 1em 1em 1em;
 }
 
+.faction_sheet_unearned_tech {
+  opacity: 0.55;
+}
+
 .tech_card {
   background-image: url(img/tech_card_template.jpg);
   position: relative;

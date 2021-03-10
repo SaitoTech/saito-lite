@@ -13,11 +13,7 @@
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
 
-console.log(vp + " --- " + objective);
-
                 if (vp > 0 && (imperium_self.stage_i_objectives[objective] != undefined || imperium_self.stage_ii_objectives[objective] != undefined)) {
-
-console.log("HERE FOLLOW-UP");
 
                   if (imperium_self.stage_i_objectives[objective] != undefined) {
                     imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
@@ -46,23 +42,19 @@ console.log("HERE FOLLOW-UP");
 
 
 
-
 	  let supplementary_secret = function() {
   	    imperium_self.playerAcknowledgeNotice("You will next be asked to score a public objective. The game will then allow other players to purchase secret objectives.", function() {
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
 
-console.log(vp + " --2-- " + objective);
-
                 if (vp > 0 && (imperium_self.stage_i_objectives[objective] != undefined || imperium_self.stage_ii_objectives[objective] != undefined)) {
-
-console.log("HERE 2");
 
                   if (imperium_self.stage_i_objectives[objective] != undefined) {
                     imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
 	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
 	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 	  	      imperium_self.updateStatus("scoring completed");
+                      imperium_self.addMove("gain\t"+strategy_card_player+"\t"+"secret_objective"+"\t"+"1");
                       for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
                       imperium_self.endTurn();
 		    });
@@ -71,11 +63,13 @@ console.log("HERE 2");
 	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
 	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 	  	      imperium_self.updateStatus("scoring completed");
+                      imperium_self.addMove("gain\t"+strategy_card_player+"\t"+"secret_objective"+"\t"+"1");
                       for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
                       imperium_self.endTurn();
 		    });
 		  }
 		} else {
+                  imperium_self.addMove("gain\t"+strategy_card_player+"\t"+"secret_objective"+"\t"+"1");
                   for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
                   imperium_self.endTurn();
 		}

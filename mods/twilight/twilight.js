@@ -46,7 +46,7 @@ class Twilight extends GameTemplate {
 
     this.moves           = [];
     this.cards    	 = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     //
     // newbie mode
@@ -2039,7 +2039,6 @@ console.log("CARD: " + card);
         }
         if (mv[0] === "coup") {
 
-
           let card = "";
           if (mv.length >= 5) { card = mv[4]; }
 
@@ -2409,9 +2408,9 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["missileenvy","wwby","duckandcover","degaulle","saltnegotiations","africa", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["redscare","wwby","duckandcover","degaulle","saltnegotiations","africa", "centralamerica", "europe", "asia"];
             } else {
-              this.game.deck[0].hand = ["cia", "howilearned", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["nato", "naziscientist", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -6115,8 +6114,12 @@ this.startClock();
             ops++;
           }
           if (player == "ussr" && twilight_self.game.state.events.vietnam_revolts == 1 && twilight_self.game.countries[countryname].region == "seasia") {
-            twilight_self.updateLog("Vietnam Revolts bonus OP added to Southeast Asia coup...");
-            ops++;
+	    if (twilight_self.returnOpsOfCard(card) == 1 && twilight_self.game.state.events.redscare_player1 >= 1) {
+              twilight_self.updateLog("Vietnam Revolts bonus OP removed by Red Purge");
+	    } else { 
+              twilight_self.updateLog("Vietnam Revolts bonus OP added to Southeast Asia coup...");
+              ops++;
+            }
           }
 
           // twilight_self.displayModal("Coup launched in " + twilight_self.game.countries[countryname].name);
@@ -6208,7 +6211,6 @@ this.startClock();
 
 
     let control = this.countries[countryname].control;
-console.log("CONTROL IS: " + control);
     let winning = parseInt(roll) + parseInt(ops) - parseInt(control * 2);
 
 
@@ -7926,12 +7928,8 @@ console.log("SCORING: " + JSON.stringify(scoring));
 
         scoring = this.calculateControlledBattlegroundCountries(scoring, as_bg_countries);
 
-console.log("HEE: " + JSON.stringify(scoring));
-
         scoring.us.total = scoring.us.bg;
         scoring.ussr.total = scoring.ussr.bg;
-
-console.log("SCORING: " + JSON.stringify(scoring));
 
         scoring = this.calculateControlledCountries(scoring, as_countries);
 
@@ -7969,7 +7967,7 @@ console.log("SCORING: " + JSON.stringify(scoring));
 	  // Shuttle Diplomacy also removes adjacency of Japan if controlled
 	  //
           if (this.game.state.events.shuttlediplomacy == 1) {
-	    console.log("Shuttle Diplomacy removes USSR control of Japan, which also eliminates adjacency while scoring.");
+	    this.updateLog("USSR loses Japan/US-adjacency with Shuttle Diplomacy");
           } else {
 	    scoring.ussr.vp++; 
 	  }
@@ -10780,6 +10778,9 @@ alert("end of history!");
 
     if (card == "colonial") {
 
+      let xpos = 0;
+      let ypos = 0;
+
       if (this.game.player == 1) {
         this.updateStatus("<div class='status-message' id='status-message'>US is playing Colonial Rear Guards</div>");
         return 0;
@@ -10803,7 +10804,13 @@ alert("end of history!");
           if (i == "morocco" || i == "algeria" || i == "tunisia" || i == "westafricanstates" || i == "saharanstates" || i == "sudan" || i == "ivorycoast" || i == "nigeria" || i == "ethiopia" || i == "somalia" || i == "cameroon" || i == "zaire" || i == "kenya" || i == "angola" || i == "seafricanstates" || i == "zimbabwe" || i == "botswana" || i == "southafrica" || i == "philippines" || i == "indonesia" || i == "malaysia" || i == "vietnam" || i == "thailand" || i == "laos" || i == "burma") {
             twilight_self.countries[countryname].place = 1;
             $(divname).off();
-            $(divname).on('click', function() {
+            $(divname).on('mousedown', function (e) {
+              xpos = e.clientX;
+              ypos = e.clientY;
+            });
+            $(divname).on('mouseup', function (e) {
+              if (Math.abs(xpos-e.clientX) > 4) { return; }
+              if (Math.abs(ypos-e.clientY) > 4) { return; }
               let countryname = $(this).attr('id');
               if (twilight_self.countries[countryname].place == 1) {
                 twilight_self.addMove("place\tus\tus\t"+countryname+"\t1");
@@ -11063,6 +11070,9 @@ alert("end of history!");
     ////////////////////
     if (card == "decolonization") {
 
+      let xpos = 0;
+      let ypos = 0;
+
       if (this.game.player == 2) {
         this.updateStatus("<div class='status-message' id='status-message'>USSR is playing Decolonization</div>");
         return 0;
@@ -11085,7 +11095,13 @@ alert("end of history!");
           if (i == "morocco" || i == "algeria" || i == "tunisia" || i == "westafricanstates" || i == "saharanstates" || i == "sudan" || i == "ivorycoast" || i == "nigeria" || i == "ethiopia" || i == "somalia" || i == "cameroon" || i == "zaire" || i == "kenya" || i == "angola" || i == "seafricanstates" || i == "zimbabwe" || i == "botswana" || i == "southafrica" || i == "philippines" || i == "indonesia" || i == "malaysia" || i == "vietnam" || i == "thailand" || i == "laos" || i == "burma") {
             twilight_self.countries[countryname].place = 1;
             $(divname).off();
-            $(divname).on('click', function() {
+            $(divname).on('mousedown', function (e) {
+              xpos = e.clientX;
+              ypos = e.clientY;
+            });
+            $(divname).on('mouseup', function (e) {
+              if (Math.abs(xpos-e.clientX) > 4) { return; }
+              if (Math.abs(ypos-e.clientY) > 4) { return; }
               let countryname = $(this).attr('id');
               if (twilight_self.countries[countryname].place == 1) {
                 twilight_self.addMove("place\tussr\tussr\t"+countryname+"\t1");

@@ -131,7 +131,7 @@
       faction     :       "faction1",
       replaces    :       "carrier-ii",
       unit        :       1 ,
-      type	:	"special",
+      type	  :	"special",
       text	  :	  "A more sophisticated carrier" ,
       prereqs     :       ["blue","blue"],
       initialize :       function(imperium_self, player) {
@@ -163,10 +163,10 @@
       faction     :       "faction1",
       replaces    :       "infantry-ii",
       unit        :       1 ,
-      type	:	"special",
+      type	  :  	  "special",
       text	  :	  "Battle-hardened infantry" ,
       prereqs     :       ["green","green"],
-      initialize :       function(imperium_self, player) {
+      initialize  :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_infantry_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {

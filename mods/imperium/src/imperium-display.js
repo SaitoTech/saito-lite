@@ -1144,11 +1144,27 @@ returnFactionSheet(imperium_self, player=null) {
      html += `
       <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
     `;
+    //
+    // tech we have
+    //
     for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
       let techname = imperium_self.game.players_info[player-1].tech[i];
       let tech = imperium_self.tech[techname];
       if (tech.type != "ability") {
         html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card");
+      }
+    }
+    //
+    // faction tech we do not have... yet
+    //
+    for (i in imperium_self.tech) {
+      let tech = imperium_self.tech[i];
+      if (tech.type == "special") {
+	if (!imperium_self.game.players_info[player-1].tech.includes(i)) {
+ 	  if (imperium_self.game.players_info[player-1].faction == tech.faction) {
+            html += imperium_self.returnTechCardHTML(i, "faction_sheet_tech_card faction_sheet_unearned_tech");
+	  }
+	}
       }
     }
     html += `</div>`;
