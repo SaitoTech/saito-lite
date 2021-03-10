@@ -583,6 +583,7 @@ console.log("error initing chat: " + err);
       }
     }
 
+
     //
     // initialize all units / techs / powers (for all players)
     //
@@ -633,10 +634,7 @@ console.log("error initing chat: " + err);
       this.saveSystemAndPlanets(sys);
     }
 
-
     let tmps3 = this.returnSectorAndPlanets("2_1"); 
-console.log(tmps3);
-
 
     //
     // initialize laws
@@ -649,9 +647,6 @@ console.log(tmps3);
 	this.agenda_cards[this_law.agenda].initialize(this, agenda_option);
       }
     }
-
-
-
 
     //
     // HIDE HUD LOG
@@ -700,7 +695,6 @@ try {
       this.updateSectorGraphics(i);
 } catch (err) {}
         
-          
     }
   
   

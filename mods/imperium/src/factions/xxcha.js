@@ -311,7 +311,9 @@
       },
       activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
         if (imperium_self.doesPlayerHaveTech(player, "faction3-field-nullification")) {
-	  if (imperium_self.doesSectorContainPlayerShips(player, sector)) { return 1; }
+	  if (imperium_self.doesSectorContainPlayerShips(player, sector)) { 
+	    if (activating_player != player) { return 1; }
+	  }
 	}
 	return 0;
       },

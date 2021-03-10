@@ -1,5 +1,4 @@
 
-
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
   	type : "Directive" ,
@@ -325,7 +324,7 @@
 	  //
 	  for (let i = imperium_self.game.state.laws.length-1; i > 0; i--) {
 	    let saved_agenda = imperium_self.game.state.laws[i].agenda;
-	    imperium_self.game.agenda_cards[saved_agenda].repealAgenda(imperium_self);
+	    imperium_self.agenda_cards[saved_agenda].repealAgenda(imperium_self);
 	  }
 
 	  let players_to_research_tech = [];
@@ -773,7 +772,6 @@
   });
 
 
-
   this.importAgendaCard('judicial-abolishment', {
         name : "Judicial Abolishment" ,
         type : "Directive" ,
@@ -782,7 +780,7 @@
         returnAgendaOptions : function(imperium_self) {
 	  let options = [];
 	  for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
-	    options.push(imperium_self.agenda_cards[imperium_self.game.state.laws[i]].name);
+	    options.push(imperium_self.agenda_cards[imperium_self.game.state.laws[i].agenda].name);
 	  }
 	  return options;
         },
@@ -791,14 +789,19 @@
           imperium_self.game.state.judicial_abolishment = 1;
           imperium_self.game.state.judicial_abolishment_law = winning_choice;
 
+	  let repealed = null;
+
 	  for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
-	    if (winning_choice === imperium_self.agenda_cards[imperium_self.game.state.laws[i]].name) {
-	      imperium_self.game.state.laws.splice(i, 1);
+	    if (winning_choice === imperium_self.agenda_cards[imperium_self.game.state.laws[i].agenda].name) {
+	      imperium_self.agenda_cards[ imperium_self.game.state.laws[i].agenda ].repealAgenda(imperium_self);
+	      repealed = imperium_self.game.state.laws[i].agenda;
 	      i = imperium_self.game.state.laws.length+2;
 	    }
 	  }
 
-	  imperium_self.updateLog(imperium_self.agenda_cards[imperium_self.game.state.laws[i]].name + " abolished");
+	  if (repealed) {
+	    imperium_self.updateLog(imperium_self.agenda_cards[repealed].name + " abolished");
+	  }
 
 	  return 1;
 

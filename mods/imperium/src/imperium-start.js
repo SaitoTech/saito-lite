@@ -77,5 +77,5 @@ class Imperium extends GameTemplate {
   //
   initializeGameObjects() {
 
-
+console.log("INITIALIZE GAME OBJECTS");
 

@@ -1601,18 +1601,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 
   	this.game.queue.splice(qe, 1);
 
-	/***** FEB 4 - scoring handled in Imperium now
-        if (this.stage_i_objectives[objective] != undefined) {
-	  player_return_value = this.stage_i_objectives[objective].scoreObjective(this, player);
-	}
-        if (this.stage_ii_objectives[objective] != undefined) {
-	  player_return_value = this.stage_ii_objectives[objective].scoreObjective(this, player);
-	}
-        if (this.secret_objectives[objective] != undefined) {
-	  player_return_value = this.secret_objectives[objective].scoreObjective(this, player);
-	}
-	*****/
-
 	if (player == this.game.player) {
 	  return 1;
         }
@@ -1660,10 +1648,11 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
   	  this.addMove("addbonustounselectedstrategycards");
   
   	  let cards_to_select = 1;
-  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
-  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
-  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
-  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
+	  // HACK TESTING
+  	  //if (this.game.players_info.length == 2) { cards_to_select = 3; }
+  	  //if (this.game.players_info.length == 3) { cards_to_select = 2; }
+  	  //if (this.game.players_info.length == 4) { cards_to_select = 2; }
+  	  //if (this.game.players_info.length >= 5) { cards_to_select = 1; }
 
   	  //
   	  // TODO -- ROUND 1 players only select 1
