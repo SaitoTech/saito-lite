@@ -6309,7 +6309,7 @@ console.log("PLANET: " + JSON.stringify(planet));
   this.importAgendaCard('anti-intellectual-revolution', {
   	name : "Anti-Intellectual Revolution" ,
   	type : "Law" ,
-  	text : "FOR: players must destroy a capital ship in order to research a technology using the Technology card. AGAINST: at the start of the next round, each player exhausts one planet for each technology they have." ,
+  	text : "FOR: players must destroy a capital ship in order to play the Technology card. AGAINST: at the start of the next round, each player exhausts one planet for each technology they have." ,
         returnAgendaOptions : function(imperium_self) { return ['for','against']; },
         repealAgenda(imperium_self) {
 
@@ -6325,6 +6325,7 @@ console.log("PLANET: " + JSON.stringify(planet));
 
           let techcard = imperium_self.strategy_cards['technology'];
 	  if (techcard.strategyPrimaryEventBackup) { techcard.strategyPrimaryEvent = techcard.strategyPrimaryEventBackup; }
+	  if (techcard.strategySecondaryEventBackup) { techcard.strategySecondaryEvent = techcard.strategySecondaryEventBackup; }
 
           return 1;
 
@@ -6334,6 +6335,49 @@ console.log("PLANET: " + JSON.stringify(planet));
           if (winning_choice === "for") {
 
             let techcard = imperium_self.strategy_cards['technology'];
+
+            let old_tech_sec = techcard.strategySecondaryEvent;
+            let new_tech_sec = function(imperium_self, player, strategy_card_player) {
+              if (imperium_self.game.player != strategy_card_player) {
+                imperium_self.playerAcknowledgeNotice("Anti-Intellectual Revolution is in play. Do you wish to destroy a capital ship to research technology?", function() {
+
+                  imperium_self.playerSelectUnitWithFilter(
+                    "Select a capital ship to destroy: ",
+                    function(ship) {
+                      if (ship.type == "destroyer") { return 1; }
+                      if (ship.type == "cruiser") { return 1; }
+                      if (ship.type == "carrier") { return 1; }
+                      if (ship.type == "dreadnaught") { return 1; }
+                      if (ship.type == "flagship") { return 1; }
+                      if (ship.type == "warsun") { return 1; }
+                      return 0;
+                    },
+
+                    function(unit_identifier) {
+
+                      let sector        = unit_identifier.sector;
+                      let planet_idx    = unit_identifier.planet_idx;
+                      let unit_idx      = unit_identifier.unit_idx;
+                      let unit          = unit_identifier.unit;
+
+                      if (planet_idx == -1) {
+                        imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"space"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
+                      } else {
+                        imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
+                      }
+                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+                      old_tech_sec(imperium_self, player, strategy_card_player);
+
+                    }
+                  );
+                });
+              }
+            };
+	    techcard.strategySecondaryEventBackup = old_tech_sec;
+            techcard.strategySecondaryEvent = new_tech_sec;
+
+
+
             let old_tech_func = techcard.strategyPrimaryEvent;
             let new_tech_func = function(imperium_self, player, strategy_card_player) {
               if (imperium_self.game.player == strategy_card_player) {
@@ -6388,6 +6432,7 @@ console.log("PLANET: " + JSON.stringify(planet));
 	      law_to_push.agenda = "anti-intellectual-revolution";
 	      law_to_push.option = winning_choice;
 	  imperium_self.game.state.laws.push(law_to_push);
+	  this.initialize(imperium_self, winning_choice);
 	}
   });
 
@@ -7323,7 +7368,10 @@ console.log("PLANET: " + JSON.stringify(planet));
 		for (let ii = 0; ii < imperium_self.game.players_info.length; ii++) {
 		  imperium_self.game.sectors[i].activated[ii] = 1;
 		}
-		imperium_self.updateSectorGraphics(i);
+	        let sys = imperium_self.returnSectorAndPlanets(i);
+		if (sys.s) {
+		  imperium_self.updateSectorGraphics(i);
+		}
 	      }
 	    }
 	  }
@@ -27527,7 +27575,10 @@ console.log("HOPPABLE: " + JSON.stringify(return_obj));
   
     let sys = this.returnSectorAndPlanets(sector);
     let save_sector = 0;
-  
+
+    if (sys == undefined) { return; }
+    if (sys == null) { return; }
+
     //
     // in space
     //
@@ -28434,21 +28485,11 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
-console.log("type: " + unittype);
-
   let preobj = this.units[unittype];
-
-console.log(JSON.stringify(this.units[unittype]));
-
   let obj = JSON.parse(JSON.stringify(preobj));
 
   obj.owner = this.game.player;
-
-console.log("upgrading the unit: " + this.game.player + " -- unit -- " + obj.owner);
-
   obj = this.upgradeUnit(obj, this.game.player);
-
-console.log("UPGRADING IT");
 
   if (!obj) { return ""; }
 
@@ -29098,6 +29139,13 @@ updateSectorGraphics(sector) {
   // handle both 'sector41' and '2_1'
   //
   let sys = this.returnSectorAndPlanets(sector);
+
+  if (sys == undefined) { return; }
+  if (sys == null) { return; }
+  if (sys.s == undefined) { return; }
+  if (sys.s == null) { return; }
+  try {
+
   if (sector.indexOf("_") == -1) { sector = sys.s.tile; }
 
   for (let i = 0; i < this.game.players_info.length; i++) {
@@ -29403,6 +29451,8 @@ updateSectorGraphics(sector) {
       }
     }
   }
+
+  } catch (err) {}
 
 };
 

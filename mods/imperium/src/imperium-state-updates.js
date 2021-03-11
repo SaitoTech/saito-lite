@@ -244,7 +244,10 @@
   
     let sys = this.returnSectorAndPlanets(sector);
     let save_sector = 0;
-  
+
+    if (sys == undefined) { return; }
+    if (sys == null) { return; }
+
     //
     // in space
     //

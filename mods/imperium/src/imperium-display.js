@@ -731,21 +731,11 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
-console.log("type: " + unittype);
-
   let preobj = this.units[unittype];
-
-console.log(JSON.stringify(this.units[unittype]));
-
   let obj = JSON.parse(JSON.stringify(preobj));
 
   obj.owner = this.game.player;
-
-console.log("upgrading the unit: " + this.game.player + " -- unit -- " + obj.owner);
-
   obj = this.upgradeUnit(obj, this.game.player);
-
-console.log("UPGRADING IT");
 
   if (!obj) { return ""; }
 
@@ -1395,6 +1385,13 @@ updateSectorGraphics(sector) {
   // handle both 'sector41' and '2_1'
   //
   let sys = this.returnSectorAndPlanets(sector);
+
+  if (sys == undefined) { return; }
+  if (sys == null) { return; }
+  if (sys.s == undefined) { return; }
+  if (sys.s == null) { return; }
+  try {
+
   if (sector.indexOf("_") == -1) { sector = sys.s.tile; }
 
   for (let i = 0; i < this.game.players_info.length; i++) {
@@ -1700,6 +1697,8 @@ updateSectorGraphics(sector) {
       }
     }
   }
+
+  } catch (err) {}
 
 };
 

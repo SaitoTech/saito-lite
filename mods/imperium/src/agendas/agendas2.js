@@ -402,7 +402,10 @@
 		for (let ii = 0; ii < imperium_self.game.players_info.length; ii++) {
 		  imperium_self.game.sectors[i].activated[ii] = 1;
 		}
-		imperium_self.updateSectorGraphics(i);
+	        let sys = imperium_self.returnSectorAndPlanets(i);
+		if (sys.s) {
+		  imperium_self.updateSectorGraphics(i);
+		}
 	      }
 	    }
 	  }
