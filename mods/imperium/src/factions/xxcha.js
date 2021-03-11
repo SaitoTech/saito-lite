@@ -306,7 +306,7 @@
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "faction3-field-nullification") {
           imperium_self.game.players_info[gainer-1].field_nullification = 1;
-          imperium_self.game.players_info[player-1].field_nullification_exhausted = 0;
+          imperium_self.game.players_info[gainer-1].field_nullification_exhausted = 0;
         }
       },
       activateSystemTriggers : function(imperium_self, activating_player, player, sector) {

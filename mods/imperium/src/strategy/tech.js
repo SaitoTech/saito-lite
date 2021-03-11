@@ -21,6 +21,8 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
+console.log("in secondary!");
+
 	let html = "";
 	let resources_to_spend = 0;
 
