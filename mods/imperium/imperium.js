@@ -6108,8 +6108,6 @@ console.log("PLANET: " + JSON.stringify(planet));
   });
 
 
-console.log("importaint resarch team warfare");
-
   this.importAgendaCard('research-team-warfare', {
         name : "Research Team: Warfare" ,
         type : "Law" ,
@@ -6922,8 +6920,6 @@ console.log("importaint resarch team warfare");
 
 
 
-console.log("AGENDA CARDS SDFSDF");
-
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
   	type : "Directive" ,
@@ -7696,8 +7692,6 @@ console.log("AGENDA CARDS SDFSDF");
         }
   });
 
-
-console.log("importing judicial abolishment");
 
   this.importAgendaCard('judicial-abolishment', {
         name : "Judicial Abolishment" ,
@@ -10976,7 +10970,6 @@ console.log("error initing chat: " + err);
       }
     }
 
-console.log(" ---- a");
 
     //
     // initialize all units / techs / powers (for all players)
@@ -11030,8 +11023,6 @@ console.log(" ---- a");
 
     let tmps3 = this.returnSectorAndPlanets("2_1"); 
 
-console.log(" ---- b");
-
     //
     // initialize laws
     //
@@ -11043,8 +11034,6 @@ console.log(" ---- b");
 	this.agenda_cards[this_law.agenda].initialize(this, agenda_option);
       }
     }
-
-console.log(" ---- c");
 
     //
     // HIDE HUD LOG

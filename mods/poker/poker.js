@@ -487,6 +487,8 @@ class Poker extends GameTemplate {
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
+console.log("QUEUE: " + JSON.stringify(this.game.queue));
+
       if (mv[0] == "notify") {
         this.updateLog(mv[1]);
         this.game.queue.splice(qe, 1);
@@ -498,8 +500,6 @@ class Poker extends GameTemplate {
         this.showSplash("<h1>Game Over: " + this.game.state.player_names[mv[1] - 1] + " wins!</h1>" + this.updateHTML);
         this.game.winner = this.game.players[mv[1] - 1];
         this.resignGame(this.game.id); //post to leaderboard - ignore 'resign'
-	// FEB 10
-        //this.saveGame(this.game.id);
         return 0;
       }
 
