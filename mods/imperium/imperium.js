@@ -2697,7 +2697,7 @@ console.log("P: " + planet);
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "faction3-field-nullification") {
           imperium_self.game.players_info[gainer-1].field_nullification = 1;
-          imperium_self.game.players_info[player-1].field_nullification_exhausted = 0;
+          imperium_self.game.players_info[gainer-1].field_nullification_exhausted = 0;
         }
       },
       activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
@@ -5654,7 +5654,7 @@ console.log("PLANET: " + JSON.stringify(planet));
         if ((imperium_self.game.players_info[player-1].strategy_tokens + imperium_self.game.players_info[player-1].command_tokens) >= 6) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectStrategyAndCommandTokens(6, function(success) {
             mycallback(success);
@@ -5890,7 +5890,7 @@ console.log("PLANET: " + JSON.stringify(planet));
 	  if (winning_choice != null) {
             imperium_self.game.state.holy_planet_of_ixth = 0;
             imperium_self.game.state.holy_planet_of_ixth_planet = -1;
-	    imperium_self.game.planets[winning_choce].locked = 0;
+	    imperium_self.game.planets[winning_choice].locked = 0;
 	  }
 
           return 1;
@@ -6340,7 +6340,7 @@ console.log("PLANET: " + JSON.stringify(planet));
 
             let old_tech_sec = techcard.strategySecondaryEvent;
             let new_tech_sec = function(imperium_self, player, strategy_card_player) {
-              if (imperium_self.game.player != strategy_card_player) {
+	      if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) {
                 imperium_self.playerAcknowledgeNotice("Anti-Intellectual Revolution is in play. Do you wish to destroy a capital ship to research technology?", function() {
 
                   imperium_self.playerSelectUnitWithFilter(
@@ -6368,10 +6368,7 @@ console.log("PLANET: " + JSON.stringify(planet));
                         imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
                       }
                       imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
-console.log("running old tech sec");
-console.log(player + " <----> " + strategy_card_player);
                       old_tech_sec(imperium_self, player, strategy_card_player);
-console.log("running old tech sec 2");
 
                     }
                   );
@@ -6554,24 +6551,35 @@ console.log("running old tech sec 2");
   	text : "Any player more than 3 VP behind the lead must henceforth be referred to as an Irrelevant Loser" ,
         returnAgendaOptions : function(imperium_self) { 
 	  let options = [ 'for' , 'against' ];
-	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	    options.push(imperium_self.returnFaction(i+1));
-	  }
 	  return options;
         },
 	initialize : function(imperium_self, winning_choice) {
-	  if (imperium_self.game.state.space_cadet == 1) {
-	    imperium_self.returnFactionNamePreSpaceCadet = imperium_self.returnFactionName;
-	    imperium_self.returnFactionName = function(imperium_self, player) {
-	      let max_vp = 0;
-	      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	        if (max_vp > imperium_self.game.players_info[i].vp) {
-		  max_vp = imperium_self.game.players_info[i].vp;
-		}
-	      }
-              if (imperium_self.game.players_info[player-1].vp < (max_vp-3)) { return "Irrelevant Loser"; }
-              return imperium_self.returnFactionNamePreSpaceCadet(imperium_self, player);
-            };
+	  if (imperium_self.space_cadet_initialized == undefined) {
+	    imperium_self.space_cadet_initialized = 1;
+	    if (imperium_self.game.state.space_cadet == 1) {
+	      imperium_self.returnFactionNamePreSpaceCadet = imperium_self.returnFactionName;
+	      imperium_self.returnFactionName = function(imperium_self, player) {
+	        let max_vp = 0;
+	        for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	          if (max_vp < imperium_self.game.players_info[i].vp) {
+		    max_vp = imperium_self.game.players_info[i].vp;
+		  }
+	        }
+                if (imperium_self.game.players_info[player-1].vp <= (max_vp-3)) { return "Irrelevant Loser"; }
+    	        return imperium_self.returnFactionNamePreSpaceCadet(imperium_self, player);
+  	      }
+	      imperium_self.returnFactionNameNicknamePreSpaceCadet = imperium_self.returnFactionNameNickname;
+	      imperium_self.returnFactionNameNickname = function(imperium_self, player) {
+	        let max_vp = 0;
+	        for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	          if (max_vp < imperium_self.game.players_info[i].vp) {
+		    max_vp = imperium_self.game.players_info[i].vp;
+		  }
+	        }
+                if (imperium_self.game.players_info[player-1].vp <= (max_vp-3)) { return "Loser"; }
+    	        return imperium_self.returnFactionNameNicknamePreSpaceCadet(imperium_self, player);
+  	      }
+	    }
 	  }
 	},
 	onPass : function(imperium_self, winning_choice) {
@@ -6622,15 +6630,13 @@ console.log("running old tech sec 2");
 	    if (imperium_self.game.state.galactic_threat == 1) {
 	      imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
 	      imperium_self.returnFactionName = function(imperium_self, player) {
-    	        let factions = imperium_self.returnFactions();
                 if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
     	        return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
   	      }
-	      imperium_self.returnFactionNicknamePreGalacticThreat = imperium_self.returnFactionNickname;
-	      imperium_self.returnFactionName = function(imperium_self, player) {
-    	        let factions = imperium_self.returnFactions();
+	      imperium_self.returnFactionNameNicknamePreGalacticThreat = imperium_self.returnFactionNameNickname;
+	      imperium_self.returnFactionNameNickname = function(imperium_self, player) {
                 if (imperium_self.game.state.galactic_threat_player == player) { return "Threat"; }
-    	        return imperium_self.returnFactionNicknamePreGalacticThreat(imperium_self, player);
+    	        return imperium_self.returnFactionNameNicknamePreGalacticThreat(imperium_self, player);
   	      }
 	    }
 	  }
@@ -7719,9 +7725,13 @@ console.log("running old tech sec 2");
           imperium_self.game.state.compensated_disarmament = 1;
           imperium_self.game.state.compensated_disarmament_planet = winning_choice;
 
+console.log("planet is: " + winning_choice);
+
 	  let planet = imperium_self.game.planets[winning_choice];
 	  let owner = parseInt(planet.owner);
 	  let total_infantry = 0;
+
+	  if (owner == -1) { return 1; }
 
 	  let units_to_check = planet.units[owner-1].length;
 	  for (let i = 0; i < units_to_check; i++) {
@@ -14133,20 +14143,16 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
       if (mv[0] === "must_exhaust_at_round_start") {
 
 	let player = parseInt(mv[1]);
-	let type = mv[2];;
+	let type = mv[2];
 	let number = "all"; if (mv[2]) { number = mv[2]; }
         this.game.queue.splice(qe, 1);
 
 	let exhausted = 0;
 
-	if (player) {
-          let planets = this.returnPlayerPlanetCards(player);
-	}
-
 	if (type == "cultural") {
 	  for (let i in this.game.planets) {
 	    if (this.game.planets[i].type == "cultural") {
-	      planets[i].exhausted = 1;
+	      this.game.planets[i].exhausted = 1;
 	      exhausted = 1;
 	      this.updateSectorGraphics(i);
 	    }
@@ -14155,7 +14161,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	if (type == "industrial") {	
 	  for (let i in this.game.planets) {
 	    if (this.game.planets[i].type == "industrial") {
-	      planets[i].exhausted = 1;
+	      this.game.planets[i].exhausted = 1;
 	      exhausted = 1;
 	      this.updateSectorGraphics(i);
 	    }
@@ -14164,7 +14170,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	if (type == "hazardous") {
 	  for (let i in this.game.planets) {
 	    if (this.game.planets[i].type == "hazardous") {
-	      planets[i].exhausted = 1;
+	      this.game.planets[i].exhausted = 1;
 	      exhausted = 1;
 	      this.updateSectorGraphics(i);
 	    }
@@ -14173,7 +14179,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	if (type == "homeworld") {
 	  for (let i in this.game.planets) {
 	    if (this.game.planets[i].type == "homeworld") {
-	      planets[i].exhausted = 1;
+	      this.game.planets[i].exhausted = 1;
 	      exhausted = 1;
 	      this.updateSectorGraphics(i);
 	    }
@@ -23110,13 +23116,17 @@ playerSelectChoice(msg, choices, elect = "other", mycallback = null) {
 
   for (let i = 0; i < choices.length; i++) {
     if (elect == "player") {
-      html += '<li class="textchoice" id="' + choices[i] + '">' + this.returnFaction(choices[i]) + '</li>';
+      if (this.returnFaction(choices[i]) != "Unknown") {
+        html += '<li class="textchoice" id="' + i + '">' + this.returnFaction(choices[i]) + '</li>';
+      } else {
+        html += '<li class="textchoice" id="' + i + '">' + choices[i] + '</li>';
+      }
     }
     if (elect == "planet") {
-      html += '<li class="textchoice" id="' + choices[i] + '">' + this.game.planets[choices[i]].name + '</li>';
+      html += '<li class="textchoice" id="' + i + '">' + this.game.planets[choices[i]].name + '</li>';
     }
     if (elect == "sector") {
-      html += '<li class="textchoice" id="' + choices[i] + '">' + this.game.sectors[this.game.board[choices[i]].tile].name + '</li>';
+      html += '<li class="textchoice" id="' + i + '">' + this.game.sectors[this.game.board[choices[i]].tile].name + '</li>';
     }
     if (elect == "other") {
       html += '<li class="textchoice" id="' + i + '">' + choices[i] + '</li>';

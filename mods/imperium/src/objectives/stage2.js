@@ -219,7 +219,7 @@
         if ((imperium_self.game.players_info[player-1].strategy_tokens + imperium_self.game.players_info[player-1].command_tokens) >= 6) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectStrategyAndCommandTokens(6, function(success) {
             mycallback(success);

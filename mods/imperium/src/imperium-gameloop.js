@@ -253,8 +253,6 @@
 	    x.rider 	= mv[2];
 	    x.choice 	= mv[3];
 
-console.log("RIDER: " + x.player + " -- " + x.rider + " -- " + x.choice);
-
 	this.game.state.riders.push(x);  
 
   	this.game.queue.splice(qe, 1);
@@ -1537,13 +1535,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 
  	this.game.state.new_objectives = [];
 
-  	//
-  	// reset agendas -- disabled July 19
-  	//
-        //this.game.state.stage_i_objectives = [];
-        //this.game.state.stage_ii_objectives = [];
-        //this.game.state.secret_objectives = [];
-
 	if (this.game.deck.length > 5) {
           for (i = 0; i < this.game.deck[5].hand.length; i++) {
   	    if (!this.game.state.secret_objectives.includes(this.game.deck[5].hand[i])) {
@@ -1648,11 +1639,10 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
   	  this.addMove("addbonustounselectedstrategycards");
   
   	  let cards_to_select = 1;
-	  // HACK TESTING
-  	  //if (this.game.players_info.length == 2) { cards_to_select = 3; }
-  	  //if (this.game.players_info.length == 3) { cards_to_select = 2; }
-  	  //if (this.game.players_info.length == 4) { cards_to_select = 2; }
-  	  //if (this.game.players_info.length >= 5) { cards_to_select = 1; }
+  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
+  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
+  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
+  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
 
   	  //
   	  // TODO -- ROUND 1 players only select 1
@@ -1691,20 +1681,16 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
       if (mv[0] === "must_exhaust_at_round_start") {
 
 	let player = parseInt(mv[1]);
-	let type = mv[2];;
+	let type = mv[2];
 	let number = "all"; if (mv[2]) { number = mv[2]; }
         this.game.queue.splice(qe, 1);
 
 	let exhausted = 0;
 
-	if (player) {
-          let planets = this.returnPlayerPlanetCards(player);
-	}
-
 	if (type == "cultural") {
 	  for (let i in this.game.planets) {
 	    if (this.game.planets[i].type == "cultural") {
-	      planets[i].exhausted = 1;
+	      this.game.planets[i].exhausted = 1;
 	      exhausted = 1;
 	      this.updateSectorGraphics(i);
 	    }
@@ -1713,7 +1699,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	if (type == "industrial") {	
 	  for (let i in this.game.planets) {
 	    if (this.game.planets[i].type == "industrial") {
-	      planets[i].exhausted = 1;
+	      this.game.planets[i].exhausted = 1;
 	      exhausted = 1;
 	      this.updateSectorGraphics(i);
 	    }
@@ -1722,7 +1708,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	if (type == "hazardous") {
 	  for (let i in this.game.planets) {
 	    if (this.game.planets[i].type == "hazardous") {
-	      planets[i].exhausted = 1;
+	      this.game.planets[i].exhausted = 1;
 	      exhausted = 1;
 	      this.updateSectorGraphics(i);
 	    }
@@ -1731,7 +1717,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	if (type == "homeworld") {
 	  for (let i in this.game.planets) {
 	    if (this.game.planets[i].type == "homeworld") {
-	      planets[i].exhausted = 1;
+	      this.game.planets[i].exhausted = 1;
 	      exhausted = 1;
 	      this.updateSectorGraphics(i);
 	    }
@@ -1894,9 +1880,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
         let unitjson     = mv[6];
         let shipjson     = mv[7];
 
-// july 21 - prev commented out
-//        let sys = this.returnSectorAndPlanets(sector);
-  
   	if (this.game.player != player || player_moves == 1) {
           if (source == "planet") {
             this.unloadUnitByJSONFromPlanet(player, sector, source_idx, unitjson);
@@ -1915,10 +1898,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
             }
           }
         }
-
-//        let sys = this.returnSectorAndPlanets(sector);
-// july 21   
-//        this.saveSystemAndPlanets(sys);
 
         this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);

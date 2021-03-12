@@ -221,7 +221,7 @@
 	  if (winning_choice != null) {
             imperium_self.game.state.holy_planet_of_ixth = 0;
             imperium_self.game.state.holy_planet_of_ixth_planet = -1;
-	    imperium_self.game.planets[winning_choce].locked = 0;
+	    imperium_self.game.planets[winning_choice].locked = 0;
 	  }
 
           return 1;
@@ -882,24 +882,35 @@
   	text : "Any player more than 3 VP behind the lead must henceforth be referred to as an Irrelevant Loser" ,
         returnAgendaOptions : function(imperium_self) { 
 	  let options = [ 'for' , 'against' ];
-	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	    options.push(imperium_self.returnFaction(i+1));
-	  }
 	  return options;
         },
 	initialize : function(imperium_self, winning_choice) {
-	  if (imperium_self.game.state.space_cadet == 1) {
-	    imperium_self.returnFactionNamePreSpaceCadet = imperium_self.returnFactionName;
-	    imperium_self.returnFactionName = function(imperium_self, player) {
-	      let max_vp = 0;
-	      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	        if (max_vp > imperium_self.game.players_info[i].vp) {
-		  max_vp = imperium_self.game.players_info[i].vp;
-		}
-	      }
-              if (imperium_self.game.players_info[player-1].vp < (max_vp-3)) { return "Irrelevant Loser"; }
-              return imperium_self.returnFactionNamePreSpaceCadet(imperium_self, player);
-            };
+	  if (imperium_self.space_cadet_initialized == undefined) {
+	    imperium_self.space_cadet_initialized = 1;
+	    if (imperium_self.game.state.space_cadet == 1) {
+	      imperium_self.returnFactionNamePreSpaceCadet = imperium_self.returnFactionName;
+	      imperium_self.returnFactionName = function(imperium_self, player) {
+	        let max_vp = 0;
+	        for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	          if (max_vp < imperium_self.game.players_info[i].vp) {
+		    max_vp = imperium_self.game.players_info[i].vp;
+		  }
+	        }
+                if (imperium_self.game.players_info[player-1].vp <= (max_vp-3)) { return "Irrelevant Loser"; }
+    	        return imperium_self.returnFactionNamePreSpaceCadet(imperium_self, player);
+  	      }
+	      imperium_self.returnFactionNameNicknamePreSpaceCadet = imperium_self.returnFactionNameNickname;
+	      imperium_self.returnFactionNameNickname = function(imperium_self, player) {
+	        let max_vp = 0;
+	        for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	          if (max_vp < imperium_self.game.players_info[i].vp) {
+		    max_vp = imperium_self.game.players_info[i].vp;
+		  }
+	        }
+                if (imperium_self.game.players_info[player-1].vp <= (max_vp-3)) { return "Loser"; }
+    	        return imperium_self.returnFactionNameNicknamePreSpaceCadet(imperium_self, player);
+  	      }
+	    }
 	  }
 	},
 	onPass : function(imperium_self, winning_choice) {
@@ -950,15 +961,13 @@
 	    if (imperium_self.game.state.galactic_threat == 1) {
 	      imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
 	      imperium_self.returnFactionName = function(imperium_self, player) {
-    	        let factions = imperium_self.returnFactions();
                 if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
     	        return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
   	      }
-	      imperium_self.returnFactionNicknamePreGalacticThreat = imperium_self.returnFactionNickname;
-	      imperium_self.returnFactionName = function(imperium_self, player) {
-    	        let factions = imperium_self.returnFactions();
+	      imperium_self.returnFactionNameNicknamePreGalacticThreat = imperium_self.returnFactionNameNickname;
+	      imperium_self.returnFactionNameNickname = function(imperium_self, player) {
                 if (imperium_self.game.state.galactic_threat_player == player) { return "Threat"; }
-    	        return imperium_self.returnFactionNicknamePreGalacticThreat(imperium_self, player);
+    	        return imperium_self.returnFactionNameNicknamePreGalacticThreat(imperium_self, player);
   	      }
 	    }
 	  }

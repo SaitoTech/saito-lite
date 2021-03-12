@@ -748,9 +748,13 @@
           imperium_self.game.state.compensated_disarmament = 1;
           imperium_self.game.state.compensated_disarmament_planet = winning_choice;
 
+console.log("planet is: " + winning_choice);
+
 	  let planet = imperium_self.game.planets[winning_choice];
 	  let owner = parseInt(planet.owner);
 	  let total_infantry = 0;
+
+	  if (owner == -1) { return 1; }
 
 	  let units_to_check = planet.units[owner-1].length;
 	  for (let i = 0; i < units_to_check; i++) {

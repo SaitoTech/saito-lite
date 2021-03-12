@@ -5272,13 +5272,17 @@ playerSelectChoice(msg, choices, elect = "other", mycallback = null) {
 
   for (let i = 0; i < choices.length; i++) {
     if (elect == "player") {
-      html += '<li class="textchoice" id="' + choices[i] + '">' + this.returnFaction(choices[i]) + '</li>';
+      if (this.returnFaction(choices[i]) != "Unknown") {
+        html += '<li class="textchoice" id="' + i + '">' + this.returnFaction(choices[i]) + '</li>';
+      } else {
+        html += '<li class="textchoice" id="' + i + '">' + choices[i] + '</li>';
+      }
     }
     if (elect == "planet") {
-      html += '<li class="textchoice" id="' + choices[i] + '">' + this.game.planets[choices[i]].name + '</li>';
+      html += '<li class="textchoice" id="' + i + '">' + this.game.planets[choices[i]].name + '</li>';
     }
     if (elect == "sector") {
-      html += '<li class="textchoice" id="' + choices[i] + '">' + this.game.sectors[this.game.board[choices[i]].tile].name + '</li>';
+      html += '<li class="textchoice" id="' + i + '">' + this.game.sectors[this.game.board[choices[i]].tile].name + '</li>';
     }
     if (elect == "other") {
       html += '<li class="textchoice" id="' + i + '">' + choices[i] + '</li>';
