@@ -14,6 +14,7 @@ class WebsiteCN extends Website {
     // we don't want to respond to things twice, website.js will still be installed on the client side.
   }
   webServer(app, expressapp, express) {
+    //all we do is tell express to serve this index.html before the one in mods/website.
     expressapp.use("/", express.static(`${__dirname}/../../mods/${this.dirname}/web/`));
     super.webServer(app, expressapp, express);
   }
