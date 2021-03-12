@@ -7924,6 +7924,7 @@ ACTION CARD - types
 ************************************/
 
 
+
     this.importActionCard('infiltrate', {
   	name : "Infiltrate" ,
   	type : "instant" ,
@@ -7933,7 +7934,6 @@ ACTION CARD - types
 	  return 1;
 	},
     });
-
 
 
 
@@ -8232,6 +8232,8 @@ ACTION CARD - types
 
 
 
+
+
     this.importActionCard('propulsion-research', {
   	name : "Propulsion Research" ,
   	type : "instant" ,
@@ -8258,6 +8260,7 @@ ACTION CARD - types
     });
 
 
+/****/
 
     this.importActionCard('cripple-defenses', {
   	name : "Cripple Defenses" ,
@@ -8301,6 +8304,7 @@ ACTION CARD - types
 	}
     });
 
+/****/
 
     this.importActionCard('reactor-meltdown', {
   	name : "Reactor Meltdown" ,
@@ -8346,6 +8350,8 @@ ACTION CARD - types
 	  return 0;
 	}
     });
+
+
 
 
     this.importActionCard('lost-mission', {
@@ -8409,6 +8415,7 @@ ACTION CARD - types
 	  return 0;
 	}
     });
+
 
 
 
@@ -8817,15 +8824,14 @@ ACTION CARD - types
 
 		if (planet_owner >= 0) {
 		  for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
-		    if (infantry_destroyed > 3) {
+		    if (infantry_destroyed < 3) {
 		      if (planet_obj.units[planet_owner-1][i].type == "infantry") {
-		        imperium_self.addMove("destroy\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		        imperium_self.addMove("destroy_unit\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		    	infantry_destroyed++;
 		      }
 		    }
 		  }
 		}
-                imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+planet_res);
-		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains " + planet_res + " trade goods");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -12705,8 +12711,6 @@ handleSystemsMenuItem() {
 	    x.rider 	= mv[2];
 	    x.choice 	= mv[3];
 
-console.log("RIDER: " + x.player + " -- " + x.rider + " -- " + x.choice);
-
 	this.game.state.riders.push(x);  
 
   	this.game.queue.splice(qe, 1);
@@ -13989,13 +13993,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 
  	this.game.state.new_objectives = [];
 
-  	//
-  	// reset agendas -- disabled July 19
-  	//
-        //this.game.state.stage_i_objectives = [];
-        //this.game.state.stage_ii_objectives = [];
-        //this.game.state.secret_objectives = [];
-
 	if (this.game.deck.length > 5) {
           for (i = 0; i < this.game.deck[5].hand.length; i++) {
   	    if (!this.game.state.secret_objectives.includes(this.game.deck[5].hand[i])) {
@@ -14100,11 +14097,10 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
   	  this.addMove("addbonustounselectedstrategycards");
   
   	  let cards_to_select = 1;
-	  // HACK TESTING
-  	  //if (this.game.players_info.length == 2) { cards_to_select = 3; }
-  	  //if (this.game.players_info.length == 3) { cards_to_select = 2; }
-  	  //if (this.game.players_info.length == 4) { cards_to_select = 2; }
-  	  //if (this.game.players_info.length >= 5) { cards_to_select = 1; }
+  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
+  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
+  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
+  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
 
   	  //
   	  // TODO -- ROUND 1 players only select 1
@@ -14342,9 +14338,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
         let unitjson     = mv[6];
         let shipjson     = mv[7];
 
-// july 21 - prev commented out
-//        let sys = this.returnSectorAndPlanets(sector);
-  
   	if (this.game.player != player || player_moves == 1) {
           if (source == "planet") {
             this.unloadUnitByJSONFromPlanet(player, sector, source_idx, unitjson);
@@ -14363,10 +14356,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
             }
           }
         }
-
-//        let sys = this.returnSectorAndPlanets(sector);
-// july 21   
-//        this.saveSystemAndPlanets(sys);
 
         this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -17843,6 +17832,8 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
   }
 
 
+
+/****
 returnPlayers(num = 0) {
 
   var players = [];
@@ -18078,7 +18069,7 @@ returnPlayers(num = 0) {
 
 
 
-
+***/
 
 
 
@@ -20005,6 +19996,7 @@ playerContinueTurn(player, sector) {
     html += '<li class="option" id="produce">produce units</li>';
     options_available++;
   }
+
   if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
     if (sector == "new-byzantium" || sector == "4_4") {
       if ((imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player) + imperium_self.game.players_info[imperium_self.game.player - 1].goods) >= 6) {
@@ -20856,8 +20848,6 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
-    imperium_self.unlockInterface();
-
 
     let id = $(this).attr("id");
 
@@ -20886,6 +20876,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
         imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
       }
 
+      imperium_self.unlockInterface();
       imperium_self.playerSelectResources(total_cost, function (success) {
 
         if (success == 1) {
@@ -22837,6 +22828,20 @@ playerPostActivateSystem(sector) {
     html += '<li class="option" id="move">move into sector</li>';
   }
 
+
+  if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
+    if (sector == "new-byzantium" || sector == "4_4") {
+      if ((imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player) + imperium_self.game.players_info[imperium_self.game.player - 1].goods) >= 6) {
+        html += '<li class="option" id="invade">invade planet</li>';
+      }
+    } else {
+      html += '<li class="option" id="invade">invade planet</li>';
+    }
+  }
+  if (this.canPlayerLandInfantry(player, sector) && this.game.tracker.invasion == 0) {
+    html += '<li class="option" id="land">reassign infantry</li>';
+  }
+
   if (this.canPlayerProduceInSector(this.game.player, sector)) {
     html += '<li class="option" id="produce">produce units</li>';
   }
@@ -22866,6 +22871,33 @@ playerPostActivateSystem(sector) {
         imperium_self.playerPlayActionCardMenu(action_card_player, card);
       }, ["action"]);
     }
+
+
+    if (action2 == "invade") {
+
+      //
+      // New Byzantium requires 6 influence to conquer
+      //
+      if (sector === "new-byzantium" || sector == "4_4") {
+        if (imperium_self.game.planets['new-byzantium'].owner == -1) {
+          if (imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
+            imperium_self.playerSelectInfluence(6, function (success) {
+              imperium_self.game.tracker.invasion = 1;
+              imperium_self.playerInvadePlanet(player, sector);
+            });
+          } else {
+            salert("The first conquest of New Byzantium requires spending 6 influence, which you lack.");
+            return;
+          }
+          return;
+        }
+      }
+
+      imperium_self.game.tracker.invasion = 1;
+      imperium_self.playerInvadePlanet(player, sector);
+    }
+
+
 
     if (action2 == "land") {
       imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
@@ -25773,7 +25805,9 @@ playerDiscardActionCards(num, mycallback=null) {
   
   
   canPlayerInvadePlanet(player, sector) {
-  
+
+console.log(player + " -- " + sector);  
+
     let sys = this.returnSectorAndPlanets(sector);
     let space_transport_available = 0;
     let planets_ripe_for_plucking = 0;
@@ -25787,27 +25821,35 @@ playerDiscardActionCards(num, mycallback=null) {
       if (sys.p[i].locked == 0 && sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
     }
 
+console.log("planets ripe for plucking: " + planets_ripe_for_plucking);  
+
     if (planets_ripe_for_plucking == 0) { return 0; }
 
     //
     // do we have any infantry for an invasion
     //
+console.log("ships in space: " + sys.s.units[player-1].length);
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
+console.log("unit: " + JSON.stringify(unit));
       for (let k = 0; k < unit.storage.length; k++) {
       if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
       }
-      if (unit.capacity > 0) { space_tranport_available = 1; }
+      if (unit.capacity > 0) { space_transport_available = 1; }
     }
-  
+
     //
     // return yes if troops in space
     //
     if (total_available_infantry > 0) {
       return 1;
     }
+
+console.log("tai: " + total_available_infantry);
+
+console.log("sta: " + space_transport_available);
   
     //
     // otherwise see if we can transfer over from another planet in the sector

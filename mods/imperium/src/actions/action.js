@@ -19,6 +19,7 @@ ACTION CARD - types
 ************************************/
 
 
+
     this.importActionCard('infiltrate', {
   	name : "Infiltrate" ,
   	type : "instant" ,
@@ -28,7 +29,6 @@ ACTION CARD - types
 	  return 1;
 	},
     });
-
 
 
 
@@ -327,6 +327,8 @@ ACTION CARD - types
 
 
 
+
+
     this.importActionCard('propulsion-research', {
   	name : "Propulsion Research" ,
   	type : "instant" ,
@@ -443,6 +445,8 @@ ACTION CARD - types
     });
 
 
+
+
     this.importActionCard('lost-mission', {
   	name : "Lost Mission" ,
   	type : "action" ,
@@ -504,6 +508,7 @@ ACTION CARD - types
 	  return 0;
 	}
     });
+
 
 
 
@@ -912,15 +917,14 @@ ACTION CARD - types
 
 		if (planet_owner >= 0) {
 		  for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
-		    if (infantry_destroyed > 3) {
+		    if (infantry_destroyed < 3) {
 		      if (planet_obj.units[planet_owner-1][i].type == "infantry") {
-		        imperium_self.addMove("destroy\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		        imperium_self.addMove("destroy_unit\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		    	infantry_destroyed++;
 		      }
 		    }
 		  }
 		}
-                imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+planet_res);
-		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains " + planet_res + " trade goods");
 		imperium_self.endTurn();
 		return 0;
 	      },

@@ -1279,7 +1279,9 @@
   
   
   canPlayerInvadePlanet(player, sector) {
-  
+
+console.log(player + " -- " + sector);  
+
     let sys = this.returnSectorAndPlanets(sector);
     let space_transport_available = 0;
     let planets_ripe_for_plucking = 0;
@@ -1293,27 +1295,35 @@
       if (sys.p[i].locked == 0 && sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
     }
 
+console.log("planets ripe for plucking: " + planets_ripe_for_plucking);  
+
     if (planets_ripe_for_plucking == 0) { return 0; }
 
     //
     // do we have any infantry for an invasion
     //
+console.log("ships in space: " + sys.s.units[player-1].length);
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
+console.log("unit: " + JSON.stringify(unit));
       for (let k = 0; k < unit.storage.length; k++) {
       if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
       }
-      if (unit.capacity > 0) { space_tranport_available = 1; }
+      if (unit.capacity > 0) { space_transport_available = 1; }
     }
-  
+
     //
     // return yes if troops in space
     //
     if (total_available_infantry > 0) {
       return 1;
     }
+
+console.log("tai: " + total_available_infantry);
+
+console.log("sta: " + space_transport_available);
   
     //
     // otherwise see if we can transfer over from another planet in the sector

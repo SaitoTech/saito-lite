@@ -1,4 +1,6 @@
 
+
+/****
 returnPlayers(num = 0) {
 
   var players = [];
@@ -234,7 +236,7 @@ returnPlayers(num = 0) {
 
 
 
-
+***/
 
 
 
@@ -2161,6 +2163,7 @@ playerContinueTurn(player, sector) {
     html += '<li class="option" id="produce">produce units</li>';
     options_available++;
   }
+
   if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
     if (sector == "new-byzantium" || sector == "4_4") {
       if ((imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player) + imperium_self.game.players_info[imperium_self.game.player - 1].goods) >= 6) {
@@ -3012,8 +3015,6 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
-    imperium_self.unlockInterface();
-
 
     let id = $(this).attr("id");
 
@@ -3042,6 +3043,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
         imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
       }
 
+      imperium_self.unlockInterface();
       imperium_self.playerSelectResources(total_cost, function (success) {
 
         if (success == 1) {
@@ -4993,6 +4995,20 @@ playerPostActivateSystem(sector) {
     html += '<li class="option" id="move">move into sector</li>';
   }
 
+
+  if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
+    if (sector == "new-byzantium" || sector == "4_4") {
+      if ((imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player) + imperium_self.game.players_info[imperium_self.game.player - 1].goods) >= 6) {
+        html += '<li class="option" id="invade">invade planet</li>';
+      }
+    } else {
+      html += '<li class="option" id="invade">invade planet</li>';
+    }
+  }
+  if (this.canPlayerLandInfantry(player, sector) && this.game.tracker.invasion == 0) {
+    html += '<li class="option" id="land">reassign infantry</li>';
+  }
+
   if (this.canPlayerProduceInSector(this.game.player, sector)) {
     html += '<li class="option" id="produce">produce units</li>';
   }
@@ -5022,6 +5038,33 @@ playerPostActivateSystem(sector) {
         imperium_self.playerPlayActionCardMenu(action_card_player, card);
       }, ["action"]);
     }
+
+
+    if (action2 == "invade") {
+
+      //
+      // New Byzantium requires 6 influence to conquer
+      //
+      if (sector === "new-byzantium" || sector == "4_4") {
+        if (imperium_self.game.planets['new-byzantium'].owner == -1) {
+          if (imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
+            imperium_self.playerSelectInfluence(6, function (success) {
+              imperium_self.game.tracker.invasion = 1;
+              imperium_self.playerInvadePlanet(player, sector);
+            });
+          } else {
+            salert("The first conquest of New Byzantium requires spending 6 influence, which you lack.");
+            return;
+          }
+          return;
+        }
+      }
+
+      imperium_self.game.tracker.invasion = 1;
+      imperium_self.playerInvadePlanet(player, sector);
+    }
+
+
 
     if (action2 == "land") {
       imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
