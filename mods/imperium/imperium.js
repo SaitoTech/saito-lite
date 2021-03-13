@@ -8260,7 +8260,6 @@ ACTION CARD - types
     });
 
 
-/****/
 
     this.importActionCard('cripple-defenses', {
   	name : "Cripple Defenses" ,
@@ -8304,7 +8303,6 @@ ACTION CARD - types
 	}
     });
 
-/****/
 
     this.importActionCard('reactor-meltdown', {
   	name : "Reactor Meltdown" ,

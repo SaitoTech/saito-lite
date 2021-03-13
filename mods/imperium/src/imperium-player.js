@@ -1,6 +1,5 @@
 
 
-/****
 returnPlayers(num = 0) {
 
   var players = [];
@@ -234,9 +233,6 @@ returnPlayers(num = 0) {
 }
 
 
-
-
-***/
 
 
 
