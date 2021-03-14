@@ -682,7 +682,6 @@ console.log(err);
 
 	let twilight_self = this;
 
-console.log("adding sizer!");
         this.sizer.render(this.app, this);
         this.sizer.attachEvents(this.app, this, '.gameboard');
 
@@ -816,7 +815,6 @@ console.log("\n\n\n\n");
       let p = Object.assign({}, m, o);
       let q = Object.assign({}, n, p);
 
-      console.log("CARDS: " + JSON.stringify(k));
       this.game.queue.push("DECK\t1\t"+JSON.stringify(k));
     } else {
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnEarlyWarCards()));
@@ -963,9 +961,6 @@ try {
         let qe = this.game.queue.length-1;
         let mv = this.game.queue[qe].split("\t");
         let shd_continue = 1;
-
-console.log("QUEUE: " + this.game.queue);
-console.log("MOVE: " + JSON.stringify(mv));
 
         //
         // cambridge region
@@ -1391,8 +1386,6 @@ console.log("MOVE: " + JSON.stringify(mv));
           let receiver = "us";
           let discarder = "ussr";
           if (sender == 2) { receiver = "ussr"; discarder = "us"; }
-
-console.log("CARD: " + card);
 
           this.game.state.events.missile_envy = sender;
 
@@ -2224,7 +2217,6 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "place") {
-console.log("place: " + mv[1] + " -- " + player);
           if (player !== mv[1]) { this.placeInfluence(mv[3], parseInt(mv[4]), mv[2]); }
           this.game.queue.splice(qe, 1);
         }
@@ -2303,7 +2295,6 @@ console.log("place: " + mv[1] + " -- " + player);
 	        this.game.queue[le] = this.game.queue[le-1];
 		this.game.queue[le-1] = tmp; 		
                 lmv = this.game.queue[le].split("\t");
-console.log("re-arranged resolve to avoid OBSERVER MODE bug");
 	      }
 
 
@@ -2358,7 +2349,6 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
                     if (tmplmv[0] === "event") {
                       if (tmplmv.length > 2) {
                         if (tmplmv[2] === mv[1]) {
-  console.log("resolving earlier: " + this.game.queue[z]);
                           this.game.queue.splice(z);
                           zz = 0;
                         }
@@ -4358,9 +4348,6 @@ this.startClock();
           if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) { scoring_cards_available++; }
         }
       }
-
-console.log("scoring cards: " + scoring_cards_available + " -- " + moves_remaining);
-console.log("available cards: " + cards_available + " -- " + this.game.state.events.missile_envy + " -- " + this.game.state.events.missileenvy);
 
       //
       // handle missile envy if needed
@@ -6454,8 +6441,6 @@ this.startClock();
     this.moves = [];
     this.sendMessage("game", extra);
 
-  console.log("MESSAGE SENT: " + this.game.queue);
-
   }
 
 
@@ -7096,8 +7081,6 @@ this.startClock();
 
   returnEarlyWarCards() {
 
-console.log("RETURNING CARDS: " + this.game.options.deck);
-
     var deck = {};
 
     // EARLY WAR
@@ -7696,9 +7679,6 @@ console.log("RETURNING CARDS: " + this.game.options.deck);
   }
 
   determineRegionVictor(scoring, region_scoring_range, max_bg_num) {
-
-console.log("RANGE: " + JSON.stringify(region_scoring_range));
-console.log("SCORING: " + JSON.stringify(scoring));
 
     if (scoring.us.bg == max_bg_num && scoring.us.total > scoring.ussr.total) { scoring.us.vp = region_scoring_range.control; }
     else if (scoring.us.bg > scoring.ussr.bg && scoring.us.total > scoring.us.bg && scoring.us.total > scoring.ussr.total) { scoring.us.vp = region_scoring_range.domination; }
@@ -8555,8 +8535,6 @@ console.log("SCORING: " + JSON.stringify(scoring));
       }
     }
 
-
-  console.log("LOWERING DEFCON: " + this.game.state.defcon + " -- " + this.game.state.headline + " -- " + this.game.state.player_to_go);
 
     if (this.game.state.defcon == 1) {
       if (this.game.state.headline == 1) {
