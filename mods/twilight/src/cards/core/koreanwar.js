@@ -11,8 +11,10 @@
       if (this.isControlled("us", "northkorea") == 1) { target++; }
 
       let roll = this.rollDice(6);
+      let modified = target - 4;
 
-      this.updateLog("<span>Korean War happens (roll:</span> " + roll+" / -"+(target -4) + ")");
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls:</span> "+roll);
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>modified:</span> "+roll-modified);
 
       if (roll >= target) {
         this.updateLog("North Korea wins the Korean War");
