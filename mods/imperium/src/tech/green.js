@@ -65,7 +65,7 @@
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "hyper-metabolism") {
           imperium_self.game.players_info[gainer-1].hyper_metabolism = 1;
-          imperium_self.game.players_info[gainer-1].new_tokens_bonus_when_issued = 1;
+          imperium_self.game.players_info[gainer-1].new_token_bonus_when_issued = 1;
         }
       },
     });

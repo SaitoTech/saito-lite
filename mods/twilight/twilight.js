@@ -6138,6 +6138,9 @@ this.startClock();
   playCoup(player, countryname, ops, mycallback=null) {
 
     let roll    = this.rollDice(6);
+    let modifier = 0;
+
+    this.updateLog(`COUP: ${player.toUpperCase()} rolls ${roll}`);
 
     // stats
     if (player == "us") { this.game.state.stats.us_coups.push(roll); }
@@ -6159,7 +6162,7 @@ this.startClock();
     //
     if (this.game.state.events.saltnegotiations == 1) {
       this.updateLog("Salt Negotiations -1 modifier on coups");
-      roll--;
+      modifier--;
     }
 
     //
@@ -6171,12 +6174,12 @@ this.startClock();
         if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
           if (player == "ussr") {
             this.updateLog("Latin American Death Squads triggers: USSR "+roll_modifier+" modifier");
-            roll += roll_modifier;
+            modifier += roll_modifier;
           }
           if (player == "us")   {
             if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
               this.updateLog("Latin American Death Squads triggers: US -"+roll_modifier+" modifier");
-              roll -= roll_modifier;
+              modifier -= roll_modifier;
             }
           }
         }
@@ -6186,11 +6189,11 @@ this.startClock();
         if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
           if (player == "ussr") {
             this.updateLog("Latin American Death Squads triggers: USSR -"+roll_modifier+" modifier");
-            roll -= roll_modifier;
+            modifier -= roll_modifier;
           }
           if (player == "us")   {
             this.updateLog("Latin American Death Squads triggers: US "+roll_modifier+" modifier");
-            roll += roll_modifier;
+            modifier += roll_modifier;
           }
         }
       }
@@ -6203,7 +6206,7 @@ this.startClock();
     //
     if (this.game.state.events.inftreaty == 1) {
         this.updateLog("INF Treaty -1 modifier on coups");
-        roll--;
+        modifier--;
     }
     if ((player == "ussr" && this.game.state.events.cubanmissilecrisis == 1) || (player == "us" && this.game.state.events.cubanmissilecrisis == 2)) {
 	this.game.state.events.cubanmissilecrisis = 0;
@@ -6211,6 +6214,12 @@ this.startClock();
 
 
     let control = this.countries[countryname].control;
+
+    if (modifier != 0) {
+      roll = (roll+modifier);
+      this.updateLog(`COUP: ${player.toUpperCase()} modified roll: ${roll}`);
+    }
+
     let winning = parseInt(roll) + parseInt(ops) - parseInt(control * 2);
 
 
@@ -10095,8 +10104,11 @@ alert("end of history!");
       if (this.isControlled("us", "lebanon") == 1) { target++; }
       if (this.isControlled("us", "syria") == 1) { target++; }
 
+      let modified = target - 4;
+
       let roll = this.rollDice(6);
-      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls</span> "+roll+" / -"+(target -4));
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls:</span> "+roll);
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>modified:</span> "+roll-modified);
 
       if (roll >= target) {
         this.updateLog("USSR wins the Arab-Israeli War");
@@ -10444,6 +10456,7 @@ alert("end of history!");
                 }
               }
 
+
               if (twilight_self.game.player == 1) {
                 if (c === "mexico") { modify++; }
                 if (c === "cuba") { modify++; }
@@ -10488,7 +10501,8 @@ alert("end of history!");
                   }
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" succeeded.");
-                twilight_self.addMove("notify\tBrush War rolls "+ (dieroll+modify) +" / -"+modify);
+                twilight_self.addMove("notify\tBrush War modified: " + (dieroll-modify));
+                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll));
                 twilight_self.endTurn();
 
               } else {
@@ -10498,7 +10512,8 @@ alert("end of history!");
                   twilight_self.addMove("milops\tussr\t3");
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" failed.");
-                twilight_self.addMove("notify\tBrush War rolls "+ (dieroll+modify) +" / -"+modify);
+                twilight_self.addMove("notify\tBrush War modified: " + (dieroll-modify));
+                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll));
                 twilight_self.endTurn();
               }
             });
@@ -11765,8 +11780,12 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
             if (twilight_self.isControlled(opponent, "iran") == 1) { target++; }
             if (twilight_self.isControlled(opponent, "afghanistan") == 1) { target++; }
 
+	    let modified = target-4;
+
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" modified: "+ (die-modified));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls: "+die);
+
 
             if (die >= target) {
 
@@ -11806,8 +11825,12 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
             if (twilight_self.isControlled(opponent, "pakistan") == 1) { target++; }
             if (twilight_self.isControlled(opponent, "burma") == 1) { target++; }
 
+            let modified = target-4;
+
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" modified: "+ (die-modified));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls: "+die);
+
 
             if (die >= target) {
 
@@ -12000,8 +12023,10 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
             if (twilight_self.isControlled(opponent, "iraq") == 1) { target++; }
             if (twilight_self.isControlled(opponent, "afghanistan") == 1) { target++; }
 
+            let modified = target-4;
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" modified: "+ (die-modified));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls: "+die);
 
             if (die >= target) {
 
@@ -12044,8 +12069,10 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
             if (twilight_self.isControlled(opponent, "gulfstates") == 1) { target++; }
             if (twilight_self.isControlled(opponent, "saudiarabia") == 1) { target++; }
 
+            let modified = target-4;
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" modified: "+ (die-modified));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls: "+die);
 
             if (die >= target) {
 

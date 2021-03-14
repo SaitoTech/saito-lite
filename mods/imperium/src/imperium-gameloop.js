@@ -913,7 +913,11 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	    }
 	    if (this.agenda_cards[agenda].elect == "player") { 
 	      is_player = 1;
-              this.updateLog("Agenda Outcome: " + this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+              if (this.returnFactionNickname(this.game.state.choices[i]) !== "Unknown") {
+                this.updateLog("Agenda Outcome: " + this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+	      } else {
+                this.updateLog("Agenda Outcome: " + this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+	      }
 	    }
 	    if (this.agenda_cards[agenda].elect == "sector") { 
 	      is_sector = 1;
@@ -1289,7 +1293,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	if (this.playing_token_allocation == 1) { return; }
 	this.playing_token_allocation = 1; 
 
-	if (parseInt(mv[2])) { 
+	if (parseInt(mv[2])) {
  	  this.playerAllocateNewTokens(parseInt(mv[1]), parseInt(mv[2]), 1, 3);
 	} else { 
  	  this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued), 1, 3);

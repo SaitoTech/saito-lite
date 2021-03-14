@@ -113,7 +113,6 @@ returnPlayers(num = 0) {
     //
     players[i].new_token_bonus_when_issued = 0;
     players[i].action_cards_bonus_when_issued = 0;
-    players[i].new_tokens_bonus_when_issued = 0;
     players[i].fleet_move_bonus = 0;
     players[i].temporary_fleet_move_bonus = 0;
     players[i].ship_move_bonus = 0;
@@ -2366,7 +2365,6 @@ playerBuyTokens(stage = 0, resolve = 1) {
       salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
-    imperium_self.unlockInterface();
 
 
     let id = $(this).attr("id");
@@ -2394,9 +2392,11 @@ playerBuyTokens(stage = 0, resolve = 1) {
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + command_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + strategy_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tfleetsupply\t" + fleet_supply);
+          imperium_self.unlockInterface();
           imperium_self.endTurn();
           return;
         } else {
+          imperium_self.unlockInterface();
           imperium_self.endTurn();
         }
       });
@@ -5096,7 +5096,6 @@ playerPostActivateSystem(sector) {
     }
   });
 }
-
 
 
 

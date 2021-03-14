@@ -274,7 +274,7 @@ console.log("INITIALIZE GAME OBJECTS");
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "hyper-metabolism") {
           imperium_self.game.players_info[gainer-1].hyper_metabolism = 1;
-          imperium_self.game.players_info[gainer-1].new_tokens_bonus_when_issued = 1;
+          imperium_self.game.players_info[gainer-1].new_token_bonus_when_issued = 1;
         }
       },
     });
@@ -2302,7 +2302,7 @@ console.log("P: " + planet);
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"strategy"+"\t"+"1");
-              imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
+              imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " orbital drops 2 infantry onto " + planet.name);
               imperium_self.endTurn();
               return 0;
             },
@@ -3828,6 +3828,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
 
                   if (imperium_self.stage_i_objectives[objective] != undefined) {
                     imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
+                      imperium_self.addMove("score\t"+imperium_self.game.player+"\t"+"1"+"\t"+"new-byzantium");
 	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
 	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 	  	      imperium_self.updateStatus("scoring completed");
@@ -3835,6 +3836,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
 		    });
 		  } else {
                     imperium_self.stage_ii_objectives[objective].scoreObjective(imperium_self, player, function() {
+                      imperium_self.addMove("score\t"+imperium_self.game.player+"\t"+"1"+"\t"+"new-byzantium");
 	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
 	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 	  	      imperium_self.updateStatus("scoring completed");
@@ -5157,7 +5159,7 @@ console.log("PLANET: " + JSON.stringify(planet));
         let techlist = imperium_self.game.players_info[player-1].tech;
         let factiontech = 0;
         for (let i = 0; i < techlist.length; i++) {
-          if (imperium_self.tech[techlist[i]].type == "normal" && techlist[i].indexOf("faction") == 0) { factiontech++; }
+          if (imperium_self.tech[techlist[i]].type == "special" && techlist[i].indexOf("faction") == 0) { factiontech++; }
         }
         if (factiontech >= 2) { return 1; }
 	return 0;
@@ -7252,7 +7254,7 @@ console.log("PLANET: " + JSON.stringify(planet));
 
 	    players_to_research_tech.sort();
 	    for (let i = 0; i < players_to_research_tech.length; i++) { 
-	      imperium_self.game.queue.push("reearch\t"+players_to_research_tech[i]);
+	      imperium_self.game.queue.push("research\t"+players_to_research_tech[i]);
 	    }
           }
 
@@ -9369,8 +9371,7 @@ ACTION CARD - types
               },
               function(player) {
                 imperium_self.addMove("rider\t"+player+"\tassassinate-representative\t-1");
-                //imperium_self.addMove("assassinate_representative\t"+imperium_self.game.player+"\t"+player);
-                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " assassinates the voting representative of " + imperium_self.returnFaction(player));
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " assassinates the " + imperium_self.returnFactionNickname(player) + " delegate");
                 imperium_self.endTurn();
                 return 0;
               },
@@ -13369,7 +13370,11 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	    }
 	    if (this.agenda_cards[agenda].elect == "player") { 
 	      is_player = 1;
-              this.updateLog("Agenda Outcome: " + this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+              if (this.returnFactionNickname(this.game.state.choices[i]) !== "Unknown") {
+                this.updateLog("Agenda Outcome: " + this.returnFactionNickname(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+	      } else {
+                this.updateLog("Agenda Outcome: " + this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+	      }
 	    }
 	    if (this.agenda_cards[agenda].elect == "sector") { 
 	      is_sector = 1;
@@ -13745,7 +13750,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	if (this.playing_token_allocation == 1) { return; }
 	this.playing_token_allocation = 1; 
 
-	if (parseInt(mv[2])) { 
+	if (parseInt(mv[2])) {
  	  this.playerAllocateNewTokens(parseInt(mv[1]), parseInt(mv[2]), 1, 3);
 	} else { 
  	  this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued), 1, 3);
@@ -17831,7 +17836,6 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
 
 
 
-/****
 returnPlayers(num = 0) {
 
   var players = [];
@@ -17945,7 +17949,6 @@ returnPlayers(num = 0) {
     //
     players[i].new_token_bonus_when_issued = 0;
     players[i].action_cards_bonus_when_issued = 0;
-    players[i].new_tokens_bonus_when_issued = 0;
     players[i].fleet_move_bonus = 0;
     players[i].temporary_fleet_move_bonus = 0;
     players[i].ship_move_bonus = 0;
@@ -18065,9 +18068,6 @@ returnPlayers(num = 0) {
 }
 
 
-
-
-***/
 
 
 
@@ -20201,7 +20201,6 @@ playerBuyTokens(stage = 0, resolve = 1) {
       salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
-    imperium_self.unlockInterface();
 
 
     let id = $(this).attr("id");
@@ -20229,9 +20228,11 @@ playerBuyTokens(stage = 0, resolve = 1) {
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + command_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + strategy_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tfleetsupply\t" + fleet_supply);
+          imperium_self.unlockInterface();
           imperium_self.endTurn();
           return;
         } else {
+          imperium_self.unlockInterface();
           imperium_self.endTurn();
         }
       });
@@ -22931,7 +22932,6 @@ playerPostActivateSystem(sector) {
     }
   });
 }
-
 
 
 

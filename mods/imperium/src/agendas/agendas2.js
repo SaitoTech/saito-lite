@@ -275,7 +275,7 @@
 
 	    players_to_research_tech.sort();
 	    for (let i = 0; i < players_to_research_tech.length; i++) { 
-	      imperium_self.game.queue.push("reearch\t"+players_to_research_tech[i]);
+	      imperium_self.game.queue.push("research\t"+players_to_research_tech[i]);
 	    }
           }
 

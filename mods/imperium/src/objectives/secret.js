@@ -557,7 +557,7 @@ console.log("PLANET: " + JSON.stringify(planet));
         let techlist = imperium_self.game.players_info[player-1].tech;
         let factiontech = 0;
         for (let i = 0; i < techlist.length; i++) {
-          if (imperium_self.tech[techlist[i]].type == "normal" && techlist[i].indexOf("faction") == 0) { factiontech++; }
+          if (imperium_self.tech[techlist[i]].type == "special" && techlist[i].indexOf("faction") == 0) { factiontech++; }
         }
         if (factiontech >= 2) { return 1; }
 	return 0;

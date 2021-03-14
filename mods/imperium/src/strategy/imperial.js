@@ -17,6 +17,7 @@
 
                   if (imperium_self.stage_i_objectives[objective] != undefined) {
                     imperium_self.stage_i_objectives[objective].scoreObjective(imperium_self, player, function() {
+                      imperium_self.addMove("score\t"+imperium_self.game.player+"\t"+"1"+"\t"+"new-byzantium");
 	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
 	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 	  	      imperium_self.updateStatus("scoring completed");
@@ -24,6 +25,7 @@
 		    });
 		  } else {
                     imperium_self.stage_ii_objectives[objective].scoreObjective(imperium_self, player, function() {
+                      imperium_self.addMove("score\t"+imperium_self.game.player+"\t"+"1"+"\t"+"new-byzantium");
 	              imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); 
 	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 	  	      imperium_self.updateStatus("scoring completed");

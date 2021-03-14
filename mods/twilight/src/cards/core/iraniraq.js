@@ -27,8 +27,10 @@
             if (twilight_self.isControlled(opponent, "iraq") == 1) { target++; }
             if (twilight_self.isControlled(opponent, "afghanistan") == 1) { target++; }
 
+            let modified = target-4;
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" modified: "+ (die-modified));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls: "+die);
 
             if (die >= target) {
 
@@ -71,8 +73,10 @@
             if (twilight_self.isControlled(opponent, "gulfstates") == 1) { target++; }
             if (twilight_self.isControlled(opponent, "saudiarabia") == 1) { target++; }
 
+            let modified = target-4;
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" modified: "+ (die-modified));
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls: "+die);
 
             if (die >= target) {
 

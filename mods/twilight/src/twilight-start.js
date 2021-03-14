@@ -6138,6 +6138,9 @@ this.startClock();
   playCoup(player, countryname, ops, mycallback=null) {
 
     let roll    = this.rollDice(6);
+    let modifier = 0;
+
+    this.updateLog(`COUP: ${player.toUpperCase()} rolls ${roll}`);
 
     // stats
     if (player == "us") { this.game.state.stats.us_coups.push(roll); }
@@ -6159,7 +6162,7 @@ this.startClock();
     //
     if (this.game.state.events.saltnegotiations == 1) {
       this.updateLog("Salt Negotiations -1 modifier on coups");
-      roll--;
+      modifier--;
     }
 
     //
@@ -6171,12 +6174,12 @@ this.startClock();
         if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
           if (player == "ussr") {
             this.updateLog("Latin American Death Squads triggers: USSR "+roll_modifier+" modifier");
-            roll += roll_modifier;
+            modifier += roll_modifier;
           }
           if (player == "us")   {
             if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
               this.updateLog("Latin American Death Squads triggers: US -"+roll_modifier+" modifier");
-              roll -= roll_modifier;
+              modifier -= roll_modifier;
             }
           }
         }
@@ -6186,11 +6189,11 @@ this.startClock();
         if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
           if (player == "ussr") {
             this.updateLog("Latin American Death Squads triggers: USSR -"+roll_modifier+" modifier");
-            roll -= roll_modifier;
+            modifier -= roll_modifier;
           }
           if (player == "us")   {
             this.updateLog("Latin American Death Squads triggers: US "+roll_modifier+" modifier");
-            roll += roll_modifier;
+            modifier += roll_modifier;
           }
         }
       }
@@ -6203,7 +6206,7 @@ this.startClock();
     //
     if (this.game.state.events.inftreaty == 1) {
         this.updateLog("INF Treaty -1 modifier on coups");
-        roll--;
+        modifier--;
     }
     if ((player == "ussr" && this.game.state.events.cubanmissilecrisis == 1) || (player == "us" && this.game.state.events.cubanmissilecrisis == 2)) {
 	this.game.state.events.cubanmissilecrisis = 0;
@@ -6211,6 +6214,12 @@ this.startClock();
 
 
     let control = this.countries[countryname].control;
+
+    if (modifier != 0) {
+      roll = (roll+modifier);
+      this.updateLog(`COUP: ${player.toUpperCase()} modified roll: ${roll}`);
+    }
+
     let winning = parseInt(roll) + parseInt(ops) - parseInt(control * 2);
 
 

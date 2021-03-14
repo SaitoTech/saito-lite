@@ -17,8 +17,7 @@
               },
               function(player) {
                 imperium_self.addMove("rider\t"+player+"\tassassinate-representative\t-1");
-                //imperium_self.addMove("assassinate_representative\t"+imperium_self.game.player+"\t"+player);
-                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " assassinates the voting representative of " + imperium_self.returnFaction(player));
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " assassinates the " + imperium_self.returnFactionNickname(player) + " delegate");
                 imperium_self.endTurn();
                 return 0;
               },

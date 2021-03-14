@@ -18,8 +18,11 @@
       if (this.isControlled("us", "lebanon") == 1) { target++; }
       if (this.isControlled("us", "syria") == 1) { target++; }
 
+      let modified = target - 4;
+
       let roll = this.rollDice(6);
-      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls</span> "+roll+" / -"+(target -4));
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls:</span> "+roll);
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>modified:</span> "+roll-modified);
 
       if (roll >= target) {
         this.updateLog("USSR wins the Arab-Israeli War");
