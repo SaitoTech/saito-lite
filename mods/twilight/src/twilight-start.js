@@ -46,7 +46,7 @@ class Twilight extends GameTemplate {
 
     this.moves           = [];
     this.cards    	 = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     //
     // newbie mode
@@ -2408,9 +2408,9 @@ console.log("re-arranged resolve to avoid OBSERVER MODE bug");
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["redscare","wwby","duckandcover","degaulle","saltnegotiations","africa", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["redscare","wwby","duckandcover","degaulle","saltnegotiations","missileenvy", "cia", "europe"];
             } else {
-              this.game.deck[0].hand = ["nato", "naziscientist", "brezhnev", "opec", "southamerica","opec", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["nato", "naziscientist", "brezhnev", "opec", "grainsales","africa", "beartrap", "cubanmissile","china"];
             }
           }
 
@@ -4359,6 +4359,7 @@ this.startClock();
         }
       }
 
+console.log("scoring cards: " + scoring_cards_available + " -- " + moves_remaining);
 console.log("available cards: " + cards_available + " -- " + this.game.state.events.missile_envy + " -- " + this.game.state.events.missileenvy);
 
       //
@@ -4375,6 +4376,10 @@ console.log("available cards: " + cards_available + " -- " + this.game.state.eve
           playable_cards = [];
           playable_cards.push("missileenvy");
         }
+      }
+
+      if (scoring_cards_available >= moves_remaining) {
+        playable_cards_handled = 0;
       }
 
       if (playable_cards_handled == 0) {
