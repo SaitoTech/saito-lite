@@ -1,0 +1,75 @@
+.settings-grid {}
+
+.grid-2 {
+  row-gap: 0em;
+  column-gap: 1em;
+  padding: 0px;
+  margin-bottom: 0px;
+}
+.grid-4 {
+  row-gap: 0em;
+  column-gap: 1em;
+  padding: 0px;
+  margin-bottom: 0px;
+}
+.grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) { 
+  line-height: 1em;
+}
+
+
+.settings-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 1em;
+}
+
+#qrcode {
+  display: inline-block;
+}
+
+#see-password {
+  line-height: 40px;
+}
+
+.password {
+  font-family: p-word;
+}
+
+.email-appspace-settings {
+  max-width: 900px;
+}
+
+.settings-wallet-management {
+  margin: 0 0 2em 0;
+}
+
+.settings-app-management {
+  margin: 1em 0;
+}
+
+.private-key {
+  display: grid;
+    grid-template-columns: auto 1.2em;
+}
+
+.settings-app-list {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  border: 1px solid #8888;
+  padding: 1em;
+}
+
+.settings-app-select {
+  line-height: 24px;
+}
+
+@media only screen and (max-width: 600px) {
+  .settings-buttons {
+    grid-template-columns: 1fr;
+    grid-gap: 3px;
+  }
+  .settings-app-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
