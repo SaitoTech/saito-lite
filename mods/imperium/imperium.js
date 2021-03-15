@@ -2621,8 +2621,8 @@ console.log("P: " + planet);
           imperium_self.updateStatus(html);
 
           $('.option').off();
-          $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
-          $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
+          $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(s); });
+          $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(s); });
           $('.option').on('click', function() {
 
              let agenda_to_quash = $(this).attr('id');
@@ -20197,13 +20197,16 @@ playerBuyTokens(stage = 0, resolve = 1) {
   $('.buildchoice').off();
   $('.buildchoice').on('click', function () {
 
+console.log("click");
+
     if (!imperium_self.mayUnlockInterface()) {
       salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
 
-
     let id = $(this).attr("id");
+
+console.log("id: " + id);
 
     if (id == "skip") {
       if (resolve == 1) {
@@ -20222,17 +20225,19 @@ playerBuyTokens(stage = 0, resolve = 1) {
         imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
       }
 
+console.log("into player select influence: ");
+      imperium_self.unlockInterface();
       imperium_self.playerSelectInfluence(total_cost, function (success) {
+
+console.log("selected: ");
 
         if (success == 1) {
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + command_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + strategy_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tfleetsupply\t" + fleet_supply);
-          imperium_self.unlockInterface();
           imperium_self.endTurn();
           return;
         } else {
-          imperium_self.unlockInterface();
           imperium_self.endTurn();
         }
       });
@@ -21490,8 +21495,8 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
   let selected_cost = 0;
 
   let html = "<div class='sf-readable'>Select " + cost + " in Strategy and Command Tokens: </div><ul>";
-  html += '<li class="textchoice" id="strategy">strategy tokens - <span class="available_strategy_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens+'</span></li>';
   html += '<li class="textchoice" id="command">command tokens - <span class="available_command_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].command_tokens+'</span></li>';
+  html += '<li class="textchoice" id="strategy">strategy tokens - <span class="available_strategy_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens+'</span></li>';
   html += '</ul>';
 
   this.updateStatus(html);
@@ -23620,8 +23625,8 @@ playerDiscardActionCards(num, mycallback=null) {
     planets['planet48'] = { type : "cultural" , img : "/imperium/img/planets/BREST.png" , name : "Brest" , resources : 3 , influence : 1 , bonus : ""  }
     planets['planet49'] = { type : "hazardous" , img : "/imperium/img/planets/HIRAETH.png" , name : "Hiraeth" , resources : 1 , influence : 1 , bonus : ""  }
     planets['planet50'] = { type : "cultural" , img : "/imperium/img/planets/FIREHOLE.png" , name : "Firehole" , resources : 3 , influence : 0 , bonus : ""  }
-    planets['planet51'] = { type : "industrial" , img : "/imperium/img/planets/QUARTIL.png" , name : "Quartil" , resources : 3 , influence : 1 , bonus : ""  } // wormhole A system planet
-    planets['planet52'] = { type : "hazardous" , img : "/imperium/img/planets/YODERUX.png" , name : "Yoderux" , resources : 3 , influence : 1 , bonus : ""  } // wormhole B system planet
+    planets['planet51'] = { type : "industrial" , img : "/imperium/img/planets/QUARTIL.png" , name : "Quartil" , resources : 3 , influence : 1 , bonus : ""  } // wormhole B system planet
+    planets['planet52'] = { type : "hazardous" , img : "/imperium/img/planets/YODERUX.png" , name : "Yoderux" , resources : 3 , influence : 1 , bonus : ""  } // wormhole A system planet
     planets['planet53'] = { type : "homeworld" , img : "/imperium/img/planets/JOL.png" , name : "Jol" , resources : 1 , influence : 2 , bonus : ""  }
     planets['planet54'] = { type : "homeworld" , img : "/imperium/img/planets/NAR.png" , name : "Nar" , resources : 2 , influence : 3 , bonus : ""  }
     planets['planet55'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-REX.png" , name : "Archion Rex" , resources : 2 , influence : 3 , bonus : ""  }
@@ -23710,8 +23715,8 @@ playerDiscardActionCards(num, mycallback=null) {
     sectors['sector54']        = { img : "/imperium/img/sectors/sector54.png" , 	   name : "Wormhole A" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : [] } 		// wormhole a
     sectors['sector56']        = { img : "/imperium/img/sectors/sector56.png" , 	   name : "Wormhole B" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : [] } 		// wormhole b
 
-    sectors['sector57']        = { img : "/imperium/img/sectors/sector57.png" , 	   name : "Quartil" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet51'] } 	// wormhole a
-    sectors['sector55']        = { img : "/imperium/img/sectors/sector55.png" , 	   name : "Yoderux" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet52'] } 	// wormhole b
+    sectors['sector55']        = { img : "/imperium/img/sectors/sector55.png" , 	   name : "Yoderux" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet52'] } 	// wormhole a
+    sectors['sector57']        = { img : "/imperium/img/sectors/sector57.png" , 	   name : "Quartil" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet51'] } 	// wormhole b
 
     sectors['sector8']         = { img : "/imperium/img/sectors/sector8.png" , 	   	   name : "Crystalis / Troth" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet1','planet2'] }
     sectors['sector9']         = { img : "/imperium/img/sectors/sector9.png" , 	   	   name : "Londrak / Citadel" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet3','planet4'] }

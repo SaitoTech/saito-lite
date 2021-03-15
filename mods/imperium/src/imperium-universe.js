@@ -58,8 +58,8 @@
     planets['planet48'] = { type : "cultural" , img : "/imperium/img/planets/BREST.png" , name : "Brest" , resources : 3 , influence : 1 , bonus : ""  }
     planets['planet49'] = { type : "hazardous" , img : "/imperium/img/planets/HIRAETH.png" , name : "Hiraeth" , resources : 1 , influence : 1 , bonus : ""  }
     planets['planet50'] = { type : "cultural" , img : "/imperium/img/planets/FIREHOLE.png" , name : "Firehole" , resources : 3 , influence : 0 , bonus : ""  }
-    planets['planet51'] = { type : "industrial" , img : "/imperium/img/planets/QUARTIL.png" , name : "Quartil" , resources : 3 , influence : 1 , bonus : ""  } // wormhole A system planet
-    planets['planet52'] = { type : "hazardous" , img : "/imperium/img/planets/YODERUX.png" , name : "Yoderux" , resources : 3 , influence : 1 , bonus : ""  } // wormhole B system planet
+    planets['planet51'] = { type : "industrial" , img : "/imperium/img/planets/QUARTIL.png" , name : "Quartil" , resources : 3 , influence : 1 , bonus : ""  } // wormhole B system planet
+    planets['planet52'] = { type : "hazardous" , img : "/imperium/img/planets/YODERUX.png" , name : "Yoderux" , resources : 3 , influence : 1 , bonus : ""  } // wormhole A system planet
     planets['planet53'] = { type : "homeworld" , img : "/imperium/img/planets/JOL.png" , name : "Jol" , resources : 1 , influence : 2 , bonus : ""  }
     planets['planet54'] = { type : "homeworld" , img : "/imperium/img/planets/NAR.png" , name : "Nar" , resources : 2 , influence : 3 , bonus : ""  }
     planets['planet55'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-REX.png" , name : "Archion Rex" , resources : 2 , influence : 3 , bonus : ""  }
@@ -148,8 +148,8 @@
     sectors['sector54']        = { img : "/imperium/img/sectors/sector54.png" , 	   name : "Wormhole A" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : [] } 		// wormhole a
     sectors['sector56']        = { img : "/imperium/img/sectors/sector56.png" , 	   name : "Wormhole B" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : [] } 		// wormhole b
 
-    sectors['sector57']        = { img : "/imperium/img/sectors/sector57.png" , 	   name : "Quartil" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet51'] } 	// wormhole a
-    sectors['sector55']        = { img : "/imperium/img/sectors/sector55.png" , 	   name : "Yoderux" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet52'] } 	// wormhole b
+    sectors['sector55']        = { img : "/imperium/img/sectors/sector55.png" , 	   name : "Yoderux" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet52'] } 	// wormhole a
+    sectors['sector57']        = { img : "/imperium/img/sectors/sector57.png" , 	   name : "Quartil" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet51'] } 	// wormhole b
 
     sectors['sector8']         = { img : "/imperium/img/sectors/sector8.png" , 	   	   name : "Crystalis / Troth" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet1','planet2'] }
     sectors['sector9']         = { img : "/imperium/img/sectors/sector9.png" , 	   	   name : "Londrak / Citadel" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet3','planet4'] }

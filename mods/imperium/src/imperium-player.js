@@ -2361,13 +2361,16 @@ playerBuyTokens(stage = 0, resolve = 1) {
   $('.buildchoice').off();
   $('.buildchoice').on('click', function () {
 
+console.log("click");
+
     if (!imperium_self.mayUnlockInterface()) {
       salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
 
-
     let id = $(this).attr("id");
+
+console.log("id: " + id);
 
     if (id == "skip") {
       if (resolve == 1) {
@@ -2386,17 +2389,19 @@ playerBuyTokens(stage = 0, resolve = 1) {
         imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
       }
 
+console.log("into player select influence: ");
+      imperium_self.unlockInterface();
       imperium_self.playerSelectInfluence(total_cost, function (success) {
+
+console.log("selected: ");
 
         if (success == 1) {
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + command_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + strategy_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tfleetsupply\t" + fleet_supply);
-          imperium_self.unlockInterface();
           imperium_self.endTurn();
           return;
         } else {
-          imperium_self.unlockInterface();
           imperium_self.endTurn();
         }
       });
@@ -3654,8 +3659,8 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
   let selected_cost = 0;
 
   let html = "<div class='sf-readable'>Select " + cost + " in Strategy and Command Tokens: </div><ul>";
-  html += '<li class="textchoice" id="strategy">strategy tokens - <span class="available_strategy_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens+'</span></li>';
   html += '<li class="textchoice" id="command">command tokens - <span class="available_command_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].command_tokens+'</span></li>';
+  html += '<li class="textchoice" id="strategy">strategy tokens - <span class="available_strategy_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens+'</span></li>';
   html += '</ul>';
 
   this.updateStatus(html);
