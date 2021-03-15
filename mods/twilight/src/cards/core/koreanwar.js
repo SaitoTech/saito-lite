@@ -14,7 +14,7 @@
       let modified = target - 4;
 
       this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls:</span> "+roll);
-      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>modified:</span> "+(`roll-modified));
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>modified:</span> "+(roll-modified));
 
       if (roll >= target) {
         this.updateLog("North Korea wins the Korean War");
