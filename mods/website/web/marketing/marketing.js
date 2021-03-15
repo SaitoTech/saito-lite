@@ -1,6 +1,6 @@
 import {pushFunctionToMatomo, logToMatomo, addToDOM} from '/l/matomohelpers.js';
 
-const queryString = window.location.search;console.log(addToDOM);
+const queryString = window.location.search;
 const urlParams = new URLSearchParams(window.location.search);
 let urlTokens = window.location.pathname.split("/")
 addToDOM();
@@ -11,4 +11,4 @@ pushFunctionToMatomo(() => {
   } else {
     window.location.href = "/";
   }
-});
+}, 2000);
