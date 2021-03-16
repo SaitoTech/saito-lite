@@ -20197,8 +20197,6 @@ playerBuyTokens(stage = 0, resolve = 1) {
   $('.buildchoice').off();
   $('.buildchoice').on('click', function () {
 
-console.log("click");
-
     if (!imperium_self.mayUnlockInterface()) {
       salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
@@ -20206,12 +20204,11 @@ console.log("click");
 
     let id = $(this).attr("id");
 
-console.log("id: " + id);
-
     if (id == "skip") {
       if (resolve == 1) {
         imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
       }
+      imperium_self.unlockInterface();
       imperium_self.endTurn();
       return;
     }
@@ -20225,11 +20222,8 @@ console.log("id: " + id);
         imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
       }
 
-console.log("into player select influence: ");
       imperium_self.unlockInterface();
       imperium_self.playerSelectInfluence(total_cost, function (success) {
-
-console.log("selected: ");
 
         if (success == 1) {
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + command_tokens);
