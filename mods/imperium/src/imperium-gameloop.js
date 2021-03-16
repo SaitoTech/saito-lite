@@ -416,6 +416,7 @@
 
   	let player = parseInt(mv[1]);
   	let sector = mv[2];
+
         this.game.queue.splice(qe, 1);
 
         return this.handleFleetSupply(player, sector);
@@ -427,6 +428,11 @@
 
   	let player = mv[1];
   	let sector = mv[2];
+
+
+	if (this.handleFleetSupply(player, sector) == 0) {
+	  return 0;
+	}
 
 	this.setPlayerActiveOnly(player);
 
@@ -3616,7 +3622,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
  	  let modified_roll = [];
 	  let reroll = [];
 
-
 	  for (let i = 0; i < battery.length; i++) {
 	    if (battery[i].owner == player) {
  	      total_shots++;
@@ -3625,18 +3630,40 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	    }
 	  }
 
-	  total_shots += this.game.players_info[player-1].pds_combat_roll_bonus_shots;
+
+	  let attacker_best_shot_idx = 0;
+	  let shot_hits_on = 10;
+	  for (let i = 0; i < battery.length; i++) {
+	    if (battery[i].combat < shot_hits_on) {
+	      attacker_best_shot_idx = i;
+	      shot_hits_on = battery[i].combat;
+	    }
+	  }
+
+	  for (let i = 0; i < this.game.players_info[player-1].pds_combat_roll_bonus_shots; i++) {
+
+             let bs = {};
+                 bs.name = "Bonus";
+                 bs.unit = JSON.parse(JSON.stringify(battery[attacker_best_shot_idx].unit));
+		 bs.unit.name = "Bonus";
+                 bs.range = battery[attacker_best_shot_idx].range;
+                 bs.combat = battery[attacker_best_shot_idx].combat;
+                 bs.owner = battery[attacker_best_shot_idx].owner;
+                 bs.sector = battery[attacker_best_shot_idx].sector;
+
+ 	         total_shots++;
+	         hits_on.push(bs.combat);
+	         units_firing.push(bs.unit);
+	  }
 
           this.updateLog(this.returnFactionNickname(player) + " has " + total_shots + " PDS shots");
 
 
 	  for (let s = 0; s < total_shots; s++) {
 
-
 	    let roll = this.rollDice(10);
 
 	    unmodified_roll.push(roll);
-
 
 	    for (let z_index in z) {
 	      roll = z[z_index].modifyCombatRoll(this, player, attacker, player, "pds", roll);
@@ -3656,8 +3683,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	      hits_or_misses.push(0);
 	    }
 	  }
-
-	  //this.updateLog(this.returnFactionNickname(player) + " has " + total_hits + " hits");
 
 	  //
  	  // handle rerolls

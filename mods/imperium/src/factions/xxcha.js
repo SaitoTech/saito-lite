@@ -4,9 +4,9 @@
       name		: 	"XXCha Kingdom",
       nickname		: 	"XXCha",
       homeworld		: 	"sector51",
-      space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
+      space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter","flagship"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship","faction3-field-nullification"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship","pds-ii","plasma-scoring"],
       background	: 	'faction3.jpg',
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the XXCha Kingdom, a faction which excels in diplomacy and defensive weaponry. With the proper alliances and political maneuvers your faction you can be a contender for the Imperial Throne. Good luck!</div>`
@@ -26,34 +26,45 @@
        if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return battery; }
 
        let player_fleet = imperium_self.returnPlayerFleet(player);
+
        if (player_fleet.flagship > 0) {
 
-         let as = this.returnAdjacentSectors(sector);
+         let as = imperium_self.returnAdjacentSectors(sector);
+
          for (let i = 0; i < as.length; i++) {
 	   if (imperium_self.doesSectorContainPlayerUnit(player, as[i], "flagship")) {
 
              let pds1 = {};
-                 pds1.range = imperium_self.returnUnit(player, "pds").range;
-                 pds1.combat = imperium_self.returnUnit(player, "pds").combat;
+                 pds1.name = "XXCha Flagship #1";
+                 pds1.unit = JSON.parse(JSON.stringify(imperium_self.returnUnit("pds", player)));
+                 pds1.unit.name = "Flagship";
+                 pds1.range = 1;
+                 pds1.combat = 6;
                  pds1.owner = player;
                  pds1.sector = sector;
 
              let pds2 = {};
-                 pds2.range = imperium_self.returnUnit(player, "pds").range;
-                 pds2.combat = imperium_self.returnUnit(player, "pds").combat;
+                 pds2.name = "XXCha Flagship #2";
+                 pds2.unit = JSON.parse(JSON.stringify(imperium_self.returnUnit("pds", player)));
+                 pds2.unit.name = "Flagship";
+                 pds2.range = 1;
+                 pds2.combat = 6;
                  pds2.owner = player;
                  pds2.sector = sector;
 
              let pds3 = {};
-                 pds3.range = imperium_self.returnUnit(player, "pds").range;
-                 pds3.combat = imperium_self.returnUnit(player, "pds").combat;
+                 pds3.name = "XXCha Flagship #3";
+                 pds3.unit = JSON.parse(JSON.stringify(imperium_self.returnUnit("pds", player)));
+                 pds3.unit.name = "Flagship";
+                 pds3.range = 1;
+                 pds3.combat = 6;
                  pds3.owner = player;
                  pds3.sector = sector;
 
              battery.push(pds1);
              battery.push(pds2);
              battery.push(pds3);
-     
+    
 	     return battery;
 	   }
 	 }
