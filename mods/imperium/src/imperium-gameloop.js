@@ -4836,10 +4836,10 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
   
         let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
-  	let bombarding_player = parseInt(mv[1]);
-        let sector	 = mv[2];
-        let planet_idx	 = mv[3];
-        let z_index	 = parseInt(mv[4]);
+  	let bombarding_player = parseInt(mv[2]);
+        let sector	 = mv[3];
+        let planet_idx	 = mv[4];
+        let z_index	 = parseInt(mv[5]);
 
   	this.game.queue.splice(qe, 1);
 
