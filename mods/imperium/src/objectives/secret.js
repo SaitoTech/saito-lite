@@ -285,23 +285,37 @@ console.log("PLANET: " + JSON.stringify(planet));
       phase		: 	"action" ,
       onNewTurn		: 	function(imperium_self, player, mycallback) {
 	imperium_self.game.state.secret_objective_close_the_trap = 0;
+	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
         return 0; 
       },
+      modifyPDSRoll     :       function(imperium_self, attacker, defender, roll) {
+        if (attacker == imperium_self.game.player) {
+	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+        }
+        if (defender == imperium_self.game.player) {
+	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+        }
+      }
+      modifySpaceCombatRoll     :       function(imperium_self, attacker, defender, roll) {
+	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
+      }
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
-	    imperium_self.game.state.secret_objective_close_the_trap = 1;
+	    if (imperium_self.game.state.secret_objective_close_the_trap_pds_fired == 1) {
+	      imperium_self.game.state.secret_objective_close_the_trap = 1;
+	      imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+	    }
 	  }
 	}
 	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
-	    imperium_self.game.state.secret_objective_close_the_trap = 1;
+	    if (imperium_self.game.state.secret_objective_close_the_trap_pds_fired == 1) {
+	      imperium_self.game.state.secret_objective_close_the_trap = 1;
+	      imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+	    }
 	  }
-	}
-
-        if (imperium_self.game.players_info[imperium_self.game.player-1].units_i_destroyed_this_combat_round.includes("flagship")) {
-	  imperium_self.game.state.secret_objective_military_catastrophe = 1;
 	}
         return 0; 
       },

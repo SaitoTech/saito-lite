@@ -39,7 +39,7 @@
       name     		:       "Spacedock",
       type     		:       "spacedock",
       capacity 		:	3,
-      production 	:	4,
+      production 	:	2,
       combat      	: 	0,
       range       	: 	0,
       description	:	"Spacedocks are used to produce infantry and other ships. They cannot produce ships in space if an opponent fighter is in the sector",

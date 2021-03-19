@@ -979,7 +979,7 @@ console.log("P: " + planet);
       name     		:       "Spacedock",
       type     		:       "spacedock",
       capacity 		:	3,
-      production 	:	4,
+      production 	:	2,
       combat      	: 	0,
       range       	: 	0,
       description	:	"Spacedocks are used to produce infantry and other ships. They cannot produce ships in space if an opponent fighter is in the sector",
@@ -4898,23 +4898,37 @@ console.log("PLANET: " + JSON.stringify(planet));
       phase		: 	"action" ,
       onNewTurn		: 	function(imperium_self, player, mycallback) {
 	imperium_self.game.state.secret_objective_close_the_trap = 0;
+	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
         return 0; 
       },
+      modifyPDSRoll     :       function(imperium_self, attacker, defender, roll) {
+        if (attacker == imperium_self.game.player) {
+	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+        }
+        if (defender == imperium_self.game.player) {
+	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+        }
+      }
+      modifySpaceCombatRoll     :       function(imperium_self, attacker, defender, roll) {
+	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
+      }
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
-	    imperium_self.game.state.secret_objective_close_the_trap = 1;
+	    if (imperium_self.game.state.secret_objective_close_the_trap_pds_fired == 1) {
+	      imperium_self.game.state.secret_objective_close_the_trap = 1;
+	      imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+	    }
 	  }
 	}
 	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
-	    imperium_self.game.state.secret_objective_close_the_trap = 1;
+	    if (imperium_self.game.state.secret_objective_close_the_trap_pds_fired == 1) {
+	      imperium_self.game.state.secret_objective_close_the_trap = 1;
+	      imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+	    }
 	  }
-	}
-
-        if (imperium_self.game.players_info[imperium_self.game.player-1].units_i_destroyed_this_combat_round.includes("flagship")) {
-	  imperium_self.game.state.secret_objective_military_catastrophe = 1;
 	}
         return 0; 
       },
@@ -17304,10 +17318,10 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
   
         let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
-  	let bombarding_player = parseInt(mv[1]);
-        let sector	 = mv[2];
-        let planet_idx	 = mv[3];
-        let z_index	 = parseInt(mv[4]);
+  	let bombarding_player = parseInt(mv[2]);
+        let sector	 = mv[3];
+        let planet_idx	 = mv[4];
+        let z_index	 = parseInt(mv[5]);
 
   	this.game.queue.splice(qe, 1);
 
@@ -20263,7 +20277,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
 
         if (success == 1) {
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + command_tokens);
-          imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + strategy_tokens);
+          imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tstrategy\t" + strategy_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tfleetsupply\t" + fleet_supply);
           imperium_self.endTurn();
           return;
@@ -20811,6 +20825,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
   let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
   available_resources += imperium_self.game.players_info[imperium_self.game.player - 1].production_bonus;
 
+
   let calculated_production_limit = 0;
   for (let i = 0; i < sys.s.units[this.game.player - 1].length; i++) {
     calculated_production_limit += sys.s.units[this.game.player - 1][i].production;
@@ -20823,6 +20838,8 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       }
     }
   }
+
+console.log("Calculated Production Limit: " + calculated_production_limit);
 
   if (this.game.players_info[this.game.player - 1].may_player_produce_without_spacedock == 1) {
     if (production_limit == 0 && this.game.players_info[this.game.player - 1].may_player_produce_without_spacedock_production_limit >= 0) { production_limit = this.game.players_info[this.game.player - 1].may_player_produce_without_spacedock_production_limit; }

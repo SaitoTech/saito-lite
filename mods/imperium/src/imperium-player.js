@@ -2391,7 +2391,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
 
         if (success == 1) {
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + command_tokens);
-          imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tcommand\t" + strategy_tokens);
+          imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tstrategy\t" + strategy_tokens);
           imperium_self.addMove("purchase\t" + imperium_self.game.player + "\tfleetsupply\t" + fleet_supply);
           imperium_self.endTurn();
           return;
@@ -2939,6 +2939,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
   let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
   available_resources += imperium_self.game.players_info[imperium_self.game.player - 1].production_bonus;
 
+
   let calculated_production_limit = 0;
   for (let i = 0; i < sys.s.units[this.game.player - 1].length; i++) {
     calculated_production_limit += sys.s.units[this.game.player - 1][i].production;
@@ -2951,6 +2952,8 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       }
     }
   }
+
+console.log("Calculated Production Limit: " + calculated_production_limit);
 
   if (this.game.players_info[this.game.player - 1].may_player_produce_without_spacedock == 1) {
     if (production_limit == 0 && this.game.players_info[this.game.player - 1].may_player_produce_without_spacedock_production_limit >= 0) { production_limit = this.game.players_info[this.game.player - 1].may_player_produce_without_spacedock_production_limit; }
