@@ -4908,10 +4908,10 @@ console.log("PLANET: " + JSON.stringify(planet));
         if (defender == imperium_self.game.player) {
 	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
         }
-      }
+      },
       modifySpaceCombatRoll     :       function(imperium_self, attacker, defender, roll) {
 	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
-      }
+      },
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
