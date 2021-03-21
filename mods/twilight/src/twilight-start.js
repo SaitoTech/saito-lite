@@ -46,7 +46,7 @@ class Twilight extends GameTemplate {
 
     this.moves           = [];
     this.cards    	 = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     //
     // newbie mode
@@ -2398,9 +2398,9 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["redscare","wwby","duckandcover","degaulle","saltnegotiations","missileenvy", "cia", "europe"];
+              this.game.deck[0].hand = ["nuclearsubs", "fidel","u2","duckandcover","degaulle","saltnegotiations","missileenvy", "cia", "europe"];
             } else {
-              this.game.deck[0].hand = ["nato", "naziscientist", "brezhnev", "opec", "grainsales","africa", "beartrap", "cubanmissile","china"];
+              this.game.deck[0].hand = ["cubanmissile", "brezhnev", "opec", "grainsales","africa", "beartrap", "cubanmissile","china"];
             }
           }
 
@@ -3745,10 +3745,17 @@ if (this.game.player == 0) {
 
           this.moves = [];
 
+          let are_we_playing_ops = 0;
+          if (twilight_self.game.queue[twilight_self.game.queue.length-1].split("\t")[0] === "ops") {
+            are_we_playing_ops = 1;
+          }
+
           if (twilight_self.game.player == 1) {
             twilight_self.removeInfluence("cuba", 2, "ussr");
-            twilight_self.addMove("ops\tussr\t"+card+"\t"+original_ops);
-            twilight_self.addMove("remove\tussr\tussr\tcuba\t2");
+	    if (are_we_playing_ops == 0) {
+              twilight_self.addMove("ops\tussr\t"+card+"\t"+original_ops);
+            }
+	    twilight_self.addMove("remove\tussr\tussr\tcuba\t2");
             twilight_self.addMove("notify\tUSSR has cancelled the Cuban Missile Crisis");
             twilight_self.addMove("unlimit\tcmc");
             twilight_self.endTurn();
@@ -3767,16 +3774,20 @@ if (this.game.player == 0) {
 
               if (action2 === "turkey") {
                 twilight_self.removeInfluence("turkey", 2, "us");
-                twilight_self.addMove("ops\tus\t"+card+"\t"+original_ops);
-                twilight_self.addMove("remove\tus\tus\tturkey\t2");
+	        if (are_we_playing_ops == 0) {
+                  twilight_self.addMove("ops\tus\t"+card+"\t"+original_ops);
+                }
+	        twilight_self.addMove("remove\tus\tus\tturkey\t2");
                 twilight_self.addMove("unlimit\tcmc");
                 twilight_self.addMove("notify\tUS has cancelled the Cuban Missile Crisis");
                 twilight_self.endTurn();
               }
               if (action2 === "westgermany") {
                 twilight_self.removeInfluence("westgermany", 2, "us");
-                twilight_self.addMove("ops\tus\t"+card+"\t"+original_ops);
-                twilight_self.addMove("remove\tus\tus\twestgermany\t2");
+	        if (are_we_playing_ops == 0) {
+                  twilight_self.addMove("ops\tus\t"+card+"\t"+original_ops);
+                }
+	        twilight_self.addMove("remove\tus\tus\twestgermany\t2");
                 twilight_self.addMove("unlimit\tcmc");
                 twilight_self.addMove("notify\tUS has cancelled the Cuban Missile Crisis");
                 twilight_self.endTurn();
@@ -4766,21 +4777,30 @@ this.startClock();
 
             twilight_self.addShowCardEvents(function(action2) {
 
+	      let are_we_playing_ops = 0;
+	      if (twilight_self.game.queue[twilight_self.game.queue.length-1].split("\t")[0] === "ops") {
+	        are_we_playing_ops = 1;
+	      }
+
               if (action2 === "turkey") {
                 twilight_self.removeInfluence("turkey", 2, "us");
-                twilight_self.addMove("card\tus\t"+card);
-                twilight_self.addMove("remove\tus\tus\tturkey\t2");
+	        if (are_we_playing_ops === 0) {
+                  twilight_self.addMove("card\tus\t"+card);
+                }
+		twilight_self.addMove("remove\tus\tus\tturkey\t2");
                 twilight_self.addMove("unlimit\tcmc");
                 twilight_self.addMove("notify\tUS has cancelled the Cuban Missile Crisis");
                 twilight_self.endTurn();
               }
               if (action2 === "westgermany") {
                 twilight_self.removeInfluence("westgermany", 2, "us");
-                twilight_self.addMove("card\tus\t"+card);
-                twilight_self.addMove("remove\tus\tus\twestgermany\t2");
+	        if (are_we_playing_ops === 0) {
+                  twilight_self.addMove("card\tus\t"+card);
+                }
+		twilight_self.addMove("remove\tus\tus\twestgermany\t2");
                 twilight_self.addMove("unlimit\tcmc");
                 twilight_self.addMove("notify\tUS has cancelled the Cuban Missile Crisis");
-                  twilight_self.endTurn();
+                twilight_self.endTurn();
               }
             });
           }
@@ -9582,7 +9602,6 @@ this.startClock();
 	 	} else { 
 		  $(".optional_edition").prop("checked", true); 
 		  if ($("#deckselect").val() == "endofhistory") { 
-alert("end of history!");
 		    $(".endofhistory_edition").prop("checked",true); 
 		    $(".optional_edition").prop("checked", false);
 		  } else {
