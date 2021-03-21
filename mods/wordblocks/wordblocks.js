@@ -236,17 +236,22 @@ class Wordblocks extends GameTemplate {
     html += '</tr>';
 
     html += '<tr>';
+    let total_score = [];
     for (let i = 0; i < this.game.opponents.length+1; i++) {
+      total_score.push(0);
       let words_scored_html = '<table>';
       for (let z = 0; z < this.game.words_played[i].length; z++) {
-	words_scored_html += '<tr><td>' + this.game.words_played[i][z].word + '</td><td>' + this.game.words_played[i][z].score + '</td></tr>';
+        if (this.game.words_played[i][z] != undefined) {
+	  words_scored_html += '<tr><td>' + this.game.words_played[i][z].word + '</td><td>' + this.game.words_played[i][z].score + '</td></tr>';
+	  total_score[i] += this.game.words_played[i][z].score;
+        }
       }
       words_scored_html += '</table>';
       html += `<td>${words_scored_html}</td>`;
     }
     html += '</tr><tr>';
     for (let i = 0; i < this.game.opponents.length+1; i++) {
-      html += `<td>${this.game.score[$(i+1)]}</td>`;
+      html += `<td>${total_score[i]}</td>`;
     }
     html += '</tr>';
     html += '</table>';
@@ -757,6 +762,7 @@ if (this.game.player != 0) {
             let myscore = 0;
             wordblocks_self.addWordToBoard(word, orientation, x, y);
             myscore = wordblocks_self.scoreWord(word, wordblocks_self.game.player, orientation, x, y);
+  	    wordblocks_self.game.words_played[parseInt(wordblocks_self.game.player)-1].push({ word : word , score : myscore });
 
             if (myscore <= 1) {
               wordblocks_self.removeWordFromBoard(word, orientation, x, y);
@@ -1270,6 +1276,8 @@ if (this.game.player != 0) {
         let tmpb = this.returnBonus(boardslot);
         let letter_bonus = 1;
 
+console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
+
         if (tmpb == "3W" && this.game.board[boardslot].fresh == 1) {
           word_bonus = word_bonus * 3;
         }
@@ -1640,7 +1648,9 @@ if (this.game.player != 0) {
     }
 
     this.firstmove = 0;
-    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${score} points (total: ${this.game.score[player-1]}))`;
+    let last_move_html = "";
+    if (this.game.words_played[player-1].length > 0) { last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${this.game.words_played[player-1][this.game.words_played[player-1].length-1].score} points (total: ${this.game.score[player-1]})`; }
+//    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${score} points (total: ${this.game.score[player-1]}))`;
     $('.lastmove').html(last_move_html);
     $('#remainder').html(`DECK: ${this.game.deck[0].crypt.length}`);
     this.last_played_word = { player, finalword, score };
@@ -1754,8 +1764,11 @@ if (this.game.player != 0) {
 
         } else {
 
-          score = this.scoreWord(word, player, orient, x, y);
-	  this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
+	  //
+	  // scoring done when added to board - MARCH 21
+	  //
+          //score = this.scoreWord(word, player, orient, x, y);
+	  //this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
 
 	}
 
