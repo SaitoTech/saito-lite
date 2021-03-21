@@ -522,7 +522,7 @@ if (this.game.player != 0) {
       tile_html += this.returnTileHTML(this.game.deck[0].cards[this.game.deck[0].hand[i]].name);
     }
     let { player, finalword, score } = this.last_played_word;
-    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${score} points (total: ${this.game.score[player-1]})`;
+    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${this.game.words_played[player-1][this.game.words_played[player-1].length-1].score} points (total: ${this.game.score[player-1]})`;
     let html =
       `
       <div class="hud-status-update-message">${status}</div>
