@@ -2696,7 +2696,7 @@ console.log("STATE: " + JSON.stringify(state));
 
     for (let i = 0; i < this.app.modules.mods.length; i++) {
       if (this.app.modules.mods[i].ticker != "" && this.app.modules.mods[i].ticker != undefined) {
-        options_html += `<option value="${this.app.modules.mods[i].ticker}" selected="selected">${this.app.modujles.mods[i].ticker}</option>`;
+        options_html += `<option value="${this.app.modules.mods[i].ticker}" selected="selected">${this.app.modules.mods[i].ticker}</option>`;
       }
     }
 
