@@ -1,8 +1,6 @@
 #!/bin/bash
 
 
-
-
 function post_compile {
 
   cp ./lib/saito/boot.js ./web/saito/saito2.js
