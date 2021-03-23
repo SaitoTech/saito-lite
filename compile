@@ -102,9 +102,6 @@ function reset_nonpersistent {
   if [ ! -f ./config/modules.config.js ]; then
     cp ./config/modules.default.js ./config/modules.config.js
   fi
-  if [ -f config/options.conf ]; then
-    cp config/options.conf config/options
-  fi
 
 }
 
@@ -158,10 +155,71 @@ function copy_lite_mods_to_bundler_directory {
 
 
 
+if [ "$1" == "init" ]; then
+
+
+  if [ -f config/modules.config.js ]; then
+
+    echo "";
+    echo "It looks like you have already installed Saito. If you are "
+    echo "trying to change the modules that are installed on your "
+    echo "machine you can edit the file: "
+    echo "";
+    echo "  config/modules.config.js";
+    echo "";
+    echo "And run the following command: ";
+    echo "";
+    echo "  > npm run compile";
+    echo "";
+    echo "Continuing with this installation will delete existing data,"
+    echo "reset your wallet and resync the blockchain. Are you sure "
+    echo "you wish to continue? (yes/no)"
+
+    while true; do
+      read -p "> " yn
+      case $yn in
+        yes* ) cp config/modules.default.js config/modules.config.js; break;;
+        no* ) exit;;
+        * ) echo 'Please answer "yes" or "no".';;
+      esac
+    done
+
+
+  elif [ -f config/modules.default.js ]; then
+
+    echo "";
+    echo "Installing and compiling Saito with default modules..."
+    echo "";
+
+  fi
+
+
+  if [ -f config/saito.io.conf ]; then
+
+    while true; do
+
+      echo ""
+      echo "You can join the Saito Network and participate in development"
+      echo "of the public chain. Or you can setup a local node for the"
+      echo "easier development and testing of applications."
+      echo "";
+      echo "Join saito.io (saito) or local install (local): ";
+      read -p "> " yn
+      case $yn in
+        saito* ) cp config/saito.io.conf config/options; break;;
+        local* ) break;;
+        * ) echo 'Please answer "saito" or "local".';;
+      esac
+    done
+
+  fi
+
+
+fi
 
 
 
-if [ "$1" == "nuke" ]; then
+if [ "$1" == "nuke" ] || [ "$1" == "init" ]; then
 
   echo ""
   echo ""
