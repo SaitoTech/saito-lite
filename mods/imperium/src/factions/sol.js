@@ -29,7 +29,7 @@
 	return 0;
       },
       playersChooseStrategyCardsBeforeEvent : function(imperium_self, player) {
-	for (let i in this.game.sectors) {
+	for (let i in imperium_self.game.sectors) {
 	  if (imperium_self.doesSectorContainPlayerUnit(player, i, "flagship")) {
 	    let sec = this.game.sectors[i];
 	    for (let k = 0; k < sec.units[player-1].length; k++) {
