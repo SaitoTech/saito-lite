@@ -1165,7 +1165,7 @@ console.log("LAST RAISE IS NOW RAISE REQUIRED: " + this.game.state.last_raise);
       html += " (small blind)";
     }
     */
-    html += `<div style="float:right;" class="saito-balance">${this.game.state.player_credit[this.game.player-1]} SAITO</div>Your move:</div>`;
+    html += `<div style="float:right;" class="saito-balance">${this.game.state.player_credit[this.game.player-1]} ${this.game.crypto}</div>Your move:</div>`;
     html += '<ul>';
 
     let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player - 1];
@@ -1574,7 +1574,7 @@ console.log("STATE: " + JSON.stringify(state));
       newhtml += `
         </div>
         <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-        <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+        <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} ${this.game.crypto}</div> 
         
       `;
       boxobj.querySelector(".info").innerHTML = newhtml;
