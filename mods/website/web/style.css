@@ -644,8 +644,8 @@ section {
 
 .sectionWrapper6 {
   width: 100%;
-  height: 82.5rem;
   background: #000;
+  padding-bottom: 1em;
 }
 
 .sectionWrapper6 a.language {
@@ -670,16 +670,41 @@ section {
 
 .section6 .itemWrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
 }
 
-.section6 .itemWrapper .itemImage {
-  width: 48.5%;
-  height: 100%;
+.section6 .itemWrapper3 {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.section6 .itemWrapper .itemImage{
   margin-top: 3rem;
   box-sizing: content-box;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.section6 .itemWrapper .itemImage {
+  width: 22.5%;
+}
+.section6 .itemWrapper2 .itemImage {
+  width: 17.5%;
+}
+.section6 .itemWrapper3 .itemImage {
+  width: 16.5%;
+  margin-left: 1.5%;
+  margin-right: 1.5%;
+}
+
+.section6 .itemWrapper .itemImageSVG, .section6 .itemWrapper2 .itemImageSVG  {
+  background-color: #fff;
+  width: 32%; 
+}
+
 
 .section6 .iconWrapper {
   display: flex;
@@ -1118,14 +1143,22 @@ h2, h5 {
     margin-top: 8rem;
     padding-bottom: 1.8rem;
   }
-  .section6 .itemWrapper {
-    padding: 0 2rem;
+  
+  .section6 .itemWrapper .itemImage{
+    margin-top: 1rem;
   }
   .section6 .itemWrapper .itemImage {
-    width: 46%;
-    height: 100%;
-    margin-top: 2rem;
+    width: 48%;
   }
+  .section6 .itemWrapper2 .itemImage {
+    width: 31.5%;
+  }
+  .section6 .itemWrapper3 .itemImage {
+    width: 31.5%;
+    margin-left: 1%;
+    margin-right: 1%;
+  }
+  
   .section6 .iconWrapper, .section6 .copyright {
     display: none;
   }
