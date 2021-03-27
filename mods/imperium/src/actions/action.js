@@ -821,6 +821,8 @@ ACTION CARD - types
                   },
 	          function(unit_info) {
 
+console.log("Unit Info: " + JSON.stringify(unit_info));
+
 		    let s = unit_info.sector;
 		    let p = parseInt(unit_info.unit.owner);
 		    let uidx = unit_info.unit_idx;
