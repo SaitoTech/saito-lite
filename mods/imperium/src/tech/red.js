@@ -69,9 +69,12 @@
 
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let planet = sys.p[planet_idx];
+	let owner = planet.owner;
 
+console.log("owner is: " + owner);
+console.log("starting magen gce");
 	for (let i = 0; i < planet.units.length; i++) {
-	  if (planet.units[i] != (player-1)) {
+	  if (i != (owner-1)) {
 	    for (let ii = 0; i < planet.units[i].length; ii++) {
 
 	      let attacker_unit = planet.units[i][ii];
