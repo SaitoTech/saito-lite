@@ -814,6 +814,7 @@ ACTION CARD - types
 	          "Select a ship in this sector to destroy: " ,
 		  sector,
                   function(unit) {
+console.log("UNIT: " + JSON.stringify(unit));
 		    if (unit.type == "destroyer") { return 1; }
 		    if (unit.type == "cruiser") { return 1; }
 		    if (unit.type == "dreadnaught") { return 1; }
