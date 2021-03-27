@@ -73,8 +73,11 @@
 
 console.log("owner is: " + owner);
 console.log("starting magen gce");
+console.log("planet: " +JSON.stringify(planet));
 	for (let i = 0; i < planet.units.length; i++) {
+console.log("i: " + i);
 	  if (i != (owner-1)) {
+console.log("units: " + JSON.stringify(planet.units[i]));
 	    for (let ii = 0; i < planet.units[i].length; ii++) {
 
 	      let attacker_unit = planet.units[i][ii];
