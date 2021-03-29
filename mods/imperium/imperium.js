@@ -5707,8 +5707,6 @@ console.log("PLANET: " + JSON.stringify(planet));
   
   
   
-/******** HACK
-
 
   this.importAgendaCard('shard-of-the-throne', {
   	name : "Shard of the Throne" ,
@@ -6722,8 +6720,6 @@ console.log("PLANET: " + JSON.stringify(planet));
   });
 
 
-***** HACK *****/
-
 
   this.importAgendaCard('committee-formation', {
   	name : "Committee Formation" ,
@@ -6822,12 +6818,6 @@ console.log("pushing onto law: " + JSON.stringify(law_to_push));
         }
 
   });
-
-
-
-
-
-/****** HACK *****
 
 
 
@@ -7704,9 +7694,6 @@ console.log("pushing onto law: " + JSON.stringify(law_to_push));
   });
 
 
-**** HACK ****/
-
-
   this.importAgendaCard('colonial-redistribution', {
         name : "Colonial Redistribution" ,
         type : "Directive" ,
@@ -7917,11 +7904,6 @@ console.log("planet is: " + winning_choice);
 
 
 
-
-
-/****** HACK *****
-
-
   this.importAgendaCard('ixthian-artifact', {
 
         name : "Ixthian Artifact" ,
@@ -7971,7 +7953,6 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
 
 
 
-********* HACK *******/
 
 
 /************************************
@@ -8095,6 +8076,7 @@ ACTION CARD - types
 	  return 1;
 	},
     });
+
 
 
     this.importActionCard('plague', {
@@ -9071,6 +9053,7 @@ ACTION CARD - types
 	  return 1;
 	}
     });
+
 
 
 
@@ -10518,7 +10501,6 @@ ACTION CARD - types
         }
 
     });
-
 
 
   
@@ -15272,7 +15254,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 
         this.updateLog("Agenda: " + this.agenda_cards[agenda].name + "<p></p><div style='width:80%;font-size:1.0em;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:15px'>" + this.agenda_cards[agenda].text +'</div>');
 
-
 	//
 	// clear all riders
 	//
@@ -15282,7 +15263,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-console.log(z[k].name);
 	    if (z[k].preAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
 	      this.game.queue.push("pre_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+k);
 	    }
@@ -24218,13 +24198,9 @@ playerDiscardActionCards(num, mycallback=null) {
     //
     // laws-in-play
     //
-console.log("num of laws in play: " + this.game.state.laws.length);
     for (let i = 0; i < this.game.state.laws.length; i++) {
-console.log("this one: " + this.game.state.laws[i].agenda);
       if (this.game.state.laws[i].agenda) {
-console.log("this two: " + this.agenda_cards[this.game.state.laws[i].agenda].name);
         if (this.agenda_cards[this.game.state.laws[i].agenda].name) {
-console.log("pushing back this object for the law");
           z.push(this.agenda_cards[this.game.state.laws[i].agenda]);
         }
       }

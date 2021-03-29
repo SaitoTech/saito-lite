@@ -2742,7 +2742,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 
         this.updateLog("Agenda: " + this.agenda_cards[agenda].name + "<p></p><div style='width:80%;font-size:1.0em;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:15px'>" + this.agenda_cards[agenda].text +'</div>');
 
-
 	//
 	// clear all riders
 	//
@@ -2752,7 +2751,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-console.log(z[k].name);
 	    if (z[k].preAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
 	      this.game.queue.push("pre_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+k);
 	    }

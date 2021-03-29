@@ -1,5 +1,3 @@
-/******** HACK
-
 
   this.importAgendaCard('shard-of-the-throne', {
   	name : "Shard of the Throne" ,
@@ -1013,8 +1011,6 @@
   });
 
 
-***** HACK *****/
-
 
   this.importAgendaCard('committee-formation', {
   	name : "Committee Formation" ,
@@ -1113,12 +1109,6 @@ console.log("pushing onto law: " + JSON.stringify(law_to_push));
         }
 
   });
-
-
-
-
-
-/****** HACK *****
 
 
 
@@ -1995,9 +1985,6 @@ console.log("pushing onto law: " + JSON.stringify(law_to_push));
   });
 
 
-**** HACK ****/
-
-
   this.importAgendaCard('colonial-redistribution', {
         name : "Colonial Redistribution" ,
         type : "Directive" ,
@@ -2208,11 +2195,6 @@ console.log("planet is: " + winning_choice);
 
 
 
-
-
-/****** HACK *****
-
-
   this.importAgendaCard('ixthian-artifact', {
 
         name : "Ixthian Artifact" ,
@@ -2262,6 +2244,5 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
 
 
 
-********* HACK *******/
 
 

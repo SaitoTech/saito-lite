@@ -121,6 +121,7 @@ ACTION CARD - types
     });
 
 
+
     this.importActionCard('plague', {
   	name : "Plague" ,
   	type : "action" ,
@@ -1095,5 +1096,6 @@ ACTION CARD - types
 	  return 1;
 	}
     });
+
 
 
