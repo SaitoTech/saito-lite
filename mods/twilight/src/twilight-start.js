@@ -2398,9 +2398,9 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["nuclearsubs", "fidel","u2","duckandcover","degaulle","saltnegotiations","missileenvy", "cia", "europe"];
+              this.game.deck[0].hand = ["beartrap","redscare","nuclearsubs", "fidel","u2","duckandcover","degaulle","saltnegotiations","missileenvy", "cia", "europe"];
             } else {
-              this.game.deck[0].hand = ["cubanmissile", "brezhnev", "opec", "grainsales","africa", "beartrap", "cubanmissile","china"];
+              this.game.deck[0].hand = ["colonial", "cubanmissile", "brezhnev", "opec", "grainsales","africa", "cia", "cubanmissile","china"];
             }
           }
 
@@ -3553,6 +3553,7 @@ if (this.game.player == 0) {
             //
             // if cannot sacrifice missile envy to bear trap because red purged
             //
+
             if (this.game.state.events.beartrap == 1 && this.game.state.events.redscare_player1 >= 1) {
               this.playerTurn();
             } else {
