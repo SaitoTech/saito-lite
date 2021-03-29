@@ -106,6 +106,7 @@
       name     		:       "War Sun",
       type     		:       "warsun",
       cost 		:	12,
+      shots 		:	3,
       move 		:	1,
       capacity 		:	6,
       combat 		:	3,

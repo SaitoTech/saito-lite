@@ -49,6 +49,7 @@
         return 1;
       },
       groundCombatTriggers : function(imperium_self, player, sector, planet_idx) { 
+        if (imperium_self.game.state.ground_combat_round >= 1) { return 0; } // starts at 0
 	if (imperium_self.doesPlayerHaveTech(player, "magen-defense-grid")) {
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
@@ -71,21 +72,24 @@
 	let planet = sys.p[planet_idx];
 	let owner = planet.owner;
 
+console.log("defender is: " + player);
 console.log("owner is: " + owner);
 console.log("starting magen gce");
 console.log("planet: " +JSON.stringify(planet));
 	for (let i = 0; i < planet.units.length; i++) {
 console.log("i: " + i);
-	  if (i != (owner-1)) {
+	  let ii_limit = planet.units[i].length;
+	  if (i != (owner-1) && i < planet.units.length) {
 console.log("units: " + JSON.stringify(planet.units[i]));
-	    for (let ii = 0; i < planet.units[i].length; ii++) {
+	    for (let ii = 0; ii < ii_limit; ii++) {
 
 	      let attacker_unit = planet.units[i][ii];
 	      let attacker = (i+1);
 	      let defender = player;
 
 	      if (attacker_unit.type == "infantry") {
-		imperium_self.assignHitsToGroundForces(attacker, defender, sector, planet_idx, 1);
+		// defender and attacker reversed as attacker takes the hits
+		imperium_self.assignHitsToGroundForces(defender, attacker, sector, planet_idx, 1);
                 imperium_self.eliminateDestroyedUnitsInSector(attacker, sector);
                 imperium_self.updateSectorGraphics(sector);
 		imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infantry to Magan Defense Grid");

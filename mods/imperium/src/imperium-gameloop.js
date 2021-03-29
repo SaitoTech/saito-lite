@@ -997,6 +997,8 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
   	  this.game.queue.splice(qe-1, 1);
 	}
 
+	return 1;
+
       }
 
 
@@ -2359,6 +2361,17 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
+	//
+	// MARCH 28
+	//
+	try {
+          let html = this.returnTokenDisplay();
+          document.querySelector('.hud-header').html(html);
+	} catch (err) {
+	  console.log("error updating hud-header: " + err);
+ 	}
+
+
 	this.updateTokenDisplay();
 	this.updateLeaderboard();
 	this.displayFactionDashboard();
@@ -2739,6 +2752,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
+console.log(z[k].name);
 	    if (z[k].preAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
 	      this.game.queue.push("pre_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+k);
 	    }
@@ -3438,7 +3452,7 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
               //
               if (defender != -1) {
 		//
-		//
+		// unless we are infiltrating and get to keep them...
 		//
 		if (this.game.players_info[attacker-1].temporary_infiltrate_infrastructure_on_invasion == 1 || this.game.players_info[attacker-1].temporary_infiltrate_infrastructure_on_invasion == 1) {
 		  let infiltration = 0;
@@ -3983,7 +3997,13 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
 	  // then the rest
 	  //
 	  for (let i = 0; i < sys.s.units[attacker-1].length; i++) {
+	  //
+	  // repeat for N shots (i.e. Warsuns hit 3x)
+	  //
+	  for (let shots = 0; shots < sys.s.units[attacker-1][i].shots; shots++) {
+	  //
 	  // skip if unit is toast
+	  //
           if (sys.s.units[attacker-1][i].strength > 0) {
 
 	    let roll = this.rollDice(10);
@@ -4017,7 +4037,8 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
 	    }
 
 	  }
-
+	  }
+	  }
 
 	  //
  	  // handle rerolls
@@ -4076,8 +4097,7 @@ console.log("bomb: " + JSON.stringify(hits_or_misses));
 	      }
 	    }
 
-	  } // if attacking unit not dead
-	  } // for all attacking units
+	  }
 
 	  //
 	  // create an object with all this information to update our LOG

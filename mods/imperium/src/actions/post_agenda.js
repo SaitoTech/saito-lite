@@ -90,7 +90,7 @@
     this.importActionCard('bribery', {
   	name : "Bribery" ,
   	type : "post_agenda" ,
-  	text : "After the speaker has cast his vote, spend any number of trade goods to purchase the same number of additional voutes" ,
+  	text : "After the speaker has cast his vote, spend any number of trade goods to purchase additional votes" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 

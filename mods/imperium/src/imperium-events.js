@@ -39,9 +39,13 @@
     //
     // laws-in-play
     //
+console.log("num of laws in play: " + this.game.state.laws.length);
     for (let i = 0; i < this.game.state.laws.length; i++) {
+console.log("this one: " + this.game.state.laws[i].agenda);
       if (this.game.state.laws[i].agenda) {
-        if (this.agenda_cards[this.game.state.laws[i].agenda]) {
+console.log("this two: " + this.agenda_cards[this.game.state.laws[i].agenda].name);
+        if (this.agenda_cards[this.game.state.laws[i].agenda].name) {
+console.log("pushing back this object for the law");
           z.push(this.agenda_cards[this.game.state.laws[i].agenda]);
         }
       }

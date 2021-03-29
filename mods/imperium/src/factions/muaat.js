@@ -181,6 +181,7 @@
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
         imperium_self.game.players_info[gainer-1].faction7_advanced_warsun_i = 1;
+	imperium_self.game.players_info[gainer-1].may_produce_warsuns = 1;
       },
       upgradeUnit :       function(imperium_self, player, unit) {
 

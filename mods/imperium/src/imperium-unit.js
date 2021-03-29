@@ -10,6 +10,7 @@
     if (obj.owner == null)		{ obj.owner = -1; }			// who owns this unit
     if (obj.type == null) 		{ obj.type = ""; }			// infantry / fighter / etc.
     if (obj.storage  == null) 		{ obj.storage = []; }			// units this stores
+    if (obj.shots == null)		{ obj.shots = 1; }			// in combat gets N shots
     if (obj.space == null) 		{ obj.space = 1; }			// defaults to spaceship
     if (obj.ground == null) 		{ obj.ground = 0; }			// defaults to spaceship
     if (obj.cost == null) 		{ obj.cost = 1; }			// cost to product

@@ -127,11 +127,11 @@
 	    // destroy 100 == destroy them all :)
 	    imperium_self.addMove("destroy_infantry_on_planet\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+"100");
             imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"x89_bacterial_weapon_exhausted"+"\t"+"int"+"\t"+"1");
-	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " uses Bacterial Weapons");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " uses X89 Bacterial Weapons");
 	    imperium_self.endTurn();
 	  }
 	  if (action2 == "skip") {
-	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " refrains from using Bacterial Weapons");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " refrains from using X89 Bacterial Weapons");
 	    imperium_self.endTurn();
 	  }
         });

@@ -254,6 +254,7 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
           imperium_self.addMove("destroy_infantry_on_planet"+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+1);
           imperium_self.addMove("add_infantry_to_planet"+"\t"+player+"\t"+planet.planet+"\t"+1);
           imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
+	  imperium_self.endTurn();
         } else {
           mycallback(imperium_self);
           return;

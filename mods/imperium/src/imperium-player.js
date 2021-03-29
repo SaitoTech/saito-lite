@@ -2888,7 +2888,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
             }
           }
           if (id === "pds") {
-            if (existing_units >= imperium_self.game.state_pds_limit_per_planet) { return 0; }
+            if (existing_units >= imperium_self.game.state.pds_limit_per_planet) { return 0; }
           }
           if (id === "spacedock") {
             if (existing_units >= 1) { return 0; }
@@ -5453,7 +5453,6 @@ playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, 
     }
   }
 
-// HACK
   for (let p = 0; p < sys.p.length; p++) {
     for (let k = 0; k < sys.p[p].units[imperium_self.game.player - 1].length; k++) {
       if (filter_func(sys.p[p].units[imperium_self.game.player - 1][k])) {
@@ -5478,16 +5477,6 @@ playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, 
   this.updateStatus(html);
 
   $('.textchoice').off();
-  //    $('.textchoice').on('mouseenter', function() { 
-  //      let s = $(this).attr("id"); 
-  //      imperium_self.showPlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
-  //      imperium_self.showSectorHighlight(imperium_self.game.planets[s].tile);
-  //    });
-  //    $('.textchoice').on('mouseleave', function() { 
-  //      let s = $(this).attr("id");
-  //      imperium_self.hidePlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
-  //      imperium_self.hideSectorHighlight(imperium_self.game.planets[s].tile);
-  //    });
 
   this.lockInterface();
 
@@ -5501,8 +5490,6 @@ playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, 
 
 
     let action = $(this).attr("id");
-    //      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 
-    //      imperium_self.hideSectorHighlight(imperium_self.game.planets[action].tile);
 
     if (action === "cancel") {
       cancel_func();
@@ -5516,7 +5503,6 @@ playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, 
     }
 
     let unit_to_return = { sector: sector_array[action], planet_idx: planet_array[action], unit_idx: unit_idx[action], unit: unit_array[action] }
-    //      imperium_self.hideSectorHighlight(action);
 
     imperium_self.updateStatus("");
     mycallback(unit_to_return);
@@ -5526,10 +5512,7 @@ playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, 
 
 
 
-
-
-
-playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = null) {
+playerSelectOpponentUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, cancel_func = null) {
 
   let imperium_self = this;
   let unit_array = [];
@@ -5541,36 +5524,40 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
   let html = '<div class="sf-readable">' + msg + '</div>';
   html += '<ul>';
 
-  for (let i in this.game.sectors) {
+  let sys = this.returnSectorAndPlanets(sector);
 
-    let sys = this.returnSectorAndPlanets(i);
-    let sector = i;
-
-    for (let k = 0; k < sys.s.units[imperium_self.game.player - 1].length; k++) {
-      if (filter_func(sys.s.units[imperium_self.game.player - 1][k])) {
-        unit_array.push(sys.s.units[imperium_self.game.player - 1][k]);
-        sector_array.push(sector);
-        planet_array.push(-1);
-        unit_idx.push(k);
-        exists_unit = 1;
-        html += '<li class="textchoice" id="' + (unit_array.length - 1) + '">' + sys.s.name + ' - ' + unit_array[unit_array.length - 1].name + '</li>';
-      }
-    }
-
-    for (let p = 0; p < sys.p.length; p++) {
-      for (let k = 0; k < sys.p[p].units[imperium_self.game.player - 1].length; k++) {
-        if (filter_func(sys.p[p].units[imperium_self.game.player - 1][k])) {
-          unit_array.push(sys.p[p].units[imperium_self.game.player - 1][k]);
+  for (let ps = 0; ps < sys.s.units.length; ps++) {
+    if (ps != (imperium_self.game.player-1)) {
+      for (let k = 0; k < sys.s.units[ps].length; k++) {
+        if (filter_func(sys.s.units[ps][k])) {
+          unit_array.push(sys.s.units[ps][k]);
           sector_array.push(sector);
-          planet_array.push(p);
+          planet_array.push(-1);
           unit_idx.push(k);
           exists_unit = 1;
-          html += '<li class="textchoice" id="' + (unit_array.length - 1) + '">' + sys.s.sector + ' / ' + sys.p[p].name + " - " + unit_array[unit_array.length - 1].name + '</li>';
+          html += '<li class="textchoice" id="' + (unit_array.length - 1) + '">' + sys.s.name + ' - ' + unit_array[unit_array.length - 1].name + '</li>';
         }
       }
     }
-
   }
+
+  for (let p = 0; p < sys.p.length; p++) {
+    for (let ps = 0; ps < sys.s.units.length; ps++) {
+      if (ps != (imperium_self.game.player-1)) {
+        for (let k = 0; k < sys.p[p].units[imperium_self.game.player - 1].length; k++) {
+          if (filter_func(sys.p[p].units[imperium_self.game.player - 1][k])) {
+            unit_array.push(sys.p[p].units[imperium_self.game.player - 1][k]);
+            sector_array.push(sector);
+            planet_array.push(p);
+            unit_idx.push(k);
+            exists_unit = 1;
+            html += '<li class="textchoice" id="' + (unit_array.length - 1) + '">' + sys.s.sector + ' / ' + sys.p[p].name + " - " + unit_array[unit_array.length - 1].name + '</li>';
+          }
+        }
+      }
+    }
+  }
+
   if (exists_unit == 0) {
     html += '<li class="textchoice" id="none">no unit available</li>';
   }
@@ -5580,20 +5567,9 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
   html += '</ul>';
 
   this.updateStatus(html);
-
   this.lockInterface();
 
   $('.textchoice').off();
-  //    $('.textchoice').on('mouseenter', function() { 
-  //      let s = $(this).attr("id"); 
-  //      imperium_self.showPlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
-  //      imperium_self.showSectorHighlight(imperium_self.game.planets[s].tile);
-  //    });
-  //    $('.textchoice').on('mouseleave', function() { 
-  //      let s = $(this).attr("id");
-  //      imperium_self.hidePlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
-  //      imperium_self.hideSectorHighlight(imperium_self.game.planets[s].tile);
-  //    });
   $('.textchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
@@ -5604,8 +5580,6 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
 
 
     let action = $(this).attr("id");
-    //      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 
-    //      imperium_self.hideSectorHighlight(imperium_self.game.planets[action].tile);
 
     if (action === "cancel") {
       cancel_func();
@@ -5619,7 +5593,6 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
     }
 
     let unit_to_return = { sector: sector_array[action], planet_idx: planet_array[action], unit_idx: unit_idx[action], unit: unit_array[action] }
-    //      imperium_self.hideSectorHighlight(action);
 
     imperium_self.updateStatus("");
     mycallback(unit_to_return);

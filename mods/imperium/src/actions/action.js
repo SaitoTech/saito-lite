@@ -810,20 +810,16 @@ ACTION CARD - types
               },
 	      function(sector) {
 
-                imperium_self.playerSelectUnitInSectorWithFilter(
-	          "Select a ship in this sector to destroy: " ,
+                imperium_self.playerSelectOpponentUnitInSectorWithFilter(
+	          "Select opponent ship in this sector to destroy: " ,
 		  sector,
                   function(unit) {
-console.log("UNIT: " + JSON.stringify(unit));
 		    if (unit.type == "destroyer") { return 1; }
 		    if (unit.type == "cruiser") { return 1; }
 		    if (unit.type == "dreadnaught") { return 1; }
 		    return 0;
                   },
 	          function(unit_info) {
-
-console.log("Unit Info: " + JSON.stringify(unit_info));
-
 		    let s = unit_info.sector;
 		    let p = parseInt(unit_info.unit.owner);
 		    let uidx = unit_info.unit_idx;

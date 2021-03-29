@@ -466,7 +466,7 @@ console.log("error initing chat: " + err);
       // empty space in board center
       //
       this.game.board["4_4"].tile = "new-byzantium";
-  
+ 
       for (let i in this.game.board) {
         if (i != "4_4" && !hwsectors.includes(i)) {
           let oksel = 0;
@@ -483,6 +483,12 @@ console.log("error initing chat: " + err);
         }
       }
  
+      //
+      // player 1 owns NB
+      //
+      let sys = this.returnSectorAndPlanets("4_4");
+      sys.p[0].owner = 1;
+
 
       //
       // set homeworlds

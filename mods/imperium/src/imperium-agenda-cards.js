@@ -1,5 +1,4 @@
-  
-  
+
   returnAgendaCards() {
     return this.agenda_cards;
   }
@@ -17,5 +16,4 @@
     this.agenda_cards[name] = obj;
 
   }  
-
 
