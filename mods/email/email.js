@@ -286,9 +286,11 @@ class Email extends ModTemplate {
     } catch(err) {
       console.error(err);
     }
-    if (resp.rows) {
+    if (resp.rows.length > 0) {
       let record = resp.rows[0];
       return record.publickey ? record.publickey : record;
+    } else {
+      console.log("response did not contain any rows...")
     }
     return null
   }
