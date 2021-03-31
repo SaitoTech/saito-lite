@@ -76,6 +76,13 @@ ACTION CARD - types
 	      let card = imperium_self.game.players_info[action_card_player-1].strategy_cards_played[i];
               html += '<li class="option" id="'+card+'">' + imperium_self.strategy_cards[card].name + '</li>';
 	    }
+	    for (let i = 0; i < imperium_self.game.players_info[action_card_player-1].strategy.length; i++) {
+    	      if (!imperium_self.game.players_info[imperium_self.game.player - 1].strategy_cards_played.includes(imperium_self.game.players_info[action_card_player-1].strategy[i])) {
+	        let card = imperium_self.game.players_info[action_card_player-1].strategy[i];
+	     
+                html += '<li class="option" id="'+card+'">' + imperium_self.strategy_cards[card].name + '</li>';
+	      }
+	    }
 	    html += '</ul>';
 
 	    imperium_self.updateStatus(html);
@@ -119,7 +126,6 @@ ACTION CARD - types
 	  return 1;
 	},
     });
-
 
 
     this.importActionCard('plague', {
