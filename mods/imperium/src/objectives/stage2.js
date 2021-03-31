@@ -43,6 +43,7 @@
   });
   this.importStageIIPublicObjective('technological-empire', {
       name 	: 	"Technological Empire" ,
+      minPlayers :	4,
       img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Control 5 planets with tech bonuses" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {

@@ -911,8 +911,6 @@ console.log("----------------------------");
 	    let is_player = 0;
 	    let is_sector = 0;
 
-console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
-
 	    if (this.agenda_cards[agenda].elect == "planet") { 
 	      is_planet = 1;
               this.updateLog("Agenda Outcome: " + this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
@@ -1621,8 +1619,8 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 
 	for (let i = 0; i < this.game.players_info.length; i++) {
 	  cards_issued[i] = 0;
-	  if (this.game.players_info[i].strategy_cards_retained.length > 1) {
-	    for (let y = 0; y < this.game.players_info[i].length; y++) {
+	  if (this.game.players_info[i].strategy_cards_retained.length >= 1) {
+	    for (let y = 0; y < this.game.players_info[i].strategy_cards_retained.length; y++) {
 	      this.game.players_info[i].strategy.push(this.game.players_info[i].strategy_cards_retained[y]);
 	      cards_issued[i]++;
 	    }
@@ -1640,8 +1638,12 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
   
   	for (let z in x) {
     	  if (!this.game.state.strategy_cards.includes(z)) {
-  	    this.game.state.strategy_cards_bonus[this.game.state.strategy_cards.length] = 0;
-  	    this.game.state.strategy_cards.push(z);
+	    let include_me = 1;
+	    for (let s = 0; s < this.game.players_info.length; s++) { if (this.game.players_info[s].strategy.includes(z)) { include_me = 0; } }
+	    if (include_me == 1) {
+  	      this.game.state.strategy_cards_bonus[this.game.state.strategy_cards.length] = 0;
+  	      this.game.state.strategy_cards.push(z);
+            }
           }
   	}
   
@@ -3925,8 +3927,6 @@ console.log("IDENTIFYING by type: " + this.agenda_cards[agenda].elect);
 	      }
 	    }
 	  }
-
-console.log("bomb: " + JSON.stringify(hits_or_misses));
 
 	  if (hits_to_assign == 1) {
 	    this.updateLog("Bombardment produces " + hits_to_assign + " hit");

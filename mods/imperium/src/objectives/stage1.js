@@ -112,6 +112,7 @@
   });
   this.importStageIPublicObjective('conquest-of-science', {
       name 	: 	"Conquest of Science" ,
+      minPlayers :	4,
       img	:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control 3 planets with tech specialities" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {

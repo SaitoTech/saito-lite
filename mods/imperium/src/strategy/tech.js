@@ -21,8 +21,6 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-console.log("in secondary!");
-
 	let html = "";
 	let resources_to_spend = 0;
 
@@ -44,7 +42,7 @@ console.log("in secondary!");
 	  }
 
 	  let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
-	  if (available_resources >= 4 && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
+	  if (available_resources >= resources_to_spend && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             html += '<li class="option" id="yes">Yes</li>';
           }
 	  html += '<li class="option" id="no">No</li>';
@@ -101,8 +99,8 @@ console.log("in secondary!");
           html = '<p>Do you wish to spend '+resources_to_spend+' resources to research an additional technology? </p><ul>';
 
 	  if (
-	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
-	    imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
+	    imperium_self.game.players_info[imperium_self.game.player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
+	    imperium_self.game.players_info[imperium_self.game.player-1].temporary_research_technology_card_must_not_spend_resources == 1
 	  ) { 
             html = '<p>Do you wish to research an additional technology? </p><ul>';
 	    resources_to_spend = 0;
@@ -132,7 +130,7 @@ console.log("in secondary!");
             let id = $(this).attr("id");
 
             if (id == "yes") {
-	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 0;
+	      imperium_self.game.players_info[imperium_self.game.player-1].temporary_research_technology_card_must_not_spend_resources == 0;
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.playerSelectResources(resources_to_spend, function(success) {
@@ -175,8 +173,10 @@ console.log("in secondary!");
 	  imperium_self.game.state.minster_of_technology = null;
 	  imperium_self.game.state.minster_of_technology_player = null;
 	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	    imperium_self.game.players_info[i].temporary_research_technology_card_must_not_spend_resources = 0;
-	    imperium_self.game.players_info[i].permanent_research_technology_card_must_not_spend_resources = 0;
+	    if (!imperium_self.game.players_info[i].temporary_research_technology_card_must_not_spend_resources) {
+	      imperium_self.game.players_info[i].temporary_research_technology_card_must_not_spend_resources = 0;
+	      imperium_self.game.players_info[i].permanent_research_technology_card_must_not_spend_resources = 0;
+	    }
 	  }
 	},
         returnAgendaOptions : function(imperium_self) {

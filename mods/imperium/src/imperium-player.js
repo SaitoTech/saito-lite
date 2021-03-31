@@ -543,9 +543,13 @@ playerPlayBombardment(attacker, sector, planet_idx) {
   // no bombardment of PDS-defended territories
   //
   if (this.doesPlanetHavePDS(sys.p[planet_idx])) {
-    this.updateLog("Bombardment not possible against PDS-defended planets. Skipping.");
-    imperium_self.endTurn();
-    return 0;
+    if (this.doesSectorContainPlayerUnit(attacker, sector, "warsun")) {
+      this.updateLog("Warsuns make bombardment possible against PDS-defended planets...");
+    } else {
+      this.updateLog("Bombardment not possible against PDS-defended planets. Skipping.");
+      imperium_self.endTurn();
+      return 0;
+    }
   }
 
   html = '<div class="sf-readable">Do you wish to bombard ' + sys.p[planet_idx].name + '? </div><ul>';

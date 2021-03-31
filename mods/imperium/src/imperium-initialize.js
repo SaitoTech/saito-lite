@@ -558,6 +558,26 @@ console.log("error initing chat: " + err);
       //
       if (this.game.queue.length == 0) {
 
+	let my_stage1_objectives = this.returnStageIPublicObjectives();
+	let my_stage2_objectives = this.returnStageIIPublicObjectives();
+	let my_secret_objectives = this.returnSecretObjectives();
+
+        for (let i in my_stage1_objectives) {
+	  if (my_stage1_objectives[i].minPlayers > this.game.players.length) {
+	    delete my_stage1_objectives[i];
+	  }
+        }
+        for (let i in my_stage2_objectives) {
+	  if (my_stage2_objectives[i].minPlayers > this.game.players.length) {
+	    delete my_stage2_objectives[i];
+	  }
+        }
+        for (let i in my_secret_objectives) {
+	  if (my_secret_objectives[i].minPlayers > this.game.players.length) {
+	    delete my_secret_objectives[i];
+	  }
+        }
+
         this.game.queue.push("turn");
         this.game.queue.push("newround"); 
         //
@@ -581,9 +601,9 @@ console.log("error initing chat: " + err);
         this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnStrategyCards()));
         this.game.queue.push("DECK\t2\t"+JSON.stringify(this.returnActionCards()));	
         this.game.queue.push("DECK\t3\t"+JSON.stringify(this.returnAgendaCards()));
-        this.game.queue.push("DECK\t4\t"+JSON.stringify(this.returnStageIPublicObjectives()));
-        this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
-        this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
+        this.game.queue.push("DECK\t4\t"+JSON.stringify(my_stage1_objectives));
+        this.game.queue.push("DECK\t5\t"+JSON.stringify(my_stage2_objectives));
+        this.game.queue.push("DECK\t6\t"+JSON.stringify(my_secret_objectives));
 //        this.game.queue.push("preloader");
   
       }

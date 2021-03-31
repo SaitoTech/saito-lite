@@ -197,7 +197,7 @@ ACTION CARD - types
 
     });
 
-
+/***** HACK
 
     this.importActionCard('repeal-law', {
   	name : "Repeal Law" ,
@@ -1104,4 +1104,5 @@ ACTION CARD - types
     });
 
 
+***/
 
