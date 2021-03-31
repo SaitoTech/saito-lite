@@ -103,29 +103,31 @@ module.exports = EmailForm = {
                 email_amount = parseFloat(email_amount_elem.value);
             }
         }
-
-        email_to = await mod.returnPublicKey(email_to);
-
-        let newtx = app.wallet.returnBalance() > 0 ?
-            app.wallet.createUnsignedTransactionWithDefaultFee(email_to, email_amount) :
-            app.wallet.createUnsignedTransaction(email_to, email_amount, 0.0);
-
-        if (!newtx) {
-          salert("Unable to send email. You appear to need more tokens");
-          return;
-        }
-
-        newtx.msg.module   = "Email";
-        newtx.msg.title    = email_title;
-        newtx.msg.message  = email_text;
-
-//        newtx = app.wallet.signTransaction(newtx);
-        newtx = app.wallet.signAndEncryptTransaction(newtx);
-        app.network.propagateTransaction(newtx);
-        window.location.hash = mod.goToLocation("#page=email_list&subpage=inbox");
         
-        salert("Your message has been sent");
+        let email_to_key = await mod.returnPublicKey(email_to);
+        if(email_to_key) {
+          let newtx = app.wallet.returnBalance() > 0 ?
+              app.wallet.createUnsignedTransactionWithDefaultFee(email_to_key, email_amount) :
+              app.wallet.createUnsignedTransaction(email_to_key, email_amount, 0.0);
 
+          if (!newtx) {
+            salert("Unable to send email. You appear to need more tokens");
+            return;
+          }
+
+          newtx.msg.module   = "Email";
+          newtx.msg.title    = email_title;
+          newtx.msg.message  = email_text;
+
+  //        newtx = app.wallet.signTransaction(newtx);
+          newtx = app.wallet.signAndEncryptTransaction(newtx);
+          app.network.propagateTransaction(newtx);
+          window.location.hash = mod.goToLocation("#page=email_list&subpage=inbox");
+          
+          salert("Your message has been sent");
+        } else {
+          salert("Could not find user " + email_to);
+        }
     },
 
     verifyJSON() {
