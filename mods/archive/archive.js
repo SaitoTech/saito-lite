@@ -119,7 +119,7 @@ class Archive extends ModTemplate {
     //
     // prune periodically
     //
-    if (Math.random() < 0.0001) { this.pruneOldData(); }
+    if (Math.random() < 0.0001) { this.pruneOldTransactions(); }
 
   }
 
@@ -127,20 +127,13 @@ class Archive extends ModTemplate {
   async pruneOldTransactions() {
 
     let ts = (new Date().getTime()) - 100000000;
-    let sql = "DELETE FROM txs WHERE tx < $ts AND type = $type";
+    let sql = "DELETE FROM txs WHERE ts < $ts AND type = $type";
     let params = {
         $ts		:	ts ,
         $type		:	"Chat"
     };
     this.app.storage.executeDatabase(sql, params, "archive");
 
-  }
-
-
-  async pruneOldTransactions() {
-
-    let ts = (new Date().getTime()) - 100000000;
-    let sql = "DELETE FROM txs WHERE tx < $ts AND type = $type";
   }
 
 
