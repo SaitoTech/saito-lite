@@ -1127,8 +1127,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
     //
     let match_required = this.game.state.required_pot - this.game.state.player_pot[this.game.player - 1];
 
-console.log("LAST RAISE IS NOW RAISE REQUIRED: " + this.game.state.last_raise);
-
     let raise_required = this.game.state.last_raise;
     let html = '';
 
@@ -1364,6 +1362,30 @@ console.log("this raise: " + this_raise);
     state.small_blind_paid = 0;
     state.required_pot = 0;
     state.last_raise = state.big_blind;
+    state.blinds_idx = 0;
+    state.blinds_array = [
+      { "big" : 0.001 , "small" : 0.0005 },
+      { "big" : 0.002 , "small" : 0.0001 },
+      { "big" : 0.004 , "small" : 0.002 },
+      { "big" : 0.008 , "small" : 0.004 },
+      { "big" : 0.015 , "small" : 0.008 },
+      { "big" : 0.030 , "small" : 0.015 },
+      { "big" : 0.060 , "small" : 0.03 },
+      { "big" : 0.120 , "small" : 0.06 },
+      { "big" : 0.250 , "small" : 0.12 },
+      { "big" : 0.5   , "small" : 0.25 },
+      { "big" : 1     , "small" : 0.5 },
+      { "big" : 2     , "small" : 1 },
+      { "big" : 4     , "small" : 2 },
+      { "big" : 8     , "small" : 4 },
+      { "big" : 15    , "small" : 8 },
+      { "big" : 30    , "small" : 15 },
+      { "big" : 60    , "small" : 30 },
+      { "big" : 120   , "small" : 60 },
+      { "big" : 250   , "small" : 120 },
+      { "big" : 500   , "small" : 250 },
+      { "big" : 1000  , "small" : 500 }
+    ];
 
     state.tournament_blinds_per_level = 12;
     state.tournament_blinds_per_level_max = 12;
@@ -1397,9 +1419,21 @@ console.log("this raise: " + this_raise);
     }
 
     if (this.game.options.big_blind != undefined) {
-      state.big_blind = parseInt(this.game.options.big_blind);
-      state.small_blind = state.big_blind/2;
-      state.last_raise = parseInt(state.big_blind);
+      let big_blind_provided = 0;
+      for (let i = 0; i < state.blinds_array.length; i++) {
+	if (this.game.options.big_blind === state.blinds_array[i].big) { 
+	  state.blinds_idx = i;
+	  big_blind_provided = 1;
+          state.big_blind = parseInt(state.blinds_array[i].big);
+          state.small_blind = state.big_blind/2;
+          state.last_raise = parseInt(state.big_blind);
+	}
+      }
+      if (big_blind_provided == 0) {
+        state.big_blind = parseInt(this.game.options.big_blind);
+        state.small_blind = state.big_blind/2;
+        state.last_raise = parseInt(state.big_blind);
+      }
     }
 
 console.log("STATE: " + JSON.stringify(state));
@@ -2678,15 +2712,17 @@ console.log("STATE: " + JSON.stringify(state));
             
             <label for="big_blind">Starting Blinds:</label>
             <select name="big_blind">
+              <option value="0.001">0.001</option>
+              <option value="0.008">0.008</option>
+              <option value="0.03">0.03</option>
+              <option value="0.12">0.12</option>
+              <option value="0.25">0.25</option>
               <option value="1">1</option>
-              <option value="5">5</option>
-              <option value="10" selected>10</option>
-              <option value="20">20</option>
-              <option value="40">40</option>
-              <option value="60">60</option>
-              <option value="100">100</option>
-              <option value="200">200</option>
-              <option value="400">400</option>
+              <option value="8">8</option>
+              <option value="30" selected>30</option>
+              <option value="120">120</option>
+              <option value="250">250</option>
+              <option value="500">500</option>
             </select>
 
             <select name="crypto">
@@ -2801,74 +2837,8 @@ console.log("STATE: " + JSON.stringify(state));
 
 
   increaseBlinds() {
-
-    if (this.game.state.big_blind == 1) {
-      this.game.state.small_blind = 0.75;
-      this.game.state.big_blind = 1.25;
-      return 1;
-    }
-    if (this.game.state.big_blind == 1.25) {
-      this.game.state.small_blind = 1.25;
-      this.game.state.big_blind = 2.5;
-      return 1;
-    }
-    if (this.game.state.big_blind == 2.5) {
-      this.game.state.small_blind = 2.5;
-      this.game.state.big_blind = 5;
-      return 1;
-    }
-    if (this.game.state.big_blind == 5) {
-      this.game.state.small_blind = 5;
-      this.game.state.big_blind = 10;
-      return 1;
-    }
-    if (this.game.state.big_blind == 10) {
-      this.game.state.small_blind = 10;
-      this.game.state.big_blind = 20;
-      return 1;
-    }
-    if (this.game.state.big_blind == 20) {
-      this.game.state.small_blind = 20;
-      this.game.state.big_blind = 40;
-      return 1;
-    }
-    if (this.game.state.big_blind == 40) {
-      this.game.state.small_blind = 30;
-      this.game.state.big_blind = 60;
-      return 1;
-    }
-    if (this.game.state.big_blind == 60) {
-      this.game.state.small_blind = 50;
-      this.game.state.big_blind = 100;
-      return 1;
-    }
-    if (this.game.state.big_blind == 100) {
-      this.game.state.small_blind = 100;
-      this.game.state.big_blind = 200;
-      return 1;
-    }
-    if (this.game.state.big_blind == 200) {
-      this.game.state.small_blind = 150;
-      this.game.state.big_blind = 300;
-      return 1;
-    }
-    if (this.game.state.big_blind == 300) {
-      this.game.state.small_blind = 200;
-      this.game.state.big_blind = 400;
-      return 1;
-    }
-    if (this.game.state.big_blind == 400) {
-      this.game.state.small_blind = 400;
-      this.game.state.big_blind = 800;
-      return 1;
-    }
-    if (this.game.state.big_blind == 800) {
-      this.game.state.small_blind = 800;
-      this.game.state.big_blind = 1600;
-      return 1;
-    }
-
-    return;
+    this.game.state.blinds_idx++;
+    return 1;
   }
 
 
