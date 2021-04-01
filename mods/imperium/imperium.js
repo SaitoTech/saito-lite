@@ -1058,7 +1058,7 @@ console.log("P: " + planet);
       cost 		:	12,
       shots 		:	3,
       move 		:	1,
-      capacity 		:	6,
+      capacity 		:	3,
       combat 		:	3,
       strength 		:	2,
       bombardment_rolls	:	3,
@@ -6535,6 +6535,8 @@ console.log("PLANET: " + JSON.stringify(planet));
 
 	  let io = imperium_self.returnInitiativeOrder();
 
+console.log("seeds of the empire: " + winning_choice);
+
 	  //
 	  // highest VP
 	  //
@@ -8156,7 +8158,7 @@ ACTION CARD - types
 
     });
 
-/***** HACK
+
 
     this.importActionCard('repeal-law', {
   	name : "Repeal Law" ,
@@ -9063,7 +9065,6 @@ ACTION CARD - types
     });
 
 
-***/
 
   
 
@@ -13669,17 +13670,14 @@ console.log("----------------------------");
 	  // on die roll 1-3 blow this puppy up
 	  let roll = this.rollDice(10);
 	  if (roll <= 3) {
-
+  	    this.removeSpaceUnitByJSON(player, sector_from, shipjson);
 	    this.updateLog("The Gravity Rift destroys "+this.returnFactionNickname(player)+" "+obj.name +" (roll: "+roll+")");
   	    this.game.queue.splice(qe, 1);
   	    this.updateSectorGraphics(sector_to);
   	    this.updateSectorGraphics(sector_from);
 	    return 1;
-
 	  } else {
-
 	    this.updateLog("The Gravity Risk accelerates "+this.returnFactionNickname(player)+" "+obj.name+" (roll: "+roll+")");
-
 	  }
 
 	}
