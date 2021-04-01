@@ -824,6 +824,8 @@
 
 	  let io = imperium_self.returnInitiativeOrder();
 
+console.log("seeds of the empire: " + winning_choice);
+
 	  //
 	  // highest VP
 	  //

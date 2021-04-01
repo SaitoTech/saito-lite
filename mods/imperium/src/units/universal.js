@@ -108,7 +108,7 @@
       cost 		:	12,
       shots 		:	3,
       move 		:	1,
-      capacity 		:	6,
+      capacity 		:	3,
       combat 		:	3,
       strength 		:	2,
       bombardment_rolls	:	3,

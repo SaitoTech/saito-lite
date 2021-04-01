@@ -2574,17 +2574,14 @@ console.log("----------------------------");
 	  // on die roll 1-3 blow this puppy up
 	  let roll = this.rollDice(10);
 	  if (roll <= 3) {
-
+  	    this.removeSpaceUnitByJSON(player, sector_from, shipjson);
 	    this.updateLog("The Gravity Rift destroys "+this.returnFactionNickname(player)+" "+obj.name +" (roll: "+roll+")");
   	    this.game.queue.splice(qe, 1);
   	    this.updateSectorGraphics(sector_to);
   	    this.updateSectorGraphics(sector_from);
 	    return 1;
-
 	  } else {
-
 	    this.updateLog("The Gravity Risk accelerates "+this.returnFactionNickname(player)+" "+obj.name+" (roll: "+roll+")");
-
 	  }
 
 	}
