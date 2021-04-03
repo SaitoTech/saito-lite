@@ -1918,7 +1918,7 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units.length; i++) {
       if ((i+1) != player) {
-        if (sys.s.units.length > 0) { return (i+1); }
+        if (sys.s.units[i].length > 0) { return (i+1); }
       }
     }
     return -1;
