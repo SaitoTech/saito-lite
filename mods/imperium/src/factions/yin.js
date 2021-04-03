@@ -341,6 +341,9 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
   let sys = imperium_self.returnSectorAndPlanets(sector);
   let opponent = imperium_self.returnOpponentInSector(player, sector);
 
+console.log("System: ");
+console.log(JSON.stringify(sys.s.units));
+
 console.log("I am " + imperium_self.game.player + " and my opponent is " + opponent);
 
   if (impulse_core == 1) {
