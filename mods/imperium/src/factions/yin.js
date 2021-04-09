@@ -341,11 +341,6 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
   let sys = imperium_self.returnSectorAndPlanets(sector);
   let opponent = imperium_self.returnOpponentInSector(player, sector);
 
-console.log("System: ");
-console.log(JSON.stringify(sys.s.units));
-
-console.log("I am " + imperium_self.game.player + " and my opponent is " + opponent);
-
   if (impulse_core == 1) {
     this.addMove("assign_hits_capital_ship"+"\t"+opponent+"\t"+sector+"\t"+1);
     mycallback();
@@ -353,8 +348,6 @@ console.log("I am " + imperium_self.game.player + " and my opponent is " + oppon
   }
 
   let html = "<div class='sf-readable'>Assign 1 hit to which opponent ship?</div><ul>";
-
-console.log("num of opponent ships " + sys.s.units[opponent-1].length);
 
   for (let i = 0; i < sys.s.units[opponent-1].length; i++) {
 

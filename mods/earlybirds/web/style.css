@@ -1,0 +1,20 @@
+
+.rewards_container {
+  padding: 100px;
+  max-width: 700px;
+  font-size: 1.15em;
+}
+.email-address {
+  max-width: 400px;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid var(--saito-cyber-black-wash);
+}
+.submit-button {
+  max-width: 400px;
+  text-align: center;
+}
+
+
+
+

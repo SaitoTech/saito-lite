@@ -324,7 +324,7 @@ class Chat extends ModTemplate {
            // update TS before save -- TODO -- find a better fix that doesn't break 
            // our ability to validate the chat messages.
            //
-                 let modified_routed_tx_obj = JSON.parse(JSON.stringify(routed_tx.transaction));
+           let modified_routed_tx_obj = JSON.parse(JSON.stringify(routed_tx.transaction));
            let modified_routed_tx = new saito.transaction(modified_routed_tx_obj);
            modified_routed_tx.transaction.ts = new Date().getTime();
 
@@ -493,7 +493,8 @@ class Chat extends ModTemplate {
 
 
   receiveMessage(app, tx, renderMode="") {
-    if(this.inTransitImageMsgSig == tx.transaction.sig) {
+
+    if (this.inTransitImageMsgSig == tx.transaction.sig) {
       this.inTransitImageMsgSig = null;
     }
     let txmsg = tx.returnMessage();
@@ -606,6 +607,15 @@ class Chat extends ModTemplate {
     this.updateLastMessage(txmsg.group_id, message);
     this.sendEvent('chat_receive_message', message);
     this.render(this.app, renderMode);
+
+
+    //
+    // maybe try to find out who this is...
+    //
+    let msgidentifier = app.keys.returnIdentifierByPublicKey(tx.transaction.from[0].add);
+    if (msgidentifier === tx.transaction.from[0].add || msgidentifier == "") {
+      app.browser.addIdentifierToDom([tx.transaction.from[0].add]);
+    }
 
   }
 
