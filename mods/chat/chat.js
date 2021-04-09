@@ -614,7 +614,7 @@ class Chat extends ModTemplate {
     //
     let msgidentifier = app.keys.returnIdentifierByPublicKey(tx.transaction.from[0].add);
     if (msgidentifier === tx.transaction.from[0].add || msgidentifier == "") {
-      app.browser.addIdentifierToDom([tx.transaction.from[0].add]);
+      app.browser.addIdentifiersToDom([tx.transaction.from[0].add]);
     }
 
   }

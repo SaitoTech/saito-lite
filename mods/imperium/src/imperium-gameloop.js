@@ -1964,6 +1964,16 @@ console.log("----------------------------");
 	    } else {
 	    }
 	    this.endTurn();
+	  } else {
+
+	    if (this.game.player == giver) {
+	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+		if (this.game.deck[1].hand[i] == details) {
+		  this.game.deck[1].hand.splice(i, 1);
+		}
+	      }
+	    }
+
 	  }
 	  return 0;
         }
@@ -3521,6 +3531,8 @@ console.log("----------------------------");
 	let planet_idx	   = parseInt(mv[3]);
 
         this.game.queue.splice(qe, 1);
+
+console.log(gainer + " gains control of planet_idx: " + planet_idx + " in " + sector);
 
         this.updatePlanetOwner(sector, planet_idx, gainer);
 

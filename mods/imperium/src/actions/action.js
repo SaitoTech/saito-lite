@@ -495,7 +495,7 @@ ACTION CARD - types
 	      "Select a planet not controlled by another player: ",
               function(planet) {
 		planet = imperium_self.game.planets[planet];
-		if (planet.owner == -1) { return 1; } return 0;
+		if (planet.owner == -1) { return 1; } { return 0; }
               },
 	      function(planet) {
 

@@ -3034,6 +3034,7 @@ console.log("Calculated Production Limit: " + calculated_production_limit);
 
       if (imperium_self.game.players_info[imperium_self.game.player - 1].production_bonus > 0) {
         total_cost -= imperium_self.game.players_info[imperium_self.game.player - 1].production_bonus;
+        if (total_cost < 0) { total_cost = 0; }
       }
 
       if (warfare == 0) {
