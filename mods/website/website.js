@@ -40,12 +40,9 @@ class Website extends ModTemplate {
     document.querySelectorAll('#weixin-link').forEach((element) => {
       element.onclick = (event) => {
         // To generate QR code, take the qr from wechat, decode it and extract the url.
-        // paste the url in mods/website/weixininvite.html
-        // https://onlinepngtools.com/convert-base64-to-png
-        // 
-        // https://msng.link/o/?https%3A%2F%2Fweixin.qq.com%2Fg%2FAwYAAPjScsTWbXOGF3KWv5G2SBCv5YW2e332jesdWfxymsOBs31Dtr816UeHdDT-=wc
-        // qrcode to https://weixin.qq.com/g/AwYAAPjScsTWbXOGF3KWv5G2SBCv5YW2e332jesdWfxymsOBs31Dtr816UeHdDT-
-        //           https://weixin.qq.com/g/AwYAAPjScsTWbXOGF3KWv5G2SBCv5YW2e332jesdWfxymsOBs31Dtr816UeHdDT-
+        // https://zxing.org/w/decode
+        // Then recreate a clear QR code and replace mods/website/web/img/wechat/weixin.png
+        // https://www.the-qrcode-generator.com/
         this.overlay.showOverlay(app, this, `<div id='weixinqr-overlay'><img src="/img/wechat/weixin.png" style="display: block;">
         </div>`, () => {})
       }
