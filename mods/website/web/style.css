@@ -1563,7 +1563,6 @@ h2, h5 {
   margin: 0.5em;
   padding: 4em 2em;
 }
-
 @media only screen and (max-width: 600px) {
   #weixinqr-overlay img {
     width: 80%;
@@ -1572,6 +1571,45 @@ h2, h5 {
     margin-right: auto;
   }
 }
+
+.alert {
+  min-height: 60px;
+  border: 1px solid darkorange;
+  text-align: center;
+  position: relative;
+  top: 100px;
+  margin: 0 5em;
+  line-height: 60px;
+}
+
+.alert span {
+  font-size: 2em;
+}
+
+
+@media only screen and (max-width: 1200px) {
+  .alert {
+    top: 75px;
+ }
+ .alert span {
+  font-size: 3em;
+}
+}
+
+
+@media only screen and (max-width: 760px) {
+  .alert {
+    line-height: 20px;
+    padding: 1em;
+    margin: 0 1em 7em;
+    top: 100px;
+  }
+  .alert span {
+    display: block;
+    font-size: 2em;
+  }
+}
+
 /* Overlay */
 .saito-overlay input[type=text], input[type=number], input[type=password], input[type=date] {
   border: none;
