@@ -22,15 +22,23 @@ class EarlyBirds extends ModTemplate {
     this.header.attachEvents(app, this);
   }
 
+  validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
 
   attachEvents(app) {
 
     document.querySelector(".submit-button").onclick = (e) => {
 
       let emailobj = document.getElementById("email_address");
-      let url = "http://localhost:12101/earlybirds/register/" + emailobj.value + "/" + app.wallet.returnPublicKey();
+      if (!this.validateEmail(emailobj.value)) {
+	salert("Email Tests Invalid - if this is really your email address please write us at info@saito.tech");
+	return;
+      }
 
-console.log("URL: " + url);
+      let url = "http://saito.io/earlybirds/register/" + emailobj.value + "/" + app.wallet.returnPublicKey();
 
       document.querySelector(".rewards_container").innerHTML = "Submitting: please wait...";
 
@@ -40,7 +48,7 @@ console.log("URL: " + url);
           reject(200);
         } else {
           response.text().then(data => {
-            document.querySelector(".rewards_container").innerHTML = "Submission Succeeded";
+            document.querySelector(".rewards_container").innerHTML = "Submission Succeeded<p></p>We will contact you in the next week or so with details on your allocation.";
           });
         }
       });
