@@ -103,7 +103,12 @@ function reset_nonpersistent {
   if [ ! -f ./config/modules.config.js ]; then
     cp ./config/modules.default.js ./config/modules.config.js
   fi
-
+  
+  if [ "$1" == "nuke" ] || [ "$1" == "reset" ]; then
+    if [ -f config/options.conf ]; then
+      cp config/options.conf config/options
+    fi
+  fi
 }
 
 function reset_persistent {
