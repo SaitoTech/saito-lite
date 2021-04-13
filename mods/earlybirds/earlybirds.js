@@ -38,7 +38,7 @@ class EarlyBirds extends ModTemplate {
 	return;
       }
 
-      let url = "http://saito.io/earlybirds/register/" + emailobj.value + "/" + app.wallet.returnPublicKey();
+      let url = "https://saito.io/earlybirds/register/" + emailobj.value + "/" + app.wallet.returnPublicKey();
 
       document.querySelector(".rewards_container").innerHTML = "Submitting: please wait...";
 
