@@ -74,9 +74,9 @@ class Website extends ModTemplate {
     document.title = "SAITO Token has launched";
     document.querySelector("#burnlink").onclick = async(event) => {
       event.preventDefault(); // cancel the event
-      let result = await sconfirm("WARNING: At this time the Saito Network is under active development and is subject to be reset at the team's discretion. Your Native SAITO balance will be reset to 0 in such a case.");
+      let result = await sconfirm("WARNING: At this time the Saito Network is under active development and is subject to be reset at the team's discretion. Your Native SAITO balance will be reset in such a case.");
       if(result) {
-        result = await sconfirm("WARNING. It is strongly recommended that you do not burn your ERC20 SAITO at this time. If you are in need of tokens on the current SAITO network, please consider reaching out to us before proceeding to burn your ERC20 SAITO!");  
+        result = await sconfirm("WARNING: It is strongly recommended that you do not burn your ERC20 SAITO at this time. If you are in need of tokens on the current SAITO network, please consider reaching out to us before proceeding to burn your ERC20 SAITO.");  
       }
       if(result) {
         result = await sconfirm("Are you absolutely sure you want to know how to burn your ERC20 SAITO?");
