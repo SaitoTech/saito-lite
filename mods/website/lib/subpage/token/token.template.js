@@ -33,23 +33,4 @@ module.exports = TokenTemplate = () => {
       <a id="burnlink" href="/website/tokenburn">Click here</a> for instructions on how to burn your ERC-20 SAITO in exchange for Native SAITO.
     </p>
   </div>`;
-  
-// https://etherscan.io/token/0xFa14Fa6958401314851A17d6C5360cA29f74B57B
-
-// The Saito project is excited to announce it will partner with Polkastarter to conduct its Initial Dex Offering.
-// This is a significant step for the project — one that we could not have achieved without ongoing support from our backers and partners.
-// We are happy to be able to expand our supporter base and get $SAITO into the hands of our growing community. This is a key step towards building a healthy economy and vibrant community on Saito.
-// About Saito
-// Saito is an open network layer that delivers web3 to users. Applications on Saito can run without closed plugins, private APIs and non-open infrastructure. Saito runs without an owner while funding the nodes that provide routing and user infrastructure for its own network and other public blockchains. Saito consensus is secure, sybil resistant, and resistant to centralizing forces and monopolization — keeping web3 open and independent.
-// Telegram | Twitter | Website | Arcade
-// About the Launch
-// The Polkastarter IDO date has been set for later this month. Details regarding participation and parameters will be released via our social channels in the coming days.
-// Saito Announcement Telegram Channel
-// It is Saito’s intention to make the sale as inclusive as possible, with space for older community members, POLS holders and newcomers alike.
-// About Polkastarter
-// Polkastarter is the fully decentralized protocol for launching new ideas. Our curation process and industry access enable us to offer the best new projects in blockchain and digital assets.
-// With Polkastarter, decentralized projects can raise awareness, build a loyal community, and receive long-term support. Users of the platform will be able to participate in a secure and compliant environment, and use assets both in and beyond the current ERC20 standard.
-
-// Simply burn() your ERC20 tokens and provide a SAITO address to the data field. Instructions can be found <a href="/website/tokenburn">here</a>.
-
 }
