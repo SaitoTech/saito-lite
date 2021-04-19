@@ -4,8 +4,8 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const ModalRegisterEmail = require('../../lib/saito/ui/modal-register-email/modal-register-email');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
-const Data = require('./lib/data');
-
+const TokenTemplate 	= require('./lib/subpage/token/token.template.js');
+const TokenBurnTemplate 	= require('./lib/subpage/token/tokenburn.template.js');
 
 class Website extends ModTemplate {
 
@@ -21,22 +21,7 @@ class Website extends ModTemplate {
     this.overlay = new SaitoOverlay(app, this);
     return this;
   }
-
-  initializeHTML(app) {
-    if (this.header == null) {
-      this.header = new SaitoHeader(app, this);
-    }
-
-    this.header.render(app, this);
-    this.header.attachEvents(app, this);
-
-    if (document.querySelector('.header-icon-links')) {
-      app.browser.prependElementToDom(document.querySelector("#header-icon-links-hidden").innerHTML, document.querySelector('.header-icon-links'));
-    }
-    if (document.querySelector('.header-dropdown')) {
-      app.browser.prependElementToDom(document.querySelector("#header-dropdown-hidden").innerHTML, document.querySelector('.header-dropdown'));
-    }
-
+  initializeHompage(app) {
     document.querySelectorAll('#weixin-link').forEach((element) => {
       element.onclick = (event) => {
         // To generate QR code, take the qr from wechat, decode it and extract the url.
@@ -83,6 +68,51 @@ class Website extends ModTemplate {
     });
     this.initializePrivateSaleOverlay();
   }
+  initializeTokenPage(app) {
+    document.querySelector("#content").innerHTML = TokenTemplate();
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/token/token.style.css" />', document.head);
+    document.title = "SAITO Token has launched";
+    document.querySelector("#burnlink").onclick = async(event) => {
+      event.preventDefault(); // cancel the event
+      let result = await sconfirm("WARNING: At this time the Saito Network is under active development and is subject to be reset at the team's discretion. Your Native SAITO balance will be reset to 0 in such a case.");
+      if(result) {
+        result = await sconfirm("WARNING. It is strongly recommended that you do not burn your ERC20 SAITO at this time. If you are in need of tokens on the current SAITO network, please consider reaching out to us before proceeding to burn your ERC20 SAITO!");  
+      }
+      if(result) {
+        result = await sconfirm("Are you absolutely sure you want to know how to burn your ERC20 SAITO?");
+      }
+      if(result) {
+        window.location = document.querySelector("#burnlink").href;
+      }
+    }
+  }
+  initializeTokenBurnPage(app) {
+    document.title = "Burn SAITO Token";
+    document.querySelector("#content").innerHTML = TokenBurnTemplate();
+  }
+  initializeHTML(app) {
+    
+    if (this.header == null) {
+      this.header = new SaitoHeader(app, this);
+    }
+
+    this.header.render(app, this);
+    this.header.attachEvents(app, this);
+
+    if (document.querySelector('.header-icon-links')) {
+      app.browser.prependElementToDom(document.querySelector("#header-icon-links-hidden").innerHTML, document.querySelector('.header-icon-links'));
+    }
+    if (document.querySelector('.header-dropdown')) {
+      app.browser.prependElementToDom(document.querySelector("#header-dropdown-hidden").innerHTML, document.querySelector('.header-dropdown'));
+    }
+    if(document.location.pathname.startsWith("/website/tokenburn")){
+      this.initializeTokenBurnPage(app);
+    } else if(document.location.pathname.startsWith("/website/token")){
+      this.initializeTokenPage(app);
+    } else {
+      this.initializeHompage(app);
+    }
+  }
   
   doPrivateSaleOverlay() {
     let doPrivsaleSignup = this.app.browser.parseHash(window.location.hash).private_sale;
@@ -127,6 +157,14 @@ class Website extends ModTemplate {
     });
     expressapp.get('/weixin', async (req, res) => {
       res.sendFile(path.join(__dirname + '/web/weixininvite.html'));
+    });
+    expressapp.get('/subpagestyle/:subpage/:stylesheetfile', async (req, res) => {
+      console.log(req.params.stylesheetfile);
+      res.sendFile(path.join(__dirname + '/lib/subpage/'  + req.params.subpage + "/" + req.params.stylesheetfile));
+    });
+    expressapp.get('/website/*', async (req, res) => {
+      // use website/* here so that website.js will be initialized, i.e. we are still operating within the website module
+      res.sendFile(path.join(__dirname + '/lib/subpage/index.html'));
     });
   }
 }
