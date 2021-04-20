@@ -245,7 +245,7 @@ section {
 }
 .section1 .left .content, #subpage #content {
   margin: 3.5rem 0rem;
-  line-height: 2rem;
+  line-height: 18px;
   font-size: 18px;
   font-weight: 400;
   color: #000000;
