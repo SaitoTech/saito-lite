@@ -229,6 +229,8 @@
     }
 
     this.saveSystemAndPlanets(sys);
+    this.updateSectorGraphics(sector);
+
   }
   
   

@@ -116,7 +116,6 @@ ACTION CARD - types
     });
 
 
-
     this.importActionCard('lost-star-chart', {
   	name : "Lost Star Chart" ,
   	type : "instant" ,

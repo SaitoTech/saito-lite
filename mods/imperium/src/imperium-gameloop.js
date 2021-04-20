@@ -621,7 +621,6 @@ console.log("----------------------------");
 	  }
 	}
 
-
 	if (strategy_card_player != -1) {
 	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {
     	    imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
@@ -631,7 +630,6 @@ console.log("----------------------------");
     	    imperium_self.game.players_info[imperium_self.game.player-1].strategy_cards_played.push(card);
 	  }
 	}
-
 
   	if (stage == 1) {
 	  this.updateLog(this.returnFactionNickname(strategy_card_player) + " plays " + this.strategy_cards[card].name);
@@ -1617,6 +1615,9 @@ console.log("----------------------------");
 
 	let cards_issued = [];
 
+console.log("RETAINED strategy cards: " );
+console.log(JSON.stringify(this.game.players_info[i].strategy_cards_retained));
+
 	for (let i = 0; i < this.game.players_info.length; i++) {
 	  cards_issued[i] = 0;
 	  if (this.game.players_info[i].strategy_cards_retained.length >= 1) {
@@ -1633,7 +1634,6 @@ console.log("----------------------------");
   	//
   	// all strategy cards on table again
   	//
-  	//this.game.state.strategy_cards = [];
   	let x = this.returnStrategyCards();
   
   	for (let z in x) {
@@ -1662,7 +1662,6 @@ console.log("----------------------------");
   	  // TODO -- ROUND 1 players only select 1
   	  //
           if (this.game.state.round == 1) { cards_to_select = 1; }
- 
 
   	  for (cts = 0; cts < cards_to_select; cts++) {
             for (let i = 0; i < this.game.players_info.length; i++) {

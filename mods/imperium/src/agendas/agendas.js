@@ -1,4 +1,5 @@
 
+
   this.importAgendaCard('shard-of-the-throne', {
   	name : "Shard of the Throne" ,
   	type : "Law" ,
@@ -638,7 +639,6 @@
   });
 
 
-
   this.importAgendaCard('anti-intellectual-revolution', {
   	name : "Anti-Intellectual Revolution" ,
   	type : "Law" ,
@@ -878,6 +878,7 @@ console.log("seeds of the empire: " + winning_choice);
   });
 
 
+
   this.importAgendaCard('space-cadet', {
   	name : "Space Cadet" ,
   	type : "Law" ,
@@ -944,6 +945,7 @@ console.log("seeds of the empire: " + winning_choice);
 
         }
   });
+
 
 
   this.importAgendaCard('galactic-threat', {
@@ -2243,7 +2245,6 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
         return 1;
       }
   });
-
 
 
 
