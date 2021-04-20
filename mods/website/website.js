@@ -164,11 +164,11 @@ class Website extends ModTemplate {
     });
     expressapp.get('/subpagestyle/:subpage/:stylesheetfile', async (req, res) => {
       console.log(req.params.stylesheetfile);
-      res.sendFile(path.join(__dirname + '/lib/subpage/'  + req.params.subpage + "/" + req.params.stylesheetfile));
+      res.sendFile(path.join(__dirname + '/web/subpage/'  + req.params.subpage + "/" + req.params.stylesheetfile));
     });
     expressapp.get('/website/*', async (req, res) => {
       // use website/* here so that website.js will be initialized, i.e. we are still operating within the website module
-      res.sendFile(path.join(__dirname + '/lib/subpage/index.html'));
+      res.sendFile(path.join(__dirname + '/web/subpage/index.html'));
     });
   }
 }
