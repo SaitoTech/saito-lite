@@ -68,10 +68,19 @@ class Website extends ModTemplate {
     });
     this.initializePrivateSaleOverlay();
   }
+<<<<<<< Updated upstream
   initializeTokenPage(app) {
     document.querySelector("#content").innerHTML = TokenTemplate();
     app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/token/token.style.css" />', document.head);
     document.title = "SAITO Token has launched";
+=======
+<<<<<<< Updated upstream
+=======
+  initializeTokenPage(app) {
+    document.querySelector("#content").innerHTML = TokenTemplate();
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/token/token.style.css" />', document.head);
+    document.title = "SAITO IDO";
+>>>>>>> Stashed changes
     document.querySelector("#burnlink").onclick = async(event) => {
       event.preventDefault(); // cancel the event
       let result = await sconfirm("WARNING: At this time the Saito Network is under active development and is subject to be reset at the team's discretion. Your Native SAITO balance will be reset in such a case.");
@@ -113,6 +122,10 @@ class Website extends ModTemplate {
       this.initializeHompage(app);
     }
   }
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   
   doPrivateSaleOverlay() {
     let doPrivsaleSignup = this.app.browser.parseHash(window.location.hash).private_sale;

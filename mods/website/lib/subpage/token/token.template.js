@@ -1,36 +1,18 @@
 module.exports = TokenTemplate = () => {
   return `
   <div>
-    <div class="title">SAITO's token has launched</div>
+    <div class="title">SAITO's token is launching in less than 48 hours</div>
     <p>
-      Following our successful IDO launched on PolkaStarter, SAITO is now available as a swappable ERC-20 Token on the Ethereum platform. Each ERC-20 SAITO represents a Native SAITO coin and is 1-to-1 convertible to native coins withheld on the native network by the Saito Team.
+      Our Polkastarter pool participants are KYCing now and the pool will open on April 22, 3PM PST.
     </p>
     <p>
-      We are very excited to have passed this milestone and look forward to continuing to leverage our amazing community to bring Saito to the next level!
+      We will also be announcing the token address and creating a Uniswap pool directly following the IDO, so keep tuned to saito.io for more information as we proceed toward IDO day.
     </p>
     <p>
-      Details of the token can be seen on Etherscan <a href="https://etherscan.io/token/0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF">here</a>, Coinmarketcap <a href="https://coinmarketcap.com/currencies/saito/">here</a>, and Coingecko <a href="https://www.coingecko.com/en/coins/saito">here</a>.
+      All private sale participants who are interested in participating in the ERC-20 and have completed KYC will also receive their tokens immediately following the IDO.
     </p>
     <p>
-      In order to receive and hold your ERC-20 SAITO, you should use an ERC-20 compatible wallet such as MyEtherWallet or MetaMask.
-    </p>
-    <p>
-      We strongly encourage you to also consider a hardware-based solution for you key storage such as a Trezor or Ledger device.
-    </p>
-    <p>
-      Be sure not to use the SAITO smart contract token address as a receiving address!
-    </p>
-    <p>
-      Also be sure to keep a backup of your keys in a safe place.
-    </p>
-    <p>
-      The Saito Team will not be able to help you recover your funds if you keys are lost or otherwise irrecoverable.
-    </p>
-    <p>
-      ERC-20 SAITO is swappable to Native SAITO tokens.
-    </p>
-    <p class="burninfo">
-      <a id="burnlink" href="/website/tokenburn">Click here</a> for instructions on how to burn your ERC-20 SAITO in exchange for Native SAITO.
+      Thanks to everyone in the community for your enthusiatic support.
     </p>
   </div>`;
 }
