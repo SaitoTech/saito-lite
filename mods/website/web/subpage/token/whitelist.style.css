@@ -1,0 +1,21 @@
+.whitelistSection {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+.whitelistTitle {
+  border-bottom: 1px SOLID #434343;
+  border-right: 1px SOLID #434343;
+  background-color: #434343;
+  text-align: left;
+  font-weight: bold;
+  color: #ea4335;
+  font-family: 'docs-Courier', Arial;
+  font-size: 18pt;
+  vertical-align: bottom;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 2px 3px 2px 3px;
+}
+.communityAddresses, .polsAddresses {
+  
+}
