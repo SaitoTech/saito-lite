@@ -1,5 +1,19 @@
 module.exports = TokenTemplate = () => {
   
+  let futureContent = {
+    title: '<div class="title">SAITO\'s token has launched</div>',
+    para1: "Following our successful IDO launched on PolkaStarter, SAITO is now available as a swappable ERC-20 Token on the Ethereum platform. Each ERC-20 SAITO represents a Native SAITO coin and is 1-to-1 convertible to native coins withheld on the native network by the Saito Team.",
+    para2: "We are very excited to have passed this milestone and look forward to continuing to leverage our amazing community to bring Saito to the next level!",
+    para3: 'Details of the token can be seen on Etherscan <a href="https://etherscan.io/token/0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF">here</a>, Coinmarketcap <a href="https://coinmarketcap.com/currencies/saito/">here</a>, and Coingecko <a href="https://www.coingecko.com/en/coins/saito">here</a>.',
+    para4: "In order to receive and hold your ERC-20 SAITO, you should use an ERC-20 compatible wallet such as MyEtherWallet or MetaMask.",
+    para5: "We strongly encourage you to also consider a hardware-based solution for you key storage such as a Trezor or Ledger device.",
+    para6: "Be sure not to use the SAITO smart contract token address as a receiving address!",
+    para7: "Also be sure to keep a backup of your keys in a safe place.",
+    para8: "The Saito Team will not be able to help you recover your funds if you keys are lost or otherwise irrecoverable.",
+    para9: '<a id="burnlink" href="/website/tokenburn">Click here</a> for instructions on how to burn your ERC-20 SAITO in exchange for Native SAITO.',
+    // para9 also needs to be wrapped in <p class="burninfo"></p>
+  }
+  
   let content = {
     title: "SAITO's token is launching in less than 48 hours",
     para1: "Our Polkastarter pool participants are KYC-ing now and the pool will open on April 22, 1PM UTC.",
@@ -7,7 +21,7 @@ module.exports = TokenTemplate = () => {
     para3: "All private sale participants will also receive their tokens immediately following the IDO, subject to their vesting terms.",
     para4: "Thanks to everyone in the community for your enthusiatic support.",
   }
-  if(document.location.host.includes("cn.saito.io") || true){
+  if(document.location.host.includes("cn.saito.io")){
     content = {
       title: "SAITO代币将在未来48小时内上线。",
       para1: "我们的PolkaStarter Pool参与者现在正在进行KYC中，该池将于4月22日UTC下午1点开放。",

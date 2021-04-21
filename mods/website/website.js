@@ -4,8 +4,9 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const ModalRegisterEmail = require('../../lib/saito/ui/modal-register-email/modal-register-email');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
-const TokenTemplate 	= require('./lib/subpage/token/token.template.js');
-const TokenBurnTemplate 	= require('./lib/subpage/token/tokenburn.template.js');
+const TokenTemplate = require('./lib/subpage/token/token.template.js');
+const TokenBurnTemplate = require('./lib/subpage/token/tokenburn.template.js');
+const WhitelistTemplate = require('./lib/subpage/token/whitelist.template.js');
 
 class Website extends ModTemplate {
 
@@ -94,6 +95,12 @@ class Website extends ModTemplate {
     document.title = "Burn SAITO Token";
     document.querySelector("#content").innerHTML = TokenBurnTemplate();
   }
+  initializeWhitelistPage(app) {
+    document.title = "IDO Whitelist";
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/token/whitelist.style.css" />', document.head);
+    document.querySelector("#content").innerHTML = WhitelistTemplate();
+  }
+  
   initializeHTML(app) {
     
     if (this.header == null) {
@@ -113,6 +120,8 @@ class Website extends ModTemplate {
       this.initializeTokenBurnPage(app);
     } else if(document.location.pathname.startsWith("/website/token")){
       this.initializeTokenPage(app);
+    } else if(document.location.pathname.startsWith("/website/whitelist")){
+      this.initializeWhitelistPage(app);
     } else {
       this.initializeHompage(app);
     }
