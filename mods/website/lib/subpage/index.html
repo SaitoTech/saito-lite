@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="author" content="Saito Team">
+    <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
+    <title>Saito</title>
+    <link rel="stylesheet" href="/saito/overlay.css" />
+    <link rel="stylesheet" href="/saito/salert.css" />
+    <link rel="stylesheet" href="/website/style.css" />
+    <!--<link rel="stylesheet" href="/saito/style.css" />-->
+    <style>
+      #content{
+        width: 100%;
+        padding: 0 4rem;
+        margin: 8em auto 0;
+        background-image: url(/website/img/hex_background.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        min-height: 40rem;
+      }
+      body {
+        background-color: var(--backround-general);
+      }
+      *{
+        box-sizing: border-box;
+      }
+      </style>
+  </head>
+  <body>
+    <div style="display:none;">
+      <div id="header-icon-links-hidden">
+        <!-- copied into header by website.js -->
+        <div class="left desktop">
+          <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
+          <a alt="developer resources" href="https://org.saito.tech/">How Saito Works</a>
+          <a alt="The Saito Arcade" href="https://org.saito.tech/saito-the-web3-foundation-and-the-future-of-the-decentralized-web">Web3 Foundation Grant</a>
+          <a alt="blog" href="https://org.saito.tech/get-saito-tokens/">Get Saito Tokens</a>
+          <a class="language-info" alt="中文" href="https://cn.saito.io">中文</a> 
+        </div>
+      </div>
+      <div id="header-dropdown-hidden">
+        <div class="mobile-menu mobile">
+         <a alt="developers" href="https://org.saito.tech/developers">Developers</a>
+         <a alt="design" href="https://org.saito.tech">Economists</a>
+         <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+         <a class="language-info" alt="中文" href="https://cn.saito.io">中文</a> 
+        </div>
+      </div>
+    </div>
+    <div id="subpage" class="all">
+      <div id="content">
+        <!--
+          Use website.js to inject some content in a similar way to /website/token.
+          A stylesheet can also be injected. See website.js.
+        -->
+      </div>
+    </div>
+    <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
+  </body>
+</html>
