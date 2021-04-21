@@ -19,7 +19,8 @@ module.exports = TokenTemplate = () => {
     para1: "Our Polkastarter pool participants are KYC-ing now and the pool will open on April 22, 1PM UTC.",
     para2: "We will also be announcing the token address and creating a Uniswap pool directly following the IDO, so stay tuned to saito.io for more information as we proceed toward IDO day.",
     para3: "All private sale participants will also receive their tokens immediately following the IDO, subject to their vesting terms.",
-    para4: "Thanks to everyone in the community for your enthusiatic support.",
+    para4: 'Saito\'s tokenomics can be seen <a href="/saito-tokenomics.pdf">here</a>.',
+    para5: "Thanks to everyone in the community for your enthusiatic support.",
   }
   if(document.location.host.includes("cn.saito.io")){
     content = {
@@ -27,7 +28,8 @@ module.exports = TokenTemplate = () => {
       para1: "我们的PolkaStarter Pool参与者现在正在进行KYC中，该池将于4月22日UTC下午1点开放。",
       para2: "我们还将在IDO之后宣布代币地址并直接创建一个Uniswap池，因此请继续关注saito.io获得更多信息，以继续进行IDO当天的活动。",
       para3: "参加ERC-20代币并完成KYC的所有私募参与者也将在IDO之后获得其代币。",
-      para4: "感谢社区中每个人的大力支持",
+      para4: '<a href="/saito-tokenomics.pdf">Tokenomics</a>.',
+      para5: "感谢社区中每个人的大力支持",
     }
   }
   return `
@@ -44,6 +46,9 @@ module.exports = TokenTemplate = () => {
     </p>
     <p>
       ${content.para4}
+    </p>
+    <p>
+      ${content.para5}
     </p>
   </div>`;
 }
