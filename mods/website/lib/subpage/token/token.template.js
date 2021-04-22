@@ -14,7 +14,7 @@ module.exports = TokenTemplate = () => {
   if(document.location.host.includes("cn.saito.io")){
     content = {      
       title: 'SAITO ERC-20 代币合约',
-      para1: '代币地址为0xFFFFF。 您可以在<a href="https://etherscan.io/token/0xFa14Fa6958401314851A17d6C5360cA29f74B57B">Etherscan</a>，<a href="https://coinmarketcap.com/currencies/saito/">Coinmarketcap</a>和<a href="https://www.coingecko.com/en/coins/saito">Coingecko</a>上查找详细信 息。',
+      para1: '代币地址为0xFa14Fa6958401314851A17d6C5360cA29f74B57B。 您可以在<a href="https://etherscan.io/token/0xFa14Fa6958401314851A17d6C5360cA29f74B57B">Etherscan</a>，<a href="https://coinmarketcap.com/currencies/saito/">Coinmarketcap</a>和<a href="https://www.coingecko.com/en/coins/saito">Coingecko</a>上查找详细信 息。',
       para2: "在PolkaStarter上成功进行IDO之后，SAITO将作为可交易的ERC-20代币使用。 每个ERC- 20 SAITO代表一个原生的SAITO代币，并且可以以1:1的比例转换为Saito主网上的原生代币。",
       para3: "SAITO可以在Uniswap上进行交易，并且很快还将在更多平台上线，敬请期待官方公告。",
       para4: "为了接收和持有ERC-20 SAITO，建议您使用与ERC-20兼容的钱包，例如 MyEtherWallet，MetaMask或TrustWallet。",
