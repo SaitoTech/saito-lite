@@ -2,8 +2,8 @@ module.exports = TokenTemplate = () => {
   let content = {
     title: 'SAITO ERC-20 Token Contract',
     para1: 'The token\'s address is 0xFa14Fa6958401314851A17d6C5360cA29f74B57B. Details can be seen on <a href="https://etherscan.io/token/0xFa14Fa6958401314851A17d6C5360cA29f74B57B">Etherscan</a>, <a href="https://coinmarketcap.com/currencies/saito/">Coinmarketcap</a>, and <a href="https://www.coingecko.com/en/coins/saito">Coingecko</a>.',
-    para2: "Following our successful IDO launched on PolkaStarter, SAITO is available as a swappable ERC-20 Token. Each ERC-20 SAITO represents a native SAITO coin and is 1-to-1 convertible to native coins withheld on the native network by the Saito Team.",
-    para3: "SAITO can be traded on Uniswap and will soon also be available on more traditional platforms, so stay tuned for those announcements.",
+    para2: "Following our successful IDO launched on PolkaStarter, SAITO will be available as a swappable ERC-20 Token. Each ERC-20 SAITO represents a native SAITO coin and is 1-to-1 convertible to native coins withheld on the native network by the Saito Team.",
+    para3: "SAITO can be traded on Uniswap at 2PM TC and will soon also be available later on more traditional platforms, so stay tuned for those announcements.",
     para4: "In order to receive and hold your ERC-20 SAITO, you should use an ERC-20 compatible wallet such as MyEtherWallet, MetaMask or TrustWallet.",
     para5: "We encourage you to consider a hardware-based solution for you key storage such as a Trezor or Ledger device. Also be sure to keep a backup of your keys in a safe place.",
     para6: "Also be careful not to use the token address as a receiving address!",
