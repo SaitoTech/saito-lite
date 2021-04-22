@@ -71,9 +71,9 @@ class Website extends ModTemplate {
   }
 
   initializeTokenPage(app) {
-    document.querySelector("#content").innerHTML = TokenTemplate();
+    document.title = "SAITO ERC-20 Token Contract";
     app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/token/token.style.css" />', document.head);
-    document.title = "SAITO IDO";
+    document.querySelector("#content").innerHTML = TokenTemplate();
     document.querySelectorAll("#burnlink").forEach(element => {    
       element.onclick = async(event) => {
         event.preventDefault(); // cancel the event
