@@ -1,7 +1,8 @@
 module.exports = TokenTemplate = () => {
   let content = {
     title: 'SAITO ERC-20 Token Contract',
-    para1: 'The token\'s address is 0xFa14Fa6958401314851A17d6C5360cA29f74B57B. Details can be seen on <a href="https://etherscan.io/token/0xFa14Fa6958401314851A17d6C5360cA29f74B57B">Etherscan</a>, <a href="https://coinmarketcap.com/currencies/saito/">Coinmarketcap</a>, and <a href="https://www.coingecko.com/en/coins/saito">Coingecko</a>.',
+    para1: 'The token\'s address is <a href="https://etherscan.io/token/0xFa14Fa6958401314851A17d6C5360cA29f74B57B">0xFa14Fa6958401314851A17d6C5360cA29f74B57B</a> and the Uniswap pair is <a href="https://info.uniswap.org/pair/0xedea44548d6adddc850a3ec3806a8d231ff8426e">0xedea44548d6adddc850a3ec3806a8d231ff8426e</a>.',
+    para2: 'Details can be seen on <a href="https://etherscan.io/token/0xFa14Fa6958401314851A17d6C5360cA29f74B57B">Etherscan</a>, <a href="https://coinmarketcap.com/currencies/saito/">Coinmarketcap</a>, and <a href="https://www.coingecko.com/en/coins/saito">Coingecko</a>.',
     para2: "Following our successful IDO launched on PolkaStarter, SAITO is available as a swappable ERC-20 Token. Each ERC-20 SAITO represents a native SAITO coin and is 1-to-1 convertible to native coins withheld on the native network by the Saito Team.",
     para3: "SAITO can be traded on Uniswap and will soon also be available on more traditional platforms, so stay tuned for those announcements.",
     para4: "In order to receive and hold your ERC-20 SAITO, you should use an ERC-20 compatible wallet such as MyEtherWallet, MetaMask or TrustWallet.",
