@@ -1,21 +1,37 @@
 .whitelistSection {
   display: grid;
   grid-template-columns: auto auto;
+  justify-content: space-around; 
+}
+@media only screen and (max-width: 1000px) {
+  .whitelistSection {
+    grid-template-columns: auto;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .address {
+    font-size: 14px;
+  }
+}
+
+.whitelistSection div {
+  min-width: 500px;
 }
 .whitelistTitle {
-  border-bottom: 1px SOLID #434343;
-  border-right: 1px SOLID #434343;
-  background-color: #434343;
   text-align: left;
   font-weight: bold;
-  color: #ea4335;
-  font-family: 'docs-Courier', Arial;
-  font-size: 18pt;
+  color: var(--saito-red);
+  font-size: 1.4em;
   vertical-align: bottom;
   white-space: nowrap;
-  direction: ltr;
-  padding: 2px 3px 2px 3px;
+  padding-top: 1em;
+  padding-bottom: 0.6em;
 }
 .communityAddresses, .polsAddresses {
   
+  
+}
+.address {
+  padding-top: .2em;
 }
