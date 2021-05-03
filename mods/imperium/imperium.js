@@ -3136,6 +3136,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
   }
 
   let html = "<div class='sf-readable'>Assign 1 hit to which opponent ship?</div><ul>";
+
   for (let i = 0; i < sys.s.units[opponent-1].length; i++) {
 
     let unit = sys.s.units[opponent-1][i];
@@ -5710,6 +5711,7 @@ console.log("PLANET: " + JSON.stringify(planet));
   
   
 
+
   this.importAgendaCard('shard-of-the-throne', {
   	name : "Shard of the Throne" ,
   	type : "Law" ,
@@ -6349,7 +6351,6 @@ console.log("PLANET: " + JSON.stringify(planet));
   });
 
 
-
   this.importAgendaCard('anti-intellectual-revolution', {
   	name : "Anti-Intellectual Revolution" ,
   	type : "Law" ,
@@ -6589,6 +6590,7 @@ console.log("seeds of the empire: " + winning_choice);
   });
 
 
+
   this.importAgendaCard('space-cadet', {
   	name : "Space Cadet" ,
   	type : "Law" ,
@@ -6655,6 +6657,7 @@ console.log("seeds of the empire: " + winning_choice);
 
         }
   });
+
 
 
   this.importAgendaCard('galactic-threat', {
@@ -7958,7 +7961,6 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
 
 
 
-
 /************************************
   
 ACTION CARD - types
@@ -8075,7 +8077,6 @@ ACTION CARD - types
 	  return 1;
         }
     });
-
 
 
     this.importActionCard('lost-star-chart', {
@@ -8456,7 +8457,7 @@ ACTION CARD - types
 	      "Select a planet not controlled by another player: ",
               function(planet) {
 		planet = imperium_self.game.planets[planet];
-		if (planet.owner == -1) { return 1; } return 0;
+		if (planet.owner == -1) { return 1; } { return 0; }
               },
 	      function(planet) {
 
@@ -11717,7 +11718,6 @@ console.log("----------------------------");
 	  }
 	}
 
-
 	if (strategy_card_player != -1) {
 	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {
     	    imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
@@ -11727,7 +11727,6 @@ console.log("----------------------------");
     	    imperium_self.game.players_info[imperium_self.game.player-1].strategy_cards_played.push(card);
 	  }
 	}
-
 
   	if (stage == 1) {
 	  this.updateLog(this.returnFactionNickname(strategy_card_player) + " plays " + this.strategy_cards[card].name);
@@ -12713,6 +12712,9 @@ console.log("----------------------------");
 
 	let cards_issued = [];
 
+console.log("RETAINED strategy cards: " );
+console.log(JSON.stringify(this.game.players_info[i].strategy_cards_retained));
+
 	for (let i = 0; i < this.game.players_info.length; i++) {
 	  cards_issued[i] = 0;
 	  if (this.game.players_info[i].strategy_cards_retained.length >= 1) {
@@ -12729,7 +12731,6 @@ console.log("----------------------------");
   	//
   	// all strategy cards on table again
   	//
-  	//this.game.state.strategy_cards = [];
   	let x = this.returnStrategyCards();
   
   	for (let z in x) {
@@ -12758,7 +12759,6 @@ console.log("----------------------------");
   	  // TODO -- ROUND 1 players only select 1
   	  //
           if (this.game.state.round == 1) { cards_to_select = 1; }
- 
 
   	  for (cts = 0; cts < cards_to_select; cts++) {
             for (let i = 0; i < this.game.players_info.length; i++) {
@@ -13060,6 +13060,16 @@ console.log("----------------------------");
 	    } else {
 	    }
 	    this.endTurn();
+	  } else {
+
+	    if (this.game.player == giver) {
+	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+		if (this.game.deck[1].hand[i] == details) {
+		  this.game.deck[1].hand.splice(i, 1);
+		}
+	      }
+	    }
+
 	  }
 	  return 0;
         }
@@ -14617,6 +14627,8 @@ console.log("----------------------------");
 	let planet_idx	   = parseInt(mv[3]);
 
         this.game.queue.splice(qe, 1);
+
+console.log(gainer + " gains control of planet_idx: " + planet_idx + " in " + sector);
 
         this.updatePlanetOwner(sector, planet_idx, gainer);
 
@@ -19549,6 +19561,7 @@ console.log("Calculated Production Limit: " + calculated_production_limit);
 
       if (imperium_self.game.players_info[imperium_self.game.player - 1].production_bonus > 0) {
         total_cost -= imperium_self.game.players_info[imperium_self.game.player - 1].production_bonus;
+        if (total_cost < 0) { total_cost = 0; }
       }
 
       if (warfare == 0) {
@@ -25100,7 +25113,7 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units.length; i++) {
       if ((i+1) != player) {
-        if (sys.s.units.length > 0) { return (i+1); }
+        if (sys.s.units[i].length > 0) { return (i+1); }
       }
     }
     return -1;
@@ -26258,6 +26271,8 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
     }
 
     this.saveSystemAndPlanets(sys);
+    this.updateSectorGraphics(sector);
+
   }
   
   

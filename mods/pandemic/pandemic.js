@@ -461,11 +461,11 @@ class Pandemic extends GameTemplate {
     let html  = "<div class='status-message'>YOUR TURN: " + player.role + " in " + this.game.cities[player.city].name + " [" + moves +']:';
         html += '</div>';
         html += "<div class='status-icon-menu'>";
-          html += '<div class="card menu_icon" id="move"><img src="/pandemic/img/icons/MOVE.png" /></li>';
-          html += '<div class="card menu_icon" id="treat"><img src="/pandemic/img/icons/TREAT.png" /></li>';
-          html += '<div class="card menu_icon" id="build"><img src="/pandemic/img/icons/BUILD.png" /></li>';
-          html += '<div class="card menu_icon" id="cure"><img src="/pandemic/img/icons/CURE.png" /></li>';
-          html += '<div class="card menu_icon" id="cards"><img src="/pandemic/img/icons/CARDS.png" /></li>';
+          html += '<div class="card menu_icon" id="move"><img class="menu_icon_icon" src="/pandemic/img/icons/MOVE.png" /></div>';
+          html += '<div class="card menu_icon" id="treat"><img class="menu_icon_icon" src="/pandemic/img/icons/TREAT.png" /></div>';
+          html += '<div class="card menu_icon" id="build"><img class="menu_icon_icon" src="/pandemic/img/icons/BUILD.png" /></div>';
+          html += '<div class="card menu_icon" id="cure"><img class="menu_icon_icon" src="/pandemic/img/icons/CURE.png" /></div>';
+          html += '<div class="card menu_icon" id="cards"><img class="menu_icon_icon" src="/pandemic/img/icons/CARDS.png" /></div>';
         html += '</div>';
 
 

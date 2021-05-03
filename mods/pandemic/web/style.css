@@ -5,6 +5,12 @@
 
 }
 
+
+.menu_icon_icon {
+  max-width: 100px;
+  max-height: 100px;
+}
+
 .epidemic_overlay {
   display: block;
   width: 70vw;

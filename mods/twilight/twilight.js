@@ -9647,6 +9647,7 @@ this.startClock();
               <option value="10">10 minutes</option>
               <option value="20">20 minutes</option>
               <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
               <option value="60">60 minutes</option>
               <option value="90">90 minutes</option>
               <option value="120">120 minutes</option>

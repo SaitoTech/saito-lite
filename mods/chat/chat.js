@@ -18,7 +18,8 @@ class Chat extends ModTemplate {
     this.description = "Saito instant-messaging client and application platform";
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
- 
+
+    this.timeerror_tolerance = 1800000; // 30 minutes tolerance for TZ issues at chat head
     this.header = null;
     this.renderMode = "none";
     this.relay_moves_onchain_if_possible = 1;
@@ -421,6 +422,8 @@ class Chat extends ModTemplate {
   }
 
 
+
+
   createMessageBlocks(group) {
 
     let idx = 0;
@@ -429,15 +432,14 @@ class Chat extends ModTemplate {
     let txs = group.txs;
     let last_message_sender = "";
 
-
     while (idx < txs.length) {
       if (blocks.length == 0) {
         if (last_message_sender == "") {
           block.push(txs[idx]);
         } else {
-                if (txs[idx].isFrom(last_message_sender)) {
+          if (txs[idx].isFrom(last_message_sender)) {
             block.push(txs[idx]);
-                } else {
+         } else {
             blocks.push(block);
             block = [];
             block.push(txs[idx]);
@@ -458,7 +460,6 @@ class Chat extends ModTemplate {
     }
 
     blocks.push(block);
-
     return blocks;
 
   }
@@ -466,6 +467,7 @@ class Chat extends ModTemplate {
 
 
   formatMessage(msg) {
+
     msg = linkifyHtml(msg, { target: { url: '_self' } });
     msg = marked(msg);
     msg = sanitizeHtml(msg, {
@@ -585,7 +587,7 @@ class Chat extends ModTemplate {
           if (this.isOtherInputActive() == 0) {
             document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
             if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
-                    document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+              document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
             }
           }
         } catch (err) {}
@@ -593,9 +595,9 @@ class Chat extends ModTemplate {
     } else {
       try {
         if (this.isOtherInputActive() == 0) {
-                document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
+          document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).focus();
           if (document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).val === "") { 
-                  document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
+            document.getElementById(`chat-box-new-message-input-${txmsg.group_id}`).select();
           }
         }
       } catch (err) {}
