@@ -166,5 +166,5 @@ If you're still confused don't feel bad: most people have trouble wrapping their
 To connect to the Saito Network please contact us at:
 
 * network@saito.tech
-* [Discord](https://discord.gg/QjeXTC3)
+* [Discord](https://discord.gg/HjTFh9Tfec)
 * [Telegram](https://t.me/SaitoIO)
