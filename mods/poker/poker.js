@@ -1921,6 +1921,7 @@ console.log("STATE: " + JSON.stringify(state));
         idx = x + 1;
       }
     }
+    pairs.sort((a, b) => a - b);
 
 
     //
@@ -1936,6 +1937,7 @@ console.log("STATE: " + JSON.stringify(state));
         idx = x + 1;
       }
     }
+    three_of_a_kind.sort((a, b) => a - b);
 
 
     //
@@ -2152,7 +2154,7 @@ console.log("STATE: " + JSON.stringify(state));
       }
 
       // y now contians onyl in-suite vals
-      y.sort();
+      y.sort((a, b) => a - b);
       y.splice(0, (y.length - 5));
       for (let i = y.length - 1; i >= 0; i--) { cards_to_score.push(x + y[i]); }
 

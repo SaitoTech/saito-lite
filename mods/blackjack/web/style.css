@@ -23,6 +23,15 @@ body {
   overflow: hidden;
 }
 
+.dealer-notice {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-weight: bold;
+  background-color: #0002;
+  padding: 10px;
+}
+
 .menu-player {
   font-size: 1.1em;
 }
@@ -206,6 +215,11 @@ body {
   display: none;
 }
 
+.status-message {
+  background-color: transparent;
+  box-shadow: none;
+  width: 100%;
+}
 .status ul li:hover {
   background: #ccc3;
 }
