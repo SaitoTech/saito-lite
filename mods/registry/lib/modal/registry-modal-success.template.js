@@ -21,7 +21,7 @@ module.exports = RegistrySuccessModalTemplate = () => {
                 <button id="registry-email-button" style="margin: unset;margin-left: 10px;">SUBMIT</button>
               </div>
               <div id="registry-succes-discord">
-                <a href="https://discord.gg/QjeXTC3" target="_blank">
+                <a href="https://discord.gg/HjTFh9Tfec" target="_blank">
                   <i class="fab fa-discord" style="color: black; font-size: 2em"></i>
                 </a>
               </div>
