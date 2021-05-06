@@ -2240,7 +2240,7 @@ console.log("STATE: " + JSON.stringify(state));
     //
     if (pairs.length > 1) {
 
-      pairs.sort();
+      pairs.sort((a, b) => a - b);
 
       // deal with three pairs.
       if (pairs.length == 3) {
@@ -2257,7 +2257,7 @@ console.log("STATE: " + JSON.stringify(state));
       else { highest_card = n; }
       if (n == 1) { highest_card = n }
 
-      cards_remaining = val.length;
+      let cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
         if (val[i] == highest_card) {
           cards_to_score.push(suite[i] + val[i]);
