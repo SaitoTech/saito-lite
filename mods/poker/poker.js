@@ -1118,7 +1118,12 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
     let poker_self = this;
 
-    poker_self.addMove("resolve\tturn");
+    //
+    // cancel raise kicks us back
+    //
+    if (!poker_self.moves.includes("resolve\tturn")) {
+      poker_self.addMove("resolve\tturn");
+    }
 
     this.displayBoard();
 
@@ -1299,7 +1304,8 @@ console.log("this raise: " + this_raise);
           if (cost_to_call > 0) { raise = parseInt(raise) + parseInt(cost_to_call); }
 
           if (raise == 0) {
-            poker_self.addMove("check\t" + poker_self.game.player);
+            poker_self.playerTurn();
+	    return;
           } else {
             poker_self.addMove("raise\t" + poker_self.game.player + "\t" + raise);
           }

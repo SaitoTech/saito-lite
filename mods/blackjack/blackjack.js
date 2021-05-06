@@ -209,7 +209,6 @@ class Blackjack extends GameTemplate {
         game_mod.menu.showSubMenu("game-game");
       }
     });
-/***
     this.menu.addSubMenuOption("game-game", {
       text : "Log",
       id : "game-log",
@@ -219,6 +218,7 @@ class Blackjack extends GameTemplate {
         game_mod.log.toggleLog();
       }
     });
+/***
     this.menu.addSubMenuOption("game-game", {
       text : "Stats",
       id : "game-stats",

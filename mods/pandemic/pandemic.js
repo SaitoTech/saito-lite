@@ -533,9 +533,7 @@ class Pandemic extends GameTemplate {
           }
 
         });
-
       }
-
 
       if (action === "treat") {
 	if (treat_opacity != 1) { salert("You may not treat disease"); return; }
@@ -591,7 +589,7 @@ class Pandemic extends GameTemplate {
         });
 
       }
-      if (action === "station") {
+      if (action === "build") {
 	if (build_opacity != 1) { salert("You cannot build a research station here"); return; }
         pandemic_self.buildResearchStation();
       }
