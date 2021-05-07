@@ -23,6 +23,7 @@ package-lock.json
 
 
 data/*.sq3
+data/*/*.blk
 data/blocks/*.blk
 data/shashmaps/*.smap
 
