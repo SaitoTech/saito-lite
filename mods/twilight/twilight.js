@@ -9580,17 +9580,18 @@ this.startClock();
 
     return `
 
-      <div style="padding:40px;width:100vw;height:100vh;overflow-y:scroll;display:grid;grid-template-columns: 200px auto">
-
-	<div style="top:0;left:0;">
-
+    <div class="long-scroll">
+      <div>
+	      <div class="overlay-input">
             <label for="player1">Play as:</label>
             <select name="player1">
               <option value="random" selected>random</option>
               <option value="ussr">USSR</option>
               <option value="us">US</option>
             </select>
+        </div>
 
+        <div class="overlay-input">
             <label for="deck">Deck:</label>
             <select name="deck" id="deckselect" onchange='
 	      if ($("#deckselect").val() == "saito") { 
@@ -9625,7 +9626,9 @@ this.startClock();
               <option value="endofhistory">end of history</option>
               <option value="coldwarcrazies">cold war crazies</option>
             </select>
+        </div>
 
+        <div class="overlay-input">
             <label for="usbonus">US bonus: </label>
             <select name="usbonus">
               <option value="0">0</option>
@@ -9640,7 +9643,9 @@ this.startClock();
               <option value="9">9</option>
               <option value="10">10</option>
             </select>
+        </div>
 
+        <div class="overlay-input">
             <label for="clock">Player Time Limit:</label>
             <select name="clock">
               <option value="0" default>no limit</option>
@@ -9652,20 +9657,33 @@ this.startClock();
               <option value="90">90 minutes</option>
               <option value="120">120 minutes</option>
             </select>
+        </div>
 
+        <div class="overlay-input">
             <label for="observer_mode">Observer Mode:</label>
             <select name="observer">
               <option value="enable" selected>enable</option>
               <option value="disable">disable</option>
             </select>
+        </div>
+	    <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
+    </div>
 
-	    <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+      <div id="game-wizard-advanced-box" class="game-wizard-advanced-box" style="display:block;padding-left:20px;">
 
-	</div>
-
-            <div id="game-wizard-advanced-box" class="game-wizard-advanced-box" style="display:block;padding-left:20px;">
-
-	      <style type="text/css">li { list-style: none; } .saito-select { margin-bottom: 10px; margin-top:5px; } label { text-transform: uppercase; } .removecards { grid-gap: 0.1em; } .list-header { font-weight: bold; font-size:1.5em; margin-top:0px; margin-bottom:10px; margin-left: 15px; text-transform: uppercase; } </style>
+        <style type="text/css">
+          li { list-style: none; } 
+          .saito-select { margin-bottom: 10px; margin-top:5px; } 
+          .removecards { grid-gap: 0.1em; } 
+          .list-header { 
+            font-weight: bold; 
+            font-size:1.5em; 
+            margin-top:0px; 
+            margin-bottom:10px; 
+            margin-left: 15px; 
+            text-transform: uppercase; 
+          } 
+        </style>
               <div class="list-header">remove cards:</div>
               <ul id="removecards" class="removecards">
               <li><input class="remove_card" type="checkbox" name="asia" /> Asia Scoring</li>
@@ -9800,8 +9818,9 @@ this.startClock();
               <li><input class="remove_card endofhistory_edition" type="checkbox" name="eurocommunism" /> Eurocommunism (Mid-War)</li>
               <li><input class="remove_card endofhistory_edition" type="checkbox" name="inftreaty" /> INF Treaty (Late-War)</li>
               <li><input class="remove_card coldwarcrazies_edition" type="checkbox" name="communistrevolution" /> Communist Revolution (Early-War)</li>
-            </div>
+            </ul>
 
+        <p class="blank">&nbsp;</p>
       </div>
     </div>
           `;

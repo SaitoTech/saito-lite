@@ -2701,7 +2701,7 @@ console.log("STATE: " + JSON.stringify(state));
 
     let options_html = `
       <h1 class="overlay-title">Start a Poker Game</h1>
-          <div>
+          <div class="overlay-input">
             <label for="stake">Initial Stake:</label>
             <select name="stake">
               <option value="100">100</option>
@@ -2711,7 +2711,7 @@ console.log("STATE: " + JSON.stringify(state));
               <option value="10000">10000</option>
             </select>
           </div>
-          <div>
+          <div class="overlay-input">
             <label for="big_blind">Starting Blinds:</label>
             <select name="big_blind">
               <option value="0.001">0.001</option>
@@ -2727,7 +2727,7 @@ console.log("STATE: " + JSON.stringify(state));
               <option value="500">500</option>
             </select>
           </div>
-          <div>
+          <div class="overlay-input">
             <label for="crypto">Play Money:</label>
             <select name="crypto">
               <option value="" selected>none</option>
@@ -2743,14 +2743,14 @@ console.log("STATE: " + JSON.stringify(state));
     options_html += `
             </select>
           </div>
-          <div>
+          <div class="overlay-input">
             <label for="stake">Blinds:</label>
             <select name="blinds">
               <option value="static">static blinds</option>
               <option value="increase">increasing blinds</option>
             </select>
           </div>
-          <div>
+          <div class="overlay-input">
             <label for="observer_mode">Observer Mode:</label>
             <select name="observer">
               <option value="enable" selected>enable</option>

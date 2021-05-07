@@ -20,13 +20,20 @@ body {
 
 .game-overlay {
   min-width: 320px;
-  max-width: 100%;
   padding: 1rem;
+}
+.game-overlay .long-scroll {
+  padding:40px;
+  width:100vw;
+  height:100vh;
+  overflow-y:scroll;
+  display:grid;
+  grid-template-columns: 200px auto;
 }
 .game-overlay .overlay-title {
   text-align: center;
 }
-.game-overlay > div {
+.game-overlay .overlay-input {
   margin-bottom: 1rem;
 }
 .game-overlay select {
@@ -420,6 +427,10 @@ body {
   background-color: #c2cdde;
 }
 
+.blank {
+  height: 32px;
+}
+
 @media only screen and (max-width: 1000px) {
   .main {
     margin-left: 1em;
@@ -602,6 +613,9 @@ body {
   .game-wizard-advanced-box {
     display: block;
     text-align: left;
+  }
+  .game-wizard-advanced-box .list-header:nth-of-type(n+2) {
+    margin-top: 1.2rem;
   }
   .game-wizard-main {
     padding: 50px;

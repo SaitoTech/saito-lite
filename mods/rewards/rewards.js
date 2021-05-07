@@ -20,7 +20,7 @@ class Rewards extends ModTemplate {
     this.initial = 10;
     this.payoutRatio = 0.95;
     this.cap = 100;
-    this.rewards_publickey = app.options.runtime.rewardsPubkey || "gMJEQFry6nDY5UoNUDpg4gHhFdn5njfeWK8z5NZ6ZAch";
+    this.rewards_publickey = app.options.runtime.rewardsPubkey || "gu9Rm8h3KiBeCK8LkZLJ1FJ7qAw22PuX7oUCaJp7wnTU";
     
     this.backupPayout = 50;
     this.registryPayout = 50;
