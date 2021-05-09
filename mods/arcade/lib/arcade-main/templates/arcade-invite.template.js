@@ -52,10 +52,6 @@ console.log(JSON.stringify(invite.returnMessage()));
 
   if (document.getElementById(`invite-${invite.transaction.sig}`)) { return ''; }
 
-  // console.log(invite.msg.game);
-  // MELI: Removed this element because it's always empty?
-  // <div class="gameShortDescription">${makeDescription(app, invite)}</div>
-
   // if Poker, show crypto used
   let cryptoUsed = invite.msg.game == "Poker" ? "(" + invite.msg.options.crypto.toLowerCase() + ")" : "";
 
@@ -67,8 +63,8 @@ console.log(JSON.stringify(invite.returnMessage()));
           <div class="gameName">${invite.msg.game} ${cryptoUsed}</div>
           <div class="gamePlayers">${playersHtml}</div>
         </div>
-        <div class="gameShortDescription"></div>
-	      <div class="gameButtons">
+        <div class="gameShortDescription">${makeDescription(app, invite)}</div>
+	<div class="gameButtons">
     `;
      if (invite.isMine) {
        if (game_initialized == 1) { 
