@@ -1,7 +1,7 @@
 
 module.exports = ArcadeInviteTemplate = (app, mod, invite, idx) => {
 
-//console.log(JSON.stringify(invite.returnMessage()));
+console.log(JSON.stringify(invite.returnMessage()));
 
   let inviteTypeClass = "open-invite";
   let game_initialized = 0;
