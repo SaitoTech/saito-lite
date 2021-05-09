@@ -2956,7 +2956,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
             <option value="hard">damn hard</option>
           </select>
 
-          <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+          <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
 
         </div>
         <div>

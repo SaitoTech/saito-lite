@@ -1134,6 +1134,7 @@ console.log("this is my hand");
               <option value="10000">10000</option>
       </select>
 
+
             <select name="crypto">
               <option value="" selected>none</option>
               <option value="SAITO">SAITO</option>

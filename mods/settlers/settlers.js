@@ -62,7 +62,7 @@ class Settlers extends GameTemplate {
   returnGameOptionsHTML() {
 
     return `
-            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
     `;
 
   }

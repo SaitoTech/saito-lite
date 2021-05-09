@@ -52,16 +52,23 @@ console.log(JSON.stringify(invite.returnMessage()));
 
   if (document.getElementById(`invite-${invite.transaction.sig}`)) { return ''; }
 
+  // console.log(invite.msg.game);
+  // MELI: Removed this element because it's always empty?
+  // <div class="gameShortDescription">${makeDescription(app, invite)}</div>
+
+  // if Poker, show crypto used
+  let cryptoUsed = invite.msg.game == "Poker" ? "(" + invite.msg.options.crypto.toLowerCase() + ")" : "";
+
   let inviteHtml = `
     <div id="invite-${invite.transaction.sig}" class="arcade-tile i_${idx} ${inviteTypeClass}" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);">
       <div class="invite-tile-wrapper">
         <div class="game-inset-img" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);"></div>
         <div class="invite-col-2">
-          <div class="gameName">${invite.msg.game}</div>
+          <div class="gameName">${invite.msg.game} ${cryptoUsed}</div>
           <div class="gamePlayers">${playersHtml}</div>
         </div>
-        <div class="gameShortDescription">${makeDescription(app, invite)}</div>
-	<div class="gameButtons">
+        <div class="gameShortDescription"></div>
+	      <div class="gameButtons">
     `;
      if (invite.isMine) {
        if (game_initialized == 1) { 
