@@ -2708,7 +2708,8 @@ console.log("STATE: " + JSON.stringify(state));
   returnGameOptionsHTML() {
 
     let options_html = `
-
+      <h1 class="overlay-title">Start a Poker Game</h1>
+          <div class="overlay-input">
             <label for="stake">Initial Stake:</label>
             <select name="stake">
               <option value="100">100</option>
@@ -2717,7 +2718,8 @@ console.log("STATE: " + JSON.stringify(state));
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
             </select>
-            
+          </div>
+          <div class="overlay-input">
             <label for="big_blind">Starting Blinds:</label>
             <select name="big_blind">
               <option value="0.001">0.001</option>
@@ -2732,7 +2734,9 @@ console.log("STATE: " + JSON.stringify(state));
               <option value="250">250</option>
               <option value="500">500</option>
             </select>
-
+          </div>
+          <div class="overlay-input">
+            <label for="crypto">Play Money:</label>
             <select name="crypto">
               <option value="" selected>none</option>
               <option value="SAITO">SAITO</option>
@@ -2746,21 +2750,23 @@ console.log("STATE: " + JSON.stringify(state));
 
     options_html += `
             </select>
-
+          </div>
+          <div class="overlay-input">
             <label for="stake">Blinds:</label>
             <select name="blinds">
               <option value="static">static blinds</option>
               <option value="increase">increasing blinds</option>
             </select>
-
-
+          </div>
+          <div class="overlay-input">
             <label for="observer_mode">Observer Mode:</label>
             <select name="observer">
               <option value="enable" selected>enable</option>
               <option value="disable">disable</option>
             </select>
+          </div>
 
-      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
+      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
 
     `;
 

@@ -18,6 +18,27 @@ body {
   justify-content: center;
 }
 
+.game-overlay {
+  min-width: 320px;
+  padding: 1rem;
+}
+.game-overlay .long-scroll {
+  padding:40px;
+  width:100vw;
+  height:100vh;
+  overflow-y:scroll;
+  display:grid;
+  grid-template-columns: 200px auto;
+}
+.game-overlay .overlay-title {
+  text-align: center;
+}
+.game-overlay .overlay-input {
+  margin-bottom: 1rem;
+}
+.game-overlay select {
+  text-transform: capitalize;
+}
 
 #arcade-posts-insert-add-contact {
   margin-right:15px;
@@ -272,6 +293,7 @@ body {
   margin-left: 0.2em;
   font-size: 2.5em;
   font-weight: bold;
+  text-transform: capitalize;
 }
 
 .arcade-tile .gamePlayers {
@@ -403,6 +425,10 @@ body {
 
 .appstore-overlay-app {
   background-color: #c2cdde;
+}
+
+.blank {
+  height: 32px;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -587,6 +613,9 @@ body {
   .game-wizard-advanced-box {
     display: block;
     text-align: left;
+  }
+  .game-wizard-advanced-box .list-header:nth-of-type(n+2) {
+    margin-top: 1.2rem;
   }
   .game-wizard-main {
     padding: 50px;
@@ -1120,6 +1149,13 @@ body {
     height: 6em;
     margin: 25%;
   }
+  .game-wizard-advanced-return-btn {
+    font-size: 1.4em;
+    margin-top:20px;
+    padding: 16px 30px 12px;
+    text-align:center;
+    text-transform: uppercase;
+  }
   @media only screen and (max-width: 1000px) {
     .arcade-container {
       padding: 0;
@@ -1141,6 +1177,7 @@ body {
     }
     .playerInfo {
       transform: scale(0.8);
+      transform-origin: top left;
     }
     .saito-overlay, game-overlay {
       width: 90%;
