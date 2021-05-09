@@ -1118,7 +1118,12 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
     let poker_self = this;
 
-    poker_self.addMove("resolve\tturn");
+    //
+    // cancel raise kicks us back
+    //
+    if (!poker_self.moves.includes("resolve\tturn")) {
+      poker_self.addMove("resolve\tturn");
+    }
 
     this.displayBoard();
 
@@ -1299,7 +1304,8 @@ console.log("this raise: " + this_raise);
           if (cost_to_call > 0) { raise = parseInt(raise) + parseInt(cost_to_call); }
 
           if (raise == 0) {
-            poker_self.addMove("check\t" + poker_self.game.player);
+            poker_self.playerTurn();
+	    return;
           } else {
             poker_self.addMove("raise\t" + poker_self.game.player + "\t" + raise);
           }
@@ -1921,6 +1927,7 @@ console.log("STATE: " + JSON.stringify(state));
         idx = x + 1;
       }
     }
+    pairs.sort((a, b) => a - b);
 
 
     //
@@ -1936,6 +1943,7 @@ console.log("STATE: " + JSON.stringify(state));
         idx = x + 1;
       }
     }
+    three_of_a_kind.sort((a, b) => a - b);
 
 
     //
@@ -2152,7 +2160,7 @@ console.log("STATE: " + JSON.stringify(state));
       }
 
       // y now contians onyl in-suite vals
-      y.sort();
+      y.sort((a, b) => a - b);
       y.splice(0, (y.length - 5));
       for (let i = y.length - 1; i >= 0; i--) { cards_to_score.push(x + y[i]); }
 
@@ -2240,7 +2248,7 @@ console.log("STATE: " + JSON.stringify(state));
     //
     if (pairs.length > 1) {
 
-      pairs.sort();
+      pairs.sort((a, b) => a - b);
 
       // deal with three pairs.
       if (pairs.length == 3) {
@@ -2257,7 +2265,7 @@ console.log("STATE: " + JSON.stringify(state));
       else { highest_card = n; }
       if (n == 1) { highest_card = n }
 
-      cards_remaining = val.length;
+      let cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
         if (val[i] == highest_card) {
           cards_to_score.push(suite[i] + val[i]);

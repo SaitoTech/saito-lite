@@ -458,87 +458,143 @@ class Pandemic extends GameTemplate {
   
     this.active_moves = moves;
 
+    let move_opacity = 1;
+    let treat_opacity = 0.4;
+    let build_opacity = 0.4;
+    let discover_cure_opacity = 0.4;
+    let cards_opacity = 0.4;
+
+    if (
+      this.game.players_info[this.game.player-1].cards.includes("event1") ||
+      this.game.players_info[this.game.player-1].cards.includes("event2") ||
+      this.game.players_info[this.game.player-1].cards.includes("event3") ||
+      this.game.players_info[this.game.player-1].cards.includes("event4") ||
+      this.game.players_info[this.game.player-1].cards.includes("event5")) {
+        cards_opacity = 1;
+    }
+    if (this.isCityInfected(city) == 1) {
+      treat_opacity = 1;
+    }
+    if (this.canPlayerBuildResearchStation(city) == 1) {
+      build_opacity = 1;
+    }
+    if (this.canPlayerDiscoverCure() == 1) {
+      discover_cure_opacity = 1;
+    }
+    if (this.canPlayerShareKnowledge() == 1) {
+      cards_opacity = 1;
+    }
+
+
     let html  = "<div class='status-message'>YOUR TURN: " + player.role + " in " + this.game.cities[player.city].name + " [" + moves +']:';
         html += '</div>';
-        html += "<div class='status-icon-menu'>";
-          html += '<div class="card menu_icon" id="move"><img class="menu_icon_icon" src="/pandemic/img/icons/MOVE.png" /></div>';
-          html += '<div class="card menu_icon" id="treat"><img class="menu_icon_icon" src="/pandemic/img/icons/TREAT.png" /></div>';
-          html += '<div class="card menu_icon" id="build"><img class="menu_icon_icon" src="/pandemic/img/icons/BUILD.png" /></div>';
-          html += '<div class="card menu_icon" id="cure"><img class="menu_icon_icon" src="/pandemic/img/icons/CURE.png" /></div>';
-          html += '<div class="card menu_icon" id="cards"><img class="menu_icon_icon" src="/pandemic/img/icons/CARDS.png" /></div>';
+        html += "<div class='status-icon-menu' style='width:550px;margin-left:auto;margin-right:auto;'>";
+        html += '<div class="card menu_icon" id="move" style="margin-right:10px;margin-top:10px"><img class="menu_icon_icon" src="/pandemic/img/icons/MOVE.png" /></div>';
+        html += '<div class="card menu_icon" id="treat" style="opacity:'+treat_opacity+';margin-right:10px;margin-top:10px"><img class="menu_icon_icon" src="/pandemic/img/icons/TREAT.png" /></div>';
+        html += '<div class="card menu_icon" id="build" style="opacity:'+build_opacity+';margin-right:10px;margin-top:10px"><img class="menu_icon_icon" src="/pandemic/img/icons/BUILD.png" /></div>';
+        html += '<div class="card menu_icon" id="discover_cure" style="opacity:'+discover_cure_opacity+';margin-right:10px;margin-top:10px"><img class="menu_icon_icon" src="/pandemic/img/icons/CURE.png" /></div>';
+        html += '<div class="card menu_icon" id="cards" style="opacity:'+cards_opacity+';margin-top:10px"><img class="menu_icon_icon" src="/pandemic/img/icons/CARDS.png" /></div>';
         html += '</div>';
 
 
-/****
-    let html  = "<div class='status-message'>YOUR TURN: " + player.role + " in " + this.game.cities[player.city].name + " [" + moves +']:<ul>';
-        html += '<li class="card" id="move">drive / ferry</li>';
-        html += '<li class="card" id="flight">direct flight</li>';
-    
-        if (
-  	this.game.players_info[this.game.player-1].cards.includes("event1") ||
-  	this.game.players_info[this.game.player-1].cards.includes("event2") ||
-  	this.game.players_info[this.game.player-1].cards.includes("event3") ||
-  	this.game.players_info[this.game.player-1].cards.includes("event4") ||
-  	this.game.players_info[this.game.player-1].cards.includes("event5")) {
-          html += '<li class="card" id="eventcard">play event card</li>';
-        }
-        if (this.game.players_info[this.game.player-1].cards.includes(city)) {
-          html += '<li class="card" id="flight">charter flight</li>';
-        }
-        if (this.game.state.research_stations.length > 1 && this.game.state.research_stations.includes(city)) {
-          html += '<li class="card" id="shuttle">shuttle flight</li>';
-        }
-        if (!this.game.state.research_stations.includes(city) && this.canPlayerBuildResearchStation(city) == 1) {
-          html += '<li class="card" id="station">build research station</li>';
-        }
-        if (this.isCityInfected(city) == 1) {
-          html += '<li class="card" id="cure">treat disease</li>';
-        }
-        if (this.canPlayerDiscoverCure() == 1) {
-          html += '<li class="card" id="discover_cure">research cure</li>';
-        }
-        if (this.canPlayerShareKnowledge() == 1) {
-          html += '<li class="card" id="exchange">share knowledge</li>';
-        }
-        html += '<li class="card" id="pass">pass</li>';
-        html += '</ul>';
-        html += '</div>';
-****/
-
-  
     $('.card').off();
     this.updateStatus(html);
-    $('.card').on('click', function() {
-  
+    $('.card').on('click', function() {  
+
       let action = $(this).attr('id');
   
-      if (action === "eventcard") {
-        pandemic_self.playEventCard();
-      }
       if (action === "move") {
-        pandemic_self.movePlayer();
+
+        let html  = "<div class='status-message'>YOUR TURN: " + player.role + " in " + pandemic_self.game.cities[player.city].name + " [" + moves +']:<ul>';
+            html += '<li class="card" id="move">drive / ferry</li>';
+            html += '<li class="card" id="flight">direct flight</li>';
+        if (pandemic_self.game.players_info[pandemic_self.game.player-1].cards.includes(city)) {
+            html += '<li class="card" id="flight">charter flight</li>';
+        }
+        if (pandemic_self.game.state.research_stations.length > 1 && pandemic_self.game.state.research_stations.includes(city)) {
+            html += '<li class="card" id="shuttle">shuttle flight</li>';
+        }
+        html += '</ul>';
+        html += '</div>';
+
+        $('.card').off();
+        pandemic_self.updateStatus(html);
+        $('.card').on('click', function() {
+  
+          let action = $(this).attr('id');
+          if (action === "move") {
+            pandemic_self.movePlayer();
+          }
+          if (action === "flight") {
+            pandemic_self.directFlight();
+          }
+          if (action === "shuttle") {
+            pandemic_self.shuttleFlight();
+          }
+
+        });
       }
-      if (action === "cure") {
+
+      if (action === "treat") {
+	if (treat_opacity != 1) { salert("You may not treat disease"); return; }
         pandemic_self.cureDisease();
       }
       if (action === "discover_cure") {
+	if (discover_cure_opacity != 1) { salert("You may not discover a cure now"); return; }
         pandemic_self.discoverCure();
       }
-      if (action === "station") {
+      if (action === "cards") {
+
+	if (cards_opacity != 1) { salert("You do not have event cards and cannot share cards with anyone now"); return; }
+
+	let can_play_event_card = 0;
+        if (pandemic_self.game.players_info[this.game.player-1].cards.includes("event1") ||
+          pandemic_self.game.players_info[this.game.player-1].cards.includes("event2") ||
+          pandemic_self.game.players_info[this.game.player-1].cards.includes("event3") ||
+          pandemic_self.game.players_info[this.game.player-1].cards.includes("event4") ||
+          pandemic_self.game.players_info[this.game.player-1].cards.includes("event5")) {
+            can_play_event_card == 1; 
+        }
+
+        let can_share_knowledge = 0;
+        if (pandemic_self.canPlayerShareKnowledge() == 1) {
+	  can_share_knowledge = 1;
+	}
+
+        let html  = "<div class='status-message'>Card Options: " + player.role + " in " + pandemic_self.game.cities[player.city].name + " [" + moves +']:<ul>';
+	if (can_play_event_card == 1) {
+          html += '<li class="card" id="eventcard">play event card</li>';
+	}
+	if (can_share_knowledge == 1) {
+          html += '<li class="card" id="shareknowledge">give player card</li>';
+	}
+        html += '</ul>';
+        html += '</div>';
+
+        $('.card').off();
+        pandemic_self.updateStatus(html);
+        $('.card').on('click', function() {
+
+          let action = $(this).attr('id');
+
+          if (action === "eventcard") {
+            pandemic_self.playEventCard();
+	    return 0;
+          }
+          if (action === "shareknowledge") {
+            pandemic_self.shareKnowledge();
+	    return 0;
+          }
+
+        });
+
+      }
+      if (action === "build") {
+	if (build_opacity != 1) { salert("You cannot build a research station here"); return; }
         pandemic_self.buildResearchStation();
-      }
-      if (action === "flight") {
-        pandemic_self.directFlight();
-      }
-      if (action === "shuttle") {
-        pandemic_self.shuttleFlight();
       }
       if (action === "pass") {
         pandemic_self.endTurn();
-        return 0;
-      }
-      if (action === "exchange") {
-        pandemic_self.shareKnowledge();
         return 0;
       }
   
@@ -1061,8 +1117,6 @@ class Pandemic extends GameTemplate {
   
   returnHopsToCityFromCity(fromcity, tocity) {
 
-console.log("hops from: " + fromcity + " to " + tocity);  
-
     let hops = 0;
     let current_cities = [];
     let new_cities = [];
@@ -1080,7 +1134,6 @@ console.log("hops from: " + fromcity + " to " + tocity);
         let neighbours = this.game.cities[current_cities[i]].neighbours;
         for (let k = 0; k < neighbours.length; k++) {
           if (neighbours[k] == tocity) {
-console.log("hops from: " + fromcity + " to " + tocity + " ---> " + hops);  
   	  return hops;
   	} else {
   	  if (!new_cities.includes(neighbours[k])) {
@@ -1093,11 +1146,9 @@ console.log("hops from: " + fromcity + " to " + tocity + " ---> " + hops);
       current_cities = new_cities;
   
     }
-
-console.log("hops not found!");
-  
   }
   
+
   movePlayer(player=0) { // 0 = me
   
     let pandemic_self = this;
@@ -1219,8 +1270,8 @@ console.log("hops not found!");
       return;
     }
   
-  
-    let html  = "<div class='status-message'>Cure disease: ("+pandemic_self.active_moves+" moves)";
+ 
+    let html  = "<div class='status-message'>Cure disease: ("+pandemic_self.active_moves+" moves)<ul>";
     if (this.game.cities[city].virus.blue > 0)     { html += '<li class="card" id="blue">blue</li>'; }
     if (this.game.cities[city].virus.red > 0)      { html += '<li class="card" id="red">red</li>'; }
     if (this.game.cities[city].virus.black > 0)    { html += '<li class="card" id="black">black</li>'; }

@@ -5,6 +5,10 @@
 
 }
 
+.status-message {
+  padding-left: 0;
+  padding-right: 0;
+}
 
 .menu_icon_icon {
   max-width: 100px;
@@ -179,6 +183,9 @@
   background-color: whitesmoke;
   border-radius: 10px;
   margin-top: 10px;
+  width: 500px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 

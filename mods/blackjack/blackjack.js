@@ -28,6 +28,7 @@ class Blackjack extends GameTemplate {
 
     this.boardgameWidth = 5100;
 
+    this.settlement = [];
     this.updateHTML = "";
 
     return this;
@@ -197,6 +198,112 @@ class Blackjack extends GameTemplate {
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
 
+    //
+    // ADD MENU
+    //
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
+      }
+    });
+/***
+    this.menu.addSubMenuOption("game-game", {
+      text : "Stats",
+      id : "game-stats",
+      class : "game-stats",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.handleStatsMenu();
+      }
+    });
+****/
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        app.browser.requestFullscreen();
+      }
+    });
+    let main_menu_added = 0;
+    let community_menu_added = 0;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+        for (let ii = 0; ii < this.game.players.length; ii++) {
+          if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+
+            // add main menu
+            if (main_menu_added == 0) {
+              this.menu.addMenuOption({
+                text : "Chat",
+                id : "game-chat",
+                class : "game-chat",
+                callback : function(app, game_mod) {
+                  game_mod.menu.showSubMenu("game-chat");
+                }
+              })
+              main_menu_added = 1;
+            }
+            if (community_menu_added == 0) {
+              this.menu.addSubMenuOption("game-chat", {
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
+                callback : function(app, game_mod) {
+                  game_mod.menu.hideSubMenus();
+                  chatmod.mute_community_chat = 0;
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.openChatBox();
+                }
+              });
+              community_menu_added = 1;
+            }
+            // add peer chat
+            let data = {};
+            let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
+            let gid = this.app.crypto.hash(members.join('_'));
+            let name = "Player "+(ii+1);
+            let chatmod = this.app.modules.mods[i];
+            this.menu.addSubMenuOption("game-chat", {
+              text : name,
+              id : "game-chat-"+(ii+1),
+              class : "game-chat-"+(ii+1),
+              callback : function(app, game_mod) {
+                game_mod.menu.hideSubMenus();
+                chatmod.createChatGroup(members, name);
+                chatmod.openChatBox(gid);
+                chatmod.sendEvent('chat-render-request', {});
+                chatmod.saveChat();
+              }
+            });
+          }
+        }
+      }
+    }
+
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
     this.log.render(app, this);
     this.log.attachEvents(app, this);
 
@@ -280,6 +387,8 @@ class Blackjack extends GameTemplate {
       let qe = this.game.queue.length - 1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
+
+console.log("processing: " + mv[0]);
 
       if (mv[0] === "start") {
         this.newRound();
@@ -541,21 +650,9 @@ class Blackjack extends GameTemplate {
             }
           } else {
             this.game.queue.push("ACKNOWLEDGE\tyou lose");
-            //
-            // send tokens to others
-            //
-            if (this.game.player != this.game.state.dealer) {
-              this.game.queue.push("PAY" + "\t" + my_losses + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[this.game.state.dealer] + "\t" + (new Date().getTime()) + "\t" + "SAITO");            
-            } else {
-              for (let i = 0; i < this.game.state.player_winner.length; i++) {
-                  if (this.game.state.player_winner[i] == 1) {
-                      let gains = this.game.state.player_wager[i] * this.game.state.player_payout[i];
-                  this.game.queue.push("PAY" + "\t" + my_losses + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[i] + "\t" + (new Date().getTime()) + "\t" + "SAITO");            
-                  }
-              }
-            }
           }
         }
+
 
         return 1;
       }
@@ -962,17 +1059,14 @@ console.log("this is my hand");
     let total = 0;
     let aces = 0;
 
-console.log("starting");
     for (let i = 0; i < array_of_cards.length; i++) {
       let card = array_of_cards[i];
-console.log("CARD: " + card);
       if (card[1] === '1' && card.length == 2) {
           total += parseInt(1);
           aces++;
       } else {
         let card_total = parseInt(card.substring(1));
         if ((card_total+total) == 11 && aces == 1) {
-console.log("score is: " + 21);
           return 21;
         }
         if (card_total > 10) { card_total = 10; }
@@ -983,8 +1077,6 @@ console.log("score is: " + 21);
     for (let z = 0; z < aces; z++) {
       if ((total+10) <= 21) { total += 10; }
     }
-
-console.log("score is: " + total);
 
     return total;
   }
@@ -1034,7 +1126,7 @@ console.log("score is: " + total);
 
   returnGameOptionsHTML() {
 
-    return `
+    let options_html = `
       <label for="stake">Initial Stake:</label>
       <select name="stake">
               <option value="1000" selected="selected">1000</option>
@@ -1042,10 +1134,28 @@ console.log("score is: " + total);
               <option value="10000">10000</option>
       </select>
 
-      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
+
+            <select name="crypto">
+              <option value="" selected>none</option>
+              <option value="SAITO">SAITO</option>
+    `;
+
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].ticker != "" && this.app.modules.mods[i].ticker != undefined) {
+        options_html += `<option value="${this.app.modules.mods[i].ticker}">${this.app.modules.mods[i].ticker}</option>`;
+      }
+    }
+
+    options_html += `
+            </select>
+
+
+      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button" style="margin-top:20px;padding:30px;text-align:center">accept</div>
 
 
     `;
+
+    return options_html;
 
   }
 
@@ -1054,6 +1164,9 @@ console.log("score is: " + total);
     let new_options = {};
     for (var index in options) {
       if (index == "stake") {
+        new_options[index] = options[index];
+      }
+      if (index == "crypto") {
         new_options[index] = options[index];
       }
     }

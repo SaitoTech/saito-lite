@@ -1616,9 +1616,9 @@ console.log("----------------------------");
 	let cards_issued = [];
 
 console.log("RETAINED strategy cards: " );
-console.log(JSON.stringify(this.game.players_info[i].strategy_cards_retained));
 
 	for (let i = 0; i < this.game.players_info.length; i++) {
+console.log(i + " -- " + JSON.stringify(this.game.players_info[i].strategy_cards_retained));
 	  cards_issued[i] = 0;
 	  if (this.game.players_info[i].strategy_cards_retained.length >= 1) {
 	    for (let y = 0; y < this.game.players_info[i].strategy_cards_retained.length; y++) {

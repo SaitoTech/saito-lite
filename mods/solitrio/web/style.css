@@ -5,6 +5,21 @@ body {
   margin: 0px;
 }
 
+.main {
+  margin: 0 0 0 0 ;
+  padding: 0 0 0 0 ;
+}
+
+.intro {
+  background-color: whitesmoke;
+  padding: 30px;
+  font-size: 1.6em;
+}
+
+.hud {
+  display: none;
+}
+
 .connection_monitor {
   position: fixed;
   display: none;
@@ -39,12 +54,13 @@ body {
 .chances {
  position: absolute;
  top: 80%;
- left: 36%;
+ left: 25%;
+ font-size: 1.75em;
 }
 
 .rowbox {
   float:left;
-  padding: 40px;
+  padding: 50px;
 }
 .card {
   position: relative;

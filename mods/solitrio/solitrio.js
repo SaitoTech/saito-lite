@@ -27,10 +27,44 @@ class Solitrio extends GameTemplate {
     //
     this.boardgameWidth  = 5100;
 
-    this.hud.mode = 1; // classic
+    //this.hud.mode = 1; // classic
 
   }
 
+
+
+
+  toggleIntro() {
+
+    let overlay_html = `
+
+      <div class="intro">
+
+	Cards appear in four rows. There are four blank spaces.
+
+	<p></p>
+
+	Put the following card of the same suite in any open space. The Eight of Spades may be placed after the Seven of Spades.
+
+	<p></p>
+
+	If you clear the front card in a row, you may move any TWO into that slot.
+
+	<p></p>
+
+	You have two "chances" to reset the board (click on the "Ace"). This preserves existing chains but randomizes the remaining cards. 
+
+	<p></p>
+
+	Your goal is to order the board before you run out of "chances".
+
+      </div>
+
+    `;
+
+    this.overlay.showOverlay(this.app, this, overlay_html);
+
+  }
 
 
 
@@ -88,6 +122,82 @@ class Solitrio extends GameTemplate {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+    //
+    // ADD MENU
+    //
+    this.menu.addMenuOption({
+      text : "Game",
+      id : "game-game",
+      class : "game-game",
+      callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-game");
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "How to Play",
+      id : "game-intro",
+      class : "game-intro",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.toggleIntro();
+      }
+    });
+/***
+    this.menu.addSubMenuOption("game-game", {
+      text : "Stats",
+      id : "game-stats",
+      class : "game-stats",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.handleStatsMenu();
+      }
+    });
+***/
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
+    this.menu.addMenuIcon({
+      text : '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+      id : "game-menu-fullscreen",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        app.browser.requestFullscreen();
+      }
+    });
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].slug === "chat") {
+              let chatmod = this.app.modules.mods[i];
+              this.menu.addMenuOption({
+                text : "Chat",
+                id : "game-chat",
+                class : "game-chat",
+                callback : function(app, game_mod) {
+                  game_mod.menu.showSubMenu("game-chat");
+                }
+              })
+              this.menu.addSubMenuOption("game-chat", {
+                text : "Community",
+                id : "game-chat-community",
+                class : "game-chat-community",
+                callback : function(app, game_mod) {
+                  game_mod.menu.hideSubMenus();
+                  chatmod.mute_community_chat = 0;
+                  chatmod.sendEvent('chat-render-request', {});
+                  chatmod.openChatBox();
+                } 
+              });
+      }
+    }
+
+    this.menu.render(app, this);
+    this.menu.attachEvents(app, this);
+
   }
 
   requestInterface(type) {
@@ -493,6 +603,10 @@ class Solitrio extends GameTemplate {
 
     $('#recycles_remaining').off();
     $('#recycles_remaining').on('click', function() {
+      if (this.game.state.recycles_remaining == 0) {
+	salert("Sorry! No more chances!");
+	return;
+      }
       solitrio_self.recycleBoard();
       solitrio_self.game.state.recycles_remaining--;
       solitrio_self.displayUserInterface();
