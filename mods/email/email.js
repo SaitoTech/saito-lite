@@ -60,12 +60,11 @@ class Email extends ModTemplate {
       }
       app.options.email.welcomesent = true;
       app.storage.saveOptions();
-      app.connection.on("set_preferred_crypto", (modname) => {
-        mod.cacheAndRenderPreferredCryptoBalance();
-      });
-
-      
     }
+
+    app.connection.on("set_preferred_crypto", (modname) => {
+      this.cacheAndRenderPreferredCryptoBalance();
+    });
 
   }
   rerender(app) {

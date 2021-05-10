@@ -78,11 +78,11 @@ let EmailCryptoAppspace = {
       elem.onclick = (event) => {
         if (event.currentTarget.classList.contains("fa")) {
           event.currentTarget.classList.remove('fa');
-          app.wallet.setPreferredCrypto("Saito");
+          app.wallet.setPreferredCrypto("SAITO");
         } else {
           event.currentTarget.classList.add('fa');
           let cryptoMod = this.getCryptoMod(app);
-          app.wallet.setPreferredCrypto(cryptoMod.name);
+          app.wallet.setPreferredCrypto(cryptoMod.ticker);
         }
       }
     });
