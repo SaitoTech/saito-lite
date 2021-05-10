@@ -634,8 +634,8 @@ body {
   .game-wizard-description {
     font-size: 1.2em;
     line-height: 1.5em;
-    max-height: 33vh;
-    overflow-y: auto;
+    /* max-height: 33vh;
+    overflow-y: auto; */
   }
   .game-wizard-image {
     padding: 10px;
@@ -1264,4 +1264,10 @@ body {
     .arcade-post-title {
       font-size: 1em;
     }
+
+    
+    .game-wizard-header {
+      display: block;
+    }
+    
   }

@@ -52,6 +52,8 @@ console.log(JSON.stringify(invite.returnMessage()));
 
   if (document.getElementById(`invite-${invite.transaction.sig}`)) { return ''; }
 
+  // console.log(invite.msg);
+
   // if Poker, show crypto used
   let cryptoUsed = invite.msg.game == "Poker" ? "(" + invite.msg.options.crypto.toLowerCase() + ")" : "";
 
