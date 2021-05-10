@@ -59,6 +59,9 @@ body {
   overflow-y: auto;
   padding: 0 calc((100vw - var(--saito-width))/2);
 }
+.arcade-main .forum-title {
+  margin-bottom: 0;
+}
 
 .arcade-sidebar {
   display: flex;
@@ -430,6 +433,92 @@ body {
 .blank {
   height: 32px;
 }
+
+
+/* Post */
+
+.arcade-posts-add {
+  position: relative;
+  top: 0;
+  right: 0;
+  float: right;
+  }
+  
+  .arcade-post {
+  display: grid;
+  grid-template-columns: 3em auto;
+  }
+  
+  .arcade-post-thumbnail {
+  background-image: url(/post/img/post-logo.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: top;
+  width: 2.5em;
+  height: 2.5em;
+  }
+  
+  .arcade-post-header {
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    margin-bottom: .2rem;
+  }
+
+  .arcade-post-sublinks {
+  clear: both;
+  font-size: 0.85em;
+  padding-top: 2px;
+  }
+  
+  .arcade-post-title {
+    font-weight: bold;
+    font-size: 1em;
+  }
+  
+  .arcade-post-title > a {
+  text-decoration: none;
+  color: var(--saito-red);
+  }
+  
+  
+  .arcade-post-user {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+  }
+  
+  .arcade-post-comments {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: 0.7;
+  }
+  
+  .arcade-post-report {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+  text-decoration: underline;
+  }
+  
+  .arcade-post-posted-by {
+  float: left;
+  }
+  
+  .arcade-post-front {
+  width: 3em;
+  }
+  .arcade-post-back {
+  padding-bottom: 15px;
+  }
+  .arcade-post-ts {
+    font-size: .9em;
+  margin-left: 1em;
+  opacity: 0.7;
+  }
 
 @media only screen and (max-width: 1000px) {
   .main {
