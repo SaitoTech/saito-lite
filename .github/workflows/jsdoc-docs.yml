@@ -1,0 +1,24 @@
+name: JSDoc Docs
+
+on:
+  push:
+    branches: [master]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  doc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create
+        run: npm run jsdoc
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.2
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: saitolitedocs # The folder the action should deploy.
