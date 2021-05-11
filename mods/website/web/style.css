@@ -435,6 +435,10 @@ section {
   height: 20rem;
 }
 
+.section3 .itemWrapper div {
+  white-space: pre-wrap;
+}    
+
 .section3 .imgWrapper .itemWrapper .toolDescWrapper {
   position: absolute;
   top: 0;
@@ -445,7 +449,7 @@ section {
   justify-content: center;
 }
 
-.toolDescWrapper span {
+.toolDescWrapper {
   font-size: 20px;
   font-weight: 500;
   color: #FFFFFF;
