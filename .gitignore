@@ -20,7 +20,6 @@ config/runtime.config.js
 node_modules
 node_modules/*
 tests/config/env
-package-lock.json
 
 
 
