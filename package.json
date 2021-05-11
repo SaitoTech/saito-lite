@@ -27,7 +27,7 @@
     "big.js": "^5.2.2",
     "bitwise-xor": "0.0.0",
     "body-parser": "^1.19.0",
-    "chess.js": "^0.10.2",
+    "chess.js": "^0.11.0",
     "crypto": "^1.0.1",
     "elo-rank": "^1.0.4",
     "exports-loader": "^0.7.0",
