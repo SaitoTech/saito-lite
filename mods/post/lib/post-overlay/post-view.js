@@ -185,15 +185,15 @@ console.log("error showing comment or gallery");
       });
     } catch (err) {}
 
-    document.querySelector('.post-view-report').onclick = async (e) => {
-
-      const reportit = await sconfirm("Report this post or comments to the mods?");
-      if (reportit) {
-
-        const sig = document.querySelector('.post-view-report').getAttribute("data-id");
-
+    /*  REPORTING SYSTEM
+    *   
+    */
+    document.querySelectorAll('.post-view-report').forEach(el => {
+      el.onclick = async (e) => {
+        const reportit = await sconfirm("Report this post or comments to the mods?");
+        if (reportit) {
+          const sig = el.getAttribute("data-id");
           await salert("Thank you for flagging this");
-
           for (let i = 0; i < mod.posts.length; i++) {
             if (mod.posts[i].transaction.sig === sig) {
               mod.posts.splice(i, 1);
@@ -204,16 +204,14 @@ console.log("error showing comment or gallery");
               mod.comments.splice(i, 1);
             }
           }
-
           mod.render();
           mod.overlay.hideOverlay();
 
-        let newtx = mod.createReportTransaction(sig);
-        app.network.propagateTransaction(newtx);
-      }
-
+          const newtx = mod.createReportTransaction(sig);
+          app.network.propagateTransaction(newtx);
+        }
     }
-
+  });
 
 
   },
