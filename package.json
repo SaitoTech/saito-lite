@@ -12,7 +12,8 @@
     "compile": " ./compile recompile",
     "old": " webpack --config ./webpack/old/webpack.config.js",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
-    "analyze": "webpack --config ./webpack/old/webpack.analyze.js"
+    "analyze": "webpack --config ./webpack/old/webpack.analyze.js",
+    "jsdoc": "jsdoc --destination saitolitedocs lib/templates/abstractcryptomodule.js lib/templates/substratebasedcrypto.js lib/saito/wallet.js README.md"
   },
   "author": "Team Saito",
   "license": "SAITO",
@@ -80,6 +81,7 @@
     "babel-loader": "^8.0.6",
     "babel-polyfill": "^6.26.0",
     "file-loader": "^4.2.0",
+    "jsdoc": "^3.6.6",
     "webpack": "^4.44.1",
     "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.3.12",

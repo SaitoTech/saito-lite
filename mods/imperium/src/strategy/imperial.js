@@ -57,7 +57,7 @@
 	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 	  	      imperium_self.updateStatus("scoring completed");
                       imperium_self.addMove("gain\t"+strategy_card_player+"\t"+"secret_objective"+"\t"+"1");
-                      for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
+                      imperium_self.addMove("DEAL\t6\t"+strategy_card_player+"\t1");
                       imperium_self.endTurn();
 		    });
 		  } else {
@@ -66,13 +66,13 @@
 	  	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
 	  	      imperium_self.updateStatus("scoring completed");
                       imperium_self.addMove("gain\t"+strategy_card_player+"\t"+"secret_objective"+"\t"+"1");
-                      for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
+                      imperium_self.addMove("DEAL\t6\t"+strategy_card_player+"\t1");
                       imperium_self.endTurn();
 		    });
 		  }
 		} else {
                   imperium_self.addMove("gain\t"+strategy_card_player+"\t"+"secret_objective"+"\t"+"1");
-                  for (let i = 0; i < imperium_self.game.players_info.length; i++) { imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1"); }
+                  imperium_self.addMove("DEAL\t6\t"+strategy_card_player+"\t1");
                   imperium_self.endTurn();
 		}
               }, 1);
@@ -94,6 +94,7 @@
 
         if (imperium_self.game.player == player) {
           if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
+console.log("CAN PLAYER BUY SECRET OBJECTIVE?");
             imperium_self.playerBuySecretObjective(2);
           } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());

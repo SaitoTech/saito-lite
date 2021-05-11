@@ -1663,11 +1663,11 @@ console.log(i + " -- " + JSON.stringify(this.game.players_info[i].strategy_cards
   	  //
           if (this.game.state.round == 1) { cards_to_select = 1; }
 
-  	  for (cts = 0; cts < cards_to_select; cts++) {
+  	  for (let cts = 0; cts < cards_to_select; cts++) {
             for (let i = 0; i < this.game.players_info.length; i++) {
   	      let this_player = this.game.state.speaker+i;
   	      if (this_player > this.game.players_info.length) { this_player -= this.game.players_info.length; }
-	      if ((cts+cards_issued[i]) < cards_to_select) {
+	      if ((cts+cards_issued[this_player]) < cards_to_select) {
   	        this.rmoves.push("pickstrategy\t"+this_player);
               }
             }
