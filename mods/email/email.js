@@ -82,6 +82,14 @@ class Email extends ModTemplate {
     if(app.BROWSER != 1 || this.browser_active != 1 ) {return;}
     super.render(app);
 
+    // TODO: next week, email layout with page header
+    /* 
+          <div class="page-header">
+            <h1 class="page-title">Wallet</h1>
+            <p class="page-subtitle">Wallet demo. Transfer cryptocurrencies with messages.</p>
+          </div>
+    */
+
     let html = `
       <div id="content__">
         <div class="email-container main">

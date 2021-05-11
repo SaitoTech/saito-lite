@@ -53,6 +53,19 @@ body {
   width: 100%;
 }
 
+.page-header {
+  margin-bottom: 1rem;
+}
+/* h1 */
+.page-title {
+  margin: 0 0 .5rem;
+}
+/* p */
+.page-subtitle {
+  margin: 0;
+  opacity: .9;
+}
+
 a {
   text-decoration: none;
   color: var(--saito-red);

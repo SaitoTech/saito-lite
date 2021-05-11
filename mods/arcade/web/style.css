@@ -59,6 +59,12 @@ body {
   overflow-y: auto;
   padding: 0 calc((100vw - var(--saito-width))/2);
 }
+.arcade-container .page-header {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  padding: 0 10px;
+  margin-bottom: 0;
+}
 .arcade-main .forum-title {
   margin-bottom: 0;
 }
@@ -513,7 +519,7 @@ body {
     margin-left: 1em;
   }
   .arcade-container {
-    grid-template-columns: auto;
+    display: block;
   }
   .arcade-sidebar {
     position: absolute;
@@ -531,7 +537,20 @@ body {
     display: block;
     margin: 1em 0 0 0;
   }
+  .arcade-container .page-header {
+    margin-bottom: 1rem;
+  }
+  .arcade-main {
+    padding-left: 10px;
+  }
+  .arcade-main .forum-title {
+    margin-bottom: .5rem;
+  }
+  .arcade-posts {
+    padding-left: 0;
+  }
 }
+
 
   /* controls */
   button, .button, .file-label {

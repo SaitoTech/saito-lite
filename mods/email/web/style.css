@@ -95,6 +95,14 @@ hr {
   grid-template-columns: 15em auto;
   grid-template-areas: "email-sidebar email-main";
 }
+.email-container .page-header {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  margin: .5rem 10px 0;
+}
+.medium-editor-placeholder:after {
+  font-style: normal;
+}
 
 .email-content {
   display: grid;
@@ -502,8 +510,11 @@ hr {
     padding-right: unset;
   }
   .email-container {
-    grid-template-columns: 1fr;
-    grid-template-areas: "email-sidebar" "email-content";
+    display: block;
+    padding-left: 10px;
+  }
+  .email-container .page-header {
+    margin: 0 0 1rem;
   }
   .email-module-title {
     display: none;
