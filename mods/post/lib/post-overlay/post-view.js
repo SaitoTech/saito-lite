@@ -187,10 +187,10 @@ console.log("error showing comment or gallery");
 
     document.querySelector('.post-view-report').onclick = async (e) => {
 
-      let reportit = await sconfirm("Report this post or comments to the mods?");
+      const reportit = await sconfirm("Report this post or comments to the mods?");
       if (reportit) {
 
-        let sig = document.querySelector('.post-view-report').getAttribute("data-id");
+        const sig = document.querySelector('.post-view-report').getAttribute("data-id");
 
           await salert("Thank you for flagging this");
 

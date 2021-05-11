@@ -34,8 +34,6 @@ flex-wrap: initial;
 z-index: 999;
 }
 
-.post-main {}
-
 .post-teaser {
 margin-bottom: 1.5rem;
 display: grid;
@@ -229,9 +227,6 @@ font-size: 1.15em;
     height: auto;
 }
 
-
-.post-view-overview {}
-
 .post-view-thumbnail {
 background-size: contain;
 float: left;
@@ -344,8 +339,6 @@ background-color: white;
 margin-top: 32px;
 }
 
-.post-comment-submit-btn {}
-
 .post-view-comment {
 padding: .8em 20px;
 margin: 0 -20px;
@@ -387,12 +380,8 @@ height: 100%;
 margin-top: 5px;
 }
 
-
-
 .post-teaser-front {
 width: 3em;
-}
-.post-teaser-back {
 }
 
 

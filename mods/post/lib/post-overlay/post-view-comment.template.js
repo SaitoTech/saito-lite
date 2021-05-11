@@ -1,11 +1,11 @@
 
 module.exports = PostViewCommentTemplate = (app, mod, tx) => {
 
-  let txmsg = tx.returnMessage();
+  const txmsg = tx.returnMessage();
 
-  let time =  datetimeRelative(tx.transaction.ts);
-  let avatar = app.keys.returnIdenticon(tx.transaction.from[0].add);
-  let username = app.keys.returnUsername(tx.transaction.from[0].add);
+  const time =  datetimeRelative(tx.transaction.ts);
+  const avatar = app.keys.returnIdenticon(tx.transaction.from[0].add);
+  const username = app.keys.returnUsername(tx.transaction.from[0].add);
 
 
   let html = `

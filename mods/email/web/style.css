@@ -25,26 +25,24 @@
 
 /******* START CRYPTO MODS ********/
 .superwallet-container {
-padding: 10em;
+  padding: 10em;
 overflow-y: scroll;
 height: 100%;
 }
 
 .crypto-container {
-margin: 2em 0em;
-/* border: solid 2px black;
-padding: 1.5em; */
+  margin: 2em 0em;
 }
 
 .crypto-container button {
-  padding: 10px 16px;
+  padding: 10px 16px; 
 }
 .crypto-container .crypto-title {
 font-size: 1.5em;
 margin-bottom: 1rem;
 }
 .crypto-container .ticker {
-font-size: 3em;
+font-size: 3em; 
 margin-bottom: 1rem;
 }
 
@@ -210,19 +208,10 @@ hr {
 }
 
 .email-list {
-  /* height: calc(100vh - 9.1em); */
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: auto;
-}
-
-.email-form {
-  /* height: 72vh; */
-  /* display: grid;
-  grid-template-rows: 3em 3em 3em auto 4em;
-  grid-gap: 1em;
-  padding-top: 10px; */
 }
 
 .email-form-meta {
@@ -525,15 +514,11 @@ hr {
   .email-detail-address-id {
     font-size: 0.8em;
   }
-  .email-header {
-  }
   .email-header .email-header-holder {
     grid-template-columns: 30% 70%;
   }
   .email-balance {
     font-size: 1.33em;
-  }
-  .email-balance-detail {
   }
   .email-text {
     height: unset;
@@ -553,9 +538,6 @@ hr {
     position: fixed;
     bottom: 0;
     width: 97vw;
-  }
-  .email-detail-right-options {
-    
   }
   .email-detail-right-options>.email-icons {
     margin: 0 0 0.3em 0;
@@ -625,8 +607,6 @@ hr {
   }
   #email-form-options {
     top: unset;
-  }
-  .email-appspace {
   }
   .email-header h3 {
     padding-top: 7px;

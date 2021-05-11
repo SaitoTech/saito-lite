@@ -84,16 +84,10 @@ body {
   display: grid;
   grid-template-rows: auto 1fr;
 }
-.arcade-bars-menu {
-  /*height: 100%;*/
-}
 .arcade-navigator-bars-menu {
   height: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
-}
-.arcade-sidebar-active-games-header {
-  
 }
 .arcade-apps-wrapper {
   overflow-y: scroll;
@@ -299,9 +293,6 @@ body {
   text-transform: capitalize;
 }
 
-.arcade-tile .gamePlayers {
-}
-
 .arcade-tile .gameShortDescription {
   display: grid;
   justify-items: end;
@@ -399,9 +390,6 @@ body {
 }
 .leaderboard-rankings{
   display:grid;
-}
-.leaderboard-container hr {
-  
 }
 .leaderboard-game-module, .leaderboard-rankings, .leaderboard-container hr {
   visibility: hidden;
@@ -723,8 +711,6 @@ body {
   .game-wizard-description {
     font-size: 1.2em;
     line-height: 1.5em;
-    /* max-height: 33vh;
-    overflow-y: auto; */
   }
   .game-wizard-image {
     padding: 10px;

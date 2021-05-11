@@ -9,9 +9,9 @@ module.exports = PostTeaserTemplate = (app, mod, tx) => {
   if (img == undefined) { img = '/post/img/post-logo.png'; }
   if (img == "")        { img = '/post/img/post-logo.png'; }
 
-  let time =  datetimeRelative(tx.transaction.ts);
+  const time =  datetimeRelative(tx.transaction.ts);
   
-  let html = `
+  const html = `
     <div data-id="${tx.transaction.sig}" id="arcade-post" class="arcade-post">
       <div class="arcade-post-front">
         <div id="arcade-post-thumbnail" class="arcade-post-thumbnail" style="background-image: url('${img}')"></div>

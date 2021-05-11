@@ -8,9 +8,9 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
   if (tx == null) { return; }
 
   // from timestamp to friendly time
-  let time =  datetimeRelative(tx.transaction.ts);
-  let avatar = app.keys.returnIdenticon(tx.transaction.from[0].add);
-  let username = app.keys.returnUsername(tx.transaction.from[0].add);
+  const time =  datetimeRelative(tx.transaction.ts);
+  const avatar = app.keys.returnIdenticon(tx.transaction.from[0].add);
+  const username = app.keys.returnUsername(tx.transaction.from[0].add);
 
   let html = `
   <div id="post-view-container" class="post-view-container">
