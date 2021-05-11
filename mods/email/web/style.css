@@ -32,28 +32,46 @@ height: 100%;
 
 .crypto-container {
 margin: 2em 0em;
-border: solid 2px black;
-padding: 1.5em;
+/* border: solid 2px black;
+padding: 1.5em; */
 }
 
+.crypto-container button {
+  padding: 10px 16px;
+}
 .crypto-container .crypto-title {
 font-size: 1.5em;
+margin-bottom: 1rem;
 }
 .crypto-container .ticker {
-font-size: 3.5em;
+font-size: 3em;
+margin-bottom: 1rem;
 }
 
-.crypto-container input {
-padding: 0;
-border: solid 1px black;
-margin-bottom: 0.2em;
+.crypto-container .grid-2 {
+  row-gap: 0em;
+  column-gap: 1em;
+  padding: 0px;
+  margin-bottom: 1rem;
+}
+.crypto-container .grid-2.info div {
+  line-height: 1em;
+}
+.crypto-container .transfer input {
+  max-width: 320px;
+}
+.crypto-container hr {
+  margin: 2em 0;
 }
 
-.crypto-container input.sendbutton {
-padding: 0.3em 0.6em;
-font-size: 1.0em;
-border: solid 1px black;
+.crypto-container .set-preferred.preferred::before {
+  content: "Remove As Preferred Crypto";
 }
+.crypto-container .set-preferred.not-preferred::before {
+  content: "Set As Preferred Crypto";
+}
+
+
 
 
 /******* END CRYPTO MODS ********/
@@ -615,5 +633,24 @@ hr {
   }
   #email-bars-icon {
     display: block;
+  }
+
+
+  .crypto-container {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    text-align: center;
+  }
+  .crypto-container hr {
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+  .crypto-container .grid-2 {
+    margin: 0 auto 1rem;
+    max-width: 520px;
+    text-align: left;
+  }
+  .crypto-container .transfer input {
+    max-width: none;
   }
 }
