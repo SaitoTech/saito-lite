@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: templates/substratebasedcrypto.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: templates/substratebasedcrypto.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//const ModTemplate = require('./modtemplate');
+const AbstractCryptoModule = require('./abstractcryptomodule')
+const { Keyring, decodeAddress, encodeAddress, createPair } = require('@polkadot/keyring');
+const { ApiPromise, WsProvider } = require('@polkadot/api');
+const { randomBytes } = require('crypto');
+
+/**
+* An Implementation of AbstractCryptoModule that supports any substrate-based module
+* @extends AbstractCryptoModule
+* @example
+* class Polkadot extends SubstrateBasedCrypto {
+*   constructor(app) {
+*     super(app, 'DOT', saitoEndpoint, "Polkadot's Existential Deposit is 1 DOT, be sure not to send less than 1 DOT or leave less than 1 DOT in your wallet.");
+*     this.name = 'Polkadot';
+*     this.description = 'Polkadot application layer for in-browser Polkadot applications. Install this module to make Polkadot your default in-browser cryptocurrency';
+*     this.categories = "Cryptocurrency";
+*   }
+* ...
+*/
+class SubstrateBasedCrypto extends AbstractCryptoModule {
+
+  /**
+   * Construct SubstrateBasedCrypto
+   * @param {Object} app - Saito Application Context
+   * @param {String} ticker - Ticker symbol of underlying Cryptocurrency
+   * @param {String} endpoint - URI of Substrate Endpoint location
+   * @param {String} info - Option info about this module
+   * @example 
+   * super(app, "DOT", localhost:3838, 'DOT mainnet')
+   */
+  constructor(app, ticker, endpoint, info = '') {
+    super(app, ticker);
+    this.endpoint = endpoint;
+    //this.subscanEndpoint = "https://westend.api.subscan.io/";
+    this.subscanEndpoint = "https://saito.io:9931/subscanapi";
+    //this.subscanEndpoint = "http://kaolinite/subscanapi";
+    this.info = info;
+    this.optionsStorage = {};
+    this._api = null; // treat as private, please use getApi to access
+    this.mods = [];
+    this.keypair = null;
+    this.keyring = null;
+  }
+ /**
+  * installModule runs when a node initialized a module for the first time
+  * @param {Object} app - Saito Application Context
+  */
+  
+  installModule(app) {
+    app.wallet.setPreferredCrypto(this.name);
+  }
+ /**
+  * Initialize Endpoint API connection and keyring
+  * @param {Object} app - Saito Application Context
+  */
+  initialize(app) {
+    if (app.BROWSER) {
+      super.initialize(app);
+      this.load();
+      const wsProvider = new WsProvider(this.endpoint);
+      this._api = new ApiPromise({ provider: wsProvider });
+      this._api.on('connected', (stream) => {
+        //console.log(this.description + ' Polkadot Socket Provider connected');
+      });
+      this._api.on('disconnected', (stream) => {
+        //console.log(this.description + ' Polkadot Socket Provider disconnected');
+      });
+      this._api.on('ready', (stream) => {
+        //console.log(this.description + ' Polkadot Socket Provider ready');
+      });
+      this._api.on('error', (stream) => {
+        //console.log(this.description + ' Polkadot Socket Provider error');
+      });
+      this.keyring = new Keyring({ type: 'ed25519'});
+      this.keyring.setSS58Format(0);
+      if(!this.optionsStorage.keypair) {
+        let keypair = this.keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
+        this.optionsStorage.keypair = keypair.toJson();
+        this.save();
+      }
+      this.keypair = this.keyring.addFromJson(this.optionsStorage.keypair);  
+      this.keypair.decodePkcs8();
+      super.initialize(app);
+    }
+    
+  }
+ /**
+  * async getter for Endpoint API
+  * @param {Object} app - Saito Application Context
+  */
+ 
+  async getApi() {
+    await this._api.isReady;
+    return this._api;
+  }
+  // Token decimals:
+  //
+  //     Polkadot (DOT): 10
+  //     Kusama (KSM): 12
+  getFormatedAmount(amount) {
+
+  }
+  fromFormatedAmount(amount) {
+
+  }
+  // existential deposit (ED) to prevent dust accounts from bloating state. If an account drops below the ED, it will be reaped,
+  // Polkadot's ED is 1 DOT, while Kusama's is 0.0016666 KSM.
+
+  
+  /**
+   * Forces input address into the desired format.
+   * Input address can be any format, DOT, KSM, or Substrate.
+   * https://polkadot.js.org/docs/api/start/create
+   * @param {String} address - An address in any subtrate format. See: https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)
+   * @param {String} format - The desired output format. format ∈ {"polkadot","kusama","substrateRaw"}
+   */
+  getFormattedAddress(address, format = "polkadot") {
+    // https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)
+    // https://wiki.polkadot.network/docs/en/learn-accounts
+    //
+    // Polkadot addresses always start with the number 1.
+    // Kusama addresses always start with a capital letter like C, D, F, G, H, J...
+    // Generic Substrate addresses start with 5.
+    //
+    // Give some semantics to the polkadot magic numbers
+    let formats = {"polkadot": 0, "kusama": 2, "substrateRaw": 42 };
+    return encodeAddress(decodeAddress(address), formats[format]);
+  }
+ /**
+  * async getter for Endpoint API
+  * @param {Object} app - Saito Application Context
+  */
+  returnAddress() {
+    if (this.ticker == "KSM") {
+      return this.getFormattedAddress(this.keypair.address, "kusama");
+    } else if (this.ticker == "WESTIE") {
+      return this.getFormattedAddress(this.keypair.address, "substrateRaw");
+    } else {
+      return this.getFormattedAddress(this.keypair.address);
+    }
+  }
+  async returnBalance(){
+    let api = await this.getApi();
+    const { nonce, data: balance } = await api.query.system.account(this.keypair.publicKey);
+    if (this.ticker == "WESTIE") {
+      return balance.free/1000000000000;
+    } else {
+      return balance.free;
+    }
+  }
+  async transfer(howMuch, to) {
+    if (this.ticker == "WESTIE") {
+      howMuch = howMuch*1000000000000;
+    }
+    let api = await this.getApi();
+    const tx = await api.tx.balances.transfer(to, howMuch);
+    const hash = await tx.signAndSend(this.keypair);
+    return hash;
+  }
+  // Only looks in the last 100 payments due to a restriction on subscan's API. This could be extended by repeating the request for past pages.
+  hasPayment(howMuch, from, to, timestamp) {
+    console.log("hasPayment " + howMuch + " - " + from + " - " + to + " - " + timestamp);
+    return new Promise((resolve, reject) => {
+      let data = {
+        "row": 100,
+        "page": 0,
+        "address": "5E4M84Vwnxgx1vZ3TURvjSqbxFsMF9cD8vKs3aWohJXgJYgy"
+      }
+      fetch(this.subscanEndpoint + "/api/scan/transfers", {
+          method: 'POST',
+          //mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': '014bc513cb936da437a7710d67f27cc7'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((data) => {
+          console.log(data);
+          for(let i = 0; i &lt; data.data.transfers.length; i++) {
+            let transfer = data.data.transfers[i];
+            if(transfer.from == from &amp;&amp; transfer.to == to &amp;&amp; Number.parseFloat(transfer.amount) >= howMuch &amp;&amp; transfer.block_timestamp > timestamp) {
+              // TODO: format this transfer into a standard format for all crypto modules...
+              console.log("TRANSACTION FOUND!!!");
+              console.log(transfer);
+              resolve(true);
+              break;
+            }
+          }
+          resolve(false);
+        })
+        .catch((err) => {
+          console.log("Error fetching payments from subscan");
+          reject(err);
+        });
+      
+      // curl -X POST 'https://westend.api.subscan.io/api/scan/transfers' --header 'Content-Type: application/json' --header 'X-API-Key: 014bc513cb936da437a7710d67f27cc7' --data-raw '{
+      //     "row": 100,
+      //     "page": 1,
+      //     "address": "5E4M84Vwnxgx1vZ3TURvjSqbxFsMF9cD8vKs3aWohJXgJYgy"
+      //   }'
+        // curl -X POST 'http://kaolinite/subscanapi/api/scan/transfers' --header 'Content-Type: application/json' --header 'X-API-Key: 014bc513cb936da437a7710d67f27cc7' --data-raw '{
+        //     "row": 10,
+        //     "page": 1,
+        //     "address": "5E4M84Vwnxgx1vZ3TURvjSqbxFsMF9cD8vKs3aWohJXgJYgy"
+        //   }'
+      //   curl -X POST 'https://saito.io:9931/subscanapi/api/scan/transfers' --header 'Content-Type: application/json' --header 'X-API-Key: 014bc513cb936da437a7710d67f27cc7' --data-raw '{
+      //       "row": 100,
+      //       "page": 0,
+      //       "address": "5E4M84Vwnxgx1vZ3TURvjSqbxFsMF9cD8vKs3aWohJXgJYgy"
+      //     }'
+      // 
+    });
+  }
+  save() {
+    let moduleOptions = this.app.storage.getModuleOptionsByName(this.name);
+    moduleOptions.storage = this.optionsStorage;
+    this.app.storage.saveOptions();
+  }
+  load() {
+    let moduleOptions = this.app.storage.getModuleOptionsByName(this.name);
+    if(moduleOptions) {
+      if(!moduleOptions.storage) {
+        moduleOptions.storage = {};
+        this.save();
+      }
+      this.optionsStorage = moduleOptions.storage;
+    } else {
+      throw "Module Not Installed: " + this.name;
+    }
+  }
+}
+module.exports = SubstrateBasedCrypto;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractCryptoModule.html">AbstractCryptoModule</a></li><li><a href="SubstrateBasedCrypto.html">SubstrateBasedCrypto</a></li><li><a href="Wallet.html">Wallet</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue May 11 2021 07:41:59 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
