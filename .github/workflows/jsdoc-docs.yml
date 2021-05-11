@@ -15,7 +15,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Create
-        run: npm run jsdoc
+        run: |
+          npm i
+          npm run jsdoc
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.2
