@@ -2,34 +2,37 @@
 
 Saito is a **Tier 1 Blockchain Protocol** that provides **high throughput**. The network accomplishes with a consensus mehanism that pays the ISPs in the network instead of miners and stakers. The technical solution unleashes a distributed, global PKI layer.
 
-If you need to get in touch with us, please reach out anytime. 
+If you need to get in touch with us, please reach out anytime.
 
 The Saito Team
 info@saito.tech
 
-
 ## Table of Content
 
-* [Preamble](#Preamble)
-* [How To Use Saito](#How-To-Use-Saito)
-* [Getting Started](#Getting-Started)
-* [The Consensus Mechanism](#The-Concensus-Mechanism)
-* [Contact](#Contact)
+- [Preamble](#Preamble)
+- [How To Use Saito](#How-To-Use-Saito)
+- [Getting Started](#Getting-Started)
+- [The Consensus Mechanism](#The-Concensus-Mechanism)
+- [Contact](#Contact)
 
 ## APIs
-* [REST API](docs/restapi.md)
-* [Application/Module Protocol](docs/applications.md)
-* [Application/Module Events Protocol](docs/events.md)
-* [Application/Module Context API](docs/appcontext.md)
-* [Services](docs/services.md)
+
+- [REST API](docs/restapi.md)
+- [Application/Module Protocol](docs/applications.md)
+- [Application/Module Events Protocol](docs/events.md)
+- [Application/Module Context API](docs/appcontext.md)
+- [Services](docs/services.md)
 
 ## Other Documentation
-* [Roadmap](docs/roadmap.md)
-* [Block and Transaction Validation](docs/validation.md)
+
+- [Roadmap](docs/roadmap.md)
+- [Block and Transaction Validation](docs/validation.md)
+- [JSDoc](https://saitotech.github.io/saito-lite/index.html)
 
 ## Web3 Grant and Polkadot Integration
-* [Web3 Game Protocol and Engine Grant](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md)
-* [Polkadot Integration](docs/polkadot.md)
+
+- [Web3 Game Protocol and Engine Grant](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md)
+- [Polkadot Integration](docs/polkadot.md)
 
 # Preamble
 
@@ -41,17 +44,16 @@ Before working with this repository it may be helpful to get some perspective on
 
 If you're interested in developing DAPPs on top of Saito, that's all you really need to know. However, we've included a description of the consensus mechanism here because it is an important piece of the protocol and many people reading this document will need to know the details. If you're interested in the core advances Saito makes and in helping to develop the core blockchain, please also see our roadmap doc and reach out anytime with questions or suggestions.
 
-
 # How To Use Saito
 
 The Reference Implementation of Saito is written in NodeJS. Developers can get started by cloning the repo and running a local node which can serve applications directly to your browser. Once your application is developed you may publish it to the network. When you are ready to deploy a live application see our tutorial on [deploying applications to the network](http://org.saito.tech/tutorial-1-deploy-a-new-application/).
-
 
 ## System Preparation
 
 Saito requires a rececent version of NodeJS (>= 12). You can install this as follows:
 
 ### Linux
+
 ```
 apt update
 apt upgrade
@@ -61,7 +63,6 @@ apt install npm
 ### Mac / Windows / Other
 
 System-specific installation instructions are available on the [official NodeJS website](https://nodejs.org/en/).
-
 
 ## Install Saito and Start a Node
 
@@ -79,7 +80,6 @@ The system will be started in 'local' or 'development' mode with a default set o
 
 Once Saito is running you can test that it is working by visiting `http://localhost:12101/wallet` in your browser. Saito applications look and feel like websites. They are not -- applications run directly inside your browser and connect with blockchain access-points to send and receive data. Our default installation includes a default set of modules (applications). You can change which modules are installed by editing the file `/config/modules.config.js` to include them. Modules are installed by default in the `/mods` directory.
 
-
 ## Building Applications
 
 A tutorial series that will get you started building applications can be found in our list of [online developer tutorials](http://org.saito.tech/introduction-to-saito-development).
@@ -88,19 +88,17 @@ Details on the API used by Saito modules can be found in our [Applications docum
 
 Developers may also build applications that integrate directly with the blockchain-layer REST API described below. Tools to assist with this will be coming shortly.
 
-
-
 ## Installing Applications and Running:
 
 Once you have developed an application, see our [online developer tutorials](http://org.saito.tech/introduction-to-saito-development) for information on how to publish it into the live network and get it hosted on the Saito AppStore for other users and developers to install.
 
 If you wish to install your module locally for testing, put it into the `/mods` directory and add it to both the `core` and `lite` sections of your `/config/modules.config.js` file. Then run this command:
 
-``` 
+```
 npm run compile dev
 ```
-This command will compile the codebase into a javascript payload which can be delivered to browsers. The payload will saved as the `/web/saito/saito.js` file and can be loaded by any page you wish to author. As a convenience, the Saito Application/Module platform will automatically serve web requests if configured correctly, making it quite simple to get started making DAPPs in the browser.
 
+This command will compile the codebase into a javascript payload which can be delivered to browsers. The payload will saved as the `/web/saito/saito.js` file and can be loaded by any page you wish to author. As a convenience, the Saito Application/Module platform will automatically serve web requests if configured correctly, making it quite simple to get started making DAPPs in the browser.
 
 # The Consensus Mechanism
 
@@ -114,11 +112,11 @@ After a number of blocks which we call the Genesis Period, UTXOs which are below
 
 ## 2) Burn Fee and Golden Tickets
 
-In other blockchains a single form of work governs who produces a block and who receives payment. The fees contained in a block are handed over to the producer of a block in order to avoid economic attacks on the payment faucet and ensure that the distribution of funds is fair. 
+In other blockchains a single form of work governs who produces a block and who receives payment. The fees contained in a block are handed over to the producer of a block in order to avoid economic attacks on the payment faucet and ensure that the distribution of funds is fair.
 
 In Saito these are split into two separate functions: the network has one algorithm for determining who has the right to produce a block, and a second algorithm for determining how much money that can collect from the publication of any block. Saito regulates both difficulty and payout to ensure the cost of producing a block is always higher than the amount of money any participant can collect from the network.
 
-## 3) Burn Fee 
+## 3) Burn Fee
 
 Block production is made difficult by requiring nodes to collect a critical mass of "Routing Work". Nodes accomplish this by servicing users and collecting transactions from them in return. In order to be eligible for payment they must be in the chain of routing nodes that successfully route this transaction into a valid block.
 
@@ -138,8 +136,8 @@ The cost of attack becomes statistically negative in all situations.
 
 The magic happens at the confluence of these two mechanisms:
 
-* The amount of Routing Work associated with a transaction increases as the transaction is routed(halved at each hop, same as the Golden Ticket chances).
-* A Routing Node's chance of winning the Golden Ticket is proportional to the amount of extra Routing Work it is adding to the transaction by signing and routing it.
+- The amount of Routing Work associated with a transaction increases as the transaction is routed(halved at each hop, same as the Golden Ticket chances).
+- A Routing Node's chance of winning the Golden Ticket is proportional to the amount of extra Routing Work it is adding to the transaction by signing and routing it.
 
 ## 5) Moving Beyond Majoritarian Attacks
 
@@ -151,9 +149,9 @@ The Golden Ticket system is by far the most difficult and valuable part of Saito
 
 Don't be discouraged if this mechanism seems confusing at first. If you have questions, feel free to reach out. What's important to remember is that:
 
-1) The value of a transaction for producing a block drops the more hops a node is from a user.
+1. The value of a transaction for producing a block drops the more hops a node is from a user.
 
-2) The amount of money a routing node can expect to get paid on their share of the overall work done by all routing nodes.
+2. The amount of money a routing node can expect to get paid on their share of the overall work done by all routing nodes.
 
 The Routing Work associated with a transaction is the sum of the Golden Ticket chances it has imparted to it's Routers.
 
@@ -161,10 +159,10 @@ Stated on more way: A valid block can be formed at any time, but will only be pr
 
 If you're still confused don't feel bad: most people have trouble wrapping their head around the mechanism the first time. We encourage those interested in exploring the intricacies of the mechanism to read the [Saito Whitepaper](https://saito.io/saito-whitepaper.pdf). In addition to providing more details on technical and economic implementation, our whitepaper explains how to secure this mechanism against sybil attacks, block-flooding (spam) attacks and more issues that commonly arise in POW and POS-class mechanisms.
 
-# Contact 
+# Contact
 
 To connect to the Saito Network please contact us at:
 
-* network@saito.tech
-* [Discord](https://discord.gg/HjTFh9Tfec)
-* [Telegram](https://t.me/SaitoIO)
+- network@saito.tech
+- [Discord](https://discord.gg/HjTFh9Tfec)
+- [Telegram](https://t.me/SaitoIO)
