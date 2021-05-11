@@ -9,8 +9,13 @@
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
 
 	  let supplementary_scoring = function() {
+
   	    imperium_self.playerAcknowledgeNotice("You will first be asked to score your public objective. The game will then allow other players to purchase secret objectives.", function() {
+
               imperium_self.addMove("resolve\tstrategy");
+              imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
+              imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+
               imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
 
                 if (vp > 0 && (imperium_self.stage_i_objectives[objective] != undefined || imperium_self.stage_ii_objectives[objective] != undefined)) {
@@ -46,7 +51,11 @@
 
 	  let supplementary_secret = function() {
   	    imperium_self.playerAcknowledgeNotice("You will next be asked to score a public objective. The game will then allow other players to purchase secret objectives.", function() {
+
               imperium_self.addMove("resolve\tstrategy");
+              imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
+              imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+
               imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
 
                 if (vp > 0 && (imperium_self.stage_i_objectives[objective] != undefined || imperium_self.stage_ii_objectives[objective] != undefined)) {
@@ -90,11 +99,14 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
+console.log("IMPERIAL SECONDARY: " + player + " 0- " + strategy_card_player);
+
         imperium_self.game.state.playing_strategy_card_secondary = 1;
 
         if (imperium_self.game.player == player) {
-          if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
 console.log("CAN PLAYER BUY SECRET OBJECTIVE?");
+console.log(imperium_self.game.player + " -- " + strategy_card_player + " -- " + imperium_self.game.players_info[player-1].strategy_tokens);
+          if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             imperium_self.playerBuySecretObjective(2);
           } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());

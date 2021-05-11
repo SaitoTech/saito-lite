@@ -601,6 +601,9 @@ console.log("----------------------------");
 
       if (mv[0] === "strategy") {
 
+console.log("IN STRATEGY: ");
+console.log(JSON.stringify(this.game.queue));
+
 	this.updateLeaderboard();
 	this.updateTokenDisplay();
 
@@ -965,6 +968,8 @@ console.log("----------------------------");
 	//
 	if (total_options_at_winning_strength == 1) {
 
+console.log("WINNING CHOICE IS: " + winning_choice);
+
           let success = imperium_self.agenda_cards[agenda].onPass(imperium_self, winning_choice);
 
           //
@@ -1023,8 +1028,10 @@ console.log("----------------------------");
 	this.game.state.votes_cast[player-1] = votes;
 	this.game.state.votes_available[player-1] -= votes;
 	this.game.state.voted_on_agenda[player-1][this.game.state.voting_on_agenda] = 1;
-	this.game.state.how_voted_on_agenda[player-1] = vote;
 
+console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
+
+	this.game.state.how_voted_on_agenda[player-1] = vote;
 
         if (vote == "abstain") {
           this.updateLog(this.returnFactionNickname(player) + " abstains");
@@ -1615,10 +1622,7 @@ console.log("----------------------------");
 
 	let cards_issued = [];
 
-console.log("RETAINED strategy cards: " );
-
 	for (let i = 0; i < this.game.players_info.length; i++) {
-console.log(i + " -- " + JSON.stringify(this.game.players_info[i].strategy_cards_retained));
 	  cards_issued[i] = 0;
 	  if (this.game.players_info[i].strategy_cards_retained.length >= 1) {
 	    for (let y = 0; y < this.game.players_info[i].strategy_cards_retained.length; y++) {
@@ -1628,7 +1632,6 @@ console.log(i + " -- " + JSON.stringify(this.game.players_info[i].strategy_cards
 	  }
 	  this.game.players_info[i].strategy_cards_retained = [];
 	}
-
 
 
   	//
@@ -1667,7 +1670,7 @@ console.log(i + " -- " + JSON.stringify(this.game.players_info[i].strategy_cards
             for (let i = 0; i < this.game.players_info.length; i++) {
   	      let this_player = this.game.state.speaker+i;
   	      if (this_player > this.game.players_info.length) { this_player -= this.game.players_info.length; }
-	      if ((cts+cards_issued[this_player]) < cards_to_select) {
+	      if ((cts+cards_issued[(this_player-1)]) < cards_to_select) {
   	        this.rmoves.push("pickstrategy\t"+this_player);
               }
             }
@@ -2693,7 +2696,7 @@ console.log(i + " -- " + JSON.stringify(this.game.players_info[i].strategy_cards
 
         sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[activating_player-1] = 1;
-  	//sys.s.activated[player_to_continue-1] = 1;
+	this.game.state.activated_sector = sector;
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
 
@@ -2937,6 +2940,8 @@ console.log(i + " -- " + JSON.stringify(this.game.players_info[i].strategy_cards
 	let opponent = this.returnOpponentInSector(attacker, sector);
 
 	if (opponent == -1) { return 1; }
+
+console.log("checking if player has PDS units in range...");
 
 	if (this.doesPlayerHavePDSUnitsWithinRange(opponent, attacker, sector) == 1) {
 	  this.game.queue.push("pds_space_attack_player_menu\t"+attacker+"\t"+attacker+"\t"+sector);
@@ -3580,6 +3585,8 @@ console.log(gainer + " gains control of planet_idx: " + planet_idx + " in " + se
       //
       if (mv[0] === "destroy_ships") {
 
+console.log(JSON.stringify(mv));
+
         let player	   = parseInt(mv[1]);
 	let total          = parseInt(mv[2]);
 	let sector	   = mv[3];
@@ -3589,6 +3596,8 @@ console.log(gainer + " gains control of planet_idx: " + planet_idx + " in " + se
 	if (sector == undefined) {
 	  sector = this.game.state.activated_sector;
         }
+
+console.log("in sector: " + sector);
 
 	if (sector.indexOf("_") > 0) {
 	  let sys = this.returnSectorAndPlanets(sector);
@@ -3662,7 +3671,14 @@ console.log(gainer + " gains control of planet_idx: " + planet_idx + " in " + se
 	    }
 	  }
 
+console.log("DO WE HAVE BONUS SHOTS? ");
+console.log("attacker: " + attacker);
+console.log("player: " + player);
+
+
 	  for (let i = 0; i < this.game.players_info[player-1].pds_combat_roll_bonus_shots; i++) {
+
+console.log("bonus: " + (i+1));
 
              let bs = {};
                  bs.name = "Bonus";
@@ -4442,7 +4458,6 @@ console.log(gainer + " gains control of planet_idx: " + planet_idx + " in " + se
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    //if (z[k].spaceCombatTriggers(this, player, sector) == 1) {
 	    if (z[k].spaceCombatTriggers(this, speaker_order[i], sector) == 1) {
 	      this.game.queue.push("space_combat_event\t"+speaker_order[i]+"\t"+sector+"\t"+k);
             }

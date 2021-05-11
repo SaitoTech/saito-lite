@@ -770,7 +770,6 @@
   });
 
 
-
   this.importAgendaCard('unconventional-measures', {
   	name : "Unconventional Measures" ,
   	type : "Directive" ,
@@ -796,16 +795,17 @@
 	  //
 	  if (winning_choice === "against") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+console.log("uncon plyr: " + i);
+console.log(" how voted: " + imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]]);
+
 	      if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == "for") {
                 if (imperium_self.game.player == (i+1)) {
-		  imperium_self.game.players_info[i].action_cards_in_hand = 0;
-		} else {
+alert("clearing out my action cards!");
 		  imperium_self.game.players_info[i].action_cards_in_hand = 0;
 		  imperium_self.game.deck[1].hand = [];
-  		  let law_to_push = {};
-		      law_to_push.agenda = "unconventional-measures";
-		      law_to_push.option = "winning_choice";
-		  imperium_self.game.state.laws.push(law_to_push);
+		} else {
+alert("clearing out my action cards!");
+		  imperium_self.game.players_info[i].action_cards_in_hand = 0;
 		}
 	      }	      
 	    }
@@ -2245,7 +2245,6 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
         return 1;
       }
   });
-
 
 
 
