@@ -52,15 +52,12 @@ console.log(JSON.stringify(invite.returnMessage()));
 
   if (document.getElementById(`invite-${invite.transaction.sig}`)) { return ''; }
 
-  // if Poker, show crypto used
-  let cryptoUsed = invite.msg.game == "Poker" ? "(" + invite.msg.options.crypto.toLowerCase() + ")" : "";
-
   let inviteHtml = `
     <div id="invite-${invite.transaction.sig}" class="arcade-tile i_${idx} ${inviteTypeClass}" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);">
       <div class="invite-tile-wrapper">
         <div class="game-inset-img" style="background-image: url(/${invite.msg.game}/img/arcade.jpg);"></div>
         <div class="invite-col-2">
-          <div class="gameName">${invite.msg.game} ${cryptoUsed}</div>
+          <div class="gameName">${invite.msg.game}</div>
           <div class="gamePlayers">${playersHtml}</div>
         </div>
         <div class="gameShortDescription">${makeDescription(app, invite)}</div>
@@ -92,20 +89,24 @@ console.log(JSON.stringify(invite.returnMessage()));
 
 
 let makeDescription = (app, invite) => {
-  let defaultDescription = "";
-  let gameModule = app.modules.returnModule(invite.msg.game);
-  if (gameModule) {
-    let moduleDescriptionMaker = gameModule.respondTo("make-invite-description");  
-    if (moduleDescriptionMaker) {
-      defaultDescription = moduleDescriptionMaker.makeDescription(invite.msg);
-      if (defaultDescription === undefined) { defaultDescription = ""; }
-    }
-  }
-  if (defaultDescription == "") { return ""; }
+
+  let html = '';
+
   if (invite.msg) {
-    if (invite.msg.description) {
-      defaultDescription = invite.msg.description;
+    let gameModule = app.modules.returnModule(invite.msg.game);
+    if (gameModule) {
+      let sgoa = gameModule.returnShortGameOptionsArray(invite.msg.options);
+      for (let i in sgoa) {
+        let output_me = 1;
+        if (output_me == 1) {
+          html += `<div class="gameShortDescriptionRow"><div class="gameShortDescriptionKey">${i}: </div><div class="gameShortDescriptionValue">${sgoa[i]}</div></div>`;
+        }
+      }
     }
-  }
-  return ('<div class="invite-description">'+defaultDescription+'</div>');
+  } 
+
+  return html;
+
 }
+
+

@@ -30,23 +30,26 @@ module.exports = ArcadeObserveTemplate = (app, mod, msg, idx, msgjson) => {
   return inviteHtml;
 }
 
-let makeDescription = (app, msg) => {
-  let defaultDescription = "";
-  let gameModule = app.modules.returnModule(msg.module);
-  if (gameModule) {
-    let moduleDescriptionMaker = gameModule.respondTo("make-invite-description");  
-    if (moduleDescriptionMaker) {
-      defaultDescription = moduleDescriptionMaker.makeDescription(msg);
-      if (defaultDescription === undefined) { defaultDescription = ""; }
+
+let makeDescription = (app, invite) => {
+
+  let html = '';
+
+  if (invite.msg) {
+    let gameModule = app.modules.returnModule(invite.msg.game);
+    if (gameModule) {
+      let sgoa = gameModule.returnShortGameOptionsArray(invite.msg.options);
+      for (let i in sgoa) {
+        let output_me = 1;
+        if (output_me == 1) {
+          html += `<div class="gameShortDescriptionRow"><div class="gameShortDescriptionKey">${i}: </div><div class="gameShortDescriptionValue">${sgoa[i]}</div></div>`;
+        }
+      }
     }
   }
-  if (msg) {
-    if (msg.description) {
-      defaultDescription = msg.description;
-    }
-  }
-  if (defaultDescription == "") { return ""; }
-  return ('<div class="invite-description">'+defaultDescription+'</div>');
+
+  return html;
+
 }
 
 

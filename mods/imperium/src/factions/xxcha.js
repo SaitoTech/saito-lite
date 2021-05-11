@@ -21,6 +21,23 @@
       faction     :       "faction3",
       type        :       "ability" ,
       text	:	  "3 space cannons which target adjacent systems attached to flagship" ,
+      pdsSpaceAttackTriggers : function(imperium_self, attacker, player, sector) {
+
+        let player_fleet = imperium_self.returnPlayerFleet(player);
+
+        if (player_fleet.flagship > 0) {
+
+          let as = imperium_self.returnAdjacentSectors(sector);
+
+          for (let i = 0; i < as.length; i++) {
+  	    if (imperium_self.doesSectorContainPlayerUnit(player, as[i], "flagship")) {
+	      return 1;
+	    }
+    	  }
+    	}
+
+	return 0;
+      },
       returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
 
        if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return battery; }
