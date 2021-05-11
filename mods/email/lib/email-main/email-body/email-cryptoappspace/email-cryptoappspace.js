@@ -74,15 +74,17 @@ let EmailCryptoAppspace = {
         salert(`Error sending transaction.\n{error}`);
       }
     }
-    document.querySelectorAll(`.crypto-container .fa-star`).forEach((elem, i) => {
+    document.querySelectorAll(`.crypto-container .set-preferred`).forEach((elem, i) => {
       elem.onclick = (event) => {
-        if (event.currentTarget.classList.contains("fa")) {
-          event.currentTarget.classList.remove('fa');
-          app.wallet.setPreferredCrypto("Saito");
+        if (event.currentTarget.classList.contains("preferred")) {
+          event.currentTarget.classList.remove('preferred');
+          event.currentTarget.classList.add('not-preferred');
+          app.wallet.setPreferredCrypto("SAITO");
         } else {
-          event.currentTarget.classList.add('fa');
+          event.currentTarget.classList.remove('not-preferred');
+          event.currentTarget.classList.add('preferred');
           let cryptoMod = this.getCryptoMod(app);
-          app.wallet.setPreferredCrypto(cryptoMod.name);
+          app.wallet.setPreferredCrypto(cryptoMod.ticker);
         }
       }
     });

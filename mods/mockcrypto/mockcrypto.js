@@ -11,7 +11,7 @@ class MockCrypto extends AbstractCryptoModule {
   }
   
   installModule(app) {
-    app.wallet.setPreferredCrypto(this.name);
+    app.wallet.setPreferredCrypto(this.ticker);
   }
   initialize(app) {
     if (app.BROWSER) {
