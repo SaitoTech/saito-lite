@@ -10,7 +10,7 @@ module.exports = PostTeaserTemplate = (app, mod, tx) => {
   if (img == "")        { img = '/post/img/post-logo.png'; }
 
   const time =  datetimeRelative(tx.transaction.ts);
-  
+
   const html = `
     <div data-id="${tx.transaction.sig}" id="arcade-post" class="arcade-post">
       <div class="arcade-post-front">
@@ -19,10 +19,11 @@ module.exports = PostTeaserTemplate = (app, mod, tx) => {
       <div class="arcade-post-back">
         <div class="arcade-post-header">
           <div data-id="${tx.transaction.sig}" id="arcade-post-title" class="arcade-post-title">${tx.msg.title}</div>
-          <div id="arcade-post-ts" class="arcade-post-ts">${time}</div>
         </div>
         <div id="arcade-post-sublinks"  class="arcade-post-sublinks">
-          <div id="arcade-post-posted-by" class="arcade-post-posted-by">posted by </div>
+          <div id="arcade-post-posted-by" class="arcade-post-posted-by">posted</div>
+          <div id="arcade-post-ts" class="arcade-post-ts">${time}</div>
+          <div class="arcade-post-posted-by">by</div>
           <div id="arcade-post-user" class="arcade-post-user">${app.keys.returnUsername(tx.transaction.from[0].add)}</div>
           <div data-id="${tx.transaction.sig}" id="arcade-post-comments" class="arcade-post-comments">${cmt}</div>
         </div>

@@ -478,9 +478,13 @@ body {
   }
 
   .arcade-post-sublinks {
-  clear: both;
+    display: flex;
+    align-items: center;
   font-size: 0.85em;
   padding-top: 2px;
+  }
+  .arcade-post-sublinks > * {
+    margin: 0 .5em 0 0;
   }
   
   .arcade-post-title {
@@ -495,15 +499,12 @@ body {
   
   
   .arcade-post-user {
-  float: left;
   font-weight: bold;
-  margin-left: 1em;
   }
   
   .arcade-post-comments {
   float: left;
   font-weight: bold;
-  margin-left: 1em;
   text-decoration: underline;
   cursor: pointer;
   opacity: 0.7;
@@ -516,10 +517,6 @@ body {
   text-decoration: underline;
   }
   
-  .arcade-post-posted-by {
-  float: left;
-  }
-  
   .arcade-post-front {
   width: 3em;
   }
@@ -528,8 +525,7 @@ body {
   }
   .arcade-post-ts {
     font-size: .9em;
-  margin-left: 1em;
-  opacity: 0.7;
+    opacity: 0.7;
   }
 
 @media only screen and (max-width: 1000px) {
