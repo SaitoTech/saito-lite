@@ -1,11 +1,17 @@
 const path = require('path');
 const webpack = require('webpack');
 
-
+let devtool = false;
+if(process.argv.includes("dev")) {
+  devtool = "cheap-module-eval-source-map"; // change this bool to a string, js don't care
+}
+if(process.argv.includes("web3")) {
+  //TODO: build a separate saito.js for web3
+}
 webpack({
-  //optimization: {
-  //  minimize: false
-  //},
+  // optimization: {
+  //   minimize: minimization
+  // },
   target: 'web',
   node: {
     fs: "empty",
@@ -104,11 +110,7 @@ webpack({
   },
 
   mode: 'production',
-  //devtool: "cheap-module-eval-source-map",
-  //devtool: "eval",
-  devtool: false,
-
-
+  devtool: devtool,
 
   }, (err, stats) => {
   if (err || stats.hasErrors()) {
