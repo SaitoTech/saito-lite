@@ -183,7 +183,7 @@ module.exports = ArcadeMain = {
       //
       // check we have module
       //
-      if (game_options.crypto != "") {
+      if (game_options.crypto != "" && game_options.crypto != undefined) {
 
 	if (game_options.crypto != app.wallet.returnPreferredCryptoTicker()) {
 	  salert("This game requires "+game_options.crypto+" crypto to play!");
