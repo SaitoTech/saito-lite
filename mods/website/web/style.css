@@ -678,11 +678,15 @@ section {
   display: flex;
 }
 
-.section6 {
+#section6 {
   display: flex;
   flex-direction: column;
+}
+
+.section6 {
   align-items: center;
   width: 115.8rem;
+  max-width: 100%;
   padding: 0 2rem;
 }
 
@@ -731,25 +735,29 @@ section {
   width: 32%; 
 }
 
+.footer {
+  background: #000;
+  padding-bottom: 1em;
+}
 
-.section6 .iconWrapper {
+.footer .iconWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 3rem;
-  margin-top: 11.1rem;
+  padding-top: 11.1rem;
   padding-bottom: 4.9rem;
   border-bottom: 1px solid #1C1C23;
   box-sizing: content-box;
 }
 
-.section6 .iconWrapper .logoImage {
+.footer .iconWrapper .logoImage {
   width: 8.9rem;
   height: 3rem;
 }
 
-.section6 .iconWrapper .littleIcon {
+.footer .iconWrapper .littleIcon {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -761,62 +769,64 @@ section {
   font-size: 24px;
   margin: 0 24px 0 0;
 }
+.littleIcon .itemImage:last-child {
+  margin-right: 0;
+}
 
-.section6 .copyright {
-  width: 100%;
+.footer .copyright {
   height: 2rem;
   margin-top: 4.1rem;
   display: flex;
   justify-content: space-between;
 }
 
-.section6 .copyright .left {
+.footer .copyright .left {
   height: 2rem;
   font-size: 16px;
   font-weight: 400;
   color: whitesmoke; 
 }
 
-.section6 .copyright .right {
+.footer .copyright .right {
   display: flex;
   align-items: center;
   font-size: 18px;
   color: whitesmoke;
 }
 
-.section6 .copyright .right .email {
+.footer .copyright .right .email {
   width: 1.9rem;
   height: 1.4rem;
   margin-right: 1rem;
 }
 
-.section6 .copyright .right .emailText {
+.footer .copyright .right .emailText {
   margin-right: 3.2rem;
 }
 
-.section6 .copyright .right a {
+.footer .copyright .right a {
   font-size: 18px;
   font-weight: 400;
   color: whitesmoke;
   text-decoration: none;
 }
 
-.section6 .copyright .right span {
+.footer .copyright .right span {
   padding: 0 0.6rem;
 }
 
-.section6 .copyright .right a:hover {
+.footer .copyright .right a:hover {
   transform: scale(1.1);
   transform-origin: center;
   color: #5E5E5E;
 }
 
-.section6 .copyright .right .desc {
+.footer .copyright .right .desc {
   font-weight: 400;
   margin-right: 3.8rem;
 }
 
-.section6 .copyright .right .icon {
+.footer .copyright .right .icon {
   width: 1.8rem;
   height: 1.8rem;
 }
