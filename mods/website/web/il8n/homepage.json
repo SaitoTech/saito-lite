@@ -1,4 +1,10 @@
 {
+    "how_saito_works": {"en": "How Saito Works", "cn": ""},
+    "web3_foundation_grant": {"en": "Web3 Foundation Grant", "cn": ""},
+    "get_saito_tokens": {"en": "Get Saito Tokens", "cn": ""},
+    "saito_available_1": {"en": "SAITO is now available for purchase: ", "cn": "SAITO现在已向公众开放。 点击"},
+    "saito_available_2": {"en": "instructions here", "cn": "此处"},
+    "saito_available_3": {"en": ".", "cn": "查看详情。"},
     "fixing_blockchain_economics": {"en": "Fixing Blockchain Economics", "cn": "提供开放网络"},
     "live_demo": {"en":  "Live Demo", "cn": "APP"},
     "build_on_saito": {"en":  "Build on Saito", "cn": "开发者"},

@@ -9,7 +9,7 @@ const il8n = (targetLang) => {
     document.querySelectorAll("[data-il8n]").forEach(el => {
         const selector = el.getAttribute("data-il8n");
         
-        if (il8n_file.hasOwnProperty(selector) && il8n_file[selector].hasOwnProperty(targetLang))
+        if (il8n_file.hasOwnProperty(selector) && il8n_file[selector].hasOwnProperty(targetLang) && (il8n_file[selector][targetLang] != ""))
             el.textContent = il8n_file[selector][targetLang];
     });
     
