@@ -164,12 +164,60 @@ module.exports = ArcadeMain = {
   },
 
 
-  joinGame(app, mod, game_id) {
+  async joinGame(app, mod, game_id) {
 
     let accepted_game = null;
     mod.games.forEach((g) => { if (g.transaction.sig === game_id) { accepted_game = g; } });
 
     if (!accepted_game) { console.log("ERR: game not found"); return; }
+
+    //
+    // if this requires "crypto" we need to check that the mod is installed
+    // and the minimum required amount is available
+    //
+    try {
+
+      let txmsg = accepted_game.msg;
+      let game_options = txmsg.options;
+
+      //
+      // check we have module
+      //
+      if (game_options.crypto != "") {
+
+	if (game_options.crypto != app.wallet.returnPreferredCryptoTicker()) {
+	  salert("This game requires "+game_options.crypto+" crypto to play!");
+	  return;
+	} else {
+	  let c = confirm("This game requires "+game_options.crypto+" crypto to play. OK?");
+	  if (!c) { return; }
+
+	  //
+	  // if a specific cost / stake specified
+	  //
+	  if (parseFloat(game_options.stake) > 0) {
+	    let my_address = app.wallet.returnPreferredCrypto(game_options.crypto).returnAddress();
+	    let returnObj = await app.wallet.returnPreferredCryptoBalances([ my_address ], null, game_options.crypto);
+	    let balance_adequate = 0;
+	    let current_balance = 0;
+	    for (let i = 0; i < returnObj.length; i++) {
+	      if (returnObj.address == my_address) {
+		if (returnObj.balance >= game_options.stake) {
+		  balance_adequate = 1;
+		}
+	      } 
+	    }
+	    if (balance_adequate != 1) {
+	      salert("You do not have enough "+game_options.crypto+"! Balance: "+current_balance);
+	      return;
+	    }
+	  }
+	}
+      }
+
+    } catch (err) {
+      console.log("ERROR checking if crypto-required: " + err);
+    }
 
     //
     // not enough players? join not accept

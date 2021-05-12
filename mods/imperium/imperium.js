@@ -5750,8 +5750,6 @@ console.log("PLANET: " + JSON.stringify(planet));
   
 
 
-/****
-
   this.importAgendaCard('shard-of-the-throne', {
   	name : "Shard of the Throne" ,
   	type : "Law" ,
@@ -6521,7 +6519,6 @@ console.log("PLANET: " + JSON.stringify(planet));
 	}
   });
 
-******** TEST */
 
   this.importAgendaCard('unconventional-measures', {
   	name : "Unconventional Measures" ,
@@ -6553,14 +6550,12 @@ console.log(" how voted: " + imperium_self.game.state.choices[imperium_self.game
 
 	      if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == "for") {
                 if (imperium_self.game.player == (i+1)) {
-		  imperium_self.game.players_info[i].action_cards_in_hand = 0;
-		} else {
+alert("clearing out my action cards!");
 		  imperium_self.game.players_info[i].action_cards_in_hand = 0;
 		  imperium_self.game.deck[1].hand = [];
-  		  //let law_to_push = {};
-		  //    law_to_push.agenda = "unconventional-measures";
-		  //    law_to_push.option = "winning_choice";
-		  //imperium_self.game.state.laws.push(law_to_push);
+		} else {
+alert("clearing out my action cards!");
+		  imperium_self.game.players_info[i].action_cards_in_hand = 0;
 		}
 	      }	      
 	    }
@@ -6702,7 +6697,6 @@ console.log("seeds of the empire: " + winning_choice);
   });
 
 
-/***** TEST 
 
   this.importAgendaCard('galactic-threat', {
   	name : "Galactic Threat" ,
@@ -8002,7 +7996,6 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
       }
   });
 
-****/
 
 
 /************************************
@@ -22707,8 +22700,8 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {
