@@ -244,7 +244,6 @@ module.exports = ChatBox = {
           let group_id = e.currentTarget.id.split('chat-box-close-')[1];
           if (group_id == cgroup.id) { 
             mod.mute_community_chat = 1;
-            //alert("muting community chat");
           }
           e.stopPropagation();
           let chat_box = document.getElementById(`chat-box-${group_id}`);
@@ -254,7 +253,6 @@ module.exports = ChatBox = {
           let group_id = e.currentTarget.id.split('chat-box-close-')[1];
           if (group_id == cgroup.id) { 
             mod.mute_community_chat = 1;
-            //alert("muting community chat");
           }
           e.stopPropagation();
           let chat_box = document.getElementById(`chat-box-${group_id}`);

@@ -76,7 +76,7 @@ let EmailCryptoAppspace = {
     }
     document.querySelectorAll(`.crypto-container .set-preferred`).forEach((elem, i) => {
       elem.onclick = (event) => {
-        if (event.currentTarget.classList.contains("preferred")) {
+        if (event.currentTarget.classList.contains('preferred')) {
           event.currentTarget.classList.remove('preferred');
           event.currentTarget.classList.add('not-preferred');
           app.wallet.setPreferredCrypto("SAITO");

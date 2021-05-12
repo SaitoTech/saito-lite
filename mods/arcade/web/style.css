@@ -59,6 +59,12 @@ body {
   overflow-y: auto;
   padding: 0 calc((100vw - var(--saito-width))/2);
 }
+.arcade-container .page-header {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  padding: 0 10px;
+  margin-bottom: 0;
+}
 .arcade-main .forum-title {
   margin-bottom: 0;
 }
@@ -84,16 +90,10 @@ body {
   display: grid;
   grid-template-rows: auto 1fr;
 }
-.arcade-bars-menu {
-  /*height: 100%;*/
-}
 .arcade-navigator-bars-menu {
   height: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
-}
-.arcade-sidebar-active-games-header {
-  
 }
 .arcade-apps-wrapper {
   overflow-y: scroll;
@@ -308,7 +308,7 @@ body {
   font-weight: bold;
 }
 .gameShortDescriptionKey {
-  cloear: both;
+  clear: both;
   float: left;
 }
 .gameShortDescriptionValue {
@@ -415,9 +415,6 @@ body {
 .leaderboard-rankings{
   display:grid;
 }
-.leaderboard-container hr {
-  
-}
 .leaderboard-game-module, .leaderboard-rankings, .leaderboard-container hr {
   visibility: hidden;
   opacity: 0;
@@ -481,9 +478,13 @@ body {
   }
 
   .arcade-post-sublinks {
-  clear: both;
+    display: flex;
+    align-items: center;
   font-size: 0.85em;
   padding-top: 2px;
+  }
+  .arcade-post-sublinks > * {
+    margin: 0 .5em 0 0;
   }
   
   .arcade-post-title {
@@ -498,15 +499,12 @@ body {
   
   
   .arcade-post-user {
-  float: left;
   font-weight: bold;
-  margin-left: 1em;
   }
   
   .arcade-post-comments {
   float: left;
   font-weight: bold;
-  margin-left: 1em;
   text-decoration: underline;
   cursor: pointer;
   opacity: 0.7;
@@ -519,10 +517,6 @@ body {
   text-decoration: underline;
   }
   
-  .arcade-post-posted-by {
-  float: left;
-  }
-  
   .arcade-post-front {
   width: 3em;
   }
@@ -531,8 +525,7 @@ body {
   }
   .arcade-post-ts {
     font-size: .9em;
-  margin-left: 1em;
-  opacity: 0.7;
+    opacity: 0.7;
   }
 
 @media only screen and (max-width: 1000px) {
@@ -540,7 +533,7 @@ body {
     margin-left: 1em;
   }
   .arcade-container {
-    grid-template-columns: auto;
+    display: block;
   }
   .arcade-sidebar {
     position: absolute;
@@ -558,7 +551,20 @@ body {
     display: block;
     margin: 1em 0 0 0;
   }
+  .arcade-container .page-header {
+    margin-bottom: 1rem;
+  }
+  .arcade-main {
+    padding-left: 10px;
+  }
+  .arcade-main .forum-title {
+    margin-bottom: .5rem;
+  }
+  .arcade-posts {
+    padding-left: 0;
+  }
 }
+
 
   /* controls */
   button, .button, .file-label {
@@ -738,8 +744,6 @@ body {
   .game-wizard-description {
     font-size: 1.2em;
     line-height: 1.5em;
-    /* max-height: 33vh;
-    overflow-y: auto; */
   }
   .game-wizard-image {
     padding: 10px;

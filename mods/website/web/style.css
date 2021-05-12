@@ -53,6 +53,19 @@ body {
   width: 100%;
 }
 
+.page-header {
+  margin-bottom: 1rem;
+}
+/* h1 */
+.page-title {
+  margin: 0 0 .5rem;
+}
+/* p */
+.page-subtitle {
+  margin: 0;
+  opacity: .9;
+}
+
 a {
   text-decoration: none;
   color: var(--saito-red);
@@ -422,6 +435,10 @@ section {
   height: 20rem;
 }
 
+.section3 .itemWrapper div {
+  white-space: pre-wrap;
+}    
+
 .section3 .imgWrapper .itemWrapper .toolDescWrapper {
   position: absolute;
   top: 0;
@@ -432,7 +449,7 @@ section {
   justify-content: center;
 }
 
-.toolDescWrapper span {
+.toolDescWrapper {
   font-size: 20px;
   font-weight: 500;
   color: #FFFFFF;
@@ -661,11 +678,15 @@ section {
   display: flex;
 }
 
-.section6 {
+#section6 {
   display: flex;
   flex-direction: column;
+}
+
+.section6 {
   align-items: center;
   width: 115.8rem;
+  max-width: 100%;
   padding: 0 2rem;
 }
 
@@ -714,25 +735,29 @@ section {
   width: 32%; 
 }
 
+.footer {
+  background: #000;
+  padding-bottom: 1em;
+}
 
-.section6 .iconWrapper {
+.footer .iconWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 3rem;
-  margin-top: 11.1rem;
+  padding-top: 11.1rem;
   padding-bottom: 4.9rem;
   border-bottom: 1px solid #1C1C23;
   box-sizing: content-box;
 }
 
-.section6 .iconWrapper .logoImage {
+.footer .iconWrapper .logoImage {
   width: 8.9rem;
   height: 3rem;
 }
 
-.section6 .iconWrapper .littleIcon {
+.footer .iconWrapper .littleIcon {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -740,66 +765,69 @@ section {
   height: 3rem;
 }
 
-.littleIcon .itemImage {
+.footer .littleIcon .itemImage {
   font-size: 24px;
   margin: 0 24px 0 0;
 }
 
-.section6 .copyright {
-  width: 100%;
+.footer .littleIcon .itemImage:last-child {
+  margin-right: 0;
+}
+
+.footer .copyright {
   height: 2rem;
   margin-top: 4.1rem;
   display: flex;
   justify-content: space-between;
 }
 
-.section6 .copyright .left {
+.footer .copyright .left {
   height: 2rem;
   font-size: 16px;
   font-weight: 400;
   color: whitesmoke; 
 }
 
-.section6 .copyright .right {
+.footer .copyright .right {
   display: flex;
   align-items: center;
   font-size: 18px;
   color: whitesmoke;
 }
 
-.section6 .copyright .right .email {
+.footer .copyright .right .email {
   width: 1.9rem;
   height: 1.4rem;
   margin-right: 1rem;
 }
 
-.section6 .copyright .right .emailText {
+.footer .copyright .right .emailText {
   margin-right: 3.2rem;
 }
 
-.section6 .copyright .right a {
+.footer .copyright .right a {
   font-size: 18px;
   font-weight: 400;
   color: whitesmoke;
   text-decoration: none;
 }
 
-.section6 .copyright .right span {
+.footer .copyright .right span {
   padding: 0 0.6rem;
 }
 
-.section6 .copyright .right a:hover {
+.footer .copyright .right a:hover {
   transform: scale(1.1);
   transform-origin: center;
   color: #5E5E5E;
 }
 
-.section6 .copyright .right .desc {
+.footer .copyright .right .desc {
   font-weight: 400;
   margin-right: 3.8rem;
 }
 
-.section6 .copyright .right .icon {
+.footer .copyright .right .icon {
   width: 1.8rem;
   height: 1.8rem;
 }
@@ -807,12 +835,12 @@ section {
 .iconWrapperMobile {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-top: 8rem;
+  align-items: center;
   width: 100%;
-  padding: 0 2rem;
+  padding: 8rem 2rem 0;
   font-size: 18px;
   font-weight: 400;
+  text-align: center;
 }
 
 .iconWrapperMobile .logoImage {
@@ -861,12 +889,18 @@ section {
   border-bottom: 1px solid #1C1C23;
   width: 100%;
   display: flex;
+  justify-content: center;
 }
 
-.iconWrapperMobile .littleIcon .itemImage {
+.iconWrapperMobile .littleIcon > * {
   width: 2.4rem;
   height: 2.4rem;
-  margin-right: 1.1rem;
+}
+.footer .iconWrapperMobile .littleIcon > * {
+  margin-right: 2rem;
+}
+.footer .iconWrapperMobile .littleIcon > *:last-child {
+  margin-right: 0;
 }
 
 .iconWrapperMobile .copyrightMobile {
@@ -1070,6 +1104,9 @@ h2, h5 {
   .sectionWrapper3 {
     height: auto;
   }
+  .section3 {
+    padding-top: 6.1rem;
+  }
   .section3 .imgWrapper {
     display: flex;
     flex-direction: column;
@@ -1153,6 +1190,7 @@ h2, h5 {
     width: 100%;
     height: auto;
     background: #000;
+    padding-bottom: 8rem;
   }
   .section6 {
     width: 100%;
@@ -1625,6 +1663,20 @@ h2, h5 {
   .alert span {
     display: block;
     font-size: 2em;
+  }
+
+  .section1 .itemImage {
+    margin: 0;
+  }
+  .section1 .littleIcon {
+    display: flex;
+    justify-content: center;
+  }
+  .section1 .littleIcon > * {
+    margin-right: 1rem;
+  }
+  .section1 .littleIcon > *:last-child {
+    margin-right: 0;
   }
 }
 
