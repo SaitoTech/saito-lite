@@ -105,6 +105,7 @@
       bombardmentEvent : function(imperium_self, player, bombarding_player, sector, planet_idx) {
 
 	if (imperium_self.game.player != bombarding_player) { return 0; }
+	if (imperium_self.game.player != player) { return 0; }
 
         let sys = imperium_self.returnSectorAndPlanets(sector);
         let planet = sys.p[planet_idx];

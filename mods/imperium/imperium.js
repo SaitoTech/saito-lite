@@ -314,6 +314,7 @@ console.log("INITIALIZE GAME OBJECTS");
       bombardmentEvent : function(imperium_self, player, bombarding_player, sector, planet_idx) {
 
 	if (imperium_self.game.player != bombarding_player) { return 0; }
+	if (imperium_self.game.player != player) { return 0; }
 
         let sys = imperium_self.returnSectorAndPlanets(sector);
         let planet = sys.p[planet_idx];
@@ -2424,6 +2425,23 @@ console.log("P: " + planet);
       faction     :       "faction3",
       type        :       "ability" ,
       text	:	  "3 space cannons which target adjacent systems attached to flagship" ,
+      pdsSpaceAttackTriggers : function(imperium_self, attacker, player, sector) {
+
+        let player_fleet = imperium_self.returnPlayerFleet(player);
+
+        if (player_fleet.flagship > 0) {
+
+          let as = imperium_self.returnAdjacentSectors(sector);
+
+          for (let i = 0; i < as.length; i++) {
+  	    if (imperium_self.doesSectorContainPlayerUnit(player, as[i], "flagship")) {
+	      return 1;
+	    }
+    	  }
+    	}
+
+	return 0;
+      },
       returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
 
        if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return battery; }
@@ -3930,6 +3948,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
 
         if (imperium_self.game.player == player) {
           if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
+console.log("CAN PLAYER BUY SECRET OBJECTIVE?");
             imperium_self.playerBuySecretObjective(2);
           } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
@@ -6545,7 +6564,7 @@ console.log("seeds of the empire: " + winning_choice);
 
 	    let highest_vp = 0;
 	    for (let i = 0; i < io.length; i++) {
-	      if (highest_vp >= imperium_self.game.players_info[io[i]-1].vp) { highest_vp = imperium_self.game.players_info[io[i]-1].vp; }
+	      if (highest_vp < imperium_self.game.players_info[io[i]-1].vp) { highest_vp = imperium_self.game.players_info[io[i]-1].vp; }
 	      imperium_self.game.state.seeds_of_an_empire = io[i];
 	    }
 
@@ -6568,7 +6587,7 @@ console.log("seeds of the empire: " + winning_choice);
 
 	    let lowest_vp = 10000;
 	    for (let i = 0; i < io.length; i++) {
-	      if (lowest_vp <= imperium_self.game.players_info[io[i]-1].vp) { highest_vp = imperium_self.game.players_info[io[i]-1].vp; }
+	      if (lowest_vp > imperium_self.game.players_info[io[i]-1].vp) { lowest_vp = imperium_self.game.players_info[io[i]-1].vp; }
 	    }
 
 	    for (let i = 0; i < io.length; i++) {
@@ -12760,11 +12779,11 @@ console.log(i + " -- " + JSON.stringify(this.game.players_info[i].strategy_cards
   	  //
           if (this.game.state.round == 1) { cards_to_select = 1; }
 
-  	  for (cts = 0; cts < cards_to_select; cts++) {
+  	  for (let cts = 0; cts < cards_to_select; cts++) {
             for (let i = 0; i < this.game.players_info.length; i++) {
   	      let this_player = this.game.state.speaker+i;
   	      if (this_player > this.game.players_info.length) { this_player -= this.game.players_info.length; }
-	      if ((cts+cards_issued[i]) < cards_to_select) {
+	      if ((cts+cards_issued[this_player]) < cards_to_select) {
   	        this.rmoves.push("pickstrategy\t"+this_player);
               }
             }
@@ -22648,8 +22667,8 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-      return ["1_1", "4_7"];
-//      return ["1_1", "2_1"];
+//      return ["1_1", "4_7"];
+      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {
@@ -28359,6 +28378,32 @@ updateSectorGraphics(sector) {
   }
   hideTechCard(tech) {
     this.cardbox.hideCardbox(1);
+  }
+
+
+  returnShortGameOptionsArray(options) {
+
+console.log("HERE: ");
+
+    let sgoa = super.returnShortGameOptionsArray(options);
+    let ngoa = [];
+
+    for (let i in sgoa) {
+      if (sgoa[i] != "") {
+
+        let okey = i;
+        let oval = options[i];
+
+        let output_me = 1;
+        if (i == "game_length") { okey = "VP"; }
+
+        if (output_me == 1) {
+          ngoa[okey] = oval;
+        }
+      }
+    }
+
+    return ngoa;
   }
 
 

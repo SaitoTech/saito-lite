@@ -1895,4 +1895,30 @@ updateSectorGraphics(sector) {
   }
 
 
+  returnShortGameOptionsArray(options) {
+
+console.log("HERE: ");
+
+    let sgoa = super.returnShortGameOptionsArray(options);
+    let ngoa = [];
+
+    for (let i in sgoa) {
+      if (sgoa[i] != "") {
+
+        let okey = i;
+        let oval = options[i];
+
+        let output_me = 1;
+        if (i == "game_length") { okey = "VP"; }
+
+        if (output_me == 1) {
+          ngoa[okey] = oval;
+        }
+      }
+    }
+
+    return ngoa;
+  }
+
+
 

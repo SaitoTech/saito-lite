@@ -299,11 +299,29 @@ body {
   text-transform: capitalize;
 }
 
+.arcade-tile .gamePlayers {
+}
+
+.gameShortDescriptionRow {
+  background-color: #0005;
+  padding: 2px;
+  font-weight: bold;
+}
+.gameShortDescriptionKey {
+  clear: both;
+  float: left;
+}
+.gameShortDescriptionValue {
+  float: left;
+  margin-left: 10px;
+}
+
 .arcade-tile .gameShortDescription {
   display: grid;
   justify-items: end;
   margin: 0.2em 0.2em 0.4em 0em;
-  font-size: 2.2em;
+  font-size: 1em;
+  overflow: scroll;
 }
 
 .invite-description {
@@ -1267,7 +1285,7 @@ body {
       font-size: 2.2em;
     }
     .arcade-tile .gameShortDescription {
-      font-size: 2.2em;
+      font-size: 1em;
     }
     .playerInfo {
       transform: scale(0.8);

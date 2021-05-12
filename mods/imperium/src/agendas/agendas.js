@@ -833,7 +833,7 @@ console.log("seeds of the empire: " + winning_choice);
 
 	    let highest_vp = 0;
 	    for (let i = 0; i < io.length; i++) {
-	      if (highest_vp >= imperium_self.game.players_info[io[i]-1].vp) { highest_vp = imperium_self.game.players_info[io[i]-1].vp; }
+	      if (highest_vp < imperium_self.game.players_info[io[i]-1].vp) { highest_vp = imperium_self.game.players_info[io[i]-1].vp; }
 	      imperium_self.game.state.seeds_of_an_empire = io[i];
 	    }
 
@@ -856,7 +856,7 @@ console.log("seeds of the empire: " + winning_choice);
 
 	    let lowest_vp = 10000;
 	    for (let i = 0; i < io.length; i++) {
-	      if (lowest_vp <= imperium_self.game.players_info[io[i]-1].vp) { highest_vp = imperium_self.game.players_info[io[i]-1].vp; }
+	      if (lowest_vp > imperium_self.game.players_info[io[i]-1].vp) { lowest_vp = imperium_self.game.players_info[io[i]-1].vp; }
 	    }
 
 	    for (let i = 0; i < io.length; i++) {
