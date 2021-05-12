@@ -6,8 +6,9 @@
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship","assault-cannon"],
       background	: 	'faction3.jpg',
+
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the XXCha Kingdom, a faction which excels in diplomacy and defensive weaponry. With the proper alliances and political maneuvers your faction you can be a contender for the Imperial Throne. Good luck!</div>`
     });
@@ -21,6 +22,10 @@
       faction     :       "faction3",
       type        :       "ability" ,
       text	:	  "3 space cannons which target adjacent systems attached to flagship" ,
+/******
+      pdsSpaceAttackEvent : function(imperium_self, attacker, player, sector) {
+	return 1;
+      },
       pdsSpaceAttackTriggers : function(imperium_self, attacker, player, sector) {
 
         let player_fleet = imperium_self.returnPlayerFleet(player);
@@ -38,6 +43,7 @@
 
 	return 0;
       },
+******/
       returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
 
        if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return battery; }

@@ -10,10 +10,21 @@
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "graviton-laser-system") {
+        if (tech == "plasma-scoring") {
           imperium_self.game.players_info[gainer-1].plasma_scoring = 1;
 	  imperium_self.game.players_info[gainer-1].pds_combat_roll_bonus_shots++;
         }
+      },
+      pdsSpaceAttackTriggers : function(imperium_self, attacker, player, sector) {
+	if (imperium_self.doesPlayerHaveTech(player, "plasma-scoring")) {
+ 	  if (imperium_self.doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) == 1 && attacker != player) {
+	    imperium_self.updateLog(imperium_self.returnFaction(player) + " gets +1 shot from Plasma Scoring");
+	  }
+	}
+	//
+	// we don't need the event, just the notification on trigger
+	//
+	return 0;
       },
       pdsSpaceDefenseTriggers : function(imperium_self, attacker, player, sector) {
 	if (imperium_self.doesPlayerHaveTech(player, "plasma-scoring")) {
@@ -72,21 +83,13 @@
 	let planet = sys.p[planet_idx];
 	let owner = planet.owner;
 
-console.log("defender is: " + player);
-console.log("owner is: " + owner);
-console.log("starting magen gce");
-console.log("planet: " +JSON.stringify(planet));
 	for (let i = 0; i < planet.units.length; i++) {
-console.log("i: " + i);
 	  let ii_limit = planet.units[i].length;
 	  if (i != (owner-1) && i < planet.units.length) {
-console.log("units: " + JSON.stringify(planet.units[i]));
 	    for (let ii = 0; ii < ii_limit; ii++) {
-
 	      let attacker_unit = planet.units[i][ii];
 	      let attacker = (i+1);
 	      let defender = player;
-
 	      if (attacker_unit.type == "infantry") {
 		// defender and attacker reversed as attacker takes the hits
 		imperium_self.assignHitsToGroundForces(defender, attacker, sector, planet_idx, 1);
@@ -172,45 +175,43 @@ console.log("units: " + JSON.stringify(planet.units[i]));
         return 1;
       },
       spaceCombatTriggers :function(imperium_self, player, sector) {
+
+        imperium_self.game.state.activated_sector = sector;
+
 	let sys = imperium_self.returnSectorAndPlanets(sector);
+	let capital_ships = 0;
 
 	for (let i = 0; i < sys.s.units.length; i++) {
-	  if ((i+1) != player) {
-	    if (imperium_self.doesPlayerHaveTech((i+1), "assault-cannon")) {
-	      let capital_ships = 0;
-	      for (let ii = 0; ii < sys.s.units[i].length; ii++) {
-		let thisunit = sys.s.units[i][ii];
-		if (thisunit.type == "destroyer") { capital_ships++; }
-		if (thisunit.type == "carrier") { capital_ships++; }
-		if (thisunit.type == "cruiser") { capital_ships++; }
-		if (thisunit.type == "dreadnaught") { capital_ships++; }
-		if (thisunit.type == "flagship") { capital_ships++; }
-		if (thisunit.type == "warsun") { capital_ships++; }
-	      }
-	      if (capital_ships >= 3) {
+	  if ((i+1) != player && imperium_self.doesPlayerHaveTech((i+1), "assault-cannon")) {
+	    for (let ii = 0; ii < sys.s.units[i].length; ii++) {
+	      let thisunit = sys.s.units[i][ii];
+	      if (thisunit.type == "destroyer") { capital_ships++; }
+	      if (thisunit.type == "carrier") { capital_ships++; }
+	      if (thisunit.type == "cruiser") { capital_ships++; }
+	      if (thisunit.type == "dreadnaught") { capital_ships++; }
+	      if (thisunit.type == "flagship") { capital_ships++; }
+	      if (thisunit.type == "warsun") { capital_ships++; }
+	    }
 
-		//
-		// if I have an eligible ship
-		//
-	        for (let z = 0; z < sys.s.units[player-1].length; z++) {
-		  let thisunit = sys.s.units[player-1][z];
-		  if (thisunit.type == "destroyer") { return 1; }
-		  if (thisunit.type == "carrier") { return 1; }
-		  if (thisunit.type == "cruiser") { return 1; }
-		  if (thisunit.type == "dreadnaught") { return 1; }
-		  if (thisunit.type == "flagship") { return 1; }
-		  if (thisunit.type == "warsun") { return 1; }
-	        }
-	        return 1;
+	    if (capital_ships >= 3) {
+	      for (let z = 0; z < sys.s.units[player-1].length; z++) {
+	        let thisunit = sys.s.units[player-1][z];
+	        if (thisunit.type == "destroyer") { return 1; }
+	        if (thisunit.type == "carrier") { return 1; }
+	        if (thisunit.type == "cruiser") { return 1; }
+	        if (thisunit.type == "dreadnaught") { return 1; }
+	        if (thisunit.type == "flagship") { return 1; }
+	        if (thisunit.type == "warsun") { return 1; }
 	      }
 	    }
 	  }
 	}
-
+        return 0;
       },
       spaceCombatEvent : function(imperium_self, player, sector) {
 	imperium_self.game.players_info[player-1].target_units = ['carrier','destroyer','cruiser','dreadnaught','flagship','warsun'];
 	imperium_self.game.queue.push("destroy_ships\t"+player+"\t"+"1"+"\t"+imperium_self.game.state.activated_sector);
+	imperium_self.game.queue.push("ACKNOWLEDGE\t"+imperium_self.returnFaction(player)+" must destroy 1 ship from Assault Cannon");
 	return 1;
       },
     });

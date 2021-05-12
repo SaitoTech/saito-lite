@@ -29,7 +29,7 @@
 	  }
 	}
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
 	for (let i = 0; i < planetcards.length; i++) {
 	  if (homeplanets.includes(planetcards[i].name)) { return 1; }
@@ -49,7 +49,7 @@
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
         let techbonuses = 0;
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (planetcards[i].bonus == "red") { techbonuses++; }
@@ -130,7 +130,7 @@
         let industrial = 0;
         let diplomatic = 0;
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
@@ -177,7 +177,7 @@
         let industrial = 0;
         let diplomatic = 0;
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }

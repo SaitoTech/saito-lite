@@ -249,11 +249,7 @@ if [ "$1" == "nuke" ] || [ "$1" == "init" ]; then
   reset_persistent
   reset_bundler
 
-  if [ "$2" == "dev" ]; then 
-    node webpack/webpack.dev.js
-  else
-    node webpack/webpack.prod.js
-  fi
+  node webpack/webpack.prod.js $2 $3
 
   post_compile
 
@@ -273,11 +269,7 @@ if [ "$1" == "reset" ]; then
   reset_nonpersistent
   reset_bundler
 
-  if [ "$2" == "dev" ]; then 
-    node webpack/webpack.dev.js
-  else
-    node webpack/webpack.prod.js
-  fi
+  node webpack/webpack.prod.js $2 $3
 
   post_compile
 
@@ -301,12 +293,8 @@ if [ "$1" == "recompile" ]; then
 
   reset_bundler
 
-  if [ "$2" == "dev" ]; then 
-    node webpack/webpack.dev.js
-  else
-    node webpack/webpack.prod.js
-  fi
-
+  node webpack/webpack.prod.js $2 $3
+  
   post_compile
 
 fi
