@@ -3,7 +3,6 @@ module.exports = PostMainTemplate = (app, mod) => {
     <div id="post-main" class="post-main">
       <div class="page-header">
         <h1 class="page-title">Posts</h1>
-        <p class="page-subtitle">Posts demo. Post messages and comments.</p>
       </div>
       <div id="post-headers" class="post-headers"></div>
       <div id="post-posts" class="post-posts"></div>

@@ -53,6 +53,16 @@ class EmailCollector extends ModTemplate {
         }
 
         await app.storage.executeDatabase(sql, params, "emailcollector");
+
+        // Send Email
+        app.network.sendRequest('send email', {
+          from: 'network@saito.tech',
+          to: params.$email, 
+          subject: 'Newsletter Subscription',
+          ishtml: false,
+          body: `Thank you for subscribing to Saito's newsletter.`
+        });
+
         return;
 
       } catch (err){
