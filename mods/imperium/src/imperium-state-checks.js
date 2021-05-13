@@ -2216,6 +2216,17 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
     let battery = this.returnPDSWithinRange(attacker, sector, sectors, distance);
 
     //
+    // check for weird stuff like XXCha flagship
+    //
+    let z = this.returnEventObjects();
+    for (let z_index in z) {
+      for (let i = 0; i < this.game.players_info.length; i++) {
+        battery = z[z_index].returnPDSUnitsWithinRange(this, (i+1), attacker, player, sector, battery);
+      }
+    }
+
+
+    //
     // what are the range of my PDS shots
     //
     for (let i = 0; i < battery.length; i++) {

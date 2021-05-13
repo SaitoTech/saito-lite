@@ -1,11 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
 
-
+let devtool = false;
+let entrypoint = './../bundler/default/apps/lite/index.js';
+let outputfile = 'saito.js';
+if(process.argv.includes("dev")) {
+  devtool = "cheap-module-eval-source-map";
+}
+if(process.argv.includes("web3")) {
+  //TODO: build a separate saito.js for web3
+  entrypoint = './../bundler/default/apps/lite/web3index.js';
+  outputfile = 'web3saito.js';
+}
 webpack({
-  //optimization: {
-  //  minimize: false
-  //},
+  // optimization: {
+  //   minimize: minimization
+  // },
   target: 'web',
   node: {
     fs: "empty",
@@ -50,10 +60,10 @@ webpack({
         /\/www\//
   ],
   // Path to your entry point. From this file Webpack will begin his work
-  entry: ["babel-polyfill", path.resolve(__dirname, './../bundler/default/apps/lite/index.js')],
+  entry: ["babel-polyfill", path.resolve(__dirname, entrypoint)],
   output: {
     path: path.resolve(__dirname, './../web/saito'),
-    filename: 'saito.js'
+    filename: outputfile
   },
   module: {
         rules: [
@@ -104,11 +114,7 @@ webpack({
   },
 
   mode: 'production',
-  //devtool: "cheap-module-eval-source-map",
-  //devtool: "eval",
-  devtool: false,
-
-
+  devtool: devtool,
 
   }, (err, stats) => {
   if (err || stats.hasErrors()) {
