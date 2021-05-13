@@ -1,0 +1,74 @@
+.game-crypto-transfer-manager-container {
+  min-width:300px;
+  max-width: 95vw;
+  border-radius: 0.5rem;
+  padding: 40px 24px;
+  text-align:center;
+  color: white;
+  background-color:rgba(0,0,0,0.9);
+}
+.auth_title {
+  font-size:1.7em;
+  margin-top: 0;
+}
+.crypto_transfer_btn {
+  background-color: var(--saito-red);
+  border: 1px solid var(--saito-red);
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  margin-top: 40px;
+  font-size: 2em;
+  text-transform: uppercase;
+  transition: all .2s ease-in-out;
+}
+.crypto_transfer_btn:hover,
+.crypto_transfer_btn:active,
+.crypto_transfer_btn:focus {
+  border-color: rgb(255, 69, 95);
+  background-color: rgb(255, 69, 95);
+  text-shadow: none;
+}
+.amount {
+  font-size: 2.4em;
+  margin: 30px auto;
+}
+.from_address {
+  margin-bottom: 20px;
+}
+.send_to {
+  margin-bottom: 20px;
+  font-size: 1.4em;
+}
+.from_address,
+.to_address {
+  font-size: 1.6em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 300px;
+}
+.game-crypto-transfer-manager-container .spinner {
+  margin-bottom: 30px;
+}
+.transfer-details {
+  display: flex;
+  align-items: center;
+}
+.transfer-details .send_to {
+  display: inline;
+  font-size: 1em;
+  margin-bottom: 0;
+  padding-right: 4px;
+}
+.transfer-details .from_address,
+.transfer-details .to_address {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 1em;
+  max-width: 120px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
