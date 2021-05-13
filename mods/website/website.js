@@ -9,6 +9,7 @@ const TokenBurnTemplate = require('./lib/subpage/token/tokenburn.template.js');
 const PoolsTemplate = require('./lib/subpage/token/pools.template.js');
 const Web3Template = require('./lib/subpage/web3.template.js');
 const TeamTemplate = require('./lib/subpage/team.template.js');
+const FAQTemplate = require('./lib/subpage/faq.template.js');
 
 class Website extends ModTemplate {
 
@@ -115,6 +116,12 @@ class Website extends ModTemplate {
     app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/team/style.css" />', document.head);
     document.querySelector("#content").innerHTML = TeamTemplate();
   }
+
+  initializeFAQPage(app) {
+    document.title = "Frequently Asked Questions";
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/faq/style.css" />', document.head);
+    document.querySelector("#content").innerHTML = FAQTemplate();
+  }
   
   initializeHTML(app) {
     
@@ -141,6 +148,8 @@ class Website extends ModTemplate {
       this.initializeWeb3Page(app);
     } else if(document.location.pathname.startsWith("/website/team")){
       this.initializeTeamPage(app);
+    } else if(document.location.pathname.startsWith("/website/faq")){
+      this.initializeFAQPage(app);
     } else {
       this.initializeHompage(app);
     }
