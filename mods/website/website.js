@@ -10,6 +10,7 @@ const PoolsTemplate = require('./lib/subpage/token/pools.template.js');
 const Web3Template = require('./lib/subpage/web3.template.js');
 const TeamTemplate = require('./lib/subpage/team.template.js');
 const FAQTemplate = require('./lib/subpage/faq.template.js');
+const HowSaitoWorksTemplate = require('./lib/subpage/howSaitoWorks.template.js');
 
 class Website extends ModTemplate {
 
@@ -107,7 +108,6 @@ class Website extends ModTemplate {
   initializeWeb3Page(app) {
     document.title = "Web3.0";
     app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/web3/style.css" />', document.head);
-    // console.log(app);
     document.querySelector("#content").innerHTML = Web3Template(app);
   }
 
@@ -121,6 +121,12 @@ class Website extends ModTemplate {
     document.title = "Frequently Asked Questions";
     app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/faq/style.css" />', document.head);
     document.querySelector("#content").innerHTML = FAQTemplate();
+  }
+
+  initializeHowSaitoWorksPage(app) {
+    document.title = "Welcome to the Saito Project";
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/howSaitoWorks/style.css" />', document.head);
+    document.querySelector("#content").innerHTML = HowSaitoWorksTemplate();
   }
   
   initializeHTML(app) {
@@ -150,6 +156,8 @@ class Website extends ModTemplate {
       this.initializeTeamPage(app);
     } else if(document.location.pathname.startsWith("/website/faq")){
       this.initializeFAQPage(app);
+    } else if(document.location.pathname.startsWith("/website/how-saito-works")){
+      this.initializeHowSaitoWorksPage(app);
     } else {
       this.initializeHompage(app);
     }
