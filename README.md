@@ -1,6 +1,6 @@
 # Welcome to Saito
 
-Saito is a **Tier 1 Blockchain Protocol** that provides **high throughput**. The network accomplishes with a consensus mehanism that pays the ISPs in the network instead of miners and stakers. The technical solution unleashes a distributed, global PKI layer.
+Saito is a **Tier 1 Blockchain Protocol** that provides **high throughput**. The network accomplishes this with a consensus mechanism that pays the ISPs in the network instead of miners and stakers. The technical solution unleashes a distributed, global PKI layer.
 
 If you need to get in touch with us, please reach out anytime.
 
@@ -9,30 +9,30 @@ info@saito.tech
 
 ## Table of Content
 
-- [Preamble](#Preamble)
-- [How To Use Saito](#How-To-Use-Saito)
-- [Getting Started](#Getting-Started)
-- [The Consensus Mechanism](#The-Concensus-Mechanism)
-- [Contact](#Contact)
+-   [Preamble](#Preamble)
+-   [How To Use Saito](#How-To-Use-Saito)
+-   [Getting Started](#Getting-Started)
+-   [The Consensus Mechanism](#The-Concensus-Mechanism)
+-   [Contact](#Contact)
 
 ## APIs
 
-- [REST API](docs/restapi.md)
-- [Application/Module Protocol](docs/applications.md)
-- [Application/Module Events Protocol](docs/events.md)
-- [Application/Module Context API](docs/appcontext.md)
-- [Services](docs/services.md)
+-   [REST API](docs/restapi.md)
+-   [Application/Module Protocol](docs/applications.md)
+-   [Application/Module Events Protocol](docs/events.md)
+-   [Application/Module Context API](docs/appcontext.md)
+-   [Services](docs/services.md)
 
 ## Other Documentation
 
-- [Roadmap](docs/roadmap.md)
-- [Block and Transaction Validation](docs/validation.md)
-- [JSDoc](https://saitotech.github.io/saito-lite/index.html)
+-   [Roadmap](docs/roadmap.md)
+-   [Block and Transaction Validation](docs/validation.md)
+-   [JSDoc](https://saitotech.github.io/saito-lite/index.html)
 
 ## Web3 Grant and Polkadot Integration
 
-- [Web3 Game Protocol and Engine Grant](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md)
-- [Polkadot Integration](docs/polkadot.md)
+-   [Web3 Game Protocol and Engine Grant](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md)
+-   [Polkadot Integration](docs/polkadot.md)
 
 # Preamble
 
@@ -66,7 +66,7 @@ System-specific installation instructions are available on the [official NodeJS 
 
 ## Install Saito and Start a Node
 
-Clone the Saito software directory and start-up an instance of Saito as follows:
+Clone the Saito software directory and through a Bash shell start-up an instance of Saito as follows:
 
 ```
 git clone https://github.com/saitotech/saito-lite
@@ -136,8 +136,8 @@ The cost of attack becomes statistically negative in all situations.
 
 The magic happens at the confluence of these two mechanisms:
 
-- The amount of Routing Work associated with a transaction increases as the transaction is routed(halved at each hop, same as the Golden Ticket chances).
-- A Routing Node's chance of winning the Golden Ticket is proportional to the amount of extra Routing Work it is adding to the transaction by signing and routing it.
+-   The amount of Routing Work associated with a transaction increases as the transaction is routed(halved at each hop, same as the Golden Ticket chances).
+-   A Routing Node's chance of winning the Golden Ticket is proportional to the amount of extra Routing Work it is adding to the transaction by signing and routing it.
 
 ## 5) Moving Beyond Majoritarian Attacks
 
@@ -153,9 +153,9 @@ Don't be discouraged if this mechanism seems confusing at first. If you have que
 
 2. The amount of money a routing node can expect to get paid on their share of the overall work done by all routing nodes.
 
-The Routing Work associated with a transaction is the sum of the Golden Ticket chances it has imparted to it's Routers.
+The Routing Work associated with a transaction is the sum of the Golden Ticket chances it has imparted to its Routers.
 
-Stated on more way: A valid block can be formed at any time, but will only be profitable to it's Routers when the total Burn Fee is offset by the amount of fees included by the transaction in the block. The contribution to Routing Work from a transaction is it's fee. The Routing Work needed to include that transaction is increased each time it is routed through the network but the total Burn Fee needed for a given block is decreasing as the previous block gets further away in the past.
+Stated one more way: A valid block can be formed at any time, but will only be profitable to its Routers when the total Burn Fee is offset by the amount of fees included by the transaction in the block. The contribution to Routing Work from a transaction is its fee. The Routing Work needed to include that transaction is increased each time it is routed through the network but the total Burn Fee needed for a given block is decreasing as the previous block gets further away in the past.
 
 If you're still confused don't feel bad: most people have trouble wrapping their head around the mechanism the first time. We encourage those interested in exploring the intricacies of the mechanism to read the [Saito Whitepaper](https://saito.io/saito-whitepaper.pdf). In addition to providing more details on technical and economic implementation, our whitepaper explains how to secure this mechanism against sybil attacks, block-flooding (spam) attacks and more issues that commonly arise in POW and POS-class mechanisms.
 
@@ -163,6 +163,6 @@ If you're still confused don't feel bad: most people have trouble wrapping their
 
 To connect to the Saito Network please contact us at:
 
-- network@saito.tech
-- [Discord](https://discord.gg/HjTFh9Tfec)
-- [Telegram](https://t.me/SaitoIO)
+-   network@saito.tech
+-   [Discord](https://discord.gg/HjTFh9Tfec)
+-   [Telegram](https://t.me/SaitoIO)
