@@ -1,11 +1,11 @@
 
 module.exports = PostViewCommentTemplate = (app, mod, tx) => {
 
-  let txmsg = tx.returnMessage();
+  const txmsg = tx.returnMessage();
 
-  let time =  datetimeRelative(tx.transaction.ts);
-  let avatar = app.keys.returnIdenticon(tx.transaction.from[0].add);
-  let username = app.keys.returnUsername(tx.transaction.from[0].add);
+  const time =  datetimeRelative(tx.transaction.ts);
+  const avatar = app.keys.returnIdenticon(tx.transaction.from[0].add);
+  const username = app.keys.returnUsername(tx.transaction.from[0].add);
 
 
   let html = `
@@ -32,7 +32,7 @@ module.exports = PostViewCommentTemplate = (app, mod, tx) => {
   }
 
   html += `
-        <div id="post-view-report" class="post-view-report"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <div data-id="${tx.originalSig}" id="post-view-report" class="post-view-report"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
       </svg> report</div>
       </div>

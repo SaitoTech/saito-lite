@@ -655,6 +655,9 @@ class Post extends ModTemplate {
       
   }
 
+  /*  TODO: 
+      idea: send to admin email instead of flagging database
+  */
   async receiveReportTransaction(tx) {
 
     let txmsg = tx.returnMessage();

@@ -36,7 +36,10 @@ module.exports = EmailForm = {
         this.addData();
 
         var editor = new MediumEditor('#email-text', {
-          placeholder: false,
+          placeholder: {
+            text: 'Content',
+            hideOnClick: true
+          },
           buttonLabels: 'fontawesome',
           toolbar: {
             allowMultiParagraphSelection: true,
@@ -70,12 +73,6 @@ module.exports = EmailForm = {
 	  let obj = document.querySelector(".email-payment-row");
 	  if (obj.style.display != "block") { obj.style.display = "block"; } else { obj.style.display = "none"; }
 	};
-
-        /*document.querySelector('.fa-dollar-sign')
-            .addEventListener('click', (e) => {
-            document.querySelector('.amount-value').toggleClass("hidden");
-            document.querySelector('.amount-label').toggleClass("hidden");
-        });*/
     },
 
 

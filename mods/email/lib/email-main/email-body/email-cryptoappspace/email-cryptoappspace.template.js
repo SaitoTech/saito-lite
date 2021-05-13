@@ -1,7 +1,7 @@
 module.exports = EmailCryptoAppspaceTemplate = (responseInterface, preferredCrpytoName) => {
-  let infoHtml = responseInterface.info ? responseInterface.info : "";
-  let starClasses = responseInterface.name === preferredCrpytoName ? "preferred" : "not-preferred";
-  // <i class="${starClasses} fa-star"></i> 
+  const infoHtml = responseInterface.info ? responseInterface.info : "";
+  const preferredCryptoClass = responseInterface.name === preferredCrpytoName ? "preferred" : "not-preferred";
+
   return `
     <div class="email-appspace">
       <div class="crypto-container">
@@ -15,7 +15,7 @@ module.exports = EmailCryptoAppspaceTemplate = (responseInterface, preferredCrpy
           <div>Balance:</div>
           <div class="balance">loading...</div>
         </div>
-        <button class="set-preferred ${starClasses}"></button>
+        <button class="set-preferred ${preferredCryptoClass}"></button>
 
         <hr />
 

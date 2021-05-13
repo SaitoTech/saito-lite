@@ -70,6 +70,19 @@ html[data-theme='dark'] {
   --text-color-highlight: var(--saito-red);
 }
 
+.page-header {
+    margin-bottom: 1rem;
+}
+/* h1 */
+.page-title {
+    margin: 0 0 .5rem;
+}
+/* p */
+.page-subtitle {
+    margin: 0;
+    opacity: .9;
+}
+
 p {
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
