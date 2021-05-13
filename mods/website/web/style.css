@@ -175,7 +175,6 @@ section {
 
 .all {
   margin-top: 0;
-  overflow-x: hidden;
 }
 
 /* Part one */
@@ -758,8 +757,7 @@ section {
 }
 
 .footer .copyright {
-  height: 2rem;
-  margin-top: 4.1rem;
+  padding: 4.1rem 0;
   display: flex;
   justify-content: space-between;
 }
@@ -1283,7 +1281,6 @@ h2, h5 {
   z-index: 99;
   align-items: center;
   width: 100%;
-  height: 8rem;
   padding: 0 4rem;
   position: fixed;
   z-index: 9;

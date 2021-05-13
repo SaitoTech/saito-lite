@@ -105,7 +105,9 @@ class Website extends ModTemplate {
 
   initializeWeb3Page(app) {
     document.title = "Web3.0";
-    document.querySelector("#content").innerHTML = Web3Template();
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/web3/style.css" />', document.head);
+    // console.log(app);
+    document.querySelector("#content").innerHTML = Web3Template(app);
   }
 
   initializeTeamPage(app) {
