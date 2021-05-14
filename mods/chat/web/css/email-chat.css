@@ -53,13 +53,13 @@
 
 html {
   --text-color-normal: var(--saito-cyber-black);
-  --backround-general: var(--saito-white);
+  --background-general: var(--saito-white);
   --text-color-highlight: var(--saito-red);
 }
 
 html[data-theme='dark'] {
   --text-color-normal: var(--saito-skyline-grey);
-  --backround-general: var(--saito-cyber-black);
+  --background-general: var(--saito-cyber-black);
   --text-color-highlight: var(--saito-red);
 }
 
@@ -78,7 +78,7 @@ a:hover {
 body {
   /* width: 100vw;
     height: 100vh; */
-  background-color: var(--backround-general);
+  background-color: var(--background-general);
   color: var(--text-color-normal);
 }
 
