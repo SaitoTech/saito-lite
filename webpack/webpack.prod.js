@@ -13,9 +13,9 @@ if(process.argv.includes("web3")) {
   outputfile = 'web3saito.js';
 }
 webpack({
-  // optimization: {
-  //   minimize: minimization
-  // },
+  optimization: {
+     minimize: true
+  },
   target: 'web',
   node: {
     fs: "empty",

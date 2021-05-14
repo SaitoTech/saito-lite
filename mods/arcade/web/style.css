@@ -321,7 +321,7 @@ body {
   justify-items: end;
   margin: 0.2em 0.2em 0.4em 0em;
   font-size: 1em;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .invite-description {
