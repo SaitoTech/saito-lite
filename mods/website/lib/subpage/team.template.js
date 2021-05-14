@@ -24,7 +24,7 @@ module.exports = TeamTemplate = () => {
   team.forEach( member => {
     html += `
     <div class="team-member">
-      <div class="team-photo"><img src="/subpagestyle/team/${member.photoFile}" /></div>
+      <div class="team-photo" style="background-image: url('/subpagestyle/team/${member.photoFile}')"></div>
       <div class="team-details">
         <h3 class="team-name">${member.name}</h3>
         <p class="team-desc">${member.desc}</p>
