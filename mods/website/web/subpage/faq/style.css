@@ -1,0 +1,42 @@
+.page-title {
+  margin-bottom: 1em;
+}
+
+.menu-title {
+  cursor: pointer;
+  display: block;
+  padding: 10px 0;
+  color: var(--saito-red);
+  font-family: 'visuelt-medium';
+  font-size: 1.2em;
+}
+
+.activate {
+  display: none;
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 40px;
+  margin: 0 0 0 -15px;
+  opacity: 0;
+}
+
+/* Skin */
+
+.drop-down {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.activate:checked ~ .drop-down {
+  max-height: initial;
+  margin-bottom: .5em;
+}
+
+.drop-down {
+  -webkit-transform: translateZ(0);  
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}

@@ -7,6 +7,10 @@ const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
 const TokenTemplate = require('./lib/subpage/token/token.template.js');
 const TokenBurnTemplate = require('./lib/subpage/token/tokenburn.template.js');
 const PoolsTemplate = require('./lib/subpage/token/pools.template.js');
+const Web3Template = require('./lib/subpage/web3.template.js');
+const TeamTemplate = require('./lib/subpage/team.template.js');
+const FAQTemplate = require('./lib/subpage/faq.template.js');
+const HowSaitoWorksTemplate = require('./lib/subpage/howSaitoWorks.template.js');
 
 class Website extends ModTemplate {
 
@@ -100,6 +104,30 @@ class Website extends ModTemplate {
     app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/token/pools.style.css" />', document.head);
     document.querySelector("#content").innerHTML = PoolsTemplate();
   }
+
+  initializeWeb3Page(app) {
+    document.title = "Web3.0";
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/web3/style.css" />', document.head);
+    document.querySelector("#content").innerHTML = Web3Template(app);
+  }
+
+  initializeTeamPage(app) {
+    document.title = "Our Team";
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/team/style.css" />', document.head);
+    document.querySelector("#content").innerHTML = TeamTemplate();
+  }
+
+  initializeFAQPage(app) {
+    document.title = "Frequently Asked Questions";
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/faq/style.css" />', document.head);
+    document.querySelector("#content").innerHTML = FAQTemplate();
+  }
+
+  initializeHowSaitoWorksPage(app) {
+    document.title = "Welcome to the Saito Project";
+    app.browser.addElementToElement('<link rel="stylesheet" href="/subpagestyle/howSaitoWorks/style.css" />', document.head);
+    document.querySelector("#content").innerHTML = HowSaitoWorksTemplate();
+  }
   
   initializeHTML(app) {
     
@@ -122,6 +150,14 @@ class Website extends ModTemplate {
       this.initializeTokenPage(app);
     } else if(document.location.pathname.startsWith("/website/pools") || document.location.pathname.startsWith("/website/whitelist")){
       this.initializePoolsPage(app);
+    } else if(document.location.pathname.startsWith("/website/web3")){
+      this.initializeWeb3Page(app);
+    } else if(document.location.pathname.startsWith("/website/team")){
+      this.initializeTeamPage(app);
+    } else if(document.location.pathname.startsWith("/website/faq")){
+      this.initializeFAQPage(app);
+    } else if(document.location.pathname.startsWith("/website/how-saito-works")){
+      this.initializeHowSaitoWorksPage(app);
     } else {
       this.initializeHompage(app);
     }
