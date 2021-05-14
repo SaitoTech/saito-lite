@@ -2736,7 +2736,7 @@ console.log("STATE: " + JSON.stringify(state));
             </select>
           </div>
           <div class="overlay-input">
-            <label for="crypto">Token:</label>
+            <label for="crypto">Crypto:</label>
             <select name="crypto">
               <option value="" selected>Test Money</option>
               <option value="SAITO">SAITO</option>
@@ -2752,7 +2752,7 @@ console.log("STATE: " + JSON.stringify(state));
             </select>
           </div>
           <div class="overlay-input">
-            <label for="stake">Blinds:</label>
+            <label for="stake">Mode:</label>
             <select name="blinds">
               <option value="static">static blinds</option>
               <option value="increase">increasing blinds</option>
@@ -2854,6 +2854,33 @@ console.log("STATE: " + JSON.stringify(state));
     this.game.state.blinds_idx++;
     return 1;
   }
+
+
+
+  returnShortGameOptionsArray(options) {
+
+    let sgoa = super.returnShortGameOptionsArray(options);
+    let ngoa = [];
+
+    for (let i in sgoa) {
+      if (sgoa[i] != "") {
+
+        let okey = i;
+        let oval = options[i];
+
+        let output_me = 1;
+        if (i == "big_blind") { okey = "blinds"; }
+        if (i == "blinds") { if (oval == "increase") { okey = "mode"; oval = "tournament"; } else { output_me = 0; } }
+
+        if (output_me == 1) {
+          ngoa[okey] = oval;
+        }
+      }
+    }
+
+    return ngoa;
+  }
+
 
 
 }
