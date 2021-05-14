@@ -2736,9 +2736,9 @@ console.log("STATE: " + JSON.stringify(state));
             </select>
           </div>
           <div class="overlay-input">
-            <label for="crypto">Play Money:</label>
+            <label for="crypto">Token:</label>
             <select name="crypto">
-              <option value="" selected>none</option>
+              <option value="" selected>Test Money</option>
               <option value="SAITO">SAITO</option>
     `;
 

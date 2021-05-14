@@ -670,6 +670,14 @@ class Post extends ModTemplate {
 
     await this.app.storage.executeDatabase(sql, params, "post");
 
+    // Send reported post to Email
+    this.app.network.sendRequest('send email', {
+      from: 'network@saito.tech',
+      to: 'clay@saito.tech', 
+      subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
+      ishtml: false,
+      body: `Post #${txmsg.post_id} was reported.`
+    });
   }
 
 
