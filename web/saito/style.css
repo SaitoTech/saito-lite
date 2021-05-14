@@ -58,7 +58,7 @@ Generic Style Settings for Modules in the Saito App Suite
 
 html {
   --text-color-normal: var(--saito-cyber-black);
-  --backround-general: var(--saito-white);
+  --background-general: var(--saito-white);
   --text-color-highlight: var(--saito-red);
   --scrollbarBG: rgba(255, 255, 255, 0);
   --thumbBG: var(--saito-red);
@@ -66,7 +66,7 @@ html {
 
 html[data-theme='dark'] {
   --text-color-normal: var(--saito-skyline-grey);
-  --backround-general: var(--saito-cyber-black);
+  --background-general: var(--saito-cyber-black);
   --text-color-highlight: var(--saito-red);
 }
 
@@ -109,7 +109,7 @@ a:hover {
 }
 
 body {
-  background-color: var(--backround-general);
+  background-color: var(--background-general);
   color: var(--text-color-normal);
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   scrollbar-width: thin;
