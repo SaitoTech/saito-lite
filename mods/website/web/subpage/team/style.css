@@ -16,9 +16,10 @@
 .team-member:last-child {
     margin-bottom: 48px;
 }
-.team-photo img {
-    width: 100%;
-    display: block;
+.team-photo {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 .team-details {
     font-size: 16px;
@@ -52,6 +53,10 @@
 }
 
 @media only screen and (max-width: 720px) {
+    .team-photo {
+        width: 100%;
+        min-height: 50vh;
+    }
     .team-desc {
         margin-bottom: 24px;
     }
