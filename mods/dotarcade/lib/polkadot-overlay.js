@@ -8,7 +8,6 @@ module.exports = PolkadotPopup = {
     //
     // purge existing content
     //
-console.log("TESTING POLKA POPUP");
     mod.overlay = new SaitoOverlay(app, mod);
     mod.overlay.render(app, mod);
     mod.overlay.attachEvents(app, mod);
