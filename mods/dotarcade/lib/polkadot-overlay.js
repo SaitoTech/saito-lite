@@ -1,5 +1,7 @@
 const SaitoOverlay = require('./../../../lib/saito/ui/saito-overlay/saito-overlay');
 const GameCryptoTransferManager = require('./../../../lib/saito/ui/game-crypto-transfer-manager/game-crypto-transfer-manager');
+const PolkadotAddressTemplate = require('./templates/polkadot-address.template');
+
 
 module.exports = PolkadotPopup = {
 
@@ -11,7 +13,7 @@ module.exports = PolkadotPopup = {
     mod.overlay = new SaitoOverlay(app, mod);
     mod.overlay.render(app, mod);
     mod.overlay.attachEvents(app, mod);
-    mod.overlay.showOverlay(app, mod, this.returnOverlayHTML());
+    mod.overlay.showOverlay(app, mod, PolkadotAddressTemplate(app, mod));
 
   },
 
@@ -20,14 +22,6 @@ module.exports = PolkadotPopup = {
 
   },
 
-
-  returnOverlayHTML() {
-    return `
-      <div style="height:500px;width:500px;background-color:red;">
-	Some stuff
-      </div>
-    `
-  }
 
 
 }
