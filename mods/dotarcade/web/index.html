@@ -46,6 +46,7 @@
 </head>
 
 <body>
+
   <div style="display:none;">
     <div id="header-icon-links-hidden">
       <!-- copied into header by website.js -->
@@ -117,7 +118,77 @@
     </div>
   </div>
 
+<!----
   <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
+--->
+
+  <script type="text/javascript">
+
+setTimeout(function() {
+
+  let jssource = "http://localhost:12101/saito/dotsaito.js";
+  let landpage = "/arcade";
+  let data = null;
+
+  ////////////////////////////
+  // read from localStorage //
+  ////////////////////////////
+  if (typeof(Storage) !== "undefined") {
+    data = localStorage.getItem("options");
+    data = JSON.parse(data);
+  }
+
+  if (data != null) {
+    if (data.bundle != jssource) {
+      let c = confirm("You already have a Saito wallet. Delete it and switch to using the DOT version?");
+      if (!c) { die; }
+      alert("Ok, updating your wallet!");
+      data = null;
+    } else {
+//      window.location = landpage;
+    }
+  }
+
+
+  /////////////////////////
+  // or fetch from server //
+  //////////////////////////
+  if (data == null) {
+
+    //
+    // jquery
+    //
+    $.ajax({
+      url: '/options',
+      dataType: 'json',
+      async: false,
+      success: (data) => {
+
+	//
+	// update SAITO with our bundle
+	//
+	data.bundle = jssource;
+
+	//
+	// save in localstorage
+	//
+        localStorage.setItem("options", JSON.stringify(data));
+
+	//
+	// and redirect to Saito
+	//
+//	window.location = landpage;
+
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        console.log("ERROR loading options file from server");
+      }
+    });
+  }
+
+}, 1000);
+
+  </script>
 
 </body>
 </html>
