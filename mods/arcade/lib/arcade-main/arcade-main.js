@@ -7,6 +7,7 @@ const SaitoCarousel = require('./../../../../lib/saito/ui/saito-carousel/saito-c
 const ArcadeGameDetails = require('./../arcade-game/arcade-game-details');
 const ArcadeInviteTemplate = require('./templates/arcade-invite.template');
 const ArcadeObserveTemplate = require('./templates/arcade-observe.template');
+const GameCryptoTransferManager = require('./../../../../lib/saito/ui/game-crypto-transfer-manager/game-crypto-transfer-manager');
 
 
 let tabNames = ["arcade", "observables", "tournaments"];
@@ -195,9 +196,15 @@ module.exports = ArcadeMain = {
 	  //
 	  // if a specific cost / stake specified
 	  //
+
 	  if (parseFloat(game_options.stake) > 0) {
+
 	    let my_address = app.wallet.returnPreferredCrypto(game_options.crypto).returnAddress();
+	    let crypto_transfer_manager = new GameCryptoTransferManager(app);
+            crypto_transfer_manager.balance(app, mod, my_address, game_options.crypto, function() {});
 	    let returnObj = await app.wallet.returnPreferredCryptoBalances([ my_address ], null, game_options.crypto);
+	    crypto_transfer_manager.hideOverlay();
+
 	    let balance_adequate = 0;
 	    let current_balance = 0;
 	    for (let i = 0; i < returnObj.length; i++) {
