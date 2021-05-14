@@ -19,8 +19,6 @@ class DotArcade extends ModTemplate {
   
   initialize(app) {
 
-console.log("Initialize DOT Arcade");
-
     super.initialize(app);
 
 
@@ -28,9 +26,15 @@ console.log("Initialize DOT Arcade");
 
   initializeHTML(app) {
 
+    document.onclick = (e) => {
+
+alert("Click!");
+
+    }
+
 console.log("Initializing HTML in DOTARCADE");
-    PolkadotOverlay.render(this.app, this);
-    PolkadotOverlay.attachEvents(this.app, this);
+//    PolkadotOverlay.render(this.app, this);
+//    PolkadotOverlay.attachEvents(this.app, this);
 
   }
 
