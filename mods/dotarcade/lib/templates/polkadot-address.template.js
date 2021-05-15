@@ -1,4 +1,4 @@
-module.exports = PolkadotAddressTemplate = (app, mod) => {
+module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
   return `
     <div class="polkadot-overlay-container">
 

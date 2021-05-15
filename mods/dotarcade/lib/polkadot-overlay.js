@@ -23,7 +23,9 @@ module.exports = PolkadotPopup = {
       mod.overlay.showOverlay(app, mod, PolkadotNetworkTemplate(app, mod));
 
       document.getElementById("polkadot-overlay-network-selected-btn").onclick = (e) => {
-alert("2");
+
+        let ticker = 
+
         mod.overlay.hideOverlay();
         mod.overlay.showOverlay(app, mod, PolkadotAddressTemplate(app, mod));
       }     
