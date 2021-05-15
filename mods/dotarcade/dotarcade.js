@@ -26,13 +26,10 @@ class DotArcade extends ModTemplate {
 
   initializeHTML(app) {
 
-    document.getElementById("start-game").onclick = (e) => {
+    PolkadotOverlay.render(this.app, this);
+    PolkadotOverlay.attachEvents(this.app, this);
 
-      alert("Click!");
-      PolkadotOverlay.render(this.app, this);
-      PolkadotOverlay.attachEvents(this.app, this);
-
-    }
+console.log("done initialize HTML");
 
   }
 
