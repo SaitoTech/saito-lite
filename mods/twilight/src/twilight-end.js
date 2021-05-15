@@ -22,16 +22,12 @@
     for (let i in sgo) {
       let output_me = 1;
       if (output_me == 1) {
-        nsgo[i] = invite_msg_options[i];
+        nsgo[i] = sgo[i];
       }
     }
 
     return nsgo;
   }
-
-
-}
-
 
 
 

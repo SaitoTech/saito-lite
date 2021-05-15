@@ -2398,9 +2398,9 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["beartrap","redscare","nuclearsubs", "fidel","u2","duckandcover","degaulle","saltnegotiations","missileenvy", "cia", "europe"];
+              this.game.deck[0].hand = ["oas","allende","nuclearsubs", "fidel","colonial","puppet","missileenvy", "cia", "europe","asia"];
             } else {
-              this.game.deck[0].hand = ["colonial", "cubanmissile", "brezhnev", "opec", "grainsales","africa", "cia", "cubanmissile","china"];
+              this.game.deck[0].hand = ["quagmire", "redscare", "cubanmissile", "brezhnev", "opec", "grainsales","africa", "cia", "cubanmissile","china"];
             }
           }
 
@@ -4379,6 +4379,8 @@ this.startClock();
 
       if (scoring_cards_available >= moves_remaining) {
         playable_cards_handled = 0;
+      } else {
+        if (cards_available == 0) { playable_cards_handled = 0; }
       }
 
       if (playable_cards_handled == 0) {
