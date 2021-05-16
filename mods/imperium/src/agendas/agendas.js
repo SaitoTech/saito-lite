@@ -145,6 +145,7 @@
                       let planet_idx    = unit_identifier.planet_idx;
                       let unit_idx      = unit_identifier.unit_idx;
                       let unit          = unit_identifier.unit;
+		      let sys = imperium_self.returnSectorAndPlanets(sector);
 
 		      if (unit == null) {
                         imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " has no PDS units to destroy");
@@ -152,8 +153,9 @@
 			return 0;
 		      }
                       imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
-                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + sys.s.name);
 		      imperium_self.endTurn();
+
                     }
               );
 	    }
@@ -692,13 +694,14 @@
                       let planet_idx    = unit_identifier.planet_idx;
                       let unit_idx      = unit_identifier.unit_idx;
                       let unit          = unit_identifier.unit;
+		      let sys = imperium_self.returnSectorAndPlanets(sector);
 
                       if (planet_idx == -1) {
                         imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"space"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
                       } else {
                         imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
                       }
-                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + sys.s.name);
                       old_tech_sec(imperium_self, player, strategy_card_player);
 
                     }
@@ -709,11 +712,10 @@
 	    techcard.strategySecondaryEventBackup = old_tech_sec;
             techcard.strategySecondaryEvent = new_tech_sec;
 
-
-
             let old_tech_func = techcard.strategyPrimaryEvent;
             let new_tech_func = function(imperium_self, player, strategy_card_player) {
-              if (imperium_self.game.player == strategy_card_player) {
+
+              if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
                 imperium_self.playerAcknowledgeNotice("Anti-Intellectual Revolution is in play. Do you wish to destroy a capital ship to research technology?", function() {
 
                   imperium_self.playerSelectUnitWithFilter(
@@ -734,13 +736,14 @@
                       let planet_idx    = unit_identifier.planet_idx;
                       let unit_idx      = unit_identifier.unit_idx;
                       let unit          = unit_identifier.unit;
+		      let sys = imperium_self.returnSectorAndPlanets(sector);
 
                       if (planet_idx == -1) {
                         imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"space"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
                       } else {
                         imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
                       }
-                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + sys.s.name);
                       old_tech_func(imperium_self, player, strategy_card_player);
 
                     }
@@ -1113,7 +1116,6 @@ console.log("pushing onto law: " + JSON.stringify(law_to_push));
         }
 
   });
-
 
 
   this.importAgendaCard('minister-of-policy', {
@@ -2245,6 +2247,5 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
         return 1;
       }
   });
-
 
 

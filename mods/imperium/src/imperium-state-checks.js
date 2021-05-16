@@ -2440,7 +2440,15 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
   
   }
   
-  
+ 
+  doesPlayerControlHomeworld(player=null) {
+    if (player == null) { player = this.game.player; }
+    let sys = this.returnSectorAndPlanets(this.returnPlayerHomeworldSector(player));
+    for (let i = 0; i < sys.p.length; i++) {
+      if (sys.p[i].owner != player) { return 0; }
+    }
+    return 1;
+  }
   returnPlayerHomeworldSector(player=null) {
     if (player == null) { player = this.game.player; }
     let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";

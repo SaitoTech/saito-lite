@@ -99,13 +99,9 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-console.log("IMPERIAL SECONDARY: " + player + " 0- " + strategy_card_player);
-
         imperium_self.game.state.playing_strategy_card_secondary = 1;
 
         if (imperium_self.game.player == player) {
-console.log("CAN PLAYER BUY SECRET OBJECTIVE?");
-console.log(imperium_self.game.player + " -- " + strategy_card_player + " -- " + imperium_self.game.players_info[player-1].strategy_tokens);
           if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             imperium_self.playerBuySecretObjective(2);
           } else {

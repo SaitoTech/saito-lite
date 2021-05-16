@@ -2768,6 +2768,33 @@ playerScoreSecretObjective(imperium_self, mycallback, stage = 0) {
 playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
 
   let html = '';
+
+
+  if (imperium_self.doesPlayerControlHomeworld(imperium_self.game.player) == 0) {
+
+    html += '<div class="sf-readable">You cannot score public objectives without control of your Homeworld: </div><ul>';
+    html += '<li class="option" id="no">I choose not to score...</li>';
+    html += '</ul>';
+
+    imperium_self.updateStatus(html);
+    imperium_self.lockInterface();
+
+    $('.option').off();
+    $('.option').on('click', function () {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+      mycallback(imperium_self, 0, "");
+    });
+
+    return;
+
+  }
+
+
   html += '<div class="sf-readable">Do you wish to score any public objectives? </div><ul>';
 
   // Stage I Public Objectives
@@ -2792,19 +2819,6 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       }
     }
   }
-
-  /***
-      // Secret Objectives
-      for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
-        if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
-          if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
-        if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.deck[5].hand[i])) {
-              html += '1 VP Secret Objective: <li class="option secret3" id="'+imperium_self.game.deck[5].hand[i]+'">'+imperium_self.game.deck[5].cards[imperium_self.game.deck[5].hand[i]].name+'</li>';
-            }
-          }
-        }
-      }
-  ***/
 
   html += '<li class="option" id="no">I choose not to score...</li>';
   html += '</ul>';
@@ -5530,7 +5544,11 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
   for (let i in this.game.board) {
 
     let rp = this.game.board[i].tile;
+
+console.log(i + " -- " + rp);
+
     let sys = this.returnSectorAndPlanets(rp);
+    if (sys != null) {
 
     for (let k = 0; k < sys.s.units[imperium_self.game.player - 1].length; k++) {
       if (filter_func(sys.s.units[imperium_self.game.player - 1][k])) {
@@ -5539,6 +5557,8 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
         planet_array.push(-1);
         unit_idx.push(k);
         exists_unit = 1;
+console.log("k: " + k);
+console.log(JSON.stringify(unit_array));
         html += '<li class="textchoice" id="' + (unit_array.length - 1) + '">' + sys.s.name + ' - ' + unit_array[unit_array.length - 1].name + '</li>';
       }
     }
@@ -5551,9 +5571,12 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
           planet_array.push(p);
           unit_idx.push(k);
           exists_unit = 1;
+console.log("p k: " + p + " - " + k);
           html += '<li class="textchoice" id="' + (unit_array.length - 1) + '">' + sys.s.sector + ' / ' + sys.p[p].name + " - " + unit_array[unit_array.length - 1].name + '</li>';
         }
       }
+
+      } // null sys
     }
 
   }
@@ -5594,6 +5617,8 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
     }
 
     let unit_to_return = { sector: sector_array[action], planet_idx: planet_array[action], unit_idx: unit_idx[action], unit: unit_array[action] }
+
+console.log("returning unit: " + JSON.stringify(unit_to_return));
 
     imperium_self.updateStatus("");
     mycallback(unit_to_return);
