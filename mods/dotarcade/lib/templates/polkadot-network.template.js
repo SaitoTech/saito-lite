@@ -2,17 +2,26 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
   return `
     <div class="polkadot-overlay-container">
 
-      <h1 class="polkadot-overlay-header">Choose Polkadot Network:</h1>
+      <h1 class="polkadot-overlay-header">Choose Polkadot Token:</h1>
 
-      <div class="polkadot-overlay-subheader">We recommend Westend because tokens are free and you can play around without contributing to blockchain bloat. You can always change this later: </div>
+      <div class="polkadot-overlay-subheader">Which Polkadot token do you want to use by default with Saito applications? You can change this anytime. More parachains coming soon!</div>
 
-      <div class="polkadot-overlay-select-container">
-	<select id="polkadot-overlay-select" class="polkadot-overlay-select">
-	  <option value="DOT" selected>DOT</option>
-	  <option value="KSM">Kusama</option>
-	  <option value="WND">Westend (free tokens)</option>
-        </select>
-      </div>
+      <form id="polkadot-overlay-radio" class="polkadot-overlay-radio">
+
+	<input type="radio" id="WND" class="network_option" name="network" value="WND" checked>
+	<label for="WND">WND - Westend</label>
+
+        <p></p>
+
+        <input type="radio" id="DOT" class="network_option" name="network" value="DOT">
+        <label for="DOT">DOT - Polkadot</label>
+
+        <p></p>
+
+	<input type="radio" id="KSM" class="network_option" name="network" value="KSM">
+	<label for="KSM">KSM - Kusama</label>
+
+      </form>
 
       <div id="polkadot-overlay-infobox" class="polkadot-overlay-infobox">
       </div>
@@ -25,7 +34,9 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 
 
 <style type="text/css">
-
+.network_option {
+  clear: both;
+}
 .polkadot-overlay-container {
   background-color: whitesmoke;
   max-width: 50vw;
@@ -41,6 +52,12 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 .polkadot-overlay-subheader {
   font-size: 1.4em;
 }
+.polkadot-overlay-radio {
+  margin-top: 15px;
+  margin-left: 15px;
+  font-size:1.35em;
+}
+
 .polkadot-overlay-select-container {
   margin-top: 10px;
   margin-bottom: 10px;

@@ -2,11 +2,10 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
 
   let cryptomod  = app.wallet.returnCryptoModuleByTicker(ticker);
   let my_address = cryptomod.returnAddress();
-
-  return `
+  let html = `
     <div class="polkadot-overlay-container">
 
-      <div class="polkadot-saito-image"><img class="saito-image" src="/dotarcade/img/backup_note.png" /></div>
+      <div class="polkadot-saito-image"><img class="saito-image" src="/dotarcade/img/backup_note_${ticker.toLowerCase()}.png" /></div>
 
       <div class="polkadot-address-header">Your Wallet:</div>
       <div class="polkadot-overlay-address">${my_address}</div>
@@ -14,8 +13,16 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
       <div class="polkadot-backup-reminder">Please remember to backup your wallet!</div>
 
       <div style="margin-left:auto;margin-right:auto;text-align:center">
-        <div class="polkadot-overlay-token-selected button">Load Arcade</div>
-        <div class="polkadot-overlay-token-selected button orange-button">Token Faucet</div>
+        <div class="arcade-link polkadot-overlay-token-selected button">Load Arcade</div>
+  `;
+
+ if (ticker === "WND") {
+   html += `
+        <a href="https://matrix.to/#/#westend_faucet:matrix.org?via=matrix.parity.io&via=matrix.org&via=web3.foundation" target="_ksm_new" class="polkadot-overlay-token-selected button orange-button">Westend Faucet</a>
+   `;
+  }
+
+  html += `
       </div>
 
     </div>
@@ -59,6 +66,12 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
   background-color: rgb(13 164 0);
   box-shadow: 0px 16px 29px rgb(13,164 0);
 }
+.polkadot-overlay-token-selected:hover, .polkadot-overlay-token-selected:focus {
+  text-shadow: #ffffff 1px 0;
+  background-color: rgb(13 164 0);
+  color: #ffffff;
+}
+
 
 
 
@@ -93,4 +106,8 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
 }
 </style>
   `;
+
+
+  return html;
+
 }
