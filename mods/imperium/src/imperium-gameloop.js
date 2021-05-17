@@ -1939,7 +1939,7 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 
 	if (planet) {
 	  planet.units[planet.owner-1] = [];
-	  if (planet.owner != -1) {
+	  if (planet.owner > -1) {
             this.game.players_info[planet.owner-1].lost_planet_this_round = player; // player who took it
 	  }
 	  this.updatePlanetOwner(sector, planet_idx, player);
@@ -3532,7 +3532,7 @@ console.log("checking if player has PDS units in range...");
         //
         // note planet lost
         //
-        if (sys.p[planet_idx].owner != -1) {
+        if (sys.p[planet_idx].owner > -1) {
           this.game.players_info[sys.p[planet_idx].owner].lost_planet_this_round = gainer; // player who took it
 	}
 
@@ -5070,8 +5070,9 @@ console.log("bonus: " + (i+1));
             //
             // note planet lost
             //
-            this.game.players_info[defender-1].lost_planet_this_round = attacker; // player who took it
-
+            if (defender > 0) {
+              this.game.players_info[defender-1].lost_planet_this_round = attacker; // player who took it
+	    }
             this.updatePlanetOwner(sector, planet_idx, player);
 	  } else {
             this.updateLog(sys.p[planet_idx].name + " defended by " + this.returnFactionNickname(this.game.state.ground_combat_defender) + " (" + defender_survivors + " infantry)");
