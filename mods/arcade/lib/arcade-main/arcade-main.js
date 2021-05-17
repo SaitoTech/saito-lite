@@ -186,44 +186,40 @@ module.exports = ArcadeMain = {
       //
       if (game_options.crypto != "" && game_options.crypto != undefined) {
 
-	if (game_options.crypto != app.wallet.returnPreferredCryptoTicker()) {
-	  salert("This game requires "+game_options.crypto+" crypto to play!");
-	  return;
-	} else {
-	  let c = confirm("This game requires "+game_options.crypto+" crypto to play. OK?");
-	  if (!c) { return; }
+        if (game_options.crypto != app.wallet.returnPreferredCryptoTicker()) {
+          salert("This game requires "+game_options.crypto+" crypto to play!");
+          return;
+        } else {
+          let c = confirm("This game requires "+game_options.crypto+" crypto to play. OK?");
+          if (!c) { return; }
 
-	  //
-	  // if a specific cost / stake specified
-	  //
+          //
+          // if a specific cost / stake specified
+          //
 
-	  if (parseFloat(game_options.stake) > 0) {
+          if (parseFloat(game_options.stake) > 0) {
 
-	    let my_address = app.wallet.returnPreferredCrypto(game_options.crypto).returnAddress();
-	    let crypto_transfer_manager = new GameCryptoTransferManager(app);
+            let my_address = app.wallet.returnPreferredCrypto(game_options.crypto).returnAddress();
+            let crypto_transfer_manager = new GameCryptoTransferManager(app);
             crypto_transfer_manager.balance(app, mod, my_address, game_options.crypto, function() {});
-	    let returnObj = await app.wallet.returnPreferredCryptoBalances([ my_address ], null, game_options.crypto);
-	    crypto_transfer_manager.hideOverlay();
-
-	    let balance_adequate = 0;
-	    let current_balance = 0;
-	    for (let i = 0; i < returnObj.length; i++) {
-	      if (returnObj.address == my_address) {
-		if (returnObj.balance >= game_options.stake) {
-		  balance_adequate = 1;
-		}
-	      } 
-	    }
-	    if (balance_adequate != 1) {
-	      salert("You do not have enough "+game_options.crypto+"! Balance: "+current_balance);
-	      return;
-	    }
-	  }
-	}
+            crypto_transfer_manager.hideOverlay();    
+            
+            //let returnObj = await app.wallet.returnPreferredCryptoBalances([ my_address ], null, game_options.crypto);
+            console.log("check balance....");
+            console.log(game_options.crypto);
+            let cryptoMod = app.wallet.returnCryptoModuleByTicker(game_options.crypto);
+            let current_balance = await cryptoMod.returnBalance();            
+            if (current_balance < game_options.stake) {
+                salert("You do not have enough "+game_options.crypto+"! Balance: "+current_balance);
+                return;
+            }
+          }
+        }
       }
 
     } catch (err) {
       console.log("ERROR checking if crypto-required: " + err);
+      return;
     }
 
     //
