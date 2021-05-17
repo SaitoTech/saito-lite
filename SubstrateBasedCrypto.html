@@ -569,7 +569,7 @@ https://polkadot.js.org/docs/api/start/create
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line116">line 116</a>
+        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -605,7 +605,7 @@ https://polkadot.js.org/docs/api/start/create
     
 
     
-    <h4 class="name" id="hasPayment"><span class="type-signature">(abstract) </span>hasPayment<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="hasPayment"><span class="type-signature"></span>hasPayment<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -613,7 +613,9 @@ https://polkadot.js.org/docs/api/start/create
 
 
 <div class="description">
-    TODO
+    overrides AbstractCryptoModule hasPayment
+
+Only looks in the last 100 payments due to a restriction on subscan's API. This could be extended by repeating the request for past pages.
 </div>
 
 
@@ -662,7 +664,7 @@ https://polkadot.js.org/docs/api/start/create
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="templates_abstractcryptomodule.js.html">templates/abstractcryptomodule.js</a>, <a href="templates_abstractcryptomodule.js.html#line118">line 118</a>
+        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line171">line 171</a>
     </li></ul></dd>
     
 
@@ -687,28 +689,6 @@ https://polkadot.js.org/docs/api/start/create
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    TODO
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -994,7 +974,7 @@ https://polkadot.js.org/docs/api/start/create
     
 
     
-    <h4 class="name" id="returnAddress"><span class="type-signature"></span>returnAddress<span class="signature">(app)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="load"><span class="type-signature"></span>load<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1002,7 +982,7 @@ https://polkadot.js.org/docs/api/start/create
 
 
 <div class="description">
-    async getter for Endpoint API
+    load state of this module from local storage
 </div>
 
 
@@ -1013,53 +993,92 @@ https://polkadot.js.org/docs/api/start/create
 
 
 
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>app</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
 
 
-            
-            </td>
 
-            
 
-            
-
-            <td class="description last">Saito Application Context</td>
-        </tr>
+<dl class="details">
 
     
-    </tbody>
-</table>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line236">line 236</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="returnAddress"><span class="type-signature"></span>returnAddress<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    overrides AbstractCryptoModule returnAddress
+</div>
+
+
+
+
+
+
+
 
 
 
@@ -1100,7 +1119,7 @@ https://polkadot.js.org/docs/api/start/create
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line132">line 132</a>
+        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -1136,7 +1155,7 @@ https://polkadot.js.org/docs/api/start/create
     
 
     
-    <h4 class="name" id="returnBalance"><span class="type-signature">(abstract) </span>returnBalance<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span></h4>
+    <h4 class="name" id="returnBalance"><span class="type-signature">(async) </span>returnBalance<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1144,7 +1163,7 @@ https://polkadot.js.org/docs/api/start/create
 
 
 <div class="description">
-    Abstract method which should get balance from underlying crypto endpoint
+    overrides AbstractCryptoModule returnBalance
 </div>
 
 
@@ -1193,7 +1212,7 @@ https://polkadot.js.org/docs/api/start/create
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="templates_abstractcryptomodule.js.html">templates/abstractcryptomodule.js</a>, <a href="templates_abstractcryptomodule.js.html#line89">line 89</a>
+        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -1218,24 +1237,6 @@ https://polkadot.js.org/docs/api/start/create
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Number</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -1247,7 +1248,7 @@ https://polkadot.js.org/docs/api/start/create
     
 
     
-    <h4 class="name" id="transfer"><span class="type-signature">(abstract) </span>transfer<span class="signature">(howMuch, to)</span><span class="type-signature"> &rarr; {Number}</span></h4>
+    <h4 class="name" id="save"><span class="type-signature"></span>save<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1255,7 +1256,7 @@ https://polkadot.js.org/docs/api/start/create
 
 
 <div class="description">
-    Abstract method which should transfer tokens via the crypto endpoint
+    save state of this module to local storage
 </div>
 
 
@@ -1266,76 +1267,95 @@ https://polkadot.js.org/docs/api/start/create
 
 
 
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>howMuch</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
 
 
-            
-            </td>
 
-            
 
-            
-
-            <td class="description last">How much of the token to transfer</td>
-        </tr>
+<dl class="details">
 
     
 
-        <tr>
-            
-                <td class="name"><code>to</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Pubkey/address to send to</td>
-        </tr>
+    
 
     
-    </tbody>
-</table>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line228">line 228</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="transfer"><span class="type-signature">(async) </span>transfer<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    overrides AbstractCryptoModule transfer.
+
+Substrate-based coins have existential deposit (ED) to prevent dust accounts from bloating state. If an account drops below the ED, it will be reaped,
+Polkadot's ED is 1 DOT, while Kusama's is 0.0016666 KSM.
+</div>
+
+
+
+
+
+
+
 
 
 
@@ -1376,7 +1396,7 @@ https://polkadot.js.org/docs/api/start/create
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="templates_abstractcryptomodule.js.html">templates/abstractcryptomodule.js</a>, <a href="templates_abstractcryptomodule.js.html#line100">line 100</a>
+        <a href="templates_substratebasedcrypto.js.html">templates/substratebasedcrypto.js</a>, <a href="templates_substratebasedcrypto.js.html#line157">line 157</a>
     </li></ul></dd>
     
 
@@ -1401,24 +1421,6 @@ https://polkadot.js.org/docs/api/start/create
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Number</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -1446,7 +1448,7 @@ https://polkadot.js.org/docs/api/start/create
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon May 17 2021 06:06:11 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon May 17 2021 07:35:00 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
