@@ -2712,6 +2712,10 @@ console.log("STATE: " + JSON.stringify(state));
           <div class="overlay-input">
             <label for="stake">Initial Stake:</label>
             <select name="stake">
+              <option value="1">1</option>
+              <option value="5">5</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
               <option value="100">100</option>
               <option value="500">500</option>
               <option value="1000" selected="selected">1000</option>
