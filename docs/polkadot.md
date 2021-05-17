@@ -16,6 +16,27 @@ The first milestone to support this type of Service Infrastructure is an API to 
 
 If there is further interest in leveraging this system we also plan to extend the APIs further to better support an Open Infrastructure Service. For now, that work is left to the DAPP author and we encourage anyone interested in this to reach out.
 
+## tutorial
+
+1) Get the crypto mod:
+```
+let cryptoMod = app.modules.returnModule(subPage);
+```
+OR
+```
+let cryptoMod = app.wallet.returnPreferredCrypto();
+```
+2) Do stuff:
+```
+cryptoMod.transfer(howMuch, toAddress);
+...
+cryptoMod.returnBalance();
+...
+cryptoMod.returnAddress();
+...
+cryptoMod.hasPayment(howMuch, from, to, timestamp)
+```
+
 ## Architecture
 
 For details of the architecture, see our [architecture document](https://github.com/SaitoTech/saito-lite/blob/master/docs/saito-dot-integration.pdf).
