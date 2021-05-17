@@ -2,21 +2,21 @@
 
 ## Introduction
 
-In order to facilitate integration with DOT and other Substrate-based tokens within the Polkadot ecosystem, Saito will be developing a prototype of an Open Infrastructure-type Decentralized Service which is enabled by Saito's ability to serve as an Open PKI Infrastructure and Transport Layer.
+In order to facilitate integration with DOT and other Substrate-based tokens within the Polkadot ecosystem, Saito has developed a prototype of an Open Infrastructure-type Decentralized Service which is enabled by Saito's ability to serve as an Open PKI Infrastructure and Transport Layer.
 
 The Saito Lite Client facilitates interoperability with any cryptocurrency by implementing a subclass of Modtemplate(i.e. a Module) called [AbstractCryptoModule](https://saito.io/docs/polkadot/AbstractCryptoModule.html)(see [Applications](https://github.com/SaitoTech/saito-lite/blob/master/docs/applications.md) for more details on the Modules system). By implementing an AbstractCryptoModule a DAPP author can enable their Module to be selected as the user's Preferred Cryptocurrency within the Lite Client and allow other DAPPs, such as games, to interact with a cryptocurrency through the AbstractCryptoModule interface.
 
 The functions provided by the [Lite Client's Wallet API](https://saito.io/docs/polkadot/Wallet.html) will honor the user's Preferred Cryptocurrency, allowing a Saito DAPP to seamlessly change from one cryptocurrency to another.
 
+## Working with Substrate-based cryptos
+
+To work with Substrate-based cryptocurrencies, we've extended AbstractCryptoModule as SubstrateBasedCrypto which can be used to interact with Polkadot, Kusama, or Westend. Leveraging this class to interact with parachains in the future should be very straightforward.
+
 This functionality represents the work described in [Milestone 1 of our Web3 Foundation grant](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md).
 
-If a DAPP author also wishes to leverage Saito as an Open Infrastructure platform as well, all interactions with the cryptocurrency can be passed through Saito Transactions. This enables efficient distribution of the transactions to their endpoint services within the Saito Network and also allows the author to receive payment for access to the endpoints by requiring a micro-payment in Saito.
+## Tutorial
 
-The first milestone to support this type of Service Infrastructure is an API to support interoperability between Saito and the 3rd party cryptocurrencies. This is equivalent to [the grant we have been awarded by the Web 3 Foundation](https://github.com/w3f/Open-Grants-Program/blob/master/applications/saito-game-protocol-and-engine.md), which is in a prototypal stage now.
-
-If there is further interest in leveraging this system we also plan to extend the APIs further to better support an Open Infrastructure Service. For now, that work is left to the DAPP author and we encourage anyone interested in this to reach out.
-
-## tutorial
+How to interact with DOT, Kusama, or Westend 
 
 1) Get the crypto mod:
 ```
@@ -41,7 +41,9 @@ cryptoMod.hasPayment(howMuch, from, to, timestamp)
 
 For details of the architecture, see our [architecture document](https://github.com/SaitoTech/saito-lite/blob/master/docs/saito-dot-integration.pdf).
 
-## Potential Future Grant Work
+## Future Work
+
+If a DAPP author also wishes to leverage Saito as an Open Infrastructure platform as well, all interactions with the cryptocurrency can be passed through Saito Transactions. This enables efficient distribution of the transactions to their endpoint services within the Saito Network and also allows the author to receive payment for access to the endpoints by requiring a micro-payment in Saito.
 
 For anyone who wishes to leverage Saito as an Open Infrastructure platform, the previous work does not fully support this. We would suggest that implementing an API similar to the following might be a good starting point:
 
@@ -75,7 +77,6 @@ Returns an Stream Object([https://www.npmjs.com/package/stream](https://www.npmj
 Allows the user to keep a stream open the the Saito Endpoint for as long as it is authorized. The endpoint should close the connection automatically when authorization has ended.
 
 Typically wraps a Websocket connection to the endpoint.
-
 
 > *Note:*
 >
