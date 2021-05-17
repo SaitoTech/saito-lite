@@ -1,5 +1,6 @@
 const ArcadeGameDetailsTemplate = require('./arcade-game-details.template');
 const AdvancedOverlay = require('./advanced-overlay'); // game-overlay
+const GameCryptoTransferManager = require('./../../../../lib/saito/ui/game-crypto-transfer-manager/game-crypto-transfer-manager');
 
 
 const getOptions = () => {
@@ -95,9 +96,40 @@ module.exports = ArcadeGameDetails = {
     //
     // create game
     //
-    document.getElementById('game-invite-btn').addEventListener('click', (e) => {
+    document.getElementById('game-invite-btn').addEventListener('click', async (e) => {
       try {
+
         let options = getOptions();
+
+	//
+	// if crypto and stake selected, make sure creator has it
+	//
+	if (options.crypto != "") {
+	  if (options.stake > 0) {
+
+            let my_address = app.wallet.returnPreferredCrypto(options.crypto).returnAddress();
+            let crypto_transfer_manager = new GameCryptoTransferManager(app);
+            crypto_transfer_manager.balance(app, mod, my_address, options.crypto, function() {});
+            let returnObj = await app.wallet.returnPreferredCryptoBalances([ my_address ], null, options.crypto);
+            crypto_transfer_manager.hideOverlay();
+	
+	    let adequate_balance = 0;
+	    for (let i = 0; i < returnObj.length; i++) {
+	      if (returnObj[i].address == my_address) {
+		if (parseFloat(returnObj[i].balance) >= parseFloat(options.stake)) {
+		  adequate_balance = 1;
+		}
+	      }
+	    }    
+
+	    if (adequate_balance == 0) {
+	      salert("You don't have enough "+options.crypto+" to create this game!");
+	      return;
+	    }
+	  }
+	}
+
+
         app.browser.logMatomoEvent("Arcade", "ArcadeCreateNewInvite", options.gamename);
         let gamemod = app.modules.returnModule(options.gamename);
         let gamedata = {
