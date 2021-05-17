@@ -22,12 +22,45 @@ module.exports = PolkadotPopup = {
       mod.overlay.attachEvents(app, mod);
       mod.overlay.showOverlay(app, mod, PolkadotNetworkTemplate(app, mod));
 
+      document.getElementById("polkadot-overlay-select").onchange = (e) => {
+
+        let ticker = document.getElementById("polkadot-overlay-select").value;
+	let info = [];
+            info['DOT'] = 'Polkadot';
+	    info['KSM'] = 'Kusama';
+	    info['WND'] = 'Westend';
+
+	document.getElementById("polkadot-overlay-infobox").innerHTML = info[ticker];
+	document.getElementById("polkadot-overlay-network-selected-btn").innerHTML = "Select " + info[ticker];
+
+      }
+
+
       document.getElementById("polkadot-overlay-network-selected-btn").onclick = (e) => {
 
-        let ticker = 
+        let ticker = document.getElementById("polkadot-overlay-select").value;
 
-        mod.overlay.hideOverlay();
-        mod.overlay.showOverlay(app, mod, PolkadotAddressTemplate(app, mod));
+	if (ticker == "DOT" || ticker == "KSM") {
+	  let c = confirm("Are you sure? DOT and Kusama support is provided as a demo. We recommend Westend while Polkadot rolls out its parachains. Also, you can get free tokens! Switch?");
+	  if (!c) {
+            document.getElementById("polkadot-overlay-select").value = "WND";
+	    ticker = "WND";
+	  }
+	}
+
+	let cryptomod = app.wallet.returnCryptoModuleByTicker(ticker);
+
+	try {
+
+          mod.overlay.hideOverlay();
+          mod.overlay.showOverlay(app, mod, PolkadotAddressTemplate(app, mod, ticker));
+
+	} catch (err) {
+
+	  salert("ERROR: Unsupported Crypto Module");
+
+	}
+
       }     
 
     }

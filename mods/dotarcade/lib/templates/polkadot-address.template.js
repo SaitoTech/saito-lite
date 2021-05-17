@@ -1,19 +1,22 @@
 module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
+
+  let cryptomod  = app.wallet.returnCryptoModuleByTicker(ticker);
+  let my_address = cryptomod.returnAddress();
+
   return `
     <div class="polkadot-overlay-container">
 
-      <h1 class="polkadot-overlay-header">Your Address:</h1>
+      <div class="polkadot-saito-image"><img class="saito-image" src="/dotarcade/img/backup_note.png" /></div>
 
-      <div class="polkadot-overlay-subheader">Which token do you want to use? We recommend Westend because tokens are free. You can always change this later: </div>
+      <div class="polkadot-address-header">Your Wallet:</div>
+      <div class="polkadot-overlay-address">${my_address}</div>
 
-      <div class="polkadot-overlay-address">DOT-ADDRESS-HERE</div>
+      <div class="polkadot-backup-reminder">Please remember to backup your wallet!</div>
 
-      <div class="polkadot-overlay-infobox">
-	Your balance at this address is ______. We recommend that. Please also remember that you should BACKUP your wallet so you 
-        don't lose the private keys to this address. If you need to backup, you can do that by clicking on THIS LINK.
+      <div style="margin-left:auto;margin-right:auto;text-align:center">
+        <div class="polkadot-overlay-token-selected button">Load Arcade</div>
+        <div class="polkadot-overlay-token-selected button orange-button">Token Faucet</div>
       </div>
-
-      <div class="polkadot-overlay-token-selected button">OK, Load Arcade</div>
 
     </div>
 
@@ -28,8 +31,40 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
   max-height: 90vh;
   margin-left: auto;
   margin-right: auto;
-  padding: 25px;
+  border-radius: 5px;
 }
+.polkadot-saito-image {
+  width: 100%;
+}
+.saito-image {
+  width: 100%;
+}
+.polkadot-address-header {
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.polkadot-overlay-address {
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.polkadot-backup-reminder {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+}
+.polkadot-overlay-token-selected {
+  background-color: rgb(13 164 0);
+  box-shadow: 0px 16px 29px rgb(13,164 0);
+}
+
+
+
+
+
+
 .polkadot-overlay-header {
   font-size: 2em;
 }
@@ -42,12 +77,19 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
   font-size: 1.2em;
 }
 .polkadot-overlay-infobox {
-  padding: 5px;
-  font-size: 0.9em;
+  padding: 0px;
+  font-size: 1em;
   border: 1px solid #EFEFEF;
+  margin-top: 15px;
 }
 .polkadot-overlay-token-selected {
   text-align: center;
+}
+.orange-button {
+  border: 2px solid rgb(255 172 0);
+  background-color: rgb(255 172 0);
+  box-shadow: 0px 16px 29px rgb(247 176 31);
+  margin-left: 15px;
 }
 </style>
   `;
