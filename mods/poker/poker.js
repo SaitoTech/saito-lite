@@ -1371,7 +1371,7 @@ console.log("this raise: " + this_raise);
     state.blinds_idx = 0;
     state.blinds_array = [
       { "big" : 0.001 , "small" : 0.0005 },
-      { "big" : 0.002 , "small" : 0.0001 },
+      { "big" : 0.002 , "small" : 0.001 },
       { "big" : 0.004 , "small" : 0.002 },
       { "big" : 0.008 , "small" : 0.004 },
       { "big" : 0.015 , "small" : 0.008 },
@@ -1388,7 +1388,7 @@ console.log("this raise: " + this_raise);
       { "big" : 30    , "small" : 15 },
       { "big" : 60    , "small" : 30 },
       { "big" : 120   , "small" : 60 },
-      { "big" : 250   , "small" : 120 },
+      { "big" : 250   , "small" : 125 },
       { "big" : 500   , "small" : 250 },
       { "big" : 1000  , "small" : 500 }
     ];
@@ -1424,23 +1424,10 @@ console.log("this raise: " + this_raise);
       if (this.game.options.stake != undefined) { state.player_credit[i] = parseInt(this.game.options.stake); }
     }
 
-    if (this.game.options.big_blind != undefined) {
-      let big_blind_provided = 0;
-      for (let i = 0; i < state.blinds_array.length; i++) {
-	if (this.game.options.big_blind === state.blinds_array[i].big) { 
-	  state.blinds_idx = i;
-	  big_blind_provided = 1;
-          state.big_blind = parseInt(state.blinds_array[i].big);
-          state.small_blind = state.big_blind/2;
-          state.last_raise = parseInt(state.big_blind);
-	}
-      }
-      if (big_blind_provided == 0) {
-        state.big_blind = parseInt(this.game.options.big_blind);
-        state.small_blind = state.big_blind/2;
-        state.last_raise = parseInt(state.big_blind);
-      }
-    }
+
+    state.big_blind = parseFloat(this.game.options.big_blind);
+    state.small_blind = state.big_blind/2;
+    state.last_raise = state.big_blind;
 
 console.log("STATE: " + JSON.stringify(state));
 
