@@ -15,7 +15,7 @@ module.exports = Web3Template = (app) => {
         </div>
       </div>
       <h3 class="page-heading">Before you can start a game,<br />
-      you'll need to get some <a href="">WESTIES</a>.</h3>
+      you'll need to get some <a href="">WND</a>.</h3>
       <div class="page-content">
         <p>You already have a new <b>Westend wallet</b> running in this webpage. Under the menu on the top right you should see your <b>Westend address</b>. 
         </p>
@@ -24,7 +24,7 @@ module.exports = Web3Template = (app) => {
         <p>After you get your tokens, you should see your balance by visiting <a href="">this block explorer link</a> or by refreshing this page and checking your balance in the sidebar menu below your address.
         </p>
         <p class="flex">After you confirm your balance you can visit the <a href="/arcade" class="arcade-button"><img src="/website/img/top_logo.png" class="saito-logo" />  <span class="sep">|</span> <span class="arcade">Arcade</span></a> to start a game.</p> 
-        <p>Look for a <b>poker invite using Westend</b> or <b>start your own game</b> by clicking Poker on the left, choosing <b>advanaced options</b>, and selecting <b>WESTIE</b> under the Token dropdown.
+        <p>Look for a <b>poker invite using Westend</b> or <b>start your own game</b> by clicking Poker on the left, choosing <b>advanaced options</b>, and selecting <b>WND</b> under the Token dropdown.
         </p>
       </div>
     </div>`;
