@@ -1045,7 +1045,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       if (mv[0] == "raise") {
 
         let player = parseInt(mv[1]);
-        let raise = parseInt(mv[2]);
+        let raise = parseFloat(mv[2]);
 
         let call_portion = 0;
         let raise_portion = 0;
@@ -1231,7 +1231,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
       if (choice === "raise") {
 
-        raise_required = parseInt(raise_required);
+        raise_required = parseFloat(raise_required);
 
         // match_required
         // raise_required
@@ -1248,7 +1248,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
           }
         });
 
-        poker_self.game.state.last_raise = parseInt(poker_self.game.state.last_raise);
+        poker_self.game.state.last_raise = parseFloat(poker_self.game.state.last_raise);
 
         let cost_to_monster = poker_self.game.state.required_pot - poker_self.game.state.player_pot[poker_self.game.player - 1];
         if (cost_to_monster < 0) { cost_to_monster = 0; }
@@ -1301,7 +1301,7 @@ console.log("this raise: " + this_raise);
 
           let raise = $(this).attr("id");
 
-          if (cost_to_call > 0) { raise = parseInt(raise) + parseInt(cost_to_call); }
+          if (cost_to_call > 0) { raise = parseFloat(raise) + parseFloat(cost_to_call); }
 
           if (raise == 0) {
             poker_self.playerTurn();
@@ -1421,7 +1421,7 @@ console.log("this raise: " + this_raise);
     }
     for (let i = 0; i < num_of_players; i++) {
       state.player_credit[i] = 100;
-      if (this.game.options.stake != undefined) { state.player_credit[i] = parseInt(this.game.options.stake); }
+      if (this.game.options.stake != undefined) { state.player_credit[i] = parseFloat(this.game.options.stake); }
     }
 
 
@@ -1635,7 +1635,6 @@ console.log("STATE: " + JSON.stringify(state));
 
 
   displayTable() {
-
     //
     // display flip pool (cards on table)
     //
@@ -2699,6 +2698,7 @@ console.log("STATE: " + JSON.stringify(state));
           <div class="overlay-input">
             <label for="stake">Initial Stake:</label>
             <select name="stake">
+              <option value="0.1">0.1</option>
               <option value="1">1</option>
               <option value="5">5</option>
               <option value="20">20</option>
