@@ -1517,31 +1517,41 @@ console.log("---------------------");
    * @param {Int} pollWaitTime - (default: 5000) Amount of time to wait between tries
    * @return {Array} Array of {address: {String}, balance: {Int}}
    */
-  receivePayment(senders=[], receivers=[], amounts=[], timestamp, mycallback, ticker, tries = 36, pollWaitTime = 5000) {
-
-    return new Promise(async(resolve, reject) => {  
+  async receivePayment(senders=[], receivers=[], amounts=[], timestamp, mycallback, ticker, tries = 36, pollWaitTime = 5000) {
+    // original design of this interface was to use async/await by returning a promise.
+    // Instead there was an insistence on using mycallback. The consumer of this interface does not use
+    // async/await or .then(...) so this is being abandoned(i.e. i'm removing the promise) but leaving it
+    // here in case someone wants to refactor this or wonders why this interface is this way.
+    //return new Promise(async(resolve, reject) => {  
 
       if (senders.length != receivers.length || senders.length != amounts.length) {
-        mycallback({err: "Lengths of senders, receivers, and amounts must be the same"});
+        // There is no way to handle errors with the interface of receivePayment as it's been designed.
+        // We will swallow this error and log it to the console and return.
+        // Do not delete this console.log, at least maybe the engineer who is maintaining this needs 
+        // some hope of figuring out why the game isn't progressing.
+        console.log("receivePayment ERROR. Lengths of senders, receivers, and amounts must be the same");
+        return;
+        // mycallback({err: "Lengths of senders, receivers, and amounts must be the same"});
       }
       if (senders.length !== 1) {
-        // We have no code which exercises multiple senders/receivers so can't implement it yet.
-        mycallback({err: "Only supports one transaction"});
+        // There is no way to handle errors with the interface of receivePayment as it's been designed.
+        // We will swallow this error and log it to the console and return.
+        // Do not delete this console.log, at least maybe the engineer who is maintaining this needs 
+        // some hope of figuring out why the game isn't progressing.
+        console.log("receivePayment ERROR. Only supports one transaction");
+        return;
+        //mycallback({err: "Only supports one transaction"});
       }
 
       //
       // if payment already received, return
       //
       if (this.doesPreferredCryptoTransactionExist(senders, receivers, amounts, timestamp, ticker)) {
-        mycallback({});
+        mycallback();
       }
 
       let cryptomod = this.returnCryptoModuleByTicker(ticker);
       await cryptomod.onIsInitialized();
-      console.log("**** receivePayment ****");
-      console.log("from " + senders[0]);
-      console.log("to " + receivers[0]);
-      console.log("me " + cryptomod.returnAddress());
 
       //
       // create a function we can loop through to check if the payment has come in....
@@ -1558,10 +1568,13 @@ console.log("---------------------");
         } catch(err) {
           // if check_payment_function throws an error, we want to bail out,
           // there's no point trying another 100 times.
-          console.log("ERROR");
-          console.log(err);
-          mycallback({err: err});
+          // There is no way to handle errors with the interface of receivePayment as it's been designed.
+          // We will swallow this error and log it to the console and return.
+          // Do not delete this console.log, at least maybe the engineer who is maintaining this needs 
+          // some hope of figuring out why the game isn't progressing.
+          console.log("receivePayment ERROR." + err);
           return;
+          //mycallback({err: err});
         }
         did_complete_payment(result);
       };
@@ -1581,13 +1594,18 @@ console.log("---------------------");
               poll_check_payment_function();
             }, pollWaitTime);
           } else {
-            // if there are more tries left, re-poll after pollWaitTime
-            mycallback({err: "Did not receive payment after " + ((pollWaitTime * tries)/1000) + " seconds"});
+            // There is no way to handle errors with the interface of receivePayment as it's been designed.
+            // We will swallow this error and log it to the console and return.
+            // Do not delete this console.log, at least maybe the engineer who is maintaining this needs 
+            // some hope of figuring out why the game isn't progressing.
+            console.log("Did not receive payment after " + ((pollWaitTime * tries)/1000) + " seconds");
+            return;
+            // mycallback({err: "Did not receive payment after " + ((pollWaitTime * tries)/1000) + " seconds"});
           }
         }
       }
       poll_check_payment_function();
-    });
+    //});
   }
 
   savePreferredCryptoTransaction(senders=[], receivers=[], amounts, timestamp, ticker) {
@@ -1651,7 +1669,7 @@ module.exports = Wallet;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue May 18 2021 02:55:17 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue May 18 2021 03:45:21 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
