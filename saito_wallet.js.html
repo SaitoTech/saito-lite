@@ -81,51 +81,63 @@ class Wallet {
       async returnBalance() {
         return this.app.wallet.returnBalance();
       }
+      async returnAddress() {
+alert("returning address");
+        return this.app.wallet.returnPublicKey();
+      }
       returnAddress() {
         return this.app.wallet.returnPublicKey();
       }
       async transfer(howMuch, to) {
         this.app.wallet.transferTo(howMuch, to);
       }
-      //
-      // TODO - triggers too easily because slips do not 
-      // have timestamp information. We need more complicated
-      // logic to handle Saito payments reliably.
-      //
       async hasPayment(howMuch, from, to, timestamp) {
         console.log("SAITO has payment");
         console.log(howMuch);
         console.log(from);
         console.log(to);
         console.log(timestamp);
+	let from_from = 0;
+	let to_to = 0;
         if (to == this.app.wallet.returnPublicKey()) {
           for (let i = 0; i &lt; this.app.wallet.wallet.inputs.length; i++) {
             console.log("INPUT");
             console.log(this.app.wallet.wallet.inputs[i]);
             if (this.app.wallet.wallet.inputs[i].amt === howMuch) {
               if (this.app.wallet.wallet.inputs[i].ts >= timestamp) {
-                for (let ii = 0; ii &lt; this.app.wallet.wallet.inputs[i].from_slips.length; ii++) {
-                  if (this.app.wallet.wallet.inputs[i].from_slips[ii].add == from) {
-                    return true; 
-                  }
+                if (this.app.wallet.wallet.inputs[i].add == to) {
+                  return true;
                 }
               }
             }
           }
           for (let i = 0; i &lt; this.app.wallet.wallet.outputs.length; i++) {
+            console.log("OUTPUT");
+            console.log(this.app.wallet.wallet.outputs[i]);
             if (this.app.wallet.wallet.outputs[i].amt === howMuch) {
               if (this.app.wallet.wallet.outputs[i].ts >= timestamp) {
-                for (let ii = 0; ii &lt; this.app.wallet.wallet.outputs[i].from_slips.length; ii++) {
-                  if (this.app.wallet.wallet.outputs[i].from_slips[ii].add == from) {
-                    return true; 
-                  }
+                if (this.app.wallet.wallet.outputs[i].add == to) {
+                  return true;
                 }
               }
             }
           }
           return false;
         } else {
-          return true; 
+	  if (from == this.app.wallet.returnPublicKey()) {
+            for (let i = 0; i &lt; this.app.wallet.wallet.outputs.length; i++) {
+              console.log("OUTPUT");
+              console.log(this.app.wallet.wallet.outputs[i]);
+              if (this.app.wallet.wallet.outputs[i].amt === howMuch) {
+                if (this.app.wallet.wallet.outputs[i].ts >= timestamp) {
+                  if (this.app.wallet.wallet.outputs[i].add == to) {
+                    return true;
+                  }
+                }
+              }
+            }
+          }
+          return false;
         }
       }
       onIsInitialized() {
@@ -582,6 +594,11 @@ console.log("TS set to : " +blk.block.ts);
         to_slips[ii].from = tx.transaction.from; // set from slips
       }
 
+      for (let ii = 0; ii &lt; from_slips.length; ii++) {
+console.log("TS in from slip set to : " +blk.block.ts);
+        from_slips[ii].ts  = blk.block.ts; // set ts according to block
+      }
+
       //
       // any txs in pending should be checked to see if
       // we can remove them now that we have received
@@ -642,6 +659,7 @@ console.log("TS set to : " +blk.block.ts);
             if (this.containsInput(to_slips[m]) == 0) {
               if (this.containsOutput(to_slips[m]) == 0) {
                 if (to_slips[m].type != 4) {
+console.log("Adding input slip: "+JSON.stringify(to_slips[m]));
                   this.addInput(to_slips[m]);
 		}
               }
@@ -678,7 +696,8 @@ console.log("TS set to : " +blk.block.ts);
               s.add   == qs.add
             ) {
               if (this.containsOutput(s) == 0) {
-                this.addOutput(this.wallet.inputs[c]);
+                this.addOutput(s);
+                //this.addOutput(this.wallet.inputs[c]);
               }
               this.wallet.inputs.splice(c, 1);
               this.wallet.spends.splice(c, 1);
@@ -1507,10 +1526,10 @@ console.log("---------------------");
     // only send if hasn't been sent before
     if (!this.doesPreferredCryptoTransactionExist(senders, receivers, amounts, timestamp, ticker)) {
       let cryptomod = this.returnCryptoModuleByTicker(ticker);
-      for(let i = 0; i &lt; senders.length; i++) {
+      for (let i = 0; i &lt; senders.length; i++) {
         console.log(senders[i]);
         console.log(cryptomod.returnAddress());
-        if(senders[i] === cryptomod.returnAddress()) {
+        if (senders[i] === cryptomod.returnAddress()) {
           // Need to save before we await, otherwise there is a race condition
           this.savePreferredCryptoTransaction(senders, receivers, amounts, timestamp, ticker);
           try {
@@ -1697,7 +1716,7 @@ module.exports = Wallet;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue May 18 2021 06:30:58 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue May 18 2021 08:33:02 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
