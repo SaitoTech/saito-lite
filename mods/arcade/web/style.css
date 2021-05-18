@@ -303,7 +303,6 @@ body {
 }
 
 .gameShortDescriptionRow {
-  background-color: #0005;
   padding: 2px;
   font-weight: bold;
 }
@@ -322,6 +321,10 @@ body {
   margin: 0.2em 0.2em 0.4em 0em;
   font-size: 1em;
   overflow: auto;
+  margin: 0 10% 0 50%;
+  background-color: #0005;
+  padding: 1em;
+  margin: 0 10% 0 50%;
 }
 
 .invite-description {
