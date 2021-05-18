@@ -22,8 +22,6 @@ let EmailCryptoAppspace = {
     //
     // Instead, we get a reference to EmailCryptoAppspace directly, and use it as a place to carry a reference to app and 
     // the static-like function(rerender) we want to remove. That is the purpose of this function rerenderCallback.
-    //
-    // The "correct" way to fix this is to use some sort of MV* framework which has already solved these problems for us.
     await EmailCryptoAppspace.rerender(EmailCryptoAppspace.app);
   },
   async render(app, mod) {
@@ -35,7 +33,6 @@ let EmailCryptoAppspace = {
     } catch(error) {
       mod.locationErrorFallback(`Error loading Crypto Module.<br/>${error}`, error)
     }
-    
   },
   
   getCryptoMod(app) {
@@ -46,7 +43,9 @@ let EmailCryptoAppspace = {
   async rerender(app) {
     let loadBalance = async(responseInterface) => {
       let balance = await responseInterface.returnBalance();
-      document.querySelector(`.crypto-container .balance`).innerHTML = balance;
+      document.querySelectorAll(`.email-appspace-${responseInterface.ticker} .crypto-container .balance`).forEach((elem, i) => {
+        elem.innerHTML = balance;
+      });
     }
     let loadPubkey = async(responseInterface) => {
       let address = await responseInterface.returnAddress();

@@ -3,7 +3,7 @@ module.exports = EmailCryptoAppspaceTemplate = (responseInterface, preferredCrpy
   const preferredCryptoClass = responseInterface.name === preferredCrpytoName ? "preferred" : "not-preferred";
 
   return `
-    <div class="email-appspace">
+    <div class="email-appspace email-appspace-${responseInterface.ticker}">
       <div class="crypto-container">
         <h1 class="ticker">${responseInterface.ticker}</h1>
         <div class="crypto-title">${responseInterface.description}</div>
