@@ -10,7 +10,6 @@ module.exports = PolkadotPopup = {
 
   },
 
-
   attachEvents(app, mod) {
 
     let startbtn = document.getElementById("startgame");
@@ -24,17 +23,17 @@ module.exports = PolkadotPopup = {
       mod.overlay.attachEvents(app, mod);
       mod.overlay.showOverlay(app, mod, PolkadotNetworkTemplate(app, mod));
 
-
       let radioChangeFunc = (e) => {
-	if (document.getElementById("KSM").checked) { ticker = "KSM"; }
-	if (document.getElementById("DOT").checked) { ticker = "DOT"; }
+        if (document.getElementById("KSM").checked) { ticker = "KSM"; }
+        if (document.getElementById("DOT").checked) { ticker = "DOT"; }
+        if (document.getElementById("WND").checked) { ticker = "WND"; }
 
-	let info = [];
-            info['DOT'] = 'Polkadot';
-	    info['KSM'] = 'Kusama';
-	    info['WND'] = 'Westend';
-	//document.getElementById("polkadot-overlay-infobox").innerHTML = info[ticker];
-	document.getElementById("polkadot-overlay-network-selected-btn").innerHTML = "Select " + info[ticker];
+        let info = [];
+        info['DOT'] = 'Polkadot';
+        info['KSM'] = 'Kusama';
+        info['WND'] = 'Westend';
+        //document.getElementById("polkadot-overlay-infobox").innerHTML = info[ticker];
+        document.getElementById("polkadot-overlay-network-selected-btn").innerHTML = "Select " + info[ticker];
 
       }
 
@@ -45,33 +44,32 @@ module.exports = PolkadotPopup = {
 
       document.getElementById("polkadot-overlay-network-selected-btn").onclick = (e) => {
 
-	let ticker = "WND";
-	if (document.getElementById("KSM").checked) { ticker = "KSM"; }
-	if (document.getElementById("DOT").checked) { ticker = "DOT"; }
+        let ticker = "WND";
+        if (document.getElementById("KSM").checked) { ticker = "KSM"; }
+        if (document.getElementById("DOT").checked) { ticker = "DOT"; }
 
-	if (ticker == "DOT" || ticker == "KSM") {
-	  let c = confirm("DOT and Kusama support is provided to demo functionality. We recommend Westend while Polkadot rolls out its scalable parachains. Also, you can get free tokens! Switch?");
-	  if (c) {
-	    ticker = "WND";
-	  }
-	}
+        if (ticker == "DOT" || ticker == "KSM") {
+          let c = confirm("DOT and Kusama support is provided to demo functionality. We recommend Westend while Polkadot rolls out its scalable parachains. Also, you can get free tokens! Switch?");
+          if (c) {
+            ticker = "WND";
+          }
+        }
 
-console.log("ticker is: " + ticker);
-	let cryptomod = app.wallet.returnCryptoModuleByTicker(ticker);
+        let cryptomod = app.wallet.returnCryptoModuleByTicker(ticker);
 
-	try {
+        try {
 
           mod.overlay.hideOverlay();
           mod.overlay.showOverlay(app, mod, PolkadotAddressTemplate(app, mod, ticker));
 
-	  document.querySelector(".arcade-link").onclick = (e) => {
-	    app.wallet.setPreferredCrypto(ticker);
-	    window.location = '/arcade';
-	  }
+          document.querySelector(".arcade-link").onclick = (e) => {
+            app.wallet.setPreferredCrypto(ticker);
+            window.location = '/arcade';
+          }
 
-	} catch (err) {
-	  salert("ERROR: Unsupported Crypto Module");
-	}
+        } catch (err) {
+          salert("ERROR: Unsupported Crypto Module");
+        }
       }     
     }
   },

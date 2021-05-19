@@ -8,8 +8,8 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 
       <form id="polkadot-overlay-radio" class="polkadot-overlay-radio">
 
-	<input type="radio" id="WND" class="network_option" name="network" value="WND" checked>
-	<label for="WND">WND - Westend</label>
+        <input type="radio" id="WND" class="network_option" name="network" value="WND" checked>
+        <label for="WND">WND - Westend</label>
 
         <p></p>
 
@@ -18,8 +18,8 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 
         <p></p>
 
-	<input type="radio" id="KSM" class="network_option" name="network" value="KSM">
-	<label for="KSM">KSM - Kusama</label>
+        <input type="radio" id="KSM" class="network_option" name="network" value="KSM">
+        <label for="KSM">KSM - Kusama</label>
 
       </form>
 
