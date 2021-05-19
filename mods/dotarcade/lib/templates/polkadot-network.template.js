@@ -73,6 +73,18 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 .polkadot-overlay-network-selected-btn {
   text-align: center;
 }
+
+@media only screen and (max-width: 960px) {
+  .polkadot-overlay-container {
+    max-width: 80vw;
+  }
+  .polkadot-overlay-container {
+    max-width: 80vw;
+  }
+}
+
+
+
 </style>
   `;
 }

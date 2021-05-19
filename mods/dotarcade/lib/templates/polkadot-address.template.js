@@ -6,12 +6,11 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
     <div class="polkadot-overlay-container">
 
       <div class="polkadot-saito-image"><img class="saito-image" src="/dotarcade/img/backup_note_${ticker.toLowerCase()}.png" /></div>
-
-      <div class="polkadot-address-header">Your Wallet:</div>
-      <div class="polkadot-overlay-address">${my_address}</div>
-
-      <div class="polkadot-backup-reminder">Please remember to backup your wallet!</div>
-
+      <div class="polkadot-overlay-details">
+        <div class="polkadot-address-header">Your Wallet:</div>
+        <div class="polkadot-overlay-address">${my_address}</div>
+        <div class="polkadot-backup-reminder">Please remember to backup your wallet!</div>
+      </div>
       <div style="margin-left:auto;margin-right:auto;text-align:center">
         <div class="arcade-link polkadot-overlay-token-selected button">Load Arcade</div>
   `;
@@ -56,6 +55,8 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
   margin-bottom: 15px;
   font-weight: bold;
   font-size: 1.1em;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .polkadot-backup-reminder {
   text-align: center;
@@ -64,7 +65,6 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
 }
 .polkadot-overlay-token-selected {
   background-color: rgb(13 164 0);
-  box-shadow: 0px 16px 29px rgb(13,164 0);
 }
 .polkadot-overlay-token-selected:hover, .polkadot-overlay-token-selected:focus {
   text-shadow: #ffffff 1px 0;
@@ -101,9 +101,24 @@ module.exports = PolkadotAddressTemplate = (app, mod, ticker) => {
 .orange-button {
   border: 2px solid rgb(255 172 0);
   background-color: rgb(255 172 0);
-  box-shadow: 0px 16px 29px rgb(247 176 31);
   margin-left: 15px;
 }
+
+@media only screen and (max-width: 960px) {
+  .polkadot-overlay-container {
+    max-width: 80vw;
+  }
+  .polkadot-overlay-details {
+    padding: 25px;
+  }
+  .saito-overlay .button {
+    margin: 1em 0;
+    max-width: 70%;
+    font-size: 1.5em;
+  }
+}
+
+
 </style>
   `;
 
