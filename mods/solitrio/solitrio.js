@@ -596,6 +596,10 @@ class Solitrio extends GameTemplate {
 
     $('.logobox').off();
     $('.logobox').on('click', function() {
+      if (this.game.state.recycles_remaining == 0) {
+	salert("Sorry! No more chances!");
+	return;
+      }
       solitrio_self.recycleBoard();
       solitrio_self.game.state.recycles_remaining--;
       solitrio_self.displayUserInterface();

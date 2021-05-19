@@ -5071,7 +5071,10 @@ console.log("bonus: " + (i+1));
             // note planet lost
             //
             if (defender > 0) {
-              this.game.players_info[defender-1].lost_planet_this_round = attacker; // player who took it
+	      if (defender != -1) {
+console.log("defender is: " + defender);
+                this.game.players_info[defender-1].lost_planet_this_round = attacker; // player who took it
+	      }
 	    }
             this.updatePlanetOwner(sector, planet_idx, player);
 	  } else {
