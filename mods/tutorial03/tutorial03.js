@@ -1,4 +1,5 @@
 var ModTemplate = require('../../lib/templates/modtemplate');
+const Tutorial03EmailAppspace = require('./lib/email-appspace/tutorial03-appspace');
 
 //
 // Saito supports the use of a special class of Cryptocurrency Modules which 
@@ -39,66 +40,12 @@ class Tutorial03 extends ModTemplate {
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {};
-
-          obj.render = function(app, mod) {
-	    document.querySelector('.email-appspace').innerHTML = `
-
-	      Send Polkadot to Which Address:
-
-	      <p></p>
-
-	      <label for="address">Recipient</label>
-	      <input type=text" id="payment_address" class="payment_address" name="payment_address" />
-
-	      <p></p>
-
-	      <label for="amount">Amount</label>
-	      <input type=text" id="payment_amount" class="payment_amount" name="payment_amount" />
-
-	      <p></p>
-
-	      <div class="button tutorial-btn" id="tutorial-btn" style="margin-top: 30px; width: 120px; text-align: center;">Click me!</div>';
-
-	    `;
-	  }
-
-
-          obj.attachEvents = function(app, mod) {
-
-    	    document.querySelector('.tutorial-btn').addEventListener('click', async function(e) {
-
-	      let payment_address = document.getElementById("payment_address").value;
-	      let payment_amount = document.getElementById("payment_amount").value;
-	      let cryptomod = app.wallet.returnCryptoModuleByTicker("DOT");
-
-	      //
-	      // the important functions for making cryptocurrency applications are:
-	      //
-	      // sendPayment
-	      // receivePayment
-	      // returnPreferredCryptoBalances
-	      //
-	      // details on how to use these functions can be found in /lib/saito/wallet.js
-	      //
-	      try {
-		await app.wallet.sendPayment(
-		  [ cryptomod.returnAddress() ],
-		  [ payment_address ],
-		  [ payment_amount ] ,
-		  (new Date().getTime()) ,
-		  function() {
-		    console.log("Optional Callback when Payment Sent!");
-		  },
-		  "DOT"
-	        );
-	      } catch (err) {
-		alert("ERROR: " + err);
-	      }
-
-    	    });
-
-	  };
-
+          obj.render = function (app, mod) {
+            Tutorial03EmailAppspace.render(app, mod);
+          }
+          obj.attachEvents = function (app, mod) {
+            Tutorial03EmailAppspace.attachEvents(app, mod);
+          }
       return obj;
     }
     return null;

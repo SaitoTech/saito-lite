@@ -36,11 +36,21 @@ class Email extends ModTemplate {
 
   }
 
-
+  initializeHTML(app) {
+    this.app.connection.on("update_balance", async (wallet) => {
+      let bobj = document.getElementById("email-balance");
+      if (bobj) {
+	let bal = await wallet.returnPreferredCryptoBalance();
+	bobj.innerHTML = bal;
+      }
+    });
+  }
 
   initialize(app) {
+
     super.initialize(app);
-    if(app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
+
+    if (app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
       let mypubkey = app.wallet.returnPublicKey();
       let welcometx = app.wallet.createUnsignedTransaction(mypubkey, 0.0, 0.0);
       welcometx.msg.module   = "Email";
@@ -79,7 +89,7 @@ class Email extends ModTemplate {
     }
   }
   render(app) {
-    if(app.BROWSER != 1 || this.browser_active != 1 ) {return;}
+    if (app.BROWSER != 1 || this.browser_active != 1 ) {return;}
     super.render(app);
 
     // TODO: next week, email layout with page header
@@ -272,7 +282,7 @@ class Email extends ModTemplate {
   async renderBalance() {
     if (document.getElementById("email-token")) {
       document.getElementById("email-token").innerHTML = " " + this.app.wallet.returnPreferredCrypto().ticker;
-      document.getElementById("email-balance").innerHTML = this.preferredCryptoBalance
+      document.getElementById("email-balance").innerHTML = this.preferredCryptoBalance;
     }
   }
   returnAddressHTML(key) {
