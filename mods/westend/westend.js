@@ -6,8 +6,7 @@ let saitoWestendEndpointSecure = "wss://saito.io:9931/argylewss/";
 
 class Westend extends SubstrateBasedCrypto {
   constructor(app) {
-    //super(app, 'WESTIE', kaoliniteTestServerEndpoint);
-    super(app, 'WESTIE', saitoWestendEndpointSecure);
+    super(app, 'WND', saitoWestendEndpointSecure);
     this.name = 'Westend';
     this.description = 'Westend Polkadot Testnet application support for Saito. Installing this module will make Westnet your default in-browser cryptocurrency.';
     this.categories = "Cryptocurrency";
