@@ -798,10 +798,14 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
           this.showSplash(updateHTML);
           this.updateHTML = updateHTML;
 
+console.log("WINNERS LENGTH: " + winners.length);
+
           //
           // report winner
           //
           if (winners.length > 1) {
+
+console.log("winners are all");
 
             //
             // split winnings among winners
@@ -822,7 +826,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
               // non-winners send wagers to winner
               //
 	      if (this.game.crypto != "") {
-	        for (let ii = 0; ii < this.game.players; ii++) {
+	        for (let ii = 0; ii < this.game.players.length; ii++) {
 		  if ((!winners.includes(ii)) && this.game.state.player_pot[ii] > 0) {
                     this.settlement.push("RECEIVE" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[ii]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
                     this.settlement.push("SEND" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[ii]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
@@ -839,15 +843,15 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
             this.game.state.player_credit[winners[0]] += this.game.state.pot;
 
 	    if (this.game.crypto != "") {
-	      for (let ii = 0; ii < this.game.players; ii++) {
+	      for (let ii = 0; ii < this.game.players.length; ii++) {
 	        if ((!winners.includes(ii)) && this.game.state.player_pot[ii] > 0) {
                   this.settlement.push("RECEIVE" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[ii] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
                   this.settlement.push("SEND" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[ii] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
 	        }
 	      }
 	    }
-
           }
+
           this.startNextRound();
 
           return 1;
