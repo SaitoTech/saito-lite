@@ -42,7 +42,7 @@
     "image-resolver": "^0.6.1",
     "jimp": "^0.9.3",
     "json-tree-viewer": "0.0.2",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "jszip": "^3.5.0",
     "markdown-linkify": "^1.0.3",
     "marked": "^0.8.0",
