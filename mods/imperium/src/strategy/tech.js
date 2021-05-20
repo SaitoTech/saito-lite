@@ -175,12 +175,14 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
         type : "Law" ,
         text : "Elect a player. They do not need to spend resources to research technology when the technology card is played" ,
 	initialize : function(imperium_self) {
-	  imperium_self.game.state.minster_of_technology = null;
-	  imperium_self.game.state.minster_of_technology_player = null;
-	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	    if (!imperium_self.game.players_info[i].temporary_research_technology_card_must_not_spend_resources) {
-	      imperium_self.game.players_info[i].temporary_research_technology_card_must_not_spend_resources = 0;
-	      imperium_self.game.players_info[i].permanent_research_technology_card_must_not_spend_resources = 0;
+         if (!imperium_self.game.state.ministery_of_technology) {
+	    imperium_self.game.state.minster_of_technology = null;
+	    imperium_self.game.state.minster_of_technology_player = null;
+	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	      if (!imperium_self.game.players_info[i].temporary_research_technology_card_must_not_spend_resources) {
+	        imperium_self.game.players_info[i].temporary_research_technology_card_must_not_spend_resources = 0;
+	        imperium_self.game.players_info[i].permanent_research_technology_card_must_not_spend_resources = 0;
+	      }
 	    }
 	  }
 	},

@@ -6,6 +6,7 @@ class Imperium extends GameTemplate {
     super(app);
   
     this.name             = "Imperium";
+    this.gamename         = "Red Imperium";
     this.slug		  = "imperium";
     this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of a galaxy in the waning days of a dying Empire.`;
     this.categories	  = "Arcade Games Entertainment";
@@ -2411,7 +2412,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship","assault-cannon"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
 
       promissary_notes	:	["trade","political","ceasefire","throne"],
@@ -13073,7 +13074,7 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 
 	if (planet) {
 	  planet.units[planet.owner-1] = [];
-	  if (planet.owner != -1) {
+	  if (planet.owner > -1) {
             this.game.players_info[planet.owner-1].lost_planet_this_round = player; // player who took it
 	  }
 	  this.updatePlanetOwner(sector, planet_idx, player);
@@ -13366,6 +13367,9 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 
   	this.game.queue.splice(qe, 1);
 
+console.log("OFFER: " + JSON.stringify(offer));
+console.log("PRE TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
+
 	if (offering_faction == this.game.player) {
 	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
 	}
@@ -13401,6 +13405,8 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 	  this.game.players_info[faction_responding-1].goods += parseInt(this.game.players_info[faction_responding-1].commodities);
 	  this.game.players_info[faction_responding-1].commodities = 0;
 	}
+
+console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 
 	this.displayFactionDashboard();
   	return 1;
@@ -14666,7 +14672,7 @@ console.log("checking if player has PDS units in range...");
         //
         // note planet lost
         //
-        if (sys.p[planet_idx].owner != -1) {
+        if (sys.p[planet_idx].owner > -1) {
           this.game.players_info[sys.p[planet_idx].owner].lost_planet_this_round = gainer; // player who took it
 	}
 
@@ -16204,8 +16210,12 @@ console.log("bonus: " + (i+1));
             //
             // note planet lost
             //
-            this.game.players_info[defender-1].lost_planet_this_round = attacker; // player who took it
-
+            if (defender > 0) {
+	      if (defender != -1) {
+console.log("defender is: " + defender);
+                this.game.players_info[defender-1].lost_planet_this_round = attacker; // player who took it
+	      }
+	    }
             this.updatePlanetOwner(sector, planet_idx, player);
 	  } else {
             this.updateLog(sys.p[planet_idx].name + " defended by " + this.returnFactionNickname(this.game.state.ground_combat_defender) + " (" + defender_survivors + " infantry)");

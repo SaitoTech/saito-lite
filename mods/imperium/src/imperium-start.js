@@ -6,6 +6,7 @@ class Imperium extends GameTemplate {
     super(app);
   
     this.name             = "Imperium";
+    this.gamename         = "Red Imperium";
     this.slug		  = "imperium";
     this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of a galaxy in the waning days of a dying Empire.`;
     this.categories	  = "Arcade Games Entertainment";

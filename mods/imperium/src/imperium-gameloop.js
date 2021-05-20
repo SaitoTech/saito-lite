@@ -2232,6 +2232,9 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 
   	this.game.queue.splice(qe, 1);
 
+console.log("OFFER: " + JSON.stringify(offer));
+console.log("PRE TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
+
 	if (offering_faction == this.game.player) {
 	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
 	}
@@ -2267,6 +2270,8 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 	  this.game.players_info[faction_responding-1].goods += parseInt(this.game.players_info[faction_responding-1].commodities);
 	  this.game.players_info[faction_responding-1].commodities = 0;
 	}
+
+console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 
 	this.displayFactionDashboard();
   	return 1;
