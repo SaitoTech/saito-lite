@@ -258,7 +258,8 @@ class Rewards extends ModTemplate {
   }
 
   async payoutFirstInstance(address, event, payout) {
-    if (await this.checkEvent(address, event) == false) {
+    let hasHappened = await this.checkEvent(address, event);
+    if (!hasHappened) {
       this.makePayout(address, payout, event);
       let params = {
         $address: address,
@@ -284,19 +285,18 @@ class Rewards extends ModTemplate {
       if (txmsg.module != rewards_self.name) { return; }
 
       this.renderBadges();
+    } else {
+      if (app.wallet.returnPublicKey() != this.rewards_publickey) { return; } 
+      if (conf == 0) {
+        if (tx.transaction.type == 0) {
+          this.updateUsers(tx);
+        }
+        if (tx.returnMessage().module == "Registry") {
+          this.payoutFirstInstance(tx.transaction.from[0].add, "register identifier", this.registryPayout);
+        }
+      }  
     }
-    if (app.wallet.returnPublicKey() != this.rewards_publickey) { return; } 
-
-    if (conf == 0) {
-      if (tx.transaction.type == 0) {
-        if (this.app.BROWSER == 1) { return; }
-        this.updateUsers(tx);
-      }
-
-      if (tx.returnMessage().module == "Registry") {
-        this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registryPayout);
-      }
-    }
+    
   }
 
   onNewBlock(blk, lc) {
