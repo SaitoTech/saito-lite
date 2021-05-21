@@ -92,7 +92,7 @@ module.exports = SettingsAppspace = {
     // install module (button)
     //
     try {
-    Array.from(document.getElementsByClassName("modules_mods_checkbox")).forEach(ckbx => {
+      Array.from(document.getElementsByClassName("modules_mods_checkbox")).forEach(ckbx => {
 
       ckbx.onclick = async (e) => {
 
@@ -121,94 +121,32 @@ module.exports = SettingsAppspace = {
 
       };
     });
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
 
     try {
-    document.getElementById('backup-account-btn').addEventListener('click', (e) => {
-      app.wallet.backupWallet();
-    });
-    } catch (err) {}
-
-    try {
-    document.getElementById('restore-account-btn').onclick = async(e) => {
-      document.getElementById('file-input').addEventListener('change', function(e) {
-
-        var file = e.target.files[0];
-
-
-        let password_prompt = "";
-        /*
-        //let confirm_password = await sconfirm("Did you encrypt this backup with a password. Click cancel if not:");
-        if (confirm_password) {
-
-          password_prompt = await sprompt("Please provide the password you used to encrypt this backup:");
-          if (!password_prompt) {
-            salert("Wallet Restore Cancelled");
-            return;
-          }
-        } else {
-          password_prompt = "";
-        }
-
-        password_prompt = await sprompt("Enter encryption password (blank for no password):");
-
-        let groo = password_prompt;
-        
-        if (password_prompt === false) {
-          salert("Wallet Restore Cancelled");
-          return;
-        }
-        */
-        
-        let selectedFile = e.target.files[0];
-        var wallet_reader = new FileReader();
-        wallet_reader.onloadend = function () {
-
-          let decryption_secret = "";
-          let decrypted_wallet = "";
-
-          if (password_prompt != "") {
-            decryption_secret = app.crypto.hash(password_prompt + "SAITO-PASSWORD-HASHING-SALT");
-            try {
-              decrypted_wallet = app.crypto.aesDecrypt(wallet_reader.result, decryption_secret);
-            } catch (err) {
-              salert(err);
-            }
-          } else {
-            decrypted_wallet = wallet_reader.result;
-          }
-
-          try {
-            let wobj = JSON.parse(decrypted_wallet);
-            app.options = wobj;
-
-            app.blockchain.resetBlockchain();
-
-            app.modules.returnModule('Arcade').onResetWallet();
-            app.storage.saveOptions();
-
-            //
-            // and reload
-            //
-            salert("Restoration Complete ... click to reload Saito");
-            window.location.reload();
-          } catch (err) {
-            if(err.name == "SyntaxError") {
-              salert("Error reading wallet file. Did you upload the correct file?");
-            } else if(false) {// put this back when we support encrypting wallet backups again...
-              salert("Error decrypting wallet file. Password incorrect");
-            } else {
-              salert("Unknown error<br/>" + err);  
-            }
-            
-          }
-        };
-
-        wallet_reader.readAsBinaryString(selectedFile);
+      document.getElementById('backup-account-btn').addEventListener('click', (e) => {
+        app.wallet.backupWallet();
       });
-      document.querySelector('#file-input').click();
-    };
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      document.getElementById('restore-account-btn').onclick = async(e) => {
+        console.log("restore-account-btn");
+        console.log(document.getElementById('file-input'));
+        document.getElementById('file-input').addEventListener('change', function(e) {
+          console.log("file-input change...");
+          var file = e.target.files[0];
+          app.wallet.restoreWallet(file);
+        });
+        document.querySelector('#file-input').click();
+      }
+    } catch (err) {
+      console.log(err);
+    }
 
 
 
@@ -220,8 +158,7 @@ module.exports = SettingsAppspace = {
         app.wallet.resetWallet();
         app.modules.returnModule('Arcade').onResetWallet();
         app.storage.saveOptions();
-      
-  
+
         mod.emails.inbox = [];
         mod.emails.sent = [];
         mod.emails.trash = [];
