@@ -16,6 +16,7 @@ class Thirteen extends GameTemplate {
     this.app             = app;
 
     this.name  		 = "Thirteen";
+    this.name  		 = "Thirteen Days";
     this.slug		 = "thirteen";
     this.description     = `Thirteen Days is a mid-length simulation of the Cuban Missile Crisis created by Asger Granerud and Daniel Skjold Pedersenmade.`;
     this.publisher_message = `Thirteen Days is owned by <a href="http://jollyrogergames.com/game/13-days/">Jolly Roger Games</a>. This module includes the open source Vassal module explicitly authorized by the publisher. Vassal module requirements are that at least one player per game has purchased a copy of the game. Please support Jolly Roger Games and purchase your copy <a href="http://jollyrogergames.com/game/13-days/">here</a>`;

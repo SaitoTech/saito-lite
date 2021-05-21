@@ -33,6 +33,11 @@ module.exports = ArcadeSidebar = {
     let games_menu = document.querySelector(".arcade-apps");
     app.modules.respondTo("arcade-games").forEach(module => {
       let title = module.name;
+      try {
+        if (module.gamename) { title = module.gamename; }
+      } catch (err) {
+
+      }
       if (!document.getElementById(module.name)) {
         games_menu.innerHTML += `<li class="arcade-navigator-item" id="${module.name}">${title}</li>`;
       }
