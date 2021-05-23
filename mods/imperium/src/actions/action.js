@@ -210,7 +210,7 @@ ACTION CARD - types
 	    for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
 	      let law = imperium_self.game.state.laws[i];
 	      let agenda = imperium_self.agenda_cards[law];
-              html += '<li class="option" id="'+agenda+'">' + imperium_self.agenda_cards[card].name + '</li>';
+              html += '<li class="option" id="'+agenda+'">' + agenda.name + '</li>';
 	    }
             html += '<li class="option" id="cancel">cancel</li>';
 	    html += '</ul>';

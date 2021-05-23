@@ -73,14 +73,14 @@ Additionally, <b>with this module you can lose significant amounts of money with
       let dotgo = document.getElementById("dot-warning-confirm");
       if (dotgo) {
         dotgo.onclick = (e) => {
-          cryptomod.overlay.hideOverlay();
+          cryptomod.modal_overlay.hideOverlay();
         }
       }
       let dotno = document.getElementById("revert-to-saito");
       if (dotno) {
         dotno.onclick = (e) => {
           app.wallet.setPreferredCrypto("SAITO");
-          cryptomod.overlay.hideOverlay();
+          cryptomod.modal_overlay.hideOverlay();
         }
       }
     } catch (err) {

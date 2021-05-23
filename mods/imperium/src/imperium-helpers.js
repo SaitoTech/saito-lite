@@ -82,8 +82,6 @@
       this.moves.push(this.rmoves[i]);
     }
 
-    this.updateStatus("Waiting for information from peers....");
-  
     if (nextTarget != 0) {
       extra.target = nextTarget;
     }
@@ -92,6 +90,9 @@
     this.moves = [];
     this.rmoves = [];
     this.sendMessage("game", {});
+
+    this.updateStatus("Waiting for information from peers....");
+  
   };
 
   
@@ -139,6 +140,7 @@
             <label for="game_length ">Game Length:</label>
             <select name="game_length">
               <option value="4">4 VP</option>
+              <option value="6">6 VP</option>
               <option value="8">8 VP</option>
               <option value="10" selected>10 VP</option>
               <option value="12">12 VP</option>

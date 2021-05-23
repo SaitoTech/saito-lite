@@ -8213,7 +8213,7 @@ ACTION CARD - types
 	    for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
 	      let law = imperium_self.game.state.laws[i];
 	      let agenda = imperium_self.agenda_cards[law];
-              html += '<li class="option" id="'+agenda+'">' + imperium_self.agenda_cards[card].name + '</li>';
+              html += '<li class="option" id="'+agenda+'">' + agenda.name + '</li>';
 	    }
             html += '<li class="option" id="cancel">cancel</li>';
 	    html += '</ul>';
@@ -16527,8 +16527,6 @@ console.log("defender is: " + defender);
       this.moves.push(this.rmoves[i]);
     }
 
-    this.updateStatus("Waiting for information from peers....");
-  
     if (nextTarget != 0) {
       extra.target = nextTarget;
     }
@@ -16537,6 +16535,9 @@ console.log("defender is: " + defender);
     this.moves = [];
     this.rmoves = [];
     this.sendMessage("game", {});
+
+    this.updateStatus("Waiting for information from peers....");
+  
   };
 
   
@@ -16584,6 +16585,7 @@ console.log("defender is: " + defender);
             <label for="game_length ">Game Length:</label>
             <select name="game_length">
               <option value="4">4 VP</option>
+              <option value="6">6 VP</option>
               <option value="8">8 VP</option>
               <option value="10" selected>10 VP</option>
               <option value="12">12 VP</option>
