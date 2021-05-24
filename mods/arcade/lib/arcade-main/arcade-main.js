@@ -185,7 +185,10 @@ module.exports = ArcadeMain = {
       // check we have module
       //
       if (game_options.crypto != "" && game_options.crypto != undefined) {
-
+        if(game_options.crypto !== app.wallet.returnPreferredCrypto().ticker){
+          salert(`You must set ${game_options.crypto} as your preferred crypto to join this game`);
+          return;
+        }
         let cryptoMod = null;
         try {
           cryptoMod = app.wallet.returnCryptoModuleByTicker(game_options.crypto);

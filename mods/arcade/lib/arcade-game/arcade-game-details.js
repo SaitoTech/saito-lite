@@ -101,33 +101,42 @@ module.exports = ArcadeGameDetails = {
 
         let options = getOptions();
 
-	//
-	// if crypto and stake selected, make sure creator has it
-	//
-	if (options.crypto != "") {
-	  if (options.stake > 0) {
+      //
+      // if crypto and stake selected, make sure creator has it
+      //
+      if (options.crypto != "") {
+        if (options.stake > 0) {
 
-            let my_address = app.wallet.returnPreferredCrypto(options.crypto).returnAddress();
+
+          let selected_crypto_ticker = app.wallet.returnCryptoModuleByTicker(options.crypto).ticker;
+          let preferred_crypto_ticker = app.wallet.returnPreferredCrypto().ticker;
+          if(selected_crypto_ticker === preferred_crypto_ticker) {
+            let my_address = app.wallet.returnPreferredCrypto().returnAddress();
             let crypto_transfer_manager = new GameCryptoTransferManager(app);
             crypto_transfer_manager.balance(app, mod, my_address, options.crypto, function() {});
             let returnObj = await app.wallet.returnPreferredCryptoBalances([ my_address ], null, options.crypto);
             crypto_transfer_manager.hideOverlay();
-	
-	    let adequate_balance = 0;
-	    for (let i = 0; i < returnObj.length; i++) {
-	      if (returnObj[i].address == my_address) {
-		if (parseFloat(returnObj[i].balance) >= parseFloat(options.stake)) {
-		  adequate_balance = 1;
-		}
-	      }
-	    }    
 
-	    if (adequate_balance == 0) {
-	      salert("You don't have enough "+options.crypto+" to create this game!");
-	      return;
-	    }
-	  }
-	}
+            let adequate_balance = 0;
+            for (let i = 0; i < returnObj.length; i++) {
+              if (returnObj[i].address == my_address) {
+                if (parseFloat(returnObj[i].balance) >= parseFloat(options.stake)) {
+                  adequate_balance = 1;
+                }
+              }
+            }    
+
+            if (adequate_balance == 0) {
+              salert("You don't have enough "+options.crypto+" to create this game!");
+              return;
+            }
+          } else {
+            salert(`${options.crypto} must be set as your preferred crypto to create a game using ${options.crypto}`);
+            return;
+          }
+          
+        }
+      }
 
 
         app.browser.logMatomoEvent("Arcade", "ArcadeCreateNewInvite", options.gamename);
