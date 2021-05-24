@@ -14,8 +14,8 @@ module.exports = TeamTemplate = () => {
     },
     {
       name: 'Clayton Rabenda', 
-      photoFile: '', 
-      desc: 'Studied Electronics and Electrical Engineering at LeHigh University and worked on the web technologies teams at Viacom and Amplify Inc. before joining Google as a Software Engineer focused on fraud protection in the company’s advertising platforms.', 
+      photoFile: 'Clayton_Rabenda.jpg', 
+      desc: 'Studied Electrical Engineering at Lehigh University and worked on the web technologies teams at Viacom and Amplify Inc. before joining Google as a Senior Software Engineer on their advertising fraud protection team, Ad Traffic Quality, which leveraged Machine Learning at Internet Scale to defend the majority Google\'s revenue.', 
       linkedin: 'https://linkedin.com/in/clayton-rabenda-6ab9b39'
     }
   ];
@@ -29,7 +29,7 @@ module.exports = TeamTemplate = () => {
         <h3 class="team-name">${member.name}</h3>
         <p class="team-desc">${member.desc}</p>
         <div class="team-links">
-          <a href="${member.linkedin}" class="button">Linked In Profile</a></div>
+          <a href="${member.linkedin}" class="button">LinkedIn Profile</a></div>
       </div>
     </div>
     `;
