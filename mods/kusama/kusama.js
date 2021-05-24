@@ -11,6 +11,8 @@ class Kusama extends SubstrateBasedCrypto {
     this.name = 'Kusama';
     this.description = 'Kusama Polkadot testnet for Saito. Installing this module will make Kusama your default in-browser cryptocurrency.';
     this.categories = "Cryptocurrency";
+    this.information = "Your wallet has a Kusama module installed. This allows you to send and receive KSM and interact with the Kusama network via Kusama-compatible applications running on the Saito network. Please note that KSM is intended for rapid application prototyping and development. We recommend against using this network for casual network purposes unless you are a developer and know what you are doing. And please be sure to backup your wallet.";
+    this.warning = "Kusama has an Existential Deposit of 0.01 KSM. Be sure not to send less than this amount or leave less than 0.01 KSM in your wallet or it will be reaped by the network.";
   }
   renderModalSelectCrypto(app, cryptomod) {
     return `

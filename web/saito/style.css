@@ -849,6 +849,10 @@ input[type=text], input[type=number], input[type=password], input[type=date] {
   border-bottom: 1px solid var(--saito-cyber-black-wash);
 }
 
+.password {
+  font-family: p-word;
+}
+
 input[type=file] {
   border: none;
   width: 0.1px;

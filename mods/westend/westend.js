@@ -10,6 +10,8 @@ class Westend extends SubstrateBasedCrypto {
     this.name = 'Westend';
     this.description = 'Westend Polkadot Testnet application support for Saito. Installing this module will make Westnet your default in-browser cryptocurrency.';
     this.categories = "Cryptocurrency";
+    this.information = "Your wallet has a Westend module installed. This allows you to send and receive WND tokens and interact with the Polkadot Westend testnet via Westend-compatible applications running on the Saito network. Although WND tokens do not have any economic value, please be sure you backup your wallet if you wish to retain this network address across server resets.";
+    this.warning = "";
   }
 
   renderModalSelectCrypto(app, cryptomod) {

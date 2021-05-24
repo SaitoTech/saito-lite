@@ -53,10 +53,17 @@ let EmailCryptoAppspace = {
     }
     let cryptoMod = this.getCryptoMod(app);
     let preferredCryptoMod = app.wallet.returnPreferredCrypto();
-    document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(cryptoMod, preferredCryptoMod.name);
+    document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(app, cryptoMod);
     loadBalance(cryptoMod);
     loadPubkey(cryptoMod);
     
+    try {
+      document.getElementById("private-key").onclick = function (e) {
+        document.getElementById("private-key").toggleClass("password");
+      }
+    } catch (err) {}
+
+
     document.querySelector(`.crypto-container .sendbutton`).onclick = () => {
       let howMuch = document.querySelector(`.crypto-container .howmuch`).value;
       let toAddress = document.querySelector(`.crypto-container .pubkeyto`).value;

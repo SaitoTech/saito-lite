@@ -9,6 +9,8 @@ class Polkadot extends SubstrateBasedCrypto {
     super(app, 'DOT', saitoEndpointSecure, "Polkadot's Existential Deposit is 1 DOT, be sure not to send less than 1 DOT or leave less than 1 DOT in your wallet.");
     this.name = 'Polkadot';
     this.description = 'Polkadot application layer for in-browser Polkadot applications. Install this module to make Polkadot your default in-browser cryptocurrency';
+    this.information = "Your wallet has a Polkadot module installed. This allows you to send and receive DOT and interact with Polkadot-compatible applications running on the Saito network. Please note that DOT is not intended for consumer usage, but intended as a base-layer for supporting an ecosystem of parachains. We recommend against using this network for other purposes.";
+    this.warning = "Polkadot has an Existential Deposit of 1 DOT. Be sure not to send less than 1 DOT or leave less than 1 DOT in your wallet or it will be reaped by the network.";
     this.categories = "Cryptocurrency";
   }
 
