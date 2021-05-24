@@ -31,6 +31,8 @@
 const saito = require('./saito');
 const Big      = require('big.js');
 const AbstractCryptoModule = require('../templates/abstractcryptomodule')
+const ModalSelectCrypto = require('./ui/modal-select-crypto/modal-select-crypto');
+
 
 
 /**
@@ -55,7 +57,7 @@ class Wallet {
     this.wallet.outputs                  = [];
     this.wallet.spends                   = [];        // spent but still around
     this.wallet.default_fee              = 2;
-    this.wallet.version                  = 3.331;
+    this.wallet.version                  = 3.332;
 
     this.wallet.preferred_crypto	 = "SAITO";
     this.wallet.preferred_txs		 = [];
@@ -89,19 +91,14 @@ console.log("SAITO transferring: " + howMuch + " - to - " + to);
         this.app.wallet.transferTo(howMuch, to);
       }
       async hasPayment(howMuch, from, to, timestamp) {
-        console.log("SAITO has payment");
-        console.log(howMuch);
-        console.log(from);
-        console.log(to);
-        console.log(timestamp);
-	let from_from = 0;
-	let to_to = 0;
+        // This doens't account for the from field in case when the user is "to"
+        // and doesn't account for "to" field when the user is "from".
+        let from_from = 0;
+        let to_to = 0;
         if (to == this.app.wallet.returnPublicKey()) {
           for (let i = 0; i &lt; this.app.wallet.wallet.inputs.length; i++) {
-            //console.log("INPUT");
-            //console.log(this.app.wallet.wallet.inputs[i]);
             if (this.app.wallet.wallet.inputs[i].amt === howMuch) {
-              if (this.app.wallet.wallet.inputs[i].ts >= timestamp) {
+              if (parseInt(this.app.wallet.wallet.inputs[i].ts) >= parseInt(timestamp)) {
                 if (this.app.wallet.wallet.inputs[i].add == to) {
                   return true;
                 }
@@ -109,10 +106,8 @@ console.log("SAITO transferring: " + howMuch + " - to - " + to);
             }
           }
           for (let i = 0; i &lt; this.app.wallet.wallet.outputs.length; i++) {
-            //console.log("OUTPUT");
-            //console.log(this.app.wallet.wallet.outputs[i]);
             if (this.app.wallet.wallet.outputs[i].amt === howMuch) {
-              if (this.app.wallet.wallet.outputs[i].ts >= timestamp) {
+              if (parseInt(this.app.wallet.wallet.outputs[i].ts) >= parseInt(timestamp)) {
                 if (this.app.wallet.wallet.outputs[i].add == to) {
                   return true;
                 }
@@ -121,12 +116,12 @@ console.log("SAITO transferring: " + howMuch + " - to - " + to);
           }
           return false;
         } else {
-	  if (from == this.app.wallet.returnPublicKey()) {
+          if (from == this.app.wallet.returnPublicKey()) {
             for (let i = 0; i &lt; this.app.wallet.wallet.outputs.length; i++) {
               //console.log("OUTPUT");
               //console.log(this.app.wallet.wallet.outputs[i]);
               if (this.app.wallet.wallet.outputs[i].amt === howMuch) {
-                if (this.app.wallet.wallet.outputs[i].ts >= timestamp) {
+                if (parseInt(this.app.wallet.wallet.outputs[i].ts) >= parseInt(timestamp)) {
                   if (this.app.wallet.wallet.outputs[i].add == to) {
                     return true;
                   }
@@ -143,7 +138,6 @@ console.log("SAITO transferring: " + howMuch + " - to - " + to);
     }
     this.saitoCrypo = new SaitoCrypto(app);
   }
-
 
 
   addInput(x) {
@@ -906,6 +900,78 @@ console.log("---------------------------------------");
       console.log("Error backing-up wallet: " + err);
     }
   }
+  
+  /**
+   * Restores the user's wallet from uploaded JSON
+   */
+  async restoreWallet(file) {
+    console.log("restore wallet...");
+    
+    // let password_prompt = "";
+    // let confirm_password = await sconfirm("Did you encrypt this backup with a password. Click cancel if not:");
+    // if (confirm_password) {
+    // 
+    //   password_prompt = await sprompt("Please provide the password you used to encrypt this backup:");
+    //   if (!password_prompt) {
+    //     salert("Wallet Restore Cancelled");
+    //     return;
+    //   }
+    // } else {
+    //   password_prompt = "";
+    // }
+    // 
+    // password_prompt = await sprompt("Enter encryption password (blank for no password):");
+    // 
+    // let groo = password_prompt;
+    // 
+    // if (password_prompt === false) {
+    //   salert("Wallet Restore Cancelled");
+    //   return;
+    // }
+    
+    
+    var wallet_reader = new FileReader();
+    wallet_reader.readAsBinaryString(file);  
+    wallet_reader.onloadend = () => {
+      
+      let decryption_secret = "";
+      let decrypted_wallet = "";
+
+      // if (password_prompt != "") {
+      //   decryption_secret = app.crypto.hash(password_prompt + "SAITO-PASSWORD-HASHING-SALT");
+      //   try {
+      //     decrypted_wallet = app.crypto.aesDecrypt(wallet_reader.result, decryption_secret);
+      //   } catch (err) {
+      //     salert(err);
+      //   }
+      // } else {
+        decrypted_wallet = wallet_reader.result;
+      //}
+      try {
+        let wobj = JSON.parse(decrypted_wallet);
+        this.app.options = wobj;
+
+        this.app.blockchain.resetBlockchain();
+
+        this.app.modules.returnModule('Arcade').onResetWallet();
+        this.app.storage.saveOptions();
+
+        salert("Restoration Complete ... click to reload Saito");
+        window.location.reload();
+      } catch (err) {
+        if(err.name == "SyntaxError") {
+          salert("Error reading wallet file. Did you upload the correct file?");
+        } else if(false) {// put this back when we support encrypting wallet backups again...
+          salert("Error decrypting wallet file. Password incorrect");
+        } else {
+          salert("Unknown error&lt;br/>" + err);  
+        }
+      }
+    };
+
+  }
+  
+
 
   /**
    * Generates a new keypair for the user, resets all stored wallet info, and saves
@@ -1412,11 +1478,13 @@ console.log("---------------------");
    * Set user's preferred crypto module by ticker
    * @param {String} ticker - Ticker of install crypto module
    */
-  setPreferredCrypto(ticker) {
+  setPreferredCrypto(ticker, show_overlay=0) {
+console.log("set preferred crypto: " + ticker);
     let can_we_do_this = 0;
     let mods = this.returnAvailableCryptos();
+    let cryptomod = null;
     for (let i = 0; i &lt; mods.length; i++) {
-      if (mods[i].ticker === ticker) { can_we_do_this = 1; }
+      if (mods[i].ticker === ticker) { cryptomod = mods[i]; can_we_do_this = 1; }
     }
     if (ticker == "SAITO") { can_we_do_this = 1; }
 
@@ -1424,6 +1492,14 @@ console.log("---------------------");
       this.wallet.preferred_crypto = ticker;
       this.saveWallet();
       this.app.connection.emit("set_preferred_crypto", ticker);
+    }
+
+    if (cryptomod != null &amp;&amp; show_overlay == 1) {
+      if (cryptomod.renderModalSelectCrypto() != null) {
+        let modal_select_crypto = new ModalSelectCrypto(this.app, cryptomod);
+        modal_select_crypto.render(this.app, cryptomod);
+        modal_select_crypto.attachEvents(this.app, cryptomod);
+      }
     }
 
     return;
@@ -1512,12 +1588,6 @@ console.log("---------------------");
   * @param {String} ticker - Ticker of install crypto module
   */
   async sendPayment(senders=[], receivers=[], amounts=[], timestamp, mycallback, ticker) {
-    console.log("sendPayment???/");
-    console.log(senders[0]);
-    console.log(receivers[0]);
-    console.log(amounts[0]);
-    console.log(timestamp[0]);
-    console.log(ticker);
     // validate inputs
     if (senders.length != receivers.length || senders.length != amounts.length) {
       console.log("Lengths of senders, receivers, and amounts must be the same")
@@ -1532,13 +1602,10 @@ console.log("---------------------");
     if (!this.doesPreferredCryptoTransactionExist(senders, receivers, amounts, timestamp, ticker)) {
       let cryptomod = this.returnCryptoModuleByTicker(ticker);
       for (let i = 0; i &lt; senders.length; i++) {
-        console.log(senders[i]);
-        console.log(cryptomod.returnAddress());
         if (senders[i] === cryptomod.returnAddress()) {
           // Need to save before we await, otherwise there is a race condition
           this.savePreferredCryptoTransaction(senders, receivers, amounts, timestamp, ticker);
           try {
-            console.log("???? here????");
             let hash = await cryptomod.transfer(amounts[i], receivers[i]);
             // execute callback if exists
             mycallback({hash: hash});
@@ -1600,6 +1667,7 @@ console.log("---------------------");
       //
       if (this.doesPreferredCryptoTransactionExist(senders, receivers, amounts, timestamp, ticker)) {
         mycallback();
+        return;
       }
 
       let cryptomod = this.returnCryptoModuleByTicker(ticker);
@@ -1609,7 +1677,7 @@ console.log("---------------------");
       // create a function we can loop through to check if the payment has come in....
       //
       let check_payment_function = async() => {
-        return await cryptomod.hasPayment(amounts[0], senders[0], receivers[0], timestamp[0]); 
+        return await cryptomod.hasPayment(amounts[0], senders[0], receivers[0], timestamp - 3); // subtract 3 seconds in case system time is slightly off
       }
 
       let poll_check_payment_function = async() => {
@@ -1721,7 +1789,7 @@ module.exports = Wallet;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed May 19 2021 04:51:24 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon May 24 2021 05:00:01 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
