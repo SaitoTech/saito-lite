@@ -299,8 +299,12 @@ margin-bottom: 4px;
 
 .post-view-parent-comment {
 line-height: 1.2em;
-font-size: .9em;
+font-size: 1.15em;
 margin: 1rem 0;
+}
+
+.post-view-parent-comment div {
+  margin-bottom: 15px;
 }
 
 .post-view-container hr {
@@ -345,7 +349,7 @@ background-color: #eaeaea;
 }
 
 .post-view-comment-text {
-    font-size: .9em;
+    font-size: 1.15em;
     margin: .5rem 0 1rem 32px;
 }
 

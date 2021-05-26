@@ -80,6 +80,7 @@ let EmailCryptoAppspace = {
         salert(`Error sending transaction.\n{error}`);
       }
     }
+/****
     document.querySelectorAll(`.crypto-container .set-preferred`).forEach((elem, i) => {
       elem.onclick = (event) => {
         if (event.currentTarget.classList.contains('preferred')) {
@@ -94,6 +95,8 @@ let EmailCryptoAppspace = {
         }
       }
     });
+****/
+
   }
   
 }

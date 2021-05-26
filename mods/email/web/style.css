@@ -38,8 +38,8 @@ height: 100%;
   padding: 10px 16px; 
 }
 .crypto-container .crypto-title {
-font-size: 1.5em;
-margin-bottom: 1rem;
+  font-size: 1.25em;
+  margin-bottom: 1rem;
 }
 .crypto-container .ticker {
 font-size: 3em; 

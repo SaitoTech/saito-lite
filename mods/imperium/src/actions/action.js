@@ -38,7 +38,7 @@ ACTION CARD - types
   	text : "If you have lost a planet this round, refresh one of your planets" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
-	  if (imperium_self.game.players_info[action_card_player-1].lost_planet_this_round != -1) {
+	  if (imperium_self.game.players_info[action_card_player-1].lost_planet_this_round != -1 && action_card_player == imperium_self.game.player) {
 
 	    let my_planets = imperium_self.returnPlayerExhaustedPlanetCards(imperium_self.game.player);
 
@@ -921,10 +921,10 @@ ACTION CARD - types
 		let infantry_destroyed = 0;
 
 		if (planet_owner >= 0) {
-		  for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
+		  for (let i = planet_obj.units[planet_owner-1].length-1; i >= 0; i--) {
 		    if (infantry_destroyed < 3) {
 		      if (planet_obj.units[planet_owner-1][i].type == "infantry") {
-		        imperium_self.addMove("destroy_unit\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		        imperium_self.addMove("destroy_unit\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+i+"\t"+"1");
 		    	infantry_destroyed++;
 		      }
 		    }

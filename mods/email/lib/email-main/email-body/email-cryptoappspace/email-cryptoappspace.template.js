@@ -17,9 +17,11 @@ module.exports = EmailCryptoAppspaceTemplate = (app, cryptomod) => {
           <div>Balance:</div>
           <div class="balance">loading...</div>
           <div>Private Key:</div>
-          <div id="private-key" class="private-key password">${app.wallet.returnPrivateKey()}<i style="margin-left:5px" class="see-password fas fa-eye" id="see-password"></i></div>
+          <div id="private-key" class="private-key password">${cryptomod.returnPrivateKey()}<i style="margin-left:5px" class="see-password fas fa-eye" id="see-password"></i></div>
         </div>
+<!----
         <button class="set-preferred ${is_preferred}"></button>
+--->
 
         <hr />
 
