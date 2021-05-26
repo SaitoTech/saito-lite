@@ -28,7 +28,6 @@
 
       if (my_go == 0) {
         this.updateStatus("<div class='status-message' id='status-message'>Opponent retrieving card from discard pile</div>");
-        console.log("HERE: " + my_go + " --- " + this.game.player + " --- " + player);
         return 0;
       }
 

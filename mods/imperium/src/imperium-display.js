@@ -1897,8 +1897,6 @@ updateSectorGraphics(sector) {
 
   returnShortGameOptionsArray(options) {
 
-console.log("HERE: ");
-
     let sgoa = super.returnShortGameOptionsArray(options);
     let ngoa = [];
 
