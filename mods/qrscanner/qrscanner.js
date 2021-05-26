@@ -1,5 +1,6 @@
 const ModTemplate = require('../../lib/templates/modtemplate');
-const Header = require('../../lib/ui/header/header');
+// This header was deprecated, use the new one in lib/saito/ui
+// const Header = require('../../lib/ui/header/header');
 const AddContact = require('./lib/add-contact');
 
 const HeaderDropdownTemplate = (dropdownmods) => {
@@ -265,8 +266,9 @@ class QRScanner extends ModTemplate {
 
       this.decoder.terminate();
 
-      AddContact.render(this.app, {publickey: msg, header: Header});
-      AddContact.attachEvents(this.app, {publickey: msg, header: Header});
+      // This header was deprecated
+      // AddContact.render(this.app, {publickey: msg, header: Header});
+      // AddContact.attachEvents(this.app, {publickey: msg, header: Header});
 
     } else {
       this.sendEvent('qrcode', msg);

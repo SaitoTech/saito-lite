@@ -1,7 +1,8 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const LeaderboardArcadeInfobox = require('./lib/arcade-infobox/arcade-infobox');
-const Header = require('../../lib/ui/header/header');
+// This header was deprecated, use the new one in lib/saito/ui
+//const Header = require('../../lib/ui/header/header');
 
 const Elo = require('elo-rank');
 

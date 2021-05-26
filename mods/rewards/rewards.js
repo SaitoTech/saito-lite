@@ -17,22 +17,23 @@ class Rewards extends ModTemplate {
     this.name = "Rewards";
     this.description = "Quick reference for earning Saito tokens from the Saito faucet.";
     this.categories = "Core Utilities Finance";
-    this.initial = 10;
-    this.payoutRatio = 0.95;
-    this.cap = 100;
+    this.INITIAL = 10;
+    this.PAYOUT_RATIO = 0.95;
+    this.CAP = 100;
     this.rewards_publickey = app.options.runtime.rewardsPubkey || "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
     
-    this.backupPayout = 50;
-    this.registryPayout = 50;
-    this.surveyPayout = 50;
-    this.suggestPayout = 25;
-    this.newsletterPayout = 50;
-    this.referralPayout = 50;
+    this.BACKUP_PAYOUT = 50;
+    this.REGISTRY_PAYOUT = 50;
+    this.FAUCET_PAYOUT = 50;
+    this.SURVEY_PAYOUT = 50;
+    this.SUGGEST_PAYOUT = 25;
+    this.NEWSLETTER_PAYOUT = 50;
+    this.REFERRAL_PAYOUT = 50;
 
-    this.referralBonus = 0.1;
+    this.REFERRAL_BONUS = 0.1;
 
-    this.payoutRateLimitPerDay = 1000; // restarting the server will reset this!!
-    this.currentRateLimitedPool = this.payoutRateLimitPerDay/24; // Pretend the server has been running for 1 hour for dev purposes. May want to set this to 0 in the future.
+    this.PAYOUT_RATE_LIMIT_PER_DAY = 1000; // restarting the server will reset this!!
+    this.currentRateLimitedPool = this.PAYOUT_RATE_LIMIT_PER_DAY/24; // Pretend the server has been running for 1 hour for dev purposes. May want to set this to 0 in the future.
     this.lastPayoutTS = Date.now();
 
     this.description = "User activity reward program module.";
@@ -131,26 +132,27 @@ class Rewards extends ModTemplate {
       var achievements = await this.returnAchievements(message.data)
       mycallback(achievements);
     }
-
-    if (message.request == "user wallet backup") {
-      this.payoutFirstInstance(message.data, message.request, this.backupPayout);
-    }
-
-    if (message.request == "user survey") {
-      this.payoutFirstInstance(message.data.key, message.request, this.surveyPayout);
-    }
-
-    if (message.request == "screen survey") {
-      this.payoutFirstInstance(message.data.key, message.request, this.surveyPayout);
-    }
-
-    if (message.request == "user suggest") {
-      this.payoutFirstInstance(message.data.key, message.request, this.suggestPayout);
-    }
-
-    if (message.request == "user newsletter") {
-      this.payoutFirstInstance(message.data.key, message.request, this.newsletterPayout);
-    }
+    // Email rewards appspace has been deprecated and is no longer in use.
+    // I'm removing the calls to payoutFirstInstance to avoid confusion
+    // if (message.request == "user wallet backup") {
+    //   this.payoutFirstInstance(message.data, message.request, this.BACKUP_PAYOUT);
+    // }
+    // 
+    // if (message.request == "user survey") {
+    //   this.payoutFirstInstance(message.data.key, message.request, this.SURVEY_PAYOUT);
+    // }
+    // 
+    // if (message.request == "screen survey") {
+    //   this.payoutFirstInstance(message.data.key, message.request, this.SURVEY_PAYOUT);
+    // }
+    // 
+    // if (message.request == "user suggest") {
+    //   this.payoutFirstInstance(message.data.key, message.request, this.SUGGEST_PAYOUT);
+    // }
+    // 
+    // if (message.request == "user newsletter") {
+    //   this.payoutFirstInstance(message.data.key, message.request, this.NEWSLETTER_PAYOUT);
+    // }
 
     if (message.request == "update activities") {
       var completed = await this.returnEvents(message.data);
@@ -257,21 +259,23 @@ class Rewards extends ModTemplate {
     RewardsSidebar.attachEvents(app, data);
   }
 
-  async payoutFirstInstance(address, event, payout) {
-    let hasHappened = await this.checkEvent(address, event);
+  async payoutDailyInstance(address, evnt, payout) {
+    await this.payoutFirstInstance(address, evnt, payout, true);
+  }
+
+  async payoutFirstInstance(address, evnt, payout, daily = false) {
+    let hasHappened = await this.checkEvent(address, evnt, daily);
     if (!hasHappened) {
-      this.makePayout(address, payout, event);
+      this.makePayout(address, payout, evnt);
       let params = {
         $address: address,
         $payout_ts: new Date().getTime(),
         $payout_amt: payout,
       }
       let sql = `UPDATE users SET last_payout_ts = $payout_ts, total_payout = total_payout + $payout_amt WHERE address = $address`;
-  
       await this.app.storage.executeDatabase(sql, params, "rewards");
     }
-    this.recordEvent(address, event);
- 
+    this.recordEvent(address, evnt);
   }
 
   async onConfirmation(blk, tx, conf, app) {
@@ -292,7 +296,10 @@ class Rewards extends ModTemplate {
           this.updateUsers(tx);
         }
         if (tx.returnMessage().module == "Registry") {
-          this.payoutFirstInstance(tx.transaction.from[0].add, "register identifier", this.registryPayout);
+          this.payoutFirstInstance(tx.transaction.from[0].add, "register identifier", this.REGISTRY_PAYOUT);
+        }
+        if (tx.returnMessage().module == "Reward") {
+          await this.payoutDailyInstance(tx.transaction.from[0].add, tx.returnMessage().action, this.FAUCET_PAYOUT);
         }
       }  
     }
@@ -341,19 +348,19 @@ class Rewards extends ModTemplate {
     }
     let sql = "";
     let params = {};
-    var payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.payoutRatio);
-    //if (row.total_spend > this.cap) {
-    //  payout = (row.total_spend % this.cap) > tx.returnFees();
+    var should_payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.PAYOUT_RATIO);
+    //if (row.total_spend > this.CAP) {
+    //  should_payout = (row.total_spend % this.CAP) > tx.returnFees();
     //}
     
 
     var lastPayout = row.last_payout_amt;
-    if (lastPayout > this.cap) {
-      lastPayout = this.cap;
+    if (lastPayout > this.CAP) {
+      lastPayout = this.CAP;
     }
-    var newPayout = Math.ceil(lastPayout / this.payoutRatio);
-    if(newPayout > this.cap) {
-      newPayout = this.cap;
+    var newPayout = Math.ceil(lastPayout / this.PAYOUT_RATIO);
+    if(newPayout > this.CAP) {
+      newPayout = this.CAP;
     }
     
     var isGame = 0;
@@ -364,7 +371,7 @@ class Rewards extends ModTemplate {
     if (row.latest_tx == -1) {
       this.makePayout(row.address, (row.total_payout - row.total_spend), "Welcome Back");
     }
-    if (payout == true) {
+    if (should_payout == true) {
       params = {
         $address: row.address,
         $last_payout_ts: tx.transaction.ts,
@@ -392,7 +399,7 @@ class Rewards extends ModTemplate {
     let resp = await this.app.storage.executeDatabase(sql, params, "rewards");
 
 
-    if (payout) {
+    if (should_payout) {
       this.makePayout(row.address, newPayout, "Usage");
     }
   }
@@ -419,19 +426,19 @@ class Rewards extends ModTemplate {
         $first_tx: tx.transaction.ts,
         $latest_tx: tx.transaction.ts,
         $last_payout_ts: tx.transaction.ts,
-        $last_payout_amt: this.initial,
-        $total_payout: this.initial,
+        $last_payout_amt: this.INITIAL,
+        $total_payout: this.INITIAL,
         $total_spend: Number(tx.fees_total),
         $referer: referer
       }
-      let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('" + tx.transaction.from[ii].add + "', " + 1 + ", " + 0 + ", " + isGame + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + this.initial + ", " + this.initial + ", " + Number(tx.fees_total) + ", '" + referer + "');";
+      let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('" + tx.transaction.from[ii].add + "', " + 1 + ", " + 0 + ", " + isGame + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + this.INITIAL + ", " + this.INITIAL + ", " + Number(tx.fees_total) + ", '" + referer + "');";
       params = {};
 
       await this.app.storage.executeDatabase(sql, params, "rewards");
 
       //initial funds sent
-      this.makePayout(tx.transaction.from[ii].add, this.initial);
-      this.makePayout(referer, this.referralPayout, "New Referral User");
+      this.makePayout(tx.transaction.from[ii].add, this.INITIAL);
+      this.makePayout(referer, this.REFERRAL_PAYOUT, "New Referral User");
 
       return;
     } catch (err) {
@@ -501,8 +508,8 @@ class Rewards extends ModTemplate {
     try {
       let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
       rows.forEach(row => {
-        row.next_payout_amount = Math.ceil(row.last_payout_amt / this.payoutRatio);
-        row.next_payout_after = Math.ceil((row.total_payout * this.payoutRatio) - row.total_spend);
+        row.next_payout_amount = Math.ceil(row.last_payout_amt / this.PAYOUT_RATIO);
+        row.next_payout_after = Math.ceil((row.total_payout * this.PAYOUT_RATIO) - row.total_spend);
       });
 
       return rows;
@@ -525,11 +532,20 @@ class Rewards extends ModTemplate {
     }
   }
   
-  async checkEvent(address, event) {
+  async checkEvent(address, event, daily) {
     let sql = "SELECT * FROM events where address = $address and $event = event";
     let params = {
       $address: address,
       $event: event
+    }
+    if (daily) {
+      let time = (new Date().getTime()) - 24*60*60*1000;
+      sql = "SELECT * FROM events where address = $address and $event = event and $time < time";
+      params = {
+        $address: address,
+        $event: event,
+        $time: time
+      }
     }
 
     try {
@@ -568,7 +584,7 @@ class Rewards extends ModTemplate {
   makePayoutRateLimited(address, amount, event = "") {
     let timePassed = Date.now() - this.lastPayoutTS;
     this.lastPayoutTS = Date.now();
-    this.currentRateLimitedPool += this.payoutRateLimitPerDay* ( timePassed / (24*60*60*1000));
+    this.currentRateLimitedPool += this.PAYOUT_RATE_LIMIT_PER_DAY* ( timePassed / (24*60*60*1000));
     if(amount > this.currentRateLimitedPool) {
       amount = this.currentRateLimitedPool;
     }
@@ -630,8 +646,8 @@ class Rewards extends ModTemplate {
       this.returnReferer(address)
         .then((referer) => {
           if (referer.length >= 40) {
-            if ((amount * this.referralBonus) >= 1) {
-              let referralPayment = amount * this.referralBonus;
+            if ((amount * this.REFERRAL_BONUS) >= 1) {
+              let referralPayment = amount * this.REFERRAL_BONUS;
               this.makePayout(referer, referralPayment, "referral: " + event);
             }
           }
