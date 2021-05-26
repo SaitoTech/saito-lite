@@ -2706,17 +2706,33 @@ console.log("P: " + planet);
         }
       },
       playActionCardTriggers : function(imperium_self, player, action_card_player, card) {
-        if (imperium_self.game.players_info[player-1].instinct_training == 1) { return 1; }
+        if (imperium_self.game.players_info[player-1].instinct_training == 1 && imperium_self.game.players_info[player-1].strategy_tokens > 0) { return 1; }
 	return 0;
       },
       playActionCardEvent : function(imperium_self, player, action_card_player, card) {
 
         if (imperium_self.game.player == player) {
-          // remove previous action card
-          imperium_self.addMove("resolve\t"+"action_card");
-          imperium_self.addMove("resolve\t"+"action_card_post");
-          imperium_self.addMove("expend\t"+imperium_self.game.player+"strategy"+"1");
-	  imperium_self.endTurn();
+
+          let html = "<div class='sf-readable'>Do you wish to spend a strategy token to cancel opponent action card with Instinct Training?</div><ul>";
+              html += '<li class="textchoice" id="yes">yes</li>';
+              html += '<li class="textchoice" id="no">no</li>';
+              html += '</ul>';
+
+          imperium_self.updateStatus(html);
+
+          $('.textchoice').off();
+          $('.textchoice').on('click', function () {
+            let action2 = $(this).attr("id");
+            if (action2 === "no") {
+	      imperium_self.endTurn();
+            } else {
+              // remove previous action card
+              imperium_self.addMove("resolve\t"+"action_card");
+              imperium_self.addMove("resolve\t"+"action_card_post");
+              imperium_self.addMove("expend\t"+imperium_self.game.player+"strategy"+"1");
+	      imperium_self.endTurn();
+	    }
+          });
         }
 
 	return 0;
