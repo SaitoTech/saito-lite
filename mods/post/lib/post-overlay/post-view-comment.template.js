@@ -10,7 +10,8 @@ module.exports = PostViewCommentTemplate = (app, mod, tx) => {
 
   let html = `
   <div id="post-view-comment" class="post-view-comment">
-    <div id="post-view-comment-sublinks" class="post-view-comment-sublinks">
+    <div id="post-view-actions" class="post-view-actions">
+      <div id="post-view-comment-sublinks" class="post-view-comment-sublinks">
   `;
 
   if (tx.transaction.from[0].add === app.wallet.returnPublicKey()) {
