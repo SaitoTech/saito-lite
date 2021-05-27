@@ -32,7 +32,6 @@ module.exports = PostViewCommentTemplate = (app, mod, tx) => {
 
   html += `
     </div>
-  </div>
   `;
 
 
