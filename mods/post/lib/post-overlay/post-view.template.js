@@ -74,7 +74,6 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
 
   html += `
       <div data-id="${sig}" id="post-view-parent-comment" class="post-view-parent-comment">${comment_filler}</div>
-      ${post_view_actions}
     </div>
   `;
 

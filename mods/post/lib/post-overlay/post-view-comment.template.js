@@ -41,7 +41,6 @@ module.exports = PostViewCommentTemplate = (app, mod, tx) => {
         </div>
       </div>
       <div data-id="${tx.originalSig}" id="post-view-comment-text" class="post-view-comment-text">${txmsg.comment}</div>
-      <div class="post-view-actions">
   `;
 
 
