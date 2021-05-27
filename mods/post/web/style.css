@@ -277,6 +277,7 @@ margin-bottom: 4px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    float: right;
 }
 .post-view-actions div {
     align-items: center;
@@ -290,17 +291,17 @@ margin-bottom: 4px;
 .post-view-actions div:hover,
 .post-view-actions div:active,
 .post-view-actions div:focus {
-    color: #444;
+  color: #444;
 }
 .post-view-actions div svg {
-    width: 16px;
-    margin-right: 4px;
+  width: 16px;
+  margin-right: 4px;
 }
 
 .post-view-parent-comment {
-line-height: 1.2em;
-font-size: 1.15em;
-margin: 1rem 0;
+  line-height: 1.2em;
+  font-size: 1.0em;
+  margin: 1rem 0rem 1.5rem 0rem;
 }
 
 .post-view-parent-comment div {

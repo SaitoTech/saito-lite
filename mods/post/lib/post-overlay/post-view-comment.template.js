@@ -11,15 +11,6 @@ module.exports = PostViewCommentTemplate = (app, mod, tx) => {
   let html = `
   <div id="post-view-comment" class="post-view-comment">
     <div id="post-view-comment-sublinks" class="post-view-comment-sublinks">
-      <div class="post-header">
-        <div class="post-user-avatar"><img src="${avatar}" class="post-view-user-identicon" /></div>
-        <div class="post-details">
-          <div id="post-view-user" class="post-view-user">${username}</div>
-          <div id="post-view-ts" class="post-view-ts"> ${time}</div>
-        </div>
-      </div>
-      <div data-id="${tx.originalSig}" id="post-view-comment-text" class="post-view-comment-text">${txmsg.comment}</div>
-      <div class="post-view-actions">
   `;
 
   if (tx.transaction.from[0].add === app.wallet.returnPublicKey()) {
@@ -39,6 +30,20 @@ module.exports = PostViewCommentTemplate = (app, mod, tx) => {
     </div>
   </div>
   `;
+
+
+  html += `
+      <div class="post-header">
+        <div class="post-user-avatar"><img src="${avatar}" class="post-view-user-identicon" /></div>
+        <div class="post-details">
+          <div id="post-view-user" class="post-view-user">${username}</div>
+          <div id="post-view-ts" class="post-view-ts"> ${time}</div>
+        </div>
+      </div>
+      <div data-id="${tx.originalSig}" id="post-view-comment-text" class="post-view-comment-text">${txmsg.comment}</div>
+      <div class="post-view-actions">
+  `;
+
 
   return html;
 
