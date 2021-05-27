@@ -50,17 +50,26 @@ class Email extends ModTemplate {
 
     super.initialize(app);
 
+alert("initialize EMAIL!");
+
+    //if (app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
     if (app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
-      let mypubkey = app.wallet.returnPublicKey();
-      let welcometx = app.wallet.createUnsignedTransaction(mypubkey, 0.0, 0.0);
+
+alert("and add it");
+
+      let welcometx = app.wallet.createUnsignedTransaction();
+
       welcometx.msg.module   = "Email";
       welcometx.msg.title    = "Welcome to Saito";
-      welcometx.msg.message  = `Saito is a high throughput blockchain. Sending a message with your transactions is both useful and reasonable!<br/><br/>
-      This email was sent with your first transaction automatically.<br/><br/>
-      The reward server should see that you've sent your first email and give you a reward which should also appear in your inbox.<br/><br/>
-      A keypair has been generated for you. If you need more secure keys, it's possible to generate a paper wallet. However, in a Web3/Saito context it will sometimes be useful to generate keys which will be used only temporarily, perhaps to access a service for only 5 minutes or simply to set up a temporary keypair for use of some Web3 PKI infrastructure like negotiating an encrypted data tunnel or accessing web services anonymously.
+      welcometx.msg.message  = `Saito is a network that runs blockchain applications in your browser!
+	<br/><br/>
+      Saito is currently under development, which mean any tokens in your account are TESTNET tokens. They will disappear when the network is reset. If you are interested in purchasing tokens for use on the production network, please see our <a href="https://saito.io">main site</a> for instructions on how to do so. If you're curious what else you can do with Saito, why not check out the <a href="https://saito.io/arcade">Saito Arcade</a>.
+        <br/><br/>
+      Have questions? Why not join us on <a href="">Saito Telegram</a>.
       `;
-      welcometx = app.wallet.signAndEncryptTransaction(welcometx);
+      //welcometx = app.wallet.signAndEncryptTransaction(welcometx);
+      this.addEmail(welcometx);
+/***
       app.network.propagateTransaction(welcometx);
       
       // save welcomesent to options so we dont' send this over and over
@@ -68,8 +77,10 @@ class Email extends ModTemplate {
       if(!app.options.email){
         app.options.email = {};  
       }
+
       app.options.email.welcomesent = true;
       app.storage.saveOptions();
+***/
     }
 
     app.connection.on("set_preferred_crypto", (modname) => {

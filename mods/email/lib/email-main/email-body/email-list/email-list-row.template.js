@@ -8,7 +8,9 @@ module.exports = EmailListRowTemplate = (tx, addr_html, helpers) => {
   let sig 	= tx.transaction.sig;
 
   let { datetime_formatter } = helpers;
-  let datetime = datetime_formatter(ts);
+  let datetime = datetimeFormatter(ts);
+
+console.log("DATETIME: " + datetime);
 
   var tmp = document.createElement("DIV");
   tmp.innerHTML = message;
