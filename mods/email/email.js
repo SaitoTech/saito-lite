@@ -50,12 +50,8 @@ class Email extends ModTemplate {
 
     super.initialize(app);
 
-alert("initialize EMAIL!");
-
     //if (app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
     if (app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
-
-alert("and add it");
 
       let welcometx = app.wallet.createUnsignedTransaction();
 
@@ -63,9 +59,9 @@ alert("and add it");
       welcometx.msg.title    = "Welcome to Saito";
       welcometx.msg.message  = `Saito is a network that runs blockchain applications in your browser!
 	<br/><br/>
-      Saito is currently under development, which mean any tokens in your account are TESTNET tokens. They will disappear when the network is reset. If you are interested in purchasing tokens for use on the production network, please see our <a href="https://saito.io">main site</a> for instructions on how to do so. If you're curious what else you can do with Saito, why not check out the <a href="https://saito.io/arcade">Saito Arcade</a>.
+      We are currently under development, which mean any tokens in your account are TESTNET tokens which will disappear when the network is upgraded. If you are interested in purchasing tokens for use on the production network, please see our <a href="https://saito.io">main site</a> for instructions on how to do so. If you're curious what else you can do on Saito besides reading this message, why not check out the <a href="https://saito.io/arcade">Saito Arcade</a>?
         <br/><br/>
-      Have questions? Why not join us on <a href="">Saito Telegram</a>.
+      Have questions? Why not join us on <a href="">Saito Telegram</a>?
       `;
       //welcometx = app.wallet.signAndEncryptTransaction(welcometx);
       this.addEmail(welcometx);
