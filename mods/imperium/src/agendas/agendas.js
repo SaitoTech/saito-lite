@@ -1325,8 +1325,6 @@ console.log("pushing onto law: " + JSON.stringify(law_to_push));
 
 
 
-/*****
-
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
   	type : "Directive" ,

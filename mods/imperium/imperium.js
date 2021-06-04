@@ -4809,12 +4809,12 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
 
-	if (imperium_self.game.player == attacker && && sys.s.units[defender-1].length == 0 && sys.s.units[attacker-1].length > 0) {
+	if (imperium_self.game.player == attacker && sys.s.units[defender-1].length == 0 && sys.s.units[attacker-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
 	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
 	  }
 	}
-	if (imperium_self.game.player == defender && ys.s.units[attacker-1].length == 0 && ys.s.units[defender-1].length > 0) {
+	if (imperium_self.game.player == defender && sys.s.units[attacker-1].length == 0 && sys.s.units[defender-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
 	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
 	  }
@@ -7093,8 +7093,6 @@ console.log("pushing onto law: " + JSON.stringify(law_to_push));
 
 
 
-
-/*****
 
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
@@ -22672,15 +22670,12 @@ playerDiscardActionCards(num, mycallback=null) {
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.game.players_info[i].traded_this_turn == 0 && (i+1) != this.game.player) {
         if (this.arePlayersAdjacent(this.game.player, (i+1))) {
-	  //
-	  // anyone have anything to trade?
-	  //
+	  // must have tradeables too
 	  if (this.game.players_info[this.game.player-1].commodities > 0 || this.game.players_info[this.game.player-1].goods > 0) {
 	    if (this.game.players_info[i].commodities > 0 || this.game.players_info[i].goods > 0) {
 	      return 1;
 	    }
 	  }
-
 	  if (this.game.players_info[this.game.player-1].promissary_notes.length > 0 || this.game.players_info[i].promissary_notes.length > 0) {
 	    return 1;
 	  }
@@ -23461,8 +23456,8 @@ playerDiscardActionCards(num, mycallback=null) {
   
   arePlayersAdjacent(player1, player2) {
 
-    let p1sectors = this.returnSectorsWithPlayerUnits(player1);
-    let p2sectors = this.returnSectorsWithPlayerUnits(player2);
+    let p1sectors = this.returnSectorsWithPlayerUnitsAndPlanets(player1);
+    let p2sectors = this.returnSectorsWithPlayerUnitsAndPlanets(player2);
 
     for (let i = 0; i < p1sectors.length; i++) {
       for (let ii = 0; ii < p2sectors.length; ii++) {
@@ -23549,6 +23544,20 @@ playerDiscardActionCards(num, mycallback=null) {
     for (let i in this.game.sectors) {
       if (this.doesSectorContainPlayerUnits(player, i)) {
 	sectors_with_units.push(i);
+      }
+    }
+    return sectors_with_units;
+  }
+
+  returnSectorsWithPlayerUnitsAndPlanets(player) {
+    let sectors_with_units = [];
+    for (let i in this.game.sectors) {
+      if (this.doesSectorContainPlayerUnits(player, i)) {
+	sectors_with_units.push(i);
+      } else {
+        if (this.doesSectorContainPlanetOwnedByPlayer(i, player)) {
+	  sectors_with_units.push(i);
+        }
       }
     }
     return sectors_with_units;

@@ -342,15 +342,12 @@
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.game.players_info[i].traded_this_turn == 0 && (i+1) != this.game.player) {
         if (this.arePlayersAdjacent(this.game.player, (i+1))) {
-	  //
-	  // anyone have anything to trade?
-	  //
+	  // must have tradeables too
 	  if (this.game.players_info[this.game.player-1].commodities > 0 || this.game.players_info[this.game.player-1].goods > 0) {
 	    if (this.game.players_info[i].commodities > 0 || this.game.players_info[i].goods > 0) {
 	      return 1;
 	    }
 	  }
-
 	  if (this.game.players_info[this.game.player-1].promissary_notes.length > 0 || this.game.players_info[i].promissary_notes.length > 0) {
 	    return 1;
 	  }
@@ -1131,8 +1128,8 @@
   
   arePlayersAdjacent(player1, player2) {
 
-    let p1sectors = this.returnSectorsWithPlayerUnits(player1);
-    let p2sectors = this.returnSectorsWithPlayerUnits(player2);
+    let p1sectors = this.returnSectorsWithPlayerUnitsAndPlanets(player1);
+    let p2sectors = this.returnSectorsWithPlayerUnitsAndPlanets(player2);
 
     for (let i = 0; i < p1sectors.length; i++) {
       for (let ii = 0; ii < p2sectors.length; ii++) {
@@ -1219,6 +1216,20 @@
     for (let i in this.game.sectors) {
       if (this.doesSectorContainPlayerUnits(player, i)) {
 	sectors_with_units.push(i);
+      }
+    }
+    return sectors_with_units;
+  }
+
+  returnSectorsWithPlayerUnitsAndPlanets(player) {
+    let sectors_with_units = [];
+    for (let i in this.game.sectors) {
+      if (this.doesSectorContainPlayerUnits(player, i)) {
+	sectors_with_units.push(i);
+      } else {
+        if (this.doesSectorContainPlanetOwnedByPlayer(i, player)) {
+	  sectors_with_units.push(i);
+        }
       }
     }
     return sectors_with_units;

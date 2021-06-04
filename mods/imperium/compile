@@ -35,7 +35,6 @@ for file in ./src/agendas/*
 do
   cat $file >> ./imperium.js
 done
-
 #for file in ./src/actions/*
 #do
 #  cat $file >> ./imperium.js
