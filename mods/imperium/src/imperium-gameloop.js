@@ -1588,13 +1588,27 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
   	let vp 		 = parseInt(mv[2]);
   	let objective    = mv[3];
         let objective_name = objective;
+        let objective_text = "";
         let player_return_value = 1;
 
-        if (this.secret_objectives[objective] != null) { objective_name = this.secret_objectives[objective].name; }
-        if (this.stage_i_objectives[objective] != null) { objective_name = this.stage_i_objectives[objective].name; }
-        if (this.stage_ii_objectives[objective] != null) { objective_name = this.stage_ii_objectives[objective].name; }
+        if (this.secret_objectives[objective] != null) {
+	  objective_name = this.secret_objectives[objective].name; 
+	  objective_text = this.secret_objectives[objective].text; 
+	}
+        if (this.stage_i_objectives[objective] != null) { 
+	  objective_name = this.stage_i_objectives[objective].name;
+	  objective_text = this.stage_i_objectives[objective].text; 
+	}
+        if (this.stage_ii_objectives[objective] != null) {
+	  objective_name = this.stage_ii_objectives[objective].name;
+	  objective_text = this.stage_ii_objectives[objective].text; 
+	}
 
-  	this.updateLog(this.returnFactionNickname(player)+" scores "+objective_name+" ("+vp+" VP)");
+	if (objective_text == "") {
+  	  this.updateLog(this.returnFactionNickname(player)+" scores "+objective_name+" ("+vp+" VP)");
+	} else {
+	  this.updateLog(this.returnFactionNickname(player) + " scores " + objective_name + "<p></p><div style='width:80%;font-size:1.0em;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:15px'>" + objective_text +'</div>');
+	}
 
   	this.game.players_info[player-1].vp += vp;
   	this.game.players_info[player-1].objectives_scored.push(objective);

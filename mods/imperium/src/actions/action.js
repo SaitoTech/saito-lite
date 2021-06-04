@@ -1074,10 +1074,26 @@ ACTION CARD - types
 		}
               },
 	      function(sector) {
-                imperium_self.addMove("purchase\t"+action_card_player+"\tcommand\t"+"1");
-                imperium_self.addMove("deactivate\t"+action_card_player+"\t"+sector);
-                imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " deactivates " + imperium_self.game.sectors[sector].name);
-		imperium_self.endTurn();
+
+	        let html = '<div class="sf-readable">Gain command or strategy token?</div><ul>';
+                    html += '<li class="option" id="command">command token</li>';
+                    html += '<li class="option" id="strategy">strategy token</li>';
+
+	        html += '</ul>';
+	        imperium_self.updateStatus(html);
+
+	        $('.option').off();
+	        $('.option').on('click', function() {
+
+	          let tokentype = $(this).attr("id");
+
+                  imperium_self.addMove("purchase\t"+action_card_player+"\t"+tokentype+"\t"+"1");
+                  imperium_self.addMove("deactivate\t"+action_card_player+"\t"+sector);
+                  imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " deactivates " + imperium_self.game.sectors[sector].name);
+	  	  imperium_self.endTurn();
+
+	        });
+
 		return 0;
 	      },
 	      function() {

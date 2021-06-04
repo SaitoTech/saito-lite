@@ -123,12 +123,12 @@
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
 
-	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
+	if (imperium_self.game.player == attacker && && sys.s.units[defender-1].length == 0 && sys.s.units[attacker-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
 	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
 	  }
 	}
-	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
+	if (imperium_self.game.player == defender && ys.s.units[attacker-1].length == 0 && ys.s.units[defender-1].length > 0) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
 	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
 	  }

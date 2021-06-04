@@ -117,6 +117,7 @@
       prereqs     :       ["green", "green"] ,
       color       :       "green" ,
       type        :       "special" ,
+      text        :       "Place additional infantry on planet after producing in sector",
       initialize  :       function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].faction5_yin_spinner == null) {
           imperium_self.game.players_info[player-1].faction5_yin_spinner = 0;

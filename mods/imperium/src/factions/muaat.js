@@ -42,7 +42,7 @@
         return x;
       },
       menuOptionTriggers:  function(imperium_self, menu, player) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction7-star-forge") && menu === "main") {
+        if (imperium_self.doesPlayerHaveTech(player, "faction7-star-forge") && menu === "main" && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
           return 1;
         }
         return 0;
