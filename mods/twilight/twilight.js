@@ -2637,7 +2637,7 @@ try {
             if (this.game.state.eagle_has_landed == "us") { bonus_player = 2; }
 
             if (this.game.player != bonus_player) {
-              this.updateStatus('div class="status-message" id="status-message">' + this.game.state.eagle_has_landed.toUpperCase() + " </span> <span>is deciding whether to discard a card</div>");
+              this.updateStatus('<div class="status-message" id="status-message">' + this.game.state.eagle_has_landed.toUpperCase() + " is deciding whether to discard a card</div>");
               return 0;
             }
 
@@ -13639,7 +13639,6 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
 
       if (my_go == 0) {
         this.updateStatus("<div class='status-message' id='status-message'>Opponent retrieving card from discard pile</div>");
-        console.log("HERE: " + my_go + " --- " + this.game.player + " --- " + player);
         return 0;
       }
 
@@ -14189,21 +14188,18 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
 
             if (action2 == "raise") {
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
-              twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\traise");
               twilight_self.addMove("notify\tDEFCON is raised by 1");
               twilight_self.endTurn();
             }
             if (action2 == "lower") {
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
-              twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\tlower");
               twilight_self.addMove("notify\tDEFCON is lowered by 1");
               twilight_self.endTurn();
             }
             if (action2 == "same") {
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
-              twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("notify\tDEFCON left untouched");
               twilight_self.endTurn();
             }

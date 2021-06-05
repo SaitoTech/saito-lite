@@ -2637,7 +2637,7 @@ try {
             if (this.game.state.eagle_has_landed == "us") { bonus_player = 2; }
 
             if (this.game.player != bonus_player) {
-              this.updateStatus('div class="status-message" id="status-message">' + this.game.state.eagle_has_landed.toUpperCase() + " </span> <span>is deciding whether to discard a card</div>");
+              this.updateStatus('<div class="status-message" id="status-message">' + this.game.state.eagle_has_landed.toUpperCase() + " is deciding whether to discard a card</div>");
               return 0;
             }
 
