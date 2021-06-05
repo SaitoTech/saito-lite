@@ -105,6 +105,7 @@
         },
 	playActionCardEvent : function(imperium_self, player, action_card_player, card) {
 	
+            console.log(JSON.stringify(imperium_self.agenda_cards[active_agenda]));
 	  if (imperium_self.game.player == action_card_player) {
 
 	    // three action cards
@@ -270,6 +271,7 @@
 	    let active_agenda = imperium_self.returnActiveAgenda();
 
             let msg  = 'On which choice do you wish to place your Technology rider?';
+console.log("Active Agenda: " + active_agenda);
 	    let choices = imperium_self.agenda_cards[active_agenda].returnAgendaOptions(imperium_self);
 	    let elect = imperium_self.agenda_cards[active_agenda].elect;
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {

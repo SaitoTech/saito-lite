@@ -68,21 +68,18 @@
 
             if (action2 == "raise") {
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
-              twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\traise");
               twilight_self.addMove("notify\tDEFCON is raised by 1");
               twilight_self.endTurn();
             }
             if (action2 == "lower") {
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
-              twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\tlower");
               twilight_self.addMove("notify\tDEFCON is lowered by 1");
               twilight_self.endTurn();
             }
             if (action2 == "same") {
               twilight_self.updateStatus("<div class='status-message' id='status-message'>broadcasting choice....</div>");
-              twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("notify\tDEFCON left untouched");
               twilight_self.endTurn();
             }

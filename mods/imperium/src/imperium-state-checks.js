@@ -115,6 +115,7 @@
     for (let i = this.game.queue.length-1; i >= 0; i--) {
       let x = this.game.queue[i].split("\t");
       if (x[0] == "agenda") { return x[1]; }
+      if (x[0] == "simultaneous_agenda") { return x[1]; }
     }
     return "";
   }

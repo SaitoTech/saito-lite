@@ -451,6 +451,19 @@ playerPlayActionCardMenu(action_card_player, card, action_cards_played = []) {
     }
     html += '</ul>';
 
+    //
+    // if we really can't do anything, auto-skip this step 
+    //
+    if (tech_attach_menu_events == 0 && ac.length == 0) {
+      if (imperium_self.game.state.action_card_order === "simultaneous") {
+console.log("BROADCASTING MOVES 1: " + JSON.stringify(this.moves));
+        imperium_self.prependMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+        imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+      }
+      imperium_self.endTurn();
+      return;
+    }
+
     this.updateStatus(html);
 
     $('.option').off();
@@ -483,6 +496,14 @@ playerPlayActionCardMenu(action_card_player, card, action_cards_played = []) {
       }
 
       if (action2 == "cont") {
+        //
+        // resolve action card simultaneous
+        //
+        if (imperium_self.game.state.action_card_order === "simultaneous") {
+          imperium_self.prependMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+          imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+        }
+console.log("BROADCASTING MOVES 2: " + JSON.stringify(this.moves));
         imperium_self.endTurn();
       }
       return 0;
@@ -2024,6 +2045,15 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
   }
   html += '</ul>';
 
+  //
+  // if we really can't do anything, skip this skep
+  //
+  if (tech_attach_menu_events == 0 && ac.length == 0) {
+    imperium_self.endTurn();
+    return;
+  }
+
+
   this.updateStatus(html);
 
   $('.option').off();
@@ -2099,6 +2129,14 @@ playerPlayPostAgendaStage(player, agenda, array_of_winning_options) {
     }
   }
   html += '</ul>';
+
+  //
+  // if we really can't do anything, skip this skep
+  //
+  if (tech_attach_menu_events == 0 && ac.length == 0) {
+    imperium_self.endTurn();
+    return;
+  }
 
   this.updateStatus(html);
 

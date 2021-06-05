@@ -947,7 +947,7 @@ ACTION CARD - types
 
 
 
-    this.importActionCard('Covert Operation', {
+    this.importActionCard('covert-operation', {
   	name : "Covert Operation" ,
   	type : "action" ,
   	text : "ACTION: Choose a player. They give you one of their action cards, if possible" ,

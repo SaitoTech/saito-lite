@@ -16,7 +16,7 @@
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log(JSON.stringify(mv));
+console.log("move: " + mv[0]);
 
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
@@ -602,9 +602,6 @@ console.log("----------------------------");
 
 
       if (mv[0] === "strategy") {
-
-console.log("IN STRATEGY: ");
-console.log(JSON.stringify(this.game.queue));
 
 	this.updateLeaderboard();
 	this.updateTokenDisplay();
@@ -1258,6 +1255,149 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
       }
 
 
+
+
+
+      if (mv[0] == "simultaneous_agenda") {
+
+	//
+	// we repeatedly hit "agenda"
+	//
+	let laws = imperium_self.returnAgendaCards();
+        let agenda = mv[1];
+        let agenda_num = parseInt(mv[2]);
+	let agenda_name = this.agenda_cards[agenda].name;
+	this.game.state.voting_on_agenda = agenda_num;
+
+	//
+	// voting happens simultaneously
+	//
+	let has_everyone_voted = 1;
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  if (this.game.state.voted_on_agenda[this.game.player-1][agenda_num] == 0) { has_everyone_voted = 0; }
+        }
+	if (has_everyone_voted == 1) {
+  	  this.game.queue.splice(qe, 1);
+	  return 1;
+	}
+
+
+	//
+	// voting happens simultaneously
+	//
+	if (this.game.state.voted_on_agenda[this.game.player-1][agenda_num] == 1) { 
+
+          let html  = '<div class="agenda_instructions">Waiting for Voting Results:</div>';
+  	      html += '<div class="agenda_name">' + imperium_self.agenda_cards[agenda].name + '</div>';
+	      html += '<div class="agenda_text">';
+	      html += imperium_self.agenda_cards[agenda].text;
+	      html += '</div>';
+	  this.updateStatus(html);
+
+	} else {
+
+	  //
+	  // if the player has a rider, we skip the interactive voting and submit an abstention
+	  //
+	  if (imperium_self.doesPlayerHaveRider(this.game.player)) {
+	    imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	    imperium_self.addMove("vote\t"+agenda+"\t"+imperium_self.game.player+"\t"+"abstain"+"\t"+"0");
+	    imperium_self.endTurn();
+	    return 0;
+	  }
+
+	  //
+	  // otherwise we vote
+	  //
+    	  let is_planet = 0;
+   	  let is_sector = 0;
+
+          let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
+  	      html += '<div class="agenda_name">' + imperium_self.agenda_cards[agenda].name + '</div>';
+	      html += '<div class="agenda_text">';
+	      html += imperium_self.agenda_cards[agenda].text;
+	      html += '</div><ul>';
+	  for (let i = 0; i < this.game.state.choices.length && this.game.state.votes_available[imperium_self.game.player-1] > 0; i++) {
+
+	      let to_print = this.game.state.choices[i];
+	      if (to_print.indexOf("planet") == 0) { to_print = this.game.planets[to_print].name; }
+	      if (to_print.indexOf("sector") == 0) { to_print = this.game.sectors[to_print].sector; }
+	      if (to_print.indexOf("new-byzantium") == 0) { to_print = "New Byzantium"; }
+
+              html += '<li class="option" id="'+i+'">' + to_print + '</li>';
+	  }
+              html += '<li class="option" id="abstain">abstain</li></ul></p>';
+	  imperium_self.updateStatus(html);
+
+          $('.option').off();
+    	  $('.option').on('mouseenter', function() {
+    	    let s = $(this).attr("id");
+	    if (s === "abstain") { return; }
+    	    if (imperium_self.game.state.choices[s].indexOf("planet") == 0) { is_planet = 1; }
+    	    if (imperium_self.game.state.choices[s].indexOf("sector") == 0 || imperium_self.game.state.choices[s].indexOf("new-byzantium") == 0) { is_sector = 0; }
+    	    if (is_planet == 1) {
+    	      imperium_self.showPlanetCard(imperium_self.game.planets[imperium_self.game.state.choices[s]].tile, imperium_self.game.planets[imperium_self.game.state.choices[s]].idx);
+    	      imperium_self.showSectorHighlight(imperium_self.game.planets[imperium_self.game.state.choices[s]].tile);
+      	    }
+    	  });
+    	  $('.option').on('mouseleave', function() {
+   	    let s = $(this).attr("id");
+	    if (s === "abstain") { return; }
+      	    if (imperium_self.game.state.choices[s].indexOf("planet") == 0) { is_planet = 1; }
+     	    if (imperium_self.game.state.choices[s].indexOf("sector") == 0 || imperium_self.game.state.choices[s].indexOf("new-byzantium") == 0) { is_sector = 0; }
+     	    if (is_planet == 1) {
+     	      imperium_self.hidePlanetCard(imperium_self.game.planets[imperium_self.game.state.choices[s]].tile, imperium_self.game.planets[imperium_self.game.state.choices[s]].idx);
+              imperium_self.hideSectorHighlight(imperium_self.game.planets[imperium_self.game.state.choices[s]].tile);
+            }
+          });
+          $('.option').on('click', function() {
+
+            let vote = $(this).attr("id");
+	    let votes = 0;
+
+	    if (is_planet == 1 && vote != "abstain") {
+  	      imperium_self.hidePlanetCard(imperium_self.game.planets[imperium_self.game.state.choices[vote]].tile, imperium_self.game.planets[imperium_self.game.state.choices[vote]].idx);
+  	      imperium_self.hideSectorHighlight(imperium_self.game.planets[imperium_self.game.state.choices[vote]].tile);
+	    }	
+
+	    if (vote == "abstain") {
+
+	      imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	      imperium_self.addMove("vote\t"+agenda+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
+	      imperium_self.endTurn();
+	      return 0;
+
+	    }
+
+            let html = '<p style="margin-bottom:15px">Your voting strength is determined by your influence. Conquer more influence-rich planets to increase it. How many votes do you wish to cast in the Galactic Senate:</p>';
+	    for (let i = 1; i <= imperium_self.game.state.votes_available[imperium_self.game.player-1]; i++) {
+              if (i == 1) {
+	        html += '<li class="option textchoice" id="'+i+'">'+i+' vote</li>';
+              } else {
+	        html += '<li class="option textchoice" id="'+i+'">'+i+' votes</li>';
+	      }
+	    }
+	    imperium_self.updateStatus(html);
+
+            $('.option').off();
+            $('.option').on('click', function() {
+
+              votes = $(this).attr("id");
+ 
+  	      imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	      imperium_self.addMove("vote\t"+agenda+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
+	      imperium_self.endTurn();
+	      return 0;
+
+	    });
+	  });
+	}
+
+  	return 0;
+
+      }
+
+
       if (mv[0] == "change_speaker") {
   
   	this.game.state.speaker = parseInt(mv[1]);
@@ -1326,15 +1466,16 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
   	// SCORING
   	//
         if (this.game.state.round >= 1 && this.game.state.round_scoring == 0) {
-          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t3\t"+1); // 3 ==> end-of-round tertiary
-	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
-          this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
-          this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
 
 	  if (this.game.planets['new-byzantium'].owner != -1) {
             this.game.queue.push("strategy\t"+"politics"+"\t"+this.game.state.speaker+"\t3\t"+1); // 3 ==> end-of-round tertiary
             this.game.queue.push("ACKNOWLEDGE\t"+"The Galactic Senate has been re-established on New Byzantium, voting commences on the recent round of proposals");
 	  }
+
+          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t3\t"+1); // 3 ==> end-of-round tertiary
+	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
+          this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
+          this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
 
   	  this.game.state.round_scoring = 0;
 	  return 1;
@@ -1342,6 +1483,9 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
   	  this.game.state.round_scoring = 0;
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as no secondary to run
   	}
+
+	// testing - give everyone a sabotage
+	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
 
         //
   	// game event triggers
@@ -5231,23 +5375,64 @@ console.log("defender is: " + defender);
 	this.game.players_info[this.game.player-1].can_intervene_in_action_card = 0;
 
 	//
-	// allow players to respond to their action cards, EVENT always triggers
+	// allow players to respond to their action cards, EVENT always triggers -- simultaneous unsupported now
 	//
-  	for (let i = 0; i < speaker_order.length; i++) {
-	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].playActionCardTriggers(this, speaker_order[i], player, card) == 1) {
-              this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
+	if (this.game.state.action_card_order === "simultaneous") {
+  	  for (let i = 0; i < speaker_order.length; i++) {
+	    for (let k = 0; k < z.length; k++) {
+	      if (z[k].playActionCardTriggers(this, speaker_order[i], player, card) == 1) {
+                this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
+              }
             }
           }
-	  if (speaker_order[i] != player) {
-            this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
+          this.game.queue.push("simultaneous_action_card_player_menu\t"+player+"\t"+card);
+  	  //for (let i = 0; i < speaker_order.length; i++) {
+	    //if (speaker_order[i] != player) {
+              //this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
+            //}
+          //}
+          this.game.queue.push("resetconfirmsneeded\t"+(speaker_order.length-1));
+	} else {
+  	  for (let i = 0; i < speaker_order.length; i++) {
+	    for (let k = 0; k < z.length; k++) {
+	      if (z[k].playActionCardTriggers(this, speaker_order[i], player, card) == 1) {
+                this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
+              }
+            }
+	    if (speaker_order[i] != player) {
+              this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
+            }
           }
-        }
-
+	}
 
 	return 1;
 
       }
+      if (mv[0] === "simultaneous_action_card_player_menu") { 
+
+	let action_card_player = parseInt(mv[1]);
+	let action_card = mv[2];
+
+console.log("reached simultaneous_action_card_player_menu...");
+
+	//
+	// the person who played the action card cannot respond to it
+	//
+	if (this.game.player == action_card_player) {
+    	  //this.game.queue.splice(qe, 1);
+	  this.updateStatus("Your opponents are being notified you have played " + this.action_cards[action_card].name);
+	  return 0;
+	} else {
+	  if (this.hasPlayerConfirmed(this.app.wallet.returnPublicKey())) {
+  	    this.updateStatus("Waiting for players to respond to "+this.action_cards[action_card].name);
+	  } else {
+    	    //this.game.queue.splice(qe, 1);
+	    this.playerPlayActionCardMenu(action_card_player, action_card);
+	  } 
+	} 
+	return 0;
+
+      } 
       if (mv[0] === "action_card_player_menu") { 
 
 	let player = parseInt(mv[1]);
@@ -5297,6 +5482,8 @@ console.log("defender is: " + defender);
 	//
 	// this is where we execute the card
 	//
+console.log(card + " -- " + this.game.player + " -- " + action_card_player);
+
 	return played_card.playActionCard(this, this.game.player, action_card_player, card);
 
       }

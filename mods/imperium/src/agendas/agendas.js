@@ -1,5 +1,46 @@
 
 
+  this.importAgendaCard('sequential-voting', {
+  	name : "Sequential Voting" ,
+  	type : "Law" ,
+  	text : "Players vote on Agendas in Initiative Order, not Simultaneously" ,
+        returnAgendaOptions : function(imperium_self) { return ['for','against']; },
+        onPass : function(imperium_self, winning_choice) {
+
+          //
+          // switch to initiative order
+          //
+          if (winning_choice === "for") {
+	    imperium_self.game.state.agenda_voting_order = "initiative";
+	  } else {
+	    imperium_self.game.state.agenda_voting_order = "simultaneous";
+	  }
+
+        },
+  });
+
+
+  this.importAgendaCard('structures-not-shackles', {
+  	name : "Structures not Shackles" ,
+  	type : "Law" ,
+	elect : "player" ,
+  	text : "Players respond to action cards in Initiative Order, not Simultaneously" ,
+        returnAgendaOptions : function(imperium_self) { return ['for','against']; },
+        onPass : function(imperium_self, winning_choice) {
+
+          //
+          // switch to initiative order
+          //
+          if (winning_choice === "for") {
+	    imperium_self.game.state.action_card_order = "initiative";
+	  } else {
+	    imperium_self.game.state.action_card_order = "simultaneous";
+	  }
+
+        },
+  });
+
+
   this.importAgendaCard('shard-of-the-throne', {
   	name : "Shard of the Throne" ,
   	type : "Law" ,

@@ -5,6 +5,8 @@
  	text : "When another player plays an action card, you may cancel that action card" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
+console.log("QUEUE: " + JSON.stringify(imperium_self.game.queue));
+
 	  //
 	  // this runs in actioncard post...
 	  //
@@ -12,8 +14,13 @@
 	    if (imperium_self.game.queue[i].indexOf("action_card_") == 0) {
 	      let removed_previous = 0;
 	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
+console.log("removing: " + JSON.stringify(imperium_self.game.queue[i]));
 	      imperium_self.game.queue.splice(i, 1);
-	      if (removed_previous == 1) { return 1; }
+	      if (removed_previous == 1) { 
+	        imperium_self.removeConfirmsNeeded();
+	        imperium_self.updateLog(imperium_self.returnFaction(action_card_player) + " plays Sabotage!");
+		return 1;
+	      }
 	    }
 	  }
 
@@ -26,6 +33,8 @@
  	text : "When another player plays an action card, you may cancel that action card" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
+console.log("QUEUE: " + JSON.stringify(imperium_self.game.queue));
+
 	  //
 	  // this runs in actioncard post...
 	  //
@@ -33,8 +42,13 @@
 	    if (imperium_self.game.queue[i].indexOf("action_card_") == 0) {
 	      let removed_previous = 0;
 	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
+console.log("removing: " + JSON.stringify(imperium_self.game.queue[i]));
 	      imperium_self.game.queue.splice(i, 1);
-	      if (removed_previous == 1) { return 1; }
+	      if (removed_previous == 1) { 
+	        imperium_self.removeConfirmsNeeded();
+	        imperium_self.updateLog(imperium_self.returnFaction(action_card_player) + " plays Sabotage!");
+		return 1;
+	      }
 	    }
 	  }
 
@@ -47,6 +61,8 @@
  	text : "When another player plays an action card, you may cancel that action card" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
+console.log("QUEUE: " + JSON.stringify(imperium_self.game.queue));
+
 	  //
 	  // this runs in actioncard post...
 	  //
@@ -54,8 +70,13 @@
 	    if (imperium_self.game.queue[i].indexOf("action_card_") == 0) {
 	      let removed_previous = 0;
 	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
+console.log("removing: " + JSON.stringify(imperium_self.game.queue[i]));
 	      imperium_self.game.queue.splice(i, 1);
-	      if (removed_previous == 1) { return 1; }
+	      if (removed_previous == 1) { 
+	        imperium_self.removeConfirmsNeeded();
+	        imperium_self.updateLog(imperium_self.returnFaction(action_card_player) + " plays Sabotage!");
+		return 1;
+	      }
 	    }
 	  }
 
@@ -76,7 +97,11 @@
 	      let removed_previous = 0;
 	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
 	      imperium_self.game.queue.splice(i, 1);
-	      if (removed_previous == 1) { return 1; }
+	      if (removed_previous == 1) { 
+	        imperium_self.removeConfirmsNeeded();
+	        imperium_self.updateLog(imperium_self.returnFaction(action_card_player) + " plays Sabotage!");
+		return 1;
+	      }
 	    }
 	  }
 
