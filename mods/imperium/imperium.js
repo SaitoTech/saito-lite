@@ -4216,12 +4216,17 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
             //
             // add extra 0s to ensure flexibility if extra agendas added
             //
+
+console.log("AP2: " + imperium_self.game.state.agendas_per_round);
+
             for (let z = 0; z < imperium_self.game.state.agendas_per_round+2; z++) {
               imperium_self.game.state.voted_on_agenda[i].push(0);
             }
           }
         }
-
+console.log("----------------------");
+console.log("---" + JSON.stringify(imperium_self.game.state.voted_on_agenda) + "---");
+console.log("----------------------");
 
         if (imperium_self.game.player === imperium_self.game.state.speaker) {
 
@@ -4260,7 +4265,7 @@ if (imperium_self.game.state.agenda_voting_order === "simultaneous") {
                   imperium_self.addMove("resolve_agenda\t"+selected_agendas[i]);
                   imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]);
                   imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]);
-                  imperium_self.addMove("simultaneous_agenda\t"+selected_agendas[i]);
+                  imperium_self.addMove("simultaneous_agenda\t"+selected_agendas[i]+"\t"+i);
                   imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
                   imperium_self.addMove("pre_agenda_stage_post\t"+selected_agendas[i]);
                   imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]);
@@ -5800,7 +5805,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
 
 
-
+/****
   this.importAgendaCard('structures-not-shackles', {
   	name : "Structures not Shackles" ,
   	type : "Law" ,
@@ -5820,7 +5825,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
 
         },
   });
-
+****/
 
 
   this.importAgendaCard('shard-of-the-throne', {
@@ -11165,8 +11170,8 @@ console.log("error initing chat: " + err);
       //
       // player 1 owns NB -- FOR TESTING AGENDA VOTING
       //
-      let sys = this.returnSectorAndPlanets("4_4");
-      sys.p[0].owner = 1;
+      //let sys = this.returnSectorAndPlanets("4_4");
+      //sys.p[0].owner = 1;
 
 
       //
@@ -13979,11 +13984,14 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 	//
 	// voting happens simultaneously
 	//
+console.log("Aenda Num: " + agenda_num);
 	let has_everyone_voted = 1;
 	for (let i = 0; i < this.game.players_info.length; i++) {
-	  if (this.game.state.voted_on_agenda[this.game.player-1][agenda_num] == 0) { has_everyone_voted = 0; }
+console.log("has player: " + i + " voted? " + JSON.stringify(this.game.state.voted_on_agenda));
+	  if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { has_everyone_voted = 0; }
         }
 	if (has_everyone_voted == 1) {
+console.log("EVERYONE HAS VOTED");
   	  this.game.queue.splice(qe, 1);
 	  return 1;
 	}
@@ -14002,6 +14010,8 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 	  this.updateStatus(html);
 
 	} else {
+
+console.log("TRYING");
 
 	  //
 	  // if the player has a rider, we skip the interactive voting and submit an abstention
@@ -14192,7 +14202,7 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
   	}
 
 	// testing - give everyone a sabotage
-	this.game.deck[1].hand.push(("sabotage"+this.game.player));
+	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
 
         //
   	// game event triggers

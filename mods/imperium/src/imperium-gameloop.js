@@ -1272,11 +1272,14 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 	//
 	// voting happens simultaneously
 	//
+console.log("Aenda Num: " + agenda_num);
 	let has_everyone_voted = 1;
 	for (let i = 0; i < this.game.players_info.length; i++) {
-	  if (this.game.state.voted_on_agenda[this.game.player-1][agenda_num] == 0) { has_everyone_voted = 0; }
+console.log("has player: " + i + " voted? " + JSON.stringify(this.game.state.voted_on_agenda));
+	  if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { has_everyone_voted = 0; }
         }
 	if (has_everyone_voted == 1) {
+console.log("EVERYONE HAS VOTED");
   	  this.game.queue.splice(qe, 1);
 	  return 1;
 	}
@@ -1295,6 +1298,8 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 	  this.updateStatus(html);
 
 	} else {
+
+console.log("TRYING");
 
 	  //
 	  // if the player has a rider, we skip the interactive voting and submit an abstention
@@ -1485,7 +1490,7 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
   	}
 
 	// testing - give everyone a sabotage
-	this.game.deck[1].hand.push(("sabotage"+this.game.player));
+	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
 
         //
   	// game event triggers

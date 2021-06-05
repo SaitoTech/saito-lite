@@ -20,7 +20,7 @@
   });
 
 
-
+/****
   this.importAgendaCard('structures-not-shackles', {
   	name : "Structures not Shackles" ,
   	type : "Law" ,
@@ -40,7 +40,7 @@
 
         },
   });
-
+****/
 
 
   this.importAgendaCard('shard-of-the-throne', {

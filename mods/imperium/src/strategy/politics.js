@@ -94,12 +94,17 @@
             //
             // add extra 0s to ensure flexibility if extra agendas added
             //
+
+console.log("AP2: " + imperium_self.game.state.agendas_per_round);
+
             for (let z = 0; z < imperium_self.game.state.agendas_per_round+2; z++) {
               imperium_self.game.state.voted_on_agenda[i].push(0);
             }
           }
         }
-
+console.log("----------------------");
+console.log("---" + JSON.stringify(imperium_self.game.state.voted_on_agenda) + "---");
+console.log("----------------------");
 
         if (imperium_self.game.player === imperium_self.game.state.speaker) {
 
@@ -138,7 +143,7 @@ if (imperium_self.game.state.agenda_voting_order === "simultaneous") {
                   imperium_self.addMove("resolve_agenda\t"+selected_agendas[i]);
                   imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]);
                   imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]);
-                  imperium_self.addMove("simultaneous_agenda\t"+selected_agendas[i]);
+                  imperium_self.addMove("simultaneous_agenda\t"+selected_agendas[i]+"\t"+i);
                   imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
                   imperium_self.addMove("pre_agenda_stage_post\t"+selected_agendas[i]);
                   imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]);
