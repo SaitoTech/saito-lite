@@ -414,7 +414,9 @@ playerPlayActionCardMenu(action_card_player, card, action_cards_played = []) {
 
   for (let i = 0; i < this.game.deck[1].hand.length; i++) {
     if (this.game.deck[1].hand[i].indexOf("sabotage") > -1) {
-      this.game.players_info[this.game.player - 1].can_intervene_in_action_card = 1;
+      if (card.indexOf("sabotage") == -1) {
+        this.game.players_info[this.game.player - 1].can_intervene_in_action_card = 1;
+      }
     }
   }
 
@@ -517,7 +519,14 @@ console.log("BROADCASTING MOVES 2: " + JSON.stringify(this.moves));
     notice += this.action_cards[card].text;
     notice += '</div>';
 
-    this.playerAcknowledgeNotice(notice, function () { imperium_self.endTurn(); });
+    this.playerAcknowledgeNotice(notice, function () { 
+      if (imperium_self.game.state.action_card_order === "simultaneous") {
+        imperium_self.prependMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+        imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+console.log("BROADCASTING MOVES 3: " + JSON.stringify(this.moves));
+      }
+      imperium_self.endTurn(); 
+    });
     return 0;
   }
 

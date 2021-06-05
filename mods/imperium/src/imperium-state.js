@@ -27,7 +27,7 @@
         state.riders = [];
         state.choices = [];
 
-	state.action_card_order = "initiative";
+	state.action_card_order = "simultaneous";
         state.assign_hits_queue_instruction = "";
         state.assign_hits_to_cancel = "";
         state.active_player_moved = 0;

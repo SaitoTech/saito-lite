@@ -3,7 +3,7 @@
   this.importAgendaCard('sequential-voting', {
   	name : "Sequential Voting" ,
   	type : "Law" ,
-  	text : "Players vote on Agendas in Initiative Order, not Simultaneously" ,
+  	text : "Players must vote on Agendas in Initiative Order, not Simultaneously" ,
         returnAgendaOptions : function(imperium_self) { return ['for','against']; },
         onPass : function(imperium_self, winning_choice) {
 
@@ -20,11 +20,12 @@
   });
 
 
+
   this.importAgendaCard('structures-not-shackles', {
   	name : "Structures not Shackles" ,
   	type : "Law" ,
 	elect : "player" ,
-  	text : "Players respond to action cards in Initiative Order, not Simultaneously" ,
+  	text : "Players play action cards in initiative order, not simultaneously" ,
         returnAgendaOptions : function(imperium_self) { return ['for','against']; },
         onPass : function(imperium_self, winning_choice) {
 
@@ -39,6 +40,7 @@
 
         },
   });
+
 
 
   this.importAgendaCard('shard-of-the-throne', {

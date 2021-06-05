@@ -1485,7 +1485,7 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
   	}
 
 	// testing - give everyone a sabotage
-	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
+	this.game.deck[1].hand.push(("sabotage"+this.game.player));
 
         //
   	// game event triggers
@@ -5391,7 +5391,13 @@ console.log("defender is: " + defender);
               //this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
             //}
           //}
-          this.game.queue.push("resetconfirmsneeded\t"+(speaker_order.length-1));
+
+	  //
+	  // sabotage is a response to another card, which has its own simultaneous
+	  //
+	  if (card.indexOf("sabotage") != 0) {
+            this.game.queue.push("resetconfirmsneeded\t"+(speaker_order.length));
+	  }
 	} else {
   	  for (let i = 0; i < speaker_order.length; i++) {
 	    for (let k = 0; k < z.length; k++) {
@@ -5414,6 +5420,7 @@ console.log("defender is: " + defender);
 	let action_card = mv[2];
 
 console.log("reached simultaneous_action_card_player_menu...");
+console.log("AM I CONFIRMED: " + this.hasPlayerConfirmed(this.app.wallet.returnPublicKey()) );
 
 	//
 	// the person who played the action card cannot respond to it
@@ -5421,9 +5428,19 @@ console.log("reached simultaneous_action_card_player_menu...");
 	if (this.game.player == action_card_player) {
     	  //this.game.queue.splice(qe, 1);
 	  this.updateStatus("Your opponents are being notified you have played " + this.action_cards[action_card].name);
+	  if (this.hasPlayerConfirmed(this.app.wallet.returnPublicKey())) {
+	    if (action_card.indexOf("sabotage") != 0) {
+	      // sabotage doesn't need resolve, it happily resolves itself
+	    } else {
+              imperium_self.addMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+              imperium_self.endTurn();
+            }
+          }
 	  return 0;
 	} else {
-	  if (this.hasPlayerConfirmed(this.app.wallet.returnPublicKey())) {
+	  // sabotage is a special case where we want to show the menu even if we have already confirmed
+	  if (this.hasPlayerConfirmed(this.app.wallet.returnPublicKey()) && action_card.indexOf("sabotage") != 0) {
   	    this.updateStatus("Waiting for players to respond to "+this.action_cards[action_card].name);
 	  } else {
     	    //this.game.queue.splice(qe, 1);
