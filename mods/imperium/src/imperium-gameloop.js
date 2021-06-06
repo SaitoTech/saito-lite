@@ -1490,7 +1490,7 @@ console.log("TRYING");
   	}
 
 	// testing - give everyone a sabotage
-	this.game.deck[1].hand.push(("sabotage"+this.game.player));
+	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
 
         //
   	// game event triggers
