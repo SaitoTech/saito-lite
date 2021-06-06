@@ -1920,6 +1920,13 @@ body {
   margin-left: 15em;
 }
 
+.dash-faction-agenda {
+  font-weight: bold;
+  font-size: 4em;
+  color: white;
+  background: #0004;
+  text-align: center;
+}
 .dash-faction-base {
   background-color: #000;
   opacity: 0.95;

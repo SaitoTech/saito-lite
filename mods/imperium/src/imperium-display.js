@@ -369,7 +369,7 @@ returnPlanetInformationHTML(planet) {
 
 }
 
-returnFactionDashboard() {
+returnFactionDashboard(agenda_phase=0) {
 
   let html = '';
   for (let i = 0; i < this.game.players_info.length; i++) {
@@ -378,8 +378,19 @@ returnFactionDashboard() {
 
     <div data-id="${(i+1)}" class="dash-faction p${i+1}">
      <div data-id="${(i+1)}" class="dash-faction-name bk"></div>
-      <div data-id="${(i+1)}" class="dash-faction-info">
+    `;
 
+    if (agenda_phase == 1) {
+    html += `
+      <div data-id="${(i+1)}" class="dash-faction-agenda">
+        <div data-id="${(i+1)}" class="dash-item-agenda-influence agenda-influence">
+          <span data-id="${(i+1)}" class="avail">${this.game.state.votes_available[i]}</span>
+        </div>
+      </div>
+    `;
+    } else {
+    html += `
+      <div data-id="${(i+1)}" class="dash-faction-info">
         <div data-id="${(i+1)}" class="dash-item tooltip dash-item-resources resources">
           <span data-id="${(i+1)}" class="avail"></span>
           <span data-id="${(i+1)}" class="total"></span>
@@ -396,9 +407,10 @@ returnFactionDashboard() {
             ${this.game.players_info[i].goods}
           </div>
         </div>
-
       </div>
-
+    `;
+    }
+    html += `
       <div data-id="${(i+1)}" class="dash-faction-base">
 	<div data-id="${(i+1)}" class="dash-faction-status-${(i+1)} dash-faction-status"></div>
 	commodities : <span data-id="${(i+1)}" class="dash-item-commodities">${this.game.players_info[i].commodities}</span> / <span data-id="${(i+1)}" class="dash-item-commodity-limit">${this.game.players_info[i].commodity_limit}</span>
@@ -993,13 +1005,14 @@ returnObjectivesOverlay() {
 
 
 
-displayFactionDashboard() {
+displayFactionDashboard(agenda_phase=0) {
 
   let imperium_self = this;
 
   try {
 
-    document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard();
+    document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard(agenda_phase);
+
     let pl = "";
     let fo = "";
     for (let i = 0; i < this.game.players_info.length; i++) {
@@ -1013,13 +1026,16 @@ displayFactionDashboard() {
       let available_influence = this.returnAvailableInfluence((i+1)) - this.game.players_info[i].goods;
 
       document.querySelector(`.${pl} .dash-faction-name`).innerHTML = this.returnFaction(i+1);
-      document.querySelector(`.${pl} .resources .avail`).innerHTML = available_resources;
-      document.querySelector(`.${pl} .resources .total`).innerHTML = total_resources;
+      try {
+// availableinfluence first as rest will error-out on agenda overlay
       document.querySelector(`.${pl} .influence .avail`).innerHTML = available_influence;
       document.querySelector(`.${pl} .influence .total`).innerHTML = total_influence;
+      document.querySelector(`.${pl} .resources .avail`).innerHTML = available_resources;
+      document.querySelector(`.${pl} .resources .total`).innerHTML = total_resources;
       document.querySelector(`.${pl} .dash-item-goods`).innerHTML = this.game.players_info[i].goods;
       document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
       document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
+      } catch (err) {}
 
       document.querySelector(fo).onclick = (e) => {
         imperium_self.displayFactionSheet((i+1));

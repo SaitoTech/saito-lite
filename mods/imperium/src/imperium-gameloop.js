@@ -1124,6 +1124,12 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
 	this.game.state.voting_on_agenda = agenda_num;
 
 	//
+	// display faction dashboard with voting strength
+	//
+	this.displayFactionDashboard(1);
+
+
+	//
 	// voting happens in turns, speaker last
 	//
         let who_is_next = 0;
@@ -1268,6 +1274,12 @@ console.log("HOW VOTED ON AGENDA? " + player + " -- " + vote);
         let agenda_num = parseInt(mv[2]);
 	let agenda_name = this.agenda_cards[agenda].name;
 	this.game.state.voting_on_agenda = agenda_num;
+
+	//
+	// display faction dashboard with voting strength
+	//
+	this.displayFactionDashboard(1);
+
 
 	//
 	// voting happens simultaneously
