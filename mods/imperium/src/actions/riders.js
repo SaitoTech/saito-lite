@@ -12,7 +12,7 @@
             let msg  = 'On which choice do you wish to place your Leadership rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
 	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choices[choice]);
-	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium.self.game.player)+" has placed a Leadership Rider on "+choices[choice]);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFactionNickname(imperium_self.game.player)+" has placed a Leadership Rider on "+choices[choice]);
 	      imperium_self.endTurn();
 	    });
 	  }
