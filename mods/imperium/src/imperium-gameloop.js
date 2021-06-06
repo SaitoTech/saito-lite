@@ -1490,7 +1490,7 @@ console.log("TRYING");
   	}
 
 	// testing - give everyone a sabotage
-	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
+	this.game.deck[1].hand.push(("sabotage"+this.game.player));
 
         //
   	// game event triggers
@@ -5435,13 +5435,20 @@ console.log("AM I CONFIRMED: " + this.hasPlayerConfirmed(this.app.wallet.returnP
 	  this.updateStatus("Your opponents are being notified you have played " + this.action_cards[action_card].name);
 	  if (this.hasPlayerConfirmed(this.app.wallet.returnPublicKey())) {
 	    if (action_card.indexOf("sabotage") != 0) {
-	      // sabotage doesn't need resolve, it happily resolves itself
+              imperium_self.addMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+              imperium_self.endTurn();
 	    } else {
+	      // sabotage doesn't need resolve, it happily resolves itself
               imperium_self.addMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
               imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
             }
-          }
+          } else {
+              imperium_self.addMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+              imperium_self.endTurn();
+	  }
 	  return 0;
 	} else {
 	  // sabotage is a special case where we want to show the menu even if we have already confirmed

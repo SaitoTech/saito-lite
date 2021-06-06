@@ -9274,10 +9274,10 @@ console.log("QUEUE: " + JSON.stringify(imperium_self.game.queue));
 	      let removed_previous = 0;
 	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
 console.log("removing: " + JSON.stringify(imperium_self.game.queue[i]));
+	      if (imperium_self.game.queue[i].indexOf("sabotage") > 0) { removed_previous = 0; }
 	      if (imperium_self.game.queue[i].indexOf("resolve") != 0) {
 	        imperium_self.game.queue.splice(i, 1);
 	      }
-	      if (imperium_self.game.queue[i].indexOf("sabotage") > 0) { removed_previous = 0; }
 	      if (removed_previous == 1) { 
 	        imperium_self.removeConfirmsNeeded();
 	        imperium_self.updateLog(imperium_self.returnFaction(action_card_player) + " plays Sabotage!");
@@ -9305,6 +9305,7 @@ console.log("QUEUE: " + JSON.stringify(imperium_self.game.queue));
 	      let removed_previous = 0;
 	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
 console.log("removing: " + JSON.stringify(imperium_self.game.queue[i]));
+	      if (imperium_self.game.queue[i].indexOf("sabotage") > 0) { removed_previous = 0; }
 	      if (imperium_self.game.queue[i].indexOf("resolve") != 0) {
 	        imperium_self.game.queue.splice(i, 1);
 	      }
@@ -9335,10 +9336,10 @@ console.log("QUEUE: " + JSON.stringify(imperium_self.game.queue));
 	      let removed_previous = 0;
 	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
 console.log("removing: " + JSON.stringify(imperium_self.game.queue[i]));
+	      if (imperium_self.game.queue[i].indexOf("sabotage") > 0) { removed_previous = 0; }
 	      if (imperium_self.game.queue[i].indexOf("resolve") != 0) {
 	        imperium_self.game.queue.splice(i, 1);
 	      }
-	      if (imperium_self.game.queue[i].indexOf("sabotage") > 0) { removed_previous = 0; }
 	      if (removed_previous == 1) { 
 	        imperium_self.removeConfirmsNeeded();
 	        imperium_self.updateLog(imperium_self.returnFaction(action_card_player) + " plays Sabotage!");
@@ -9363,10 +9364,10 @@ console.log("removing: " + JSON.stringify(imperium_self.game.queue[i]));
 	    if (imperium_self.game.queue[i].indexOf("action_card_") >= 0) {
 	      let removed_previous = 0;
 	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
+	      if (imperium_self.game.queue[i].indexOf("sabotage") > 0) { removed_previous = 0; }
 	      if (imperium_self.game.queue[i].indexOf("resolve") != 0) {
 	        imperium_self.game.queue.splice(i, 1);
 	      }
-	      if (imperium_self.game.queue[i].indexOf("sabotage") > 0) { removed_previous = 0; }
 	      if (removed_previous == 1) { 
 	        imperium_self.removeConfirmsNeeded();
 	        imperium_self.updateLog(imperium_self.returnFaction(action_card_player) + " plays Sabotage!");
@@ -14202,7 +14203,7 @@ console.log("TRYING");
   	}
 
 	// testing - give everyone a sabotage
-	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
+	this.game.deck[1].hand.push(("sabotage"+this.game.player));
 
         //
   	// game event triggers
@@ -18147,13 +18148,20 @@ console.log("AM I CONFIRMED: " + this.hasPlayerConfirmed(this.app.wallet.returnP
 	  this.updateStatus("Your opponents are being notified you have played " + this.action_cards[action_card].name);
 	  if (this.hasPlayerConfirmed(this.app.wallet.returnPublicKey())) {
 	    if (action_card.indexOf("sabotage") != 0) {
-	      // sabotage doesn't need resolve, it happily resolves itself
+              imperium_self.addMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+              imperium_self.endTurn();
 	    } else {
+	      // sabotage doesn't need resolve, it happily resolves itself
               imperium_self.addMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
               imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
             }
-          }
+          } else {
+              imperium_self.addMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+              imperium_self.endTurn();
+	  }
 	  return 0;
 	} else {
 	  // sabotage is a special case where we want to show the menu even if we have already confirmed
@@ -18880,15 +18888,15 @@ playerPlayActionCardMenu(action_card_player, card, action_cards_played = []) {
     //
     // if we really can't do anything, auto-skip this step 
     //
-    if (tech_attach_menu_events == 0 && ac.length == 0) {
-      if (imperium_self.game.state.action_card_order === "simultaneous") {
-console.log("BROADCASTING MOVES 1: " + JSON.stringify(this.moves));
-        imperium_self.prependMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
-        imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
-      }
-      imperium_self.endTurn();
-      return;
-    }
+//    if (tech_attach_menu_events == 0 && ac.length == 0) {
+//      if (imperium_self.game.state.action_card_order === "simultaneous") {
+//console.log("BROADCASTING MOVES 1: " + JSON.stringify(this.moves));
+//        imperium_self.prependMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
+//        imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
+//      }
+//      imperium_self.endTurn();
+//      return;
+//    }
 
     this.updateStatus(html);
 
@@ -18910,12 +18918,18 @@ console.log("BROADCASTING MOVES 1: " + JSON.stringify(this.moves));
       }
 
       if (action2 == "action") {
-        imperium_self.playerSelectActionCard(function (card) {
-          imperium_self.game.players_info[imperium_self.game.player - 1].action_cards_played.push(card);
-          imperium_self.addMove("action_card_post\t" + imperium_self.game.player + "\t" + card);
-          imperium_self.addMove("action_card\t" + imperium_self.game.player + "\t" + card);
+        imperium_self.playerSelectActionCard(function (card2) {
+          imperium_self.game.players_info[imperium_self.game.player - 1].action_cards_played.push(card2);
+          imperium_self.addMove("action_card_post\t" + imperium_self.game.player + "\t" + card2);
+          imperium_self.addMove("action_card\t" + imperium_self.game.player + "\t" + card2);
           imperium_self.addMove("lose\t" + imperium_self.game.player + "\taction_cards\t1");
-          imperium_self.playerPlayActionCardMenu(action_card_player, card);
+
+	  if (card2.indexOf("sabotage") == 0) {
+            imperium_self.endTurn();
+	  } else {
+            imperium_self.playerPlayActionCardMenu(action_card_player, card);
+	  }
+
         }, function () {
           imperium_self.playerPlayActionCardMenu(action_card_player, card);
         }, relevant_action_cards);
@@ -18929,7 +18943,6 @@ console.log("BROADCASTING MOVES 1: " + JSON.stringify(this.moves));
           imperium_self.prependMove("resolve\tsimultaneous_action_card_player_menu\t1\t" + imperium_self.app.wallet.returnPublicKey());
           imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
         }
-console.log("BROADCASTING MOVES 2: " + JSON.stringify(this.moves));
         imperium_self.endTurn();
       }
       return 0;
