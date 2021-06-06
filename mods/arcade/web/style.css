@@ -50,6 +50,17 @@ body {
 .header-shim {
   height: 5em;
 }
+
+.arcade-announcement {
+  margin-top: 0.5em;
+  border: 1px solid var(--saito-red);
+  padding: 10px;
+}
+.arcade-announcement a {
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+}
 .arcade-container {
   display: grid;
   gap: 1em;
