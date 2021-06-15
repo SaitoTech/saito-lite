@@ -3,13 +3,15 @@
     "how_saito_works": {"en": "How Saito Works", "zh": "Saito是如何工作的"},
     "web3_foundation_grant": {"en": "Web3 Foundation Grant", "zh": "Web3基金会Grant计划"},
     "get_saito_tokens": {"en": "Get Saito Tokens", "zh": "获取SAITO代币"},
+    "saito_team": {"en": "Team", "zh": "我们"},
+
     "saito_available_1": {"en": "SAITO is now available for purchase: ", "zh": "SAITO现已上线"},
     "saito_available_2": {"en": "instructions here", "zh": "此处说明"},
     "saito_available_3": {"en": ".", "zh": ""},
     "fixing_blockchain_economics": {"en": "Fixing Blockchain Economics", "zh": "完善区块链经济体系"},
     "Scalability_web3": {"en": "Scalability For Web3.0", "zh": "Web3.0延展"},
     "live_demo": {"en":  "Live Demo", "zh": "在线演示"},
-    "build_on_saito": {"en":  "Build on Saito", "zh": "在Saito上建设"},
+    "build_on_saito": {"en":  "uild on Saito", "zh": "在Saito上建设"},
     "saito_long_desc": {
         "en": "Saito is a Web3 Foundation grant recipient that pays nodes in the P2P network instead of miners or stakers, delivering a permissionless and scalable network capable of powering decentralized versions of Twitter, Facebook and Amazon without the need for predatory monopolies in the network layer.", 
         "zh": "Saito作为一个获得Web3基金会Grant计划资金资助的项目，它向点对点网络中的节点付费，而不是矿工或质押者。Saito不仅提供免费的可扩展网络基础设施，并且，无需考虑网络掠夺性垄断，即可支持去中心化版的Twitter、Facebook和亚马逊。"
