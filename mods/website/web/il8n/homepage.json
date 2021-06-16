@@ -11,7 +11,7 @@
     "fixing_blockchain_economics": {"en": "Fixing Blockchain Economics", "zh": "完善区块链经济体系"},
     "Scalability_web3": {"en": "Scalability For Web3.0", "zh": "Web3.0延展"},
     "live_demo": {"en":  "Live Demo", "zh": "在线演示"},
-    "build_on_saito": {"en":  "uild on Saito", "zh": "在Saito上建设"},
+    "build_on_saito": {"en":  "Build on Saito", "zh": "在Saito上建设"},
     "saito_long_desc": {
         "en": "Saito is a layer one blockchain that pays nodes in the P2P network instead of miners or stakers, delivering a permissionless and scalable network capable of powering decentralized versions of Twitter, Facebook and Amazon without the need for predatory monopolies in the network layer.", 
         "zh": "Saito作为一个获得Web3基金会Grant计划资金资助的项目，它向点对点网络中的节点付费，而不是矿工或质押者。Saito不仅提供免费的可扩展网络基础设施，并且，无需考虑网络掠夺性垄断，即可支持去中心化版的Twitter、Facebook和亚马逊。"
