@@ -660,6 +660,10 @@ section {
   display: flex;
 }
 
+.footerWrapper {
+  background: #000;
+}
+
 #section6 {
   display: flex;
   flex-direction: column;
