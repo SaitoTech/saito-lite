@@ -301,7 +301,7 @@
   checkForVictory() {
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.game.players_info[i].vp >= this.game.state.vp_target) {
-        this.updateStatus("Game Over: " + this.returnFaction(i+1) + " has reached 14 VP");
+        this.updateStatus("Game Over: " + this.returnFaction(i+1) + " has reached "+this.game.state.vo_target+" VP");
         return 1;
       }
     }

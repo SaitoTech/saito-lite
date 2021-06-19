@@ -58,6 +58,7 @@
             imperium_self.addMove("resolve\tplay");
             imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "0");
             imperium_self.addMove("player_end_turn\t" + imperium_self.game.player);
+            imperium_self.addMove("NOTIFY\t" + imperium_self.returnFactionNickname(imperium_self.game.player) + " stalls by discarding an action card");
             imperium_self.endTurn();
             return 0;
 	  });

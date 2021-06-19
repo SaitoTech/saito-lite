@@ -1482,6 +1482,7 @@ console.log("TRYING");
   	//
   	// SCORING
   	//
+this.game.state.end_round_scoring = 1;
         if (this.game.state.round >= 1 && this.game.state.round_scoring == 0) {
 
 	  if (this.game.planets['new-byzantium'].owner != -1) {
@@ -1500,9 +1501,26 @@ console.log("TRYING");
   	  this.game.state.round_scoring = 0;
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as no secondary to run
   	}
+this.game.state.end_round_scoring = 0;
+
 
 	// testing - give everyone a sabotage
 	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
+
+
+	//
+	// check for victory condition
+	//
+	let io = this.returnInitiativeOrder();
+	for (let i = 0; i < io.length; i++) {
+          if (this.game.players_info[i].vp >= this.game.state.vp_target) {
+            this.updateStatus("Game Over: " + this.returnFaction(i) + " has reached " + this.game.state.vp_target + " VP");
+            this.updateLog("Game Over: " + this.returnFactionNickname(i) + " has reached " + this.game.state.vp_target + " VP");
+            return 0;
+	  }
+        }
+
+
 
         //
   	// game event triggers
@@ -1777,9 +1795,11 @@ console.log("TRYING");
 	//
 	// end game
 	//
-	if (this.checkForVictory() == 1) {
-	  this.updateStatus("Game Over: " + this.returnFaction(player-1) + " has reached 14 VP");
-	  return 0;
+	if (this.game.state.end_round_scoring != 1) {
+	  if (this.checkForVictory() == 1) {
+	    this.updateStatus("Game Over: " + this.returnFaction(player-1) + " has reached " + this.game.state.vp_target + " VP");
+	    return 0;
+	  }
 	}
 
   	this.game.queue.splice(qe, 1);
@@ -2117,6 +2137,7 @@ console.log("TRYING");
 	  if (planet.owner > -1) {
             this.game.players_info[planet.owner-1].lost_planet_this_round = player; // player who took it
 	  }
+          this.updateLog(planet.name + " is annexed by " + imperium_self.returnFaction(imperium_self.game.player));
 	  this.updatePlanetOwner(sector, planet_idx, player);
 	}
 

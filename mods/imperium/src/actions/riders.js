@@ -70,7 +70,7 @@
                 for (let b = 0; b < imperium_self.game.players_info.length; b++) {
                   imperium_self.addMove("activate\t"+(b+1)+"\t"+sector);
                 }
-                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFactionNickname(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFactionNickname(action_card_player) + " uses Diplomacy Rider to protect " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -111,7 +111,7 @@
 	    // three action cards
             imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t3");
             imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t3");
-            imperium_self.addMove("NOTIFY\tdealing two action cards to player "+player);
+            imperium_self.addMove("NOTIFY\tdealing two action cards to "+imperium_self.returnFactionNickname(imperium_self.game.player));
 
 	    // and change speaker
 	    let html = 'Make which player the speaker? <ul>';
@@ -168,7 +168,7 @@
               },
               function(planet) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t"+imperium_self.game.planets[planet].idx+"\t"+"spacedock"+"\t"+imperium_self.game.planets[planet].sector);
-                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " builds a Space Dock in " + imperium_self.game.sectors[imperium_self.game.planets[planet].sector].name);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(action_card_player) + " builds a Space Dock in " + imperium_self.game.sectors[imperium_self.game.planets[planet].sector].name);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -205,7 +205,7 @@
 	},
 	playActionCardEvent(imperium_self, player, action_card_player, card) {
 	  imperium_self.game.queue.push("purchase\t"+action_card_player+"\t"+"goods"+"\t"+5);
-	  imperium_self.game.queue.push("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " gains 5 Trade Goods through their Trade Rider");
+	  imperium_self.game.queue.push("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " gains 5 Trade Goods through their Trade Rider");
 	  return 1;
 	}
     });
