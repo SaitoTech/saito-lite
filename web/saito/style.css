@@ -1141,7 +1141,45 @@ div#message-wrapper {
 #header-token-select{
   max-width: 11.5em;
   padding: 5px;
+  border-bottom: 1px solid #888 !important;
+  margin: 5px 0;
+  animation: pulsey 2s 5;
 }
+
+.account-info .saito-select::after {
+  background-color: #fff0;
+}
+.account-info .saito-select {
+  }
+
+@keyframes pulse {
+  0% {
+      box-shadow: 0 0 0 0 var(--saito-orange);
+  }
+
+  70% {
+      box-shadow: 0 0 1em -1em rgba(247, 31, 61, 0);
+  }
+
+  100% {
+      box-shadow: 0 0 0 0 rgba(247, 31, 61, 0);
+  }
+}
+
+@keyframes pulsey {
+  0% {
+    border-bottom: 1px solid var(--saito-orange) !important;
+  }
+
+  70% {
+    border-bottom: 4px solid var(--saito-red) !important;
+  }
+
+  100% {
+    border-bottom: 1px solid rgba(247, 31, 61, 0) !important;
+  }
+}
+
 
 .personal-info .saito-select {
   width: 14em;

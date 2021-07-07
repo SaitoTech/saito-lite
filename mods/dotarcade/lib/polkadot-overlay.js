@@ -64,7 +64,7 @@ module.exports = PolkadotPopup = {
 
           document.querySelector(".arcade-link").onclick = (e) => {
             app.wallet.setPreferredCrypto(ticker);
-            window.location = '/arcade';
+            window.location = '/arcade/#side_bar=1';
           }
 
         } catch (err) {

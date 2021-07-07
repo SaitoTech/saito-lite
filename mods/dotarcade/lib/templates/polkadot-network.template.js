@@ -4,7 +4,8 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 
       <h1 class="polkadot-overlay-header">Choose Polkadot Token:</h1>
 
-      <div class="polkadot-overlay-subheader">Which Polkadot token do you want to use by default with Saito applications? You can change this anytime. More parachains coming soon!</div>
+      <div class="polkadot-overlay-subheader">Which Polkadot token do you want to use by default with Saito applications?<br />
+        You can change this anytime.</div>
 
       <form id="polkadot-overlay-radio" class="polkadot-overlay-radio">
 
@@ -23,7 +24,13 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 
       </form>
 
-      <div id="polkadot-overlay-infobox" class="polkadot-overlay-infobox">
+      <!--div id="polkadot-overlay-infobox" class="polkadot-overlay-infobox">
+      </div-->
+
+      <div>
+        <p>
+          More parachains coming soon!
+        </p>
       </div>
 
       <div id="polkadot-overlay-network-selected-btn" class="polkadot-overlay-network-selected-btn button">Select Westend</div>
@@ -38,13 +45,38 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
   clear: both;
 }
 .polkadot-overlay-container {
-  background-color: whitesmoke;
   max-width: 50vw;
   max-height: 90vh;
   margin-left: auto;
   margin-right: auto;
   padding: 25px;
   border-radius: 5px;
+}
+.polkadot-overlay-container::after {
+  background-image: url(img/brand-pattern.png);
+  background-size: cover;
+  content: "";
+  opacity: 0.375;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  padding: 25px;
+  border-radius: 5px;
+}
+.polkadot-overlay-container::before {
+  z-index: -5;
+  content: "";
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  padding: 25px;
+  border-radius: 5px;
+  background: #efefef;
 }
 .polkadot-overlay-header {
   font-size: 2em;
@@ -72,6 +104,7 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 }
 .polkadot-overlay-network-selected-btn {
   text-align: center;
+  margin: 2em 0 0;
 }
 
 @media only screen and (max-width: 960px) {

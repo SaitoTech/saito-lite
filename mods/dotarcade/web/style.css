@@ -42,7 +42,9 @@ body {
 .web3-page h2 {
     color: white;
     font-size: 3em;
-    margin-bottom: 1.5em;
+}
+.web3-page h3 {
+    font-size: 2em;
 }
 .heading-poker {
     color: var(--saito-red);
@@ -56,11 +58,16 @@ body {
     letter-spacing: 1px;
     text-transform: uppercase;
 }
+.powered-by {
+    margin: 2.5em 0;
+}
 .powered-logo img {
     max-width: 120px;
 }
 
-
+#startgame {
+    text-align: center;
+}
 
 /* Content Style */
 .page-heading {
@@ -138,10 +145,9 @@ body {
     padding: .8em 1.2em;
     transition: all .2s ease-in-out;
     transform: scale(1);
-    animation: pulse 2s 5;
+    /*animation: pulse 2s 5*/;
 }
 .button:hover {
-    background-color: #d02035;
     color: white;
     transform: translateY(2px);
 }
