@@ -71,16 +71,20 @@ html[data-theme='dark'] {
 }
 
 .page-header {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
+
 /* h1 */
+
 .page-title {
-    margin: 0 0 .5rem;
+  margin: 0 0 .5rem;
 }
+
 /* p */
+
 .page-subtitle {
-    margin: 0;
-    opacity: .9;
+  margin: 0;
+  opacity: .9;
 }
 
 p {
@@ -131,7 +135,6 @@ body {
   border: 3px solid var(--scrollbarBG);
 }
 
-
 /* ALERt BOX */
 
 .alert-banner {
@@ -143,6 +146,7 @@ body {
   color: black;
   min-height: 120px;
 }
+
 .alert-icon {
   color: white;
   width: 2em;
@@ -153,24 +157,23 @@ body {
   font-size: 200%;
   padding-top: 20px;
   padding-right: 0.3em;
-  float:left;
+  float: left;
 }
+
 .alert-body {
   padding: 1.125rem;
   display: inline-block;
 }
+
 .alert-title {
   font-weight: 800;
-  font-size:1.5em;
+  font-size: 1.5em;
 }
+
 .alert-notice {
   font-size: 1.3em;
   padding-top: 3px;
 }
-
-
-
-
 
 /* SAITO ANIMATION CSS */
 
@@ -426,6 +429,7 @@ button i {
   max-width: 150px;
   margin-top: 30px;
 }
+
 #appstore-end-compile-btn {
   max-width: 150px;
   margin-top: 30px;
@@ -535,7 +539,7 @@ button i {
   float: right;
   font-size: 1em;
   padding: 4px;
-  max-width:200px;
+  max-width: 200px;
 }
 
 .appstore-overlay-developers {
@@ -546,9 +550,11 @@ button i {
   margin-right: auto;
   width: auto;
 }
+
 .appstore-overlay-developers:hover {
   font-weight: bold;
-  cursor: pointer;;
+  cursor: pointer;
+  ;
 }
 
 .appstore-overlay-container {
@@ -634,10 +640,12 @@ button i {
   height: 3em;
   min-height: 2em;
 }
+
 .appstore-overlay-searchbox {
   font-size: 0.8em;
   padding: 4px;
 }
+
 .appstore-header-title {
   font-size: 1.4em;
   padding: 4px;
@@ -711,8 +719,8 @@ button i {
   transform: rotate(45deg);
 }
 
-
 /*--- Chat ---*/
+
 .chat-message p {
   margin-bottom: 10px;
 }
@@ -1138,55 +1146,43 @@ div#message-wrapper {
   font-weight: normal;
 }
 
-#header-token-select{
+#header-token-select {
   max-width: 11.5em;
   padding: 5px;
   border-bottom: 1px solid #888 !important;
   margin: 5px 0;
-  animation: pulsey 2s 5;
+  animation-delay: 2s;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: 2;
+  animation-name: pulsey;
+  background: linear-gradient(to right, #fff 35%, var(--saito-red) 48%, var(--saito-red) 53%, #fff 65%);
+  background-size: 300% auto;
+  background-position: 300% center;
 }
 
 .account-info .saito-select::after {
   background-color: #fff0;
 }
-.account-info .saito-select {
-  }
-
-@keyframes pulse {
-  0% {
-      box-shadow: 0 0 0 0 var(--saito-orange);
-  }
-
-  70% {
-      box-shadow: 0 0 1em -1em rgba(247, 31, 61, 0);
-  }
-
-  100% {
-      box-shadow: 0 0 0 0 rgba(247, 31, 61, 0);
-  }
-}
 
 @keyframes pulsey {
-  0% {
-    border-bottom: 1px solid var(--saito-orange) !important;
+/*  0% {
+    background-position: 300% center;
   }
-
-  70% {
-    border-bottom: 4px solid var(--saito-red) !important;
-  }
-
+  50% {
+    background-position: 0 center;
+  }*/
   100% {
-    border-bottom: 1px solid rgba(247, 31, 61, 0) !important;
+    background-position: -300% center;
   }
 }
-
 
 .personal-info .saito-select {
   width: 14em;
 }
 
-.header-dropdown{
-  border:  solid 1px;
+.header-dropdown {
+  border: solid 1px;
   padding: 0em 0.4em;
   height: 1.35em;
 }
@@ -1340,6 +1336,7 @@ div#message-wrapper {
   display: flex;
   flex-flow: wrap;
 }
+
 .account-info .saito-select {
   border: 0px;
   color: #333;
@@ -1980,4 +1977,3 @@ a.header-icon-fullscreen.tip {
 .align-top {
   align-self: auto !important;
 }
-
