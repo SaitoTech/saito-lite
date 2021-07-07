@@ -162,6 +162,11 @@ class Website extends ModTemplate {
       this.initializeHompage(app);
     }
   }
+  initialize(app) {
+    if(app.BROWSER) {
+      this.initializeExpandSideBar();
+    }
+  }
   
   doPrivateSaleOverlay() {
     let doPrivsaleSignup = this.app.browser.parseHash(window.location.hash).private_sale;
@@ -171,6 +176,22 @@ class Website extends ModTemplate {
       this.mre.attachEvents(this.app, this);
       window.location.hash = this.app.browser.removeFromHash(window.location.hash, "private_sale");
     }
+  }
+  doExpandSideBar() {
+    let expandSidebar = this.app.browser.parseHash(window.location.hash).side_bar;
+    if(expandSidebar) {
+      document.querySelector("#header-mini-wallet").click();
+      window.location.hash = this.app.browser.removeFromHash(window.location.hash, "side_bar");
+    }
+  }
+  
+  initializeExpandSideBar() {
+    window.addEventListener("hashchange", () => {
+      this.doExpandSideBar();
+    });
+    let oldHash = window.location.hash;
+    window.location.hash = `#`;
+    window.location.hash = oldHash;
   }
   initializePrivateSaleOverlay() {
     window.addEventListener("hashchange", () => {
