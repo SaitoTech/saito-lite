@@ -181,6 +181,7 @@ class Website extends ModTemplate {
     let expandSidebar = this.app.browser.parseHash(window.location.hash).side_bar;
     if(expandSidebar) {
       document.querySelector("#header-mini-wallet").click();
+      document.querySelector('#header-token-select').classList.add('pulsey');
       window.location.hash = this.app.browser.removeFromHash(window.location.hash, "side_bar");
     }
   }

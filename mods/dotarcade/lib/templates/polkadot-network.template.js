@@ -4,13 +4,19 @@ module.exports = PolkadotNetworkTemplate = (app, mod) => {
 
       <h1 class="polkadot-overlay-header">Choose Polkadot Token:</h1>
 
-      <div class="polkadot-overlay-subheader">Which Polkadot token do you want to use by default with Saito applications?<br />
-        You can change this anytime.</div>
+      <div class="polkadot-overlay-subheader">
+        <p>
+          Which Polkadot token do you want to use by default with Saito applications?
+        </p>
+        <p>
+          You can change this anytime.
+        </p>
+      </div>
 
       <form id="polkadot-overlay-radio" class="polkadot-overlay-radio">
 
         <input type="radio" id="WND" class="network_option" name="network" value="WND" checked>
-        <label for="WND">WND - Westend</label>
+        <label for="WND">WND - Westend (Testnet - Recommended)</label>
 
         <p></p>
 
