@@ -377,8 +377,8 @@ class Poker extends GameTemplate {
     if (this.game.state.tournament_blinds_level_up > 0) {
       this.game.state.tournament_blinds_per_level--;
       if (this.game.state.tournament_blinds_per_level < 0) {
-	this.updateLog("Blinds increased to: " + game.state.big_blind + "/" + game.state.small_blind);
-	this.game.state.tournament_blinds_per_level = this.game.state.tournament_blinds_per_level_max;
+    this.updateLog("Blinds increased to: " + game.state.big_blind + "/" + game.state.small_blind);
+    this.game.state.tournament_blinds_per_level = this.game.state.tournament_blinds_per_level_max;
       }
     }
 
@@ -509,7 +509,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       //
       if (mv[0] === "resolve") {
         this.game.queue.splice(qe-1, 2);
-	return 1;
+    return 1;
       }
 
 
@@ -565,23 +565,23 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
           }
 
 
-	 //
-   	 // everyone settles with winner if needed
-   	 //
-   	 if (this.game.crypto != "") {
-    	   for (let i = 0; i < this.game.players.length; i++) {
-    	     if (this.game.state.player_pot[i] > 0) {
-	       if ((this.game.player-1) == player_left_idx) {
-		 if (i != player_left_idx) {
+     //
+        // everyone settles with winner if needed
+        //
+        if (this.game.crypto != "") {
+           for (let i = 0; i < this.game.players.length; i++) {
+             if (this.game.state.player_pot[i] > 0) {
+           if ((this.game.player-1) == player_left_idx) {
+         if (i != player_left_idx) {
                    this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-		 }
-	       } else {
-		 if (i != player_left_idx) {
-            	   this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-            	   this.settlement.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-	         }
-	       }
-	     }
+         }
+           } else {
+         if (i != player_left_idx) {
+                   this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+                   this.settlement.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+             }
+           }
+         }
            }
          }
 
@@ -639,12 +639,12 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
             this.game.queue.push("FLIPRESET\t1");
           }
 
-	  //
-	  // observer mode
-	  //
-	  if (this.game.player == 0) {
+      //
+      // observer mode
+      //
+      if (this.game.player == 0) {
             this.game.queue.push("OBSERVER_CHECKPOINT");
-	  }
+      }
 
           this.game.state.plays_since_last_raise = 0;
           return 1;
@@ -657,9 +657,9 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         this.game.state.turn++;
 
         if (this.game.state.passed[player_to_go - 1] == 1) {
-	  //
-	  // we auto-clear without need for player to broadcast
-	  // 
+      //
+      // we auto-clear without need for player to broadcast
+      // 
           this.game.queue.splice(qe, 1);
           return 1;
         } else {
@@ -825,13 +825,13 @@ console.log("winners are all");
               //
               // non-winners send wagers to winner
               //
-	      if (this.game.crypto != "") {
-	        for (let ii = 0; ii < this.game.players.length; ii++) {
-		  if ((!winners.includes(ii)) && this.game.state.player_pot[ii] > 0) {
+          if (this.game.crypto != "") {
+            for (let ii = 0; ii < this.game.players.length; ii++) {
+          if ((!winners.includes(ii)) && this.game.state.player_pot[ii] > 0) {
                     this.settlement.push("RECEIVE" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[ii]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
                     this.settlement.push("SEND" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[i]] + "\t" + this.game.state.player_pot[ii]/winners.length + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-		  }
-	        }
+          }
+            }
               }
             }
           } else {
@@ -842,14 +842,14 @@ console.log("winners are all");
             this.updateLog(this.game.state.player_names[winners[0]] + " wins " + this.game.state.pot);
             this.game.state.player_credit[winners[0]] += this.game.state.pot;
 
-	    if (this.game.crypto != "") {
-	      for (let ii = 0; ii < this.game.players.length; ii++) {
-	        if ((!winners.includes(ii)) && this.game.state.player_pot[ii] > 0) {
+        if (this.game.crypto != "") {
+          for (let ii = 0; ii < this.game.players.length; ii++) {
+            if ((!winners.includes(ii)) && this.game.state.player_pot[ii] > 0) {
                   this.settlement.push("RECEIVE" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[ii] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
                   this.settlement.push("SEND" + "\t" + this.game.players[ii] + "\t" + this.game.players[winners[0]] + "\t" + this.game.state.player_pot[ii] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-	        }
-	      }
-	    }
+            }
+          }
+        }
           }
 
           this.startNextRound();
@@ -1009,23 +1009,23 @@ console.log("winners are all");
           this.game.state.player_credit[player_left_idx] = this.game.state.pot;
 
 
-	  //
-   	  // everyone settles with winner if needed
-   	  //
-   	  if (this.game.crypto != "") {
-    	    for (let i = 0; i < this.game.players.length; i++) {
-    	      if (i != player_left_idx) {
-	        if ((this.game.player-1) == player_left_idx) {
-		  if (i != player_left_idx) {
+      //
+         // everyone settles with winner if needed
+         //
+         if (this.game.crypto != "") {
+            for (let i = 0; i < this.game.players.length; i++) {
+              if (i != player_left_idx) {
+            if ((this.game.player-1) == player_left_idx) {
+          if (i != player_left_idx) {
                     this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-		  }
-	        } else {
-		  if (i != player_left_idx) {
-              	    this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-            	    this.settlement.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
-	          }
-	        }
-	      }
+          }
+            } else {
+          if (i != player_left_idx) {
+                      this.settlement.push("RECEIVE" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+                    this.settlement.push("SEND" + "\t" + this.game.players[i] + "\t" + this.game.players[player_left_idx] + "\t" + this.game.state.player_pot[i] + "\t" + (new Date().getTime()) + "\t" + this.game.crypto);
+              }
+            }
+          }
             }
           }
 
@@ -1172,7 +1172,7 @@ console.log("winners are all");
       html += " (small blind)";
     }
     */
-    html += `<div style="float:right;" class="saito-balance">${this.game.state.player_credit[this.game.player-1]} ${this.game.crypto}</div>Your move:</div>`;
+    html += `<div style="float:right;" class="saito-balance">${this.sizeNumber(this.game.state.player_credit[this.game.player-1])} ${this.game.crypto}</div>Your move:</div>`;
     html += '<ul>';
 
     let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player - 1];
@@ -1184,9 +1184,9 @@ console.log("winners are all");
     if (this.game.state.required_pot > this.game.state.player_pot[this.game.player - 1]) {
       if (can_fold == 1) { html += '<li class="menu_option" id="fold">fold</li>'; }
       if (can_call == 1 && cost_to_call <= 0) { html += '<li class="menu_option" id="call">call</li>'; }
-      if (can_call == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="call">call (' + cost_to_call + ')</li>'; }
+      if (can_call == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="call">call (' + this.sizeNumber(cost_to_call) + ')</li>'; }
       if (can_raise == 1 && cost_to_call <= 0) { html += '<li class="menu_option" id="raise">raise</li>'; }
-      if (can_raise == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="raise">raise (' + cost_to_call + '+)</li>'; }
+      if (can_raise == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="raise">raise (' + this.sizeNumber(cost_to_call) + '+)</li>'; }
       html += '</ul>';
       this.updateStatus(html, 1);
     } else {
@@ -1258,7 +1258,7 @@ console.log("winners are all");
         if (cost_to_monster < 0) { cost_to_monster = 0; }
 
         if (cost_to_monster > 0) {
-          html = 'Match ' + cost_to_monster + ' and raise: <p></p><ul>';
+          html = 'Match ' + poker_self.sizeNumber(cost_to_monster) + ' and raise: <p></p><ul>';
         } else {
           html = 'Please select an option below: <p></p><ul>';
         }
@@ -1276,15 +1276,15 @@ console.log("smallest stack: " + smallest_stack);
 console.log("this raise: " + this_raise);
           if (credit_remaining > this_raise && smallest_stack > this_raise) {
             if (this_raise - cost_to_monster > 0) {
-              html += '<li class="menu_option" id="' + (this_raise - cost_to_monster) + '">raise ' + (this_raise - cost_to_monster) + '</li>';
+              html += '<li class="menu_option" id="' + (this_raise - cost_to_monster) + '">raise ' + poker_self.sizeNumber(this_raise - cost_to_monster) + '</li>';
             }
           } else {
             if (smallest_stack < this_raise) {
               if (smallest_stack == credit_remaining) {
-                html += '<li class="menu_option" id="' + (smallest_stack - cost_to_monster) + '">raise ' + (smallest_stack - cost_to_monster) + ' (' + poker_self.game.state.player_names[smallest_stack_player] + ' all in)</li>';
+                html += '<li class="menu_option" id="' + (smallest_stack - cost_to_monster) + '">raise ' + poker_self.sizeNumber(smallest_stack - cost_to_monster) + ' (' + poker_self.game.state.player_names[smallest_stack_player] + ' all in)</li>';
                 i = 6;
               } else {
-                html += '<li class="menu_option" id="' + (smallest_stack) + '">raise ' + (smallest_stack) + ' (' + poker_self.game.state.player_names[smallest_stack_player] + ' all in)</li>';
+                html += '<li class="menu_option" id="' + (smallest_stack) + '">raise ' + poker_self.sizeNumber(smallest_stack) + ' (' + poker_self.game.state.player_names[smallest_stack_player] + ' all in)</li>';
                 i = 6;
               }
             }
@@ -1309,7 +1309,7 @@ console.log("this raise: " + this_raise);
 
           if (raise == 0) {
             poker_self.playerTurn();
-	    return;
+        return;
           } else {
             poker_self.addMove("raise\t" + poker_self.game.player + "\t" + raise);
           }
@@ -1318,6 +1318,14 @@ console.log("this raise: " + this_raise);
         });
       }
     });
+  }
+
+  sizeNumber(x) {
+    if (x >= 100) {
+      return Math.floor(x);
+    } else {
+      return x.toString().substring(0,6);
+    }
   }
 
 
@@ -1605,7 +1613,7 @@ console.log("STATE: " + JSON.stringify(state));
       newhtml += `
         </div>
         <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-        <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} ${this.game.crypto}</div> 
+        <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.sizeNumber(this.game.state.player_credit[i])} ${this.game.crypto}</div> 
         
       `;
       boxobj.querySelector(".info").innerHTML = newhtml;
@@ -1658,7 +1666,7 @@ console.log("STATE: " + JSON.stringify(state));
    //
     // update pot
     //
-    document.querySelector('.pot').innerHTML = this.game.state.pot;
+    document.querySelector('.pot').innerHTML = this.sizeNumber(this.game.state.pot);
 
 
   }
