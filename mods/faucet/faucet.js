@@ -43,7 +43,6 @@ class Faucet extends ModTemplate {
 
 
   async onConfirmation(blk, tx, conf, app) {
-
     let txmsg = tx.returnMessage();
 
     if (conf == 0) {
