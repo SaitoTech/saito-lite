@@ -135,10 +135,7 @@ module.exports = SettingsAppspace = {
 
     try {
       document.getElementById('restore-account-btn').onclick = async(e) => {
-        console.log("restore-account-btn");
-        console.log(document.getElementById('file-input'));
         document.getElementById('file-input').addEventListener('change', function(e) {
-          console.log("file-input change...");
           var file = e.target.files[0];
           app.wallet.restoreWallet(file);
         });
