@@ -44,13 +44,6 @@ class Email extends ModTemplate {
 	bobj.innerHTML = bal;
       }
     });
-  }
-
-  initialize(app) {
-
-    super.initialize(app);
-
-    //if (app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
     if (app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
 
       let welcometx = app.wallet.createUnsignedTransaction();
@@ -58,31 +51,21 @@ class Email extends ModTemplate {
       welcometx.msg.module   = "Email";
       welcometx.msg.title    = "Welcome to Saito";
       welcometx.msg.message  = `Saito is a network that runs blockchain applications in your browser!
-	<br/><br/>
+  <br/><br/>
       We are currently under development, which mean any tokens in your account are TESTNET tokens which will disappear when the network is upgraded. If you are interested in purchasing tokens for use on the production network, please see our <a href="https://saito.io">main site</a> for instructions on how to do so. If you're curious what else you can do on Saito besides reading this message, why not check out the <a href="https://saito.io/arcade">Saito Arcade</a>?
         <br/><br/>
       Have questions? Why not join us on <a href="">Saito Telegram</a>?
       `;
       //welcometx = app.wallet.signAndEncryptTransaction(welcometx);
       this.addEmail(welcometx);
-/***
-      app.network.propagateTransaction(welcometx);
-      
-      // save welcomesent to options so we dont' send this over and over
-      // todo: Could this just be done in installModule instead??
-      if(!app.options.email){
-        app.options.email = {};  
-      }
-
-      app.options.email.welcomesent = true;
-      app.storage.saveOptions();
-***/
     }
+  }
 
+  initialize(app) {
+    super.initialize(app);
     app.connection.on("set_preferred_crypto", (modname) => {
       this.cacheAndRenderPreferredCryptoBalance();
     });
-
   }
   rerender(app) {
     if(app.BROWSER != 1 || this.browser_active != 1 ) {return;}
@@ -241,7 +224,7 @@ class Email extends ModTemplate {
   }
   addToBox(tx, where) {
     for (let k = 0; k < where.length; k++) {
-      if (where[k].returnSignature() == tx.returnSignature()) {
+      if (where[k].returnSignature(this.app) == tx.returnSignature(this.app)) {
         return;
       }
     }
