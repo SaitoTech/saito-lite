@@ -1,4 +1,3 @@
-
 .hud-square .hud-body {
   min-height: unset;
   height: auto;
@@ -11,7 +10,7 @@ body {
   margin: 0px;
   background-color: #024;
   overflow-x: hidden;
-    overflow-y: auto;
+  overflow-y: auto;
   scrollbar-face-color: #868686;
   scrollbar-base-color: #868686;
   scrollbar-3dlight-color: #868686;
@@ -21,7 +20,6 @@ body {
   scrollbar-shadow-color: #868686;
 }
 
-
 .stats-overlay {
   min-width: 220px;
   min-height: 200px;
@@ -29,10 +27,11 @@ body {
   background-color: whitesmoke;
   border-radius: 10px;
 }
+
 .stats-overlay table {
-  margin-left:auto;
-  margin-right:auto;
-  margin-top:auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
   margin-bottom: auto;
 }
 
@@ -48,7 +47,7 @@ body {
 .wb-main {
   border: 1px solid orange;
   max-width: 902px;
- }
+}
 
 .gameboard {
   display: grid;
@@ -79,12 +78,11 @@ body {
 #remainder {
   font-size: 25px;
   padding: 10px 0;
-  width: 33%;
-  float: right;
-  margin-right: 1.4em;
 }
+
 #lastmove {
   clear: both;
+  height: 30px;
 }
 
 .home {
@@ -101,9 +99,7 @@ body {
   font-size: 1.6rem;
   display: grid;
   align-content: center;
-  /* padding: 10px 20px; */
-  /* display: inline-block; */
-  /* width: 20% */
+  padding: 0 30px;
 }
 
 .rack {
@@ -113,20 +109,8 @@ body {
   height: 80px; */
 }
 
-.shuffle {
-  display: inline-block;
-  font-size: 20px;
-  width: 12%;
-  height: 4em;
-  cursor: pointer;
-}
-
 .tiles {
-  /* display: inline-block;
-  font-size: 1.9em;
-  width: 80%;
-  position: relative;
-  top: -45px; */
+  margin: auto;
   display: flex;
 }
 
@@ -148,7 +132,7 @@ body {
   border-style: solid;
   border-color: rgb(221, 221, 221);
   border-image: initial;
-  padding: 4px 0 6px 0;
+  padding: 10px 0 6px 0;
   background: rgb(70, 70, 70);
   font-size: 36px;
   color: #efefec;
@@ -328,6 +312,7 @@ body {
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
+  text-align: left;
   /* width: 85%; */
 }
 
@@ -339,6 +324,7 @@ body {
   justify-self: right;
 }
 
+/*
 .hud {
   display: grid;
   grid-template-rows: 40px auto;
@@ -361,9 +347,11 @@ body {
 .hud-hidden {
   height: 40px;
 }
+*/
 
 /** HUD HEADER **/
 
+/*
 .hud-header {
   grid-area: hud-header;
   display: grid;
@@ -386,6 +374,7 @@ body {
 
 /** HUD BODY **/
 
+/*
 .hud-body {
   grid-area: hud-body;
   display: grid;
@@ -398,6 +387,7 @@ body {
   border-right: 1px solid var(--saito-skyline-grey);
   display: none;
 }
+*/
 
 .status {
   width: unset !important;
@@ -462,6 +452,7 @@ body {
 
 /* hud */
 
+/*
 .hud div {
   background: #333;
   color: var(--saito-skyline-grey);
@@ -495,6 +486,8 @@ body {
 .hud-menu {
   border-right: 1px solid #555;
 }
+*/
+
 /**
 .status div {
   font-size: 24px;
@@ -502,11 +495,69 @@ body {
   max-width: 95vw;
 }
 **/
+
 .player span {
   line-height: 40px;
 }
 
 
+.rack {
+  width: auto;
+}
+
+.rack-controls>div {
+  display: flex;
+  align-items: center;
+}
+
+.tile-placement-controls {
+  display: grid;
+}
+
+.action {
+  justify-self: center;
+  align-self: center;
+  padding: 1.5vh 0px;
+  width: 100%;
+}
+
+.shuffle {
+  height: 3em;
+  width: 3em;
+  cursor: pointer;
+}
+
+.hud {
+  display: block;
+  width: 600px;
+  max-height: initial;
+  height: fit-content;
+  background: rgb(68, 68, 68);
+  border: 1px solid rgb(136, 136, 136);
+  color: rgb(239, 239, 239);
+  border: 1px solid #888;
+}
+
+.hud-body {
+  height: fit-content;
+  overflow-y: visible;
+  cursor: initial;
+}
+
+.hud-header {
+  width: initial;
+  margin: 0;
+  background: linear-gradient( 45deg, black, #999);
+}
+
+.hud-status-update-message {
+  margin: 10px auto;
+}
+
+.rack-controls {
+  display: flex;
+  justify-content: space-around;
+}
 
 @media only screen and (max-width: 750px) and (orientation: portrait) {
   .hud-status-update-message {
@@ -614,7 +665,7 @@ body {
   }
   .status_container {
     grid-template-rows: 1em auto;
-    margin: 12px 0 0 0 ;
+    margin: 12px 0 0 0;
   }
   .score {
     font-size: 1rem;
@@ -647,25 +698,3 @@ body {
     padding: 2vw;
   }
 }
-.rack {
-  width: auto;
-}
-
-.tile-placement-controls {
-  display: grid;
-}
-
-.action {
-  justify-self: center;
-  align-self: center;
-  padding: 1.5vh 0px;
-  width: 100%;
-}
-
-.shuffle {
-  height: 3em;
-  width: 3em;
-  cursor: pointer;
-  float: left;
-}
-

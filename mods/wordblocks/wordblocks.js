@@ -87,7 +87,7 @@ class Wordblocks extends GameTemplate {
 
   initializeHTML(app) {
 
-    this.hud.mode = 1; // square
+    this.hud.mode = 0; // square
 
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
@@ -538,9 +538,12 @@ if (this.game.player != 0) {
           </div>
         </div>
         <div class="subrack" id="subrack">
-          <img id="shuffle" class="shuffle" src="/wordblocks/img/reload.png">
-          <div id="remainder" class="remainder">DECK: ${this.game.deck[0].crypt.length}</div>
-          <div class="lastmove" id="lastmove">${last_move_html}</div>
+          <div class="rack-controls">
+            <div>Shuffle: <img id="shuffle" class="shuffle" src="/wordblocks/img/reload.png"></div>
+            <div id="remainder" class="remainder">Remaining Tiles: ${this.game.deck[0].crypt.length}</div>
+        </div>
+        <div class="lastmove" id="lastmove">${last_move_html}</div>
+        <div class="score" id="score"></div>
         </div>
       </div
     `;
@@ -572,7 +575,7 @@ if (this.game.player != 0) {
     }
 
     var op = 0;
-/***
+
     for (let i = 0; i < players; i++) {
       let this_player = i + 1;
 
@@ -595,10 +598,10 @@ if (this.game.player != 0) {
         `;
       }
     }
-***/
+
 
     if (this.browser_active == 1) {
-      $('.score').html(html);
+      document.querySelector('.score').innerHTML = html;
     }
   }
 
