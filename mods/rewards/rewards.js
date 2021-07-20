@@ -618,6 +618,10 @@ class Rewards extends ModTemplate {
 
       newtx.transaction.from = this.app.wallet.returnAdequateInputs(total_fees.toString());
 
+      if(newtx.transaction.from == null) {
+        console.log("\n\n\n *******REWARD SERVER CANNOT CREATE ADEQUATE INPUTS******* \n\n\n");
+        return;
+      }
       //
       // add change input
       var total_from_amt = newtx.transaction.from
