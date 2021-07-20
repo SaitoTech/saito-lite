@@ -759,6 +759,10 @@ body {
     font-size: 1.2em;
     line-height: 1.5em;
   }
+  .game-wizard-status {
+    margin: 1em 0 0;
+  }
+
   .game-wizard-image {
     padding: 10px;
   }
@@ -980,6 +984,19 @@ body {
   .arcade-apps-item:hover, .arcade-navigator-item:hover {
     background-color: #33669999;
   }
+
+  .arcade-navigator-item .tiptext {
+    width: 90%;
+    background-color: #000a;
+    color: #ffffff !important;
+    min-width: 0px;
+    padding: 3px;
+}
+
+.arcade-navigator-item .tiptext:hover {
+  visibility: hidden;
+}
+
   .remove_cards_box {
     max-height: 400px;
     overflow: auto;

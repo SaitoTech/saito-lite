@@ -35,11 +35,14 @@ module.exports = ArcadeSidebar = {
       let title = module.name;
       try {
         if (module.gamename) { title = module.gamename; }
-      } catch (err) {
+      } catch (err) {}
+      let status = "";
+      try {
+        if (module.status) {status = '<div class="tiptext">This game is: ' + module.status + '.</div>';}
+      } catch (err) {}
 
-      }
       if (!document.getElementById(module.name)) {
-        games_menu.innerHTML += `<li class="arcade-navigator-item" id="${module.name}">${title}</li>`;
+        games_menu.innerHTML += `<li class="arcade-navigator-item tip" id="${module.name}">${title}${status}</li>`;
       }
     });
   },

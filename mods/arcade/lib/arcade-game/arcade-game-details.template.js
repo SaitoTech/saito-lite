@@ -10,6 +10,7 @@ module.exports = ArcadeGameDetailsTemplate = (app, mod, invite) => {
 	    <input type="hidden" name="gamename" value="${invite.msg.game}" />
             <div class="game-wizard-title">Red Imperium</div>
             <div class="game-wizard-description">Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.</div>
+            <div class="game-wizard-status"></div>
 	  </div>
 	</div>
         

@@ -18,6 +18,7 @@ class Pandemic extends GameTemplate {
     this.maxPlayers      = 4;
     this.minPlayers      = 2;  
     this.type            = "Cooperative Boardgme";
+    this.status          = "Alpha";
 
     this.gameboardWidth  = 2602;
   

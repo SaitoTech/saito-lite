@@ -60,6 +60,10 @@ module.exports = ArcadeGameDetails = {
       } catch (err) {}
     };
 
+    if (gamemod.status) {
+      document.querySelector(".game-wizard-status").innerHTML = `Development Status: ${gamemod.status}.`;
+    }
+
     if (gamemod.publisher_message) {
       document.querySelector('.game-wizard-publisher-message').innerHTML = `<span style="font-weight:bold">NOTE: </span>${gamemod.publisher_message}`;
     }

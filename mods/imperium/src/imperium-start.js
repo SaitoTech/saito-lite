@@ -13,6 +13,7 @@ class Imperium extends GameTemplate {
     this.minPlayers       = 2;
     this.maxPlayers       = 6;
     this.type             = "Strategy Boardgame";
+    this.status           = "Beta";
 
     this.gameboardWidth   = 1900;
   
