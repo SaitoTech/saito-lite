@@ -23,52 +23,6 @@ async function initSaito() {
 
   await app.init();
 
-  console.log(`
-
-                                           
-                     ◼◼◼                   
-                  ◼◼   ◼ ◼◼                
-               ◼◼◼      ◼  ◼◼◼             
-            ◼◼◼          ◼    ◼◼◼          
-         ◼◼◼              ◼      ◼◼◼       
-       ◼◼◼                 ◼       ◼◼◼     
-    ◼◼◼                     ◼         ◼◼◼  
-   ◼◼◼                       ◼         ◼◼◼ 
-   ◼  ◼◼◼                     ◼     ◼◼◼  ◼ 
-   ◼     ◼◼◼                   ◼  ◼◼◼    ◼ 
-   ◼       ◼◼◼                 ◼◼◼       ◼ 
-   ◼        ◼ ◼◼◼           ◼◼◼          ◼ 
-   ◼       ◼     ◼◼◼     ◼◼◼             ◼ 
-   ◼      ◼         ◼◼ ◼◼                ◼ 
-   ◼     ◼            ◼                  ◼ 
-   ◼    ◼             ◼                  ◼ 
-   ◼   ◼              ◼                  ◼ 
-   ◼  ◼               ◼                  ◼ 
-   ◼ ◼                ◼                  ◼ 
-   ◼◼                 ◼                  ◼ 
-   ◼◼                 ◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼ 
-    ◼◼◼               ◼               ◼◼◼  
-       ◼◼◼            ◼            ◼◼◼     
-         ◼◼◼          ◼          ◼◼◼       
-            ◼◼◼       ◼       ◼◼◼          
-               ◼◼◼    ◼    ◼◼◼             
-                  ◼◼  ◼  ◼◼                
-                     ◼◼◼                   
-                                           
-
-    Welcome to Saito
-
-    address: ${app.wallet.returnPublicKey()}
-    balance: ${app.wallet.returnBalance()}
-
-    This is the address and balance of your computer on the Saito network. Once Saito
-    is running it will generate tokens automatically over time. The more transactions
-    you process the greater the chance that you will be rewarded for the work.
-
-    For inquiries please visit our website: https://saito.io
-
-  `);
-
   function shutdownSaito() {
     console.log("Shutting down Saito");
     app.server.close();
