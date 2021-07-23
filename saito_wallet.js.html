@@ -263,7 +263,6 @@ class Wallet {
 
 
   doesSlipInPendingTransactionsSpendBlockHash(bsh="") {
-    if (bsh == "") { return false; }
     for (let i = 0; i &lt; this.wallet.pending.length; i++) {
       let ptx = new saito.transaction(JSON.parse(this.wallet.pending[i]));
       for (let k = 0; k &lt; ptx.transaction.from.length; k++) {
@@ -536,6 +535,7 @@ class Wallet {
       //
       // recreate pending slips
       //
+      let bad_pending_tx_indexes = [];
       if (this.recreate_pending_transactions == 1) {
         for (let i = 0; i &lt; this.wallet.pending.length; i++) {
           let ptx = new saito.transaction(JSON.parse(this.wallet.pending[i]));
@@ -545,19 +545,26 @@ class Wallet {
             if (newtx != null) {
               this.wallet.pending[i] = JSON.stringify(newtx);
             }
+          } else {
+            bad_pending_tx_indexes.push(i);
+            console.log("pending transaction could not be recreated, purging");
           }
+        }
+        for(let i = 0; i &lt; bad_pending_tx_indexes.length; i++) {
+          this.wallet.pending.splice(i, 1);
         }
         this.recreate_pending_transactions = 0;
       }
 
     } else {
       if (this.doesSlipInPendingTransactionsSpendBlockHash(bsh)) {
+        console.log("doesSlipInPendingTransactionsSpendBlockHash true, recreate_pending_transactions");
         this.recreate_pending_transactions = 1;
+      } else {
+        console.log("doesn't doesSlipInPendingTransactionsSpendBlockHash, recreate_pending_transactions not set");
       }
     }
-
     this.resetExistingSlips(bid, bsh, lc);
-
   }
 
 
@@ -667,7 +674,6 @@ class Wallet {
         }
       }
 
-
       //
       // outbound payments
       //
@@ -750,8 +756,7 @@ console.log("---------------------------------------");
     for (let m = this.wallet.inputs.length-1; m >= 0; m--) {
       if (this.wallet.inputs[m].bid == bid &amp;&amp; this.wallet.inputs[m].bsh === bsh) {
         this.wallet.inputs[m].lc = lc;
-      }
-      else {
+      } else {
         if (this.wallet.inputs[m].bid &lt; bid) {
           return;
         }
@@ -798,11 +803,13 @@ console.log("---------------------------------------");
     //
     if (this.wallet.pending.length > 0) {
       for (let i = 0; i &lt; this.wallet.pending.length; i++) {
-        let ptx = new saito.transaction(JSON.parse(this.wallet.pending[i]));
-        for (let k = 0; k &lt; ptx.transaction.from.length; k++) {
-          let slipIndex = ptx.transaction.from[k].returnSignatureSource();
+        let pendingtx = new saito.transaction(JSON.parse(this.wallet.pending[i]));
+        for (let k = 0; k &lt; pendingtx.transaction.from.length; k++) {
+          let slipIndex = pendingtx.transaction.from[k].returnSignatureSource();
           for (let m = 0; m &lt; this.wallet.inputs; m++) {
             let thisSlipIndex = this.wallet.inputs[m].returnSignatureSource();
+            // if the input in the wallet is already in a pending tx...
+            // then set spends[m] to 1
             if (thisSlipIndex === slipIndex) {
               while (this.wallet.spends.length &lt; m) {
                 this.wallet.spends.push(0);
@@ -813,25 +820,32 @@ console.log("---------------------------------------");
         }
       }
     }
-
-
+    let hasAdequateInputs = false;
+    let slipIndexes = [];
     for (let i = 0; i &lt; this.wallet.inputs.length; i++) {
       if (this.wallet.spends[i] == 0 || i >= this.wallet.spends.length) {
         var slip = this.wallet.inputs[i];
         if (slip.lc == 1 &amp;&amp; slip.bid >= lowest_block) {
           if (this.app.mempool.transactions_inputs_hmap[slip.returnSignatureSource()] != 1) {
-            this.wallet.spends[i] = 1;
+            slipIndexes.push(i);
             utxiset.push(slip);
             value = value.plus(Big(slip.amt));
             if (value.gt(bigamt) || value.eq(bigamt)) {
-              return utxiset;
+              hasAdequateInputs = true;
+              break
             }
           }
         }
       }
     }
-
-    return null;
+    if(hasAdequateInputs) {
+      for(let i = 0; i &lt; slipIndexes.length; i++) {
+        this.wallet.spends[slipIndexes[i]] = 1;
+      }
+      return utxiset;
+    } else {
+      return null;
+    }
   }
   /**
    * Calculates balance from slips in the local storage wallet
@@ -1127,8 +1141,14 @@ console.log(err);
   }
 
   createUnsignedTransactionWithDefaultFee(publickey="", amt=0.0, force_merge=0) {
-   if (publickey === "") { publickey = this.app.wallet.returnPublicKey(); }
-    return this.createUnsignedTransaction(publickey, amt, this.wallet.default_fee);
+    if (publickey === "") { publickey = this.app.wallet.returnPublicKey(); }
+    var wallet_avail = this.calculateBalance();
+    if (Big(this.wallet.default_fee).gt(wallet_avail)) {
+      console.log("Inadequate funds in wallet for default fee, creating with 0.0 fee instead.");
+      return this.createUnsignedTransaction(publickey, amt, 0.0);
+    } else {
+      return this.createUnsignedTransaction(publickey, amt, this.wallet.default_fee);
+    }
   }
 
   createUnsignedTransaction(publickey="", amt=0.0, fee=0.0, force_merge=0) {
@@ -1151,7 +1171,7 @@ console.log(err);
     //
     if (!this.app.crypto.isPublicKey(publickey)) {
       throw "Invalid address " + publickey;
-      //console.log("trying to send message to invalid address");
+      console.log("trying to send message to invalid address");
       return null;
     }
 
@@ -1159,7 +1179,8 @@ console.log(err);
     if (total_fees.gt(wallet_avail)) {
       amt = 0.0;
       fee = 0.0;
-      //return null;
+      console.log("Inadequate funds in wallet to create transaction. total: " + total_fees);
+      return null;
     }
 
 
@@ -1346,112 +1367,20 @@ console.log("---------------------");
 
 
   createReplacementTransaction(oldtx) {
-
-    let recipients = [];
-    let outputs    = [];
-    let inputs     = Big(0.0);
-    let fee        = Big(0.0);
-
-    //
-    // calculate inputs
-    //
+    let inputs_amt = Big(0.0);
     for (let z = 0; z &lt; oldtx.transaction.from.length; z++) {
-      inputs = inputs.plus(Big(oldtx.transaction.from[z].amt));
+      inputs_amt = inputs_amt.plus(Big(oldtx.transaction.from[z].amt));
     }
-
-    //
-    // calculate outputs
-    //
-    for (let z = 0; z &lt; oldtx.transaction.to.length; z++) {
-
-      if (!recipients.includes(oldtx.transaction.to[z].add)) {
-        recipients.push(oldtx.transaction.to[z].add);
-        outputs.push(Big(0.0));
-      }
-
-      let ridx = 0;
-      for (let zz = 0; zz &lt; recipients.length; zz++) {
-        if (recipients[zz] === oldtx.transaction.to[z].add) {
-  	  ridx = zz;
-  	  zz = recipients.length+1;
-        }
-      }
-
-      outputs[ridx] = outputs[ridx].plus(Big(oldtx.transaction.to[z].amt));
-
+    let newtx = new saito.transaction(oldtx.transaction);
+    let inputs = this.returnAdequateInputs(inputs_amt);
+    if(inputs) {
+      newtx.transaction.from = this.returnAdequateInputs(inputs_amt);
+      this.saveWallet();
+      return newtx;  
+    } else {
+      return null;
     }
-
-
-    //
-    // calculate total fees paid
-    //
-    let total_fees = Big(0.0);
-    for (let z = 0; z &lt; outputs.length; z++) { total_fees = total_fees.plus(outputs[z]); }
-    total_fees = total_fees.minus(inputs).times(-1);
-
-
-    //
-    // subtract outputs I am paying myself to figure out actual amount needed...
-    //
-    for (let z = 0; z &lt; recipients.length; z++) {
-      if (recipients[z] == this.returnPublicKey()) {
-        inputs = inputs.minus(outputs[z]);
-        outputs[z] = outputs[z].minus(outputs[z]);
-      }
-    }
-
-    //
-    // subtract fees from inputs
-    //
-    inputs = inputs.minus(total_fees);
-
-    //
-    // create the transaction
-    //
-    let tx           = new saito.transaction();
-
-    let our_idx = 0;
-    for (let z = 0; z &lt; recipients.length; z++) {
-      if (recipients[z] == this.returnPublicKey()) {
-        our_idx = z; z = recipients.length+1;
-      }
-    }
-
-    let newtx = this.createUnsignedTransaction(this.returnPublicKey(), outputs[our_idx].toString(), total_fees.toString());
-    if (newtx == null) { return null; }
-
-    //
-    // add slips for other users / recipients
-    //
-    for (let z = 0; z &lt; recipients.length; z++) {
-      if (recipients[z] != this.returnPublicKey()) {
-
-        if (outputs[z].eq(Big(0.0))) {
-          newtx.transaction.to.push(new saito.slip(recipients[z]));
-        } else {
-          let newtx2 = this.createUnsignedTransaction(recipients[z], outputs[z].toString(), 0);
-  	  if (newtx2 == null) { return null; }
-	  for (let z = 0; z &lt; newtx2.transaction.from.length; z++) {
-	    newtx.transaction.from.push(newtx2.transaction.from[z]);
-          }
-	  for (let z = 0; z &lt; newtx2.transaction.to.length; z++) {
-	    newtx.transaction.to.push(newtx2.transaction.to[z]);
-          }
-        }
-      }
-    }
-
-    newtx.transaction.ts = oldtx.transaction.ts;
-    newtx.transaction.msg = oldtx.transaction.msg;
-    newtx.transaction.msg.recreated = 1;
-
-    //
-    // we save here so that we don't create another transaction
-    // with the same inputs after broadcasting on reload
-    //
-    this.saveWallet();
-    return newtx;
-
+    
   }
 
   ///////////////////////
@@ -1796,7 +1725,7 @@ module.exports = Wallet;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Jul 21 2021 10:34:09 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jul 23 2021 03:12:32 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
