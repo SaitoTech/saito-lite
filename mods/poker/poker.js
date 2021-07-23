@@ -518,6 +518,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         let player_to_go = parseInt(mv[1]);
         this.displayBoard();
 
+
         //
         // if everyone except 1 player has zero credit...
         //
@@ -565,7 +566,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
           }
 
 
-     //
+        //
         // everyone settles with winner if needed
         //
         if (this.game.crypto != "") {
@@ -639,12 +640,12 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
             this.game.queue.push("FLIPRESET\t1");
           }
 
-      //
-      // observer mode
-      //
-      if (this.game.player == 0) {
+          //
+          // observer mode
+          //
+          if (this.game.player == 0) {
             this.game.queue.push("OBSERVER_CHECKPOINT");
-      }
+          }
 
           this.game.state.plays_since_last_raise = 0;
           return 1;
@@ -657,9 +658,9 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         this.game.state.turn++;
 
         if (this.game.state.passed[player_to_go - 1] == 1) {
-      //
-      // we auto-clear without need for player to broadcast
-      // 
+          //
+          // we auto-clear without need for player to broadcast
+          // 
           this.game.queue.splice(qe, 1);
           return 1;
         } else {
@@ -963,11 +964,15 @@ console.log("winners are all");
         this.updateLog(this.game.state.player_names[player - 1] + " calls");
 
 
-        if (this.game.state.small_blind_player == player) {
-          if (this.game.state.flipped == 0) {
-            this.game.state.plays_since_last_raise = this.game.players.length - 1;
-          }
-        }
+        //
+        // this causes issues with us, as the big blind can always raise after raising
+	// even if the other player called them on it.
+        //
+        //if (this.game.state.small_blind_player == player) {
+        //  if (this.game.state.flipped == 0) {
+        //    this.game.state.plays_since_last_raise = this.game.players.length - 1;
+        //  }
+        //}
 
         //
         // reset plays since last raise
@@ -1008,8 +1013,7 @@ console.log("winners are all");
 
           this.game.state.player_credit[player_left_idx] = this.game.state.pot;
 
-
-      //
+         //
          // everyone settles with winner if needed
          //
          if (this.game.crypto != "") {
@@ -1057,6 +1061,7 @@ console.log("winners are all");
         //
         // 1 instead of 0 as my play is first player
         //
+console.log("plays since last raise is now 1 because of raise...");
         this.game.state.plays_since_last_raise = 1;
 
         if (this.game.state.required_pot > this.game.state.player_pot[player - 1]) {

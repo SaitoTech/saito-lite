@@ -635,15 +635,22 @@ console.log("and processing join request");
                   console.log("%%%%%%%%%%%%%%%%");
                   console.log("%%%%%%%%%%%%%%%%");
 
-                  this.app.options.games[i].status = "Opponent Resigned";
-                  this.app.options.games[i].over = 1;
-                  this.app.storage.saveOptions();
+		  //
+		  // avoids edge cases where benevolent other user deletes on arcade and
+		  // that kills a game in-process
+		  //
+                  if (app.options.games[i].players.includes(tx.transaction.from[0].add)) {
 
-                  let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
-                  if (gamemod) {
-                    gamemod.loadGame(tx.returnMessage().sig);
-                    gamemod.updateStatus("Opponent Resigned");
-                    gamemod.updateLog("Opponent Resigned");
+                    this.app.options.games[i].status = "Opponent Resigned";
+                    this.app.options.games[i].over = 1;
+                    this.app.storage.saveOptions();
+		 
+                    let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
+                    if (gamemod) {
+                      gamemod.loadGame(tx.returnMessage().sig);
+                      gamemod.updateStatus("Opponent Resigned");
+                      gamemod.updateLog("Opponent Resigned");
+                    }
                   }
                 }
               }
