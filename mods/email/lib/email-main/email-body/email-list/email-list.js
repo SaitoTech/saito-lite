@@ -16,7 +16,7 @@ module.exports = EmailList = {
       }
       if(inbox_emails){
         inbox_emails.forEach(tx => {
-          console.log("### Inbox Emails: " + inbox_emails.length);
+          //console.log("### Inbox Emails: " + inbox_emails.length);
           document.querySelector('.email-list').innerHTML +=
               EmailListRowTemplate(tx, mod.returnAddressHTML(tx.transaction.from[0].add), helpers);
         });

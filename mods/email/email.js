@@ -37,6 +37,11 @@ class Email extends ModTemplate {
   }
 
   initializeHTML(app) {
+    // Added this here from line 112 below as the even was being added in an infinite loop.
+    window.addEventListener("hashchange", () => {
+      this.rerender(app);
+    });
+
     this.app.connection.on("update_balance", async (wallet) => {
       let bobj = document.getElementById("email-balance");
       if (bobj) {
@@ -109,9 +114,6 @@ class Email extends ModTemplate {
     // this.renderMain(app);
     // this.renderSidebar(app);
     //
-    window.addEventListener("hashchange", () => {
-      this.rerender(app);
-    });
     // set the hash to match the state we want and force a hashchange event
     let oldHash = window.location.hash;
     window.location.hash = `#`;
