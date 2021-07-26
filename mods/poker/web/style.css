@@ -423,3 +423,75 @@ body {
 
 
 
+
+
+
+
+.cardfan {
+  position: absolute;
+  top: 70vh;
+  left: 15vw;
+} 
+  
+.cardfan .card {
+  position: absolute;
+  width: 17.5vh;
+}
+  
+/* .card:nth-child(1n+2) {
+  left: -130px;
+} */
+
+.cardfan>.card:nth-child(1) {
+  transform: rotate(-20deg);
+  left: 0px; 
+} 
+  
+.cardfan>.card:nth-child(2) {
+  transform: rotate(-10deg);
+  left: 3vh;
+}
+
+.cardfan>.card:nth-child(3) {
+  transform: rotate(0deg);
+  left: 6vh;
+} 
+  
+.cardfan>.card:nth-child(4) {
+  transform: rotate(10deg);
+  left: 9vh;
+} 
+
+.cardfan>.card:nth-child(5) {
+  transform: rotate(20deg);
+  left: 12vh;
+} 
+
+.hand>.card:nth-child(1) {
+  transform: rotate(-20deg);
+  left: 0px;
+} 
+
+.hand>.card:nth-child(2) {
+  transform: rotate(-10deg);
+  left: 2vh;
+}
+
+.hand>.card:nth-child(3) {
+  transform: rotate(0deg);
+  left: 4vh;
+}
+
+.hand>.card:nth-child(4) {
+  transform: rotate(10deg);
+  left: 6vh;
+}
+
+.hand>.card:nth-child(5) {
+  transform: rotate(20deg);
+  left: 8vh;
+}
+
+
+
+
