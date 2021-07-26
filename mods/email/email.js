@@ -37,10 +37,13 @@ class Email extends ModTemplate {
   }
 
   initializeHTML(app) {
-    // Added this here from line 112 below as the even was being added in an infinite loop.
     window.addEventListener("hashchange", () => {
       this.rerender(app);
     });
+    // set the hash to match the state we want and force a hashchange event
+    let oldHash = window.location.hash;
+    window.location.hash = `#`;
+    window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: "0"});
 
     this.app.connection.on("update_balance", async (wallet) => {
       let bobj = document.getElementById("email-balance");
@@ -114,13 +117,7 @@ class Email extends ModTemplate {
     // this.renderMain(app);
     // this.renderSidebar(app);
     //
-    // set the hash to match the state we want and force a hashchange event
-    let oldHash = window.location.hash;
-    window.location.hash = `#`;
-    window.location.hash = app.browser.initializeHash("#page=email_list&subpage=inbox", oldHash, {ready: "0"});
-    
-    
-    // // make visible
+
     //document.getElementById('content').style.visibility = "visible";
 
     //console.log("TODO - fark mode in email is cross-module");
