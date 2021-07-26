@@ -68,6 +68,78 @@ class Settlers extends GameTemplate {
   }
 
 
+  showTradeOverlay() {
+
+    let settlers_self = this;
+    settlers_self.offer = {};
+
+    let html = `
+      <div class="trade_overlay" id="trade_overlay">
+        <div style="width:100%"><div class="trade_overlay_title">Broadcast Trade Offers</div></div>
+        <div class="trade_overlay_offers">
+
+	  <h2>You Want</h2>
+	  <div class="trade_button get_wood" id="get_wood">Wood</div>
+	  <div class="trade_button get_brick" id="get_brick">Brick</div>
+	  <div class="trade_button get_wool" id="get_wool">Wool</div>
+	  <div class="trade_button get_ore" id="get_ore">Ore</div>
+	  <div class="trade_button get_sheep" id="get_sheep">Sheep</div>
+	</div>
+
+        <div class="trade_overlay_offers">
+	  <h2>You Offer</h2>
+	  <div class="trade_button give_wood" id="give_wood">Wood</div>
+	  <div class="trade_button give_brick" id="give_brick">Brick</div>
+	  <div class="trade_button give_wool" id="give_wool">Wool</div>
+	  <div class="trade_button give_ore" id="give_ore">Ore</div>
+	  <div class="trade_button give_sheep" id="give_sheep">Sheep</div>
+	</div>
+
+	<div class="trade_overlay_buttons">
+	  <div class="trade_overlay_button button trade_overlay_reset_button">Reset</div>
+	  <div class="trade_overlay_button button trade_overlay_broadcast_button">Broadcast Offer</div>
+	</div>
+
+      </div>
+    `;
+
+    this.overlay.showOverlay(this.app, this, html);
+
+    $('.trade_button').on('click', function() {
+
+      let item = $(this).attr("id");
+
+      let current_number = parseInt(document.getElementById(item).innerHTML);
+      if (!current_number) { current_number = 0; }
+      current_number++;
+      document.getElementById(item).innerHTML = current_number;
+      settlers_self.offer[item] = current_number;
+
+    });
+
+    $('.trade_overlay_reset_button').on('click', function() {
+      settlers_self.offer = {};
+      $('.trade_button').html("");
+    });
+
+    $('.trade_overlay_broadcast_button').on('click', function() {
+      // add directly to this.game.turn as game should handle rest as moves
+      let old_turn = settlers_self.game.turn;
+      let offer_json = JSON.stringify(settlers_self.offer);
+      let cmd = `advertisement\t${settlers_self.game.player}\t${offer_json}`;
+      settlers_self.game.turn = [];
+      settlers_self.game.turn.push(cmd);
+      settlers_self.sendMessage("game", {}, function() {
+        settlers_self.game.turn = old_turn;
+	settlers_self.overlay.hideOverlay();
+      });
+    });
+
+  }
+
+
+
+
 
   initializeHTML(app) {
 
@@ -89,6 +161,24 @@ class Settlers extends GameTemplate {
 	game_mod.menu.showSubMenu("game-game");
       }
     });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Log",
+      id : "game-log",
+      class : "game-log",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.log.toggleLog();
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
+
 
     let main_menu_added = 0;
     let community_menu_added = 0;
@@ -163,6 +253,25 @@ class Settlers extends GameTemplate {
       }
     });
 
+
+    this.menu.addMenuOption({
+      text : "Trade",
+      id : "game-trade",
+      class : "game-trade",
+      callback : function(app, game_mod) {
+	game_mod.menu.showSubMenu("game-trade");
+      }
+    });
+    this.menu.addSubMenuOption("game-trade", {
+      text : "Offer",
+      id : "game-offer",
+      class : "game-offer",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.showTradeOverlay();
+      }
+    });
+
     this.menu.render(app, this);
     this.menu.attachEvents(app, this);
 
@@ -172,8 +281,10 @@ class Settlers extends GameTemplate {
     this.hexgrid.render(app, this);
     this.hexgrid.attachEvents(app, this);
 
+
     this.cardbox.render(app, this);
     this.cardbox.attachEvents(app, this);
+
 
     //
     // add card events -- text shown and callback run if there
@@ -418,7 +529,153 @@ class Settlers extends GameTemplate {
       }
     }
 
-//console.log("FOUND ADJACENT: " + JSON.stringify(adjacent));
+    return adjacent;
+
+  }
+
+
+  returnCitySlotsAdjacentToPlayerRoads(player) {
+
+    let adjacent = [];
+    let player_roads = [];
+
+    for (let i = 0; i < this.game.state.roads.length; i++) {
+      if (this.game.state.roads[i].player == player) { 
+
+	let slot = this.game.state.roads[i].slot;
+        let tmp = slot.split("_");
+
+        let pos = parseInt(tmp[1]);
+        let hex = parseInt(tmp[3]);
+	let row = parseInt(tmp[2]);
+	
+	if (pos == 1) {
+	  adjacent.push(`city_${1}_${row}_${hex}`);
+	  adjacent.push(`city_${2}_${row}_${hex}`);
+	  if (row <= 3) {
+	    adjacent.push(`city_${6}_${row}_${hex+1}`);
+	  } else {
+	    adjacent.push(`city_${6}_${row}_${hex}`);
+	  }
+	}
+
+	if (pos == 2) {
+	  adjacent.push(`city_${2}_${row}_${hex}`);
+	  adjacent.push(`city_${3}_${row}_${hex}`);
+	  adjacent.push(`city_${6}_${row}_${hex+1}`);
+	}
+
+	if (pos == 3) {
+	  adjacent.push(`city_${3}_${row}_${hex}`);
+	  adjacent.push(`city_${4}_${row}_${hex}`);
+	  adjacent.push(`city_${2}_${row+1}_${hex-1}`);
+	}
+
+	if (pos == 4) {
+	  adjacent.push(`city_${4}_${row}_${hex}`);
+	  adjacent.push(`city_${5}_${row}_${hex}`);
+	  adjacent.push(`city_${3}_${row}_${hex-1}`);
+	}
+
+	if (pos == 5) {
+	  adjacent.push(`city_${5}_${row}_${hex}`);
+	  adjacent.push(`city_${6}_${row}_${hex}`);
+	  adjacent.push(`city_${3}_${row}_${hex-1}`);
+	  adjacent.push(`city_${5}_${row+1}_${hex}`);
+	}
+
+	if (pos == 6) {
+	  adjacent.push(`city_${6}_${row}_${hex}`);
+	  adjacent.push(`city_${1}_${row}_${hex}`);
+	}
+
+      }
+    }
+
+console.log(adjacent);
+
+    // remove non-existent
+    let existing_adjacent = [];
+    for (let i = 0; i < adjacent.length; i++) {
+      if (document.getElementById(adjacent[i])) {
+        existing_adjacent.push(adjacent[i]);
+      } 
+    }
+    adjacent = existing_adjacent;
+
+
+    // open left available
+    let survivors = [];
+    for (let i = 0; i < adjacent.length; i++) {
+      let add_me = 1;
+      for (let ii = 0; ii < this.game.state.cities.length; ii++) {
+        if (this.game.state.cities[ii].slot == adjacent[i]) {
+	  add_me = 0;
+	  ii = this.game.state.cities.length;
+	}
+      }
+      if (add_me == 1) {
+	survivors.push(adjacent[i]);
+      }
+    }
+    adjacent = survivors;
+
+    return adjacent;
+
+  }
+
+
+  returnAdjacentCitySlots(city_slot) {
+
+    let tmpar = city_slot.split("_");
+    let adjacent = [];
+    
+    let pos = parseInt(tmpar[1]);
+    let row = parseInt(tmpar[2]);
+    let hex = parseInt(tmpar[3]);
+
+    if (pos == 1) {
+      adjacent.push(`city_${6}_${row}_${hex}`);
+      adjacent.push(`city_${2}_${row}_${hex}`);
+      adjacent.push(`city_${6}_${row}_${hex+1}`);
+      adjacent.push(`city_${2}_${row}_${hex-1}`);
+      if (row <= 3) {
+        adjacent.push(`city_${6}_${row-1}_${hex}`);
+      } else {
+        adjacent.push(`city_${6}_${row-1}_${hex+1}`);
+      }
+    }
+    if (pos == 2) {
+      adjacent.push(`city_${1}_${row}_${hex}`);
+      adjacent.push(`city_${3}_${row}_${hex}`);
+      adjacent.push(`city_${1}_${row}_${hex+1}`);
+      adjacent.push(`city_${1}_${row+1}_${hex+1}`);
+    }
+    if (pos == 3) {
+      adjacent.push(`city_${2}_${row}_${hex}`);
+      adjacent.push(`city_${4}_${row}_${hex}`);
+      adjacent.push(`city_${4}_${row}_${hex+1}`);
+    }
+    if (pos == 4) {
+      adjacent.push(`city_${3}_${row}_${hex}`);
+      adjacent.push(`city_${5}_${row}_${hex}`);
+    }
+    if (pos == 5) {
+      adjacent.push(`city_${4}_${row}_${hex}`);
+      adjacent.push(`city_${6}_${row}_${hex}`);
+    }
+    if (pos == 6) {
+      adjacent.push(`city_${5}_${row}_${hex}`);
+      adjacent.push(`city_${1}_${row}_${hex}`);
+      adjacent.push(`city_${5}_${row-1}_${hex}`);
+      adjacent.push(`city_${1}_${row}_${hex-1}`);
+      if (row <= 3) {
+        adjacent.push(`city_${1}_${row+1}_${hex}`);
+      } else {
+        adjacent.push(`city_${1}_${row+1}_${hex-1}`);
+      }
+    }
+
     return adjacent;
 
   }
@@ -485,6 +742,47 @@ console.log("QUEUE: " + this.game.queue);
 
 	return 1;
       }
+      //
+      // trade advertisement
+      //
+      if (mv[0] == "advertisement") {
+
+	let player = mv[1];
+	let offer_json = mv[2];
+
+	let offer = JSON.parse(offer_json);
+        let get_alert = "";
+        let give_alert = "";
+        for (var key in offer) {
+	  if (key.indexOf("get_") == 0) {
+	    if (give_alert.length > 0) { give_alert += " and "; }
+	    give_alert += `${offer[key]} ${key.substring(4)}`;
+	  } else {
+	    if (get_alert.length > 0) { get_alert += " and "; }
+	    get_alert += `${offer[key]} ${key.substring(5)}`;
+          }
+        }
+
+	let log_update = `Player ${player} `;
+        if (give_alert != "") { log_update += `offers ${give_alert}`; }
+        if (get_alert != "") {
+          if (give_alert != "") { log_update += " and "; }
+	  log_update += `wants ${get_alert}`;
+	}
+
+	this.updateLog(log_update);
+        this.game.queue.splice(qe, 1);
+
+	//
+	// do not treat trade announcements as triggers
+	// to continue executing if we are mid-move 
+	// ourselves...
+	//
+	return 0;
+
+      }
+
+
 
       //
       // generate_map
@@ -538,6 +836,54 @@ console.log("QUEUE: " + this.game.queue);
 	return 0;
 
       }
+
+
+      //
+      // upgrade town to city
+      //
+      if (mv[0] == "player_upgrade_city") {
+
+	let player = parseInt(mv[1]);
+
+        this.game.queue.splice(qe, 1)
+
+	if (this.game.player == player) {;
+	  this.playerUpgradeCity();
+	} else {
+	  this.updateStatus(`<div class="status-message">Player ${player} is upgrading a town...</div>`);
+	}
+
+	//
+	// halt game until next move received
+	//
+	return 0;
+      }
+
+
+      //
+      // upgrade town to city
+      //
+      if (mv[0] == "upgrade_city") {
+
+	let player = parseInt(mv[1]);
+	let slot = parseInt(mv[2]);
+
+        this.game.queue.splice(qe, 1)
+
+	for (let i = 0; i < this.game.state.cities.length; i++) {
+	  if (this.game.state.cities[i].slot === slot) {
+	    this.game.state.cities[i].level = 2;
+	  }
+	}
+
+	return 1;
+
+      }
+
+
+
+
+
       if (mv[0] == "build_city") {
 
 	let player = parseInt(mv[1]);
@@ -782,7 +1128,7 @@ console.log("QUEUE: " + this.game.queue);
 
         if (this.game.player == player) {
 
-	  let notice = `<div class="status-message">It's your turn -- click here to roll the dice...</div>`;  
+	  let notice = `It's your turn -- click here to roll the dice...`;  
 	  this.playerAcknowledgeNotice(notice, function() {
 	    settlers_self.addMove("roll\t"+player);
 	    settlers_self.endTurn();
@@ -805,6 +1151,11 @@ console.log("QUEUE: " + this.game.queue);
 	//
 	let roll = (this.rollDice(6) + this.rollDice(6));
 	this.updateLog(`Dice Roll: ${roll}`);
+
+	//
+	// board animation
+	//
+	this.animateDiceRoll(roll);
 
 	//
 	// issue 
@@ -936,7 +1287,7 @@ console.log("QUEUE: " + this.game.queue);
 
     if (document.getElementById(svid)) { return; }
 
-    let sector_value_html = `<div class="sector_value" id="sector_value_${hex}">${sector_value}</div>`;
+    let sector_value_html = `<div class="sector_value sector_value_${sector_value}" id="sector_value_${hex}">${sector_value}</div>`;
     let sector_value_obj = this.app.browser.htmlToElement(sector_value_html);
     el.appendChild(sector_value_obj);
 
@@ -1301,19 +1652,31 @@ console.log("QUEUE: " + this.game.queue);
     for (let i in this.game.state.hexes) {
       let divname = "#hex_bg_"+i;
       let x = Math.floor(Math.random()*3)+1;
-      $(divname).html(`<img class="hex_img2" id="" src="/settlers/img/sectors/${this.game.state.hexes[i].resource}${x}.png">`);
+      $(divname).html(`<img class="hex_img2" id="" src="/settlers/img/sectors/${this.game.state.hexes[i].resource}1.png">`);
     }
 
     for (let i in this.game.state.cities) {
       let divname = "#"+this.game.state.cities[i].slot;
       let classname = "p"+this.game.state.cities[i].player;
       $(divname).addClass(classname);
+console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
+      $(divname).html(this.game.state.cities[i].level);
+
+      // remove adjacent slots
+      let ad = this.returnAdjacentCitySlots(this.game.state.cities[i].slot);
+      for (let i = 0; i < ad.length; i++) {
+        let d = "#"+ad[i];
+        try { $(d).remove(); } catch (err) {}
+      }
+
+
     }
 
     for (let i in this.game.state.roads) {
       let divname = "#"+this.game.state.roads[i].slot;
       let classname = "p"+this.game.state.roads[i].player;
       $(divname).addClass(classname);
+      $(divname).css('background-image', 'url("/settlers/img/sectors/road1.png")');
     }
 
   }
@@ -1325,6 +1688,60 @@ console.log("QUEUE: " + this.game.queue);
     this.updateStatus(`<div class="status-message">You may build a town...</div>`);
 
     let settlers_self = this;
+    let existing_cities = 0;
+    for (let i = 0; i < this.game.state.cities.length; i++) {
+      if (this.game.state.cities[i].player == this.game.player) { existing_cities++; }
+    }
+
+    if (existing_cities < 2) {
+
+      $('.city').addClass('hover');
+      $('.city').css('z-index', 9999999);
+      $('.city').off();
+      $('.city').on('click', function() {
+        $('.city').removeClass('hover');
+        $('.city').css('z-index', 99999999);
+        $('.city').off();
+        let slot = $(this).attr("id");
+        settlers_self.buildCity(settlers_self.game.player, slot);
+        settlers_self.addMove(`build_city\t${settlers_self.game.player}\t${slot}`);
+        settlers_self.endTurn();
+      });
+
+    } else {
+
+      let building_options = this.returnCitySlotsAdjacentToPlayerRoads(this.game.player);
+
+      for (let i = 0; i < building_options.length; i++) {
+
+	let divname = "#"+building_options[i];
+
+        $(divname).addClass('hover');
+        $(divname).css('z-index', 9999999);
+        $(divname).css('background-color', 'yellow');
+        $(divname).off();
+        $(divname).on('click', function() {
+          $(divname).removeClass('hover');
+          $(divname).css('z-index', 99999999);
+          $(divname).off();
+          let slot = $(this).attr("id");
+          settlers_self.buildCity(settlers_self.game.player, slot);
+          settlers_self.addMove(`build_city\t${settlers_self.game.player}\t${slot}`);
+          settlers_self.endTurn();
+        });
+      }
+
+    }
+
+  }
+
+
+
+  playerUpgradeCity() {
+
+    this.updateStatus(`<div class="status-message">Click on a town to upgrade it...</div>`);
+
+    let settlers_self = this;
 
     $('.city').addClass('hover');
     $('.city').css('z-index', 9999999);
@@ -1332,18 +1749,30 @@ console.log("QUEUE: " + this.game.queue);
     $('.city').on('click', function() {
 
       $('.city').removeClass('hover');
-      $('.city').css('z-index', 1999999);
+      $('.city').css('z-index', 99999999);
       $('.city').off();
-      let slot = $(this).attr("id");
-      settlers_self.buildCity(settlers_self.game.player, slot);
-      settlers_self.addMove(`build_city\t${settlers_self.game.player}\t${slot}`);
-      settlers_self.endTurn();
 
+      let slot = $(this).attr("id");
+
+      for (let i = 0; i < this.game.state.cities.length; i++) {
+        if (slot === this.game.state.cities[i].slot) {
+          settlers_self.upgradeCity(settlers_self.game.player, slot);
+          settlers_self.addMove(`upgrade_city\t${settlers_self.game.player}\t${slot}`);
+          settlers_self.endTurn();
+        }
+      }
     });
-  
   }
 
+
   buildCity(player, slot) {
+
+    // remove adjacent slots
+    let ad = this.returnAdjacentCitySlots(slot);
+    for (let i = 0; i < ad.length; i++) {
+      let d = "#"+ad[i];
+      try { $(d).remove(); } catch (err) {}
+    }
 
     let divname = "#"+slot;
     let classname = "p"+player;
@@ -1354,7 +1783,8 @@ console.log("QUEUE: " + this.game.queue);
     for (let i = 0; i < this.game.state.cities.length; i++) {
       if (this.game.state.cities[i].slot == slot) { return; }
     }
-    this.game.state.cities.push({ player : player , slot : slot , neighbours : neighbours });
+
+    this.game.state.cities.push({ player : player , slot : slot , neighbours : neighbours , level : 1});
 
   }
 
@@ -1386,6 +1816,7 @@ console.log("QUEUE: " + this.game.queue);
     let divname = "#"+slot;
     let classname = "p"+player;
     $(divname).addClass(classname);
+    $(divname).css('background-image', 'url("/settlers/img/sectors/road1.png")');
 
     for (let i = 0; i < this.game.state.roads.length; i++) {
       if (this.game.state.roads[i].slot == slot) { return; }
@@ -1440,10 +1871,12 @@ console.log("QUEUE: " + this.game.queue);
 	settlers_self.updateStatus('<div class="status-message">broadcasting choice</div>');
 
         if (id === "road") {
+	  settlers_self.addMove("player_build_road\t"+settlers_self.game.player);
 	  settlers_self.addMove("spend_resource\t"+settlers_self.game.player+"\t"+"wood");
 	  settlers_self.endTurn();
         }
         if (id === "town") {
+	  settlers_self.addMove("player_build_city\t"+settlers_self.game.player);
 	  settlers_self.addMove("spend_resource\t"+settlers_self.game.player+"\t"+"brick");
 	  settlers_self.addMove("spend_resource\t"+settlers_self.game.player+"\t"+"wood");
 	  settlers_self.addMove("spend_resource\t"+settlers_self.game.player+"\t"+"wool");
@@ -1451,6 +1884,7 @@ console.log("QUEUE: " + this.game.queue);
 	  settlers_self.endTurn();
         }
         if (id === "city") {
+	  settlers_self.addMove("player_upgrade_city\t"+settlers_self.game.player);
 	  settlers_self.addMove("spend_resource\t"+settlers_self.game.player+"\t"+"wheat");
 	  settlers_self.addMove("spend_resource\t"+settlers_self.game.player+"\t"+"wheat");
 	  settlers_self.addMove("spend_resource\t"+settlers_self.game.player+"\t"+"ore");
@@ -1503,9 +1937,7 @@ console.log("QUEUE: " + this.game.queue);
       let card = $(this).attr("id");
 
       let cardobj = this.game.deck[0].cards[this.game.deck[0].hand[card]];
-console.log("about to go into card callback...");
       cardobj.callback(settlers_self.game.player);
-console.log("done!");
 
     });
 
@@ -1662,7 +2094,6 @@ console.log("done!");
   }
 
 
-
   playerTrade() {
 
     let settlers_self = this;
@@ -1766,6 +2197,27 @@ console.log("done!");
 
     });
   }
+
+
+
+
+  animateDiceRoll(roll) {
+console.log("Dice Animated: " + roll);
+    let divname = ".sector_value_"+roll;
+    $(divname).css('color','#000').css('background','#FFF6').delay(800).queue(function() {
+      $(this).css('color','#FFF').css('background','#0004').dequeue();
+    }).delay(800).queue(function() {
+      $(this).css('color','#000').css('background','#FFF6').dequeue();
+    }).delay(800).queue(function() {
+      $(this).css('color','#FFF').css('background','#0004').dequeue();
+    }).delay(800).queue(function() {
+      $(this).css('color','#000').css('background','#FFF6').dequeue();
+    }).delay(800).queue(function() {
+      $(this).css('color','#FFF').css('background','#0004').dequeue();
+    });
+
+  }
+
 
 }
 
