@@ -214,7 +214,8 @@ ul li a {
 .status-cardbox {
   display: grid;
   row-gap: 10px;
-  overflow-x: scroll;
+  overflow-x: none;
+  /* overflow-x: scroll; */
   height: 100%;
   width: 100%;
   padding: 0.25em;
