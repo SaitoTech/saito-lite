@@ -5,6 +5,7 @@ const helpers = require('./../../../../../../lib/helpers/index');
 module.exports = EmailList = {
 
     render(app, mod) {
+      console.log('------render inbox-------')
       document.querySelector('.email-body').innerHTML = EmailListTemplate();
       let inbox_emails;
       try {
@@ -15,6 +16,7 @@ module.exports = EmailList = {
       }
       if(inbox_emails){
         inbox_emails.forEach(tx => {
+          //console.log("### Inbox Emails: " + inbox_emails.length);
           document.querySelector('.email-list').innerHTML +=
               EmailListRowTemplate(tx, mod.returnAddressHTML(tx.transaction.from[0].add), helpers);
         });

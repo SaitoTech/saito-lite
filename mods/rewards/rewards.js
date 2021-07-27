@@ -17,7 +17,7 @@ class Rewards extends ModTemplate {
     this.name = "Rewards";
     this.description = "Quick reference for earning Saito tokens from the Saito faucet.";
     this.categories = "Core Utilities Finance";
-    this.INITIAL = 10;
+    this.INITIAL = 50;
     this.PAYOUT_RATIO = 0.95;
     this.CAP = 100;
     this.rewards_publickey = app.options.runtime.rewardsPubkey || "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
@@ -348,7 +348,7 @@ class Rewards extends ModTemplate {
     }
     let sql = "";
     let params = {};
-    var should_payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.PAYOUT_RATIO);
+    var should_payout = ((row.total_spend / (row.total_payout + 0.01) >= this.PAYOUT_RATIO) || (row.total_payout - row.total_spend < 10 ));
     //if (row.total_spend > this.CAP) {
     //  should_payout = (row.total_spend % this.CAP) > tx.returnFees();
     //}
@@ -369,7 +369,8 @@ class Rewards extends ModTemplate {
     if (tx.name == "game over") { gameOver = 1 };
     //welcome folks back if they have been reset - and give me a little somethin.
     if (row.latest_tx == -1) {
-      this.makePayout(row.address, (row.total_payout - row.total_spend), "Welcome Back");
+      //this.makePayout(row.address, (row.total_payout - row.total_spend), "Welcome Back");
+      this.makePayout(row.address, 200, "Welcome Back");
     }
     if (should_payout == true) {
       params = {
