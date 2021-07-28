@@ -673,7 +673,7 @@ section {
   align-items: center;
   width: 115.8rem;
   max-width: 100%;
-  padding: 0 2rem;
+  padding: 0 2rem 4rem;
 }
 
 .section6 .title {
@@ -719,6 +719,72 @@ section {
 .section6 .itemWrapper .itemImageSVG, .section6 .itemWrapper2 .itemImageSVG  {
   background-color: #fff;
   width: 32%; 
+}
+
+.section7 {
+  display: flex;
+  flex-direction: row;
+}
+
+.section7 {
+  align-items: center;
+  width: 115.8rem;
+  max-width: 100%;
+  padding: 0 2rem;
+}
+
+.sectionWrapper7 .title {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--saito-cyber-black);
+  margin-top: 5rem;
+  padding-bottom: 3rem;
+  text-align: center;
+}
+
+.section7 .itemWrapper {
+  width: 33%;
+  height: 26rem;
+  margin: 0px 0 5rem;
+}
+
+.section7 .itemWrapper:hover {
+  transform: scale(1.1);
+  transform-origin: center;
+}
+
+.section7 .itemWrapper .itemImage {
+  max-width: 24rem;
+}
+
+.section7 .itemTitle {
+  color: var(--saito-red);
+  font-size: 3rem;
+  text-align: center;
+}
+
+.section7 .itemWrapper div {
+  height: 10rem;
+  text-align: center;
+}
+
+.section7 .itemWrapper .itemTitle {
+  height: 4rem;
+}
+
+.section7 .itemWrapper1 .itemImage {
+  margin: 3em 0 0 0;
+}
+.section7 .itemWrapper2 .itemImage {
+  margin: 0.9em 0 0 0;
+}
+
+.section7 img {
+  filter: grayscale(100%);
+}
+
+.section7 .itemWrapper:hover img {
+  filter: grayscale(0%);
 }
 
 .footer {
