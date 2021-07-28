@@ -75,7 +75,8 @@
     "ua-parser-js": "^0.7.22",
     "unzipper": "^0.10.5",
     "url": "^0.11.0",
-    "utf-8-validate": "^5.0.2"
+    "utf-8-validate": "^5.0.2",
+    "ws": "^7.5.3"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
