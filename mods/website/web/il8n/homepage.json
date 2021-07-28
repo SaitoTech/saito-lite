@@ -6,7 +6,7 @@
     "saito_team": {"en": "Team", "zh": "我们"},
 
     "saito_available_1": {"en": "SAITO is now available for purchase: ", "zh": "SAITO现已上线"},
-    "saito_available_2": {"en": "instructions here", "zh": "此处说明"},
+    "saito_available_2": {"en": " details here", "zh": "此处详情"},
     "saito_available_3": {"en": ".", "zh": ""},
     "fixing_blockchain_economics": {"en": "Fixing Blockchain Economics", "zh": "完善区块链经济体系"},
     "Scalability_web3": {"en": "Scalability For Web3.0", "zh": "Web3.0延展"},

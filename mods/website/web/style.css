@@ -1061,6 +1061,20 @@ h2, h5 {
     display: flex;
     align-items: center;
   }
+  
+  .section7 {
+    flex-direction: column;
+  }
+
+  .section7 .itemWrapper {
+    width: unset;
+    height: unset;
+    transform: scale(0.8);
+  }
+  .section7 .itemWrapper div {
+    height: unset;
+  }
+
 }
 @media only screen and (max-width: 768px) {
   html {
