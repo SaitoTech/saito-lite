@@ -61,7 +61,12 @@ module.exports = ArcadeGameDetails = {
     };
 
     if (gamemod.status) {
-      document.querySelector(".game-wizard-status").innerHTML = `Development Status: ${gamemod.status}.`;
+      var html =  `
+      <h3>Development Status: ${gamemod.status}.</h3>
+      <p>
+      Saito is a community project. Our games are under constant development. If you would like to participate email developers@saito.io, connect on <a href="https://t.me/SaitoIO" target="_blank">Telegram</a> or head over to <a href="https://github.com/saitotech" target="_blank">Github</a> to get started. 
+      </p>`;
+      document.querySelector(".game-wizard-status").innerHTML = html;
     }
 
     if (gamemod.publisher_message) {

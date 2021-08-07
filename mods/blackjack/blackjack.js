@@ -1130,15 +1130,23 @@ console.log("this is my hand");
     let options_html = `
       <label for="stake">Initial Stake:</label>
       <select name="stake">
-              <option value="1000" selected="selected">1000</option>
+              <option value="0.001">0.001</option>
+              <option value="0.01" >0.01</option>
+              <option value="0.1" >0.1</option>
+              <option value="1" >1.0</option>
+              <option value="5" >5.0</option>
+              <option value="10" >10</option>
+              <option value="100" selected="selected">100</option>
+              <option value="500" >500</option>
+              <option value="1000" >1000</option>
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
       </select>
 
-
-            <select name="crypto">
-              <option value="" selected>none</option>
-              <option value="SAITO">SAITO</option>
+      <label for="crypto">Crypto to stake:</label>
+      <select name="crypto">
+          <option value="" selected>none</option>
+          <option value="SAITO">SAITO</option>
     `;
 
     for (let i = 0; i < this.app.modules.mods.length; i++) {

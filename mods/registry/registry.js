@@ -64,7 +64,7 @@ class Registry extends ModTemplate {
 
   tryRegisterIdentifier(identifier, domain="@saito") {
     
-      let newtx = this.app.wallet.createUnsignedTransaction(this.publickey, this.app.wallet.wallet.default_fee, this.app.wallet.wallet.default_fee);
+      let newtx = this.app.wallet.createUnsignedTransaction(this.publickey, 0.0, this.app.wallet.wallet.default_fee);
       if (newtx == null) {
         console.log("NULL TX CREATED IN REGISTRY MODULE")
         throw Error("NULL TX CREATED IN REGISTRY MODULE");
@@ -95,7 +95,7 @@ class Registry extends ModTemplate {
   // DEPRECATED, USE tryRegisterIdentifier()
   registerIdentifier(identifier, domain="@saito") {
 
-    let newtx = this.app.wallet.createUnsignedTransaction(this.publickey, this.app.wallet.wallet.default_fee, this.app.wallet.wallet.default_fee);
+    let newtx = this.app.wallet.createUnsignedTransaction(this.publickey, 0.0, this.app.wallet.wallet.default_fee);
     if (newtx == null) {
       console.log("NULL TX CREATED IN REGISTRY MODULE")
       return;

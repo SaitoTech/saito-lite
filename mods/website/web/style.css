@@ -181,7 +181,7 @@ section {
 
 .sectionWrapper1 {
   width: 100%;
-  padding: 0 4rem;
+  padding: 4rem 4rem;
   margin: 3em auto 0;
   background-image: url("/website/img/hex_background.png");
   background-repeat: no-repeat;
@@ -235,12 +235,13 @@ section {
 }
 
 .section1 .left .content {
-  width: 64.6rem;
+  max-width: 64.6rem;
+  padding-right: 1em;
 }
 .section1 .left .content, #subpage #content {
   margin: 2.5rem 0rem;
-  line-height: 24px;
-  font-size: 18px;
+  line-height: 3rem;
+  font-size: 2.25rem;
   font-weight: 400;
   color: #000000;
 }
@@ -268,7 +269,14 @@ section {
   transform-origin: center;
 }
 
-.section1 .right {
+
+.section1 .right{
+  flex:  1;
+  display: flex;
+  justify-content: flex-end;
+}
+.section1 .background-logo {
+  /* rem toggles from 8px to 12px at 1200 view screen width */
   width: 33.7rem;
   height: 38.4rem;
 }
@@ -673,7 +681,7 @@ section {
   align-items: center;
   width: 115.8rem;
   max-width: 100%;
-  padding: 0 2rem;
+  padding: 0 2rem 4rem;
 }
 
 .section6 .title {
@@ -719,6 +727,72 @@ section {
 .section6 .itemWrapper .itemImageSVG, .section6 .itemWrapper2 .itemImageSVG  {
   background-color: #fff;
   width: 32%; 
+}
+
+.section7 {
+  display: flex;
+  flex-direction: row;
+}
+
+.section7 {
+  align-items: center;
+  width: 115.8rem;
+  max-width: 100%;
+  padding: 0 2rem;
+}
+
+.sectionWrapper7 .title {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--saito-cyber-black);
+  margin-top: 5rem;
+  padding-bottom: 3rem;
+  text-align: center;
+}
+
+.section7 .itemWrapper {
+  width: 33%;
+  height: 26rem;
+  margin: 0px 0 5rem;
+}
+
+.section7 .itemWrapper:hover {
+  transform: scale(1.1);
+  transform-origin: center;
+}
+
+.section7 .itemWrapper .itemImage {
+  max-width: 24rem;
+}
+
+.section7 .itemTitle {
+  color: var(--saito-red);
+  font-size: 3rem;
+  text-align: center;
+}
+
+.section7 .itemWrapper div {
+  height: 10rem;
+  text-align: center;
+}
+
+.section7 .itemWrapper .itemTitle {
+  height: 4rem;
+}
+
+.section7 .itemWrapper1 .itemImage {
+  margin: 3em 0 0 0;
+}
+.section7 .itemWrapper2 .itemImage {
+  margin: 0.9em 0 0 0;
+}
+
+.section7 img {
+  filter: grayscale(100%);
+}
+
+.section7 .itemWrapper:hover img {
+  filter: grayscale(0%);
 }
 
 .footer {
@@ -909,6 +983,9 @@ h2, h5 {
 }
 
 @media only screen and (max-width: 1600px) {
+  html{
+    font-size: 10px;
+  }
   .section1 .left .desc {
     font-size: 5.2rem;
   }
@@ -995,6 +1072,20 @@ h2, h5 {
     display: flex;
     align-items: center;
   }
+  
+  .section7 {
+    flex-direction: column;
+  }
+
+  .section7 .itemWrapper {
+    width: unset;
+    height: unset;
+    transform: scale(0.8);
+  }
+  .section7 .itemWrapper div {
+    height: unset;
+  }
+
 }
 @media only screen and (max-width: 768px) {
   html {
@@ -1051,10 +1142,15 @@ h2, h5 {
   .section1 .left {
     order: 2;
   }
+
+  .section1 .right{
+    order: 1;
+    justify-content: center;
+  }
   .section1 .background-logo {
     width: 60%;
     height: 100%;
-    order: 1;
+    
   }
   .section1 .left .desc {
     flex-direction: column;
@@ -1266,6 +1362,7 @@ h2, h5 {
   #settings-dropdown .account-info #header-token-select {
     width: 17rem;
   }
+
 }
 
 .loading {
@@ -1619,34 +1716,37 @@ h2, h5 {
   position: relative;
   top: 100px;
   margin: 0 5em;
-  line-height: 60px;
+  /*line-height: 60px;*/
 }
 
 .alert span {
-  font-size: 2em;
+  font-size: 3em;
+  line-height: 3em;
 }
 
-
+/*
+This whole rule is kind of useless as it shrinks .alert from the 768-1200px range
 @media only screen and (max-width: 1200px) {
-  .alert {
+  /*.alert { Not enough space to fit header
     top: 75px;
- }
+ }*
  .alert span {
   font-size: 3em;
 }
 }
+*/
 
-
-@media only screen and (max-width: 760px) {
+@media only screen and (max-width: 768px) {
   .alert {
-    line-height: 20px;
+    /*line-height: 20px; adjusting line-height through child element*/
     padding: 1em;
     margin: 0 1em 7em;
-    top: 100px;
+    /*top: 100px; redundant*/
   }
   .alert span {
     display: block;
     font-size: 2em;
+    line-height: 1em;
   }
 
   .section1 .itemImage {
