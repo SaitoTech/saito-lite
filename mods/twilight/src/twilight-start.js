@@ -792,6 +792,7 @@ console.log("\n\n\n\n");
       this.game.options.handshake = 1;
       this.game.options.rustinredsquare = 1;
       this.game.options.poliovaccine = 1;
+      this.game.options.communistrevolution = 1;
 
       this.game.options.deck = "endofhistory";
       let a = this.returnEarlyWarCards();
@@ -2399,7 +2400,7 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["containment","allende","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
+              this.game.deck[0].hand = ["containment","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
             } else {
               this.game.deck[0].hand = ["quagmire", "redscare", "missileenvy", "brezhnev", "opec", "grainsales","africa", "cubanmissile","china"];
             }
@@ -6262,7 +6263,6 @@ this.startClock();
 	}
       }
     }
-
 
     if (winning > 0) {
 

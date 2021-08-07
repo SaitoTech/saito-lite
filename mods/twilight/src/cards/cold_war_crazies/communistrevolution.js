@@ -10,6 +10,7 @@
 console.log("communistrevolution ! " + me + " -- " + player);
 
       if (me == "us") {
+        let burned = this.rollDice(6);
 	return 0;
       }
       if (me == "ussr") {
@@ -44,7 +45,7 @@ console.log(twilight_self.countries[c]);
 	    twilight_self.addMove("SETVAR\tcountries\t"+c+"\t"+"control"+"\t"+stability);
 	    twilight_self.addMove("SETVAR\tstate\tlimit_ignoredefcon\t"+0);
 	    twilight_self.addMove("SETVAR\tstate\tlower_defcon_on_coup\t"+1);
-	    twilight_self.addMove("coup\tplayer\t"+c+"\t"+twilight_self.modifyOps(2));
+	    twilight_self.addMove("coup\tussr\t"+c+"\t"+twilight_self.modifyOps(2));
 	    twilight_self.addMove("SETVAR\tstate\tlower_defcon_on_coup\t"+0);
 	    twilight_self.addMove("SETVAR\tstate\tlimit_ignoredefcon\t"+1);
 	    twilight_self.addMove("SETVAR\tcountries\t"+c+"\t"+"control"+"\t"+modified_stability);

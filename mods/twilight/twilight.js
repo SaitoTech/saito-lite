@@ -792,6 +792,7 @@ console.log("\n\n\n\n");
       this.game.options.handshake = 1;
       this.game.options.rustinredsquare = 1;
       this.game.options.poliovaccine = 1;
+      this.game.options.communistrevolution = 1;
 
       this.game.options.deck = "endofhistory";
       let a = this.returnEarlyWarCards();
@@ -2399,7 +2400,7 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["containment","allende","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
+              this.game.deck[0].hand = ["containment","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
             } else {
               this.game.deck[0].hand = ["quagmire", "redscare", "missileenvy", "brezhnev", "opec", "grainsales","africa", "cubanmissile","china"];
             }
@@ -6262,7 +6263,6 @@ this.startClock();
 	}
       }
     }
-
 
     if (winning > 0) {
 
@@ -15699,6 +15699,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
 console.log("communistrevolution ! " + me + " -- " + player);
 
       if (me == "us") {
+        let burned = this.rollDice(6);
 	return 0;
       }
       if (me == "ussr") {
@@ -15733,7 +15734,7 @@ console.log(twilight_self.countries[c]);
 	    twilight_self.addMove("SETVAR\tcountries\t"+c+"\t"+"control"+"\t"+stability);
 	    twilight_self.addMove("SETVAR\tstate\tlimit_ignoredefcon\t"+0);
 	    twilight_self.addMove("SETVAR\tstate\tlower_defcon_on_coup\t"+1);
-	    twilight_self.addMove("coup\tplayer\t"+c+"\t"+twilight_self.modifyOps(2));
+	    twilight_self.addMove("coup\tussr\t"+c+"\t"+twilight_self.modifyOps(2));
 	    twilight_self.addMove("SETVAR\tstate\tlower_defcon_on_coup\t"+0);
 	    twilight_self.addMove("SETVAR\tstate\tlimit_ignoredefcon\t"+1);
 	    twilight_self.addMove("SETVAR\tcountries\t"+c+"\t"+"control"+"\t"+modified_stability);
