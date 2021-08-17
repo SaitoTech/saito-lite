@@ -18,7 +18,7 @@ class Solitrio extends GameTemplate {
     this.maxPlayers      = 1;
     this.minPlayers      = 1;
     this.type            = "Solitaire Cardgame";
-    this.status          = "Alpha";
+    this.status          = "Beta";
 
     this.description = "Solitaire card game made famous by the good folks at Cathay Pacific Information Technology Services.";
     this.categories  = "Cardgame Game Solitaire";
