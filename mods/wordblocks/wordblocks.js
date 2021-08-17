@@ -85,6 +85,9 @@ class Wordblocks extends GameTemplate {
 
   }
 
+
+
+
   initializeHTML(app) {
 
     this.hud.mode = 0; // square
@@ -103,6 +106,16 @@ class Wordblocks extends GameTemplate {
         game_mod.menu.showSubMenu("game-game");
       }
     });
+    this.menu.addSubMenuOption("game-game", {
+      text : "How to Play",
+      id : "game-intro",
+      class : "game-intro",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnRulesOverlay());
+      }
+    });
+
     //toggleLog causes an error because game-log is not robust 
     //Do we even need this? What does GameLog do?
     /*this.menu.addSubMenuOption("game-game", {
@@ -223,6 +236,19 @@ class Wordblocks extends GameTemplate {
 
   }
 
+
+  returnRulesOverlay() {
+
+    let overlay_html = `<div class="intro">
+      Like a classic crossword puzzle boardgame, players take turns spelling words using the seven letters in their tile rack and available space on the game board.
+      <h2>Scoring</h2>
+      <p>Each letter is worth a certain number of points as indicated on the tile. The score for the word is the sum of point values of its letters, which may be affected by playing the word over bonus spaces on the board.</p>
+      <p>There is an automatic 1 point deduction for attempting to play an invalid word, but you have a second chance to play a word</p>
+      </div>`;
+    return overlay_html;
+    
+
+  }
 
 
   returnStatsOverlay() {
@@ -560,7 +586,7 @@ if (this.game.player != 0) {
   async calculateScore() {
     let html = "";
     let am_i_done = 0;
-    let players = 1;
+    let players = 1; 
 
     if (this.game.opponents != undefined) {
       players = this.game.opponents.length + 1;
@@ -647,7 +673,7 @@ if (this.game.player != 0) {
     let wordblocks_self = this;
 
     try {
-
+      //Discard Tiles
     $('.tosstiles').off();
     $('.tosstiles').on('click', async function () {
       tiles = await sprompt("Which tiles do you want to discard? Tossed tiles count against your score:");
@@ -671,7 +697,7 @@ if (this.game.player != 0) {
         wordblocks_self.endTurn();
       }
     });
-
+    //Click on game board to place
     $('.slot').off();
     $('.slot').on('mousedown', function (e) {
       xpos = e.clientX;
@@ -751,7 +777,7 @@ if (this.game.player != 0) {
           return;
         }
 
-        word = await sprompt("Provide your word:");
+        word = await sprompt("Provide your word:").toUpperCase();
 
         if (word) {
           //
@@ -761,15 +787,15 @@ if (this.game.player != 0) {
           $('.status').html("Processing your turn.");
 
           //
-          // if entry is valid
+          // if entry is valid (position and letters available)
           //
           if (wordblocks_self.isEntryValid(word, orientation, x, y) == 1) {
             let myscore = 0;
             wordblocks_self.addWordToBoard(word, orientation, x, y);
             myscore = wordblocks_self.scoreWord(word, wordblocks_self.game.player, orientation, x, y);
-  	    wordblocks_self.game.words_played[parseInt(wordblocks_self.game.player)-1].push({ word : word , score : myscore });
+  	        wordblocks_self.game.words_played[parseInt(wordblocks_self.game.player)-1].push({ word : word , score : myscore });
 
-            if (myscore <= 1) {
+            if (myscore <= 1) { //If not found in dictionary
               wordblocks_self.removeWordFromBoard(word, orientation, x, y);
               wordblocks_self.updateStatusWithTiles(
                 `Try again! Click on the board to place a letter from that square, or
@@ -777,18 +803,18 @@ if (this.game.player != 0) {
               );
               wordblocks_self.addEventsToBoard();
             } else {
-              wordblocks_self.setBoard(word, orientation, x, y); 
+              
 
-	      //
-              // place word on board
-              //
               wordblocks_self.addMove("place\t" + word + "\t" + wordblocks_self.game.player + "\t" + x + "\t" + y + "\t" + orientation);
-	      //
+	            //
               // discard tiles
-              //
-              wordblocks_self.discardTiles(word, orientation, x, y);
-
-	      //
+              // (not really a discard, just changing flags on the board spaces to enable scoring??)
+              //wordblocks_self.discardTiles(word, orientation, x, y);
+              //Lock in Move in the DOM
+              //wordblocks_self.setBoard(word, orientation, x, y); 
+              wordblocks_self.finalizeWord(word, orientation, x, y);
+              wordblocks_self.addScoreToPlayer(wordblocks_self.game.player, myscore);
+	            //
               // get new cards
               //
               let cards_needed = 7;
@@ -802,18 +828,15 @@ if (this.game.player != 0) {
                 wordblocks_self.addMove("DEAL\t1\t" + wordblocks_self.game.player + "\t" + cards_needed);
               }
 
-              wordblocks_self.exhaustWord(word, orientation, x, y);
-              wordblocks_self.addScoreToPlayer(wordblocks_self.game.player, myscore);
-
               if (wordblocks_self.checkForEndGame() == 1) {
                 return;
               }
 
               $('#remainder').html("DECK: " + wordblocks_self.game.deck[0].crypt.length);
               wordblocks_self.endTurn();
-            };
+            }
 
-          } else {
+          } else { //!isEntryValid
             wordblocks_self.updateStatusWithTiles(
               `Word is not valid, try again! Click on the board to place a word, or
               <span class="link tosstiles">discard tiles</span>`
@@ -899,19 +922,28 @@ if (this.game.player != 0) {
           return 0;
         }
       } //this.firstmove = 0;
-    }
-
+    } 
+    //In all cases, must have the letters in hand or on board to spell word
     for (let i = 0; i < word.length; i++) {
       let boardslot = "";
       let letter = word[i].toUpperCase();
 
       if (orientation == "horizontal") {
         boardslot = y + "_" + (x + i);
+        if ((x+i) > 15){
+          salert("Word must fit on board!");
+          return 0;
+        }
       }
 
       if (orientation == "vertical") {
         boardslot = y + i + "_" + x;
+        if ((y+i) > 15){
+          salert("Word must fit on board!");
+          return 0;
+        }
       }
+
 
       if (this.game.board[boardslot].letter != "_") {
         if (this.game.board[boardslot].letter != letter) {
@@ -935,6 +967,13 @@ if (this.game.player != 0) {
       }
     }
 
+    //Add a test for touching previous words here, not in scoring
+    /*    if (this.firstmove == 0 && touchesWord == 0) {
+      salert("Word does not cross our touch an existing word.");
+      return -1;
+    }*/
+
+
     if (valid_placement == 0) {
       salert("This is an invalid placement!");
     }
@@ -943,8 +982,10 @@ if (this.game.player != 0) {
 
   }
 
-
-  exhaustWord(word, orientation, x, y) {
+  //Mark word as no longer new (.fresh is a flag used in scoring)
+  //--AND-- remove newly used tiles from players hand
+  //--AND-- update DOM classes
+  finalizeWord(word, orientation, x, y) {
 
     x = parseInt(x);
     y = parseInt(y);
@@ -962,12 +1003,17 @@ if (this.game.player != 0) {
         boardslot = y + i + "_" + x;
       }
 
-      this.game.board[boardslot].fresh = 0;
+      if (this.game.board[boardslot].fresh == 1) {
+        this.removeTilesFromHand(word[i]);
+        this.game.board[boardslot].fresh = 0;
+      }
+      divname = "#" + boardslot;
+      $(divname).addClass("set");
     }
   }
 
 
-  discardTiles(word, orientation, x, y) {
+  /*discardTiles(word, orientation, x, y) {
 
     x = parseInt(x);
     y = parseInt(y);
@@ -991,9 +1037,38 @@ if (this.game.player != 0) {
     }
   }
 
+  /*
+  Adds class to GUI for the newly spelled word
+  /
+  setBoard(word, orientation, x, y) {
+
+    x = parseInt(x);
+    y = parseInt(y);
+
+    for (let i = 0; i < word.length; i++) {
+      let boardslot = "";
+      let divname = "";
+
+      if (orientation == "horizontal") {
+        boardslot = y + "_" + (x + i);
+      }
+
+      if (orientation == "vertical") {
+        boardslot = y + i + "_" + x;
+      }
+
+      divname = "#" + boardslot;
+      $(divname).addClass("set");
+    }
+  }
 
 
 
+  */
+
+  /*
+  Updates GUI and game.board with newly played word
+  */
   addWordToBoard(word, orientation, x, y) {
     x = parseInt(x);
     y = parseInt(y);
@@ -1014,6 +1089,7 @@ if (this.game.player != 0) {
       divname = "#" + boardslot;
 
       if (this.game.board[boardslot].letter != "_") {
+        console.log(this.game.board[boardslot].letter,letter); //what is going on here?
         if (this.game.board[boardslot].letter != letter) {
           this.game.board[boardslot].letter = letter;
           this.addTile($(divname), letter);
@@ -1026,7 +1102,9 @@ if (this.game.player != 0) {
   }
 
 
-
+  /*
+  Undoes addWordToBoard, updates GUI to remove newly played tiles (as defined by class:set)
+  */
   removeWordFromBoard(word, orientation, x, y) {
 
     x = parseInt(x);
@@ -1056,29 +1134,7 @@ if (this.game.player != 0) {
   }
 
 
-  setBoard(word, orientation, x, y) {
-
-    x = parseInt(x);
-    y = parseInt(y);
-
-    for (let i = 0; i < word.length; i++) {
-      let boardslot = "";
-      let divname = "";
-
-      if (orientation == "horizontal") {
-        boardslot = y + "_" + (x + i);
-      }
-
-      if (orientation == "vertical") {
-        boardslot = y + i + "_" + x;
-      }
-
-      divname = "#" + boardslot;
-      $(divname).addClass("set");
-    }
-  }
-
-
+  
 
 
   returnBoard() {
@@ -1205,6 +1261,7 @@ if (this.game.player != 0) {
 
   ////////////////
   // Score Word //
+  // Returns -1 if not found in dictionary //
   ////////////////
   scoreWord(word, player, orientation, x, y) {
 
@@ -1760,9 +1817,9 @@ console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
 
         if (player != wordblocks_self.game.player) {
           this.addWordToBoard(word, orient, x, y);
-          this.setBoard(word, orient, x, y);
+          //this.setBoard(word, orient, x, y);
           score = this.scoreWord(word, player, orient, x, y);
-          this.exhaustWord(word, orient, x, y);
+          this.finalizeWord(word, orient, x, y);
           this.addScoreToPlayer(player, score);
 
 	  this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
