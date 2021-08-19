@@ -35,6 +35,19 @@ body {
   margin-bottom: auto;
 }
 
+.score-overlay{
+  min-width: 220px;
+  min-height: 200px;
+  background-color: whitesmoke;
+  border-radius: 10px; 
+}
+
+.intro {
+  background-color: whitesmoke;
+  padding: 30px;
+  font-size: 1.6em;
+}
+
 .link {
   border-bottom: 1px dashed;
   cursor: pointer;
@@ -83,6 +96,7 @@ body {
 #lastmove {
   clear: both;
   height: 30px;
+  cursor: pointer;
 }
 
 .home {

@@ -34,7 +34,7 @@ class Wordblocks extends GameTemplate {
     this.letters = {};
     this.moves = [];
     this.firstmove = 1;
-    this.last_played_word = { player: '', finalword: '', score: '' };
+    this.last_played_word = {};
 
     return this;
 
@@ -240,10 +240,12 @@ class Wordblocks extends GameTemplate {
   returnRulesOverlay() {
 
     let overlay_html = `<div class="intro">
-      Like a classic crossword puzzle boardgame, players take turns spelling words using the seven letters in their tile rack and available space on the game board.
+      <h1>Welcome to Wordblocks</h1>
+      <p>Game play is similar to the classic crossword puzzle boardgame. Players take turns spelling words using the seven letters in their tile rack and available space on the game board. The game ends when one player finishes all the letters in their rack and there are no remaining tiles to draw.</p>
+      <p>Players may discard any number of tiles from their rack in lieu of playing a word.</p>
       <h2>Scoring</h2>
-      <p>Each letter is worth a certain number of points as indicated on the tile. The score for the word is the sum of point values of its letters, which may be affected by playing the word over bonus spaces on the board.</p>
-      <p>There is an automatic 1 point deduction for attempting to play an invalid word, but you have a second chance to play a word</p>
+      <p>Each letter is worth the number of points indicated on the tile. The score for the word is the sum of point values of its letters, which may be affected by playing the word over bonus spaces on the board. </p>
+      <p>If you use all 7 tiles in one play, you receive 10 additional points to the letter score and a +1 multiple on the overall word score.</p>
       </div>`;
     return overlay_html;
     
@@ -277,7 +279,7 @@ class Wordblocks extends GameTemplate {
       words_scored_html += '</table>';
       html += `<td>${words_scored_html}</td>`;
     }
-    html += '</tr><tr>';
+    html += '</tr><hr><tr>';
     for (let i = 0; i < this.game.opponents.length+1; i++) {
       html += `<td>${total_score[i]}</td>`;
     }
@@ -554,8 +556,7 @@ if (this.game.player != 0) {
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
       tile_html += this.returnTileHTML(this.game.deck[0].cards[this.game.deck[0].hand[i]].name);
     }
-    let { player, finalword, score } = this.last_played_word;
-    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${this.game.words_played[player-1][this.game.words_played[player-1].length-1].score} points (total: ${this.game.score[player-1]})`;
+    let last_move_html = (this.last_played_word.word) ? `Player ${this.last_played_word.player} played ${this.last_played_word.word} for: ${this.last_played_word.score} points (total: ${this.last_played_word.totalscore})` : '...' ;
     let html =
       `
       <div class="hud-status-update-message">${status}</div>
@@ -575,10 +576,12 @@ if (this.game.player != 0) {
         </div>
       </div
     `;
-    this.updateStatus(html);
-    this.calculateScore();
-    this.enableEvents();
-    } catch (err) {}
+    this.updateStatus(html); //Attach html to #status box
+    this.calculateScore(); //Calculate player scores and insert into #score
+    this.enableEvents(); 
+    } catch (err) {
+      console.log(err);
+    }
   }
 
 
@@ -773,13 +776,14 @@ if (this.game.player != 0) {
           $('.action').off();
           $('.tile-placement-controls').remove();
           wordblocks_self.updateStatusWithTiles("Click on the board to place a letter from that square, or <span class=\"link tosstiles\">discard tiles</span> if you cannot move.");
-          wordblocks_self.addEventsToBoard();
+          //wordblocks_self.addEventsToBoard();
           return;
         }
 
-        word = await sprompt("Provide your word:").toUpperCase();
+        word = await sprompt("Provide your word:");
 
         if (word) {
+          word = word.toUpperCase();
           //
           // reset board
           //
@@ -792,7 +796,7 @@ if (this.game.player != 0) {
           if (wordblocks_self.isEntryValid(word, orientation, x, y) == 1) {
             let myscore = 0;
             wordblocks_self.addWordToBoard(word, orientation, x, y);
-            myscore = wordblocks_self.scoreWord(word, wordblocks_self.game.player, orientation, x, y);
+            myscore = wordblocks_self.scorePlay(word, wordblocks_self.game.player, orientation, x, y);
   	        wordblocks_self.game.words_played[parseInt(wordblocks_self.game.player)-1].push({ word : word , score : myscore });
 
             if (myscore <= 1) { //If not found in dictionary
@@ -801,7 +805,7 @@ if (this.game.player != 0) {
                 `Try again! Click on the board to place a letter from that square, or
                 <span class="link tosstiles">discard tiles</span> if you cannot move.`
               );
-              wordblocks_self.addEventsToBoard();
+              //wordblocks_self.addEventsToBoard();
             } else {
               
 
@@ -811,8 +815,9 @@ if (this.game.player != 0) {
               // (not really a discard, just changing flags on the board spaces to enable scoring??)
               //wordblocks_self.discardTiles(word, orientation, x, y);
               //Lock in Move in the DOM
-              //wordblocks_self.setBoard(word, orientation, x, y); 
-              wordblocks_self.finalizeWord(word, orientation, x, y);
+              //wordblocks_self.setBoard(word, orientation, x, y);
+              wordblocks_self.discardTiles(word, orientation, x, y); //remove Played tiles from Hand
+              wordblocks_self.finalizeWord(word, orientation, x, y); //update board
               wordblocks_self.addScoreToPlayer(wordblocks_self.game.player, myscore);
 	            //
               // get new cards
@@ -841,10 +846,15 @@ if (this.game.player != 0) {
               `Word is not valid, try again! Click on the board to place a word, or
               <span class="link tosstiles">discard tiles</span>`
             );
-            wordblocks_self.addEventsToBoard();
+           //wordblocks_self.addEventsToBoard();
           }
         }
       });
+    });
+
+    $('#lastmove').off();
+    $('#lastmove').on('click', function(){
+      wordblocks_self.overlay.showOverlay(wordblocks_self.app, wordblocks_self, wordblocks_self.returnMath(wordblocks_self.last_played_word.play));
     });
 
     $('#shuffle').on('click', function () {
@@ -922,7 +932,35 @@ if (this.game.player != 0) {
           return 0;
         }
       } //this.firstmove = 0;
-    } 
+    }else{
+      //Check to make sure newly played word touches another word
+      let touchesWord = 0;
+      let xStart = Math.max(1,x-1);
+      let yStart = Math.max(1,y-1);
+      let xEnd,yEnd;
+      if (orientation == "horizontal"){
+        xEnd = Math.min(15,x+word.length+1);
+        yEnd = Math.min(15,y+1);
+      }else{
+        xEnd = Math.min(15,x+1);
+        yEnd = Math.min(15,y+word.length+1);
+      }
+      for (let i = xStart; i<=xEnd; i++)
+        for (let j = yStart; j<=yEnd; j++){
+          let boardslot = j+"_"+i;
+          if (this.game.board[boardslot].fresh == 0){
+            touchesWord = 1;
+            break;
+          }
+        }
+
+      if (touchesWord == 0) {
+          salert("Word does not cross or touch an existing word.");
+        return 0;
+      }
+    }
+
+     
     //In all cases, must have the letters in hand or on board to spell word
     for (let i = 0; i < word.length; i++) {
       let boardslot = "";
@@ -937,7 +975,7 @@ if (this.game.player != 0) {
       }
 
       if (orientation == "vertical") {
-        boardslot = y + i + "_" + x;
+        boardslot = (y + i) + "_" + x;
         if ((y+i) > 15){
           salert("Word must fit on board!");
           return 0;
@@ -966,12 +1004,6 @@ if (this.game.player != 0) {
         }
       }
     }
-
-    //Add a test for touching previous words here, not in scoring
-    /*    if (this.firstmove == 0 && touchesWord == 0) {
-      salert("Word does not cross our touch an existing word.");
-      return -1;
-    }*/
 
 
     if (valid_placement == 0) {
@@ -1004,7 +1036,6 @@ if (this.game.player != 0) {
       }
 
       if (this.game.board[boardslot].fresh == 1) {
-        this.removeTilesFromHand(word[i]);
         this.game.board[boardslot].fresh = 0;
       }
       divname = "#" + boardslot;
@@ -1013,14 +1044,12 @@ if (this.game.player != 0) {
   }
 
 
-  /*discardTiles(word, orientation, x, y) {
-
+  discardTiles(word, orientation, x, y) {
     x = parseInt(x);
     y = parseInt(y);
 
     for (let i = 0; i < word.length; i++) {
       let boardslot = "";
-      let divname = "";
       let letter = word[i].toUpperCase();
 
       if (orientation == "horizontal") {
@@ -1089,8 +1118,8 @@ if (this.game.player != 0) {
       divname = "#" + boardslot;
 
       if (this.game.board[boardslot].letter != "_") {
-        console.log(this.game.board[boardslot].letter,letter); //what is going on here?
-        if (this.game.board[boardslot].letter != letter) {
+        if (this.game.board[boardslot].letter != letter) { //We can overwrite tiles??
+          console.log(this.game.board[boardslot].letter,letter); //what is going on here?
           this.game.board[boardslot].letter = letter;
           this.addTile($(divname), letter);
         }
@@ -1136,14 +1165,16 @@ if (this.game.player != 0) {
 
   
 
-
+  /*
+  Board is 1-indexed, 15 Rows x 15 Columns (= y_x)
+  */
   returnBoard() {
 
     var board = {};
 
-    for (let i = 0; i < 15; i++) {
-      for (let j = 0; j < 15; j++) {
-        let divname = i + 1 + "_" + (j + 1);
+    for (let i = 1; i <= 15; i++) {
+      for (let j = 1; j <= 15; j++) {
+        let divname = i + "_" + j ;
         board[divname] = {
           letter: "_",
           fresh: 1
@@ -1258,467 +1289,152 @@ if (this.game.player != 0) {
     return bonus;
   }
 
+  /*
+  For scoring words, I use cartesian coordinate templating to make the coding easier
+  (x,y) is represented as "y_x". A slot template fixes one of the dimensions with a constant
+  to traverse the (main) axis of the word, or, alternately examine the cross axis of an 
+  intersecting word.  "#" is used as a variable, to be replaced by "i" in the for loops.  
+  */
+
+  getWordScope(head, slotPattern){
+    let boardslot;
+    let wordStart = head;
+    let wordEnd = head;
+    for (let i = parseInt(head); i>=1; i--){
+      boardslot = slotPattern.replace("#",i);
+      if (this.game.board[boardslot].letter == "_") break;
+      wordStart = i;
+    }
+    for (let i = parseInt(head); i<=15; i++){
+        boardslot = slotPattern.replace("#",i);
+      if (this.game.board[boardslot].letter == "_") break;
+        wordEnd = i;
+    }
+
+    return {"start":wordStart, "end":wordEnd};
+  }
+
+  scoreWord(wordStart, wordEnd, boardSlotTemplate){
+    let tilesUsed = 0;
+    let word_bonus = 1;
+    let thisword = "";
+    let score = 0;
+    console.log("Scoring");
+   for (let i = wordStart; i <= wordEnd; i++) {
+        boardslot = boardSlotTemplate.replace("#",i);
+        let letter_bonus = 1;
+        
+        if (this.game.board[boardslot].fresh == 1){
+          let tmpb = this.returnBonus(boardslot);
+          switch(tmpb){ //Word_bonuses can be combined...maybe
+            case "3W": word_bonus = word_bonus * 3; break;
+            case "2W": word_bonus = word_bonus * 2; break;
+            case "3L": letter_bonus = 3; break; 
+            case "2L": letter_bonus = 2; break;
+          }
+          tilesUsed += 1;
+        }else{
+          touchesWord = 1;
+        } 
+
+        let thisletter = this.game.board[boardslot].letter;
+        console.log(boardslot,thisletter);
+        thisword += thisletter;
+        score += this.letters[thisletter].score * letter_bonus;
+    }
+
+    if (!this.checkWord(thisword)) {
+       return -1;
+    }
+
+    /*Technically only care for the main word, but not worth adding code to avoid 
+      doing a couple extra additions and a comparison
+    */
+    if (tilesUsed == 7) {
+      score += 10;
+      word_bonus += 1;
+    }
+
+      score *= word_bonus;
+      console.log("word:",thisword,"score:",score);
+      return {"word":thisword, "score":score};
+  }
 
   ////////////////
   // Score Word //
   // Returns -1 if not found in dictionary //
   ////////////////
-  scoreWord(word, player, orientation, x, y) {
-
-    let score = 0;
-    let touchesWord = 0;
-    let thisword = "";
-    let finalword = "";
-    x = parseInt(x);
-    y = parseInt(y);
-
-    //
-    // find the start of the word
-    //
-
+  scorePlay(word, player, orientation, x, y) {
+    let boardslot;
+    //Orientation-dependent metadata/variables
+    let altOr, mainAxis, crossAxis, boardSlotTemplate;
     if (orientation == "horizontal") {
-
-      let beginning_of_word = x;
-      let end_of_word = x;
-      let tilesUsed = 0;
-
-      //
-      // find the beginning of the word
-      //
-      let current_x = parseInt(x) - 1;
-      let current_y = y;
-      let boardslot = y + "_" + current_x;
-      let divname = "#" + boardslot;
-
-      if (current_x < 1) {
-        beginning_of_word = 1;
-      } else {
-        while (this.game.board[boardslot].letter != "_" && current_x >= 1) {
-          beginning_of_word = current_x;
-          current_x--;
-          boardslot = y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_x < 1) {
-            break;
-          }
-        }
-      }
-
-      //
-      // find the end of the word
-      //
-      current_x = parseInt(x) + 1;
-      current_y = y;
-      boardslot = y + "_" + current_x;
-      divname = "#" + boardslot;
-
-      if (current_x <= 15) {
-        while (this.game.board[boardslot].letter != "_" && current_x <= 15) {
-          end_of_word = current_x;
-          current_x++;
-          boardslot = y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_x > 15) {
-            break;
-          }
-        }
-      }
-
-      let word_bonus = 1;
-
-      //
-      // score this word
-      //
-      thisword = "";
-
-      for (let i = beginning_of_word, k = 0; i <= end_of_word; i++) {
-        boardslot = y + "_" + i;
-        let tmpb = this.returnBonus(boardslot);
-        let letter_bonus = 1;
-
-console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
-
-        if (tmpb == "3W" && this.game.board[boardslot].fresh == 1) {
-          word_bonus = word_bonus * 3;
-        }
-
-        if (tmpb == "2W" && this.game.board[boardslot].fresh == 1) {
-          word_bonus = word_bonus * 2;
-        }
-
-        if (tmpb == "3L" && this.game.board[boardslot].fresh == 1) {
-          letter_bonus = 3;
-        }
-
-        if (tmpb == "2L" && this.game.board[boardslot].fresh == 1) {
-          letter_bonus = 2;
-        }
-
-        if (this.game.board[boardslot].fresh == 1) {
-          tilesUsed += 1;
-        }
-
-        if (this.game.board[boardslot].fresh != 1) {
-          touchesWord = 1;
-        }
-
-        let thisletter = this.game.board[boardslot].letter;
-        thisword += thisletter;
-        score += this.letters[thisletter].score * letter_bonus;
-      }
-
-      if (!this.checkWord(thisword)) {
-        return -1;
-      }
-
-      finalword += thisword;
-
-      if (tilesUsed == 7) {
-        score += 10;
-        word_bonus += 1;
-      }
-
-      score *= word_bonus;
-
-      //
-      // now score vertical words 
-      //
-
-      for (let i = x; i < x + word.length; i++) {
-        boardslot = y + "_" + i;
-
-        if (this.game.board[boardslot].fresh == 1) {
-          let orth_start = parseInt(y);
-          let orth_end = parseInt(y);
-
-          //
-          // find the beginning of the word
-          //
-
-          current_x = i;
-          current_y = orth_start - 1;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_y == 0) {
-            orth_start = 1;
-          } else {
-            while (this.game.board[boardslot].letter != "_" && current_y > 0) {
-              orth_start = current_y;
-              current_y--;
-              boardslot = current_y + "_" + current_x;
-              divname = "#" + boardslot;
-
-              if (current_y < 1) {
-                break;
-              }
-            }
-          }
-
-          //
-          // find the end of the word
-          //
-
-
-          current_x = i;
-          current_y = orth_end + 1;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_y > 15) {
-            orth_end = 15;
-          } else {
-            while (this.game.board[boardslot].letter != "_" && current_y <= 15) {
-              orth_end = current_y;
-              current_y++;
-              boardslot = current_y + "_" + current_x;
-
-              if (current_y > 15) {
-                break;
-              }
-            }
-          }
-
-          let wordscore = 0;
-          let word_bonus = 1;
-
-          //
-          // score this word
-          //
-
-          thisword = "";
-
-          if (orth_start != orth_end) {
-            for (let w = orth_start, q = 0; w <= orth_end; w++) {
-              let boardslot = w + "_" + i;
-              let tmpb = this.returnBonus(boardslot);
-              let letter_bonus = 1;
-
-              if (tmpb == "3W" && this.game.board[boardslot].fresh == 1) {
-                word_bonus = word_bonus * 3;
-              }
-
-              if (tmpb == "2W" && this.game.board[boardslot].fresh == 1) {
-                word_bonus = word_bonus * 2;
-              }
-
-              if (tmpb == "3L" && this.game.board[boardslot].fresh == 1) {
-                letter_bonus = 3;
-              }
-
-              if (tmpb == "2L" && this.game.board[boardslot].fresh == 1) {
-                letter_bonus = 2;
-              }
-
-              if (this.game.board[boardslot].fresh != 1) {
-                touchesWord = 1;
-              }
-
-              let thisletter = this.game.board[boardslot].letter;
-              thisword += thisletter;
-              wordscore += this.letters[thisletter].score * letter_bonus;
-            }
-
-            score += wordscore * word_bonus;
-
-            if (!this.checkWord(thisword)) {
-              return -1;
-            }
-          }
-        }
-      }
+      altOr = "vertical";
+      mainAxis = x;
+      crossAxis = y;
+      boardSlotTemplate = crossAxis+"_#"; //Main Axis is variable
+    }
+    else{
+      altOr = "horizontal";
+      mainAxis = y;
+      crossAxis = x;
+      boardSlotTemplate = "#_"+crossAxis;
     }
 
-    if (orientation == "vertical") {
-      let beginning_of_word = y;
-      let end_of_word = y;
-      let tilesUsed = 0;
-
-      //
-      // find the beginning of the word
-      //
-
-      let current_x = parseInt(x);
-      let current_y = parseInt(y) - 1;
-      let boardslot = current_y + "_" + current_x;
-      let divname = "#" + boardslot;
-
-      if (current_y <= 0) {
-        beginning_of_word = 1;
-      } else {
-        while (this.game.board[boardslot].letter != "_" && current_y > 0) {
-          beginning_of_word = current_y;
-          current_y--;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_y <= 0) {
-            break;
-          }
-        }
-      }
-
-      //
-      // find the end of the word
-      //
-      current_x = parseInt(x);
-      current_y = parseInt(y) + 1;
-      boardslot = current_y + "_" + current_x;
-      divname = "#" + boardslot;
-
-      if (current_y > 15) {
-        end_of_word = 15;
-      } else {
-        while (this.game.board[boardslot].letter != "_" && current_y <= 15) {
-          end_of_word = current_y;
-          current_y++;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_y > 15) {
-            break;
-          }
-        }
-      }
-
-      let word_bonus = 1;
-
-      //
-      // score this word
-      //
-      for (let i = beginning_of_word, k = 0; i <= end_of_word; i++) {
-        boardslot = i + "_" + x;
-        let tmpb = this.returnBonus(boardslot);
-        let letter_bonus = 1;
-
-        if (tmpb == "3W" && this.game.board[boardslot].fresh == 1) {
-          word_bonus = word_bonus * 3;
-        }
-
-        if (tmpb == "2W" && this.game.board[boardslot].fresh == 1) {
-          word_bonus = word_bonus * 2;
-        }
-
-        if (tmpb == "3L" && this.game.board[boardslot].fresh == 1) {
-          letter_bonus = 3;
-        }
-
-        if (tmpb == "2L" && this.game.board[boardslot].fresh == 1) {
-          letter_bonus = 2;
-        }
-
-        if (this.game.board[boardslot].fresh == 1) {
-          tilesUsed += 1;
-        }
-
-        if (this.game.board[boardslot].fresh != 1) {
-          touchesWord = 1;
-        }
-
-        let thisletter = this.game.board[boardslot].letter;
-        thisword += thisletter;
-        score += this.letters[thisletter].score * letter_bonus;
-      }
-
-      if (!this.checkWord(thisword)) {
-        return -1;
-      }
-
-      finalword += thisword;
-
-      if (tilesUsed == 7) {
-        score += 10;
-        word_bonus += 1;
-      }
-
-      score *= word_bonus;
-
-      //
-      // now score horizontal words 
-      //
-
-      for (let i = y; i < y + word.length; i++) {
-        boardslot = i + "_" + x;
-
-        if (this.game.board[boardslot].fresh == 1) {
-          let orth_start = parseInt(x);
-          let orth_end = parseInt(x);
-
-          //
-          // find the beginning of the word
-          //
-          current_x = orth_start - 1;
-          current_y = i;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_x < 1) {
-            orth_start = 1;
-          } else {
-            while (this.game.board[boardslot].letter != "_" && current_x > 0) {
-              orth_start = current_x;
-              current_x--;
-              boardslot = current_y + "_" + current_x;
-              divname = "#" + boardslot;
-
-              if (current_x < 1) {
-                break;
-              }
-            }
-          }
-
-          //
-          // find the end of the word
-          //
-          current_x = orth_end + 1;
-          current_y = i;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_x > 15) {
-            orth_end = 15;
-          } else {
-            //
-            // >= instead of greater than
-            //
-            while (this.game.board[boardslot].letter != "_" && current_x <= 15) {
-              orth_end = current_x;
-              current_x++;
-              boardslot = current_y + "_" + current_x;
-
-              if (current_x > 15) {
-                break;
-              }
-            }
-          }
-
-          let wordscore = 0;
-          let word_bonus = 1;
-
-          //
-          // score this word
-          //
-
-          thisword = "";
-
-          if (orth_start != orth_end) {
-            for (let w = orth_start, q = 0; w <= orth_end; w++) {
-              boardslot = i + "_" + w;
-              let tmpb = this.returnBonus(boardslot);
-              let letter_bonus = 1;
-
-              if (tmpb === "3W" && this.game.board[boardslot].fresh == 1) {
-                word_bonus = word_bonus * 3;
-              }
-
-              if (tmpb === "2W" && this.game.board[boardslot].fresh == 1) {
-                word_bonus = word_bonus * 2;
-              }
-
-              if (tmpb === "3L" && this.game.board[boardslot].fresh == 1) {
-                letter_bonus = 3;
-              }
-
-              if (tmpb === "2L" && this.game.board[boardslot].fresh == 1) {
-                letter_bonus = 2;
-              }
-
-              if (this.game.board[boardslot].fresh != 1) {
-                touchesWord = 1;
-              }
-
-              let thisletter = this.game.board[boardslot].letter;
-              thisword += thisletter;
-              wordscore += this.letters[thisletter].score * letter_bonus;
-            }
-
-            score += wordscore * word_bonus;
-
-            if (!this.checkWord(thisword)) {
-              return -1;
-            }
-          }
-        }
-      }
-    }
-
-    if (this.firstmove == 0 && touchesWord == 0) {
-      salert("Word does not cross our touch an existing word.");
+    //
+    // find the start and end of the word
+    //
+    let wordBoundaries = this.getWordScope(mainAxis, boardSlotTemplate);
+     
+    //Score main-axis word
+    let results = this.scoreWord(wordBoundaries.start, wordBoundaries.end, boardSlotTemplate);
+    if (results == -1)
       return -1;
-    }
+      
+    let play = new Array(results);
+    let totalscore = results.score;
 
-    this.firstmove = 0;
-    let last_move_html = "";
-    if (this.game.words_played[player-1].length > 0) { last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${this.game.words_played[player-1][this.game.words_played[player-1].length-1].score} points (total: ${this.game.score[player-1]})`; }
-//    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${score} points (total: ${this.game.score[player-1]}))`;
-    $('.lastmove').html(last_move_html);
-    $('#remainder').html(`DECK: ${this.game.deck[0].crypt.length}`);
-    this.last_played_word = { player, finalword, score };
-    return score;
+    //For each letter in the main-axis word...
+    
+      for (let i = wordBoundaries.start; i <= wordBoundaries.end; i++) {
+        boardslot = boardSlotTemplate.replace("#",i); 
+        let altTemplate = boardslot.replace(crossAxis,"#");
+        //console.log(boardslot);
+        if (this.game.board[boardslot].fresh == 1) { //...Is it newly placed...?
+          //..and does it have a word along the cross axis
+          let crossWord = this.getWordScope(crossAxis, altTemplate);
+          if (crossWord.start != crossWord.end){ //Only score word if more than 1 letter
+            //Make cross-axis variable
+             results = this.scoreWord(crossWord.start, crossWord.end, altTemplate);
+             if (results == -1)
+               return -1;
+             
+             play.push(results);
+             totalscore += results.score;  
+          }
+        }
+      }
+
+    this.firstmove = 0; //We have an acceptable move, so game has commenced. Repeat assignment simpler than adding conditional
+    console.log(play);
+
+    this.last_played_word = { player, word: play[0].word, score:play[0].score, totalscore, play};
+    //console.log(this.last_played_word);
+    return totalscore;
   }
 
+
+  returnMath(play){
+    let sum = 0;
+    let html = `<div class="score-overlay"><table>
+              <tr><td>Word</td><td>Points</td></tr>`;
+    for (let word of play){
+      html += `<tr><td>${word.word}</td><td>${word.score}</td></tr>`;
+      sum += word.score;
+    }
+    html += `<tr><td></td><td>${sum}</td></tr></table></div>`;
+    return html;
+  }
 
 
   //
@@ -1818,11 +1534,11 @@ console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
         if (player != wordblocks_self.game.player) {
           this.addWordToBoard(word, orient, x, y);
           //this.setBoard(word, orient, x, y);
-          score = this.scoreWord(word, player, orient, x, y);
+          score = this.scorePlay(word, player, orient, x, y);
           this.finalizeWord(word, orient, x, y);
           this.addScoreToPlayer(player, score);
 
-	  this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
+	        this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
 
         } else {
 
