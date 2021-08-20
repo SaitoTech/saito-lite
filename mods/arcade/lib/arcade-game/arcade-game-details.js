@@ -161,7 +161,7 @@ module.exports = ArcadeGameDetails = {
         let players_needed = document.querySelector('.game-wizard-players-select').value;
 
         if (players_needed == 1) {
-          mod.launchSinglePlayerGame(app, data, gamedata);
+          mod.launchSinglePlayerGame(app, gamedata); 
           return;
         } else {
           mod.overlay.hideOverlay();

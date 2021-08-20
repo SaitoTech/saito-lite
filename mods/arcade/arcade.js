@@ -994,7 +994,7 @@ console.log("and processing join request");
 
   }
 
-  launchSinglePlayerGame(app, data, gameobj) {
+  launchSinglePlayerGame(app, gameobj) {
     window.location = '/' + gameobj.slug;
     return;
   }
