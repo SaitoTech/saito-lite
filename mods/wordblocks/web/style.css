@@ -23,24 +23,39 @@ body {
 .stats-overlay {
   min-width: 220px;
   min-height: 200px;
-  overflow-y: scroll;
+  max-height: 65vh;
+  max-width: 50vw;
+  overflow-y: auto;
+  overflow-x: auto;
   background-color: whitesmoke;
   border-radius: 10px;
 }
 
 .stats-overlay table {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto;
+  padding: 1em;
+  border-spacing: 1em;
 }
 
 .score-overlay{
-  min-width: 220px;
+  min-width: 120px;
   min-height: 200px;
   background-color: whitesmoke;
   border-radius: 10px; 
 }
+
+.score-overlay table{
+  width:  100%;
+  border-spacing: 1em;
+  padding: 1em;
+
+}
+
+thead,  tfoot{
+  font-weight: bold;
+  text-align: center;
+}
+
 
 .intro {
   background-color: whitesmoke;
