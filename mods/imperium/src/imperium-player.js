@@ -4982,12 +4982,20 @@ playerActivateSystem() {
       // sanity check on whether we want to do this
       //
       let do_we_permit_this_activation = 1;
-      if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
-	let c = confirm("You cannot move ships into this sector. Are you sure you wish to activate it?");
-	if (c) {
-        } else {
+
+      if (imperium_self.game.state.round == 1) {
+        if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
+          imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
 	  return;
-	}
+        }
+      } else {
+        if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
+  	  let c = confirm("You cannot move ships into this sector. Are you sure you wish to activate it?");
+	  if (c) {
+          } else {
+	    return;
+	  }
+        }
       }
  
       //

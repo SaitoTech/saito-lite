@@ -1704,10 +1704,10 @@ this.game.state.end_round_scoring = 0;
         try {
           document.getElementById("close-objectives-btn").onclick = () => {
 	    if (this.game.state.round == 1) {
-	      this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
-              document.getElementById("close-units-btn").onclick = () => {
+	      //this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
+              //document.getElementById("close-units-btn").onclick = () => {
                 this.overlay.hideOverlay();
-              }
+              //}
             } else {
 	      if (this.game.planets['new-byzantium'].owner != -1 ) {
 		this.overlay.showOverlay(this.app, this, this.returnNewAgendasOverlay());
