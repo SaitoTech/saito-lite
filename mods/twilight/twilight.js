@@ -10507,8 +10507,8 @@ this.startClock();
                   }
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" succeeded.");
-                twilight_self.addMove("notify\tBrush War modified: " + (dieroll-modify));
-                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll));
+                twilight_self.addMove("notify\tBrush War modified: " + (dieroll));
+                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll+modify));
                 twilight_self.endTurn();
 
               } else {
@@ -10518,8 +10518,8 @@ this.startClock();
                   twilight_self.addMove("milops\tussr\t3");
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" failed.");
-                twilight_self.addMove("notify\tBrush War modified: " + (dieroll-modify));
-                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll));
+                twilight_self.addMove("notify\tBrush War modified: " + (dieroll));
+                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll+modify));
                 twilight_self.endTurn();
               }
             });
