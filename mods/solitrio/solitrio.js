@@ -18,7 +18,7 @@ class Solitrio extends GameTemplate {
     this.maxPlayers      = 1;
     this.minPlayers      = 1;
     this.type            = "Solitaire Cardgame";
-    this.status          = "Alpha";
+    this.status          = "Beta";
 
     this.description = "Solitaire card game made famous by the good folks at Cathay Pacific Information Technology Services.";
     this.categories  = "Cardgame Game Solitaire";
@@ -39,29 +39,18 @@ class Solitrio extends GameTemplate {
 
     let overlay_html = `
 
-      <div class="intro">
-
-	Cards appear in four rows. There are four blank spaces.
-
-	<p></p>
-
-	Put the following card of the same suite in any open space. The Eight of Spades may be placed after the Seven of Spades.
-
-	<p></p>
-
-	If you clear the front card in a row, you may move any TWO into that slot.
-
-	<p></p>
-
-	You have two "chances" to reset the board (click on the "Ace"). This preserves existing chains but randomizes the remaining cards. 
-
-	<p></p>
-
-	Your goal is to order the board before you run out of "chances".
-
-      </div>
-
-    `;
+  <div class="intro">
+  <h1>Instrutions</h1>
+  <ul>
+  <li>Cards (2-10 in each suit) are randomly arranged in four rows of ten with four blank spaces.</li>
+  <li>The goal is to arrange the cards in sequential order with one suit per row.</li>
+	<li>The 2 of any suit may be placed in the leftmost space of any row (if empty).</li>
+  <li>All other cards must match the suit of its left neighbor and be the next in sequence, e.g. the 8&spades; may be placed after (to the right of) the 7&spades;.</li>
+  <li>If you get stuck, you may reshuffle the board. Reshuffling will not move a 2 (or any connected sequence of cards) from its target position.</li>
+	<li>You only have two chances to reshuffle the board and you lose if you cannot order the cards.</li>
+	</ul>
+  </div>
+   `;
 
     this.overlay.showOverlay(this.app, this, overlay_html);
 
@@ -135,6 +124,15 @@ class Solitrio extends GameTemplate {
         game_mod.menu.showSubMenu("game-game");
       }
     });
+    this.menu.addSubMenuOption("game-game",{
+      text : "Start New Game",
+      id : "game-new",
+      class : "game-new",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        //Add code here!
+      }
+    });
     this.menu.addSubMenuOption("game-game", {
       text : "How to Play",
       id : "game-intro",
@@ -160,6 +158,7 @@ class Solitrio extends GameTemplate {
       id : "game-exit",
       class : "game-exit",
       callback : function(app, game_mod) {
+        //How to save game status??
         window.location.href = "/arcade";
       }
     });
@@ -241,27 +240,28 @@ class Solitrio extends GameTemplate {
 
       let card = $(this).attr("id");
 
-      if (selected === card) {
+      if (card[0] === 'E') { return; } //What is this?
+      if (selected === card) { //Selecting same card again
         solitrio_self.untoggleCard(card);
         selected = "";
         return;
-      }
-
-      if (selected != card) {
-        if (selected == "") {
-          if (card[0] === 'E') { return; }
-
+      }else {
+        if (selected == "") { //New Card
+          if (solitrio_self.game.board[card].name[0]==="E") {return;} //Ignore clicking empty slot
           selected = card;
           solitrio_self.toggleCard(card);
             return;
-        }
+        }else{
+          if (solitrio_self.game.board[card].name[0]!=="E"){ //Change selection
+            solitrio_self.untoggleCard(selected);
+            solitrio_self.toggleCard(card);
+            selected=card;
+            return;
+          } 
 
-
-        //
+        // Move card to empty slot if it is legal
         // selected must work in this context
-        //
         if (solitrio_self.canCardPlaceInSlot(selected, card)) {
-
           //
           // swap
           //
@@ -273,80 +273,108 @@ class Solitrio extends GameTemplate {
 
           solitrio_self.untoggleCard(card);
           solitrio_self.untoggleCard(selected);
-            selected = "";
-
-          solitrio_self.displayBoard();
-
-          /*
-
-          let winning_state = solitrio_self.isWinningState();
-
-          if (winning_state == 1) {
-            alert("Congratulations! You win!");
+          $("#"+selected).html(solitrio_self.returnCardImageHTML(solitrio_self.game.board[selected].name));
+          $("#"+card).html(solitrio_self.returnCardImageHTML(solitrio_self.game.board[card].name));
+          selected = "";
+          //solitrio_self.displayBoard();
+          
+          //Use recycling function to check if in winning state
+          if (solitrio_self.scanBoard(false)) {
+            salert("Congratulations! You win!");
+            console.log("Game Over -- Winner!");
+          }else if (!solitrio_self.hasAvailableMoves()){
+            if (solitrio_self.game.state.recycles_remaining == 0){
+              salert("No More Available Moves, you lose!");
+              console.log("Game Over -- Loser!");
+            }else{
+              console.log("Need to shuffle");
+              //Make the shuffle button flash
+            }
+          }else{
+            console.log("Wait for next Move");
           }
-          */
-
-          console.log(card + " can send move now " + selected);
 
           return;
 
+  
         } else {
-          alert("Cannot Card Place in Slot...");
+          //SmartTip, slightly redundant with internal logic of canCardPlaceInSlot
+          let smartTip;
+          let predecessor = solitrio_self.getPredecessor(card);
+          if (predecessor){
+            let cardValue = parseInt(solitrio_self.returnCardNumber(predecessor))+1;
+            if (cardValue < 11)
+              smartTip = "Hint: Try a "+cardValue+" of "+solitrio_self.cardSuitHTML(solitrio_self.returnCardSuite(predecessor));
+            else smartTip = "Unfortunately, no card can go there";
+          }else{
+            smartTip = "Hint: Try a 2 of any suit";
+          }
+          //Feedback
+          salert("<p>Sorry, "+solitrio_self.cardSuitHTML(solitrio_self.returnCardSuite(selected))+solitrio_self.returnCardNumber(selected)+" cannot go there... </p><p>"+smartTip+"</p>");
           solitrio_self.untoggleCard(selected);
           selected = "";
-          solitrio_self.displayBoard();
+          //solitrio_self.displayBoard();
           return;
         }
+      }
       }
     });
   }
 
 
-
+  /*
+  Card: Previously selected card 
+  Slot: empty slot
+  Both expressed by position "row[1-4]_slot[1-10]"
+  */
   canCardPlaceInSlot(card, slot) {
+    let cardValue = this.returnCardNumber(card); 
+    let cardSuit = this.returnCardSuite(card);
 
-    let predecessor = "none";
-    let tmparr = slot.split("_");
-    let card_value = this.game.board[card].name;
+    console.log(card + "["+ cardSuit+cardValue+"] --> " + slot);
 
-  console.log(card + " -- " + slot);
+    let predecessor = this.getPredecessor(slot);
 
-    //
-    // 2 can go in the first slot
-    //
-    if (tmparr[1] === "slot1" && card_value[1] == '2') { return 1; }
-
-    //
-    // otherwise depends on predecessor
-    //
-    if (tmparr[1] == "slot2") { precessor = tmparr[0] + "_" + "slot1"; }
-    if (tmparr[1] == "slot3") { precessor = tmparr[0] + "_" + "slot2"; }
-    if (tmparr[1] == "slot4") { precessor = tmparr[0] + "_" + "slot3"; }
-    if (tmparr[1] == "slot5") { precessor = tmparr[0] + "_" + "slot4"; }
-    if (tmparr[1] == "slot6") { precessor = tmparr[0] + "_" + "slot5"; }
-    if (tmparr[1] == "slot7") { precessor = tmparr[0] + "_" + "slot6"; }
-    if (tmparr[1] == "slot8") { precessor = tmparr[0] + "_" + "slot7"; }
-    if (tmparr[1] == "slot9") { precessor = tmparr[0] + "_" + "slot8"; }
-    if (tmparr[1] == "slot10") { precessor = tmparr[0] + "_" + "slot9"; }
-
-    //
-    // otherwise depends on predecessor
-    //
-    let precessor_value_num = parseInt(this.game.board[precessor].name.substring(1));
-    let card_value_num = parseInt(card_value.substring(1));
-
-    let precessor_value_suit = this.game.board[precessor].name[0];
-    let card_value_suit = this.game.board[card].name[0];
-
-    if (card_value_num == (precessor_value_num+1)) { 
-      if (card_value_suit === precessor_value_suit) {
-        return 1; 
-      }
-    }
-    return 0;
-
+    if (predecessor){
+      let predecessorValueNum = parseInt(this.returnCardNumber(predecessor));
+      let predecessorSuit = this.returnCardSuite(predecessor); 
+      if (cardValue == (predecessorValueNum+1) && cardSuit === predecessorSuit)
+        return true; 
+    }else{ //No predecessor, i.e. first position in row
+      if (cardValue === '2')
+        return true;
+    }    
+    return false;
   }
 
+/*
+  Return previous position in row for a given coordinate, false if no predecessor
+*/
+  getPredecessor(cardPos){
+    let tempArr = cardPos.split("_slot");
+    if (tempArr[1] === "1")
+      return false;
+    else
+      return tempArr[0]+"_slot"+(tempArr[1]-1);
+  }
+
+  /* scan board to see if any legal moves available*/
+  hasAvailableMoves(){
+    
+    for (let i = 1; i <= 4; i++) {
+      let prevNum = "none";
+      for (let j = 1; j <= 10; j++) {
+        let slot  = `row${i}_slot${j}`;
+        let suite = this.returnCardSuite(slot);  
+        if (suite === "E"){
+          if (prevNum != "10")
+            return true;
+          prevNum = "10"; //Empty slot counts as a 10 because it is "blocking"
+        } else prevNum = this.returnCardNumber(slot);
+      }
+    }
+    return false;
+  }
 
   toggleCard(divname) {
     divname = '#' + divname;
@@ -358,7 +386,10 @@ class Solitrio extends GameTemplate {
     $(divname).css('opacity', '1.0');
   }
 
-
+  hideCard(divname){
+    divname = '#' + divname;
+    $(divname).css('opacity', '0.0'); 
+  }
 
   handleGameLoop(msg=null) {
 
@@ -398,51 +429,13 @@ class Solitrio extends GameTemplate {
       if (mv[0] === "round") {
 
         this.displayUserInterface();
-
-        this.game.board['row1_slot1'] = this.game.deck[0].cards[this.game.deck[0].hand[0]];
-        this.game.board['row1_slot2'] = this.game.deck[0].cards[this.game.deck[0].hand[1]];
-        this.game.board['row1_slot3'] = this.game.deck[0].cards[this.game.deck[0].hand[2]];
-        this.game.board['row1_slot4'] = this.game.deck[0].cards[this.game.deck[0].hand[3]];
-        this.game.board['row1_slot5'] = this.game.deck[0].cards[this.game.deck[0].hand[4]];
-        this.game.board['row1_slot6'] = this.game.deck[0].cards[this.game.deck[0].hand[5]];
-        this.game.board['row1_slot7'] = this.game.deck[0].cards[this.game.deck[0].hand[6]];
-        this.game.board['row1_slot8'] = this.game.deck[0].cards[this.game.deck[0].hand[7]];
-        this.game.board['row1_slot9'] = this.game.deck[0].cards[this.game.deck[0].hand[8]];
-        this.game.board['row1_slot10'] = this.game.deck[0].cards[this.game.deck[0].hand[9]];
-
-        this.game.board['row2_slot1'] = this.game.deck[0].cards[this.game.deck[0].hand[10]];
-        this.game.board['row2_slot2'] = this.game.deck[0].cards[this.game.deck[0].hand[11]];
-        this.game.board['row2_slot3'] = this.game.deck[0].cards[this.game.deck[0].hand[12]];
-        this.game.board['row2_slot4'] = this.game.deck[0].cards[this.game.deck[0].hand[13]];
-        this.game.board['row2_slot5'] = this.game.deck[0].cards[this.game.deck[0].hand[14]];
-        this.game.board['row2_slot6'] = this.game.deck[0].cards[this.game.deck[0].hand[15]];
-        this.game.board['row2_slot7'] = this.game.deck[0].cards[this.game.deck[0].hand[16]];
-        this.game.board['row2_slot8'] = this.game.deck[0].cards[this.game.deck[0].hand[17]];
-        this.game.board['row2_slot9'] = this.game.deck[0].cards[this.game.deck[0].hand[18]];
-        this.game.board['row2_slot10'] = this.game.deck[0].cards[this.game.deck[0].hand[19]];
-
-        this.game.board['row3_slot1'] = this.game.deck[0].cards[this.game.deck[0].hand[20]];
-        this.game.board['row3_slot2'] = this.game.deck[0].cards[this.game.deck[0].hand[21]];
-        this.game.board['row3_slot3'] = this.game.deck[0].cards[this.game.deck[0].hand[22]];
-        this.game.board['row3_slot4'] = this.game.deck[0].cards[this.game.deck[0].hand[23]];
-        this.game.board['row3_slot5'] = this.game.deck[0].cards[this.game.deck[0].hand[24]];
-        this.game.board['row3_slot6'] = this.game.deck[0].cards[this.game.deck[0].hand[25]];
-        this.game.board['row3_slot7'] = this.game.deck[0].cards[this.game.deck[0].hand[26]];
-        this.game.board['row3_slot8'] = this.game.deck[0].cards[this.game.deck[0].hand[27]];
-        this.game.board['row3_slot9'] = this.game.deck[0].cards[this.game.deck[0].hand[28]];
-        this.game.board['row3_slot10'] = this.game.deck[0].cards[this.game.deck[0].hand[29]];
-
-        this.game.board['row4_slot1'] = this.game.deck[0].cards[this.game.deck[0].hand[30]];
-        this.game.board['row4_slot2'] = this.game.deck[0].cards[this.game.deck[0].hand[31]];
-        this.game.board['row4_slot3'] = this.game.deck[0].cards[this.game.deck[0].hand[32]];
-        this.game.board['row4_slot4'] = this.game.deck[0].cards[this.game.deck[0].hand[33]];
-        this.game.board['row4_slot5'] = this.game.deck[0].cards[this.game.deck[0].hand[34]];
-        this.game.board['row4_slot6'] = this.game.deck[0].cards[this.game.deck[0].hand[35]];
-        this.game.board['row4_slot7'] = this.game.deck[0].cards[this.game.deck[0].hand[36]];
-        this.game.board['row4_slot8'] = this.game.deck[0].cards[this.game.deck[0].hand[37]];
-        this.game.board['row4_slot9'] = this.game.deck[0].cards[this.game.deck[0].hand[38]];
-        this.game.board['row4_slot10'] = this.game.deck[0].cards[this.game.deck[0].hand[39]];
-
+        let indexCt = 0;
+        for (let i = 1; i <= 4; i++)
+          for (let j = 1; j<= 10; j++){
+            let position = `row${i}_slot${j}`;
+            this.game.board[position] = this.game.deck[0].cards[this.game.deck[0].hand[indexCt++]];
+          }
+        
         this.displayBoard();
   
         shd_continue = 0;
@@ -475,15 +468,22 @@ class Solitrio extends GameTemplate {
 
 
 
-  displayBoard() {
+  async displayBoard(timeInterval = 0) {
 
     if (this.browser_active == 0) { return; }
 
     try {
-      for (let i in this.game.board) {
+      //Want to add a timed delay for animated effect
+      const timeout = ms => new Promise(res => setTimeout(res, ms));
+      //(async ()=>{
+        for (let i in this.game.board) {
+        await timeout(timeInterval);
         let divname = '#'+i;
         $(divname).html(this.returnCardImageHTML(this.game.board[i].name));
+        this.untoggleCard(i);
       }
+      //})();
+      
     } catch (err) {
     }
 
@@ -501,53 +501,23 @@ class Solitrio extends GameTemplate {
 
 
   returnDeck() {
-
+    let suits = ["S","C","H","D","E"];
     var deck = {};
-
-    deck['2']                    = { name : "S2" }
-    deck['3']                    = { name : "S3" }
-    deck['4']                    = { name : "S4" }
-    deck['5']                    = { name : "S5" }
-    deck['6']                    = { name : "S6" }
-    deck['7']                    = { name : "S7" }
-    deck['8']                    = { name : "S8" }
-    deck['9']                    = { name : "S9" }
-    deck['10']                    = { name : "S10" }
-    deck['12']                    = { name : "C2" }
-    deck['13']                    = { name : "C3" }
-    deck['14']                    = { name : "C4" }
-    deck['15']                    = { name : "C5" }
-    deck['16']                    = { name : "C6" }
-    deck['17']                    = { name : "C7" }
-    deck['18']                    = { name : "C8" }
-    deck['19']                    = { name : "C9" }
-    deck['20']                    = { name : "C10" }
-    deck['22']                    = { name : "H2" }
-    deck['23']                    = { name : "H3" }
-    deck['24']                    = { name : "H4" }
-    deck['25']                    = { name : "H5" }
-    deck['26']                    = { name : "H6" }
-    deck['27']                    = { name : "H7" }
-    deck['28']                    = { name : "H8" }
-    deck['29']                    = { name : "H9" }
-    deck['30']                    = { name : "H10" }
-    deck['32']                    = { name : "D2" }
-    deck['33']                    = { name : "D3" }
-    deck['34']                    = { name : "D4" }
-    deck['35']                    = { name : "D5" }
-    deck['36']                    = { name : "D6" }
-    deck['37']                    = { name : "D7" }
-    deck['38']                    = { name : "D8" }
-    deck['39']                    = { name : "D9" }
-    deck['40']                    = { name : "D10" }
-    deck['41']                    = { name : "E1" }
-    deck['42']                    = { name : "E2" }
-    deck['43']                    = { name : "E3" }
-    deck['44']                    = { name : "E4" }
-
+    /* WTF is with this indexing system??? */
+    //2-10 of each suit, with indexing gaps on the 1's
+    for (let i = 0; i<4; i++)
+      for (let j=2; j<=10; j++){
+        let index = 10*i+j;
+        deck[index.toString()] = { "name" : suits[i]+j };
+      }
+    //E[mpty] slots (1-4) into '41'-'44'
+    for (let j = 1; j<=4; j++){
+      let index = 40+j;
+      deck[index.toString()] = { "name" : suits[4]+j };
+    }
+    
     return deck;
-
-  }
+   }
 
 
 
@@ -577,7 +547,7 @@ class Solitrio extends GameTemplate {
 
     let solitrio_self = this;
 
-    let html = 'Order cards by suite from 2 to 10. You may randomize the unarranged cards ';
+    let html = 'Order cards by suit from 2 to 10. You may randomize the unarranged cards ';
     if (this.game.state.recycles_remaining == 2) { 
       html += 'two more times.'; 
       $('.chances').text('two chances');
@@ -597,136 +567,113 @@ class Solitrio extends GameTemplate {
 
     $('.logobox').off();
     $('.logobox').on('click', function() {
-      if (this.game.state.recycles_remaining == 0) {
-	salert("Sorry! No more chances!");
-	return;
+      if (solitrio_self.game.state.recycles_remaining == 0) {
+    	 salert("Sorry! No more chances!");
+	     return;
       }
-      solitrio_self.recycleBoard();
+      solitrio_self.scanBoard(true);
       solitrio_self.game.state.recycles_remaining--;
       solitrio_self.displayUserInterface();
     });
 
     $('#recycles_remaining').off();
     $('#recycles_remaining').on('click', function() {
-      if (this.game.state.recycles_remaining == 0) {
-	salert("Sorry! No more chances!");
-	return;
+      if (solitrio_self.game.state.recycles_remaining == 0) {
+	     salert("Sorry! No more chances!");
+	     return;
       }
-      solitrio_self.recycleBoard();
+      solitrio_self.scanBoard(true);
       solitrio_self.game.state.recycles_remaining--;
       solitrio_self.displayUserInterface();
     });
   }
 
-
-  recycleBoard() {
-
-    let row1 = 0;
-    let row2 = 0;
-    let row3 = 0;
-    let row4 = 0;
+  /*
+  Combo function to check if in winning board state
+  and shuffle cards that are not in winning positions
+  */
+  scanBoard(recycle = true) {
+    let rows = new Array(4);
+    rows.fill(0);
 
     let myarray = [];
+    /*
+      For each row of cards, if a 2 is in the left most position, 
+      find the length of the sequential streak of same suit
+    */
+    for (let i = 0; i < 4; i++) {
+      let rowsuite = "none";
 
-    for (let i = 1; i < 5; i++) {
+      for (let j = 1; j < 11; j++) {
 
-      let rowsuite = "";
-      let continuous = 1;
-
-      for (let j = 1; j < 11 && continuous == 1; j++) {
-
-        let slot  = "row"+i+"_slot"+j;
+        let slot  = "row"+(i+1)+"_slot"+j;
         let suite = this.returnCardSuite(slot);
         let num   = this.returnCardNumber(slot);
 
         if (j == 1 && num == 2) {
           rowsuite = suite;
-        } else {
-            if (rowsuite !== suite) { continuous = 0; }
-        }
+        } 
 
-        if (rowsuite == suite && continuous == 1) {
-          if (num == j+1) {
-              if (i == 1) { row1 = j; }
-            if (i == 2) { row2 = j; }
-            if (i == 3) { row3 = j; }
-            if (i == 4) { row4 = j; }
-          } else {
-            continuous = 0;
-          }
-        } else {
-            continuous = 0;
+        if (rowsuite === suite && num == j+1) {
+            rows[i] = j;
+            if (recycle)
+              this.toggleCard(slot);
         }
+        else break;
       }
     }
-
-
+  
     //
     // pull off board
     //
-    for (let i = row1+1; i < 11; i++) {
-      let divname = "row1_slot"+i;
-      myarray.push(this.game.board[divname]);
-    }
-    for (let i = row2+1; i < 11; i++) {
-      let divname = "row2_slot"+i;
-      myarray.push(this.game.board[divname]);
-    }
-    for (let i = row3+1; i < 11; i++) {
-      let divname = "row3_slot"+i;
-      myarray.push(this.game.board[divname]);
-    }
-    for (let i = row4+1; i < 11; i++) {
-      let divname = "row4_slot"+i;
-      myarray.push(this.game.board[divname]);
+    for (let i = 0; i<4; i++){
+      for (let j = rows[i]+1; j < 11; j++){
+        let divname = `row${i+1}_slot${j}`;
+        if (recycle) this.hideCard(divname);
+        myarray.push(this.game.board[divname]);  
+      }
     }
 
-    //
-    // shuffle the array
-    //
-    myarray.sort(() => Math.random() - 0.5);
+    let winningGame = (myarray.length === 0);
 
-    //
-    // place back on board
-    //
-    let maidx = 0;
-    for (let i = row1+1; i < 11; i++) {
-      let divname = "row1_slot"+i;
-      this.game.board[divname] = myarray[maidx];
-      maidx++;
-    }
-    for (let i = row2+1; i < 11; i++) {
-      let divname = "row2_slot"+i;
-      this.game.board[divname] = myarray[maidx];
-      maidx++;
-    }
-    for (let i = row3+1; i < 11; i++) {
-      let divname = "row3_slot"+i;
-      this.game.board[divname] = myarray[maidx];
-      maidx++;
-    }
-    for (let i = row4+1; i < 11; i++) {
-      let divname = "row4_slot"+i;
-      this.game.board[divname] = myarray[maidx];
-      maidx++;
-    }
+    if (recycle){
+      //shuffle array, best method?
+       myarray.sort(() => Math.random() - 0.5);
 
-    //
-    //
-    //
-    this.saveGame(this.game.id);
-    this.displayBoard();
+      //refill board
 
+      for (let i = 0; i < 4; i++){
+        for (let j = rows[i]+ 1; j<11; j++){
+          let divname = `row${i+1}_slot${j}`;
+          this.game.board[divname] = myarray.shift();
+        }
+      }
+
+      this.saveGame(this.game.id);
+      this.displayBoard(100);
+     }
+    return winningGame;
   }
-
-
 
   returnCardSuite(slot) {
     let card = this.game.board[slot].name;
     return card[0];
   }
+
+  cardSuitHTML(suit){
+    switch (suit){
+      case "D": return "&diams;"
+      case "H": return "&hearts;"
+      case "S": return "&spades;"
+      case "C": return "&clubs;"
+      default: return "";
+    }
+  }
+
   returnCardNumber(slot) {
     let card = this.game.board[slot].name;
+    if (card[0]==="E") //empty slot
+      return 11;
     return card.substring(1);
   }
 

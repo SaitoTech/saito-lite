@@ -594,6 +594,10 @@ class Rewards extends ModTemplate {
   }
 
   makePayout(address, amount, event = "") {
+    //do not make payments right now
+
+    return false;
+
     //tamping down on rewards growth
     if (amount > 100) {amount = 100}
     if (this.app.wallet.returnPublicKey() != this.rewards_publickey) { return; }
