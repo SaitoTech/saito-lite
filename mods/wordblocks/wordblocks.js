@@ -1369,7 +1369,7 @@ class Wordblocks extends GameTemplate {
         thisword += thisletter;
         score += this.letters[thisletter].score * letter_bonus;
         if (letter_bonus>1){
-          html += ` + ${this.letters[thisletter].score} <span class="${tmpb}">x${letter_bonus}</span>`;
+          html += ` + ${this.letters[thisletter].score} x${letter_bonus}`;
         }else{
           html += " + "+this.letters[thisletter].score;
         }
