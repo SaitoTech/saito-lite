@@ -824,7 +824,7 @@ class Wordblocks extends GameTemplate {
             let myscore = 0;
             wordblocks_self.addWordToBoard(word, orientation, x, y);
             myscore = wordblocks_self.scorePlay(word, wordblocks_self.game.player, orientation, x, y);
-  	        wordblocks_self.game.words_played[parseInt(wordblocks_self.game.player)-1].push({ word : word , score : myscore });
+  	        
 
             if (myscore <= 1) { //If not found in dictionary
               wordblocks_self.removeWordFromBoard(word, orientation, x, y);
@@ -835,7 +835,7 @@ class Wordblocks extends GameTemplate {
               //wordblocks_self.addEventsToBoard();
             } else {
               
-
+              wordblocks_self.game.words_played[parseInt(wordblocks_self.game.player)-1].push({ word : word , score : myscore });
               wordblocks_self.addMove("place\t" + word + "\t" + wordblocks_self.game.player + "\t" + x + "\t" + y + "\t" + orientation);
 	            //
               // discard tiles
