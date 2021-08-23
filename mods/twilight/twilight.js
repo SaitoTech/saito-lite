@@ -345,6 +345,10 @@ class Twilight extends GameTemplate {
   handleDisplayMenu() {
 
     let twilight_self = this;
+
+    let use_clock_html = '';
+    if (twilight_self.useClock == 1) { use_clock_html = '<li class="menu-item" id="move_clock">Move Clock</li>'; }
+
     let user_message = `
       <div class="game-overlay-menu" id="game-overlay-menu">
         <div>DISPLAY MODE:</div>
@@ -352,6 +356,7 @@ class Twilight extends GameTemplate {
           <li class="menu-item" id="english">English</li>
           <li class="menu-item" id="chinese">简体中文</li>
           <li class="menu-item" id="enable_observer_mode">Observer Mode</li>
+          ${use_clock_html}
         </ul>
       </div>`;
 //          <li class="menu-item" id="text">Text Cards</li>
@@ -361,6 +366,11 @@ class Twilight extends GameTemplate {
 
     $('.menu-item').on('click', function() {
       let action2 = $(this).attr("id");
+
+      if (action2 === "move_clock") {
+	twilight_self.clock.moveClock();
+	return;
+      }
 
       if (action2 === "enable_observer_mode") {
         twilight_self.game.saveGameState = 1;
@@ -1031,13 +1041,13 @@ try {
 	        // [1] should be creator 
 		if (observer == 0) {
                   if (this.game.players[1] === this.app.wallet.returnPublicKey()) {
-                    if (this.game.options.player1 == "us") {
+                    if (this.game.options.player1 === "us") {
                       this.game.player = 2;
                     } else {
                       this.game.player = 1;
                     }
                   } else {
-                    if (this.game.options.player1 == "us") {
+                    if (this.game.options.player1 === "us") {
                       this.game.player = 1;
                     } else {
                       this.game.player = 2;
@@ -9868,7 +9878,11 @@ this.startClock();
         if (options[index] == "random") {
           new_options[index] = options[index];
         } else {
-          new_options[index] = options[index] == "ussr" ? "us" : "ussr";
+	  if (options[index] === "ussr") {
+	    new_options[index] = "ussr";
+	  } else {
+	    new_options[index] = "us";
+	  }
         }
       } else {
         new_options[index] = options[index]
@@ -10507,8 +10521,8 @@ this.startClock();
                   }
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" succeeded.");
-                twilight_self.addMove("notify\tBrush War modified: " + (dieroll-modify));
-                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll));
+                twilight_self.addMove("notify\tBrush War modified: " + (dieroll));
+                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll+modify));
                 twilight_self.endTurn();
 
               } else {
@@ -10518,8 +10532,8 @@ this.startClock();
                   twilight_self.addMove("milops\tussr\t3");
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" failed.");
-                twilight_self.addMove("notify\tBrush War modified: " + (dieroll-modify));
-                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll));
+                twilight_self.addMove("notify\tBrush War modified: " + (dieroll));
+                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll+modify));
                 twilight_self.endTurn();
               }
             });
@@ -14299,7 +14313,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
         let available_cards = this.game.deck[0].hand.length;
         let cards_for_select = [];
         for (let z = 0; z < this.game.deck[0].hand.length; z++) {
-          if (this.game.deck[0].hand[i] === "china" || this.game.deck[0].hand[i] == this.game.state.headline_opponent_card || this.game.deck[0].hand[i] == this.game.state.headline_card) { cards_to_reveal--; } else {
+          if (this.game.deck[0].hand[z] === "china" || this.game.deck[0].hand[z] == this.game.state.headline_opponent_card || this.game.deck[0].hand[z] == this.game.state.headline_card) { cards_to_reveal--; } else {
             cards_for_select.push(this.game.deck[0].hand[z]);
           }
         }

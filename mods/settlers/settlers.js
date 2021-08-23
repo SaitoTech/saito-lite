@@ -1652,7 +1652,7 @@ console.log("QUEUE: " + this.game.queue);
     for (let i in this.game.state.hexes) {
       let divname = "#hex_bg_"+i;
       let x = Math.floor(Math.random()*3)+1;
-      $(divname).html(`<img class="hex_img2" id="" src="/settlers/img/sectors/${this.game.state.hexes[i].resource}1.png">`);
+      $(divname).html(`<img class="hex_img2" id="" src="/settlers/img/sectors/${this.game.state.hexes[i].resource}${x}.png">`);
     }
 
     for (let i in this.game.state.cities) {
