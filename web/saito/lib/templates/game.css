@@ -761,8 +761,9 @@ input#game_board_sizer {
 /****************/
 /*** CLOCKBOX ***/
 /****************/
-.clockbox {
+.game-clock {
   position: fixed;
+  cursor: pointer;
   top:0px;
   right:0px;
   display:inline;
