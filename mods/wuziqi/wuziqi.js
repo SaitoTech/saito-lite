@@ -1,10 +1,11 @@
+const { timingSafeEqual } = require('crypto');
 const saito = require('../../lib/saito/saito');
 const GameTemplate = require('../../lib/templates/gametemplate');
 //const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 //const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 
 
-class wuziqi extends GameTemplate {
+class Wuziqi extends GameTemplate {
 
     constructor(app) {
 
@@ -18,16 +19,19 @@ class wuziqi extends GameTemplate {
         this.minPlayers = 2;
         this.maxPlayers = 2;
 
-        this.game.size = 13;
         this.useHUD = 0;
+
+        this.moves = [];
+        this.firstmove = 1;
 
         return this;
     }
 
 
-    initialize() {
+    initializeHTML(app) {
 
         super.initializeHTML(app);
+
         this.app.modules.respondTo("chat-manager").forEach(mod => {
             mod.respondTo('chat-manager').render(this.app, this);
         });
@@ -71,7 +75,7 @@ class wuziqi extends GameTemplate {
         for (let i = 0; i < this.app.modules.mods.length; i++) {
             if (this.app.modules.mods[i].slug === "chat") {
                 for (let ii = 0; ii < this.game.players.length; ii++) {
-                    if (this.game.sides[ii] != this.app.wallet.returnPublicKey()) {
+                    if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
 
                         // add main menu
                         if (main_menu_added == 0) {
@@ -102,7 +106,7 @@ class wuziqi extends GameTemplate {
                         }
                         // add peer chat
                         let data = {};
-                        let members = [this.game.sides[ii], this.app.wallet.returnPublicKey()].sort();
+                        let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
                         let gid = this.app.crypto.hash(members.join('_'));
                         let name = "Player " + (ii + 1);
                         let chatmod = this.app.modules.mods[i];
@@ -135,7 +139,29 @@ class wuziqi extends GameTemplate {
         this.menu.render(app, this);
         this.menu.attachEvents(app, this);
 
+        this.game.sides = ["black", "white"];
+
+
+        this.game.size = 13;
+
+        if (this.game.board.length < 1) {
+            this.generateBoard(this.game.size);
+        }
+
+        if (this.browser_active == 1) {
+            try {
+                this.drawBoard(this.game.board);
+                if (this.game.target == this.game.player) {
+                    this.addEvents(this.game.board);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+
     }
+
     returnRulesOverlay() {
 
         let overlay_html = `<div class="intro">
@@ -151,25 +177,10 @@ class wuziqi extends GameTemplate {
 
         this.loadGame(game_id);
 
-        this.game.sides = ["black", "white"];
 
-        document.querySelector('.board').style.gridTemplateColumns = 'repeat(' + this.game.size + ', 1fr)';
 
-        if (!this.game.board) {
-            generateBoard(this.game.size);
+        this.game.queue.push("READY");
         }
-
-        if (this.browser_active == 1) {
-            try {
-                drawBoard(this.game.board);
-                if (this.game.target == this.game.player) {
-                    addEvents(this.game.board);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    }
 
 
 
@@ -185,7 +196,7 @@ class wuziqi extends GameTemplate {
             cell.sets.lddiag = (x - cell.sets.col) + cell.sets.row;
             cell.sets.rudiag = cell.sets.row + cell.sets.col - 1;
             cell.owner = "none";
-            cell.winner = "no"
+            cell.winner = "no";
             this.game.board.push(cell);
         }
         //console.log(this);
@@ -193,6 +204,8 @@ class wuziqi extends GameTemplate {
 
     drawBoard(board) {
         boardElement = document.querySelector('.board');
+        boardElement.style.gridTemplateColumns = 'repeat(' + this.game.size + ', 1fr)';
+
         boardElement.innerHTML = "";
         board.forEach(cell => {
             let el = document.createElement('div');
@@ -210,28 +223,26 @@ class wuziqi extends GameTemplate {
                 el.addEventListener("click", (e) => {
                     cell.owner = this.game.sides[this.game.player];
                     // check for winner.
-                    let winner = findWinner(cell);
+                    let winner = this.findWinner(cell);
                     if (winner != "no winner") {
                         this.game.winner = this.game.player;
-                        let mv = this.serializeBoard(board + "\t");
-                        this.addMove(mv);
                         this.addMove("gameover");
                         this.endTurn();
                         return 1;
                     }
-                    drawBoard(board);
+                    this.drawBoard(board);
 
                     salert("You Win!");
 
                     // send move
 
 
-                    let mv = this.serializeBoard(board);
+                    let mv = ["place", this.serializeBoard(board), e.target.id];
                     this.addMove(mv);
 
                     //addEvents(board);
                     //this.game.player = (this.game.player + 1) % 2;
-                    console.log(serializeBoard(board));
+                    console.log(this.serializeBoard(board));
                 });
             }
         });
@@ -266,32 +277,40 @@ class wuziqi extends GameTemplate {
             wordblocks_self.saveGame(wordblocks_self.game.id);
             let qe = this.game.queue.length - 1;
             let mv = this.game.queue[qe].split("\t");
-            let shd_continue = 1;
-      
+
             //
             // game over conditions
             //
-      
+
             if (mv[0] === "gameover") {
+                salert("you lose - sad");
+                this.resignGame();
 
+                this.game.queue.splice(this.game.queue.length - 1, 1);
+                return 0;
             }
-      
-// here - handling game logic.
 
+            if (mv[0] == "place") {
+                this.boardFromString(mv[1]);
+                let cell = this.findCellbyId(mv[2]);
+                let winner = this.findWinner(cell);
+                this.game.queue.splice(this.game.queue.length - 1, 1);
+                return 1;
+            }
+        }
     }
-
 
     findWinner(cell) {
         let win = 0;
         let winner = "no winner";
         for (const [key, value] of Object.entries(cell.sets)) {
-            let testset = returnCells(key, value);
+            let testset = this.returnCells(key, value);
             if (testset.length > 4) {
                 testset.forEach(item => {
                     if (item.owner == cell.owner) {
                         win = win + 1;
                         if (win > 4) {
-                            showWin(key, value, cell);
+                            this.showWin(key, value, cell);
                             winner = cell.owner;
                         }
                     } else {
@@ -305,9 +324,9 @@ class wuziqi extends GameTemplate {
 
     showWin(key, value, cell) {
         let set = returnCells(key, value);
-        addWinners(set, cell);
+        this.addWinners(set, cell);
         set.reverse();
-        addWinners(set, cell);
+        this.addWinners(set, cell);
     }
 
     addWinners(set, cell) {
@@ -336,16 +355,24 @@ class wuziqi extends GameTemplate {
         return cells;
     }
 
+    returnCellById(id) {
+        this.game.board.forEach(cell => {
+            if (cell.id == id) {
+                return cell;
+            }
+        });
+    }
+
     serializeBoard(board) {
         boardString = "";
         board.forEach(cell => {
-            boardString += shortOwner(cell.owner);
+            boardString += this.shortOwner(cell.owner);
         });
         return boardString;
     }
 
     boardFromString(boardString) {
-        generateBoard(Math.sqrt(boardString.length));
+        this.generateBoard(Math.sqrt(boardString.length));
         this.game.board.forEach(cell, idx => {
             cell.owner = boardString[idx];
         });

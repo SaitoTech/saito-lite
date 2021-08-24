@@ -16,6 +16,7 @@ module.exports = {
     'solitrio/solitrio.js',
     'wordblocks/wordblocks.js',
     'website/website.js',
+    'wuziqi/wuziqi.js'
   ],
   lite: [
     'arcade/arcade.js',     
@@ -35,5 +36,6 @@ module.exports = {
     'solitrio/solitrio.js',
     'wordblocks/wordblocks.js',
     'website/website.js',
+    'wuziqi/wuziqi.js'
   ]
 }
