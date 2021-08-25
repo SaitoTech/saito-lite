@@ -1,0 +1,51 @@
+body {
+    background: linear-gradient(-45deg, #369, #036);
+}
+
+.board {
+    display: grid;
+    margin: 10vh auto;
+    border: 1px solid orangered;
+}
+
+@media (orientation: landscape) {
+    .board {
+        width: 80vh;
+        height: 80vh;
+    }
+}
+
+@media (orientation: portrait) {
+    .board {
+        width: 80vw;
+        height: 80vw;
+    }
+}
+
+
+.board div {
+    border: 2px solid #8888;
+    border-radius: 100%;
+    margin: 15%;
+}
+
+.active:hover {
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+.owner_white {
+    background: white;
+}
+
+.owner_black {
+    background: black;
+}
+
+.owner_black.winner_yes {
+    border: 2px solid rgb(255, 166, 0) !important;
+}
+
+.owner_white.winner_yes {
+    border: 2px solid rgb(29, 0, 12) !important;
+}

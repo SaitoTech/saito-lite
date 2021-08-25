@@ -144,7 +144,7 @@ class Wuziqi extends GameTemplate {
 
         this.game.size = 13;
 
-        if (this.game.board.length < 1) {
+        if (!this.game.board || this.game.board.length < 1) {
             this.generateBoard(this.game.size);
         }
 
@@ -180,7 +180,7 @@ class Wuziqi extends GameTemplate {
 
 
         this.game.queue.push("READY");
-        }
+    }
 
 
 
@@ -220,29 +220,27 @@ class Wuziqi extends GameTemplate {
         board.forEach(cell => {
             el = document.getElementById(cell.id);
             if (cell.owner == "none") {
+                el.classList.add("active");
                 el.addEventListener("click", (e) => {
-                    cell.owner = this.game.sides[this.game.player];
+                    cell.owner = this.game.sides[this.game.player - 1];
                     // check for winner.
                     let winner = this.findWinner(cell);
+                    this.drawBoard(board);
                     if (winner != "no winner") {
+                        salert("You Win!");
                         this.game.winner = this.game.player;
+                        let mv = "place\t" + this.serializeBoard(board) + "\t" + e.target.id;
+                        this.addMove(mv);
                         this.addMove("gameover");
                         this.endTurn();
                         return 1;
+                    } else {
+                        // send move
+                        let mv = "place\t" + this.serializeBoard(board) + "\t" + e.target.id;
+                        this.addMove(mv);
+                        this.endTurn();
                     }
-                    this.drawBoard(board);
 
-                    salert("You Win!");
-
-                    // send move
-
-
-                    let mv = ["place", this.serializeBoard(board), e.target.id];
-                    this.addMove(mv);
-
-                    //addEvents(board);
-                    //this.game.player = (this.game.player + 1) % 2;
-                    console.log(this.serializeBoard(board));
                 });
             }
         });
@@ -270,13 +268,13 @@ class Wuziqi extends GameTemplate {
 
         let wuziqi_self = this;
 
-        if (this.game.queue.length > 0) {
+        if (wuziqi_self.game.queue.length > 0) {
             //
             // save before we start executing the game queue
             //
-            wordblocks_self.saveGame(wordblocks_self.game.id);
-            let qe = this.game.queue.length - 1;
-            let mv = this.game.queue[qe].split("\t");
+            wuziqi_self.saveGame(wuziqi_self.game.id);
+            let qe = wuziqi_self.game.queue.length - 1;
+            let mv = wuziqi_self.game.queue[qe].split("\t");
 
             //
             // game over conditions
@@ -284,17 +282,22 @@ class Wuziqi extends GameTemplate {
 
             if (mv[0] === "gameover") {
                 salert("you lose - sad");
-                this.resignGame();
-
-                this.game.queue.splice(this.game.queue.length - 1, 1);
+                wuziqi_self.resignGame();
+                wuziqi_self.game.queue.splice(this.game.queue.length - 1, 1);
                 return 0;
             }
 
             if (mv[0] == "place") {
-                this.boardFromString(mv[1]);
-                let cell = this.findCellbyId(mv[2]);
-                let winner = this.findWinner(cell);
-                this.game.queue.splice(this.game.queue.length - 1, 1);
+                wuziqi_self.boardFromString(mv[1]);
+                let cell = wuziqi_self.returnCellById(parseInt(mv[2]));
+                let playedby = wuziqi_self.game.sides.indexOf(cell.owner) + 1;
+                let winner = wuziqi_self.findWinner(cell);
+                console.log(winner);
+                wuziqi_self.drawBoard(wuziqi_self.game.board);
+                if (wuziqi_self.game.player != playedby){
+                    wuziqi_self.addEvents(wuziqi_self.game.board);
+                }
+                wuziqi_self.game.queue.splice(wuziqi_self.game.queue.length - 1, 1);
                 return 1;
             }
         }
@@ -323,7 +326,7 @@ class Wuziqi extends GameTemplate {
     }
 
     showWin(key, value, cell) {
-        let set = returnCells(key, value);
+        let set = this.returnCells(key, value);
         this.addWinners(set, cell);
         set.reverse();
         this.addWinners(set, cell);
@@ -356,11 +359,13 @@ class Wuziqi extends GameTemplate {
     }
 
     returnCellById(id) {
-        this.game.board.forEach(cell => {
-            if (cell.id == id) {
-                return cell;
+        var cell = {};
+        this.game.board.forEach(item => {
+            if (item.id == id) {
+                cell = item;
             }
         });
+        return cell;
     }
 
     serializeBoard(board) {
@@ -373,8 +378,8 @@ class Wuziqi extends GameTemplate {
 
     boardFromString(boardString) {
         this.generateBoard(Math.sqrt(boardString.length));
-        this.game.board.forEach(cell, idx => {
-            cell.owner = boardString[idx];
+        this.game.board.forEach((cell, idx) => {
+            cell.owner = this.longOwner(boardString[idx]);
         });
     }
 
@@ -391,6 +396,20 @@ class Wuziqi extends GameTemplate {
                 break;
         }
     }
+    longOwner(s) {
+        switch (s) {
+            case "B":
+                return "black";
+                break;
+            case "W":
+                return "white";
+                break;
+            default:
+                return "none";
+                break;
+        }
+    }
+
 
 
 }
