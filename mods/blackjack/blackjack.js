@@ -253,7 +253,7 @@ toggleIntro() {
     }
 
     this.game.queue.push("startround");
-    this.game.queue.push("READY");
+    
     //
     // players
     //
@@ -272,6 +272,7 @@ toggleIntro() {
           this.updateStatus("You are the dealer this round");
         }
 
+    this.game.queue.push("READY");
     //for (let i = this.game.players.length; i>0; i--)
     // this.game.queue.push(`revealhand\t${i}`); //Sets Data Structure so DisplayPlayer knows what cards to put in the DOM
     
@@ -337,7 +338,7 @@ toggleIntro() {
       if (mv[0] === "newround") {
         this.game.queue.splice(qe, 1);
         this.newRound(); 
-        return 0;
+        return 1;
       }
       //Never pushed to queue
       /*if (mv[0] === "startround") { 
@@ -366,7 +367,7 @@ toggleIntro() {
         this.game.queue.splice(qe, 1);
         this.game.queue.push("revealhand\t"+player+"\t1"); //force reveal whole hand
         this.game.queue.push("DEAL\t1\t"+player+"\t1");
-        return 0;
+        return 1;
       }
 
       if (mv[0] === "selectwager") {
@@ -420,17 +421,17 @@ toggleIntro() {
         let player = parseInt(mv[1]);
         let wager = parseInt(mv[2]);
         this.game.state.player_wager[player-1] = wager;
-        return 0;
+        return 1;
       }
 
       if (mv[0] === "stand") {
         this.game.queue.splice(qe, 1);
-        return 0;
+        return 1;
       }
 
       if (mv[0] === "bust") {
         this.game.queue.splice(qe, 1);
-        return 0;
+        return 1;
       }
 
 
@@ -459,7 +460,7 @@ toggleIntro() {
           this.updateStatus("You are the dealer this round");
         }*/
 
-        return 0;
+        return 1;
       }
 
 
@@ -485,7 +486,7 @@ toggleIntro() {
         let hand = JSON.parse(mv[2]);
         this.game.state.player_hands[player-1] = hand;
         this.game.queue.splice(qe, 1);
-        return 0;
+        return 1;
       }
 
 
@@ -556,7 +557,7 @@ toggleIntro() {
           }
 
 
-        return 0;
+        return 1;
       }
 
 
