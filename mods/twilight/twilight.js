@@ -4496,7 +4496,7 @@ this.startClock();
       if (card === "skipturn") {
         twilight_self.hideCard(card);
         twilight_self.addMove("resolve\tplay");
-        twilight_self.addMove("notify\t"+player+" has no cards playable.");
+        twilight_self.addMove("notify\t"+player.toUpperCase()+" has no cards playable.");
         twilight_self.endTurn();
         return 0;
       }
@@ -14313,7 +14313,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
         let available_cards = this.game.deck[0].hand.length;
         let cards_for_select = [];
         for (let z = 0; z < this.game.deck[0].hand.length; z++) {
-          if (this.game.deck[0].hand[z] === "china" || this.game.deck[0].hand[z] == this.game.state.headline_opponent_card || this.game.deck[0].hand[z] == this.game.state.headline_card) { cards_to_reveal--; } else {
+          if (this.game.deck[0].hand[z] === "china" || this.game.deck[0].hand[z] == this.game.state.headline_opponent_card || this.game.deck[0].hand[z] == this.game.state.headline_card) {} else {
             cards_for_select.push(this.game.deck[0].hand[z]);
           }
         }
