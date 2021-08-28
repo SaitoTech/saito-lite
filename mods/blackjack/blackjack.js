@@ -2,8 +2,6 @@ const GameTemplate = require('../../lib/templates/gametemplate');
 const saito = require('../../lib/saito/saito');
 
 
-
-
 //////////////////
 // CONSTRUCTOR  //
 //////////////////
@@ -20,7 +18,7 @@ class Blackjack extends GameTemplate {
     this.type            = "Classic Cardgame";
     this.status     = "Alpha";
 
-    this.card_img_dir = '/poker/img/cards';
+    this.card_img_dir = '/blackjack/img/cards';
     this.useHUD = 0;
 
     this.minPlayers = 2;
@@ -33,17 +31,12 @@ class Blackjack extends GameTemplate {
     this.updateHTML = "";
 
     return this;
-
   }
-
-
-
 
   //
   // manually announce arcade banner support
   //
   respondTo(type) {
-
     if (super.respondTo(type) != null) {
       return super.respondTo(type);
     }
@@ -56,142 +49,27 @@ class Blackjack extends GameTemplate {
     }
 
     return null;
-
   }
 
 
+toggleIntro() {
+    let overlay_html = `<div class="intro">
+    <h1>Homestyle Blackjack</h1>
+    Homestyle Blackjack is quite different than Casino Blackjack. The game is played with a single deck and each player takes turns as the house (dealer). 
+    This means when you are the dealer, you are staking the bets of all the other players. Each player gets a single facedown card and the chance to place a bet. 
+    After each player (excluding the dealer) has placed a bet, one face up card is dealt.
+    <p>Cards are scored as usual, J, Q, and Ks count as 10s, Aces can be either 1 or 11. Going over 21 is busting and the goal is to have the highest possible hand.</p>
+    <p>Beginning to the left of the dealer, each player must decide whether to hit or stand. If the player busts, the dealer immediately collects their bet.</p>
+    <p>The dealer is the last to play and may use their discretion, i.e. no mandatory casino rule of hitting below 17.</p>
+    <p>Blackjacks--21 points with two cards--pay 2:1! If the dealer has a blackjack, and collects double the bet from each player unless the player also has a blackjack, in which case the player loses their bet. If a player has a blackjack and the dealer doesn't, the player wins double their bet</p>
 
+      </div>`;
 
-
-  startRound() {
-
-    this.game.queue.push("startplay");
-
-    this.game.state.player_wager = [];
-    this.game.state.player_payout = [];
-    this.game.state.player_hands = [];
-    this.game.state.player_total = [];
-    for (let i = 0; i < this.game.players.length; i++) {
-      this.game.state.player_wager[i] = 0;
-      this.game.state.player_payout[i] = 1;
-      this.game.state.player_hands[i] = [];
-      this.game.state.player_total[i] = 0;
-    }
-
-
-    //
-    // players
-    //
-    if (this.game.players.length == 2) {
-      this.game.queue.push("revealhand\t2");
-      this.game.queue.push("revealhand\t1");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 3) {
-      this.game.queue.push("revealhand\t3");
-      this.game.queue.push("revealhand\t2");
-      this.game.queue.push("revealhand\t1");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 4) {
-      this.game.queue.push("revealhand\t4");
-      this.game.queue.push("revealhand\t3");
-      this.game.queue.push("revealhand\t2");
-      this.game.queue.push("revealhand\t1");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 5) {
-      this.game.queue.push("revealhand\t5");
-      this.game.queue.push("revealhand\t4");
-      this.game.queue.push("revealhand\t3");
-      this.game.queue.push("revealhand\t2");
-      this.game.queue.push("revealhand\t1");
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t5");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t5");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 6) {
-      this.game.queue.push("revealhand\t6");
-      this.game.queue.push("revealhand\t5");
-      this.game.queue.push("revealhand\t4");
-      this.game.queue.push("revealhand\t3");
-      this.game.queue.push("revealhand\t2");
-      this.game.queue.push("revealhand\t1");
-      this.game.queue.push("DEAL\t1\t6\t2");
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t6");
-      this.game.queue.push("DECKENCRYPT\t1\t5");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t6");
-      this.game.queue.push("DECKXOR\t1\t5");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
-    //this.game.queue.push("BALANCE\t0\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
-
-    //
-    // set your wager before cards dealt
-    //
-    for (let i = 0; i < this.game.players.length; i++) {
-      if ( (i+1) != this.game.state.dealer) {
-        this.game.queue.push("selectwager\t"+(i+1));
-      }
-    }
-
+    this.overlay.showOverlay(this.app, this, overlay_html);
   }
-
 
 
   initializeHTML(app) {
-
     super.initializeHTML(app);
 
     this.app.modules.respondTo("chat-manager").forEach(mod => {
@@ -217,6 +95,15 @@ class Blackjack extends GameTemplate {
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
         game_mod.log.toggleLog();
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Help",
+      id : "game-intro",
+      class : "game-intro",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.toggleIntro();
       }
     });
 /***
@@ -312,8 +199,6 @@ class Blackjack extends GameTemplate {
 
 
 
-
-
   initializeGame(game_id) {
 
     //
@@ -326,14 +211,23 @@ class Blackjack extends GameTemplate {
     // initialize
     //
     if (this.game.deck.length == 0) {
-      this.game.state = this.returnState(this.game.players.length);
+      this.game.state = this.returnInitialState(this.game.players.length);
       this.updateStatus("Generating the Game");
-      this.game.state.required_pot = this.game.state.big_blind;
+      //Neither of these show up
+      //this.game.state.required_pot = this.game.state.big_blind;
 
       this.game.queue = [];
-      this.game.queue.push("start");
-      this.game.queue.push("READY");
+      this.initializeQueue();
     }
+
+
+    if (this.game.options)
+      if (this.game.options.stake)
+        this.game.options.stake = parseFloat(this.game.options.stake);
+      else 
+        this.game.options.stake = 1000;
+    else this.game.options = { stake: 1000 };
+    
 
     if (this.browser_active) {
       this.displayBoard();
@@ -341,9 +235,60 @@ class Blackjack extends GameTemplate {
   }
 
 
+  /*
+  Unlike Game Module, game.state arrays are 0-indexed
+  */
+  initializeQueue() {
 
+    
+    this.game.state.player_wager = [];
+    this.game.state.player_payout = [];
+    this.game.state.player_hands = [];
+    this.game.state.player_total = [];
+    for (let i = 0; i < this.game.players.length; i++) {
+      this.game.state.player_wager[i] = 0;
+      this.game.state.player_payout[i] = 1; //Multiplier for Blackjack bonus
+      this.game.state.player_hands[i] = []; //Array for holding each players hand
+      this.game.state.player_total[i] = 0;
+    }
 
+    this.game.queue.push("startround");
+    this.game.queue.push("READY");
+    //
+    // players
+    //
+    for (let i = this.game.players.length; i>0; i--)
+     this.game.queue.push(`revealhand\t${i}`); //Sets Data Structure so DisplayPlayer knows what cards to put in the DOM
 
+    for (let i = this.game.players.length; i>0; i--)
+      this.game.queue.push(`DEAL\t1\t${i}\t1`);    
+
+    // set your wager with one card, dealer does not wager, order from player to left of dealer
+    for (let i = 0; i < this.game.players.length-1; i++) {
+        let playerID = (this.game.state.dealer+i)%this.game.players.length + 1;
+        this.game.queue.push("selectwager\t"+ playerID);
+      }
+    if (this.game.player == this.game.state.dealer) {
+          this.updateStatus("You are the dealer this round");
+        }
+
+    //for (let i = this.game.players.length; i>0; i--)
+    // this.game.queue.push(`revealhand\t${i}`); //Sets Data Structure so DisplayPlayer knows what cards to put in the DOM
+    
+    for (let i = this.game.players.length; i>0; i--)
+      this.game.queue.push(`DEAL\t1\t${i}\t1`);
+    
+    for (let i = this.game.players.length; i>0; i--)
+      this.game.queue.push(`DECKENCRYPT\t1\t${i}`);
+    
+    for (let i = this.game.players.length; i>0; i--)
+      this.game.queue.push(`DECKXOR\t1\t${i}`);
+    
+    this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
+    //this.game.queue.push("BALANCE\t0\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
+
+    
+  }
 
 
   newRound() {
@@ -353,28 +298,19 @@ class Blackjack extends GameTemplate {
     //
     this.game.state.turn = 0;
     this.game.state.round++;
-    this.game.state.dealer++;
-
-    if (this.game.state.dealer > this.game.players.length) { this.game.state.dealer = 1; }
-
-    for (let i = 0; i < this.game.players.length; i++) {
-      this.game.state.player_wager[i] = 0;
-      this.game.state.player_payout[i] = 1;;
-    }
+    this.game.state.dealer = this.game.state.dealer%this.game.players.length + 1;
 
     console.log("Round: "+ this.game.state.round);
 
-    this.updateLog("New Round...");
     this.updateLog("Round: "+(this.game.state.round));
     document.querySelectorAll('.plog').forEach(el => {
        el.innerHTML = "";
     });
 
-    this.startRound();
-    this.displayPlayers();
+    this.initializeQueue();
+    this.displayBoard();
 
   }
-
 
 
 
@@ -389,187 +325,167 @@ class Blackjack extends GameTemplate {
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("processing: " + mv[0]);
+      this.displayBoard();
+      console.log("processing: " + mv[0]);
+      console.log("Remaining Queue:",this.game.queue);
 
-      if (mv[0] === "start") {
+      /*if (mv[0] === "start") { //okay, but never removed from queue?
         this.newRound();
         return 1;
-      }
+      }*/
 
       if (mv[0] === "newround") {
         this.game.queue.splice(qe, 1);
         this.newRound(); 
-        return 1;
+        return 0;
       }
-
-      if (mv[0] === "startround") {
+      //Never pushed to queue
+      /*if (mv[0] === "startround") { 
         this.game.queue.splice(qe, 1);
         this.startRound(); 
         return 1;
-      }
+      }*/
 
+      //Is this pushed to queue?
       if (mv[0] === "play") {
+        this.game.queue.splice(qe, 1);
+        console.log("play found in queue");
         let player_to_go = parseInt(mv[1]);
-        this.displayBoard();
+        //this.displayBoard();
         if (parseInt(mv[1]) == this.game.player) {
           this.playerTurn();
-          return 0;
         } else {
           this.updateStatus("Waiting for " + this.game.state.player_names[mv[1] - 1], 1);
-          return 0;
+         
         }
+        return 0;
       }
 
       if (mv[0] === "hit") {
         let player = parseInt(mv[1]);
         this.game.queue.splice(qe, 1);
-        if (player == this.game.state.dealer) {
-          this.game.queue.push("revealhand\t"+player+"\t1");
-        } else {
-          this.game.queue.push("revealhand\t"+player);
-        }
+        this.game.queue.push("revealhand\t"+player+"\t1"); //force reveal whole hand
         this.game.queue.push("DEAL\t1\t"+player+"\t1");
-        return 1;
+        return 0;
       }
 
       if (mv[0] === "selectwager") {
 
         let blackjack_self = this;
         let player = parseInt(mv[1]);
-        this.game.queue.splice(qe, 1);
+        this.game.queue.splice(qe, 1);  //remove this command
 
-        this.displayPlayers();
+        this.displayBoard();
 
         if (this.game.player != player) {
-          if (this.game.player == this.game.state.dealer) {
+          if (this.game.player == this.game.state.dealer)
             this.updateStatus('<div class="">You are the dealer. Waiting for players to set their wager</div>');
-            return 0;
-          } else {
+          else 
             this.updateStatus('<div class="">Player '+player+' is picking wager</div>');
-            return 0;
-          }
-        }
-
-        let html = `<div class="">How much would you like to wager? (${this.game.state.player_credit[this.game.player-1]})`;
-            html += '</div>';
+        }else{
+          //Should be tied to the stake, 1%, 5%, 10%, 25%
+            console.log("Max bet:",this.game.options.stake);
+            let stake = parseFloat(this.game.options.stake);
+            let fractions = [0.01, 0.05, 0.1, 0.25];
+            let html = `<div class="">How much would you like to wager? (${this.game.state.player_credit[this.game.player-1]})</div>`;
             html += '<ul>';
-            html += '<li class="menu_option" id="25">25</li>';
-            html += '<li class="menu_option" id="50">50</li>';
-            html += '<li class="menu_option" id="75">75</li>';
-            html += '<li class="menu_option" id="100">100</li>';
-        html += '</ul>';
+            for (let i = 0; i < fractions.length; i++)
+              html += `<li class="menu_option" id="${fractions[i]*stake}">${fractions[i]*stake}</li>`;
+            html += '</ul>';
     
-        this.updateStatus(html, 1);
+            this.updateStatus(html, 1);
+            this.lockInterface();
+            try {
+              $('.menu_option').off();
+              $('.menu_option').on('click', function () {
+                  $('.menu_option').off();
+                  blackjack_self.unlockInterface();
+                  blackjack_self.updateStatus("dealing cards");
+                  let choice = $(this).attr("id");
 
-        this.lockInterface();
-
-	try {
-        $('.menu_option').off();
-        $('.menu_option').on('click', function () {
-
-          $('.menu_option').off();
-          blackjack_self.unlockInterface();
-          blackjack_self.updateStatus("dealing cards");
-          let choice = $(this).attr("id");
-
-          blackjack_self.addMove("setwager\t" + blackjack_self.game.player + "\t" + choice);
-          blackjack_self.endTurn();
-          return 0;
-        });
-	} catch (err) {}
-
+                  blackjack_self.addMove("setwager\t" + blackjack_self.game.player + "\t" + choice);
+                  blackjack_self.endTurn();
+                  return 0;
+                });
+              } catch (err) {
+                console.log("selectwager error",err);
+              }
+        }
         return 0;
       }
 
 
-      if (mv[0] === "setwager") {
+      if (mv[0] === "setwager") { //Move data into shared public data structure
         this.game.queue.splice(qe, 1);
         let player = parseInt(mv[1]);
         let wager = parseInt(mv[2]);
         this.game.state.player_wager[player-1] = wager;
-        return 1;
+        return 0;
       }
-
-
 
       if (mv[0] === "stand") {
         this.game.queue.splice(qe, 1);
-        return 1;
+        return 0;
       }
 
       if (mv[0] === "bust") {
         this.game.queue.splice(qe, 1);
-        return 1;
+        return 0;
       }
 
 
-      if (mv[0] === "startplay") {
+      if (mv[0] === "startround") { //Arrange the queue for players to take turns
 
         this.game.queue.splice(qe, 1);
 
-        this.displayBoard();
         this.game.queue.push("pickwinner");
+        let otherPlayers = [];
 
-        for (let i = 0; i < this.game.players.length; i++) {
-          if ((i+1) == this.game.state.dealer) {
-            this.game.queue.push("PLAY\t"+(i+1));
-            this.game.queue.push("STATUS\tThe dealer is taking his turn");
-          }
+        //Dealer Goes Last
+        this.game.queue.push("play\t"+this.game.state.dealer);
+        this.game.queue.push("STATUS\tThe dealer is taking his turn");
+
+        //Cycle Other Players (in order from dealer)
+        for (let i = 0; i < this.game.players.length-1; i++) {
+          let otherPlayer = (this.game.state.dealer+i)%this.game.players.length+1;
+          this.game.queue.push("play\t"+otherPlayer);
+          
         }
+        /*for (let i = 0; i < otherPlayers.length; i++) {
+          this.game.queue.push("revealhand\t"+otherPlayers[i]);
+        }*/
 
-        let players_to_go = [];
-        let players_to_reveal = [];
-        for (let i = 0; i < this.game.players.length; i++) {
-          if ((i+1) != this.game.state.dealer) {
-            players_to_go.push((i+1));
-            players_to_reveal.push((i+1));
-          }
-        }
-
-        this.game.queue.push("PLAY\t"+JSON.stringify(players_to_go));
-        for (let i = 0; i < players_to_reveal.length; i++) {
-          this.game.queue.push("revealhand\t"+players_to_reveal[i]);
-        }
-
-        if (this.game.player == this.game.state.dealer) {
+        /*if (this.game.player == this.game.state.dealer) {
           this.updateStatus("You are the dealer this round");
-        }
+        }*/
 
-        return 1;
+        return 0;
       }
 
 
       if (mv[0] === "revealhand") {
 
         this.game.queue.splice(qe, 1);
-
-        let player = parseInt(mv[1]);
-        let force_reveal = 0;
-        if (mv[2] == 1) { force_reveal = 1; }
+        let force_reveal = (mv[2] === 1);
 
         if (this.game.player == parseInt(mv[1])) {
-          if (this.game.state.dealer == this.game.player && force_reveal == 0) {
-            if (this.game.deck[0].hand.length > 0) {
-              let cardarray = [this.game.deck[0].hand[0]];
+           if (force_reveal){
+              this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
+           }else{
+              let cardarray = [this.game.deck[0].hand[0]]; //Just One Card 
               this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(cardarray));
             }
-            this.endTurn();
-          } else {
-            if (this.game.deck[0].hand.length > 0) {
-              this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
-            }
-            this.endTurn();
-          }
+          this.endTurn();
         }
         return 0;
       }
 
-      if (mv[0] === "hand") {
+      if (mv[0] === "hand") { //Move data into shared public data structure
         let player = parseInt(mv[1]);
         let hand = JSON.parse(mv[2]);
         this.game.state.player_hands[player-1] = hand;
         this.game.queue.splice(qe, 1);
-        return 1;
+        return 0;
       }
 
 
@@ -584,78 +500,63 @@ console.log("processing: " + mv[0]);
         this.game.queue.push("newround");
 
         //
-        // decide who wins
+        // decide who wins and loses
         //
         let number_of_winners = 0;
-        let dealer_wins = 0;
-
+        let dealerWins = false;  
+        let total_losses = 0;
+        let myLoss = 0;
         for (let i = 0; i < this.game.state.player_winner.length; i++) {
-          if (this.game.state.player_winner[i] == 1) {
+          if (this.game.state.player_winner[i] == 1) { //Winner!
             number_of_winners++;
             if ((i+1) == this.game.state.dealer) {
               dealer_wins = 1;
             }
           }
         }
-
-        //
-        // calculate losses
-        //
-        let total_losses = 0;
-        let my_losses = 0;
-        for (let i = 0; i < this.game.state.player_winner.length; i++) {
-          if (this.game.state.player_winner[i] == 0) {
-            let losses = this.game.state.player_wager[i] * this.game.state.player_payout[i];
-            my_losses = losses;
-            this.game.state.player_credit[i] -= Math.floor(losses);
-          } else {
-
-//
-//
-// HACK CHECK TIES DEALER, ETC.
-//
-            let gains = this.game.state.player_wager[i] * this.game.state.player_payout[i];
-            this.game.state.player_credit[i] += Math.floor(gains);
-          }
-        }
-
-
-
-        //
-        // manage payout
-        //
-        if (number_of_winners == 0) {
-          this.game.queue.push("ACKNOWLEDGE\teveryone loses");
-        } else {
-          if (this.game.state.player_winner[this.game.player-1] == 1) {
-            if (this.game.player == this.game.state.dealer) {
-              if (this.game.state.player_winner[this.game.player-1] == 1) {
-                if (number_of_winners > 1) {
-                  this.game.queue.push("ACKNOWLEDGE\tyou tie");
-                } else {
-                  this.game.queue.push("ACKNOWLEDGE\tyou win");
-                }
-              } else {
-                if (number_of_winners > 1) {
-                  this.game.queue.push("ACKNOWLEDGE\tyou lose, badly");
-                } else {
-                  this.game.queue.push("ACKNOWLEDGE\tyou lose");
-                }
-              }
-            } else {
-              if (this.game.state.player_winner[this.game.player-1] == 1 && this.game.state.player_winner[this.game.state.dealer-1] == 1) {
-                this.game.queue.push("ACKNOWLEDGE\tyou tie");
-              } else {
-                this.game.queue.push("ACKNOWLEDGE\tyou win");
+        //Only take chips if there is a winner
+        if (number_of_winners>0){ 
+          for (let i = 0; i < this.game.state.player_winner.length; i++) {
+            if (this.game.state.player_winner[i] == 0) { //Loser!
+                myLoss = this.game.state.player_wager[i];
+                total_losses += myLoss;
+                this.game.state.player_credit[i] -= Math.ceil(myLoss);
               }
             }
-          } else {
-            this.game.queue.push("ACKNOWLEDGE\tyou lose");
-          }
         }
+        // Manage Payout
+        let payout = total_losses/number_of_winners;
+        if (dealerWins){ //If dealer among winners, dealer takes pot
+          this.game.state.player_credit[this.game.state.dealer-1] += total_losses;
+        }else{ //Winners split the pot
+            for (let i = 0; i < this.game.state.player_winner.length; i++) {
+              if (this.game.state.player_winner[i] == 1) { //Winner!
+                this.game.state.player_credit[i] += Math.floor(total_losses/number_of_winners); 
+              }
+            }  
+        }
+        
+        let myWinningStatus = this.game.state.player_winner[this.game.player-1];
+        if (myWinningStatus == 1) { //I win
+              if (number_of_winners > 1) {
+                if (dealerWins){
+                  this.game.queue.push(`ACKNOWLEDGE\tYou push the dealer and keep your bet`);
+                }else{
+                  this.game.queue.push(`ACKNOWLEDGE\tYou Tie For Victory and Win ${payout}`);  
+                }
+              } else {
+                this.game.queue.push(`ACKNOWLEDGE\tYou Win it All -- ${payout}`);
+              }
+          } else { //I lose
+              if (number_of_winners == 0) {
+                this.game.queue.push("ACKNOWLEDGE\tEveryone loses, it's a push! ");
+              } else {          
+                  this.game.queue.push(`ACKNOWLEDGE\tYou Lose Your Bet of ${myLoss}`);
+              }
+          }
 
 
-        return 1;
+        return 0;
       }
 
 
@@ -679,8 +580,8 @@ console.log("processing: " + mv[0]);
 
     let blackjack_self = this;
 
-    this.displayBoard();
-    this.pickWinner();
+    //this.displayBoard();
+    //this.pickWinner(); Why do this before player acts?
 
     let array_of_cards = [];
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
@@ -690,7 +591,7 @@ console.log("processing: " + mv[0]);
     }
     my_total = this.scoreArrayOfCards(array_of_cards);
 
-    if (my_total > 21) {
+    if (my_total < 0) {
 
       let html = "";
       html += '<div class="menu-player">You have gone bust</div>';
@@ -704,9 +605,9 @@ console.log("processing: " + mv[0]);
 
       let html = "";
       if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
-        html += '<div class="menu-player">You are the dealer. Casino rules suggest hitting until 17:';
+        html += '<div class="menu-player">You are the dealer, your move:';
       } else {
-        html += '<div class="menu-player">Your move ';
+        html += '<div class="menu-player">Your move:';
       }
       html += '</div>';
       html += '<ul>';
@@ -718,31 +619,32 @@ console.log("processing: " + mv[0]);
       this.updateStatus(html, 1);
 
     }
-
+    
+    //blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
     this.lockInterface();
 
     $('.menu_option').off();
     $('.menu_option').on('click', function () {
-
+      blackjack_self.addMove(`revealhand\t${blackjack_self.game.player}\t1`);
       $('.menu_option').off();
       blackjack_self.unlockInterface();
       let choice = $(this).attr("id");
 
       if (choice === "hit") {
         blackjack_self.addMove("hit\t" + blackjack_self.game.player);
-        if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
-          blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
-        } 
-        blackjack_self.endTurn();
+        //if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
+        //  blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
+        //} 
+        //blackjack_self.endTurn();
         return 0;
       }
 
       if (choice === "bust") {
         blackjack_self.addMove("RESOLVE\t"+blackjack_self.app.wallet.returnPublicKey());
         blackjack_self.addMove("bust\t" + blackjack_self.game.player);
-        if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
-          blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
-        } 
+        //if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
+        //  blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
+        //} 
         blackjack_self.endTurn();
         return 0;
       }
@@ -750,9 +652,9 @@ console.log("processing: " + mv[0]);
       if (choice === "stand") {
         blackjack_self.addMove("RESOLVE\t"+blackjack_self.app.wallet.returnPublicKey());
         blackjack_self.addMove("stand\t" + blackjack_self.game.player);
-        if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
-          blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
-        } 
+        //if (blackjack_self.game.player == blackjack_self.game.state.dealer) {
+        //  blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
+        //} 
         blackjack_self.endTurn();
         return 0;
       }
@@ -776,8 +678,10 @@ console.log("processing: " + mv[0]);
   }
 
 
-
-  returnState(num_of_players) {
+  /*
+  Initalize and return state object for tracking game specific data
+  */
+  returnInitialState(num_of_players) {
 
     let state = {};
 
@@ -790,12 +694,11 @@ console.log("processing: " + mv[0]);
     state.player_hands = [];
     state.player_total = [];
     state.player_winner = [];
-    state.dealer = 1;                // player 1 starts as the dealer
+    state.dealer = 0;            
 
 
     for (let i = 0; i < num_of_players; i++) {
-      state.player_credit[i] = 1000;
-      if (this.game.options.stake != undefined) { state.player_credit[i] = parseInt(this.game.options.stake); }
+      state.player_credit[i] = this.game.options.stake; 
       state.player_names[i] = this.app.keys.returnIdentifierByPublicKey(this.game.players[i], 1);
       if (state.player_names[i].indexOf("@") > 0) {
         state.player_names[i] = state.player_names[i].substring(0, state.player_names[i].indexOf("@"));
@@ -824,66 +727,18 @@ console.log("processing: " + mv[0]);
   returnDeck() {
 
     var deck = {};
-
-    deck['1'] = { name: "S1.png" }
-    deck['2'] = { name: "S2.png" }
-    deck['3'] = { name: "S3.png" }
-    deck['4'] = { name: "S4.png" }
-    deck['5'] = { name: "S5.png" }
-    deck['6'] = { name: "S6.png" }
-    deck['7'] = { name: "S7.png" }
-    deck['8'] = { name: "S8.png" }
-    deck['9'] = { name: "S9.png" }
-    deck['10'] = { name: "S10.png" }
-    deck['11'] = { name: "S11.png" }
-    deck['12'] = { name: "S12.png" }
-    deck['13'] = { name: "S13.png" }
-    deck['14'] = { name: "C1.png" }
-    deck['15'] = { name: "C2.png" }
-    deck['16'] = { name: "C3.png" }
-    deck['17'] = { name: "C4.png" }
-    deck['18'] = { name: "C5.png" }
-    deck['19'] = { name: "C6.png" }
-    deck['20'] = { name: "C7.png" }
-    deck['21'] = { name: "C8.png" }
-    deck['22'] = { name: "C9.png" }
-    deck['23'] = { name: "C10.png" }
-    deck['24'] = { name: "C11.png" }
-    deck['25'] = { name: "C12.png" }
-    deck['26'] = { name: "C13.png" }
-    deck['27'] = { name: "H1.png" }
-    deck['28'] = { name: "H2.png" }
-    deck['29'] = { name: "H3.png" }
-    deck['30'] = { name: "H4.png" }
-    deck['31'] = { name: "H5.png" }
-    deck['32'] = { name: "H6.png" }
-    deck['33'] = { name: "H7.png" }
-    deck['34'] = { name: "H8.png" }
-    deck['35'] = { name: "H9.png" }
-    deck['36'] = { name: "H10.png" }
-    deck['37'] = { name: "H11.png" }
-    deck['38'] = { name: "H12.png" }
-    deck['39'] = { name: "H13.png" }
-    deck['40'] = { name: "D1.png" }
-    deck['41'] = { name: "D2.png" }
-    deck['42'] = { name: "D3.png" }
-    deck['43'] = { name: "D4.png" }
-    deck['44'] = { name: "D5.png" }
-    deck['45'] = { name: "D6.png" }
-    deck['46'] = { name: "D7.png" }
-    deck['47'] = { name: "D8.png" }
-    deck['48'] = { name: "D9.png" }
-    deck['49'] = { name: "D10.png" }
-    deck['50'] = { name: "D11.png" }
-    deck['51'] = { name: "D12.png" }
-    deck['52'] = { name: "D13.png" }
-
+    var suits = ["S","C","H","D"];
+    let indexCt = 1;
+    for (let i = 0; i<4; i++){
+      for (let j = 1; j<=13; j++){
+        let cardImg = `${suits[i]}${j}.png`;
+        deck[indexCt.toString()] = { name: cardImg};
+        indexCt++;
+      }
+    }
     return deck;
 
   }
-
-
-
 
   updatePlayerLog(player, msg) {
 
@@ -910,7 +765,7 @@ console.log("processing: " + mv[0]);
 
   }
 
-  returnViewBoxArray() {
+  returnViewBoxArray() { //Does this.game.players.length decrement when player eliminated
 
     let player_box = [];
 
@@ -923,13 +778,16 @@ console.log("processing: " + mv[0]);
 
   }
 
+  /*
+  Player should see their hand in position 1 of player_box, other players are even spaced around "poker table"
+  */
   displayPlayers() {
 
     if (this.browser_active == 0) { return; }
 
     let player_box = "";
 
-    var prank = "";
+    var prank = 0;
     if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
       player_box = this.returnPlayersBoxArray();
       prank = this.game.players.indexOf(this.app.wallet.returnPublicKey());
@@ -939,7 +797,7 @@ console.log("processing: " + mv[0]);
       player_box = this.returnViewBoxArray();
     }
 
-    for (let j = 2; j < 7; j++) {
+    for (let j = 2; j < 7; j++) { //Empty chairs are in DOM, but dynamically hidden/displayed
       let boxobj = document.querySelector("#player-info-" + j);
       if (!player_box.includes(j)) {
         boxobj.style.display = "none";
@@ -948,12 +806,10 @@ console.log("processing: " + mv[0]);
       }
     }
 
-console.log("YES");
+    console.log(`Displaying ${this.game.players.length} Players`,"Dealer:",this.game.state.dealer);
+    console.log(this.game.state.player_hands);
 
     for (let i = 0; i < this.game.players.length; i++) {
-
-console.log(i);
-
       let seat = i - prank;
       if (seat < 0) { seat += this.game.players.length }
 
@@ -963,47 +819,43 @@ console.log(i);
       let newhtml = '';
       let player_hand_shown = 0;
 
+
       if (this.game.state.player_hands.length > 0) {
-        if (this.game.state.player_hands[i] != null) {
-          if (this.game.state.player_hands[i].length > 0) {
+        if (this.game.state.player_hands[i] /*&& this.game.state.player_hands[i].length > 0*/) {
             player_hand_shown = 1;
             newhtml = `<div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">`;
-            if (this.game.state.player_hands[i] != null) {
-              for (let z = 0; z < this.game.state.player_hands[i].length; z++) {
-                let card = this.game.deck[0].cards[this.game.state.player_hands[i][z]];
-                newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
-              }
-              if (this.game.state.player_hands[i].length == 1 && this.game.state.dealer == ([i+1])) {
-                    newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
-              }
+            if (this.game.state.player_hands[i].length < 2) { //One Hidden Card
+                newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
             }
-            
-            newhtml += `
-              </div>
+            for (let z = 0; z < this.game.state.player_hands[i].length; z++) {
+              let card = this.game.deck[0].cards[this.game.state.player_hands[i][z]];
+              newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
+            }
+       
+           newhtml += `</div>
               <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-              <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+              <div class="player-info-chips" id="player-info-chips-${i + 1}">Chips: ${this.game.state.player_credit[i]} SAITO</div> 
            `;
-          }
         }
       }
-      if (player_hand_shown == 0) {
-console.log("is the player hand shown?");
+      if (player_hand_shown == 0) { 
+        console.log(`player ${i} hand not shown`); 
         newhtml = `
           <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
             <img class="card" src="${this.card_img_dir}/red_back.png">
             <img class="card" src="${this.card_img_dir}/red_back.png">
           </div>
           <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-          <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+          <div class="player-info-chips" id="player-info-chips-${i + 1}">Chis: ${this.game.state.player_credit[i]} SAITO</div> 
         `;
-console.log("this is my hand");
+          /*console.log("this is my hand");
           let cardfan_backs = `
               <img class="card" src="${this.card_img_dir}/red_back.png">
               <img class="card" src="${this.card_img_dir}/red_back.png">
           `;
           this.cardfan.render(this.app, this, cardfan_backs);
           this.cardfan.attachEvents(this.app, this);
-
+          */
       }
 
       boxobj.querySelector(".info").innerHTML = newhtml;
@@ -1022,6 +874,8 @@ console.log("this is my hand");
 
 
   displayHand() {
+    console.log(this.game.deck);
+    console.log(this.game.deck[0].hand);
     this.cardfan.render(this.app, this);
     this.cardfan.attachEvents(this.app, this);
   }
@@ -1054,7 +908,7 @@ console.log("this is my hand");
 
 
 
-
+  //Return -1 for bust
   scoreArrayOfCards(array_of_cards) {
 
     let total = 0;
@@ -1079,6 +933,7 @@ console.log("this is my hand");
       if ((total+10) <= 21) { total += 10; }
     }
 
+    if (total> 21) return -1;
     return total;
   }
 
@@ -1089,6 +944,7 @@ console.log("this is my hand");
     // score players
     //
     this.game.state.player_total = [];
+    let maxScore = 0;
     for (let i = 0; i < this.game.state.player_hands.length; i++) {
       let array_of_cards = [];
       if (this.game.state.player_hands[i] != null) {
@@ -1101,19 +957,14 @@ console.log("this is my hand");
       }
       let handscore = this.scoreArrayOfCards(array_of_cards);
       this.game.state.player_total.push(handscore);
-      if (this.game.state.player_total[i] == 21 && this.game.state.player_total.length == 2) {
+      maxScore = Math.max(maxScore, handscore);
+      /*if (this.game.state.player_total[i] == 21 && this.game.state.player_total.length == 2) {
         this.game.state.player_payout[i] = 1.5;
-      }
+      }*/
     }
 
-    let max_score = 0;
     for (let i = 0; i < this.game.state.player_total.length; i++) {
-      if (this.game.state.player_total[i] > max_score && this.game.state.player_total[i] <= 21) {
-        max_score = this.game.state.player_total[i];
-      }
-    }
-    for (let i = 0; i < this.game.state.player_total.length; i++) {
-      if (this.game.state.player_total[i] == max_score) {
+      if (this.game.state.player_total[i] == maxScore) {
         this.game.state.player_winner[i] = 1;
       } else {
         this.game.state.player_winner[i] = 0;
@@ -1186,30 +1037,27 @@ console.log("this is my hand");
   updateStatus(str, hide_info=0) {
 
     try {
-    if (hide_info == 0) {
-      document.querySelector(".p1 > .info").style.display = "block";
-    } else {
-      document.querySelector(".p1 > .info").style.display = "none";
-    }
-
-    if (this.lock_interface == 1) { return; }
-
-    this.game.status = str;
-
-    if (this.browser_active == 1) {
-      let status_obj = document.querySelector(".status");
-      if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
-        status_obj.innerHTML = str;
+      if (hide_info == 0) {
+        document.querySelector(".p1 > .info").style.display = "block";
+      } else {
+        document.querySelector(".p1 > .info").style.display = "none";
       }
-    }
+
+      if (this.lock_interface == 1) { return; }
+
+      this.game.status = str;
+
+      if (this.browser_active == 1) {
+        let status_obj = document.querySelector(".status");
+        if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
+          status_obj.innerHTML = str;
+        }
+      }
     } catch (err) { 
-console.log("ERR: " + err);
+      console.log("ERR: " + err);
     }
 
   }
-
-
-
 
 }
 
