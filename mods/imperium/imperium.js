@@ -10714,13 +10714,50 @@ console.log("Active Agenda: " + active_agenda);
       id : "game-howto",
       class : "game-howto",
       callback : function(app, game_mod) {
+        game_mod.menu.showSubMenu("game-howto");
+      }
+    });
+    this.menu.addSubMenuOption("game-howto", {
+      text : "Basic",
+      id : "game-rules",
+      class : "game-basic-rules",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleHowToPlayMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-howto", {
+      text : "Movement",
+      id : "game-basic-rules",
+      class : "game-basic-rules",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleHowToPlayMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-howto", {
+      text : "Combat",
+      id : "game-combat",
+      class : "game-combat",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.handleHowToPlayMenuItem();
+      }
+    });
+    this.menu.addSubMenuOption("game-howto", {
+      text : "Factions",
+      id : "game-factions",
+      class : "game-factions",
+      callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
 	game_mod.handleHowToPlayMenuItem();
       }
     });
 
+
+
     this.menu.addMenuOption({
-      text : "Cards",
+      text : "Info",
       id : "game-cards",
       class : "game-cards",
       callback : function(app, game_mod) {
@@ -10728,7 +10765,7 @@ console.log("Active Agenda: " + active_agenda);
       }
     });
     this.menu.addSubMenuOption("game-cards", {
-      text : "Strategy",
+      text : "Strategy Cards",
       id : "game-strategy",
       class : "game-strategy",
       callback : function(app, game_mod) {
@@ -10737,7 +10774,7 @@ console.log("Active Agenda: " + active_agenda);
       }
     });
     this.menu.addSubMenuOption("game-cards", {
-      text : "Tech",
+      text : "Tech Tree",
       id : "game-tech",
       class : "game-tech",
       callback : function(app, game_mod) {
@@ -10746,7 +10783,7 @@ console.log("Active Agenda: " + active_agenda);
       }
     });
     this.menu.addSubMenuOption("game-cards", {
-      text : "Units",
+      text : "Unit Info",
       id : "game-units",
       class : "game-units",
       callback : function(app, game_mod) {
@@ -29514,7 +29551,7 @@ returnNewObjectivesOverlay() {
 
   if (this.game.state.round == 1) {
     html += `
-      <div class="unit-description"><div style="margin-left:auto;margin-right:auto;max-width:80%;padding:10px;background-color:yellow;color:black;font-size:1.4em;line-height:1.5em">New to Red Imperium? The CARRIER is your most important starting ship. Move it into a neighbouring sector and invade planets to gain their resources and influence.</div>.</div>
+      <div class="unit-description"><div style="margin-left:auto;margin-right:auto;max-width:80%;padding:10px;background-color:yellow;color:black;font-size:1.4em;line-height:1.5em">New to Red Imperium? The CARRIER is your most important starting ship. Move it into a neighbouring sector first turn and invade planets to gain their resources and influence.</div>.</div>
     `;
   }
 

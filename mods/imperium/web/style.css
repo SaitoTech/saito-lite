@@ -1,3 +1,8 @@
+
+.game-menu ul li {
+    width: 160px;
+}
+
 @font-face {
   font-family: 'bank-gothic';
   src: url('./font/BankGothicRegular.eot');
