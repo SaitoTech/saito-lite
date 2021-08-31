@@ -386,6 +386,10 @@ section {
 */
 .sectionWrapperArcade{
   width: 100%;
+<<<<<<< HEAD
+=======
+  min-height: 80vh;
+>>>>>>> dabfcd147639c85b3426afb53e4c5bb3a8bdb0ea
   background-image: url("/website/img/gameboard.jpg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -465,8 +469,6 @@ section {
   max-width: 100%;
   max-height: 100%;
 
-  /*margin: 3rem auto;
-  max-width: 100%;*/
 }
 
 /* Part three */
