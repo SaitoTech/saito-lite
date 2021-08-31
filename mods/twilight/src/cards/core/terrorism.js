@@ -15,7 +15,7 @@
         let available_cards = this.game.deck[0].hand.length;
         let cards_for_select = [];
         for (let z = 0; z < this.game.deck[0].hand.length; z++) {
-          if (this.game.deck[0].hand[i] === "china" || this.game.deck[0].hand[i] == this.game.state.headline_opponent_card || this.game.deck[0].hand[i] == this.game.state.headline_card) { cards_to_reveal--; } else {
+          if (this.game.deck[0].hand[z] === "china" || this.game.deck[0].hand[z] == this.game.state.headline_opponent_card || this.game.deck[0].hand[z] == this.game.state.headline_card) {} else {
             cards_for_select.push(this.game.deck[0].hand[z]);
           }
         }
