@@ -50,22 +50,66 @@ try {
 }
 
 
+returnFirstTurnOverlay() {
+  let imperium_self = this;
+  let html = `
+    <div class="how_to_play_overlay" id="how_to_play_overlay">
+
+<h2>Your First Turn:</h2>
+
+<p></p>
+
+<img src="/imperium/img/firstturn.png" style="width:400px;float:left;padding-right:15px;padding-bottom:5px;" />
+
+Your home world is bordered in your color. In Round 1, you can only activate 
+sectors you can reach. To see ship movement, click on UNITS in the CARDS menu.
+This will also show you build costs and strength in combat.
+
+<p style="margin-bottom:10px"></p>
+
+First turn? Try moving a CARRIER into a sector adjacent to your homeworld. 
+Bring INFANTRY so your can INVADE a planet in that sector after your fleet has
+moved. The <span class="resources_box">resources</span> and <span class="influence_box">influence</span>
+ of the planets you conquer will be available to spend Round 2.
+
+    </div>
+
+    <style type="text/css">
+.resources_box {
+ background-color:black;padding:4px;border:1px solid #fff;
+}
+.influence_box {
+  background-color:orange;padding:4px;border:1px solid #fff;
+}
+.how_to_play_overlay {
+  padding:30px;
+  width: 800px;
+  max-width: 80vw;
+  max-height: 90vh;
+  font-family: 'orbitron-medium', helvetica, arial;
+  line-height: 1.7em;
+  font-size: 1.1em;
+  background-image: url('/imperium/img/starscape-background4.jpg');
+  background-size: cover;
+  color: white;
+  overflow-y: scroll;
+  font-size:1.4em;
+}
+    </style>
+  `;
+
+  return html;
+}
+
 returnHowToPlayOverlay() {
   let imperium_self = this;
   let html = `
 
     <div class="how_to_play_overlay" id="how_to_play_overlay">
 
-Players start with 3 command tokens, 2 strategy tokens, and 3 fleet supply:
+<h2>Every turn players may:</h2>
 
-<p></p>
-
-<img src="/imperium/img/player_tokens.png" class="demo_player_tokens" />
-
-<p></p>
-
-Every turn players may:
-
+<div style="padding-left:30px">
   <ol class="demo_ordered_list">
     <li>Spend a command token to activate a sector</li>
       <ul style="margin-left:20px">
@@ -80,47 +124,55 @@ Every turn players may:
 
 <p></p>
 
-Planets give you <span class="resources_box">resources</span> and <span class="influence_box">influence</span>.
+Conquer planets to gain resources and influence:
 
 <p></p>
+
+</div>
 
 <div style="padding-left:30px;padding-right:30px;">
 <div class="how_to_play_resources_entry">
-<b>RESOURCES:</b>
+<b><span class="resources_box">RESOURCES</span></b>
 <p></p>
-use resources to build units and research technology.
+build units and research technology.
 </div>
 
 <div class="how_to_play_resources_entry">
-<b>INFLUENCE:</b>
+<b><span class="influence_box">INFLUENCE</span></b>
 <p></p>
-use influence to vote on agendas and buy command tokens.
+buy command tokens and vote on laws.
 </div>
 </div>
 
 <h2 style="clear:both;margin-top:35px;">Faction Abilities:</h2>
 
+<div style="padding-left: 30px">
+
 <img src="/imperium/img/factions/faction_dashboard.png" class="demo_planet_card" />
 
 <p></p>
 
-Your faction dashboard shows your total <span class="resources_box">resources</span> and <span class="influence_box">influence</span>. Also shown are trade goods and commodities:
+Every faction has special abilities. Your dashboard shows your total <span class="resources_box">resources</span> and <span class="influence_box">influence</span> and trade goods and commodities:
+
+</div>
 
 <div style="padding-left:30px;padding-right:30px;">
 <div class="how_to_play_resources_entry">
 <b>TRADE GOODS:</b>
 <p></p>
-trade goods can be spent instead of resources or influence.
+can be used instead of resources or influence.
 </div>
 
 <div class="how_to_play_resources_entry">
 <b>COMMODITIES:</b>
 <p></p>
-commodities are turned into trade goods by trading them with others.
+turn into trade goods when you trade them away
 </div>
 </div>
 
-Click on any faction for a detailed sheet showing faction tech, planets and special abilities. Every faction is different. 
+<div style="padding-left: 30px">
+  Learn more about how your ships move and fight by checking out the Units section in the Cards menu. And have fun!
+</div>
 
 	</div>
       </div>
@@ -165,7 +217,7 @@ Click on any faction for a detailed sheet showing faction tech, planets and spec
   background-size: cover;
   color: white;
   overflow-y: scroll;
-  font-size: 1.1em;
+  font-size:1.3em;
 }
 .how_to_play_resources_entry {
   padding-top: 20px;
@@ -175,6 +227,8 @@ Click on any faction for a detailed sheet showing faction tech, planets and spec
 
   return html;
 }
+
+
 
 
 returnNewSecretObjectiveOverlay(card) {
@@ -873,9 +927,17 @@ returnNewObjectivesOverlay() {
       `;
     }
   }
-
   html += `
       </div>
+  `;
+
+  if (this.game.state.round == 1) {
+    html += `
+      <div class="unit-description"><div style="margin-left:auto;margin-right:auto;max-width:80%;padding:10px;background-color:yellow;color:black;font-size:1.4em;line-height:1.5em">New to Red Imperium? The CARRIER is your most important starting ship. Move it into a neighbouring sector first turn and invade planets to gain their resources and influence.</div>.</div>
+    `;
+  }
+
+  html += `
       <div id="close-objectives-btn" class="button" style="">CONTINUE</div>
     </div>
   `;

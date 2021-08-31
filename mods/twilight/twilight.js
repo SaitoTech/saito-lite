@@ -345,6 +345,10 @@ class Twilight extends GameTemplate {
   handleDisplayMenu() {
 
     let twilight_self = this;
+
+    let use_clock_html = '';
+    if (twilight_self.useClock == 1) { use_clock_html = '<li class="menu-item" id="move_clock">Move Clock</li>'; }
+
     let user_message = `
       <div class="game-overlay-menu" id="game-overlay-menu">
         <div>DISPLAY MODE:</div>
@@ -352,6 +356,7 @@ class Twilight extends GameTemplate {
           <li class="menu-item" id="english">English</li>
           <li class="menu-item" id="chinese">简体中文</li>
           <li class="menu-item" id="enable_observer_mode">Observer Mode</li>
+          ${use_clock_html}
         </ul>
       </div>`;
 //          <li class="menu-item" id="text">Text Cards</li>
@@ -361,6 +366,11 @@ class Twilight extends GameTemplate {
 
     $('.menu-item').on('click', function() {
       let action2 = $(this).attr("id");
+
+      if (action2 === "move_clock") {
+	twilight_self.clock.moveClock();
+	return;
+      }
 
       if (action2 === "enable_observer_mode") {
         twilight_self.game.saveGameState = 1;
@@ -792,6 +802,7 @@ console.log("\n\n\n\n");
       this.game.options.handshake = 1;
       this.game.options.rustinredsquare = 1;
       this.game.options.poliovaccine = 1;
+      this.game.options.communistrevolution = 1;
 
       this.game.options.deck = "endofhistory";
       let a = this.returnEarlyWarCards();
@@ -1030,13 +1041,13 @@ try {
 	        // [1] should be creator 
 		if (observer == 0) {
                   if (this.game.players[1] === this.app.wallet.returnPublicKey()) {
-                    if (this.game.options.player1 == "us") {
+                    if (this.game.options.player1 === "us") {
                       this.game.player = 2;
                     } else {
                       this.game.player = 1;
                     }
                   } else {
-                    if (this.game.options.player1 == "us") {
+                    if (this.game.options.player1 === "us") {
                       this.game.player = 1;
                     } else {
                       this.game.player = 2;
@@ -2399,7 +2410,7 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["containment","allende","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
+              this.game.deck[0].hand = ["containment","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
             } else {
               this.game.deck[0].hand = ["quagmire", "redscare", "missileenvy", "brezhnev", "opec", "grainsales","africa", "cubanmissile","china"];
             }
@@ -4485,7 +4496,7 @@ this.startClock();
       if (card === "skipturn") {
         twilight_self.hideCard(card);
         twilight_self.addMove("resolve\tplay");
-        twilight_self.addMove("notify\t"+player+" has no cards playable.");
+        twilight_self.addMove("notify\t"+player.toUpperCase()+" has no cards playable.");
         twilight_self.endTurn();
         return 0;
       }
@@ -6262,7 +6273,6 @@ this.startClock();
 	}
       }
     }
-
 
     if (winning > 0) {
 
@@ -9868,7 +9878,11 @@ this.startClock();
         if (options[index] == "random") {
           new_options[index] = options[index];
         } else {
-          new_options[index] = options[index] == "ussr" ? "us" : "ussr";
+	  if (options[index] === "ussr") {
+	    new_options[index] = "ussr";
+	  } else {
+	    new_options[index] = "us";
+	  }
         }
       } else {
         new_options[index] = options[index]
@@ -10507,8 +10521,8 @@ this.startClock();
                   }
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" succeeded.");
-                twilight_self.addMove("notify\tBrush War modified: " + (dieroll-modify));
-                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll));
+                twilight_self.addMove("notify\tBrush War modified: " + (dieroll));
+                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll+modify));
                 twilight_self.endTurn();
 
               } else {
@@ -10518,8 +10532,8 @@ this.startClock();
                   twilight_self.addMove("milops\tussr\t3");
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" failed.");
-                twilight_self.addMove("notify\tBrush War modified: " + (dieroll-modify));
-                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll));
+                twilight_self.addMove("notify\tBrush War modified: " + (dieroll));
+                twilight_self.addMove("notify\tBrush War rolls: "+ (dieroll+modify));
                 twilight_self.endTurn();
               }
             });
@@ -14299,7 +14313,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
         let available_cards = this.game.deck[0].hand.length;
         let cards_for_select = [];
         for (let z = 0; z < this.game.deck[0].hand.length; z++) {
-          if (this.game.deck[0].hand[i] === "china" || this.game.deck[0].hand[i] == this.game.state.headline_opponent_card || this.game.deck[0].hand[i] == this.game.state.headline_card) { cards_to_reveal--; } else {
+          if (this.game.deck[0].hand[z] === "china" || this.game.deck[0].hand[z] == this.game.state.headline_opponent_card || this.game.deck[0].hand[z] == this.game.state.headline_card) {} else {
             cards_for_select.push(this.game.deck[0].hand[z]);
           }
         }
@@ -15699,6 +15713,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
 console.log("communistrevolution ! " + me + " -- " + player);
 
       if (me == "us") {
+        let burned = this.rollDice(6);
 	return 0;
       }
       if (me == "ussr") {
@@ -15733,7 +15748,7 @@ console.log(twilight_self.countries[c]);
 	    twilight_self.addMove("SETVAR\tcountries\t"+c+"\t"+"control"+"\t"+stability);
 	    twilight_self.addMove("SETVAR\tstate\tlimit_ignoredefcon\t"+0);
 	    twilight_self.addMove("SETVAR\tstate\tlower_defcon_on_coup\t"+1);
-	    twilight_self.addMove("coup\tplayer\t"+c+"\t"+twilight_self.modifyOps(2));
+	    twilight_self.addMove("coup\tussr\t"+c+"\t"+twilight_self.modifyOps(2));
 	    twilight_self.addMove("SETVAR\tstate\tlower_defcon_on_coup\t"+0);
 	    twilight_self.addMove("SETVAR\tstate\tlimit_ignoredefcon\t"+1);
 	    twilight_self.addMove("SETVAR\tcountries\t"+c+"\t"+"control"+"\t"+modified_stability);

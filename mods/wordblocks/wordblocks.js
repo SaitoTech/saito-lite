@@ -34,7 +34,7 @@ class Wordblocks extends GameTemplate {
     this.letters = {};
     this.moves = [];
     this.firstmove = 1;
-    this.last_played_word = { player: '', finalword: '', score: '' };
+    this.last_played_word = {};
 
     return this;
 
@@ -85,6 +85,9 @@ class Wordblocks extends GameTemplate {
 
   }
 
+
+
+
   initializeHTML(app) {
 
     this.hud.mode = 0; // square
@@ -94,7 +97,14 @@ class Wordblocks extends GameTemplate {
       mod.respondTo('chat-manager').render(this.app, this);
     });
 
+    this.menu.addMenuOption({
+      text: "Player"+this.game.player,
+      id: "playerno",
+      class: "playerno",
+      callback : function(app, game_mod){
 
+      }
+    });
     this.menu.addMenuOption({
       text : "Game",
       id : "game-game",
@@ -104,6 +114,18 @@ class Wordblocks extends GameTemplate {
       }
     });
     this.menu.addSubMenuOption("game-game", {
+      text : "How to Play",
+      id : "game-intro",
+      class : "game-intro",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnRulesOverlay());
+      }
+    });
+
+    //toggleLog causes an error because game-log is not robust 
+    //Do we even need this? What does GameLog do?
+    /*this.menu.addSubMenuOption("game-game", {
       text : "Log",
       id : "game-log",
       class : "game-log",
@@ -111,7 +133,7 @@ class Wordblocks extends GameTemplate {
         game_mod.menu.hideSubMenus();
         game_mod.log.toggleLog();
       }
-    });
+    });*/
     this.menu.addSubMenuOption("game-game", {
       text : "Stats",
       id : "game-stats",
@@ -222,41 +244,65 @@ class Wordblocks extends GameTemplate {
   }
 
 
+  returnRulesOverlay() {
+
+    let overlay_html = `<div class="intro">
+      <h1>Welcome to Wordblocks</h1>
+      <p>Game play is similar to the classic crossword puzzle boardgame. Players take turns spelling words using the seven letters in their tile rack and available space on the game board. The game ends when one player finishes all the letters in their rack and there are no remaining tiles to draw.</p>
+      <p>Players may discard any number of tiles from their rack in lieu of playing a word.</p>
+      <h2>Scoring</h2>
+      <p>Each letter is worth the number of points indicated on the tile. The score for the word is the sum of point values of its letters, which may be affected by playing the word over bonus spaces on the board. </p>
+      <p>If you use all 7 tiles in one play, you receive 10 additional points to the letter score and a +1 multiple on the overall word score.</p>
+      </div>`;
+    return overlay_html;
+    
+
+  }
+
+  returnMath(play){
+    let sum = 0;
+    let html = `<div class="score-overlay"><table>
+              <thead><tr><td>Word</td><td>Calculation</td><td>Points</td></tr></thead><tbody>`;
+    for (let word of play){
+      html += `<tr><td>${word.word}</td><td>${word.math}</td><td>${word.score}</td></tr>`;
+      sum += word.score;
+    }
+
+    html += `</tbody><tfoot><tr><td colspan="3"><hr></td></tr><tr><td>Total:</td><td></td><td>${sum}</td></tr></tfoot></table></div>`;
+    return html;
+  }
+
+
 
   returnStatsOverlay() {
 
-    let html = '';
-
-    html += '<div class="stats-overlay">';
-    html += '<table cellspacing="10px" rowspacing="10px">';
-    html += '<tr>';
+    let html = `<div class="stats-overlay"><table cellspacing="10px" rowspacing="10px"><tr><th>Round</th>`;
     for (let i = 0; i < this.game.opponents.length+1; i++) {
-      html += `<td>Player ${(i+1)}</td>`;
+      html += `<th colspan="2">Player ${(i+1)}</th>`;
     }
-    html += '</tr>';
 
-    html += '<tr>';
-    let total_score = [];
-    for (let i = 0; i < this.game.opponents.length+1; i++) {
-      total_score.push(0);
-      let words_scored_html = '<table>';
-      for (let z = 0; z < this.game.words_played[i].length; z++) {
+    let totals = new Array(this.game.opponents.length+1); //Each players total...
+    totals.fill(0);
+    console.log(this.game.opponents);
+    for (let z = 0; z < this.game.words_played[0].length; z++) {
+      html += `</tr><tr><td>${z+1}</td>`;
+      for (let i = 0; i < this.game.opponents.length+1; i++) {
+        //totals.push(0); //Initialize
+        //let words_scored_html = '<table>';
         if (this.game.words_played[i][z] != undefined) {
-	  words_scored_html += '<tr><td>' + this.game.words_played[i][z].word + '</td><td>' + this.game.words_played[i][z].score + '</td></tr>';
-	  total_score[i] += this.game.words_played[i][z].score;
+	         html += '<td>' + this.game.words_played[i][z].word + '</td><td>' + this.game.words_played[i][z].score + '</td>';
+	         totals[i] += this.game.words_played[i][z].score;
         }
       }
-      words_scored_html += '</table>';
-      html += `<td>${words_scored_html}</td>`;
+        //words_scored_html += '</table>';
+      //html += `<td>${words_scored_html}</td>`;
     }
-    html += '</tr><tr>';
-    for (let i = 0; i < this.game.opponents.length+1; i++) {
-      html += `<td>${total_score[i]}</td>`;
+    console.log(totals);
+    html += '</tr><tr><td colspan="10"><hr></td></tr><tfoot><tr><td>Totals</td>';
+    for (let total of totals) {
+      html += `<td colspan="2">${total}</td>`;
     }
-    html += '</tr>';
-    html += '</table>';
-    html += '</div>';
-
+    html += '</tr></tfoot></table></div>';
     return html;
 
   }
@@ -401,7 +447,7 @@ class Wordblocks extends GameTemplate {
           </div>
         `;
       } else {
-if (this.game.player != 0) {
+      if (this.game.player != 0) {
         let opponent = this.game.opponents[op];
         // we do this here
         opponent = this.app.keys.returnIdentifierByPublicKey(opponent, true);
@@ -412,7 +458,7 @@ if (this.game.player != 0) {
             <span id="score_${this_player}"> ${this.game.score[i]} </span>
           </div>
         `;
-}
+      }
       }
     }
 
@@ -526,8 +572,17 @@ if (this.game.player != 0) {
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
       tile_html += this.returnTileHTML(this.game.deck[0].cards[this.game.deck[0].hand[i]].name);
     }
-    let { player, finalword, score } = this.last_played_word;
-    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${this.game.words_played[player-1][this.game.words_played[player-1].length-1].score} points (total: ${this.game.score[player-1]})`;
+    let last_move_html;
+      if (this.last_played_word.word) {
+        let playerName = (this.game.player === this.last_played_word.player) ? "You" : `Player ${this.last_played_word.player}`;
+        if (this.last_played_word.score>0){
+          last_move_html = `${playerName} played ${this.last_played_word.word} for: ${this.last_played_word.score} points (total: ${this.last_played_word.totalscore})`;
+        }else{
+          last_move_html = `${playerName} discarded the tiles <span style="text-transform:uppercase;">[${this.last_played_word.word.split("").join()}</span>]`;
+        }
+      }else{
+        last_move_html = '...' ;
+      } 
     let html =
       `
       <div class="hud-status-update-message">${status}</div>
@@ -547,10 +602,12 @@ if (this.game.player != 0) {
         </div>
       </div
     `;
-    this.updateStatus(html);
-    this.calculateScore();
-    this.enableEvents();
-    } catch (err) {}
+    this.updateStatus(html); //Attach html to #status box
+    this.calculateScore(); //Calculate player scores and insert into #score
+    this.enableEvents(); 
+    } catch (err) {
+      console.log(err);
+    }
   }
 
 
@@ -558,7 +615,7 @@ if (this.game.player != 0) {
   async calculateScore() {
     let html = "";
     let am_i_done = 0;
-    let players = 1;
+    let players = 1; 
 
     if (this.game.opponents != undefined) {
       players = this.game.opponents.length + 1;
@@ -645,15 +702,16 @@ if (this.game.player != 0) {
     let wordblocks_self = this;
 
     try {
-
+      //Discard Tiles
     $('.tosstiles').off();
     $('.tosstiles').on('click', async function () {
-      tiles = await sprompt("Which tiles do you want to discard? Tossed tiles count against your score:");
+      tiles = await sprompt("Which tiles do you want to discard?");
 
       if (tiles) {
         salert("Tossed: " + tiles);
         wordblocks_self.removeTilesFromHand(tiles);
-        wordblocks_self.addMove("turn\t" + wordblocks_self.game.player);
+        wordblocks_self.addMove("turn\t" + wordblocks_self.game.player + "\t"+tiles);
+        //
         let cards_needed = 7;
         cards_needed = cards_needed - wordblocks_self.game.deck[0].hand.length;
 
@@ -669,7 +727,7 @@ if (this.game.player != 0) {
         wordblocks_self.endTurn();
       }
     });
-
+    //Click on game board to place
     $('.slot').off();
     $('.slot').on('mousedown', function (e) {
       xpos = e.clientX;
@@ -745,13 +803,14 @@ if (this.game.player != 0) {
           $('.action').off();
           $('.tile-placement-controls').remove();
           wordblocks_self.updateStatusWithTiles("Click on the board to place a letter from that square, or <span class=\"link tosstiles\">discard tiles</span> if you cannot move.");
-          wordblocks_self.addEventsToBoard();
+          //wordblocks_self.addEventsToBoard();
           return;
         }
 
         word = await sprompt("Provide your word:");
 
         if (word) {
+          word = word.toUpperCase();
           //
           // reset board
           //
@@ -759,34 +818,35 @@ if (this.game.player != 0) {
           $('.status').html("Processing your turn.");
 
           //
-          // if entry is valid
+          // if entry is valid (position and letters available)
           //
           if (wordblocks_self.isEntryValid(word, orientation, x, y) == 1) {
             let myscore = 0;
             wordblocks_self.addWordToBoard(word, orientation, x, y);
-            myscore = wordblocks_self.scoreWord(word, wordblocks_self.game.player, orientation, x, y);
-  	    wordblocks_self.game.words_played[parseInt(wordblocks_self.game.player)-1].push({ word : word , score : myscore });
+            myscore = wordblocks_self.scorePlay(word, wordblocks_self.game.player, orientation, x, y);
+  	        
 
-            if (myscore <= 1) {
+            if (myscore <= 1) { //If not found in dictionary
               wordblocks_self.removeWordFromBoard(word, orientation, x, y);
               wordblocks_self.updateStatusWithTiles(
                 `Try again! Click on the board to place a letter from that square, or
                 <span class="link tosstiles">discard tiles</span> if you cannot move.`
               );
-              wordblocks_self.addEventsToBoard();
+              //wordblocks_self.addEventsToBoard();
             } else {
-              wordblocks_self.setBoard(word, orientation, x, y); 
-
-	      //
-              // place word on board
-              //
+              
+              wordblocks_self.game.words_played[parseInt(wordblocks_self.game.player)-1].push({ word : word , score : myscore });
               wordblocks_self.addMove("place\t" + word + "\t" + wordblocks_self.game.player + "\t" + x + "\t" + y + "\t" + orientation);
-	      //
+	            //
               // discard tiles
-              //
-              wordblocks_self.discardTiles(word, orientation, x, y);
-
-	      //
+              // (not really a discard, just changing flags on the board spaces to enable scoring??)
+              //wordblocks_self.discardTiles(word, orientation, x, y);
+              //Lock in Move in the DOM
+              //wordblocks_self.setBoard(word, orientation, x, y);
+              wordblocks_self.discardTiles(word, orientation, x, y); //remove Played tiles from Hand
+              wordblocks_self.finalizeWord(word, orientation, x, y); //update board
+              wordblocks_self.addScoreToPlayer(wordblocks_self.game.player, myscore);
+	            //
               // get new cards
               //
               let cards_needed = 7;
@@ -800,26 +860,28 @@ if (this.game.player != 0) {
                 wordblocks_self.addMove("DEAL\t1\t" + wordblocks_self.game.player + "\t" + cards_needed);
               }
 
-              wordblocks_self.exhaustWord(word, orientation, x, y);
-              wordblocks_self.addScoreToPlayer(wordblocks_self.game.player, myscore);
-
               if (wordblocks_self.checkForEndGame() == 1) {
                 return;
               }
 
               $('#remainder').html("DECK: " + wordblocks_self.game.deck[0].crypt.length);
               wordblocks_self.endTurn();
-            };
+            }
 
-          } else {
+          } else { //!isEntryValid
             wordblocks_self.updateStatusWithTiles(
               `Word is not valid, try again! Click on the board to place a word, or
               <span class="link tosstiles">discard tiles</span>`
             );
-            wordblocks_self.addEventsToBoard();
+           //wordblocks_self.addEventsToBoard();
           }
         }
       });
+    });
+
+    $('#lastmove').off();
+    $('#lastmove').on('click', function(){
+      wordblocks_self.overlay.showOverlay(wordblocks_self.app, wordblocks_self, wordblocks_self.returnMath(wordblocks_self.last_played_word.play));
     });
 
     $('#shuffle').on('click', function () {
@@ -897,19 +959,56 @@ if (this.game.player != 0) {
           return 0;
         }
       } //this.firstmove = 0;
+    }else{
+      //Check to make sure newly played word touches another word
+      let touchesWord = 0;
+      let xStart = Math.max(1,x-1);
+      let yStart = Math.max(1,y-1);
+      let xEnd,yEnd;
+      if (orientation == "horizontal"){
+        xEnd = Math.min(15,x+word.length+1);
+        yEnd = Math.min(15,y+1);
+      }else{
+        xEnd = Math.min(15,x+1);
+        yEnd = Math.min(15,y+word.length+1);
+      }
+      for (let i = xStart; i<=xEnd; i++)
+        for (let j = yStart; j<=yEnd; j++){
+          let boardslot = j+"_"+i;
+          if (this.game.board[boardslot].fresh == 0){
+            touchesWord = 1;
+            break;
+          }
+        }
+
+      if (touchesWord == 0) {
+          salert("Word does not cross or touch an existing word.");
+        return 0;
+      }
     }
 
+     
+    //In all cases, must have the letters in hand or on board to spell word
     for (let i = 0; i < word.length; i++) {
       let boardslot = "";
       let letter = word[i].toUpperCase();
 
       if (orientation == "horizontal") {
         boardslot = y + "_" + (x + i);
+        if ((x+i) > 15){
+          salert("Word must fit on board!");
+          return 0;
+        }
       }
 
       if (orientation == "vertical") {
-        boardslot = y + i + "_" + x;
+        boardslot = (y + i) + "_" + x;
+        if ((y+i) > 15){
+          salert("Word must fit on board!");
+          return 0;
+        }
       }
+
 
       if (this.game.board[boardslot].letter != "_") {
         if (this.game.board[boardslot].letter != letter) {
@@ -933,6 +1032,7 @@ if (this.game.player != 0) {
       }
     }
 
+
     if (valid_placement == 0) {
       salert("This is an invalid placement!");
     }
@@ -941,31 +1041,10 @@ if (this.game.player != 0) {
 
   }
 
-
-  exhaustWord(word, orientation, x, y) {
-
-    x = parseInt(x);
-    y = parseInt(y);
-
-    for (let i = 0; i < word.length; i++) {
-      let boardslot = "";
-      let divname = "";
-      let letter = word[i].toUpperCase();
-
-      if (orientation == "horizontal") {
-        boardslot = y + "_" + (x + i);
-      }
-
-      if (orientation == "vertical") {
-        boardslot = y + i + "_" + x;
-      }
-
-      this.game.board[boardslot].fresh = 0;
-    }
-  }
-
-
-  discardTiles(word, orientation, x, y) {
+  //Mark word as no longer new (.fresh is a flag used in scoring)
+  //--AND-- remove newly used tiles from players hand
+  //--AND-- update DOM classes
+  finalizeWord(word, orientation, x, y) {
 
     x = parseInt(x);
     y = parseInt(y);
@@ -984,14 +1063,68 @@ if (this.game.player != 0) {
       }
 
       if (this.game.board[boardslot].fresh == 1) {
+        this.game.board[boardslot].fresh = 0;
+      }
+      divname = "#" + boardslot;
+      $(divname).addClass("set");
+    }
+  }
+
+
+  discardTiles(word, orientation, x, y) {
+    x = parseInt(x);
+    y = parseInt(y);
+
+    for (let i = 0; i < word.length; i++) {
+      let boardslot = "";
+      let letter = word[i].toUpperCase();
+
+      if (orientation == "horizontal") {
+        boardslot = y + "_" + (x + i);
+      }
+
+      if (orientation == "vertical") {
+        boardslot = y + i + "_" + x;
+      }
+
+      if (this.game.board[boardslot].fresh == 1) {
         this.removeTilesFromHand(word[i]);
       }
     }
   }
 
+  /*
+  Adds class to GUI for the newly spelled word
+  /
+  setBoard(word, orientation, x, y) {
+
+    x = parseInt(x);
+    y = parseInt(y);
+
+    for (let i = 0; i < word.length; i++) {
+      let boardslot = "";
+      let divname = "";
+
+      if (orientation == "horizontal") {
+        boardslot = y + "_" + (x + i);
+      }
+
+      if (orientation == "vertical") {
+        boardslot = y + i + "_" + x;
+      }
+
+      divname = "#" + boardslot;
+      $(divname).addClass("set");
+    }
+  }
 
 
 
+  */
+
+  /*
+  Updates GUI and game.board with newly played word
+  */
   addWordToBoard(word, orientation, x, y) {
     x = parseInt(x);
     y = parseInt(y);
@@ -1012,7 +1145,8 @@ if (this.game.player != 0) {
       divname = "#" + boardslot;
 
       if (this.game.board[boardslot].letter != "_") {
-        if (this.game.board[boardslot].letter != letter) {
+        if (this.game.board[boardslot].letter != letter) { //We can overwrite tiles??
+          console.log(this.game.board[boardslot].letter,letter); //what is going on here?
           this.game.board[boardslot].letter = letter;
           this.addTile($(divname), letter);
         }
@@ -1024,7 +1158,9 @@ if (this.game.player != 0) {
   }
 
 
-
+  /*
+  Undoes addWordToBoard, updates GUI to remove newly played tiles (as defined by class:set)
+  */
   removeWordFromBoard(word, orientation, x, y) {
 
     x = parseInt(x);
@@ -1054,38 +1190,18 @@ if (this.game.player != 0) {
   }
 
 
-  setBoard(word, orientation, x, y) {
+  
 
-    x = parseInt(x);
-    y = parseInt(y);
-
-    for (let i = 0; i < word.length; i++) {
-      let boardslot = "";
-      let divname = "";
-
-      if (orientation == "horizontal") {
-        boardslot = y + "_" + (x + i);
-      }
-
-      if (orientation == "vertical") {
-        boardslot = y + i + "_" + x;
-      }
-
-      divname = "#" + boardslot;
-      $(divname).addClass("set");
-    }
-  }
-
-
-
-
+  /*
+  Board is 1-indexed, 15 Rows x 15 Columns (= y_x)
+  */
   returnBoard() {
 
     var board = {};
 
-    for (let i = 0; i < 15; i++) {
-      for (let j = 0; j < 15; j++) {
-        let divname = i + 1 + "_" + (j + 1);
+    for (let i = 1; i <= 15; i++) {
+      for (let j = 1; j <= 15; j++) {
+        let divname = i + "_" + j ;
         board[divname] = {
           letter: "_",
           fresh: 1
@@ -1101,15 +1217,15 @@ if (this.game.player != 0) {
 
   returnDeck() {
     var dictionary = this.game.options.dictionary;
-    if (dictionary === "twl") {
+    if (dictionary === "twl" || dictionary === "sowpods") {
       this.mydeck = {"1":{"name":"A"},"2":{"name":"A"},"3":{"name":"A"},"4":{"name":"A"},"5":{"name":"A"},"6":{"name":"A"},"7":{"name":"A"},"8":{"name":"A"},"9":{"name":"A"},"10":{"name":"B"},"11":{"name":"B"},"12":{"name":"C"},"13":{"name":"C"},"14":{"name":"D"},"15":{"name":"D"},"16":{"name":"D"},"17":{"name":"D"},"18":{"name":"E"},"19":{"name":"E"},"20":{"name":"E"},"21":{"name":"E"},"22":{"name":"E"},"23":{"name":"E"},"24":{"name":"E"},"25":{"name":"E"},"26":{"name":"E"},"27":{"name":"E"},"28":{"name":"E"},"29":{"name":"E"},"30":{"name":"F"},"41":{"name":"F"},"42":{"name":"G"},"43":{"name":"G"},"44":{"name":"G"},"45":{"name":"H"},"46":{"name":"H"},"47":{"name":"I"},"48":{"name":"I"},"49":{"name":"I"},"50":{"name":"I"},"51":{"name":"I"},"52":{"name":"I"},"53":{"name":"I"},"54":{"name":"I"},"55":{"name":"I"},"56":{"name":"J"},"57":{"name":"K"},"58":{"name":"L"},"59":{"name":"L"},"60":{"name":"L"},"61":{"name":"L"},"62":{"name":"M"},"63":{"name":"M"},"64":{"name":"N"},"65":{"name":"N"},"66":{"name":"N"},"67":{"name":"N"},"68":{"name":"N"},"69":{"name":"N"},"70":{"name":"O"},"71":{"name":"O"},"72":{"name":"O"},"73":{"name":"O"},"74":{"name":"O"},"75":{"name":"O"},"76":{"name":"O"},"77":{"name":"O"},"78":{"name":"P"},"79":{"name":"P"},"80":{"name":"Q"},"81":{"name":"R"},"82":{"name":"R"},"83":{"name":"R"},"84":{"name":"R"},"85":{"name":"R"},"86":{"name":"R"},"87":{"name":"S"},"88":{"name":"S"},"89":{"name":"S"},"90":{"name":"S"},"91":{"name":"T"},"92":{"name":"T"},"93":{"name":"T"},"94":{"name":"T"},"95":{"name":"T"},"96":{"name":"T"},"97":{"name":"U"},"98":{"name":"U"},"99":{"name":"U"},"100":{"name":"U"},"101":{"name":"V"},"102":{"name":"V"},"103":{"name":"W"},"104":{"name":"W"},"105":{"name":"X"},"106":{"name":"U"},"107":{"name":"Y"},"108":{"name":"Y"},"109":{"name":"Z"}};
     }
     if (dictionary === "fise" || dictionary === "tagalog") {
       this.mydeck = {"1":{"name":"A"},"2":{"name":"A"},"3":{"name":"A"},"4":{"name":"A"},"5":{"name":"A"},"6":{"name":"A"},"7":{"name":"A"},"8":{"name":"A"},"9":{"name":"A"},"10":{"name":"A"},"11":{"name":"A"},"12":{"name":"A"},"13":{"name":"B"},"14":{"name":"B"},"15":{"name":"C"},"16":{"name":"C"},"17":{"name":"C"},"18":{"name":"C"},"19":{"name":"C"},"20":{"name":"D"},"21":{"name":"D"},"22":{"name":"D"},"23":{"name":"D"},"24":{"name":"D"},"25":{"name":"E"},"26":{"name":"E"},"27":{"name":"E"},"28":{"name":"E"},"29":{"name":"E"},"30":{"name":"E"},"31":{"name":"E"},"32":{"name":"E"},"33":{"name":"E"},"34":{"name":"E"},"35":{"name":"E"},"36":{"name":"E"},"37":{"name":"E"},"38":{"name":"F"},"39":{"name":"G"},"40":{"name":"G"},"41":{"name":"H"},"42":{"name":"H"},"43":{"name":"H"},"44":{"name":"I"},"45":{"name":"I"},"46":{"name":"I"},"47":{"name":"I"},"48":{"name":"I"},"49":{"name":"I"},"50":{"name":"J"},"51":{"name":"L"},"52":{"name":"L"},"53":{"name":"L"},"54":{"name":"L"},"55":{"name":"L"},"56":{"name":"L"},"57":{"name":"M"},"58":{"name":"M"},"59":{"name":"N"},"60":{"name":"N"},"61":{"name":"N"},"62":{"name":"N"},"63":{"name":"N"},"64":{"name":"Ñ"},"65":{"name":"Ñ"},"66":{"name":"O"},"67":{"name":"O"},"68":{"name":"O"},"69":{"name":"O"},"70":{"name":"O"},"71":{"name":"O"},"72":{"name":"O"},"73":{"name":"O"},"74":{"name":"O"},"75":{"name":"O"},"76":{"name":"P"},"77":{"name":"P"},"78":{"name":"Q"},"79":{"name":"R"},"80":{"name":"R"},"81":{"name":"R"},"82":{"name":"R"},"83":{"name":"R"},"84":{"name":"R"},"85":{"name":"R"},"86":{"name":"S"},"87":{"name":"S"},"88":{"name":"S"},"89":{"name":"S"},"90":{"name":"S"},"91":{"name":"S"},"92":{"name":"S"},"93":{"name":"T"},"94":{"name":"T"},"95":{"name":"T"},"96":{"name":"T"},"97":{"name":"U"},"98":{"name":"U"},"99":{"name":"U"},"100":{"name":"U"},"101":{"name":"U"},"102":{"name":"V"},"103":{"name":"X"},"104":{"name":"Y"},"105":{"name":"Z"}};
     }
-    if (dictionary === "sowpods") {
+    /*if (dictionary === "sowpods") {
       this.mydeck = {"1":{"name":"A"},"2":{"name":"A"},"3":{"name":"A"},"4":{"name":"A"},"5":{"name":"A"},"6":{"name":"A"},"7":{"name":"A"},"8":{"name":"A"},"9":{"name":"A"},"10":{"name":"B"},"11":{"name":"B"},"12":{"name":"C"},"13":{"name":"C"},"14":{"name":"D"},"15":{"name":"D"},"16":{"name":"D"},"17":{"name":"D"},"18":{"name":"E"},"19":{"name":"E"},"20":{"name":"E"},"21":{"name":"E"},"22":{"name":"E"},"23":{"name":"E"},"24":{"name":"E"},"25":{"name":"E"},"26":{"name":"E"},"27":{"name":"E"},"28":{"name":"E"},"29":{"name":"E"},"30":{"name":"F"},"41":{"name":"F"},"42":{"name":"G"},"43":{"name":"G"},"44":{"name":"G"},"45":{"name":"H"},"46":{"name":"H"},"47":{"name":"I"},"48":{"name":"I"},"49":{"name":"I"},"50":{"name":"I"},"51":{"name":"I"},"52":{"name":"I"},"53":{"name":"I"},"54":{"name":"I"},"55":{"name":"I"},"56":{"name":"J"},"57":{"name":"K"},"58":{"name":"L"},"59":{"name":"L"},"60":{"name":"L"},"61":{"name":"L"},"62":{"name":"M"},"63":{"name":"M"},"64":{"name":"N"},"65":{"name":"N"},"66":{"name":"N"},"67":{"name":"N"},"68":{"name":"N"},"69":{"name":"N"},"70":{"name":"O"},"71":{"name":"O"},"72":{"name":"O"},"73":{"name":"O"},"74":{"name":"O"},"75":{"name":"O"},"76":{"name":"O"},"77":{"name":"O"},"78":{"name":"P"},"79":{"name":"P"},"80":{"name":"Q"},"81":{"name":"R"},"82":{"name":"R"},"83":{"name":"R"},"84":{"name":"R"},"85":{"name":"R"},"86":{"name":"R"},"87":{"name":"S"},"88":{"name":"S"},"89":{"name":"S"},"90":{"name":"S"},"91":{"name":"T"},"92":{"name":"T"},"93":{"name":"T"},"94":{"name":"T"},"95":{"name":"T"},"96":{"name":"T"},"97":{"name":"U"},"98":{"name":"U"},"99":{"name":"U"},"100":{"name":"U"},"101":{"name":"V"},"102":{"name":"V"},"103":{"name":"W"},"104":{"name":"W"},"105":{"name":"X"},"106":{"name":"U"},"107":{"name":"Y"},"108":{"name":"Y"},"109":{"name":"Z"}};
-    }
+    }*/
     if (dictionary === "test") {
       let mydeck = {"1":{"name":"A"},"2":{"name":"A"},"3":{"name":"A"},"4":{"name":"A"},"5":{"name":"A"},"6":{"name":"A"},"7":{"name":"A"},"8":{"name":"A"},"9":{"name":"A"},"10":{"name":"C"},"11":{"name":"C"},"12":{"name":"C"},"13":{"name":"C"},"14":{"name":"T"},"15":{"name":"T"},"16":{"name":"T"},"17":{"name":"T"},"18":{"name":"T"},"19":{"name":"T"},"20":{"name":"T"}};
     }
@@ -1118,15 +1234,15 @@ if (this.game.player != 0) {
 
   returnLetters() {
     var dictionary = this.game.options.dictionary;
-    if (dictionary === "twl") {
+    if (dictionary === "twl" || dictionary === "sowpods") {
       this.letterset = {"A":{"score":1},"B":{"score":3},"C":{"score":2},"D":{"score":2},"E":{"score":1},"F":{"score":2},"G":{"score":2},"H":{"score":1},"I":{"score":1},"J":{"score":8},"K":{"score":4},"L":{"score":2},"M":{"score":2},"N":{"score":1},"O":{"score":1},"P":{"score":2},"Q":{"score":10},"R":{"score":1},"S":{"score":1},"T":{"score":1},"U":{"score":2},"V":{"score":3},"W":{"score":2},"X":{"score":8},"Y":{"score":2},"Z":{"score":10}};
     }
     if (dictionary === "fise" || dictionary === "tagalog") {
       this.letterset = {"A":{"score":1},"B":{"score":2},"C":{"score":3},"D":{"score":2},"E":{"score":1},"F":{"score":4},"G":{"score":2},"H":{"score":4},"I":{"score":1},"J":{"score":8},"L":{"score":1},"M":{"score":3},"N":{"score":1},"Ñ":{"score":8},"O":{"score":1},"P":{"score":3},"Q":{"score":6},"R":{"score":2},"S":{"score":1},"T":{"score":1},"U":{"score":1},"V":{"score":4},"X":{"score":8},"Y":{"score":4},"Z":{"score":10}};
     }
-    if (dictionary === "sowpods") {
+    /*if (dictionary === "sowpods") {
       this.letterset = {"A":{"score":1},"B":{"score":3},"C":{"score":2},"D":{"score":2},"E":{"score":1},"F":{"score":2},"G":{"score":2},"H":{"score":1},"I":{"score":1},"J":{"score":8},"K":{"score":4},"L":{"score":2},"M":{"score":2},"N":{"score":1},"O":{"score":1},"P":{"score":2},"Q":{"score":10},"R":{"score":1},"S":{"score":1},"T":{"score":1},"U":{"score":2},"V":{"score":3},"W":{"score":2},"X":{"score":8},"Y":{"score":2},"Z":{"score":10}};
-    }
+    }*/
     if (dictionary === "test") {
       let letterset = { "A": { "score": 1 }, "C": { "score": 3 }, "T": { "score": 2 } };
     }
@@ -1200,467 +1316,145 @@ if (this.game.player != 0) {
     return bonus;
   }
 
+  /*
+  For scoring words, I use cartesian coordinate templating to make the coding easier
+  (x,y) is represented as "y_x". A slot template fixes one of the dimensions with a constant
+  to traverse the (main) axis of the word, or, alternately examine the cross axis of an 
+  intersecting word.  "#" is used as a variable, to be replaced by "i" in the for loops.  
+  */
+
+  getWordScope(head, slotPattern){
+    let boardslot;
+    let wordStart = head;
+    let wordEnd = head;
+    for (let i = parseInt(head); i>=1; i--){
+      boardslot = slotPattern.replace("#",i);
+      if (this.game.board[boardslot].letter == "_") break;
+      wordStart = i;
+    }
+    for (let i = parseInt(head); i<=15; i++){
+        boardslot = slotPattern.replace("#",i);
+      if (this.game.board[boardslot].letter == "_") break;
+        wordEnd = i;
+    }
+
+    return {"start":wordStart, "end":wordEnd};
+  }
+
+  scoreWord(wordStart, wordEnd, boardSlotTemplate){
+    let tilesUsed = 0;
+    let word_bonus = 1;
+    let thisword = "";
+    let score = 0;
+    let html = '';
+   for (let i = wordStart; i <= wordEnd; i++) {
+        boardslot = boardSlotTemplate.replace("#",i);
+        let letter_bonus = 1;
+        
+        if (this.game.board[boardslot].fresh == 1){
+          let tmpb = this.returnBonus(boardslot);
+          switch(tmpb){ //Word_bonuses can be combined...maybe
+            case "3W": word_bonus = word_bonus * 3; break;
+            case "2W": word_bonus = word_bonus * 2; break;
+            case "3L": letter_bonus = 3; break; 
+            case "2L": letter_bonus = 2; break;
+          }
+          tilesUsed += 1;
+        }else{
+          touchesWord = 1;
+        } 
+
+        let thisletter = this.game.board[boardslot].letter;
+        //console.log(boardslot,thisletter);
+        thisword += thisletter;
+        score += this.letters[thisletter].score * letter_bonus;
+        if (letter_bonus>1){
+          html += ` + ${this.letters[thisletter].score} x${letter_bonus}`;
+        }else{
+          html += " + "+this.letters[thisletter].score;
+        }
+    }
+
+    if (!this.checkWord(thisword)) {
+       return -1;
+    }
+
+    /*Technically only care for the main word, but not worth adding code to avoid 
+      doing a couple extra additions and a comparison
+    */
+    if (tilesUsed == 7) {
+      score += 10;
+      word_bonus += 1;
+      html += " +10(!)";
+    }
+
+      score *= word_bonus;
+      html = html.substring(3);
+      if (word_bonus>1){
+        html = "("+html+") x "+word_bonus;
+      }
+      console.log("word:",thisword,"score:",score);
+      return {word:thisword, score:score, math:html};
+  }
 
   ////////////////
   // Score Word //
+  // Returns -1 if not found in dictionary //
   ////////////////
-  scoreWord(word, player, orientation, x, y) {
-
-    let score = 0;
-    let touchesWord = 0;
-    let thisword = "";
-    let finalword = "";
-    x = parseInt(x);
-    y = parseInt(y);
-
+  scorePlay(word, player, orientation, x, y) {
+    let boardslot;
+    //Orientation-dependent metadata/variables
+    const mainAxis = (orientation == "horizontal") ? x : y;
+    const crossAxis = (orientation == "horizontal") ? y : x;
+    const boardSlotTemplate = (orientation == "horizontal") ? crossAxis+"_#" : "#_"+crossAxis;
+    
+    console.log(mainAxis,crossAxis,boardSlotTemplate);
     //
-    // find the start of the word
+    // find the start and end of the word
     //
-
-    if (orientation == "horizontal") {
-
-      let beginning_of_word = x;
-      let end_of_word = x;
-      let tilesUsed = 0;
-
-      //
-      // find the beginning of the word
-      //
-      let current_x = parseInt(x) - 1;
-      let current_y = y;
-      let boardslot = y + "_" + current_x;
-      let divname = "#" + boardslot;
-
-      if (current_x < 1) {
-        beginning_of_word = 1;
-      } else {
-        while (this.game.board[boardslot].letter != "_" && current_x >= 1) {
-          beginning_of_word = current_x;
-          current_x--;
-          boardslot = y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_x < 1) {
-            break;
-          }
-        }
-      }
-
-      //
-      // find the end of the word
-      //
-      current_x = parseInt(x) + 1;
-      current_y = y;
-      boardslot = y + "_" + current_x;
-      divname = "#" + boardslot;
-
-      if (current_x <= 15) {
-        while (this.game.board[boardslot].letter != "_" && current_x <= 15) {
-          end_of_word = current_x;
-          current_x++;
-          boardslot = y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_x > 15) {
-            break;
-          }
-        }
-      }
-
-      let word_bonus = 1;
-
-      //
-      // score this word
-      //
-      thisword = "";
-
-      for (let i = beginning_of_word, k = 0; i <= end_of_word; i++) {
-        boardslot = y + "_" + i;
-        let tmpb = this.returnBonus(boardslot);
-        let letter_bonus = 1;
-
-console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
-
-        if (tmpb == "3W" && this.game.board[boardslot].fresh == 1) {
-          word_bonus = word_bonus * 3;
-        }
-
-        if (tmpb == "2W" && this.game.board[boardslot].fresh == 1) {
-          word_bonus = word_bonus * 2;
-        }
-
-        if (tmpb == "3L" && this.game.board[boardslot].fresh == 1) {
-          letter_bonus = 3;
-        }
-
-        if (tmpb == "2L" && this.game.board[boardslot].fresh == 1) {
-          letter_bonus = 2;
-        }
-
-        if (this.game.board[boardslot].fresh == 1) {
-          tilesUsed += 1;
-        }
-
-        if (this.game.board[boardslot].fresh != 1) {
-          touchesWord = 1;
-        }
-
-        let thisletter = this.game.board[boardslot].letter;
-        thisword += thisletter;
-        score += this.letters[thisletter].score * letter_bonus;
-      }
-
-      if (!this.checkWord(thisword)) {
-        return -1;
-      }
-
-      finalword += thisword;
-
-      if (tilesUsed == 7) {
-        score += 10;
-        word_bonus += 1;
-      }
-
-      score *= word_bonus;
-
-      //
-      // now score vertical words 
-      //
-
-      for (let i = x; i < x + word.length; i++) {
-        boardslot = y + "_" + i;
-
-        if (this.game.board[boardslot].fresh == 1) {
-          let orth_start = parseInt(y);
-          let orth_end = parseInt(y);
-
-          //
-          // find the beginning of the word
-          //
-
-          current_x = i;
-          current_y = orth_start - 1;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_y == 0) {
-            orth_start = 1;
-          } else {
-            while (this.game.board[boardslot].letter != "_" && current_y > 0) {
-              orth_start = current_y;
-              current_y--;
-              boardslot = current_y + "_" + current_x;
-              divname = "#" + boardslot;
-
-              if (current_y < 1) {
-                break;
-              }
-            }
-          }
-
-          //
-          // find the end of the word
-          //
-
-
-          current_x = i;
-          current_y = orth_end + 1;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_y > 15) {
-            orth_end = 15;
-          } else {
-            while (this.game.board[boardslot].letter != "_" && current_y <= 15) {
-              orth_end = current_y;
-              current_y++;
-              boardslot = current_y + "_" + current_x;
-
-              if (current_y > 15) {
-                break;
-              }
-            }
-          }
-
-          let wordscore = 0;
-          let word_bonus = 1;
-
-          //
-          // score this word
-          //
-
-          thisword = "";
-
-          if (orth_start != orth_end) {
-            for (let w = orth_start, q = 0; w <= orth_end; w++) {
-              let boardslot = w + "_" + i;
-              let tmpb = this.returnBonus(boardslot);
-              let letter_bonus = 1;
-
-              if (tmpb == "3W" && this.game.board[boardslot].fresh == 1) {
-                word_bonus = word_bonus * 3;
-              }
-
-              if (tmpb == "2W" && this.game.board[boardslot].fresh == 1) {
-                word_bonus = word_bonus * 2;
-              }
-
-              if (tmpb == "3L" && this.game.board[boardslot].fresh == 1) {
-                letter_bonus = 3;
-              }
-
-              if (tmpb == "2L" && this.game.board[boardslot].fresh == 1) {
-                letter_bonus = 2;
-              }
-
-              if (this.game.board[boardslot].fresh != 1) {
-                touchesWord = 1;
-              }
-
-              let thisletter = this.game.board[boardslot].letter;
-              thisword += thisletter;
-              wordscore += this.letters[thisletter].score * letter_bonus;
-            }
-
-            score += wordscore * word_bonus;
-
-            if (!this.checkWord(thisword)) {
-              return -1;
-            }
-          }
-        }
-      }
-    }
-
-    if (orientation == "vertical") {
-      let beginning_of_word = y;
-      let end_of_word = y;
-      let tilesUsed = 0;
-
-      //
-      // find the beginning of the word
-      //
-
-      let current_x = parseInt(x);
-      let current_y = parseInt(y) - 1;
-      let boardslot = current_y + "_" + current_x;
-      let divname = "#" + boardslot;
-
-      if (current_y <= 0) {
-        beginning_of_word = 1;
-      } else {
-        while (this.game.board[boardslot].letter != "_" && current_y > 0) {
-          beginning_of_word = current_y;
-          current_y--;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_y <= 0) {
-            break;
-          }
-        }
-      }
-
-      //
-      // find the end of the word
-      //
-      current_x = parseInt(x);
-      current_y = parseInt(y) + 1;
-      boardslot = current_y + "_" + current_x;
-      divname = "#" + boardslot;
-
-      if (current_y > 15) {
-        end_of_word = 15;
-      } else {
-        while (this.game.board[boardslot].letter != "_" && current_y <= 15) {
-          end_of_word = current_y;
-          current_y++;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_y > 15) {
-            break;
-          }
-        }
-      }
-
-      let word_bonus = 1;
-
-      //
-      // score this word
-      //
-      for (let i = beginning_of_word, k = 0; i <= end_of_word; i++) {
-        boardslot = i + "_" + x;
-        let tmpb = this.returnBonus(boardslot);
-        let letter_bonus = 1;
-
-        if (tmpb == "3W" && this.game.board[boardslot].fresh == 1) {
-          word_bonus = word_bonus * 3;
-        }
-
-        if (tmpb == "2W" && this.game.board[boardslot].fresh == 1) {
-          word_bonus = word_bonus * 2;
-        }
-
-        if (tmpb == "3L" && this.game.board[boardslot].fresh == 1) {
-          letter_bonus = 3;
-        }
-
-        if (tmpb == "2L" && this.game.board[boardslot].fresh == 1) {
-          letter_bonus = 2;
-        }
-
-        if (this.game.board[boardslot].fresh == 1) {
-          tilesUsed += 1;
-        }
-
-        if (this.game.board[boardslot].fresh != 1) {
-          touchesWord = 1;
-        }
-
-        let thisletter = this.game.board[boardslot].letter;
-        thisword += thisletter;
-        score += this.letters[thisletter].score * letter_bonus;
-      }
-
-      if (!this.checkWord(thisword)) {
-        return -1;
-      }
-
-      finalword += thisword;
-
-      if (tilesUsed == 7) {
-        score += 10;
-        word_bonus += 1;
-      }
-
-      score *= word_bonus;
-
-      //
-      // now score horizontal words 
-      //
-
-      for (let i = y; i < y + word.length; i++) {
-        boardslot = i + "_" + x;
-
-        if (this.game.board[boardslot].fresh == 1) {
-          let orth_start = parseInt(x);
-          let orth_end = parseInt(x);
-
-          //
-          // find the beginning of the word
-          //
-          current_x = orth_start - 1;
-          current_y = i;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_x < 1) {
-            orth_start = 1;
-          } else {
-            while (this.game.board[boardslot].letter != "_" && current_x > 0) {
-              orth_start = current_x;
-              current_x--;
-              boardslot = current_y + "_" + current_x;
-              divname = "#" + boardslot;
-
-              if (current_x < 1) {
-                break;
-              }
-            }
-          }
-
-          //
-          // find the end of the word
-          //
-          current_x = orth_end + 1;
-          current_y = i;
-          boardslot = current_y + "_" + current_x;
-          divname = "#" + boardslot;
-
-          if (current_x > 15) {
-            orth_end = 15;
-          } else {
-            //
-            // >= instead of greater than
-            //
-            while (this.game.board[boardslot].letter != "_" && current_x <= 15) {
-              orth_end = current_x;
-              current_x++;
-              boardslot = current_y + "_" + current_x;
-
-              if (current_x > 15) {
-                break;
-              }
-            }
-          }
-
-          let wordscore = 0;
-          let word_bonus = 1;
-
-          //
-          // score this word
-          //
-
-          thisword = "";
-
-          if (orth_start != orth_end) {
-            for (let w = orth_start, q = 0; w <= orth_end; w++) {
-              boardslot = i + "_" + w;
-              let tmpb = this.returnBonus(boardslot);
-              let letter_bonus = 1;
-
-              if (tmpb === "3W" && this.game.board[boardslot].fresh == 1) {
-                word_bonus = word_bonus * 3;
-              }
-
-              if (tmpb === "2W" && this.game.board[boardslot].fresh == 1) {
-                word_bonus = word_bonus * 2;
-              }
-
-              if (tmpb === "3L" && this.game.board[boardslot].fresh == 1) {
-                letter_bonus = 3;
-              }
-
-              if (tmpb === "2L" && this.game.board[boardslot].fresh == 1) {
-                letter_bonus = 2;
-              }
-
-              if (this.game.board[boardslot].fresh != 1) {
-                touchesWord = 1;
-              }
-
-              let thisletter = this.game.board[boardslot].letter;
-              thisword += thisletter;
-              wordscore += this.letters[thisletter].score * letter_bonus;
-            }
-
-            score += wordscore * word_bonus;
-
-            if (!this.checkWord(thisword)) {
-              return -1;
-            }
-          }
-        }
-      }
-    }
-
-    if (this.firstmove == 0 && touchesWord == 0) {
-      salert("Word does not cross our touch an existing word.");
+    let wordBoundaries = this.getWordScope(mainAxis, boardSlotTemplate);
+     
+    //Score main-axis word
+    let results = this.scoreWord(wordBoundaries.start, wordBoundaries.end, boardSlotTemplate);
+    if (results == -1)
       return -1;
-    }
+    console.log(orientation, wordBoundaries, results);  
+    let play = new Array(results);
+    let totalscore = results.score;
 
-    this.firstmove = 0;
-    let last_move_html = "";
-    if (this.game.words_played[player-1].length > 0) { last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${this.game.words_played[player-1][this.game.words_played[player-1].length-1].score} points (total: ${this.game.score[player-1]})`; }
-//    let last_move_html = finalword == '' ? '...' : `Player ${player} played ${finalword} for: ${score} points (total: ${this.game.score[player-1]}))`;
-    $('.lastmove').html(last_move_html);
-    $('#remainder').html(`DECK: ${this.game.deck[0].crypt.length}`);
-    this.last_played_word = { player, finalword, score };
-    return score;
+    //For each letter in the main-axis word...
+    
+      for (let i = wordBoundaries.start; i <= wordBoundaries.end; i++) {
+        boardslot = boardSlotTemplate.replace("#",i); 
+        
+        //console.log(boardslot);
+        if (this.game.board[boardslot].fresh == 1) { //...Is it newly placed...?
+          let altTemplate = boardSlotTemplate.replace(crossAxis,"@").replace("#",i).replace("@","#");  
+          //..and does it have a word along the cross axis
+          let crossWord = this.getWordScope(crossAxis, altTemplate);
+          if (crossWord.start != crossWord.end){ //Only score word if more than 1 letter
+            //Make cross-axis variable
+            console.log(crossAxis,altTemplate,crossWord);
+             results = this.scoreWord(crossWord.start, crossWord.end, altTemplate);
+             if (results == -1)
+               return -1;
+             
+             play.push(results);
+             totalscore += results.score;  
+          }
+        }
+      }
+
+    this.firstmove = 0; //We have an acceptable move, so game has commenced. Repeat assignment simpler than adding conditional
+    console.log(play);
+
+    this.last_played_word = { player, word: play[0].word, score:play[0].score, totalscore, play};
+    //console.log(this.last_played_word);
+    return totalscore;
   }
 
 
+  
 
   //
   // Core Game Logic
@@ -1676,7 +1470,7 @@ console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
     this.showTiles();
 
     ///////////
-    // QUEUE //
+    // QUEUE // Possibilities: gameover, endgame, place, turn
     ///////////
 
     if (this.game.queue.length > 0) {
@@ -1758,22 +1552,20 @@ console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
 
         if (player != wordblocks_self.game.player) {
           this.addWordToBoard(word, orient, x, y);
-          this.setBoard(word, orient, x, y);
-          score = this.scoreWord(word, player, orient, x, y);
-          this.exhaustWord(word, orient, x, y);
+          //this.setBoard(word, orient, x, y);
+          score = this.scorePlay(word, player, orient, x, y);
+          this.finalizeWord(word, orient, x, y);
           this.addScoreToPlayer(player, score);
 
-	  this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
+	        this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
 
         } else {
-
-	  //
-	  // scoring done when added to board - MARCH 21
-	  //
-          //score = this.scoreWord(word, player, orient, x, y);
-	  //this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
-
-	}
+        	 //
+	         // scoring done when added to board - MARCH 21
+	         //
+           //score = this.scoreWord(word, player, orient, x, y);
+	         //this.game.words_played[parseInt(player)-1].push({ word : word , score : score });
+      	}
 
 
         if (wordblocks_self.game.over == 1) {
@@ -1788,7 +1580,7 @@ console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
           wordblocks_self.updateStatusWithTiles("YOUR GO: click board to place or <span class=\"link tosstiles\">discard</span>.");
           wordblocks_self.enableEvents();
         } else {
-          wordblocks_self.updateStatusWithTiles("Player " + wordblocks_self.returnNextPlayer(player) + " turn");
+          wordblocks_self.updateStatusWithTiles("Player " + wordblocks_self.returnNextPlayer(player) + "'s turn");
           wordblocks_self.disableEvents();
         }
 
@@ -1797,30 +1589,33 @@ console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
       }
 
       if (mv[0] === "turn") {
+        //
+	      // observer mode
+	       //
+	       if (this.game.player == 0) {
+	         this.game.queue.push("OBSERVER_CHECKPOINT");
+           this.game.queue.splice(this.game.queue.length - 1, 1);
+	         return 1;
+	       }
 
-	//
-	// observer mode
-	//
-	if (this.game.player == 0) {
-	  this.game.queue.push("OBSERVER_CHECKPOINT");
-          this.game.queue.splice(this.game.queue.length - 1, 1);
-	  return 1;
-	}
 
+          if (wordblocks_self.checkForEndGame() == 1) {
+            return;
+          }
 
-        if (wordblocks_self.checkForEndGame() == 1) {
-          return;
-        }
+          let player = mv[1];
+          let discardedTiles = mv[2];
+          //Code to keep the discard and redraws in the game log history
+          wordblocks_self.last_played_word = { player, word: discardedTiles, score:0};
+          wordblocks_self.game.words_played[parseInt(player)-1].push({ word : "---" , score : 0 });
 
-        let player = mv[1];
-
-        if (wordblocks_self.game.player == wordblocks_self.returnNextPlayer(player)) {
-          wordblocks_self.updateStatusWithTiles("YOUR GO: click on board to place tiles, or <span class=\"link tosstiles\">discard</span>.");
-          wordblocks_self.enableEvents();
-        } else {
-          wordblocks_self.updateStatusWithTiles("Player " + wordblocks_self.returnNextPlayer(player) + " turn");
-          wordblocks_self.disableEvents();
-        }
+          if (wordblocks_self.game.player == wordblocks_self.returnNextPlayer(player)) {
+            wordblocks_self.updateStatusWithTiles("YOUR GO: click on board to place tiles, or <span class=\"link tosstiles\">discard</span>.");
+            wordblocks_self.enableEvents();
+          } else {
+            wordblocks_self.updateStatusWithTiles("Player " + wordblocks_self.returnNextPlayer(player) + "'s turn");
+            wordblocks_self.disableEvents();
+          }
 
         this.game.queue.splice(this.game.queue.length - 1, 1);
         return 1;
@@ -1888,8 +1683,8 @@ console.log(tmpb + " -- " + this.game.board[boardslot].fresh);
     return `
           <label for="dictionary">Dictionary:</label>
           <select name="dictionary">
-            <option value="sowpods" selected>English: SOWPODS</option>
-            <option value="twl">English: TWL06</option>
+            <option value="sowpods" title="A combination of the Official Scrabble Player Dictionary and Official Scrabble Words" selected>English: SOWPODS</option>
+            <option value="twl" title="Scrabble Tournament Word List">English: TWL06</option>
             <option value="fise">Spanish: FISE</option>
             <option value="tagalog">Tagalog</option>
             ${testHtml}

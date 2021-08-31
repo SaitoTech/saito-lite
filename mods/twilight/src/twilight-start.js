@@ -345,6 +345,10 @@ class Twilight extends GameTemplate {
   handleDisplayMenu() {
 
     let twilight_self = this;
+
+    let use_clock_html = '';
+    if (twilight_self.useClock == 1) { use_clock_html = '<li class="menu-item" id="move_clock">Move Clock</li>'; }
+
     let user_message = `
       <div class="game-overlay-menu" id="game-overlay-menu">
         <div>DISPLAY MODE:</div>
@@ -352,6 +356,7 @@ class Twilight extends GameTemplate {
           <li class="menu-item" id="english">English</li>
           <li class="menu-item" id="chinese">简体中文</li>
           <li class="menu-item" id="enable_observer_mode">Observer Mode</li>
+          ${use_clock_html}
         </ul>
       </div>`;
 //          <li class="menu-item" id="text">Text Cards</li>
@@ -361,6 +366,11 @@ class Twilight extends GameTemplate {
 
     $('.menu-item').on('click', function() {
       let action2 = $(this).attr("id");
+
+      if (action2 === "move_clock") {
+	twilight_self.clock.moveClock();
+	return;
+      }
 
       if (action2 === "enable_observer_mode") {
         twilight_self.game.saveGameState = 1;
@@ -792,6 +802,7 @@ console.log("\n\n\n\n");
       this.game.options.handshake = 1;
       this.game.options.rustinredsquare = 1;
       this.game.options.poliovaccine = 1;
+      this.game.options.communistrevolution = 1;
 
       this.game.options.deck = "endofhistory";
       let a = this.returnEarlyWarCards();
@@ -1030,13 +1041,13 @@ try {
 	        // [1] should be creator 
 		if (observer == 0) {
                   if (this.game.players[1] === this.app.wallet.returnPublicKey()) {
-                    if (this.game.options.player1 == "us") {
+                    if (this.game.options.player1 === "us") {
                       this.game.player = 2;
                     } else {
                       this.game.player = 1;
                     }
                   } else {
-                    if (this.game.options.player1 == "us") {
+                    if (this.game.options.player1 === "us") {
                       this.game.player = 1;
                     } else {
                       this.game.player = 2;
@@ -2399,7 +2410,7 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["containment","allende","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
+              this.game.deck[0].hand = ["containment","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
             } else {
               this.game.deck[0].hand = ["quagmire", "redscare", "missileenvy", "brezhnev", "opec", "grainsales","africa", "cubanmissile","china"];
             }
@@ -4485,7 +4496,7 @@ this.startClock();
       if (card === "skipturn") {
         twilight_self.hideCard(card);
         twilight_self.addMove("resolve\tplay");
-        twilight_self.addMove("notify\t"+player+" has no cards playable.");
+        twilight_self.addMove("notify\t"+player.toUpperCase()+" has no cards playable.");
         twilight_self.endTurn();
         return 0;
       }
@@ -6262,7 +6273,6 @@ this.startClock();
 	}
       }
     }
-
 
     if (winning > 0) {
 
@@ -9868,7 +9878,11 @@ this.startClock();
         if (options[index] == "random") {
           new_options[index] = options[index];
         } else {
-          new_options[index] = options[index] == "ussr" ? "us" : "ussr";
+	  if (options[index] === "ussr") {
+	    new_options[index] = "ussr";
+	  } else {
+	    new_options[index] = "us";
+	  }
         }
       } else {
         new_options[index] = options[index]
