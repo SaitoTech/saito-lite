@@ -271,7 +271,6 @@ section {
 
 
 .section1 .right{
-  /*flex:  1;*/
   display: flex;
   justify-content: flex-end;
 }
@@ -387,13 +386,13 @@ section {
 */
 .sectionWrapperArcade{
   width: 100%;
-  min-height: 80vh;
   background-image: url("/website/img/gameboard.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   color: whitesmoke;
   padding: 4rem 4rem;
+  position: relative;
 }
 
 .arcadetitle{
@@ -402,10 +401,15 @@ section {
   color: var(--saito-white);
   margin: 2rem auto 0px;
   text-align: center;
+  font-family: "visuelt-medium";
 }
 
 #dotarcade .section1{
   justify-content: space-evenly;
+}
+
+#dotarcade h2{
+  color:  var(--saito-white);
 }
 .sectionWrapperArcade h1,
 .sectionWrapperArcade h2 {
@@ -457,8 +461,12 @@ section {
 }
 
 .sectionWrapperArcade img{
-  margin: 3rem auto;
+  display: block;
   max-width: 100%;
+  max-height: 100%;
+
+  /*margin: 3rem auto;
+  max-width: 100%;*/
 }
 
 /* Part three */
