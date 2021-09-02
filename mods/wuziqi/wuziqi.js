@@ -1,6 +1,8 @@
 const { timingSafeEqual } = require('crypto');
+
 const saito = require('../../lib/saito/saito');
 const GameTemplate = require('../../lib/templates/gametemplate');
+const { update } = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 //const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 //const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 
@@ -12,7 +14,8 @@ class Wuziqi extends GameTemplate {
         super(app);
 
         this.name = "Wuziqi";
-        this.description = "A simple game where two players alternately place black and white tiles on a go board attempting to place 5 of them in adjacent positions."
+        this.title = "五子棋"
+        this.description = "五子棋 aka Gokomu and Gobang! is a simple game where two players alternately place black and white tiles on a go board attempting to place 5 of them in adjacent positions."
         this.categories = "Boardgame Strategy";
         this.type = "Boardgame";
 
@@ -22,7 +25,7 @@ class Wuziqi extends GameTemplate {
         this.useHUD = 0;
 
         this.moves = [];
-        this.firstmove = 1;
+        this.bestof = 1;
 
         return this;
     }
@@ -140,9 +143,9 @@ class Wuziqi extends GameTemplate {
         this.menu.attachEvents(app, this);
 
         this.game.sides = ["black", "white"];
+        this.game.score = [0,0];
 
-
-        this.game.size = 13;
+        this.game.size = this.game.options.board_size;
 
         if (!this.game.board || this.game.board.length < 1) {
             this.generateBoard(this.game.size);
@@ -151,9 +154,14 @@ class Wuziqi extends GameTemplate {
         if (this.browser_active == 1) {
             try {
                 this.drawBoard(this.game.board);
-                if (this.game.target == this.game.player) {
+                if (this.game.player == 1) {
                     this.addEvents(this.game.board);
+                    this.updateStatus("You to play.");
+                } else {
+                    this.updateStatus("Waiting for: <span class='playertitle'>Black</span>");
                 }
+                this.updateScore();
+
             } catch (err) {
                 console.log(err);
             }
@@ -176,8 +184,6 @@ class Wuziqi extends GameTemplate {
     initializeGame(game_id) {
 
         this.loadGame(game_id);
-
-
 
         this.game.queue.push("READY");
     }
@@ -223,33 +229,40 @@ class Wuziqi extends GameTemplate {
                 el.classList.add("active");
                 el.addEventListener("click", (e) => {
                     cell.owner = this.game.sides[this.game.player - 1];
-                    // check for winner.
+                    // check for round winner.
                     let winner = this.findWinner(cell);
                     this.drawBoard(board);
-                    if (winner != "no winner") {
-                        salert("You Win!");
-                        this.game.winner = this.game.player;
-                        let mv = "place\t" + this.serializeBoard(board) + "\t" + e.target.id;
-                        this.addMove(mv);
-                        this.addMove("gameover");
-                        this.endTurn();
-                        return 1;
-                    } else {
-                        // send move
-                        let mv = "place\t" + this.serializeBoard(board) + "\t" + e.target.id;
-                        this.addMove(mv);
-                        this.endTurn();
-                    }
 
+                    // finish turn
+                    if (winner != "no winner") {
+                        this.game.score[this.game.player - 1] = parseInt(this.game.score[this.game.player - 1]) + 1;
+                        this.updateScore();
+
+                        if (this.game.score[this.game.player - 1] > this.game.options.best_of / 2) {
+                            this.game.winner = this.game.player;
+                            salert("You Win!");
+                            this.addMove("gameover\t" + this.game.player);
+                        } else {
+                            this.addMove("roundover\t" + this.game.player);
+                        }
+                    }
+                    let mv = "place\t" + this.serializeBoard(board) + "\t" + e.target.id + "\t" + this.game.player + "\t" + this.game.score[0] + "|" + this.game.score[1];
+                    this.addMove(mv);
+                    this.endTurn();
                 });
             }
         });
     }
 
+    updateScore() {
+        document.querySelector(".blackscore").innerHTML = "Black: " + this.game.score[0];
+        document.querySelector(".whitescore").innerHTML = "White: " + this.game.score[1];
+        document.querySelector(".best_of").innerHTML = "Best of: " + this.game.options.best_of;
+    }
+
     addMove(mv) {
         this.moves.push(mv);
     }
-
 
     endTurn() {
         let extra = {};
@@ -266,15 +279,15 @@ class Wuziqi extends GameTemplate {
     //
     handleGameLoop(msg = null) {
 
-        let wuziqi_self = this;
+        //let groo = this;
 
-        if (wuziqi_self.game.queue.length > 0) {
+        if (this.game.queue.length > 0) {
             //
             // save before we start executing the game queue
             //
-            wuziqi_self.saveGame(wuziqi_self.game.id);
-            let qe = wuziqi_self.game.queue.length - 1;
-            let mv = wuziqi_self.game.queue[qe].split("\t");
+            this.saveGame(this.game.id);
+            let qe = this.game.queue.length - 1;
+            let mv = this.game.queue[qe].split("\t");
 
             //
             // game over conditions
@@ -282,25 +295,56 @@ class Wuziqi extends GameTemplate {
 
             if (mv[0] === "gameover") {
                 salert("you lose - sad");
-                wuziqi_self.resignGame();
-                wuziqi_self.game.queue.splice(this.game.queue.length - 1, 1);
+                this.updateScore();
+                this.updateStatus("<span class='playertitle'>" + this.game.sides[mv[1] - 1] + "</span> wins!")
+                this.drawBoard(this.game.board);
+                this.resignGame();
+                this.game.queue.splice(this.game.queue.length - 1, 1);
                 return 0;
             }
-
-            if (mv[0] == "place") {
-                wuziqi_self.boardFromString(mv[1]);
-                let cell = wuziqi_self.returnCellById(parseInt(mv[2]));
-                let playedby = wuziqi_self.game.sides.indexOf(cell.owner) + 1;
-                let winner = wuziqi_self.findWinner(cell);
-                console.log(winner);
-                wuziqi_self.drawBoard(wuziqi_self.game.board);
-                if (wuziqi_self.game.player != playedby){
-                    wuziqi_self.addEvents(wuziqi_self.game.board);
+            if (mv[0] == "roundover") {
+                this.drawBoard(this.game.board);
+                this.updateScore();
+                this.updateStatus("<span class='playertitle'>" + this.game.sides[mv[1] - 1] + "</span> wins the round.");
+                //initiate next round.
+                if (mv[1] != this.game.player) {
+                    this.addContinueButton();
+                } else {
+                    this.drawBoard(this.game.board);
                 }
-                wuziqi_self.game.queue.splice(wuziqi_self.game.queue.length - 1, 1);
+                this.game.queue.splice(this.game.queue.length - 1, 1);
+            }
+            if (mv[0] == "place") {
+                this.game.score[0] = mv[4].split("|")[0];
+                this.game.score[1] = mv[4].split("|")[1];
+                this.updateScore();
+                this.boardFromString(mv[1]);
+                let cell = this.returnCellById(parseInt(mv[2]));
+                let winner = this.findWinner(cell);
+                this.drawBoard(this.game.board);
+                if (this.game.player != mv[3]) {
+                    this.addEvents(this.game.board);
+                    this.updateStatus("<span class='playertitle'>You</span> to play.");
+                } else {
+                    this.updateStatus("Waiting for: <span class='playertitle'>" + this.game.sides[(mv[3]) % 2] + "</span>");
+                }
+                this.game.queue.splice(this.game.queue.length - 1, 1);
                 return 1;
             }
         }
+    }
+
+    addContinueButton() {
+        var el = document.createElement('button');
+        el.textContent = "Continue";
+        el.classList.add("continue");
+        el.addEventListener("click", () => {
+            this.generateBoard(this.game.options.board_size);
+            this.drawBoard(this.game.board);
+            this.addEvents(this.game.board);
+            this.updateStatus("You to play");
+        });
+        document.querySelector(".status").append(el);
     }
 
     findWinner(cell) {
@@ -396,6 +440,7 @@ class Wuziqi extends GameTemplate {
                 break;
         }
     }
+
     longOwner(s) {
         switch (s) {
             case "B":
@@ -410,6 +455,34 @@ class Wuziqi extends GameTemplate {
         }
     }
 
+    returnGameOptionsHTML() {
+        return `
+        <label for="best_of">Best of:</label>
+        <select name="best_of">
+          <option value="1">1</>
+          <option value="3" selected>3</>
+          <option value="5">5</>
+          <option value="7">7</>
+          <option value="9">9</>
+          <option value="11">11</>
+          <option value="13">13</>
+          <option value="15">15</>
+        </select>
+        <label for="board_size">
+        <select name="board_size">
+        <option value="11">11</>
+        <option value="13" selected>13</>
+        <option value="15">15</>
+        <option value="17">17</>
+        <option value="19">19</>
+        <option value="21">21</>
+        <option value="23">23</>
+        <option value="25">25</>
+      </select>
+      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
+    `;
+
+    }
 
 
 }

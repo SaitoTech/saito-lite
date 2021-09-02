@@ -1,17 +1,24 @@
-body {
-    background: linear-gradient(-45deg, #369, #036);
-}
+.inner {
+    height: 100%;
+    background: linear-gradient(217deg, #125552, transparent 70.71%),
+    linear-gradient(127deg, #093637, #44A08D 70.71%),
+    linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);}
 
 .board {
     display: grid;
-    margin: 10vh auto;
-    border: 1px solid orangered;
+    margin: 1em auto;
+    border: 1px solid #00cfff61;
+    background: #2222;
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
 }
 
 @media (orientation: landscape) {
     .board {
-        width: 80vh;
-        height: 80vh;
+        width: 70vh;
+        height: 70vh;
+    }
+    .status, .scoreboard {
+        width: 70vh;
     }
 }
 
@@ -20,13 +27,16 @@ body {
         width: 80vw;
         height: 80vw;
     }
+    .status, .scoreboard {
+        width: 80vw;
+    }
 }
 
 
 .board div {
-    border: 2px solid #8888;
+    border: 2px solid #ccc;
     border-radius: 100%;
-    margin: 15%;
+    position: relative;
 }
 
 .active:hover {
@@ -34,18 +44,67 @@ body {
     border: 2px solid white;
 }
 
+.active::after {
+    content: "";
+    position: absolute;
+    top: -2em;
+    left: -2em;
+    width: 4em;
+    height: 4em;
+    z-index: 5;
+}
+
 .owner_white {
     background: white;
+    border: 2px solid #000;
+    margin: 15%;
 }
 
 .owner_black {
     background: black;
+    border: 2px solid #aaa;
+    margin: 15%;
 }
 
-.owner_black.winner_yes {
+.owner_none {
+    margin: 40%;
+}
+
+.winner_yes {
     border: 2px solid rgb(255, 166, 0) !important;
 }
 
-.owner_white.winner_yes {
-    border: 2px solid rgb(29, 0, 12) !important;
+.scoreboard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 auto 1em;
+    padding: 3em 0 0;
+    color: #eee;
+    justify-content: space-around;
+}
+
+.scoreboard div {
+    margin: 1em 1em 0;
+    font-size: 2em;
+}
+
+.status {
+    margin: 1em auto;
+    text-align: left;
+    padding: 1em;
+    color: #eee;
+    font-size: 2em;
+}
+
+.playertitle {
+    text-transform: capitalize;
+}
+
+.continue {
+    border: 1px solid #125552;
+    margin: 0 1em;
+    background: linear-gradient(217deg, #125552, transparent 70.71%), linear-gradient(127deg, #093637, #44A08D 70.71%), linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);
+    margin: 0 1em;
+    color: #eee;
 }
