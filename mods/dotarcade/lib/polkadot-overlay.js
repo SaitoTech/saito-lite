@@ -55,7 +55,7 @@ module.exports = PolkadotPopup = {
           }
         }
 
-        let cryptomod = app.wallet.returnCryptoModuleByTicker(ticker);
+        //let cryptomod = app.wallet.returnCryptoModuleByTicker(ticker);
 
         try {
 

@@ -430,7 +430,7 @@ section {
 }
 
 
-.playbutton {
+.button {
     border: 0;
     background-color: var(--saito-red);
     color:  var(--saito-white);
@@ -448,7 +448,7 @@ section {
     transition: all .2s ease-in-out;
     transform: scale(1);
 }
-.playbutton:hover {
+.button:hover {
     color: white;
     transform: translateY(2px);
 }
@@ -1170,6 +1170,14 @@ h2, h5 {
   .section7 .itemWrapper div {
     height: unset;
   }
+
+  /* Dot Arcade */
+  .button {
+        border-radius: .5em;
+        font-size: 2em;
+        margin-top: 1.5em;
+        padding: 1em 2em;
+    }
 
 }
 @media only screen and (max-width: 768px) {
