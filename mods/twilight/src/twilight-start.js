@@ -4496,7 +4496,7 @@ this.startClock();
       if (card === "skipturn") {
         twilight_self.hideCard(card);
         twilight_self.addMove("resolve\tplay");
-        twilight_self.addMove("notify\t"+player+" has no cards playable.");
+        twilight_self.addMove("notify\t"+player.toUpperCase()+" has no cards playable.");
         twilight_self.endTurn();
         return 0;
       }
