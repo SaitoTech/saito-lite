@@ -271,7 +271,6 @@ section {
 
 
 .section1 .right{
-  flex:  1;
   display: flex;
   justify-content: flex-end;
 }
@@ -380,6 +379,92 @@ section {
 .swiperContainner2 {
   display: none;
   overflow-x: hidden;
+}
+
+/*
+  Part 2.5
+*/
+.sectionWrapperArcade{
+  width: 100%;
+  background-image: url("/website/img/gameboard.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color: whitesmoke;
+  padding: 4rem 4rem;
+  position: relative;
+}
+
+.arcadetitle{
+  font-size: 5rem;
+  font-weight: bold;
+  color: var(--saito-white);
+  margin: 2rem auto 0px;
+  text-align: center;
+  font-family: "visuelt-medium";
+}
+
+#dotarcade .section1{
+  justify-content: space-evenly;
+}
+
+#dotarcade h2{
+  color:  var(--saito-white);
+}
+.sectionWrapperArcade h1,
+.sectionWrapperArcade h2 {
+    font-family: 'visuelt-medium';
+    display: block;
+    margin: 0.2em 0px;
+    line-height: 1;
+    font-weight: normal;
+}
+.sectionWrapperArcade h1 {
+    font-size: 5em;
+}
+.sectionWrapperArcade h2 {
+    font-size: 3em;
+}
+.sectionWrapperArcade h3 {
+    font-size: 2em;
+}
+
+
+.button {
+    border: 0;
+    background-color: var(--saito-red);
+    color:  var(--saito-white);
+    border-radius: 5px;
+    min-width: 180px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1.5em;
+    letter-spacing: 1px;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 24px auto;
+    padding: .8em 1.2em;
+    transition: all .2s ease-in-out;
+    transform: scale(1);
+}
+.button:hover {
+    color: white;
+    transform: translateY(2px);
+}
+
+.heading-poker {
+    color: var(--saito-red);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.sectionWrapperArcade img{
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+
 }
 
 /* Part three */
@@ -1086,6 +1171,14 @@ h2, h5 {
     height: unset;
   }
 
+  /* Dot Arcade */
+  .button {
+        border-radius: .5em;
+        font-size: 2em;
+        margin-top: 1.5em;
+        padding: 1em 2em;
+    }
+
 }
 @media only screen and (max-width: 768px) {
   html {
@@ -1183,6 +1276,11 @@ h2, h5 {
   }
   .swiperContainner2 {
     display: block;
+  }
+
+  /* Part 2.5*/
+  #dotarcade .section1 .left{
+    align-items: center;
   }
   /* Part three */
   .sectionWrapper3 {
