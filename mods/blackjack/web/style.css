@@ -14,6 +14,12 @@ body {
   padding: unset;
 }
 
+.intro {
+  background-color: whitesmoke;
+  padding: 30px;
+  font-size: 1.6em;
+}
+
 .gameboard {
   position: absolute;
   background-image: url("img/gameboard.jpg");
@@ -34,6 +40,10 @@ body {
 
 .menu-player {
   font-size: 1.1em;
+}
+
+.menu_option{
+  text-transform: uppercase;
 }
 
 .menu-table {
@@ -137,7 +147,7 @@ body {
 .cardfan {
   position: absolute;
   top: 70vh;
-  left: 20vw;
+  left: 10vw;
 }
 
 .cardfan .card {
