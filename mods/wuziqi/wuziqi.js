@@ -18,6 +18,7 @@ class Wuziqi extends GameTemplate {
         this.description = "五子棋 aka Gokomu and Gobang! is a simple game where two players alternately place black and white tiles on a go board attempting to place 5 of them in adjacent positions."
         this.categories = "Boardgame Strategy";
         this.type = "Boardgame";
+        this.status = "Alpha";
 
         this.minPlayers = 2;
         this.maxPlayers = 2;
@@ -155,7 +156,10 @@ class Wuziqi extends GameTemplate {
             try {
                 this.drawBoard(this.game.board);
                 if (this.game.player == 1) {
-                    this.addEvents(this.game.board);
+                    let blackplayed = this.serializeBoard(this.game.board).indexOf("B");
+                    if (blackplayed < 0) {
+                        this.addEvents(this.game.board);
+                    }
                     this.updateStatus("You to play.");
                 } else {
                     this.updateStatus("Waiting for: <span class='playertitle'>Black</span>");
@@ -174,7 +178,7 @@ class Wuziqi extends GameTemplate {
 
         let overlay_html = `<div class="intro">
           <h1>Welcome to Wuziqi</h1>
-
+            Wuziqi also known as Gokomu and Gobang is a simple two player game played on a Go board.  Players alternately
           </div>`;
         return overlay_html;
 

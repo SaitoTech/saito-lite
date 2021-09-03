@@ -108,3 +108,24 @@
     margin: 0 1em;
     color: #eee;
 }
+
+@media (max-height: 750px) and (orientation: landscape) {
+    .board {
+        width: 100vh;
+        height: 1000vh;
+    }
+    .status, .scoreboard {
+        width: 100vh;
+    }
+}
+
+@media (max-width: 650px) and (orientation: portrait) {
+    .board {
+        width: 99vw;
+        height: 99vw;
+    }
+    .status, .scoreboard {
+        width: 99vw;
+    }
+}
+
