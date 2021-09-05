@@ -75,7 +75,7 @@
       class : "game-basic-rules",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleHowToPlayMenuItem();
+	game_mod.handleMovementMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-howto", {
@@ -84,7 +84,7 @@
       class : "game-combat",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleHowToPlayMenuItem();
+	game_mod.handleCombatMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-howto", {
@@ -93,7 +93,7 @@
       class : "game-factions",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleHowToPlayMenuItem();
+	game_mod.handleFactionMenuItem();
       }
     });
 

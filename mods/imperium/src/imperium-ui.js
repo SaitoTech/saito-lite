@@ -31,6 +31,18 @@ hideOverlays() {
   });
 }
 
+handleMovementMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnMovementOverlay());
+}
+handleCombatMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnCombatOverlay());
+}
+handleFactionMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnFactionOverlay());
+}
+handleHowToPlayMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnHowToPlayOverlay());
+}
 handleHowToPlayMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnHowToPlayOverlay());
 }

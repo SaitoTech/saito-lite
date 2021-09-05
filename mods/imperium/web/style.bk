@@ -452,13 +452,13 @@
   font-family: 'orbitron-medium';
   position:relative;
   float: left;
-  width: calc(52vh * 0.72110);
+  width: calc(42vh * 0.72110);
   display: block;
-  height: 52vh;
+  height: 42vh;
   color: white;
   margin-top: 50px;
   padding: 20px;
-  font-size: 2.5em;
+  font-size: 1.5em;
   line-height: 1.5em;
 }
 
@@ -472,13 +472,12 @@
 .overlay_strategy_card_text {
   position: relative;
   color: white;
-  padding-left: 25px;
-  padding-right: 30px;
-  padding-top: 65px;
+  padding-left: 15px;
+  padding-top: 45px;
   top: 0px;
   width: 100%;
   font-family: 'orbitron-light', helvetica, sans-serif;
-  font-size: 0.65em;
+  font-size: 0.7em;
   line-height: 1.4;
   z-index: 101;
 }
@@ -2620,52 +2619,6 @@ input[type=range] {
 
 
 
-
-#
-# OVerlays
-#
-.resources_box {
- background-color:black;padding:4px;border:1px solid #fff;
-}
-.influence_box {
-  background-color:orange;padding:4px;border:1px solid #fff;
-}
-.demo_ordered_list {
-  margin-left: 30px;
-  font-family: courier;
-  margin-top: 2a0px;
-  margin-bottom: 20px;
-}
-.demo_planet_card {
-  float: right;
-  width: 150px;
-}
-.demo_player_tokens {
-  clear:both;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: 200px;
-  display: inline-block;
-}
-.how_to_play_overlay {
-  padding:30px;
-  width: 800px;
-  max-width: 80vw;
-  max-height: 90vh;
-  font-family: 'orbitron-medium', helvetica, arial;
-  line-height: 1.7em;
-  font-size: 1.1em;
-  background-image: url('/imperium/img/starscape-background4.jpg');
-  background-size: cover;
-  color: white;
-  overflow-y: scroll;
-  font-size:1.3em;
-}
-.how_to_play_resources_entry {
-  padding-top: 20px;
-}
 
 
 
