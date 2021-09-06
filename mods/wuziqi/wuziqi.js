@@ -1,17 +1,15 @@
 const { timingSafeEqual } = require('crypto');
-
 const saito = require('../../lib/saito/saito');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const { update } = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
-//const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-//const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
-
 
 class Wuziqi extends GameTemplate {
 
     constructor(app) {
 
         super(app);
+
+        // Define static game parameters and add global variables.
 
         this.name = "Wuziqi";
         this.title = "五子棋"
@@ -34,12 +32,15 @@ class Wuziqi extends GameTemplate {
 
     initializeHTML(app) {
 
+        // Override the game template initializeHTML function
         super.initializeHTML(app);
 
+        // Add the Saito Chat Manager for in-game Chat
         this.app.modules.respondTo("chat-manager").forEach(mod => {
             mod.respondTo('chat-manager').render(this.app, this);
         });
 
+        // Add Menu Items to standard Menu
         this.menu.addMenuOption({
             text: "Player" + this.game.player,
             id: "playerno",
@@ -74,6 +75,7 @@ class Wuziqi extends GameTemplate {
             }
         });
 
+        // Add Chat Features to Menu
         let main_menu_added = 0;
         let community_menu_added = 0;
         for (let i = 0; i < this.app.modules.mods.length; i++) {
@@ -132,7 +134,7 @@ class Wuziqi extends GameTemplate {
             }
         }
         this.menu.addMenuIcon({
-            text: '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
+            text: '<i class="fa fa-fullscreen" aria-hidden="true"></i>',
             id: "game-menu-fullscreen",
             callback: function (app, game_mod) {
                 game_mod.menu.hideSubMenus();
@@ -140,35 +142,43 @@ class Wuziqi extends GameTemplate {
             }
         });
 
+        // Render menu and attach events
         this.menu.render(app, this);
         this.menu.attachEvents(app, this);
 
+        // Initialize our game
         this.game.sides = ["black", "white"];
-        this.game.score = [0,0];
+        this.game.score = [0, 0];
 
+        // Set the game board to the size set in the options
         this.game.size = this.game.options.board_size;
 
+        // Create the game board object if it does not exist.
         if (!this.game.board || this.game.board.length < 1) {
             this.generateBoard(this.game.size);
         }
 
-        if (this.browser_active == 1) {
-            try {
+        // Render board and set up values.
+        try {
+            // Check if anyone has played yet (black goes first)
+            let blackplayedyet = this.serializeBoard(this.game.board).indexOf("B");
+
+            // If no one has played set up the board
+            if (blackplayedyet < 0) {
                 this.drawBoard(this.game.board);
+                this.addEvents(this.game.board);
+                // If you are black, you are up.
                 if (this.game.player == 1) {
-                    let blackplayed = this.serializeBoard(this.game.board).indexOf("B");
-                    if (blackplayed < 0) {
-                        this.addEvents(this.game.board);
-                    }
                     this.updateStatus("You to play.");
                 } else {
                     this.updateStatus("Waiting for: <span class='playertitle'>Black</span>");
                 }
                 this.updateScore();
 
-            } catch (err) {
-                console.log(err);
             }
+
+        } catch (err) {
+            console.log(err);
         }
 
 
@@ -178,7 +188,7 @@ class Wuziqi extends GameTemplate {
 
         let overlay_html = `<div class="intro">
           <h1>Welcome to Wuziqi</h1>
-            Wuziqi also known as Gokomu and Gobang is a simple two player game played on a Go board.  Players alternately
+            Wuziqi also known as Gokomu and Gobang is a simple two player game played on a Go board.  Players alternately place black and white tokens. The first player to place five of their own tokens in a continuous line, vertical, horizontal or diagonally, wins. 
           </div>`;
         return overlay_html;
 
@@ -187,36 +197,61 @@ class Wuziqi extends GameTemplate {
 
     initializeGame(game_id) {
 
+        // Grab the game from my wallet if it's there, and the arcade if not.
         this.loadGame(game_id);
 
+        // Send 'let's get started' message.
         this.game.queue.push("READY");
     }
 
-
-
+    // Create the game board data structure
     generateBoard(x) {
+        // Set the board size (always a square of side length set by the user.)
         var cells = x * x;
+        // Clear the board
         this.game.board = [];
+        // Itterate through the cells in the board
         for (let n = 1; n <= cells; n++) {
+            // Create an empty cell
             let cell = {};
+            // Sets are the rows, columns and diagonals to which the cell belongs.
             cell.sets = {};
+            // Add the id
             cell.id = n;
+            // Set the row as the total divided by the side length rounded up.
             cell.sets.row = Math.ceil(n / x);
+            // Set the collumn as the cell id mod side length.
             cell.sets.col = ((n - 1) % x) + 1;
+            // Set the left down diagonal as where inverse of the column summed with row is constant 
             cell.sets.lddiag = (x - cell.sets.col) + cell.sets.row;
+            // Set the right and up diagonal to where the sum of the row and collumn
             cell.sets.rudiag = cell.sets.row + cell.sets.col - 1;
+            // The cell is blank.
             cell.owner = "none";
+            // The cell does not have a winning tile in it.
             cell.winner = "no";
             this.game.board.push(cell);
         }
         //console.log(this);
     }
 
+    // UI Score Update
+    updateScore() {
+        document.querySelector(".blackscore").innerHTML = "Black: " + this.game.score[0];
+        document.querySelector(".whitescore").innerHTML = "White: " + this.game.score[1];
+        document.querySelector(".best_of").innerHTML = "Best of: " + this.game.options.best_of;
+    }
+
+
+    // Itterate through the board object to draw each cell
     drawBoard(board) {
         boardElement = document.querySelector('.board');
+        // Add the CSS grit-template-columns value to the correct number of rows.
         boardElement.style.gridTemplateColumns = 'repeat(' + this.game.size + ', 1fr)';
 
+        // Clear the board
         boardElement.innerHTML = "";
+        // Draw the cells
         board.forEach(cell => {
             let el = document.createElement('div');
             el.id = cell.id;
@@ -226,48 +261,63 @@ class Wuziqi extends GameTemplate {
         });
     }
 
+    // Add click events to the board
     addEvents(board) {
         board.forEach(cell => {
             el = document.getElementById(cell.id);
+            // Only add click function to blank cells,
             if (cell.owner == "none") {
+                // Add CSS indications that the cell can be clicked.
                 el.classList.add("active");
+
+                // When the cell is clicked
                 el.addEventListener("click", (e) => {
+
+                    // Set it's owner to the clicker.
                     cell.owner = this.game.sides[this.game.player - 1];
-                    // check for round winner.
+                    // Check for round winner.
                     let winner = this.findWinner(cell);
+                    // Redraw the board - showing winning tokens and removing events.
                     this.drawBoard(board);
 
-                    // finish turn
+                    // Do the Saito Game Queue stuff
+
+                    // If we have a winner
                     if (winner != "no winner") {
+                        // Upate the scores
                         this.game.score[this.game.player - 1] = parseInt(this.game.score[this.game.player - 1]) + 1;
                         this.updateScore();
 
+                        // If this round win, wins the game - let the winner know.
                         if (this.game.score[this.game.player - 1] > this.game.options.best_of / 2) {
                             this.game.winner = this.game.player;
                             salert("You Win!");
+
+                            // Add a game over message to the stack.
                             this.addMove("gameover\t" + this.game.player);
                         } else {
+                            // If not only add a 'round over' message to the stack.
                             this.addMove("roundover\t" + this.game.player);
                         }
                     }
+                    // No matter what, add a 'place' message (filo - thi will be executed first) to update the board for both players.
+                    // Set the message type, the board state, cell played, player, and existing scores.
                     let mv = "place\t" + this.serializeBoard(board) + "\t" + e.target.id + "\t" + this.game.player + "\t" + this.game.score[0] + "|" + this.game.score[1];
+                    // Add this move to the stack 
                     this.addMove(mv);
+                    // And send on chain.
                     this.endTurn();
                 });
             }
         });
     }
 
-    updateScore() {
-        document.querySelector(".blackscore").innerHTML = "Black: " + this.game.score[0];
-        document.querySelector(".whitescore").innerHTML = "White: " + this.game.score[1];
-        document.querySelector(".best_of").innerHTML = "Best of: " + this.game.options.best_of;
-    }
-
+    // Utility to add moves to stack
     addMove(mv) {
         this.moves.push(mv);
     }
 
+    // Bundle moves and send them off.
     endTurn() {
         let extra = {};
         extra.target = (this.game.player + 1) % 2;
@@ -283,65 +333,78 @@ class Wuziqi extends GameTemplate {
     //
     handleGameLoop(msg = null) {
 
-        //let groo = this;
+        // The Game Loop hands us back moves from the end of the stack (the reverse order they were added)
 
+        // Check we have a queue
         if (this.game.queue.length > 0) {
-            //
-            // save before we start executing the game queue
-            //
+            
+            // Save before we start executing the game queue
             this.saveGame(this.game.id);
+
+            // Get the last move and split it on tabs.
             let qe = this.game.queue.length - 1;
             let mv = this.game.queue[qe].split("\t");
 
-            //
-            // game over conditions
-            //
-
+            
+            // Game over conditions
             if (mv[0] === "gameover") {
-                salert("you lose - sad");
+                salert("You lose.");
                 this.updateScore();
                 this.updateStatus("<span class='playertitle'>" + this.game.sides[mv[1] - 1] + "</span> wins!")
                 this.drawBoard(this.game.board);
                 this.resignGame();
+                // Remove this item from the queue.
                 this.game.queue.splice(this.game.queue.length - 1, 1);
                 return 0;
             }
+            // Round over
             if (mv[0] == "roundover") {
                 this.drawBoard(this.game.board);
                 this.updateScore();
                 this.updateStatus("<span class='playertitle'>" + this.game.sides[mv[1] - 1] + "</span> wins the round.");
-                //initiate next round.
+                // Initiate next round.
+                // Add a continue button if player did not play the winning token, just draw the board (and remove events if they did not);
                 if (mv[1] != this.game.player) {
                     this.addContinueButton();
                 } else {
                     this.drawBoard(this.game.board);
                 }
+                // Remove this item from the queue.
                 this.game.queue.splice(this.game.queue.length - 1, 1);
             }
             if (mv[0] == "place") {
+                // Set the game scores
                 this.game.score[0] = mv[4].split("|")[0];
                 this.game.score[1] = mv[4].split("|")[1];
                 this.updateScore();
+                // Regenerate the game board object from the serialized version sent by the other player.
                 this.boardFromString(mv[1]);
+                // Grab the played cell
                 let cell = this.returnCellById(parseInt(mv[2]));
+                // And check if it won the game
                 let winner = this.findWinner(cell);
+                // Redraw the board (adding winning cells if any)
                 this.drawBoard(this.game.board);
+                // If the player is next, add events, if not let them know they are waiting.
                 if (this.game.player != mv[3]) {
                     this.addEvents(this.game.board);
                     this.updateStatus("<span class='playertitle'>You</span> to play.");
                 } else {
                     this.updateStatus("Waiting for: <span class='playertitle'>" + this.game.sides[(mv[3]) % 2] + "</span>");
                 }
+                // Remove this item from the queue.
                 this.game.queue.splice(this.game.queue.length - 1, 1);
                 return 1;
             }
         }
     }
 
+    // Add button to continue the game
     addContinueButton() {
         var el = document.createElement('button');
         el.textContent = "Continue";
         el.classList.add("continue");
+        // Reinitialise the board and add events.
         el.addEventListener("click", () => {
             this.generateBoard(this.game.options.board_size);
             this.drawBoard(this.game.board);
@@ -351,11 +414,15 @@ class Wuziqi extends GameTemplate {
         document.querySelector(".status").append(el);
     }
 
+    // Check if a play won the round
     findWinner(cell) {
         let win = 0;
         let winner = "no winner";
+        // Itterte through the row, column and diagonals for the played cell
         for (const [key, value] of Object.entries(cell.sets)) {
+            // Test each to check if there are five cells in a row with the same colour tile.
             let testset = this.returnCells(key, value);
+            // Don't worry if the diagonal is not long enough for five tokens
             if (testset.length > 4) {
                 testset.forEach(item => {
                     if (item.owner == cell.owner) {
@@ -373,13 +440,15 @@ class Wuziqi extends GameTemplate {
         return winner;
     }
 
+    // Add CSS class to show cells are part of a winning row of 5
     showWin(key, value, cell) {
         let set = this.returnCells(key, value);
         this.addWinners(set, cell);
         set.reverse();
         this.addWinners(set, cell);
     }
-
+    
+    // Add to each cell owned by the winner until running out
     addWinners(set, cell) {
         let draw = false;
         set.forEach(el => {
@@ -396,6 +465,7 @@ class Wuziqi extends GameTemplate {
         });
     }
 
+    // Return cells by set
     returnCells(type, value) {
         var cells = [];
         this.game.board.forEach(cell => {
@@ -416,6 +486,8 @@ class Wuziqi extends GameTemplate {
         return cell;
     }
 
+    // Return the board as a series of letters B, W, N
+    // For Black, White, No owner.
     serializeBoard(board) {
         boardString = "";
         board.forEach(cell => {
@@ -424,6 +496,7 @@ class Wuziqi extends GameTemplate {
         return boardString;
     }
 
+    // Return a game board object from a serialised string.
     boardFromString(boardString) {
         this.generateBoard(Math.sqrt(boardString.length));
         this.game.board.forEach((cell, idx) => {
@@ -431,6 +504,7 @@ class Wuziqi extends GameTemplate {
         });
     }
 
+    // Translators between B - black etc.
     shortOwner(s) {
         switch (s) {
             case "black":
@@ -459,6 +533,7 @@ class Wuziqi extends GameTemplate {
         }
     }
 
+    // Add options to the game start wizard for different game parameters
     returnGameOptionsHTML() {
         return `
         <label for="best_of">Best of:</label>

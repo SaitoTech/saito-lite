@@ -56,13 +56,13 @@
 
 .owner_white {
     background: white;
-    border: 2px solid #000;
+    border: 1px solid #111 !important;
     margin: 15%;
 }
 
 .owner_black {
     background: black;
-    border: 2px solid #aaa;
+    border: 1px solid #eee !important;
     margin: 15%;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .winner_yes {
-    border: 2px solid rgb(255, 166, 0) !important;
+    border: 7px solid rgb(255, 166, 0) !important;
 }
 
 .scoreboard {
