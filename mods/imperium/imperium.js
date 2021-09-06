@@ -10732,7 +10732,7 @@ console.log("Active Agenda: " + active_agenda);
       class : "game-basic-rules",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleHowToPlayMenuItem();
+	game_mod.handleMovementMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-howto", {
@@ -10741,7 +10741,7 @@ console.log("Active Agenda: " + active_agenda);
       class : "game-combat",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleHowToPlayMenuItem();
+	game_mod.handleCombatMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-howto", {
@@ -10750,7 +10750,7 @@ console.log("Active Agenda: " + active_agenda);
       class : "game-factions",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleHowToPlayMenuItem();
+	game_mod.handleFactionMenuItem();
       }
     });
 
@@ -10783,7 +10783,7 @@ console.log("Active Agenda: " + active_agenda);
       }
     });
     this.menu.addSubMenuOption("game-cards", {
-      text : "Unit Info",
+      text : "Units",
       id : "game-units",
       class : "game-units",
       callback : function(app, game_mod) {
@@ -11825,6 +11825,18 @@ hideOverlays() {
   });
 }
 
+handleMovementMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnMovementOverlay());
+}
+handleCombatMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnCombatOverlay());
+}
+handleFactionMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnFactionOverlay());
+}
+handleHowToPlayMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnHowToPlayOverlay());
+}
 handleHowToPlayMenuItem() {
   this.overlay.showOverlay(this.app, this, this.returnHowToPlayOverlay());
 }
@@ -28725,18 +28737,7 @@ returnHowToPlayOverlay() {
 
     <div class="how_to_play_overlay" id="how_to_play_overlay">
 
-<h2>Every turn players may:</h2>
-
-<div style="padding-left:30px">
-  <ol class="demo_ordered_list">
-    <li>Spend a command token to activate a sector</li>
-      <ul style="margin-left:20px">
-        <li style="list-style:none">- to move ships into the sector</li>
-        <li style="list-style:none">- to produce in the sector</li>
-      </ul>
-    <li>Play a strategy card</li>
-    <li>Pass</li>
-  </ol>
+<h2>Your Goal:</h2>
 
 <img src="/imperium/img/planets/BROUGHTON.png" class="demo_planet_card" />
 
@@ -28745,8 +28746,6 @@ returnHowToPlayOverlay() {
 Conquer planets to gain resources and influence:
 
 <p></p>
-
-</div>
 
 <div style="padding-left:30px;padding-right:30px;">
 <div class="how_to_play_resources_entry">
@@ -28762,6 +28761,147 @@ buy command tokens and vote on laws.
 </div>
 </div>
 
+
+<h2 style="margin-top:30px">On Your Turn:</h2>
+
+<div style="padding-left:30px;font-family:'orbitron-medium', helvetica, arial;line-height:2em;">
+  <ol class="demo_ordered_list" style="font-family: 'orbitron-medium', helvetica, arial">
+    <li>Spend a command token to activate a sector</li>
+      <ul style="margin-left:20px">
+        <li style="list-style:none">- to move ships into the sector</li>
+        <li style="list-style:none">- to produce in the sector</li>
+      </ul>
+    <li>Play a strategy card</li>
+    <li>Pass</li>
+  </ol>
+</div>
+
+    </div>
+    </style>
+  `;
+
+  return html;
+}
+
+returnMovementOverlay() {
+  let imperium_self = this;
+  let html = `
+
+    <div class="how_to_play_overlay" id="how_to_play_overlay">
+
+<h2>Moving Ships:</h2>
+
+<p style="margin-top:15px"></p>
+
+Each ship can move a maximum number of hexes per turn. The INFO > UNITS 
+menu will show you how many hexes.
+
+<p style="margin-top:15px"></p>
+
+To move a ship, activate the destination sector. You will be able to 
+to select the ships you wish to move.
+
+<p style="margin-top:15px"></p>
+
+Some tech upgrades and action cards can increase movement distance. You 
+can also <b>upgrade</b> units to increase combat and movement.
+
+
+<h2 style="margin-top:30px">Carrying Units:</h2>
+
+<p style="margin-top:15px"></p>
+
+Some units like the CARRIER have the capacity to carry planet-based 
+units like INFANTRY. You need these units to invade and controls
+planets..
+
+<p style="margin-top:15px"></p>
+
+Capacity of each ship can be found in the INFO > UNITS menu.
+
+</div>
+
+    </div>
+  `;
+
+  return html;
+}
+
+returnCombatOverlay() {
+  let imperium_self = this;
+  let html = `
+
+    <div class="how_to_play_overlay" id="how_to_play_overlay">
+
+<h2>Space Battles:</h2>
+
+<p style="margin-top:15px"></p>
+
+The strength of each ship in combat can be found on the INFO > UNITS
+menu. This is the number which must be rolled on a 10-sided dice to
+secure a hit in combat.
+
+<p style="margin-top:15px"></p>
+
+In combat both players fire all available units, and both players then
+take damage. Combat ends when one player is destroyed or retreats from
+the battle.
+
+<p style="margin-top:15px"></p>
+
+Space battles are automated. If you have action cards that will
+modify combat or allow you to avoid damage you will have the option to 
+play them during your turn.
+
+<p style="margin-top:15px"></p>
+
+The order of combat:
+
+<p style="margin-top:15px"></p>
+
+<div style="padding-left:30px;font-family:'orbitron-medium', helvetica, arial;line-height:2em;">
+  <ol class="demo_ordered_list" style="font-family: 'orbitron-medium', helvetica, arial">
+    <li>PDS combat (optional)</li>
+    <li>Anti-fighter barrage</li>
+    <li>Space Combat</li>
+  </ol>
+</div>
+
+<h2 style="clear:both;margin-top:35px;">Ground Combat:</h2>
+
+<div style="padding-left: 30px">
+
+Ground combat works like space combat. The sequence of events:
+
+<p style="margin-top:15px"></p>
+
+<div style="padding-left:30px;font-family:'orbitron-medium', helvetica, arial;line-height:2em;">
+  <ol class="demo_ordered_list" style="font-family: 'orbitron-medium', helvetica, arial">
+    <li>Bombardment (optional)</li>
+    <li>Landing of Infantry</li>
+    <li>Ground Combat</li>
+  </ol>
+</div>
+
+<p style="margin-top:15px"></p>
+
+Ground combat ends when one player's infantry are totally destroyed. The 
+winner holds the planet, regardless of who controls the sector in space.
+
+</div>
+
+    </div>
+  `;
+
+  return html;
+}
+
+returnFactionOverlay() {
+  let imperium_self = this;
+  let html = `
+
+    <div class="how_to_play_overlay" id="how_to_play_overlay">
+
 <h2 style="clear:both;margin-top:35px;">Faction Abilities:</h2>
 
 <div style="padding-left: 30px">
@@ -28770,9 +28910,11 @@ buy command tokens and vote on laws.
 
 <p></p>
 
-Every faction has special abilities. Your dashboard shows your total <span class="resources_box">resources</span> and <span class="influence_box">influence</span> and trade goods and commodities:
+The faction dashboard shows the total influence and resources controlled by 
+every faction. The third hex is the number of trade goods held by each 
+faction. Trade goods may be spent 1-for-1 in lieu of resources or influence.
 
-</div>
+<p></p>
 
 <div style="padding-left:30px;padding-right:30px;">
 <div class="how_to_play_resources_entry">
@@ -28788,59 +28930,13 @@ turn into trade goods when you trade them away
 </div>
 </div>
 
-<div style="padding-left: 30px">
-  Learn more about how your ships move and fight by checking out the Units section in the Cards menu. And have fun!
-</div>
+<p style="margin-top:15px"></p>
 
-	</div>
-      </div>
+Learn more about the factions in the game by clicking on their faction 
+dashboard. Each faction has unique faction abilities that can change the 
+game radically. Learn your opponent's weaknesses and strengths.
 
     </div>
-
-    <style type="text/css">
-.resources_box {
- background-color:black;padding:4px;border:1px solid #fff;
-}
-.influence_box {
-  background-color:orange;padding:4px;border:1px solid #fff;
-}
-.demo_ordered_list {
-  margin-left: 30px; 
-  font-family: courier;
-  margin-top: 2a0px;
-  margin-bottom: 20px;
-}
-.demo_planet_card {
-  float: right;
-  width: 150px;
-}
-.demo_player_tokens {
-  clear:both;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: 200px;
-  display: inline-block;
-}
-.how_to_play_overlay {
-  padding:30px;
-  width: 800px;
-  max-width: 80vw;
-  max-height: 90vh;
-  font-family: 'orbitron-medium', helvetica, arial;
-  line-height: 1.7em;
-  font-size: 1.1em;
-  background-image: url('/imperium/img/starscape-background4.jpg');
-  background-size: cover;
-  color: white;
-  overflow-y: scroll;
-  font-size:1.3em;
-}
-.how_to_play_resources_entry {
-  padding-top: 20px;
-}
-    </style>
   `;
 
   return html;
@@ -29723,6 +29819,7 @@ displayFactionDashboard(agenda_phase=0) {
 
     }
 
+/****
     $('.dash-item-resources').on('mouseenter', function() {
       imperium_self.showHelpCard("resources");
     }).on('mouseleave', function() {
@@ -29740,6 +29837,7 @@ displayFactionDashboard(agenda_phase=0) {
     }).on('mouseleave', function() {
       imperium_self.hideHelpCard();
     });
+****/
 
   } catch (err) {
 console.log("ERROR: " + err);
