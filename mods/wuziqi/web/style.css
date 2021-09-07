@@ -2,13 +2,24 @@
     height: 100%;
     background: linear-gradient(217deg, #125552, transparent 70.71%),
     linear-gradient(127deg, #093637, #44A08D 70.71%),
-    linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);}
+    linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);
+    background-image: url("../poker/img/gameboard.jpg");
+    background-size: cover;
+}
+
+.intro {
+  background-color: whitesmoke;
+  padding: 30px;
+  font-size: 1.6em;
+}
 
 .board {
     display: grid;
     margin: 1em auto;
     border: 1px solid #00cfff61;
     background: #2222;
+    background-image: url("img/004-polished-wood.png");
+    padding: 2em;
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
 }
 
@@ -32,19 +43,33 @@
     }
 }
 
-
-.board div {
-    border: 2px solid #ccc;
-    border-radius: 100%;
-    position: relative;
+/*
+Board is a grid of wooden squares
+*/
+.board > div {
+    background-image: url("img/004-polished-wood.png");
+    border: 1px solid black;
+    margin:  0 -1px -1px 0;
 }
 
-.active:hover {
+/*
+ which should lite up when you hover over them
+ for which I need a place holder
+*/
+.board div.empty{
+    margin: auto;
+    height: 98%;
+    width: 98%;
+}
+
+.active:hover .empty{
     cursor: pointer;
     border: 2px solid white;
+    background-color: rgba(255,255,255,0.5);
 }
 
-.active::after {
+/*What does this do? Possibly a shift so tiles can go on the crosses?
+.active::after { 
     content: "";
     position: absolute;
     top: -2em;
@@ -52,26 +77,40 @@
     width: 4em;
     height: 4em;
     z-index: 5;
+}*/
+
+
+/*
+ squares contain round pieces
+*/
+.board div.piece{
+    border-radius: 100%;
+    margin: 15%;
+    height: 69%;
+    width: 69%;
 }
 
-.owner_white {
+/*
+ that are either black or white
+*/
+.piece[data-owner="white"]{
     background: white;
     border: 1px solid #111 !important;
-    margin: 15%;
+    
 }
 
-.owner_black {
+.piece[data-owner="black"]{
     background: black;
     border: 1px solid #eee !important;
-    margin: 15%;
 }
 
-.owner_none {
-    margin: 40%;
-}
-
-.winner_yes {
-    border: 7px solid rgb(255, 166, 0) !important;
+/*
+  We mark the cells of the 5-in-a-row winning combination
+*/
+.board .winner {
+    /*border: 7px solid rgb(255, 166, 0) !important;*/
+    background-color: gold;
+    background-image: none;
 }
 
 .scoreboard {
@@ -91,7 +130,7 @@
 
 .status {
     margin: 1em auto;
-    text-align: left;
+    text-align: center;
     padding: 1em;
     color: #eee;
     font-size: 2em;
