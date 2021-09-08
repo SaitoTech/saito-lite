@@ -35,6 +35,10 @@ class Wuziqi extends GameTemplate {
         // Override the game template initializeHTML function
         super.initializeHTML(app);
 
+        //Define black and white so can use in menus        
+        this.game.sides = ["black", "white"];
+
+
         // Add the Saito Chat Manager for in-game Chat
         this.app.modules.respondTo("chat-manager").forEach(mod => {
             mod.respondTo('chat-manager').render(this.app, this);
@@ -42,7 +46,7 @@ class Wuziqi extends GameTemplate {
 
         // Add Menu Items to standard Menu
         this.menu.addMenuOption({
-            text: "Player" + this.game.player,
+            text: "Player: " + this.formatPlayer(),
             id: "playerno",
             class: "playerno",
             callback: function (app, game_mod) {
@@ -114,7 +118,7 @@ class Wuziqi extends GameTemplate {
                         let data = {};
                         let members = [this.game.players[ii], this.app.wallet.returnPublicKey()].sort();
                         let gid = this.app.crypto.hash(members.join('_'));
-                        let name = "Player " + (ii + 1);
+                        let name = this.game.sides[ii].toUpperCase();//"Player " + (ii + 1);
                         let chatmod = this.app.modules.mods[i];
 
                         this.menu.addSubMenuOption("game-chat", {
@@ -133,8 +137,9 @@ class Wuziqi extends GameTemplate {
                 }
             }
         }
+        // Add icon to switch to full screen mode
         this.menu.addMenuIcon({
-            text: '<i class="fa fa-fullscreen" aria-hidden="true"></i>',
+            text: '<i class="fa fa-window-maximize" aria-hidden="true"></i>',
             id: "game-menu-fullscreen",
             callback: function (app, game_mod) {
                 game_mod.menu.hideSubMenus();
@@ -147,7 +152,6 @@ class Wuziqi extends GameTemplate {
         this.menu.attachEvents(app, this);
 
         // Initialize our game
-        this.game.sides = ["black", "white"];
         this.game.score = [0, 0];
 
         // Set the game board to the size set in the options
@@ -169,7 +173,7 @@ class Wuziqi extends GameTemplate {
                 this.addEvents(this.game.board);
                 // If you are black, you are up.
                 if (this.game.player == 1) {
-                    this.updateStatus("You to play.");
+                    this.updateStatus("Your move, "+this.formatPlayer());
                 } else {
                     this.updateStatus("Waiting for: <span class='playertitle'>Black</span>");
                 }
@@ -184,14 +188,24 @@ class Wuziqi extends GameTemplate {
 
     }
 
+    /*
+    Utility to make some of the status updates easier, figures out which color this player is using
+    and formats it to capitalize the first letter
+    */
+    formatPlayer(){
+        let myColor = this.game.sides[this.game.player-1];
+        return myColor.charAt(0).toUpperCase() + myColor.slice(1);
+    }
+
+    //html for game intro/rules
     returnRulesOverlay() {
 
         let overlay_html = `<div class="intro">
-          <h1>Welcome to Wuziqi</h1>
-            Wuziqi also known as Gokomu and Gobang is a simple two player game played on a Go board.  Players alternately place black and white tokens. The first player to place five of their own tokens in a continuous line, vertical, horizontal or diagonally, wins. 
+          <h2>Wuziqi （五子棋）</h2>
+           <p> Wuziqi, also known as Gokomu and Gobang, is a simple two player game played on a Go board. It is similar to <abbr title="also known as Naughts and Crosses">Tic-Tac-Toe</abbr> or Connect Four in that players alternately place tokens in an attempt to create a line of five consecutive tokens of their color. Tokens may be placed anywhere on the board not already occupied.</p>
+           <p> The first player to place five of their own tokens in a continuous line--vertical, horizontal or diagonally--wins the round. The player who wins the most rounds, wins the match.</p><p> Matches are best out of three by default, but you can change this in the advanced options in the arcade. You may also specify the size of the board for added challenge.</p>
           </div>`;
         return overlay_html;
-
 
     }
 
@@ -221,7 +235,10 @@ class Wuziqi extends GameTemplate {
             // The cell does not have a winning tile in it.
             cell.winner = false;
 
-            // Sets are the rows, columns and diagonals to which the cell belongs.
+            /* Sets are the rows, columns and diagonals to which the cell belongs.
+               Each row, col, and diag has a unique index, so that adjacent sells share
+               a value in one of the four set categories
+            */
             cell.sets = {};
             // Set the row as the total divided by the side length rounded up.
             cell.sets.row = Math.ceil(n / x);
@@ -237,9 +254,13 @@ class Wuziqi extends GameTemplate {
     }
 
     // UI Score Update
+    /* Though stupid to use a loop for two players, it is useful to see how game.sides and game.scores are 
+       indexed through the player index (1, 2, ...) 
+    */
     updateScore() {
-        document.querySelector(".blackscore").innerHTML = "Black: " + this.game.score[0];
-        document.querySelector(".whitescore").innerHTML = "White: " + this.game.score[1];
+        for (let i = 0; i < 2 /*this.game.players.length==2*/; i++){
+            document.querySelector(`.score[data-player="${i}"`).innerHTML = `${((i+1)==this.game.player)? "*" : ""}${this.game.sides[i]}: ${this.game.score[i]}`;
+        }
         document.querySelector(".best_of").innerHTML = "Best of " + this.game.options.best_of;
     }
 
@@ -358,48 +379,59 @@ class Wuziqi extends GameTemplate {
             
             // Game over conditions
             if (mv[0] === "gameover") {
-                salert("You lose.");
+                //Winner sent the move
+                if (mv[1]!=this.game.player) salert("You lose.");
+                //Not duplicated in board events, so both players run these
                 this.updateScore();
                 this.updateStatus("<span class='playertitle'>" + this.game.sides[mv[1] - 1] + "</span> wins!")
                 this.drawBoard(this.game.board);
-                this.resignGame();
+                //this.resignGame(); <- throws a 567567 error
+                
                 // Remove this item from the queue.
                 this.game.queue.splice(this.game.queue.length - 1, 1);
-                return 0;
+                return 0; //end queue cycling
             }
             // Round over
             if (mv[0] == "roundover") {
                 this.drawBoard(this.game.board);
                 this.updateScore();
-                this.updateStatus("<span class='playertitle'>" + this.game.sides[mv[1] - 1] + "</span> wins the round.");
+              
                 // Initiate next round.
                 // Add a continue button if player did not play the winning token, just draw the board (and remove events if they did not);
                 if (mv[1] != this.game.player) {
+                    this.updateStatus(`<span class='playertitle'>${this.game.sides[mv[1] - 1]}</span> wins the round.`);
                     this.addContinueButton();
                 } else {
+                    this.updateStatus(`You win the round! Waiting for <span class="playertitle">${this.game.sides[mv[1]%2]}</span> to start next round.`);
                     this.drawBoard(this.game.board);
                 }
                 // Remove this item from the queue.
                 this.game.queue.splice(this.game.queue.length - 1, 1);
+                return 1;
             }
             if (mv[0] == "place") {
                 // Set the game scores
                 this.game.score[0] = mv[4].split("|")[0];
                 this.game.score[1] = mv[4].split("|")[1];
                 this.updateScore();
-                // Regenerate the game board object from the serialized version sent by the other player.
-                this.boardFromString(mv[1]);
-                // Grab the played cell
-                let cell = this.returnCellById(parseInt(mv[2]));
-                // And check if it won the game
-                let winner = this.findWinner(cell);
-                // Redraw the board (adding winning cells if any)
-                this.drawBoard(this.game.board);
+
                 // If the player is next, add events, if not let them know they are waiting.
                 if (this.game.player != mv[3]) {
+                
+                    // Regenerate the game board object from the serialized version sent by the other player.
+                    this.boardFromString(mv[1]);
+                    // Grab the played cell
+                    let cell = this.returnCellById(parseInt(mv[2]));
+                    // And check if it won the game
+                    let winner = this.findWinner(cell);
+                    // Redraw the board (adding winning cells if any)
+                    this.drawBoard(this.game.board);
+                
+                    //Let player make their move
                     this.addEvents(this.game.board);
-                    this.updateStatus("<span class='playertitle'>You</span> to play.");
+                    this.updateStatus("Your move, "+this.formatPlayer());
                 } else {
+                    //We don't need to run the above functions because this player already ran them through the board events
                     this.updateStatus("Waiting for: <span class='playertitle'>" + this.game.sides[(mv[3]) % 2] + "</span>");
                 }
                 // Remove this item from the queue.
@@ -419,20 +451,21 @@ class Wuziqi extends GameTemplate {
             this.generateBoard(this.game.options.board_size);
             this.drawBoard(this.game.board);
             this.addEvents(this.game.board);
-            this.updateStatus("You to play");
+            this.updateStatus("You go first");
         });
         document.querySelector(".status").append(el);
     }
 
-    // Check if a play won the round
+    // Check if a player won the round
     findWinner(cell) {
-        let win = 0;
+        let win;
         let winner = "no winner";
-        // Itterte through the row, column and diagonals for the played cell
+        // Iterate through the row, column and diagonals for the played cell
         for (const [key, value] of Object.entries(cell.sets)) {
             // Test each to check if there are five cells in a row with the same colour tile.
-            let testset = this.returnCells(key, value);
-            // Don't worry if the diagonal is not long enough for five tokens
+            let testset = this.returnCellsInLine(key, value);
+            win = 0; //reset to 0 when switch directions, just in case there is a possibility that we accidentally count a bent line
+            // Only check if there are at least 5 cells in the line (diagonals can be short)
             if (testset.length > 4) {
                 testset.forEach(item => {
                     if (item.owner == cell.owner) {
@@ -450,16 +483,18 @@ class Wuziqi extends GameTemplate {
         return winner;
     }
 
-    // Add CSS class to show cells are part of a winning row of 5
+    // Modify property winner of cells in the winning set so that CSS can be updated
     showWin(key, value, cell) {
-        let set = this.returnCells(key, value);
-        this.addWinners(set, cell);
+        let set = this.returnCellsInLine(key, value);
+        this.markWinners(set, cell);
+        //must run through both ways to mark the whole winning set 
         set.reverse();
-        this.addWinners(set, cell);
+        this.markWinners(set, cell);
     }
     
-    // Add to each cell owned by the winner until running out
-    addWinners(set, cell) {
+    /*Skim through the line and start marking winning cells when we reach the given cell
+    and as long as the following cells have the same owner */
+    markWinners(set, cell) {
         let draw = false;
         set.forEach(el => {
             if (el.id == cell.id) {
@@ -475,8 +510,10 @@ class Wuziqi extends GameTemplate {
         });
     }
 
-    // Return cells by set
-    returnCells(type, value) {
+    /* Return cells that belong to a particular axis (horizontal, vertical, or diagonal)
+        type = {row, col, lddiag, rudiag}
+    */
+    returnCellsInLine(type, value) {
         var cells = [];
         this.game.board.forEach(cell => {
             if (cell.sets[type] == value) {
@@ -495,6 +532,12 @@ class Wuziqi extends GameTemplate {
         });
         return cell;
     }
+
+    /*
+    The following four function compress/decompress the board state into a string so that
+    players can transmit it with their move, a completely unnecessary action, since each player places a single 
+    tile at a time, it is enough to infer the new boardstate from the player's number and the cell id.
+    */
 
     // Return the board as a series of letters B, W, N
     // For Black, White, No owner.
@@ -557,8 +600,9 @@ class Wuziqi extends GameTemplate {
           <option value="13">13</>
           <option value="15">15</>
         </select>
-        <label for="board_size">
+        <label for="board_size">Board Size:</label>
         <select name="board_size">
+        <option value="9">9</>
         <option value="11">11</>
         <option value="13" selected>13</>
         <option value="15">15</>
