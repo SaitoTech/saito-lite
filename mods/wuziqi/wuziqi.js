@@ -170,9 +170,9 @@ class Wuziqi extends GameTemplate {
             // If no one has played set up the board
             if (blackplayedyet < 0) {
                 this.drawBoard(this.game.board);
-                this.addEvents(this.game.board);
                 // If you are black, you are up.
                 if (this.game.player == 1) {
+                    this.addEvents(this.game.board);
                     this.updateStatus("Your move, "+this.formatPlayer());
                 } else {
                     this.updateStatus("Waiting for: <span class='playertitle'>Black</span>");
@@ -254,18 +254,18 @@ class Wuziqi extends GameTemplate {
     }
 
     // UI Score Update
-    /* Though stupid to use a loop for two players, it is useful to see how game.sides and game.scores are 
-       indexed through the player index (1, 2, ...) 
+    /* Though unnecessary to loop through two players, it is important to remember that players are numbered (1, 2, 3), 
+        but data structures for player properties are typically 0-indexed arrays
     */
     updateScore() {
         for (let i = 0; i < 2 /*this.game.players.length==2*/; i++){
-            document.querySelector(`.score[data-player="${i}"`).innerHTML = `${((i+1)==this.game.player)? "*" : ""}${this.game.sides[i]}: ${this.game.score[i]}`;
+            document.querySelector(`.score${i+1}`).innerHTML = `${((i+1)==this.game.player)? "*" : ""}${this.game.sides[i]}: ${this.game.score[i]}`;
         }
         document.querySelector(".best_of").innerHTML = "Best of " + this.game.options.best_of;
     }
 
 
-    // Itterate through the board object to draw each cell in the DOM
+    // Iterate through the board object to draw each cell in the DOM
     drawBoard(board) {
         boardElement = document.querySelector('.board');
         // Clear the board
@@ -275,14 +275,19 @@ class Wuziqi extends GameTemplate {
         boardElement.style.gridTemplate = `repeat(${this.game.size}, 1fr) / repeat(${this.game.size}, 1fr)`; //'repeat(' + this.game.size + ', 1fr)';
         
         // Draw the cells
+        let ct = 1; 
         board.forEach(cell => {
             let tile = document.createElement('div');
             tile.id = cell.id;
             if (cell.winner) tile.classList.add("winner");
+            if (ct <= this.game.size) tile.classList.add("top");
+            if (ct > this.game.size*(this.game.size-1)) tile.classList.add("bottom");
+            if (ct % this.game.size == 1) tile.classList.add("left");
+            if (ct % this.game.size == 0) tile.classList.add("right");
             if (cell.owner != "none") {
                 let el = document.createElement('div');
                 el.classList.add("piece");
-                el.dataset.owner = cell.owner;
+                el.classList.add(cell.owner);
                 tile.append(el);
             }else{
                 let el = document.createElement("div");
@@ -290,6 +295,7 @@ class Wuziqi extends GameTemplate {
                 tile.append(el);
             }
             boardElement.append(tile);
+            ct++;
         });
     }
 
@@ -375,20 +381,19 @@ class Wuziqi extends GameTemplate {
             // Get the last move and split it on tabs.
             let qe = this.game.queue.length - 1;
             let mv = this.game.queue[qe].split("\t");
-
             
             // Game over conditions
             if (mv[0] === "gameover") {
+                // Remove this item from the queue.
+                this.game.queue.splice(this.game.queue.length - 1, 1);
+
                 //Winner sent the move
                 if (mv[1]!=this.game.player) salert("You lose.");
                 //Not duplicated in board events, so both players run these
                 this.updateScore();
                 this.updateStatus("<span class='playertitle'>" + this.game.sides[mv[1] - 1] + "</span> wins!")
                 this.drawBoard(this.game.board);
-                //this.resignGame(); <- throws a 567567 error
-                
-                // Remove this item from the queue.
-                this.game.queue.splice(this.game.queue.length - 1, 1);
+                //this.resignGame(); //<- throws a 567567 error                
                 return 0; //end queue cycling
             }
             // Round over

@@ -7,6 +7,9 @@
     background-size: cover;
 }
 
+/*
+    Format the help overlay
+*/
 .intro {
   background-color: whitesmoke;
   padding: 30px;
@@ -16,23 +19,28 @@
 .intro p{
     margin: 1em 0;
 }
+
 .board {
     display: grid;
     margin: 1em auto;
     border: 1px solid #00cfff61;
     background: #2222;
     background-image: url("img/004-polished-wood.png");
-    padding: 2em;
+    /*padding: 1em 1em 3em 3em;*/
+    padding:  2em;
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
 }
 
+/*
+    Size square board relative to the narrower screen dimension
+*/
 @media (orientation: landscape) {
     .board {
-        width: 70vh;
-        height: 70vh;
+        width: 80vh;
+        height: 80vh;
     }
     .status, .scoreboard {
-        width: 70vh;
+        width: 80vh;
     }
 }
 
@@ -50,10 +58,75 @@
 Board is a grid of wooden squares
 */
 .board > div {
-    background-image: url("img/004-polished-wood.png");
+    background-image: url("img/woodtile.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    /*background-image: url("img/004-polished-wood.png");
     border: 1px solid black;
-    margin:  0 -1px -1px 0;
+    margin:  0 1px 1px 0;   */
 }
+
+/*
+    Pseudo-element shifted box border to simulate Go board lines
+
+.board > div::after{
+    content: "";
+    position: relative;
+    z-index: 0;
+    top:  -50%;
+    left: -50%;
+    border: 2px solid black;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.board > .left::after{
+    display:  none;
+}
+
+.board > .bottom::after{
+    display: none;   
+}
+*/
+
+
+/*
+    Hand painted lines for proper Go board tile placement
+*/
+.board > .left {
+    background-image: url("img/woodtile-edge.png");
+    transform: rotate(90deg);
+}
+.board > .right {
+    background-image: url("img/woodtile-edge.png");
+    transform: rotate(270deg);
+}
+.board > .top {
+    background-image: url("img/woodtile-edge.png");
+    transform: rotate(180deg);
+}
+.board > .bottom {
+    background-image: url("img/woodtile-edge.png");
+}
+.board > .top.left{
+    background-image: url("img/woodtile-corner.png");   
+    transform: rotate(180deg);      
+}
+.board > .top.right{
+    background-image: url("img/woodtile-corner.png");
+    transform: rotate(270deg);     
+}
+.board > .bottom.left{
+    background-image: url("img/woodtile-corner.png");   
+    transform: rotate(90deg);      
+}
+.board > .bottom.right{
+    background-image: url("img/woodtile-corner.png");  
+    transform: rotate(0deg); 
+}
+
 
 /*
  which should lite up when you hover over them
@@ -63,6 +136,7 @@ Board is a grid of wooden squares
     margin: auto;
     height: 98%;
     width: 98%;
+    border-radius: 100%;
 }
 
 .active:hover .empty{
@@ -88,21 +162,22 @@ Board is a grid of wooden squares
 */
 .board div.piece{
     border-radius: 100%;
-    margin: 15%;
-    height: 69%;
-    width: 69%;
+    z-index: 2;
+    margin: 10%;
+    height: 80%;
+    width: 80%;
 }
 
 /*
  that are either black or white
 */
-.piece[data-owner="white"]{
+.piece.white{
     background: white;
     border: 1px solid #111 !important;
     
 }
 
-.piece[data-owner="black"]{
+.piece.black{
     background: black;
     border: 1px solid #eee !important;
 }
@@ -110,18 +185,16 @@ Board is a grid of wooden squares
 /*
   We mark the cells of the 5-in-a-row winning combination
 */
-.board .winner {
-    /*border: 7px solid rgb(255, 166, 0) !important;*/
-    background-color: gold;
-    background-image: none;
+.winner .piece{
+    border: 0.8em solid rgb(255, 166, 0) !important;
 }
 
 .scoreboard {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin: 0 auto 1em;
-    padding: 3em 0 0;
+    margin: 0 auto 1em; 
+    padding: max(3em,40px) 0 0; /*Game Menu is 40px tall*/
     color: #eee;
     justify-content: space-around;
 }
@@ -151,23 +224,38 @@ Board is a grid of wooden squares
     color: #eee;
 }
 
+/*
+    Have board take up more space on small screens
+    and if necessary move scoreboard and status window to fit on screen
+*/
+
 @media (max-height: 750px) and (orientation: landscape) {
     .board {
-        width: 100vh;
-        height: 1000vh;
+        width: 95vh;
+        height: 95vh;
+    }
+    .inner{
+        display: flex;
     }
     .status, .scoreboard {
-        width: 100vh;
+        width: max-content;
+        flex-direction: column;
+    }
+    body {
+        font-size: 8px;
     }
 }
 
 @media (max-width: 650px) and (orientation: portrait) {
     .board {
-        width: 99vw;
-        height: 99vw;
+        width: 95vw;
+        height: 95vw;
     }
     .status, .scoreboard {
-        width: 99vw;
+        width: 95vw;
+    }
+    body {
+        font-size: 8px;
     }
 }
 
