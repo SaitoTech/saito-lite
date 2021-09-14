@@ -168,6 +168,7 @@ class Wuziqi extends GameTemplate {
                 this.drawBoard(this.game.board);
                 // If you are black, you are up.
                 if (this.game.player == 1) {
+                    this.addEvents(this.game.board);
                     this.updateStatus("You to play.");
                 } else {
                     this.updateStatus("Waiting for: <span class='playertitle'>Black</span>");
