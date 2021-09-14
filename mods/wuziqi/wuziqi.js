@@ -166,7 +166,6 @@ class Wuziqi extends GameTemplate {
             // If no one has played set up the board
             if (blackplayedyet < 0) {
                 this.drawBoard(this.game.board);
-                this.addEvents(this.game.board);
                 // If you are black, you are up.
                 if (this.game.player == 1) {
                     this.updateStatus("You to play.");
@@ -210,7 +209,7 @@ class Wuziqi extends GameTemplate {
         var cells = x * x;
         // Clear the board
         this.game.board = [];
-        // Itterate through the cells in the board
+        // Iterate through the cells in the board
         for (let n = 1; n <= cells; n++) {
             // Create an empty cell
             let cell = {};
@@ -220,7 +219,7 @@ class Wuziqi extends GameTemplate {
             cell.id = n;
             // Set the row as the total divided by the side length rounded up.
             cell.sets.row = Math.ceil(n / x);
-            // Set the collumn as the cell id mod side length.
+            // Set the column as the cell id mod side length.
             cell.sets.col = ((n - 1) % x) + 1;
             // Set the left down diagonal as where inverse of the column summed with row is constant 
             cell.sets.lddiag = (x - cell.sets.col) + cell.sets.row;
@@ -243,7 +242,7 @@ class Wuziqi extends GameTemplate {
     }
 
 
-    // Itterate through the board object to draw each cell
+    // Iterate through the board object to draw each cell
     drawBoard(board) {
         boardElement = document.querySelector('.board');
         // Add the CSS grit-template-columns value to the correct number of rows.
@@ -418,7 +417,7 @@ class Wuziqi extends GameTemplate {
     findWinner(cell) {
         let win = 0;
         let winner = "no winner";
-        // Itterte through the row, column and diagonals for the played cell
+        // Iterate through the row, column and diagonals for the played cell
         for (const [key, value] of Object.entries(cell.sets)) {
             // Test each to check if there are five cells in a row with the same colour tile.
             let testset = this.returnCells(key, value);
