@@ -112,7 +112,7 @@
 @media (max-height: 750px) and (orientation: landscape) {
     .board {
         width: 100vh;
-        height: 1000vh;
+        height: 100vh;
     }
     .status, .scoreboard {
         width: 100vh;
