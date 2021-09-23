@@ -29,7 +29,8 @@ body {
   overflow: hidden;
 }
 
-.dealer-notice {
+
+.player-notice {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -124,6 +125,11 @@ body {
   text-align: center;
   font-size: 3vh;
 }
+
+.dealer{
+  background-color: var(--saito-red-wash);
+}
+
 
 .p1 .hand {
   display: none;
