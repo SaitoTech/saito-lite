@@ -1,7 +1,4 @@
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
-const elParser = require('../../lib/helpers/el_parser');
 class Imperium extends GameTemplate {
   
   constructor(app) {
@@ -9,12 +6,14 @@ class Imperium extends GameTemplate {
     super(app);
   
     this.name             = "Imperium";
+    this.gamename         = "Red Imperium";
     this.slug		  = "imperium";
-    this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.`;
+    this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of a galaxy in the waning days of a dying Empire.`;
     this.categories	  = "Arcade Games Entertainment";
     this.minPlayers       = 2;
-    this.maxPlayers       = 4; 
+    this.maxPlayers       = 6;
     this.type             = "Strategy Boardgame";
+    this.status           = "Beta";
 
     this.gameboardWidth   = 1900;
   
@@ -32,6 +31,8 @@ class Imperium extends GameTemplate {
     this.game.confirms_needed   = 0;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
+    this.game.tmp_confirms_received = 0;
+    this.game.tmp_confirms_players  = [];
     
     //
     // not specific to THIS game
@@ -47,7 +48,6 @@ class Imperium extends GameTemplate {
     this.units          	= {};
     this.promissary_notes	= {};
 
-    this.hud = new GameHud(this.app, this.menuItems());
     this.hud.mode = 1;  // classic interface
 
     //
@@ -79,5 +79,5 @@ class Imperium extends GameTemplate {
   //
   initializeGameObjects() {
 
-
+console.log("INITIALIZE GAME OBJECTS");
 

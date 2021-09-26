@@ -19,7 +19,6 @@ class President extends GameTemplate {
     this.name = "President";
     this.description = 'Play cards in singles or sets in increasing value. Last player starts when all are done. The first player who gets rid of their cards is the President. The last?';
     this.categories = "Games Arcade Entertainment";
-
     this.card_img_dir = '/president/img/cards';
     this.useHUD = 1;
 
@@ -66,7 +65,7 @@ class President extends GameTemplate {
 
 
 
-  
+
 
 
   initializeQueue() {
@@ -96,7 +95,7 @@ class President extends GameTemplate {
     this.hud.addCardType("card", "select", this.cardbox_callback);
     if (!app.browser.isMobileBrowser(navigator.userAgent)) {
       this.hud.cardbox.skip_card_prompt = 1;
-	// we have to confirm as card select is not automatic in multi-card cardfan
+      // we have to confirm as card select is not automatic in multi-card cardfan
       this.hud.cardbox.skip_card_prompt = 0;
       this.hud.card_width = 80;
     } else {
@@ -155,49 +154,49 @@ class President extends GameTemplate {
 
       if (mv[0] === "play") {
 
-	let player = parseInt(mv[1]);
-	let cards = JSON.parse(mv[2]);
-	let deck = this.returnDeck();
-	for (let i = 0; i < cards.length; i++) {
-	  this.game.state.played.push(cards[i]);
-	}
-	this.game.state.last_player_to_play = player;
-	this.game.state.last_played = cards;
+        let player = parseInt(mv[1]);
+        let cards = JSON.parse(mv[2]);
+        let deck = this.returnDeck();
+        for (let i = 0; i < cards.length; i++) {
+          this.game.state.played.push(cards[i]);
+        }
+        this.game.state.last_player_to_play = player;
+        this.game.state.last_played = cards;
 
-	if (player == this.game.player) {
+        if (player == this.game.player) {
           for (let i = 0; i < cards.length; i++) {
             this.removeCardFromHand(cards[i]);
           }
         }
 
-	let cards_played = "";
-	for (let i = 0; i < cards.length; i++) {
-	  if (i > 0) { cards_played += ", "; }
-	  cards_played += deck[cards[i]].name;
+        let cards_played = "";
+        for (let i = 0; i < cards.length; i++) {
+          if (i > 0) { cards_played += ", "; }
+          cards_played += deck[cards[i]].name;
         }
-	this.updateLog(this.returnPlayerName(player) + " plays " + cards_played);
+        this.updateLog(this.returnPlayerName(player) + " plays " + cards_played);
 
         this.game.queue.splice(qe, 1);
         this.displayTable();
-	return 1;
+        return 1;
 
       }
 
       if (mv[0] === "cards") {
 
-	let player = parseInt(mv[1]);
-	let cards_left = parseInt(mv[2]);
-	this.game.players_info[player-1].cards = cards_left;
+        let player = parseInt(mv[1]);
+        let cards_left = parseInt(mv[2]);
+        this.game.players_info[player - 1].cards = cards_left;
 
-	if (cards_left == 0) {
-	  this.game.players_info[player-1].out = 1;
-	  this.game.players_info[player-1].rank = (this.game.state.players_out+1);
-	  this.game.state.players_out++;
-	}
+        if (cards_left == 0) {
+          this.game.players_info[player - 1].out = 1;
+          this.game.players_info[player - 1].rank = (this.game.state.players_out + 1);
+          this.game.state.players_out++;
+        }
 
         this.game.queue.splice(qe, 1);
         this.displayTable();
-	return 1;
+        return 1;
 
       }
 
@@ -211,13 +210,13 @@ class President extends GameTemplate {
 
         this.game.queue.splice(qe, 1);
 
-	let has_everyone_passed = 1;
-	for (let i = 0; i < this.game.players_info.length; i++) {
-	  if (this.game.players_info[i].passed == 0 && this.game.players_info[i].out != 1) { has_everyone_passed = 0; } 
+        let has_everyone_passed = 1;
+        for (let i = 0; i < this.game.players_info.length; i++) {
+          if (this.game.players_info[i].passed == 0 && this.game.players_info[i].out != 1) { has_everyone_passed = 0; }
         }
-	if (has_everyone_passed == 1) { 
-	  return 1;
-	}
+        if (has_everyone_passed == 1) {
+          return 1;
+        }
 
         if (this.game.players_info[player_to_go - 1].out == 1) {
           this.game.queue.splice(qe, 1);
@@ -228,7 +227,7 @@ class President extends GameTemplate {
             this.playerTurn();
             return 0;
           } else {
-            this.updateStatusAndListCards("Waiting for " + this.game.players[player_to_go-1]);
+            this.updateStatusAndListCards("Waiting for " + this.game.players[player_to_go - 1]);
             return 0;
           }
           shd_continue = 0;
@@ -238,7 +237,7 @@ class President extends GameTemplate {
 
       if (mv[0] === "newround") {
         this.game.queue.splice(qe, 1);
-	this.startNewRound();
+        this.startNewRound();
         return 1;
       }
 
@@ -246,75 +245,75 @@ class President extends GameTemplate {
 
       if (mv[0] === "round") {
 
-	this.game.deck[0].hand.sort();
+        this.game.deck[0].hand.sort();
 
-	//
-	// new round of turns for players
-	//
+        //
+        // new round of turns for players
+        //
         let has_everyone_passed = 1;
         for (let i = 0; i < this.game.players_info.length; i++) {
           if (this.game.players_info[i].passed == 0) { has_everyone_passed = 0; }
         }
         if (has_everyone_passed == 1) {
 
-	  //
-	  // clear the table and let the last player go first
-	  //
-	  this.game.state.last_played = [];
+          //
+          // clear the table and let the last player go first
+          //
+          this.game.state.last_played = [];
           for (let i = 0; i < this.game.players_info.length; i++) {
             this.game.players_info[i].passed = 0;
           }
 
-	  this.game.state.first_player_in_round = this.game.state.last_player_to_play;
+          this.game.state.first_player_in_round = this.game.state.last_player_to_play;
 
         }
 
 
 
-	//
-	// are there any players left ?
-	//
-	let players_left = 0;
-	for (let i = 0; i < this.game.players_info.length; i++) {
-	  if (this.game.players_info[i].out == 0) {
-	    players_left++;
-	  }
-	}
+        //
+        // are there any players left ?
+        //
+        let players_left = 0;
+        for (let i = 0; i < this.game.players_info.length; i++) {
+          if (this.game.players_info[i].out == 0) {
+            players_left++;
+          }
+        }
 
-	//
-	// end of a turn, so redeal
-	//
-	if (players_left <= 1) {
+        //
+        // end of a turn, so redeal
+        //
+        if (players_left <= 1) {
 
-	  //
-	  // the last player out gets the last rank
-	  //
-	  for (let i = 0; i < this.game.players_info.length; i++) {
-	    if (this.game.players_info[i].rank == 0) {
-	      this.game.players_info[i].rank = (this.game.state.players_out+1);
-	      this.game.state.players_out++;
-	    }
-	  }
+          //
+          // the last player out gets the last rank
+          //
+          for (let i = 0; i < this.game.players_info.length; i++) {
+            if (this.game.players_info[i].rank == 0) {
+              this.game.players_info[i].rank = (this.game.state.players_out + 1);
+              this.game.state.players_out++;
+            }
+          }
 
           this.game.queue.splice(qe, 1);
-	  this.startNewRound();
-	  return 1;
-	}
+          this.startNewRound();
+          return 1;
+        }
 
         this.displayBoard();
 
-	//
-	//
-	//
-	let player_to_go = this.game.state.first_player_in_round;
+        //
+        //
+        //
+        let player_to_go = this.game.state.first_player_in_round;
 
         if (player_to_go == 0) {
-	  // we are at the start of a new round
-	  player_to_go = 1;
+          // we are at the start of a new round
+          player_to_go = 1;
         }
 
-        for (let i = player_to_go+1; i <= (player_to_go+this.game.players.length); i++) {
-          let player_to_turn = (i%this.game.players.length);
+        for (let i = player_to_go + 1; i <= (player_to_go + this.game.players.length); i++) {
+          let player_to_turn = (i % this.game.players.length);
           if (player_to_turn == 0) { player_to_turn = this.game.players.length; }
           this.game.queue.push("turn\t" + player_to_turn);
         }
@@ -325,10 +324,10 @@ class President extends GameTemplate {
       if (mv[0] === "pass") {
 
         let player = parseInt(mv[1]);
-        this.game.players_info[player-1].passed = 1;
+        this.game.players_info[player - 1].passed = 1;
         this.game.queue.splice(qe, 1);
 
-	this.updateLog(this.returnPlayerName(player) + " passes");
+        this.updateLog(this.returnPlayerName(player) + " passes");
 
       }
 
@@ -348,7 +347,7 @@ class President extends GameTemplate {
 
 
   returnPlayerName(player_num) {
-    return ("Player "+player_num);
+    return ("Player " + player_num);
   }
 
 
@@ -379,12 +378,12 @@ class President extends GameTemplate {
       if (num == 2) { p2c++; }
       if (num == 3) { p3c++; }
       this.game.queue.push("round");
-      this.game.queue.push("cards\t1\t"+(p1c));
-      this.game.queue.push("cards\t2\t"+(p2c));
-      this.game.queue.push("cards\t3\t"+(p3c));
-      this.game.queue.push("DEAL\t1\t3\t"+(p3c));
-      this.game.queue.push("DEAL\t1\t2\t"+(p2c));
-      this.game.queue.push("DEAL\t1\t1\t"+(p1c));
+      this.game.queue.push("cards\t1\t" + (p1c));
+      this.game.queue.push("cards\t2\t" + (p2c));
+      this.game.queue.push("cards\t3\t" + (p3c));
+      this.game.queue.push("DEAL\t1\t3\t" + (p3c));
+      this.game.queue.push("DEAL\t1\t2\t" + (p2c));
+      this.game.queue.push("DEAL\t1\t1\t" + (p1c));
       this.game.queue.push("DECKENCRYPT\t1\t3");
       this.game.queue.push("DECKENCRYPT\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t1");
@@ -415,7 +414,7 @@ class President extends GameTemplate {
     }
 
     this.game.state.turn = 0;
-    this.game.state.players_out = 0;  
+    this.game.state.players_out = 0;
     this.game.state.round++;
 
     for (let i = 0; i < this.game.players.length; i++) {
@@ -423,7 +422,7 @@ class President extends GameTemplate {
         this.game.player = (i + 1);
       }
     }
-   
+
     for (let i = 0; i < this.game.players_info.length; i++) {
       this.game.players_info[i].passed = 0;
       this.game.players_info[i].out = 0;
@@ -448,19 +447,19 @@ class President extends GameTemplate {
       this.updateStatusAndListCards("Play a card or <div style='display:inline' class='pass'>pass</div>");
     }
 
-    $('.pass').on('click', function() {
-      president_self.addMove("pass\t"+president_self.game.player);
+    $('.pass').on('click', function () {
+      president_self.addMove("pass\t" + president_self.game.player);
       president_self.endTurn(1);
       return;
     });
-    this.addShowCardEvents(function(card) {
+    this.addShowCardEvents(function (card) {
       if (president_self.isValidPlay(this.hud.cardbox.cards)) {
-        president_self.addMove("cards\t"+president_self.game.player+"\t"+(president_self.game.deck[0].hand.length-1));
-        president_self.addMove("play\t"+president_self.game.player+"\t"+JSON.stringify(this.hud.cardbox.cards));
+        president_self.addMove("cards\t" + president_self.game.player + "\t" + (president_self.game.deck[0].hand.length - 1));
+        president_self.addMove("play\t" + president_self.game.player + "\t" + JSON.stringify(this.hud.cardbox.cards));
         president_self.updateLog("cards played");
         president_self.endTurn(1);
       } else {
-alert("invalid move!");
+        alert("invalid move!");
       }
     });
 
@@ -633,17 +632,30 @@ alert("invalid move!");
       let divname = "#player-info-" + player_box_num;
       let boxobj = document.querySelector(divname);
 
+
       let newhtml = `
         <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
-          <div class="player-info-hand-cards">${this.game.players_info[i].cards}</div>
-          <img class="card" src="${this.card_img_dir}/red_back.png">
+        <div class="player-info-hand-cards">${this.game.players_info[i].cards}</div>
+        <div class="mini-cardfan-holder">
+        <div class="mini-cardfan">`;
+      let closehtml = "";
+
+      for (let c = 0; c < this.game.players_info[i].cards; c++) {
+        newhtml += `<div><img class="card" src="${this.card_img_dir}/red_back.png">`;
+        closehtml += `</div>`;
+      };
+      newhtml += closehtml;
+
+
+      newhtml += `
+          </div>
         </div>
-        <div class="player-info-name" id="player-info-name-${i+1}">${this.game.players[i]}</div>
+        <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.players[i]}</div>
       `;
       boxobj.querySelector(".info").innerHTML = newhtml;
 
       if (boxobj.querySelector(".plog").innerHTML == "") {
-        boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i+1}"></div>`;
+        boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
       }
 
     }
@@ -660,7 +672,7 @@ alert("invalid move!");
     let html = '';
     for (let i = 0; i < this.game.state.last_played.length; i++) {
       html += this.returnCardImage(this.game.state.last_played[i], 1);
-    }   
+    }
     obj.innerHTML = html;
 
   }
@@ -670,7 +682,9 @@ alert("invalid move!");
 
   returnGameOptionsHTML() {
 
-    return '';
+    return `
+            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
+    `;
 
   }
 
@@ -708,7 +722,7 @@ alert("invalid move!");
       //
       // this is not a card, it is something like "skip turn" or cancel
       //
-      return '<div class="noncard">'+cardname+'</div>';
+      return '<div class="noncard">' + cardname + '</div>';
 
     }
 
@@ -723,21 +737,21 @@ alert("invalid move!");
 
     if (this.interface == 1) {
       if (this.game.deck[0].cards[card] == undefined) {
-        return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card, 1)}</div>`;
+        return `<div id="${card.replace(/ /g, '')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card, 1)}</div>`;
       }
-      return `<div id="${card.replace(/ /g,'')}" class="card showcard cardbox-hud cardbox-hud-status">${this.returnCardImage(card, 1)}</div>`;
+      return `<div id="${card.replace(/ /g, '')}" class="card showcard cardbox-hud cardbox-hud-status">${this.returnCardImage(card, 1)}</div>`;
     } else {
       if (this.game.deck[0].cards[card] == undefined) {
-        return '<li class="card showcard" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
+        return '<li class="card showcard" id="' + card + '">' + this.game.deck[0].cards[card].name + '</li>';
       }
-      return '<li class="card showcard" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
+      return '<li class="card showcard" id="' + card + '">' + this.game.deck[0].cards[card].name + '</li>';
     }
 
   }
 
 
 
- returnCardList(cardarray=[]) {
+  returnCardList(cardarray = []) {
 
     let hand = this.game.deck[0].hand;
     let html = "";
@@ -765,7 +779,7 @@ alert("invalid move!");
   }
 
 
-  updateStatusAndListCards(message, cards=null) {
+  updateStatusAndListCards(message, cards = null) {
 
     if (cards == null) {
       cards = this.game.deck[0].hand;
@@ -776,7 +790,7 @@ alert("invalid move!");
         ${this.returnCardList(cards)}
     `
     this.updateStatus(html);
-    this.addShowCardEvents(function(card) {
+    this.addShowCardEvents(function (card) {
     });
 
   }

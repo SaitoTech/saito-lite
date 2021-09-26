@@ -3,32 +3,31 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="content-language" content="en" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Welcome to saito.io">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="Richard Parris">
-
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="author" content="Saito Team">
   <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
-
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="saito.io">
-
   <meta name="msapplication-navbutton-color" content="#FFFFFF">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="msapplication-starturl" content="/index.html">
 
-  <meta name="twitter:image:src" content="/arcade/img/dreamscape-logo.png" />
+  <meta name="twitter:image:src" content="https://saito.io/website/img/saito-card.png" />
+  <meta property="twitter:url" content="https://saito.io" />
   <meta name="twitter:site" content="Saito Project" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Saito" />
-  <meta name="twitter:description" content="Saito is an open Public Key Infrastructure for application development." />
-  <meta property="og:image" content="/arcade/img/dreamscape-logo.png" />
+  <meta name="twitter:description" content="Open Public Key Infrastructure Delivering Web3." />
+  <meta property="og:image" content="https://saito.io/website/img/saito-card.png" />
   <meta property="og:site_name" content="Saito" />
   <meta property="og:type" content="object" />
   <meta property="og:title" content="Saito" />
-  <meta property="og:url" content="/" />
-  <meta property="og:description" content="Saito
+  <meta property="og:url" content="https://saito.io/" />
+  <meta property="og:description" content="Open Public Key Infrastructure Delivering Web3" />
 
   <link rel=" icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png">
   <link rel="apple-touch-icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png">
@@ -37,523 +36,470 @@
 
   <title>Saito.io</title>
 
-  <link rel="stylesheet" href="/saito/style.css" />
+  <link rel="stylesheet" href="/saito/overlay.css" />
+  <link rel="stylesheet" href="/saito/salert.css" />
   <link rel="stylesheet" href="/website/style.css" />
   <link rel="stylesheet" type="text/css" href="/chat/css/email-chat.css">
-
+  <link rel="stylesheet" href="/website/css/swiper.min.css">
 </head>
 
 <body>
-
-  <div class="header">
-    <h2>Downloading Saito then Synching the Chain</h2>
+  <div class="loading" data-il8n="loading">Loading the Saito Blockchain...</div>
+  <div style="display:none;">
+    <div id="header-icon-links-hidden">
+      <!-- copied into header by website.js -->
+      <div class="left desktop">
+        <a class="logo" href="/"><img class="logoImage" alt="icon" src="/website/img/top_logo.png"></img></a>
+        <a alt="developer resources" href="/website/how-saito-works" data-il8n="how_saito_works">How Saito Works</a>
+        <!--a alt="The Saito Arcade" href="https://org.saito.tech/saito-the-web3-foundation-and-the-future-of-the-decentralized-web" data-il8n="web3_foundation_grant">Web3 Foundation Grant</a-->
+        <a alt="team" href="https://org.saito.tech/team/" data-il8n="saito_team">Team</a>
+        <a alt="blog" href="#get_saito" data-il8n="get_saito_tokens">Get Saito Tokens</a>
+        <a alt="arcade" href="#dotarcade" data-il8n="arcade">Dot Arcade</a>
+        <a class="language-info translate-toggle" alt="中文" href="https://cn.saito.io" data-il8n-from="en"
+          data-il8n-to="zh" data-il8n-from-text="EN" data-il8n-to-text="中文">中文</a>
+      </div>
+    </div>
+    <div id="header-dropdown-hidden">
+      <div class="mobile-menu mobile">
+        <a alt="developers" href="https://org.saito.tech/developers">Developers</a>
+        <a alt="design" href="https://org.saito.tech">Economists</a>
+        <a alt="blog" href="https://org.saito.tech/blog">Blog</a>
+        <a class="language-info" alt="中文" href="https://cn.saito.io">中文</a>
+      </div>
+    </div>
   </div>
-
   <div class="all">
-    <div class="parallax-layer parallax-back">
-      <section id="banner" class="banner">
-        <img class="banner-logo" alt="saito logo" src="/saito/img/logo.svg"></img>
-        <img class="background-logo mobile" alt="saito logo" src="/website/img/saito-shape-white.svg"></img>
+    <div class="alert">
+      <span data-il8n="saito_available_1">SAITO is now available for purchase:</span><span><a
+          href="#get_saito" data-il8n="saito_available_2">details here</a></span><!--span
+        data-il8n="saito_available_3">.</span-->
+    </div>
+    <div class="sectionWrapper1">
+
+      <section id="section1" class="section1">
+        <div class="left">
+          <div class="desc" data-il8n="Scalability_web3">Scalability For Web3.0</div>
+          <div class="buttonWrapper">
+            <a id="arcadeLink" href="/arcade" title="Saito Apps and Games Demo">
+              <div class="btn" data-il8n="live_demo">Live Demo</div>
+            </a>
+            <a id="developersLink" href="https://org.saito.tech/developers" title="Developer Hub">
+              <div class="btn" data-il8n="build_on_saito">Build on Saito</div>
+            </a>
+          </div>
+          <div class="content" data-il8n="saito_long_desc">Saito is a layer one blockchain that pays nodes in the P2P
+            network instead of miners or stakers, delivering a scalable network that can run decentralized versions of
+            Twitter, Facebook and Amazon without the need for monopolies like Google or Infura in the network layer.
+          </div>
+          <div class="crumbs">
+            <a id="whitepaperLink" href="/saito-whitepaper.pdf" class="link" data-il8n="whitepaper">Whitepaper</a>
+            <!---
+            <span>|</span>
+            <a id="litepaperLink" href="/saito-litepaper.pdf" class="link" data-il8n="litepaper">Litepaper</a>
+--->
+          </div>
+          
+          <div class="littleIcon">
+            <a class="itemImage far fa-envelope website-newsletter-subscribe" title="Subscribe to our Newsletter"></a>
+            <a id="weixin-link">
+              <i class="itemImage fab fa-weixin" aria-hidden="true"></i>
+            </a>
+            <a href="https://org.saito.tech/blog" title="Saito Blog" target="blank">
+              <i class="itemImage fas fa-rss-square"></i>
+            </a>
+            <a href="https://github.com/saitotech/saito-lite" title="Github" target="blank">
+              <i class="itemImage fab fa-github"></i>
+            </a>
+            <a href="https://discord.gg/HjTFh9Tfec" title="Discord" target="blank">
+              <i class="itemImage fab fa-discord"></i>
+            </a>
+            <a href="https://t.me/SaitoIO" title="Telegram" target="blank">
+              <i class="itemImage fab fa-telegram"></i>
+            </a>
+            <a href="https://twitter.com/SaitoOfficial" title="Twitter" target="blank">
+              <i class="itemImage fab fa-twitter"></i>
+            </a>
+          </div>
+        
+        </div>
+        <div class="right">
+        <img class="background-logo" alt="saito logo" src="/website/img/banner_logo.png"></img>
+        </div>
       </section>
-      <div class="background-logo-box">
-        <img class="background-logo" alt="saito logo" src="/website/img/saito-shape-red.svg"></img>
-      </div>
-      <div class="backslash"></div>
-      
     </div>
-    <div class="parallax-layer parallax-base">
-      <div class="main">
-        <div class="site-main">
-          <!-- banner was here -->
-
-          <section class="splash-row">
-            <div class="grid-2-columns row">
-
-              <div class="title-container">
-
-                <div class="featured-app">
-                  <div class="featured-app-inner">
-                    <div class="featured-app-front">
-                      <img class="arcade-banner" alt="Arcade Banner" src="/website/img/arcade-banner.jpg">
-                    </div>
-                    <div class="featured-app-back">
-                      <div class="featured-app-back-inner">
-                        <p>
-                          Why not try a game on the <a href="/arcade">Saito Arcade</a>?
-                        </p>
-                        <p>
-                          You already have a <a href="/email/?module=settings">wallet</a>.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="intro-box">
-                <div class="intro-title">Welcome to the Saito Network</div>
-                <div class="intro-content">
-                  <p>
-                    Most blockchains force users to pay for <em>forever storage</em> and require separate payments for
-                    off-chain data. Saito fixes both problems.
-                  </p>
-                  <p>
-                    Saito applications only pay for the on-chain time they need, while the network uses a new kind of
-                    mining
-                    that secures the blockchain with fee-routing infrastructure. The result is lower fees and higher
-                    throughput than any other blockchain.
-                  </p>
-                  <p>
-                    <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a
-                      href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
-                  </p>
-                </div>
-              </div>
-            </div>
+    <div class="sectionWrapper2">
+      <section id="section2" class="section2">
+        <div class="part">
+          <div class="title" data-il8n="powerful_applications">Powerful Applications</div>
+          <div class="desc" data-il8n="powerful_applications_desc">Saito powers games, communication tools, social media
+            apps and other data and bandwidth-intensive applications</div>
         </div>
-        <section class="mobile-banner">
-          <div class="intro-box-mobile">
-            <div class="intro-title">Welcome to the Saito Network</div>
-            <div class="intro-content">
-              <p>
-                Most blockchains force users to pay for <em>forever storage</em> and require separate payments for
-                off-chain data. Saito fixes both problems.
-              </p>
-
-              <p>
-                <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a
-                  href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
-              </p>
-            </div>
-          </div>
+        <div class="part">
+          <div class="title" data-il8n="polkadot_ecosystem">Polkadot Ecosystem</div>
+          <div class="desc" data-il8n="polkadot_ecosystem_desc">Saito applications come with full support for Polkadot
+            and other leading Web3 blockchains</div>
+        </div>
+        <div class="part">
+          <div class="title" data-il8n="proper_economics">Proper Economics</div>
+          <div class="desc" data-il8n="proper_economics_desc">An elegant economic design that solves fundamental scaling
+            problems</div>
+        </div>
+        <div class="part">
+          <div class="title" data-il8n="open_infra">Open Infrastructure</div>
+          <div class="desc" data-il8n="open_infra_desc">Saito funds the rollout of infrastructure for other networks as
+            well as its own</div>
+        </div>
+        <div class="part">
+          <div class="title" data-il8n="peer2peer">Peer-to-Peer Web3 Toolkit</div>
+          <div class="desc" data-il8n="peer2peer_desc">Libraries that support everything from QR-generation and scanning
+            to ZKP-based gaming functions</div>
+        </div>
+        <div class="part">
+          <div class="title" data-il8n="app_deployment">App Deployment</div>
+          <div class="desc" data-il8n="app_deployment_desc">Open AppStore that lets developers build and deploy apps
+            without the need to run any infrastructure</div>
+        </div>
+        <div class="part">
+          <div class="title" data-il8n="enterprise_pki_support">Enterprise PKI Support</div>
+          <div class="desc" data-il8n="enterprise_pki_support_desc">A scalable PKI network layer designed to handle
+            enterprise-level key-exchange and encryption requirements</div>
+        </div>
+        <div class="part">
+          <div class="title" data-il8n="vibrant_community">Vibrant Community</div>
+          <div class="desc" data-il8n="vibrant_community_desc">A growing community of users interested in and excited
+            about the applications <i>you</i> want to build...</div>
+        </div>
+      </section>
+    </div>
+    <div class="sectionWrapperArcade">
+      <section id="dotarcade">
+      <div class="arcadetitle"><span data-il8n="arcade">Dot Arcade</span></div>
+      <div class="section1">
+        <div class="left">
+          <h1><span data-il8n="play">Play</span><span class="heading-poker" data-il8n="game">Games</span></h1>
+          <h2><span data-il8n="with">with</span>Polkadot</h2>
+          <h3 data-il8n="ecotoken">Ecosystem Tokens</h3>
+          <div id="startgame" class="button" data-il8n="playgame">PLAY</div>
+        </div>
+        <div class="right">
+          <img class="game_picture background-logo" alt="saito arcade" src="/dotarcade/img/poker_cards.png"></img>
+        </div>
       </div>
-      <div class="featured-app-inner-mobile">
-        <div class="featured-app-front-mobile">
-          <img class="arcade-banner" alt="Arcade Banner" src="/website/img/arcade-banner.jpg">
-        </div>
-        <div class="featured-app-back-mobile">
-          <div class="featured-app-back-inner">
-            <p>
-              Why not try a game on the <a href="/arcade">Saito Arcade</a>?
-            </p>
-            <p>
-              You already have a <a href="/email/?module=settings">wallet</a>.
-            </p>
+      </section>
+    </div>
+    <div class="sectionWrapper3">
+      <section id="section3" class="section3">
+        <div class="title" data-il8n="simple_web3_dev">Simple Web3 Development</div>
+        <div class="imgWrapper">
+          <div class="itemWrapper">
+            <img class="toolImg" alt="toolImg" src="/website/img/truly_bg.png"></img>
+            <div class="toolDescWrapper" data-il8n="truly_p2p">
+              Truly Peer
+              to Peer
+            </div>
+          </div>
+          <div class="itemWrapper">
+            <img class="toolImg" alt="toolImg" src="/website/img/data_bg.png"></img>
+            <div class="toolDescWrapper" data-il8n="scalable_onchain">
+              Scalable
+              Onchain
+              Data
+            </div>
+          </div>
+          <div class="itemWrapper">
+            <img class="toolImg" alt="toolImg" src="/website/img/browser_bg.png"></img>
+            <div class="toolDescWrapper" data-il8n="browser_app_without_metamask">
+              Browser
+              Applications
+              Without
+              Metamask
+            </div>
+          </div>
+          <div class="itemWrapper">
+            <img class="toolImg" alt="toolImg" src="/website/img/js_bg.png"></img>
+            <div class="toolDescWrapper" data-il8n="all_with_know_love">
+              All with the
+              tools you know
+              and love
+            </div>
           </div>
         </div>
+      </section>
+    </div>
+    <div class="sectionWrapper4">
+
+      <section id="section4" class="section4">
+
+        <div class="title"></div>
+        <div class="itemWrapper">
+          <div class="item">
+            <div class="subtitle">40,000+</div>
+            <div class="desc" data-il8n="transactions_perday">Transactions/Day and Growing</div>
+            <img class="icon" alt="day_icon" src="/website/img/day_icon.png"></img>
+          </div>
+          <div class="item">
+            <div class="subtitle" data-il8n="10_mil">10+ Million</div>
+            <div class="desc" data-il8n="transactions">Transactions</div>
+            <img class="icon" alt="tana_icon" src="/website/img/tana_icon.png"></img>
+          </div>
+          <div class="item">
+            <div class="subtitle" data-il8n="30_popular">30+ Popular</div>
+            <div class="desc" data-il8n="apps_and_modules">Applications and Modules</div>
+            <img class="icon" alt="app_icon" src="/website/img/app_icon.png"></img>
+          </div>
+          <div class="itemCenter"></div>
+        </div>
+      </section>
+    </div>
+    <div class="swiperContainner5 desktop">
+      <div class="title" data-il8n="roadmap">Roadmap</div>
+      <div class="sectionWrapper5" id="swiperDesktop5">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="arcade_comm_growth">Arcade and community growth</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom" data-il8n="new_game_releases_arcade">New Game Releases on Arcade</div>
+          </div>
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="team_expansion">Team expansion</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom" data-il8n="expansion_erp">Expansion of ERP/Logistics software</div>
+          </div>
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="soc_trad_marketing">Social and traditional marketing</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom" data-il8n="onboard_3rd_dev">Onboarding 3rd Party Developers</div>
+          </div>
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="fundraising_discount_tranches">Fundraising through discount tranches</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon visiNone" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom visiNone"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="legals_structure_public_sale">Legals and Structure for Public Sale</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom" data-il8n="hardening_security">Hardening and Security Work</div>
+          </div>
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
       </div>
     </div>
-    </section>
-
-    <!--what you can build-->
-    <section class="can-build">
-      <div id="slider" class="slider">
-        <div class="slider-content">
-          <div class="slider-content-wrapper">
-            <div class="slider-content__item image-1">
-              <div class="slider-content_grid">
-                <img class="can-build-img-tall desktop" src="/website/img/build/chat.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/build/chat2.png" />
-                <div class="slider-content_html">
-                  <div class="saito-content-title">Android / iOS Applications</div>
-                </div>
-              </div>
-            </div>
-            <div class="slider-content__item image-2">
-              <div class="slider-content_grid">
-                <div class="slider-content_html">
-                  <div class="saito-content-title">Browser Applications Without Metamask</div>
-                </div>
-                <img class="can-build-img-tall desktop" src="/website/img/build/email.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/how_saito_works_mobile2.png" />
-              </div>
-            </div>
-            <div class="slider-content__item image-3">
-              <div class="slider-content_grid">
-                <img class="can-build-img-tall desktop" src="/website/img/build/imperium.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/build/imperium2.png" />
-                <div class="slider-content_html">
-                  <div class="saito-content-title">Visually Stunning Games</div>
-                </div>
-              </div>
-            </div>
-            <div class="slider-content__item image-4">
-              <div class="slider-content_grid">
-                <div class="slider-content_html">
-                  <div class="saito-content-title">Provably-Fair, Crypto-graphically Secure Apps</div>
-                </div>
-                <img class="can-build-img-tall desktop" src="/website/img/build/poker.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/build/poker2.png" />
-              </div>
-            </div>
-            <div class="slider-content__item image-5">
-              <div class="slider-content_grid">
-                <div class="slider-content_html">
-                  <div class="saito-content-title">QRCodes and Scanning</div>
-                </div>
-                <img class="can-build-img-tall desktop" src="/website/img/build/qrcode.png" />
-                <img class="can-build-img-tall mobile" src="/website/img/build/qrcode2.png" />
-              </div>
-            </div>
-            <div class="slider-content__item image-6">
-              <div class="slider-content_html love-tools">
-                <p>All with the tools you know and love.</p>
-                <p><img class="can-build-img-tall" src="/website/img/htmlcssjs.png" /></p>
-              </div>
-            </div>
+    <div class="swiperContainner5 mobile">
+      <div class="title" data-il8n="roadmap">Roadmap</div>
+      <div class="sectionWrapper5" id="swiperMobile5">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="arcade_comm_growth">Arcade and community growth</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom" data-il8n="new_game_releases_arcade">New Game Releases on Arcade</div>
+          </div>
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="team_expansion">Team expansion</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom" data-il8n="expansion_erp">Expansion of ERP/Logistics software</div>
+          </div>
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="soc_trad_marketing">Social and traditional marketing</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom" data-il8n="onboard_3rd_dev">Onboarding 3rd Party Developers</div>
+          </div>
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="fundraising_discount_tranches">Fundraising through discount tranches</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon visiNone" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom visiNone"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="titleTop" data-il8n="legals_structure_public_sale">Legals and Structure for Public Sale</div>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <img class="icon" alt="icon" src="/website/img/dot_icon.png"></img>
+            <img class="line_icon" alt="icon" src="/website/img/lin_bg.png"></img>
+            <div class="titleBottom" data-il8n="hardening_security">Hardening and Security Work</div>
           </div>
         </div>
-        <div class="slider-controls-wrapper"></div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
       </div>
-    </section>
+    </div>
+    <div class="sectionWrapper6">
+      <section id="section6" class="section6">
+        <div class="title" data-il8n="our_supporters">Our Supporters</div>
+        <div class="itemWrapper itemWrapper1">
 
-    <section class="fundamentals-row white fadeInLeft">
-      <div class="fundamentals">
-        <!--h2>How Saito Works:</h2-->
-        <div class="intro-email">
-          <img class="fundamentals-img desktop" src="/website/img/how_saito_works2.png" />
-          <img class="fundamentals-img mobile" src="/website/img/how_saito_works_mobile2.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/4SV.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/A195.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/BlockDreamFund.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Candaq.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/DFG.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/In_Blockchain.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/NGC.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Spark.png" />
         </div>
-        <!--
-          <div class="fundamentals-intro">
-            Saito is a layer-one blockchain similar to Bitcoin but with an improved incentive structure that eliminates
-            the most common economic attacks on POW and POS blockchains. Those
-            interested in learning how Saito works should see our <a
-              href="https://github.com/SaitoTech/saito-lite/blob/master/docs/how_saito_works.md">simplified
-              description</a> of the network or jump to our more academic <a
-              href="https://saito.tech/saito-whitepaper.pdf">Saito Whitepaper</a>. Key advances include:
-          </div>
-          <div class="fundamentals-grid">
-            <div class="fundamentals-column">
-              <h5>Transaction Rebroadcasting</h5>
-              <p class="fundamentals-text">
-                Saito prunes data by default, but allows old transactions to out-compete new ones for space on-chain.
-                The result is a rent mechanism where prices are set by the market, not hardcoded by devs.
-              </p>
-              <p class="fundamentals-text">
-                Transaction rebroadcasting eliminates blocksize limits. Maximizing profits requires
-                block producers to target a fee-level which removes the same amount of data added each block. The
-                blockchain can never collapse from over-use.
-              </p>
-            </div>
-            <div class="fundamentals-column">
-              <h5>
-                Saito Consensus
-              </h5>
-              <p class="fundamentals-text">
-                Saito uses a form of mining that pays the nodes which collect transactions from users. Cryptographic
-                routing
-                signatures and a provably-fair lottery make this as secure as mining.
-              </p>
-              <p class="fundamentals-text">
-                Turning "efficient fee collection" into the network's form of work incentivizes the
-                provision all routing infrastructure, software and data services needed to drive on-chain activity,
-                incentivizing all activities needed to support essential network services.
-              </p>
-            </div>
-          </div>
-          <div class="fundamentals-contact">
-            We welcome contact from those with questions about how Saito works and what the network will deliver at scale.
-            If you'd like to get in touch, the best ways to reach out are via email at &lt;<a
-              href="mailto:info@saito.tech">info@saito.tech</a>&gt; or via chat in our public <a
-              href="https://t.me/joinchat/BOSYOk_BR8Epp0X35A54UQ">Telegram Group</a>.
-          </div>
-        -->
-      </div>
-
-
-    </section>
-
-    <section class="compare fadeInRight">
-      <div class="row">
-
-        <div class="compare-grid">
-          <div class="compare-grid-header">
-            <div><span class="compare-title">How Saito Compares</span></div>
-          </div>
-          <div class="compare-grid-header">
-            <div>Bitcoin</div>
-          </div>
-          <div class="compare-grid-header">
-            <div>Ethereum</div>
-          </div>
-          <div class="compare-grid-header">
-            <div>Tendermint</div>
-          </div>
-          <div class="compare-grid-header">
-            <div>Polkadot</div>
-          </div>
-          <div class="compare-grid-header">
-            <div>Saito</div>
-          </div>
-          <div class="compare-grid-cell label">
-            <div>Where is Data Shared?</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>off-chain</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>off-chain</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>off-chain</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>off-chain</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>on-chain / off-chain</div>
-          </div>
-          <div class="compare-grid-cell label">
-            <div>How is Data Paid For?</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>extra fees</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>extra fees</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>extra fees</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>extra fees</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>no extra fee</div>
-          </div>
-          <div class="compare-grid-cell label">
-            <div>Data Cost</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>10x transaction fee</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>5x transaction fee</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>2x transaction fee</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>2x transaction fee</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>no extra fee</div>
-          </div>
-          <div class="compare-grid-cell label">
-            <div>User Barrier(s)</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>usability</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>metamask / Infura</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>network economics</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>sidechains, servers</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>none</div>
-          </div>
-          <div class="compare-grid-cell label">
-            <div>Developer Barrier(s)</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>UTXO scripting</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>underpowered smart contracts</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>multi-server architectures</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>coordinating and migrating parachains</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>none</div>
-          </div>
-          <div class="compare-grid-cell label">
-            <div>Cost-of-Attack</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>~51%</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>~51%</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>~33%</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>~33%</div>
-          </div>
-          <div class="compare-grid-cell">
-            <div>~125%</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="supporters black">
-      <h2>Our Supporters</h2>
-      <div class="supporter-list">
-        <img alt="inblockchain" src="/website/img/inblockchain.png" />
-        <img alt="fengshui" src="/website/img/fengshui.png" />
-        <img alt="ausvic" src="/website/img/ausvic.png" />
-        <img alt="ngc" src="/website/img/ngc.png" />
-      0  <img alt="fission" src="/website/img/fission.png" />
-        <img alt="bchangel" src="/website/img/bchangel.png" />
-      </div>
-    </section>
-
-    <!--section class="happening">
-        <h2>Saito Network Growth</h2>
-        <div class="happening-chart">
-          <iframe
-          src="https://stats.saito.io/public/dashboard/6fb57441-5452-4298-8ae2-364dfb0de76a#theme=night"
-          frameborder="0"
-          width="1400"
-          height="1050"
-          allowtransparency
-      ></iframe>
-        </div>
-      </section-->
-
-    <!--roadmap-->
-    <section class="roadmap white">
-      <div class="roadmap-wrapper">
-        <h2>Roadmap</h2>
-
-        <div class="roadmap-row project">
-          <div class="content blanc start">
-            <h3>Project</h3>
-          </div>
-          <div class="content">
-            <div class="content-shim">
-              <div class="content-label">Q4 2020</div>
-              <ul>
-                <li>Arcade and community growth</li>
-                <li>Team expansion</li>
-                <li>Social and traditional marketing</li>
-                <li>Fundraising through discount tranches</li>
-              </ul>
-            </div>
-          </div>
-          <div class="content">
-            <div class="content-shim">
-              <div class="content-label">Q1 2021</div>
-              <ul>
-                <li>Legals and Structure for Pubic Sale</li>
-                <li>Further Industry Partnerships</li>
-                <li>Listings</li>
-              </ul>
-            </div>
-          </div>
-          <div class="content blanc end"></div>
+        <div class="itemWrapper itemWrapper2">
+          <img class="itemImage" alt="icon" src="/website/img/logos/AngelONE.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Gate.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Signum.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/BlockSync.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Dealena.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Flury.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Follow_the_Seed.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Inclusion.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Infinity_Labs.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Kenel.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Lotus_Capital.png" />
+          <span class="itemImage">
+            <img class="itemImageSVG" alt="icon" src="/website/img/logos/M6.svg" />
+          </span>
+          <img class="itemImage" alt="icon" src="/website/img/logos/Master_Venture.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Moonwhale.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Phoenix.png" />
         </div>
 
-        <div class="roadmap-row technical">
-          <div class="content blanc">
-            <h3>Technical</h3>
-          </div>
-          <div class="content">
-            <div class="content-shim">
-              <div class="content-label">Applications</div>
-              <ul>
-                <li>New Game Releases on Arcade</li>
-                <li>Expansion of ERP/Logistics software</li>
-                <li>Onboarding 3rd Party Developers</li>
-              </ul>
-            </div>
-          </div>
-          <div class="content">
-            <div class="content-shim">
-              <div class="content-label">Core</div>
-              <ul>
-                <li>Hardening and Security Work</li>
-                <li>Developer SDK</li>
-                <li>Networking and Stack Optimisation</li>
-                <li>Third Party Node Implementations</li>
-              </ul>
-            </div>
-          </div>
-          <div class="content blanc"></div>
+        <div class="itemWrapper itemWrapper3">
+          <img class="itemImage" alt="icon" src="/website/img/logos/Tripera.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/Waterdrip.png" />
+          <img class="itemImage" alt="icon" src="/website/img/logos/7.jpg" />
         </div>
-      </div>
-
-    </section>
-
-    <!--about-->
-    <section class="about-saito red">
-      <div class="about-content">
-        <h2>About Saito</h2>
-        <p>
-          Saito is a solution to the problem of how to build a blockchain that preserves trustlessness at scale.
-        </p>
-        <p>
-          We prioritize building a real community with organic transactions and applications users want to use. The
-          useability and usefulness of the network always takes priority. Saito is a powerful tool to build peer to peer
-          applications, share messages and data securely, even transact other crypto.
-        </p>
-        <p>
-          Saito is an open network and users always own their data. We encourage anyone interested to get involved.
-        </p>
-      </div>
-    </section>
-
-    <!--Join us / Social-->
-    <section class="join-us">
-      <div class="boxes">
-        <div class="deeperboxes">
-          <a target="_blank" alt="blog" href="https://org.saito.tech/blog" class="deeperbox">
-            <i class="fas fa-rss-square"></i>
-            <!--div class="deepertext">Discord</div-->
-          </a>
-          <a target="_blank" alt="Discord" href="https://discord.gg/QjeXTC3" class="deeperbox">
-            <i class="fab fa-discord"></i>
-            <!--div class="deepertext">Discord</div-->
-          </a>
-          <a href="https://t.me/joinchat/BOSYOk_BR8HIqp-scldlEA" target="_blank" alt="chat with us" class="deeperbox">
-            <i class="fab fa-telegram"></i>
-            <!-- div class="deepertext">Telegram</div-->
-          </a>
-          <a href="https://twitter.com/saitoofficial" alt="Twitter" class="deeperbox">
-            <i class="fab fa-twitter"></i>
-            <!-- div class="deepertext">Twitter</div-->
-          </a>
-          <a href="https://github.com/saitotech/saito-lite" target="_blank" alt="saito for developers"
-            class="deeperbox">
-            <i class="fas fa-code-branch"></i>
-            <!-- div class="deepertext">Github</div-->
-          </a>
-          <a href="mailto://info@saito.tech" target="_blank" alt="email" class="deeperbox">
-            <i class="fas fa-envelope"></i>
-            <!-- div class="deepertext">info@</div-->
+      </section>
+    </div>
+    <a name="get_saito"></a>
+    <div class="sectionWrapper7">
+      <div class="title" data-il8n="get_saito">Get SAITO tokens</div>
+      <section id="section7" class="section7">
+        <div class="itemWrapper itemWrapper1">
+          <a href="https://org.saito.tech/saito-ido-guide/" target="_blank">
+            <div class="itemTitle">DEX</div>
+            <div class="itemImageWrapper">
+              <img class="itemImage" alt="icon" src="/website/img/Uniswap.png" />
+            </div>
+            <div></div>
           </a>
         </div>
-      </div>
-    </section>
+        <div class="itemWrapper itemWrapper2">
+          <a href="https://www.gate.io/trade/SAITO_USDT" target="_blank">
+            <div class="itemTitle">CEX</div>
+            <div class="itemImageWrapper">
+              <img class="itemImage" alt="icon" src="/website/img/gate.png" />
+            </div>
+            <div></div>
+          </a>
+        </div>
+        <div class="itemWrapper itemWrapper3">
+          <div class="itemTitle">More Info</div>
+          <div class="itemImageWrapper">
+            <a href="https://coinmarketcap.com/currencies/saito/markets/" target="_blank">
+              <img class="itemImage" alt="icon" src="/website/img/cmc.png" />
+            </a>
+          </div>
+          <div class="itemImageWrapper">
+            <a href="https://www.coingecko.com/en/coins/saito#markets" target="_blank">
+              <img class="itemImage" alt="icon" src="/website/img/coingecko.png" />
+            </a>
+          </div>
+        </div>
 
-
-    <footer class="footer">
-      <div class="footer-container">
-        <img class="footer-logo" alt="saito logo" src="/saito/img/logo.svg"></img>
-        <center>
-          <div class="light">info@saito.tech</div>
-        </center>
-        <p></p>
-        <span class="copyright">&copy; Proclus Technologies. All Rights Reserved</span>
-      </div>
-    </footer>
+      </section>
+    </div>
+    <div class="footerWrapper">
+      <section id="footer" class="footer section6">
+        <div class="iconWrapper">
+          <img class="logoImage" alt="icon" src="/website/img/saito-logo.png"></img>
+          <div class="littleIcon">
+            <a title="Subscribe to our Newsletter"><i class="itemImage far fa-envelope website-newsletter-subscribe"></i></a>
+            <a href="https://org.saito.tech/blog" title="Saito Blog" target="blank">
+              <i class="itemImage fas fa-rss-square"></i>
+            </a>
+            <a href="https://github.com/saitotech/saito-lite" title="Github" target="blank">
+              <i class="itemImage fab fa-github"></i>
+            </a>
+            <a href="https://discord.gg/HjTFh9Tfec" title="Discord" target="blank">
+              <i class="itemImage fab fa-discord"></i>
+            </a>
+            <a href="https://t.me/SaitoIO" title="Telegram" target="blank">
+              <i class="itemImage fab fa-telegram"></i>
+            </a>
+            <a href="https://twitter.com/SaitoOfficial" title="Twitter" target="blank">
+              <i class="itemImage fab fa-twitter"></i>
+            </a>
+          </div>
+        </div>
+        <div class="copyright">
+          <div class="left" data-il8n="copyright">© Proclus Technologies. All Rights Reserved</div>
+          <div class="right">
+            <img class="email" alt="icon" src="/website/img/email_icon.png"></img>
+            <div class="emailText">info@saito.tech</div>
+            <div class="desc">
+              <a alt="the Saito Arcade" data-il8n="arcade" href="https://saito.io/arcade">Arcade</a>
+              <span>|</span>
+              <a alt="developer resources" data-il8n="developers"
+                href="https://org.saito.tech/developers">Developers</a>
+            </div>
+            <a class="language-info translate-toggle" href="https://cn.saito.io" title="中文版" data-il8n-from="en" data-il8n-to="zh" data-il8n-from-text="EN"
+              data-il8n-to-text="中文">中文
+              <!-- <img class="icon chinese" alt="icon" src="/website/img/cn_Icon_bot.png"></img> -->
+            </a>
+          </div>
+        </div>
+        <div class="iconWrapperMobile">
+          <img class="logoImage" alt="icon" src="/website/img/saito-logo.png"></img>
+          <div class="personInfo">
+            <img class="email" alt="icon" src="/website/img/email_icon.png"></img>
+            <div class="emailText">info@saito.tech</div>
+            <img class="icon chinese" alt="icon" src="/website/img/cn_Icon_bot.png"></img>
+          </div>
+          <div class="desc">
+            <a alt="the Saito Arcade" data-il8n="arcade" href="https://saito.io/arcade">Arcade</a>
+            <span>|</span>
+            <a alt="developer resources" data-il8n="developers" href="https://org.saito.tech/developers">Developers</a>
+            <span>|</span>
+            <a alt="links to get involved" data-il8n="community" href="#getinvolved">Community</a>
+          </div>
+          <div class="littleIcon">
+            <a class="itemImage far fa-envelope website-newsletter-subscribe" title="Subscribe to our Newsletter"></a>
+            <a href="https://org.saito.tech/blog" title="Saito Blog" target="blank">
+              <i class="itemImage fas fa-rss-square"></i>
+            </a>
+            <a href="https://github.com/saitotech/saito-lite" title="Github" target="blank">
+              <i class="itemImage fab fa-github"></i>
+            </a>
+            <a href="https://discord.gg/HjTFh9Tfec" title="Discord" target="blank">
+              <i class="itemImage fab fa-discord"></i>
+            </a>
+            <a href="https://t.me/SaitoIO" title="Telegram" target="blank">
+              <i class="itemImage fab fa-telegram"></i>
+            </a>
+            <a href="https://twitter.com/SaitoOfficial" title="Twitter" target="blank">
+              <i class="itemImage fab fa-twitter"></i>
+            </a>
+          </div>
+          <div class="copyrightMobile" data-il8n="copyright">
+            © Proclus Technologies. All Rights Reserved
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
-  </div>
-  <div class="chat-manager" id="chat-manager"></div>
-
-  <script type="text/javascript" src="/website/js/slider.js"></script>
+  <script type="text/javascript" src="/website/js/swiper.min.js"></script>
+  <script type="text/javascript" src="/website/js/swiper.js"></script>
+  <script type="text/javascript" src="/website/js/il8n.js"></script>
   <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
 
 </body>

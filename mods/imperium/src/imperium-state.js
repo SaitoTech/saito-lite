@@ -16,8 +16,8 @@
         state.agendas = [];
 	state.vp_target = 14;
 
-	if (this.game.options.vp) {
-	  state.vp_target = parseInt(this.game.options.vp);
+	if (this.game.options.game_length) {
+	  state.vp_target = parseInt(this.game.options.game_length);
         } 
        
 	//
@@ -27,6 +27,7 @@
         state.riders = [];
         state.choices = [];
 
+	state.action_card_order = "simultaneous";
         state.assign_hits_queue_instruction = "";
         state.assign_hits_to_cancel = "";
         state.active_player_moved = 0;
@@ -37,6 +38,7 @@
         state.stage_i_objectives = [];
         state.stage_ii_objectives = [];
         state.secret_objectives = [];
+	state.agenda_voting_order = "simultaneous";
         state.votes_available = [];
         state.votes_cast = [];
         state.voted_on_agenda = [];

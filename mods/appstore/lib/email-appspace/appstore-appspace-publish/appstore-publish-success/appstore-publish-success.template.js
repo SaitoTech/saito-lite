@@ -1,23 +1,26 @@
 module.exports = AppStorePublishSuccessTemplate = () => {
   return `
-    <div margin-top:10px;">
+    <div style="margin-top:10px;">
 
-    You've submited your module!
+    <h2>Module Submitted</h2>
 
-    <p></p>
+    <p>
+    You have uploaded your application to the Saito Network. It will take a few minutes for it to be indexed by the network and made available for you and others to install. You will receive an email once your application is indexed and ready to release.
+    </p>
 
-    It will take approximately 2 minutes for your application to be indexed by the AppStores on the network and be available for other users to install. Once this is ready, you will receive an email with your unique APP-ID along with a link you can use to install the application.
+    <p>
+      <br/>
+    </p>
 
-    <p></p>
+    <p>
+    In the event you do not receive this email, it indicates that your application does not compile properly and there was an error indexing it. If that happens, please visit our <a href="https://org.saito.tech/developer">Saito developer center</a> for assistance. Most problems can be easily found and debugged by compiling manually on a local install. You are also always welcome to reach out to us for assistance. To return to your inbox and check to see if your application is available yet, please click the button below.
+    </p>
 
-    Share this ID so your friends can install it, or install it yourself and use the Add Contacts method to get your friends to install it.
+    <p>
+      <br/>
+    </p>
 
-    <p></p>
-
-    If you do not receive this email, it indicates that your application does not compile properly. Please consult the Developer section on the Saito website for assistance debugging your application.
-
-    <p></p>
-
+    <div style="text-align:center;width:100px;" class="button return-to-inbox">return to inbox</div>
 
     </div>
   `;

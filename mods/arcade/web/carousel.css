@@ -16,71 +16,90 @@
 .carousel-spacer {
     width: 100%;
     position: relative;
+    display: none; /*don't fix size*/
 }
 
-.arcade-game-carousel {
-  width:100%;
-  position: relative;
+.saito-carousel {
+    width: 100%;
+    min-height: 33vh;
+    position: relative;
+    background-image: url(/arcade/img/dreamscape-logo.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.arcade-carousel-wrapper {
+.carousel-wrapper {
     width: 100%;
     height: 100%;
     overflow: hidden;
     position: relative;
-
-    background-image: url(/arcade/img/dreamscape-logo.png);
-    background-size: cover;
-
 }
 
 .leaf {
-   background-size: cover;
-   width: 100%;
-   height: 100%;
-   position: absolute;
-   top: 0;
-   opacity: 0;
-   border: 1px solid darkorange;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    border: 1px solid darkorange;
 }
 
-.arcade-carousel-wrapper > div {
+.carousel-wrapper>div {
     animation: rightToLeft 50s linear infinite 0s;
 }
 
 /*
-.arcade-carousel-wrapper div.leaf:nth-child(1) {
+.carousel-wrapper div.leaf:nth-child(1) {
     animation-delay: 0s;
 }
 */
 
-.arcade-carousel-wrapper div.leaf:nth-child(2) {
+.carousel-wrapper div.leaf:nth-child(2) {
     animation-delay: 10s;
 }
 
-.arcade-carousel-wrapper div.leaf:nth-child(3) {
+.carousel-wrapper div.leaf:nth-child(3) {
     animation-delay: 20s;
 }
 
-.arcade-carousel-wrapper div.leaf:nth-child(4) {
+.carousel-wrapper div.leaf:nth-child(4) {
     animation-delay: 30s;
 }
 
-.arcade-carousel-wrapper div.leaf:nth-child(5) {
+.carousel-wrapper div.leaf:nth-child(5) {
     animation-delay: 40s;
 }
-
-
 
 /*rightToLeft Animation*/
 
 @keyframes rightToLeft {
-    0%   { opacity: 0; }
-    5%   { opacity: 0; transform: translateX(-100%) }
-    10%  { opacity: 1; transform: translateX(0px); }
-    25%  { opacity: 1; transform: translateX(0px); }
-    29%  { opacity: 0; }
-    30%  { transform: translateX(100%); }
-    80%  { opacity: 0; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 0;
+    }
+    5% {
+        opacity: 0;
+        transform: translateX(-100%)
+    }
+    10% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    25% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    29% {
+        opacity: 0;
+    }
+    30% {
+        transform: translateX(100%);
+    }
+    80% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
 }

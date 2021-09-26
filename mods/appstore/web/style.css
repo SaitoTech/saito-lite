@@ -59,7 +59,7 @@ h1 {
 }
 
 .loader {
-    padding: 40px;
+    padding: 20px;
 }
 
 .label {
@@ -131,7 +131,7 @@ input {
   min-width: 400px;
   padding: 1em;
   color: var(--saito-white);
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   line-height: 1.5em;
   background-color: var(--saito-cyber-black);
   margin: auto;

@@ -1,19 +1,16 @@
 module.exports = EmailChat = {
 
-    render(app, data) {
-      for (let i = 0; i < data.mods.length; i++) {
-        if (data.mods[i].respondTo('email-chat') != null) {
-          data.mods[i].respondTo('email-chat').render(app, data);
-        }
+    render(app, mod) {
+      let mods = app.modules.respondTo('email-chat');
+      for (let i = 0; i < mods.length; i++) {
+	mods[i].respondTo("email-chat").render(app, mod);
       }
-
     },
 
-    attachEvents(app, data) {
-      for (let i = 0; i < data.mods.length; i++) {
-        if (data.mods[i].respondTo('email-chat') != null) {
-          data.mods[i].respondTo('email-chat').attachEvents(app, data);
-        }
+    attachEvents(app, mod) {
+      let mods = app.modules.respondTo('email-chat');
+      for (let i = 0; i < mods.length; i++) {
+	mods[i].respondTo("email-chat").attachEvents(app, mod);
       }
     },
 

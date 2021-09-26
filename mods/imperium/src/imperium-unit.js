@@ -10,6 +10,7 @@
     if (obj.owner == null)		{ obj.owner = -1; }			// who owns this unit
     if (obj.type == null) 		{ obj.type = ""; }			// infantry / fighter / etc.
     if (obj.storage  == null) 		{ obj.storage = []; }			// units this stores
+    if (obj.shots == null)		{ obj.shots = 1; }			// in combat gets N shots
     if (obj.space == null) 		{ obj.space = 1; }			// defaults to spaceship
     if (obj.ground == null) 		{ obj.ground = 0; }			// defaults to spaceship
     if (obj.cost == null) 		{ obj.cost = 1; }			// cost to product
@@ -25,11 +26,13 @@
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
     if (obj.extension == null)		{ obj.extension = 0; }			// 1 if replacing other unit as upgrade
+    if (obj.may_fly_through_sectors_containing_other_ships == null) { obj.may_fly_through_sectors_containing_other_ships = 0; }
+    if (obj.description == null)	{ obj.description = ""; }		// shown on unit sheet
     if (obj.anti_fighter_barrage ==null){ obj.anti_fighter_barrage = 0; }
     if (obj.anti_fighter_barrage_combat ==null){ obj.anti_fighter_barrage_combat = 0; }
     if (obj.temporary_combat_modifier == null) { obj.temporary_combat_modifier = 0; } // some action cards manipulate
-    if (obj.bombardment_rolls == null)  { obj.bombardment = 0; } // 0 means no bombardment abilities
-    if (obj.bombardment_combat == null) { obj.bombardment = -1; } // hits on N
+    if (obj.bombardment_rolls == null)  { obj.bombardment_rolls = 0; } // 0 means no bombardment abilities
+    if (obj.bombardment_combat == null) { obj.bombardment_combat = -1; } // hits on N
 
 
     obj = this.addEvents(obj);
@@ -85,7 +88,19 @@
   removeSpaceUnitByJSON(player, sector, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
-      if (JSON.stringify(sys.s.units[player - 1][i]) === unitjson) {
+
+      let thisunit1 = sys.s.units[player-1][i];
+      let thisunit2 = JSON.parse(JSON.stringify(thisunit1));
+
+      let thisunit1json = JSON.stringify(thisunit1);
+      let thisunit2json = JSON.stringify(thisunit2);
+
+      if (thisunit1.already_moved == 1) {
+	delete thisunit2.already_moved;
+	thisunit2json = JSON.stringify(thisunit2);
+      }
+
+      if (thisunit1json === unitjson || thisunit2json === unitjson) {
         sys.s.units[player-1].splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return unitjson;
@@ -156,12 +171,14 @@
   };
   unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
-    for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
-      if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
-        let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
-        sys.p[planet_idx].units[player-1].splice(i, 1);
-        this.saveSystemAndPlanets(sys);
-        return JSON.stringify(unit_to_remove);
+    if (sys.p.length > planet_idx) {
+      for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
+        if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
+          let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
+          sys.p[planet_idx].units[player-1].splice(i, 1);
+          this.saveSystemAndPlanets(sys);
+          return JSON.stringify(unit_to_remove);
+        }
       }
     }
     return "";
@@ -180,9 +197,9 @@
   };
   unloadUnitFromShip(player, sector, ship_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storage.length + " UNITS");
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
       if (sys.s.units[player - 1][ship_idx].storage[i].type === unitname) {
+        let unitjson = JSON.stringify(sys.s.units[player-1][ship_idx].storage[i]);
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return unitjson;
@@ -319,7 +336,7 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storag
 
 
 
-  returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards) {  
+  returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable) {  
 
     let imperium_self = this;
     let ships_and_sectors = [];
@@ -348,11 +365,13 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storag
           for (let k = 0; k < sys.s.units[this.game.player-1].length; k++) {
             let this_ship = sys.s.units[this.game.player-1][k];
             if (this_ship.move >= distance[i]) {
-    	      x.adjusted_distance.push(distance[i]);
-              x.ships.push(this_ship);
-	      x.hazards.push(hazards[i]);
-              x.ship_idxs.push(k);
-              x.sector = sectors[i];
+	      if (hoppable[i] != -1 || this_ship.may_fly_through_sectors_containing_other_ships == 1) {
+      	        x.adjusted_distance.push(distance[i]);
+                x.ships.push(this_ship);
+	        x.hazards.push(hazards[i]);
+                x.ship_idxs.push(k);
+                x.sector = sectors[i];
+              }
             }
           }
 
@@ -536,8 +555,14 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storag
   
 
   upgradeUnit(unit, player_to_upgrade) {
+
     let z = this.returnEventObjects();
+    //
+    // we need to keep capacity
+    //
+    let old_storage = unit.storage;
     for (let z_index in z) { unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
+    unit.storage = old_storage;
     return unit;
   }
   

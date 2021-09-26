@@ -46,6 +46,7 @@
     let text = this.tech[tech].text;
     let color = this.tech[tech].color;
     let prereqs = "";
+
     for (let i = 0; i < this.tech[tech].prereqs.length; i++) {
       if (this.tech[tech].prereqs[i] == "yellow") { prereqs += '<span class="yellow">♦</span>'; }
       if (this.tech[tech].prereqs[i] == "blue") { prereqs += '<span class="blue">♦</span>'; }

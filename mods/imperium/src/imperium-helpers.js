@@ -82,8 +82,6 @@
       this.moves.push(this.rmoves[i]);
     }
 
-    this.updateStatus("Waiting for information from peers....");
-  
     if (nextTarget != 0) {
       extra.target = nextTarget;
     }
@@ -92,6 +90,9 @@
     this.moves = [];
     this.rmoves = [];
     this.sendMessage("game", {});
+
+    this.updateStatus("Waiting for information from peers....");
+  
   };
 
   
@@ -110,6 +111,8 @@
     this.game.confirms_needed   = num;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
+    this.game.tmp_confirms_received = 0;
+    this.game.tmp_confirms_players  = [];
 
     // if confirms in the number of players, we set them all as active
     if (this.game.confirms_needed == this.game.players_info.length) {
@@ -122,58 +125,57 @@
 
 
   returnGameOptionsHTML() {
- 
-    return `
 
-            <label for="game_length">Game Length:</label>
+    let player_upper_limit = this.maxPlayers;
+    try {
+      player_upper_limit = document.querySelector('.game-wizard-players-select').value;
+    } catch (err) {}
+
+    let html = `
+
+      <div style="padding:40px;width:100vw;height:100vh;overflow-y:scroll;display:grid;grid-template-columns: 200px auto">
+
+        <div style="top:0;left:0;margin-right: 20px;">
+
+            <label for="game_length ">Game Length:</label>
             <select name="game_length">
               <option value="4">4 VP</option>
+              <option value="6">6 VP</option>
               <option value="8" selected>8 VP</option>
+              <option value="10">10 VP</option>
               <option value="12">12 VP</option>
               <option value="14">14 VP</option>
             </select>
 
-            <label for="player1">Player 1:</label>
-            <select name="player1">
-              <option value="random" default>random</option>
-              <option value="faction1" default>Sol Federation</option>
-              <option value="faction2">Universities of Jol Nar</option>
-              <option value="faction3">XXcha Kingdom</option>
-              <option value="faction4">Sardakk N'Orr</option>
-              <option value="faction5">Brotherhood of Yin</option>
-            </select>
- 
-            <label for="player2">Player 2:</label>
-            <select name="player2">
-              <option value="random" default>random</option>
-              <option value="faction1" default>Sol Federation</option>
-              <option value="faction2">Universities of Jol Nar</option>
-              <option value="faction3">XXcha Kingdom</option>
-              <option value="faction4">Sardakk N'Orr</option>
-              <option value="faction5">Brotherhood of Yin</option>
-            </select>
+            <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
 
-            <label for="player3" class="game-players-options game-players-options-3p">Player 3:</label>
-            <select name="player3" id="game-players-select-3p" class="game-players-options game-players-options-3p">
-              <option value="random" default>random</option>
-              <option value="faction1" default>Sol Federation</option>
-              <option value="faction2">Universities of Jol Nar</option>
-              <option value="faction3">XXcha Kingdom</option>
-              <option value="faction4">Sardakk N'Orr</option>
-              <option value="faction5">Brotherhood of Yin</option>
-            </select>
-
-            <label for="player4" class="game-players-options game-players-options-4p">Player 4:</label>
-            <select name="player4" id="game-players-select-4p" class="game-players-options game-players-options-4p">
-              <option value="random" default>random</option>
-              <option value="faction1" default>Sol Federation</option>
-              <option value="faction2">Universities of Jol Nar</option>
-              <option value="faction3">XXcha Kingdom</option>
-              <option value="faction4">Sardakk N'Orr</option>
-              <option value="faction5">Brotherhood of Yin</option>
-            </select>
+        </div>
+        <div>
 
     `;
 
+    for (let i = 1; i <= player_upper_limit; i++) {
+      html += `
+            <label for="player${i}" class="game-players-options game-players-options-${i}p">Player ${i}:</label>
+            <select name="player${i}" id="game-players-select-${i}p" class="game-players-options game-players-options-${i}p">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+              <option value="faction5">Brotherhood of Yin</option>
+              <option value="faction6">Yssaril Tribes</option>
+              <option value="faction7">Embers of Muaat</option>
+            </select>
+      `;
+    }
+
+
+    html += `
+        </div>
+      </div>
+    `;
+
+    return html;
   }
 

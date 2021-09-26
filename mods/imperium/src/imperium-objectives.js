@@ -7,6 +7,7 @@
 
     if (obj.name == null) 	{ obj.name = "Unknown Objective"; }
     if (obj.text == null)	{ obj.type = "Unclear Objective"; }
+    if (obj.minPlayers == null) { obj.minPlayers = 2; }
     if (obj.type == null)	{ obj.type = "normal"; }
     if (obj.phase == null)	{ obj.type = "imperial"; } // "action" if can be scored at end of turn
     if (obj.img  == null) 	{ obj.img = "/imperium/img/secret_objective.jpg"; }

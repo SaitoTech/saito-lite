@@ -5,6 +5,25 @@ body {
   margin: 0px;
 }
 
+.cardlist-container {
+  width: 80vw;
+  height: 80vh;
+  overflow-y: scroll;
+}
+.cardlist-card {
+  width: 18vw;
+  height: auto;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  float: left;
+}
+.cardlist-card .cardimg {
+  position: relative;
+  float: left;
+  height: auto;
+  width: 100%;
+}
+
 .logcard {
   font-weight: bold;
   cursor: pointer;

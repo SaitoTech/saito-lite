@@ -1,7 +1,11 @@
+const saito = require('../../lib/saito/saito');
 const helpers = require('../../lib/helpers/index');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
-const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
+const EmailAppStore = require('./lib/email-appspace/appstore-appspace');
+const AppStoreOverlay = require('./lib/appstore-overlay/appstore-overlay');
+const AppStoreBundleConfirm = require('./lib/appstore-overlay/appstore-bundle-confirm');
+const AppStoreModuleIndexedConfirm = require('./lib/appstore-overlay/appstore-module-indexed-confirm');
+const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const fs = require('fs');
 const path = require('path');
 
@@ -17,13 +21,18 @@ class AppStore extends ModTemplate {
     this.name          = "AppStore";
     this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
     this.categories    = "Utilities Dev";
+    this.featured_apps = ['Polkadot','Kusama', 'Westend', 'Design', 'Debug', 'Midnight', 'Hearts', 'Settlers', 'President', 'Scotland'];
+    this.header        = null;
 
-    this.featured_apps = ['Email', 'Testing', 'Escrow', 'Design'];
+    this.bundling_timer = null;
+    this.renderMode    = "none";
+    this.search_options = {};
+
   }
 
 
   //
-  // appstore displays in email
+  // appstore upload is in email
   //
   respondTo(type) {
     if (type == 'email-appspace') {
@@ -35,17 +44,47 @@ class AppStore extends ModTemplate {
     }
     return null;
   }
-  renderEmail(app, data) {
-    data.appstore = app.modules.returnModule("AppStore");
-    data.helpers = helpers;
-    AppStoreAppspace.render(app, data);
+  renderEmail(app, mod) {
+    appstore_mod = app.modules.returnModule("AppStore");
+    EmailAppStore.render(app, appstore_mod);
   }
-  attachEventsEmail(app, data) {
-    data.appstore = app.modules.returnModule("AppStore");
-    data.helpers = helpers;
-    AppStoreAppspace.attachEvents(app, data);
+  attachEventsEmail(app, mod) {
+    appstore_mod = app.modules.returnModule("AppStore");
+    EmailAppStore.attachEvents(app, appstore_mod);
   }
 
+
+
+
+  //
+  // click-to-access overlay access
+  //
+  initializeHTML(app) {
+
+    super.initializeHTML(app);
+
+    if (this.header == null) {
+      this.header = new SaitoHeader(app, this);
+    }
+    this.header.render(app, this);
+    this.header.attachEvents(app, this);
+
+  }
+  handleUrlParams(urlParams) {
+    let i = urlParams.get('app');
+    if (i) {
+      let search_options = {};
+	  search_options.version = i;
+      this.search_options = search_options;
+      this.renderMode = "standalone";
+    }
+  }
+  onPeerHandshakeComplete(app, mod) {
+    if (this.renderMode == "standalone") {
+      AppStoreOverlay.render(this.app, this, this.search_options);
+      AppStoreOverlay.attachEvents(this.app, this);
+    }
+  }
 
 
   //
@@ -66,6 +105,9 @@ class AppStore extends ModTemplate {
         $squery2: squery2,
       };
 
+console.log(sql);
+console.log(JSON.stringify(params));
+
       let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
 
       let res = {};
@@ -75,7 +117,6 @@ class AppStore extends ModTemplate {
       mycallback(res);
 
     }
-
 
   }
 
@@ -117,9 +158,8 @@ class AppStore extends ModTemplate {
       dirs.forEach(dir => {
 
 console.log("##########################");
-console.log("##########################");
-console.log("##########################");
 console.log("processing: " + dir);
+console.log("##########################");
 
         let mod_path = path.resolve(__dirname, `mods/${dir}.zip`);
         let output = fs.createWriteStream(mod_path);
@@ -157,21 +197,28 @@ console.log("processing: " + dir);
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
+	  //
+	  // TODO - fix 
+	  //
+	  // massive zip files bypassing tx size limits cause issues with 
+	  // some versions of NodeJS. In others they over-size and fail
+	  // elegantly. adding this check to prevent issues with server
+	  // on start, particularly with Red Imperium.
+	  //
+	  if (zip.length <= 30000000) {
 
+            newtx.msg = {
+              module: "AppStore",
+              request: "submit module",
+              module_zip: zip,
+              name: dir,
+            };
 
-          newtx.msg = {
-            module: "AppStore",
-            request: "submit module",
-            module_zip: zip,
-            name: dir,
-          };
+            newtx = app.wallet.signTransaction(newtx);
+            app.network.propagateTransaction(newtx);
 
-console.log("About to Fail: " + newtx.msg.name);
-console.log("ZIP LEN: " + zip.length);
+	  }
 
-          newtx = app.wallet.signTransaction(newtx);
-
-          app.network.propagateTransaction(newtx);
         });
 
         archive.finalize();
@@ -194,15 +241,59 @@ console.log("ZIP LEN: " + zip.length);
       switch (txmsg.request) {
         case 'submit module':
           this.submitModule(blk, tx);
+	  if (tx.isFrom(app.wallet.returnPublicKey())) {
+            try {
+              document.querySelector(".appstore-loading-text").innerHTML = "Your application is being broadcast to the network. <p></p>Your AppStore should receive it within <span class=\"time_remaining\">45</span> seconds.";
+              let appstore_mod = app.modules.returnModule("AppStore");
+              appstore_mod.time_remaining = 45;
+              appstore_mod.bundling_timer = setInterval(() => {
+                if (appstore_mod.time_remaining <= 0) {
+                  clearInterval(appstore_mod.bundling_timer);
+		  AppStoreModuleIndexedConfirm.render(appstore_mod.app, appstore_mod);
+		  AppStoreModuleIndexedConfirm.attachEvents(appstore_mod.app, appstore_mod);
+                } else {
+                  appstore_mod.time_remaining--;
+                  if (appstore_mod.time_remaining >= 1) {
+                    try {
+                      document.querySelector(".time_remaining").innerHTML = appstore_mod.time_remaining;
+                    } catch (err) {
+                      clearInterval(appstore_mod.bundling_timer);
+                    }
+                  }
+                }
+              }, 1000);
+
+            } catch (err) {
+            }
+	  }
           break;
         case 'request bundle':
           if (tx.isFrom(app.wallet.returnPublicKey())) {
             try {
-              document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
+              document.querySelector(".appstore-loading-text").innerHTML = "Your application is being processed by the network. Your upgrade should be complete within about <span class=\"time_remaining\">120</span> seconds.";
+	      let appstore_mod = app.modules.returnModule("AppStore");
+	      appstore_mod.time_remaining = 120;
+	      appstore_mod.bundling_timer = setInterval(() => {
+		if (appstore_mod.time_remaining < 0) {
+		  clearInterval(appstore_mod.bundling_timer);
+		} else {
+		  appstore_mod.time_remaining--;
+		  if (appstore_mod.time_remaining >= 0) {
+		    try {
+	 	      document.querySelector(".time_remaining").innerHTML = appstore_mod.time_remaining;
+		    } catch (err) {
+		      clearInterval(appstore_mod.bundling_timer);
+		    }
+		  }
+		}
+	      }, 1000);
+
             } catch (err) {
             }
           }
-          if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
+          if (!tx.isTo(app.wallet.returnPublicKey())) { 
+	    return; 
+	  }
           this.requestBundle(blk, tx);
           break;
         case 'receive bundle':
@@ -240,6 +331,7 @@ console.log("ZIP LEN: " + zip.length);
     fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin2, { encoding: 'binary' });
 
     let name = 'Unknown Module';
+    let image = "";
     let description = 'unknown';
     let categories = 'unknown';
 
@@ -249,16 +341,24 @@ console.log("ZIP LEN: " + zip.length);
 
       let promises = directory.files.map(async file => {
 
+        if (file.path === "web/img/arcade.jpg") {
+          let content = await file.buffer();
+          image = "data:image/jpeg;base64," + content.toString('base64')
+	}
+        if (file.path === "web/img/saito_icon.jpg") {
+          let content = await file.buffer();
+          image = "data:image/jpeg;base64," + content.toString('base64')
+	}
+
         if (file.path.substr(0,3) == "lib") { return; }
         if (file.path.substr(-2) !== "js") { return; }
-        if (file.path.substr(-2) !== "js") { return; }
-        if (file.path.indexOf("/") > -1) { return; }
-        if (file.path.indexOf("/web/") > -1) { return; }
-        if (file.path.indexOf("/www/") > -1) { return; }
-        if (file.path.indexOf("/lib/") > -1) { return; }
-        if (file.path.indexOf("/license/") > -1) { return; }
-        if (file.path.indexOf("/docs/") > -1) { return; }
-        if (file.path.indexOf("/sql/") > -1) { return; }
+        //if (file.path.substr(2).indexOf("/") > -1) { return; }
+        if (file.path.indexOf("web/") > -1) { return; }
+        if (file.path.indexOf("www/") > -1) { return; }
+        if (file.path.indexOf("lib/") > -1) { return; }
+        if (file.path.indexOf("license/") > -1) { return; }
+        if (file.path.indexOf("docs/") > -1) { return; }
+        if (file.path.indexOf("sql/") > -1) { return; }
 
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
@@ -276,6 +376,7 @@ console.log("ZIP LEN: " + zip.length);
 	  if (/this.name/.test(zip_lines[i]) && found_name == 0) {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
+//console.log("FP: " + file.path);
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
 	      name = cleanString(name);
 	      name = name.replace(/^\s+|\s+$/gm,'');
@@ -328,16 +429,19 @@ console.log("ZIP LEN: " + zip.length);
 
       await Promise.all(promises);
     } catch (err) {
-      console.log(err);
+      console.log("ERROR UNZIPPING: " + err);
     }
 
     //
     // delete unziped module
     //
     fs.unlink(path.resolve(__dirname, zip_path));
+    return { name, image , description, categories };
 
-    return { name, description, categories };
   }
+
+
+
 
 
 
@@ -352,23 +456,21 @@ console.log("ZIP LEN: " + zip.length);
             newtx.msg.title        = "Saito Application Published";
             newtx.msg.message      = `
 
-	    Your application is now available at the following link:
+	    <p>
+	    Your application has been published with the following APP-ID:
+	    </p>
 
-	    <p></p>
+	    <p><br /></p>
 
-	    <a href="http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}">http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}</a>
+	    <p>
+	    ${this.app.crypto.hash(tx.transaction.ts + "-" + tx.transaction.sig)}
+	    </p>
 
-	    <p></p>
+	    <p><br /></p>
 
-	    or by searching on your preferred AppStore for the following APP-ID:
-
-	    <p></p>
-
-	     ${tx.transaction.ts}-${tx.transaction.sig}
-
-            <p></p>
-
-	    If your application does not appear shortly, it means there is a bug in the code preventing AppStores from compiling it successfully. We recommend that you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile and test your module locally to eliminate any errors before uploading in this case.
+	    <p>
+	    Please note: if you have problems installing your application, there may be a problem preventing it from compiling successfully. In these cases, we recommend <a href="https://org.saito.tech/developers">installing Saito</a> and testing locally before deploying to the network. You are welcome to contact the Saito team with questions or problems.
+	    </p>
 
         `;
         newtx = this.app.wallet.signTransaction(newtx);
@@ -384,22 +486,40 @@ console.log("ZIP LEN: " + zip.length);
 
     }
 
-    let sql = `INSERT OR IGNORE INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured) VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
+    let sql = `INSERT OR IGNORE INTO modules (name, description, version, image, categories, publickey, unixtime, bid, bsh, tx, featured) VALUES ($name, $description, $version, $image, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
 
     let { from, sig, ts } = tx.transaction;
 
     // should happen locally from ZIP
     let { module_zip } = tx.returnMessage();
 
-    let { name, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
+    let { name, image, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
+
+console.log("-----------------------------");
+console.log("--INSERTING INTO APPSTORE --- " + name);
+console.log("-----------------------------");
+if (name == "Unknown") {
+  console.log(`TROUBLE EXTRACTING: mods/module-${sig}-${ts}.zip`);
+  //console.log("ZIP: " + module_zip);
+  //process.exit();
+}
 
     let featured_app = 0;
     if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
+    if (featured_app == 1) {
+      featured_app = 0;
+      if (this.featured_apps.includes(name)) {
+	featured_app = 1;
+      }
+    }
+
+console.log(name + " is included? " + featured_app);
 
     let params = {
-      $name:name,
+      $name: name,
       $description: description || '',
-      $version: `${ts}-${sig}`,
+      $version: this.app.crypto.hash(`${ts}-${sig}`),
+      $image: image ,
       $categories: categories,
       $publickey: from[0].add,
       $unixtime: ts,
@@ -424,7 +544,7 @@ console.log("ZIP LEN: " + zip.length);
         sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
         params = {
           $name: name,
-          $version: `${ts}-${sig}`,
+          $version: this.app.crypto.hash(`${ts}-${sig}`),
         };
         await this.app.storage.executeDatabase(sql, params, "appstore");
 
@@ -481,11 +601,12 @@ console.log("ZIP LEN: " + zip.length);
 
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
+        let { module_zip } = new saito.transaction(tx).returnMessage();
         modules_selected.push(
           {
             name: rows[i].name,
             description: rows[i].description,
-            zip: tx.msg.module_zip
+            zip: module_zip
           }
         );
       }
@@ -501,16 +622,16 @@ console.log("ZIP LEN: " + zip.length);
 
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
+        let { module_zip } = new saito.transaction(tx).returnMessage();
         modules_selected.push(
           {
             name: rows[i].name,
             description: rows[i].description,
-            zip: tx.msg.module_zip
+            zip: module_zip
           }
         );
       }
     }
-
 
     //
     // WEBPACK
@@ -528,7 +649,7 @@ console.log("ZIP LEN: " + zip.length);
     sql = `INSERT OR IGNORE INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts } = tx.transaction;
     params = {
-      $version: `${ts}-${sig}`,
+      $version: this.app.crypto.hash(`${ts}-${sig}`),
       $publickey: from[0].add,
       $unixtime: ts,
       $bid: blk.block.id,
@@ -543,7 +664,6 @@ console.log("ZIP LEN: " + zip.length);
     //
     //
     let online_version = this.app.options.server.endpoint.protocol + "://" + this.app.options.server.endpoint.host + ":" + this.app.options.server.endpoint.port + "/appstore/bundle/" + bundle_filename;
-
 
     //
     // send our filename back at our person of interest
@@ -579,7 +699,6 @@ console.log("ZIP LEN: " + zip.length);
     const path = require('path');
     const unzipper = require('unzipper');
 
-
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
 
@@ -601,7 +720,6 @@ console.log("ZIP LEN: " + zip.length);
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/mods" + "\n";
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/dist" + "\n";
 
-
     fs.writeFileSync(path.resolve(__dirname, bash_script_create), bash_script_create_dirs, { encoding: 'binary' });
     try {
       let cwdir = __dirname;
@@ -610,7 +728,6 @@ console.log("ZIP LEN: " + zip.length);
     } catch (err) {
       console.log(err);
     }
-
 
     bash_script_content += 'cd ' + __dirname + '/mods' + "\n";
     bash_script_delete  += 'cd ' + __dirname + '/mods' + "\n";
@@ -623,7 +740,7 @@ console.log("ZIP LEN: " + zip.length);
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
 
 
-      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
+      bash_script_content += `unzip -o ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/web` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/www` + "\n";
       bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/sql` + "\n";
@@ -643,10 +760,8 @@ console.log("ZIP LEN: " + zip.length);
       return `${returnSlug(mod.name)}/${returnSlug(mod.name)}.js`;
     });
 
-
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}-create` + "\n";
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}` + "\n";
-
 
     //
     // write our modules config file
@@ -670,7 +785,6 @@ console.log("ZIP LEN: " + zip.length);
       IndexTemplate(modules_config_filename)
     );
 
-
     //
     // execute bundling process
     //
@@ -680,40 +794,43 @@ console.log("ZIP LEN: " + zip.length);
     bash_script_content += 'cd ' + __dirname + "\n";
     bash_script_content += 'cd ../../' + "\n";
     bash_script_content += `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
-    bash_script_content += "\n";
-    //bash_script_content += bash_script_delete;
 
+console.log("COMPILING: " + `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`);
+
+    bash_script_content += "\n";
+    bash_script_content += bash_script_delete;
 
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
     try {
       let cwdir = __dirname;
       let bash_command = 'sh ' + bash_script;
-//console.log("running bash command: " + bash_command);
-//console.log(" with: " + bash_script_content);
       const { stdout, stderr } = await exec(bash_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
     } catch (err) {
       console.log(err);
     }
+
+console.log(newappdir + " --- " + index_filename + " ------ " + bash_script);
 
     //
     // create tx
     //
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     let bundle_bin = "";
+
+console.log("Bundle Filename: " + bundle_filename);
+console.log("Bundle __dirname: " + __dirname);
+
     if (fs) { bundle_bin = fs.readFileSync(path.resolve(__dirname, `./bundler/dist/${bundle_filename}`), { encoding: 'binary' }); }
     newtx.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin };
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-
-
     //
     // cleanup
     //
-// tmp disabled
-//    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
-//      console.log("Appstore Compilation Files Removed!");
-//    });
+    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
+      console.log("Appstore Compilation Files Removed!");
+    });
 
     return bundle_filename;
   }
@@ -773,11 +890,49 @@ console.log("ZIP LEN: " + zip.length);
 
         res.setHeader('Content-type', 'text/javascript');
         res.charset = 'UTF-8';
-        res.write('alert("Server does not contain your Saito javascript bundle...");');
+        res.write(`
+
+	  let x = confirm("Server reports it does not contain your Saito javascript bundle. This can happen across server upgrades with remotely-hosted application bundles. Do you wish to reset to use the server default and update your default AppStore to this server?");
+	  if (x) { 
+
+	    try {
+
+	      if (typeof(Storage) !== "undefined") {
+	        let options = null;
+	        let data = localStorage.getItem("options");
+	        if (data) {
+	  	  options = JSON.parse(data); 
+	          options.appstore = "";
+	          options.bundle = "";
+	          options.modules = [];
+	          localStorage.setItem("options", JSON.stringify(options));
+		  window.location.reload(false);
+    		}
+	      }
+
+	    } catch (err) {
+  	      alert("Error attempting to reset to use default Saito: " + err);
+	    }
+	  }
+
+	`);
+
         res.end();
       });
     }
   }
+
+
+
+  //////////////////
+  // UI Functions //
+  //////////////////
+  openAppstoreOverlay(options) {
+    AppStoreOverlay.render(this.app, this, options);
+    AppStoreOverlay.attachEvents(this.app, this);
+  }
+
+
 }
 module.exports = AppStore;
 

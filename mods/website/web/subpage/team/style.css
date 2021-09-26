@@ -1,0 +1,90 @@
+.page-title {
+    color: var(--saito-red);
+    text-align: center;
+}
+.desc {
+    text-align: center;
+    margin-bottom: 6rem;
+}
+.team-member {
+    background-color: white;
+    display: grid;
+    grid-template-columns: 45% 55%;
+    box-shadow: 0px 0px 59px #C9C9C945;
+    margin-bottom: 30px;
+}
+.team-member:last-child {
+    margin-bottom: 48px;
+}
+.team-photo-holder{
+  /* width: 100%;
+  padding-bottom: 75%; */
+}
+.team-photo {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+  height: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.team-details {
+    font-size: 16px;
+    padding: 16px 32px;
+}
+.team-name {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+.team-links {
+    margin: 32px 0 48px;
+}
+.button {
+    background-color: var(--saito-red);
+    border-radius: 30px;
+    box-shadow: 0px 16px 29px #BE0B0B69;
+    color: white;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 12px 32px;
+    transition: all .2s ease-in-out;
+}
+.button:hover {
+    background-color: #d02035;
+    color: white;
+    transform: translateY(2px);
+    box-shadow: 0px 12px 24px #a0070769;
+}
+
+@media only screen and (min-width: 1200px) {
+    #subpage #content {
+        max-width: 80em;
+        margin: 0 auto;
+    }
+}
+@media only screen and (max-width: 720px) {
+    .team-photo {
+        width: 100%;
+        min-height: 50vh;
+    }
+    .team-desc {
+        margin-bottom: 24px;
+    }
+    .team-member {
+        display: block;
+    }
+    .team-details {
+        text-align: center;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .team-member {
+        margin-left: -4rem;
+        margin-right: -4rem;
+    }
+}

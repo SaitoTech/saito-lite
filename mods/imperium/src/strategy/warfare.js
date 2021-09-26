@@ -3,7 +3,7 @@
       name     			:       "Warfare",
       rank			:	6,
       img			:	"/strategy/MILITARY.png",
-      text			:	"De-activate a sector and get 1 free token. Others may spend a strategy token to producein their home system" ,
+      text			:	"De-activate a sector. Gain and distribute 1 free token.<hr />Other players may spend a strategy token to producein their home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -30,6 +30,9 @@
         if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) { 
 
           let html = '<p>Do you wish to spend 1 strategy token to produce in your home sector? </p><ul>';
+          if (imperium_self.game.state.round == 1) {
+            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has played the Warfare strategy card. You may spend 1 strategy token to produce in your Homeworld without activating the sector. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability? </p><ul>`;
+          }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0 ) { 
             html += '<li class="option" id="yes">Yes</li>';
 	  }
@@ -56,6 +59,7 @@
             }
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }

@@ -1,0 +1,11 @@
+var wordlist = ["aa",
+"act",
+"acta",
+"at",
+"att",
+"attac",
+"caca",
+"cat",
+"tact",
+"tat",
+];

@@ -7,10 +7,10 @@
         if (imperium_self.returnAvailableTradeGoods(player) >= 10) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
         imperium_self.game.players_info[player-1].goods -= 10;
 	imperium_self.displayFactionDashboard();
-        return 1;
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('display-of-dominance', {
@@ -29,7 +29,7 @@
 	  }
 	}
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
 	for (let i = 0; i < planetcards.length; i++) {
 	  if (homeplanets.includes(planetcards[i].name)) { return 1; }
@@ -37,18 +37,19 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('technological-empire', {
       name 	: 	"Technological Empire" ,
+      minPlayers :	4,
       img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Control 5 planets with tech bonuses" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
         let techbonuses = 0;
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (planetcards[i].bonus == "red") { techbonuses++; }
@@ -61,8 +62,8 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('establish-galactic-currency', {
@@ -73,13 +74,14 @@
         if (imperium_self.returnAvailableResources(player) >= 16) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectResources(16, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+	    mycallback(success);
           });
-        }
-        return 0;
+        } else {
+	  mycallback(0);
+	}
       },
   });
   this.importStageIIPublicObjective('master-of-science', {
@@ -112,8 +114,8 @@
         if (achieve_two >= 4) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
 
   });
@@ -128,7 +130,7 @@
         let industrial = 0;
         let diplomatic = 0;
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
@@ -141,8 +143,8 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+        mycallback(1);
       },
   });
   this.importStageIIPublicObjective('advanced-technologies', {
@@ -160,8 +162,8 @@
         if (unit_upgrades >= 3) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('colonial-dominance', {
@@ -175,7 +177,7 @@
         let industrial = 0;
         let diplomatic = 0;
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
@@ -188,8 +190,8 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIIPublicObjective('power-broker', {
@@ -200,30 +202,32 @@
         if (imperium_self.returnAvailableInfluence(player) >= 16) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectInfluence(16, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+            mycallback(success);
           });
-        }
-        return 0;
+        } else {
+	  mycallback(0);
+	}
       },
   });
   this.importStageIIPublicObjective('cultural-revolution', {
-      name 	: 	"A Cultural Revolution" ,
+      name 	: 	"Cultural Revolution" ,
       img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Spend 6 command or strategy tokens when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if ((imperium_self.game.players_info[player-1].strategy_tokens + imperium_self.game.players_info[player-1].command_tokens) >= 6) { return 1; }
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectStrategyAndCommandTokens(6, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+            mycallback(success);
           });
-        }
-        return 0;
+        } else {
+	  mycallback(0);
+	}
       },
   });
   

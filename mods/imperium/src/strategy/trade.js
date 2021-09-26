@@ -3,7 +3,7 @@
       name     			:       "Trade",
       rank			:	5,
       img			:	"/strategy/TRADE.png",
-      text			:	"Gain 3 trade goods and refresh your commodities. You may refresh the commodities of any other players, or they may refresh themselves by spending a strategy token." ,
+      text			:	"Gain 3 trade goods. Refresh your commodities and those of any other players.<hr />Unrefreshed players may spend a strategy token to refresh their commodities." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -52,6 +52,9 @@
 	  }
 
           let html = '<p>Trade has been played. Do you wish to spend 1 strategy token to refresh your commodities? </p><ul>';
+          if (imperium_self.game.state.round == 1) {
+            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has played the Trade strategy card. You may spend 1 strategy token to refresh your faction commodities, which may be exchanged with your neighbours on the board for trade goods. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability? </p><ul>`;
+          }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             html += '<li class="option" id="yes">Yes</li>';
           }
@@ -61,6 +64,7 @@
 
 	  if (imperium_self.game.players_info[imperium_self.game.player-1].commodities == imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit) {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
 	    imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " already has commodities and skips trade secondary");
 	    imperium_self.endTurn();
 	    return 0;
@@ -80,15 +84,19 @@
             }
             imperium_self.unlockInterface();
 
+            $('.option').off();
             let id = $(this).attr("id");
 
             if (id == "yes") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommodities\t"+imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
+	      imperium_self.endTurn();
             }
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }

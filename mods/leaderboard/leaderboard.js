@@ -1,8 +1,8 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const LeaderboardSidebar = require('./lib/arcade-sidebar/side-leaderboard');
-const Header = require('../../lib/ui/header/header');
-const AddressController = require('../../lib/ui/menu/address-controller');
+const LeaderboardArcadeInfobox = require('./lib/arcade-infobox/arcade-infobox');
+// This header was deprecated, use the new one in lib/saito/ui
+//const Header = require('../../lib/ui/header/header');
 
 const Elo = require('elo-rank');
 
@@ -22,12 +22,12 @@ class Leaderboard extends ModTemplate {
     this.mods = [];
 
     this.carousel_idx = 0;
+    this.carousel_length = 0;
     this.carousel_active = 0;
     this.carousel_timer = null;
-    this.carousel_speed = 10000;
+    this.carousel_speed = 8000;
 
-    this.addrController = new AddressController(app);
-
+    this.identifiers_to_fetch = [];
   }
 
 
@@ -37,7 +37,7 @@ class Leaderboard extends ModTemplate {
     super.initialize(app);
 
     //
-    // main-panel games
+    // track which games?
     //
     if (this.app.modules.respondTo("arcade-games")) {
       this.app.modules.respondTo("arcade-games").forEach(mod => {
@@ -57,19 +57,51 @@ class Leaderboard extends ModTemplate {
 
   }
 
-
+  rerender() {
+    
+    let html = '';
+    this.carousel_idx = 0;
+    let index = 0;
+    Object.keys(this.rankings).forEach((modnameKey, i) => {
+      let ranking = this.rankings[modnameKey];
+      if (ranking.length > 0) {
+        let classdata = index == 0 ? "shown" : "";
+        html += `<hr class="leaderboard_hrtop_${index} ${classdata}"/>`;
+        html += `<h3 class="leaderboard-game-module leaderboard_header_${index} ${classdata}">${modnameKey} Leaderboard:</h3>`;
+        html += `<div class="leaderboard-rankings leaderboard_${modnameKey} leaderboard_${index} ${classdata}" id="leaderboard_${modnameKey}">`;
+        for (let i = 0; i < ranking.length; i++) {
+          let entry = ranking[i];
+          html += `<div class="${entry.player} playername saito-address saito-address-${entry.address} ${classdata}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
+        }
+        html += '</div>';
+        html += `<hr class="leaderboard_hrbottom_${index} ${classdata}"/>`;
+        index++;
+      }
+    });
+    this.carousel_length = index;
+    this.app.browser.addIdentifiersToDom(this.identifiers_to_fetch);
+    let lbcontainer = document.querySelector(".leaderboard-container");
+    lbcontainer.innerHTML = html;
+    document.querySelector(".leaderboard-container").innerHTML = html;
+    this.startCarousel(this.mods);
+  }
 
 
   onPeerHandshakeComplete(app, peer) {
-
     let leaderboard_self = app.modules.returnModule("Leaderboard");
     let arcade_self = app.modules.returnModule("Arcade");
 
     if (arcade_self == null) { return ; }
+
+    //
+    // avoid errors for now
+    //
+    //return;
+
     if (arcade_self.browser_active == 1) {
 
       let installed_games = "(";
-      let identifiers_to_fetch = [];
+      
       for (let i = 0; i < this.mods.length; i++) {
         this.rankings[this.mods[i].name] = [];
         installed_games += "'" + this.mods[i].name + "'";
@@ -78,20 +110,16 @@ class Leaderboard extends ModTemplate {
       installed_games += ")";
 
       app.modules.returnModule("Leaderboard").sendPeerDatabaseRequestWithFilter(
-
-	"Leaderboard" ,
-
-	`SELECT * FROM leaderboard WHERE module IN ${installed_games} ORDER BY ranking desc, games desc LIMIT 100` ,
-
-	(res) => {
-
-	  if (res.rows) {
+      "Leaderboard" ,
+      `SELECT * FROM leaderboard WHERE module IN ${installed_games} ORDER BY ranking desc, games desc LIMIT 100` ,
+      (res) => {
+        if (res.rows) {
           res.rows.forEach(row => {
 
             let player = "other";
             if (row.publickey == app.wallet.returnPublicKey()) { player = "me"; }
             let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
-            if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
+            if (app.crypto.isPublicKey(player_identifier)) { this.identifiers_to_fetch.push(player_identifier); }
 
             leaderboard_self.rankings[row.module].push({
               "address": row.publickey ,
@@ -103,42 +131,8 @@ class Leaderboard extends ModTemplate {
 
           });
           }
-
-          let html = '';
-          let shown = 0;
-          let loop = 0;
-          let styledata = "display:grid";
-          for (var z in leaderboard_self.rankings) {
-            if (leaderboard_self.rankings[z].length > 0) {
-              html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
-              for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
-                let entry = leaderboard_self.rankings[z][i];
-                html += `<div class="${entry.player} playername saito-address saito-address-${entry.address}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
-              }
-              if (shown == 0) {
-                document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
-              }
-              shown = 1;
-              this.carousel_idx = loop;
-              styledata = "display:none";
-              html += '</div>';
-            }
-            loop++;
-          }
-
-          leaderboard_self.addrController.fetchIdentifiers(identifiers_to_fetch);
-
-          try {
-            document.querySelector(".leaderboard-container").innerHTML = html;
-            document.querySelectorAll('.me.playername').forEach(el => {
-              el.scrollIntoView();
-            });
-            leaderboard_self.startCarousel(leaderboard_self.mods);
-          } catch (err) {
-            console.log(err);
-          }
+          this.rerender();
         }
-
       );
     }
   }
@@ -248,22 +242,22 @@ console.log(" ... update ranking");
     await this.app.storage.executeDatabase(sql, {}, "leaderboard");
   }
 
+
   respondTo(type = "") {
-    if (type == "arcade-sidebar") {
+    if (type == "arcade-infobox") {
       let obj = {};
-      obj.render = this.renderSidebar;
-      obj.attachEvents = this.attachEventsSidebar;
+      obj.render = this.renderArcadeInfobox.bind(this);
+      obj.attachEvents = this.attachEventsArcadeInfobox.bind(this);
       return obj;
     }
     return null;
   }
-  renderSidebar(app, data) {
-    data.leaderboard = app.modules.returnModule("Leaderboard");
-    LeaderboardSidebar.render(app, data);
+  renderArcadeInfobox(app, mod) {
+    LeaderboardArcadeInfobox.render(app, app.modules.returnModule("Leaderboard"));  
+    this.rerender();
   }
-  attachEventsSidebar(app, data) {
-    data.leaderboard = app.modules.returnModule("Leaderboard");
-    LeaderboardSidebar.attachEvents(app, data);
+  attachEventsArcadeInfobox(app, mod) {
+    LeaderboardArcadeInfobox.attachEvents(app, app.modules.returnModule("Leaderboard"));
   }
 
   shouldAffixCallbackToModule(modname) {
@@ -279,63 +273,22 @@ console.log(" ... update ranking");
 
   }
 
-
-
   startCarousel(mods) {
-
     if (this.carousel_active == 1) { return; }
-
-    let leaderboard_presentable = 0;
-    for (let i in this.rankings) {
-      if (this.rankings[i] != null) {
-        if (this.rankings[i].length > 0) {
-          leaderboard_presentable = 1;
-        }
-      }
-    }
-
-    if (leaderboard_presentable == 0) { return; }
-
+    this.carousel_active = 1;
     this.carousel_timer = setInterval(() => {
-
-      let x = this.carousel_idx + 1;
-      let y = this.carousel_idx;
-      let found = 0;
-
-      for (; x < this.mods.length; x++) {
-        if (this.rankings[this.mods[x].name].length > 0) {
-          this.carousel_idx = x;
-          found = 1;
-          y = x;
-          x = this.mods.length + 100;
-        }
-      }
-      if (found == 0) {
-        for (x = 0; x < this.carousel_idx; x++) {
-          if (this.rankings[this.mods[x].name].length > 0) {
-            this.carousel_idx = x;
-            found = 1;
-            y = x;
-            x = this.mods.length + 100;
-          }
-        }
-      }
-
-      //
-      // update leaderboard with mod at this.carousel_idx
-      //
-      for (let i = 0; i < this.mods.length; i++) {
-        let classn = '.leaderboard_' + this.mods[i].name;
-        let obj = document.querySelector(classn);
-        if (obj) { obj.style.display = 'none'; }
-      }
-      let classn = '.leaderboard_' + this.mods[this.carousel_idx].name;
-      if(document.querySelector(classn)){
-        document.querySelector(classn).style.display = 'grid';
-      }
-      document.querySelector('.leaderboard-game-module').innerHTML = (this.mods[this.carousel_idx].name + ' Leaderboard:');
-
-    }, this.carousel_speed);
+      
+     document.querySelectorAll(`.leaderboard_${this.carousel_idx}, .leaderboard_header_${this.carousel_idx}, .leaderboard_hrtop_${this.carousel_idx}, .leaderboard_hrbottom_${this.carousel_idx}`).forEach((element, i) => {
+       element.classList.remove("shown");
+     });
+     this.carousel_idx++;
+     if(this.carousel_idx >= this.carousel_length) {
+       this.carousel_idx = 0;
+     }
+     document.querySelectorAll(`.leaderboard_${this.carousel_idx}, .leaderboard_header_${this.carousel_idx}, .leaderboard_hrtop_${this.carousel_idx}, .leaderboard_hrbottom_${this.carousel_idx}`).forEach((element, i) => {
+       element.classList.add("shown");
+     });
+   }, this.carousel_speed);
   }
 }
 

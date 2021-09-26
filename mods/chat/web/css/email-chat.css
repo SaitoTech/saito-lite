@@ -9,7 +9,7 @@
 }
 
 @font-face {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   src: url('/saito/fonts/visuelt-light.eot');
   src: url('/saito/fonts/visuelt-light.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-light.woff2') format('woff2'), url('/saito/fonts/visuelt-light.woff') format('woff'), url('/saito/fonts/visuelt-light.ttf') format('truetype');
   font-weight: normal;
@@ -53,18 +53,18 @@
 
 html {
   --text-color-normal: var(--saito-cyber-black);
-  --backround-general: var(--saito-white);
+  --background-general: var(--saito-white);
   --text-color-highlight: var(--saito-red);
 }
 
 html[data-theme='dark'] {
   --text-color-normal: var(--saito-skyline-grey);
-  --backround-general: var(--saito-cyber-black);
+  --background-general: var(--saito-cyber-black);
   --text-color-highlight: var(--saito-red);
 }
 
 p {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 a {
@@ -78,7 +78,7 @@ a:hover {
 body {
   /* width: 100vw;
     height: 100vh; */
-  background-color: var(--backround-general);
+  background-color: var(--background-general);
   color: var(--text-color-normal);
 }
 
@@ -140,14 +140,20 @@ p {
   padding: 4px 0 0 0;
 }
 
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .chat-last-message {
   color: grey;
   margin-top: 2px;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 .chat-last-message-timestamp {
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 4px 0 0 0;
 }
 
@@ -160,7 +166,7 @@ p {
   margin: unset;
   margin-bottom: 1px;
   word-wrap: break-word;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   line-height: 16px;
   font-size: 15px;
 }
@@ -264,7 +270,6 @@ p {
 }
 
 .chat-list {
-  height: 255px;
   overflow-y: scroll;
   border: 1px solid #ddd;
 }
@@ -279,15 +284,10 @@ p {
   font-size: 1em;
 }
 
-.chat-manager {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  z-index: 100;
-}
-
 .chat-box {
+  bottom: 0px;
+  right: 0px;
+  position: absolute;
   display: grid;
   margin-left: 1em;
   background-color: white;
@@ -298,7 +298,9 @@ p {
   grid-template-areas: "chat_header" "chat_main" ".";
   width: 32em;
   height: 38em;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
+  z-index: 100;
+  max-height: 100vh;
 }
 
 .chat-box .chat-box-header {
@@ -316,6 +318,7 @@ p {
 
 .chat-box-close {
   cursor: pointer;
+  margin-right: 8px;
 }
 
 .chat-box-header {
@@ -337,7 +340,7 @@ p {
 .chat-box-main {
   display: block;
   flex-direction: column;
-  height: 32em;
+  /* height: 32em; */
   grid-area: chat_main;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -383,7 +386,7 @@ p {
 }
 
 .chat-box-input {
-  position: fixed;
+  position: absolute;
   bottom: 0%;
   width: 32em;
   height: 3em;
@@ -488,18 +491,17 @@ p {
     display: none;
   }
   .chat-box {
-        display: none; 
     height: calc(100vh - 5em);
-    
-    width: calc(100vw -1px);
+    width: calc(100vw - 1px);
     max-height: 50vh;
+    position: fixed;
   }
-  .chat-manager.min-chat {
+  .min-chat {
     left: -14px;
     width: 5em;
   }
   .chat-box.chat-box-hide {
-    width: 5em;
+    height: 3.5em;
   }
   .chat-manager {
     bottom: 1px;
@@ -509,8 +511,8 @@ p {
 
 /*** Hide in Landscape Mode Small Screens ***/
 
-@media screen and (orientation:landscape) and (max-height: 700px) {
+@media screen and (orientation:landscape) and (max-height: 600px) {
   .chat-manager {
-      display: none;
+    display: none;
   }
 }

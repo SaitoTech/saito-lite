@@ -6,8 +6,8 @@
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	return 1;
       },
-      scoreObjective : function(imperium_self, player) {
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
 ***/
@@ -22,9 +22,10 @@
 	let cultural = 0;
 	let industrial = 0;
 
-	let planetcards = imperium_self.returnPlayerPlanetCards();
+	let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
 	for (let i = 0; i < planetcards.length; i++) {
+	  let p = imperium_self.game.planets[planetcards[i]];
 	  if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
 	  if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
 	  if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
@@ -34,8 +35,8 @@
 
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIPublicObjective('forge-of-war', {
@@ -53,8 +54,8 @@
 	if (unit_upgrades >= 2) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIPublicObjective('diversified-research', {
@@ -87,8 +88,8 @@
 	if (achieve_two >= 2) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIPublicObjective('mining-conglomerate', {
@@ -99,23 +100,25 @@
 	if (imperium_self.returnAvailableResources(player) >= 8) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectResources(8, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+	    mycallback(success);
           });
+	} else {
+	  mycallback(0);
 	}
-	return 0;
       },
   });
   this.importStageIPublicObjective('conquest-of-science', {
       name 	: 	"Conquest of Science" ,
+      minPlayers :	4,
       img	:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control 3 planets with tech specialities" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
         let techbonuses = 0;
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (planetcards[i].bonus == "red") { techbonuses++; }
@@ -128,8 +131,8 @@
 
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
   this.importStageIPublicObjective('colonization', {
@@ -143,7 +146,7 @@
         let industrial = 0;
         let diplomatic = 0;
 
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
 
         for (let i = 0; i < planetcards.length; i++) {
           if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
@@ -156,10 +159,12 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+	mycallback(1);
       },
   });
+
+
   this.importStageIPublicObjective('grand-gesture', {
       name 	: 	"A Grand Gesture" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -168,15 +173,17 @@
 	if ((imperium_self.game.players_info[player-1].strategy_tokens + imperium_self.game.players_info[player-1].command_tokens) >= 3) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectStrategyAndCommandTokens(3, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+	    mycallback(success);
           });
+	} else {
+	  mycallback(0);
 	}
-	return 0;
       },
   });
+
 
   this.importStageIPublicObjective('establish-trade-outposts', {
       name 	: 	"Establish Trade Outposts" ,
@@ -186,10 +193,10 @@
 	if (imperium_self.returnAvailableTradeGoods(player) >= 5) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
         imperium_self.game.players_info[player-1].goods -= 5;
 	imperium_self.displayFactionDashboard();
-	return 1;
+	mycallback(1);
       },
   });
   this.importStageIPublicObjective('pecuniary-diplomacy', {
@@ -200,12 +207,16 @@
 	if (imperium_self.returnAvailableInfluence(player) >= 8) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) {
+      scoreObjective : function(imperium_self, player, mycallback) {
 	if (imperium_self.game.player == player) {
           imperium_self.playerSelectInfluence(8, function(success) {
-            if (success == 1) { imperium_self.endTurn(); }
+	    mycallback(success);
           });
-        }
-	return 0;
+        } else {
+	  mycallback(0);
+	}
       },
   });
+
+
+

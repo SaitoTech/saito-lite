@@ -1,3 +1,8 @@
+.hud-square .hud-body {
+  min-height: unset;
+  height: auto;
+}
+
 body {
   font-family: arial, helvetica, sans-serif;
   font-size: 13px;
@@ -5,7 +10,7 @@ body {
   margin: 0px;
   background-color: #024;
   overflow-x: hidden;
-    overflow-y: auto;
+  overflow-y: auto;
   scrollbar-face-color: #868686;
   scrollbar-base-color: #868686;
   scrollbar-3dlight-color: #868686;
@@ -13,6 +18,49 @@ body {
   scrollbar-track-color: #646464;
   scrollbar-arrow-color: #646464;
   scrollbar-shadow-color: #868686;
+}
+
+.stats-overlay {
+  min-width: 220px;
+  min-height: 200px;
+  max-height: 65vh;
+  max-width: 50vw;
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+
+.stats-overlay table {
+  margin: auto;
+  padding: 1em;
+  border-spacing: 1em;
+}
+
+.score-overlay{
+  min-width: 120px;
+  min-height: 200px;
+  background-color: whitesmoke;
+  border-radius: 10px; 
+}
+
+.score-overlay table{
+  width:  100%;
+  border-spacing: 1em;
+  padding: 1em;
+
+}
+
+thead,  tfoot{
+  font-weight: bold;
+  text-align: center;
+}
+
+
+.intro {
+  background-color: whitesmoke;
+  padding: 30px;
+  font-size: 1.6em;
 }
 
 .link {
@@ -27,7 +75,7 @@ body {
 .wb-main {
   border: 1px solid orange;
   max-width: 902px;
- }
+}
 
 .gameboard {
   display: grid;
@@ -55,14 +103,15 @@ body {
   text-align: center;
 }
 
-#remainder, #lastmove {
-  /* display: inline-block; */
+#remainder {
   font-size: 25px;
   padding: 10px 0;
 }
 
-#remainder {
-  width: 33%;
+#lastmove {
+  clear: both;
+  height: 30px;
+  cursor: pointer;
 }
 
 .home {
@@ -79,9 +128,7 @@ body {
   font-size: 1.6rem;
   display: grid;
   align-content: center;
-  /* padding: 10px 20px; */
-  /* display: inline-block; */
-  /* width: 20% */
+  padding: 0 30px;
 }
 
 .rack {
@@ -91,20 +138,8 @@ body {
   height: 80px; */
 }
 
-.shuffle {
-  display: inline-block;
-  font-size: 20px;
-  width: 12%;
-  height: 4em;
-  cursor: pointer;
-}
-
 .tiles {
-  /* display: inline-block;
-  font-size: 1.9em;
-  width: 80%;
-  position: relative;
-  top: -45px; */
+  margin: auto;
   display: flex;
 }
 
@@ -115,6 +150,7 @@ body {
   text-indent: 5px;
 }
 
+/* Player Tile Rack*/
 .tiles div.tile {
   width: 65px;
   height: 60px;
@@ -126,7 +162,7 @@ body {
   border-style: solid;
   border-color: rgb(221, 221, 221);
   border-image: initial;
-  padding: 10px 0 0 0;
+  padding: 10px 0 6px 0;
   background: rgb(70, 70, 70);
   font-size: 36px;
   color: #efefec;
@@ -146,7 +182,7 @@ body {
   cursor: pointer;
   display: flex;
   background: rgb(102, 102, 102);
-  border-width: 2px solid rgb(102, 102, 102);
+  border: 3px solid rgb(102, 102, 102);
   border-image: initial;
   border-radius: 5px;
   overflow: hidden;
@@ -159,9 +195,9 @@ body {
 .slot div.tile {
   color: rgb(238, 238, 238);
   font-size: 2rem;
-  background-color: rgb(68, 68, 68);
+  background-color: rgba(68, 68, 68, 0.85);
   text-align: center;
-  padding-top: 8px;
+  padding-top: 6px;
   border-radius: 3px;
 }
 
@@ -174,73 +210,88 @@ body {
   font-size: 11px;
 }
 
+/*
+  Double/Triple Letter/Word Bonus Tiles and Star Tiles
+*/
+.slot .bonus{
+  color: rgb(238, 238, 238);
+  text-align: center;
+  height: 100%;
+  margin: auto;
+  padding:  5px 0px;
+}
+
 .tw {
   border: 2px solid rgb(221, 70, 0);
+  background: rgb(221, 102, 0);
 }
 
 .twbk {
-  color: rgb(238, 238, 238);
+  /*color: rgb(238, 238, 238);
   text-align: center;
   height: 100%;
-  background: rgb(221, 102, 0);
   margin: auto;
-  padding: 9px 0px;
+  padding: 9px 0px;*/
 }
 
 .dw {
-  border: 2px solid rgb(207, 31, 0);
+  border-color: /*2px solid*/ rgb(207, 31, 0);
+  background-color: rgb(184, 28, 0);
 }
 
 .dwbk {
-  background-color: rgb(184, 28, 0);
-  color: rgb(238, 238, 238);
+  /*color: rgb(238, 238, 238);
   text-align: center;
   height: 100%;
   margin: auto;
-  padding: 9px 0px;
+  padding: 9px 0px;*/
 }
 
 .tl {
-  border: 2px solid #114477;
+  border-color: /*2px solid*/ #114477;
+  background-color: rgb(0, 51, 102);
 }
 
 .tlbk {
-  background-color: rgb(0, 51, 102);
-  color: rgb(238, 238, 238);
+  /*color: rgb(238, 238, 238);
   text-align: center;
   height: 100%;
   margin: auto;
-  padding: 9px 0px;
+  padding: 9px 0px;*/
 }
 
 .dl {
-  border: 2px solid #117744;
+  border-color: /*2px solid*/ #117744;
+  background-color: rgb(0, 102, 51);
 }
 
 .dlbk {
-  background-color: rgb(0, 102, 51);
-  color: rgb(238, 238, 238);
+  /*color: rgb(238, 238, 238);
   text-align: center;
   height: 100%;
   margin: auto;
-  padding: 9px 0px;
+  padding: 9px 0px;*/
 }
 
 .star {
-  border: 2px solid #888822;
+  border-color: /*2px solid*/ #888822;
+  background-color: rgb(187, 187, 102);
 }
 
 .starbk {
-  background-color: rgb(187, 187, 102);
   font-size: 36px !important;
   color: rgb(51, 51, 51);
   text-align: center;
   height: 100%;
   width: 100%;
   margin: auto;
-  padding: 6px 0px;
+  /*padding: 6px 0px;*/
 }
 
+.star .starbk{
+  color: rgb(51, 51, 51);
+  padding: 0px;
+}
 .tile::after {
   vertical-align: sub;
   font-size: 33%;
@@ -306,6 +357,7 @@ body {
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
+  text-align: left;
   /* width: 85%; */
 }
 
@@ -317,32 +369,34 @@ body {
   justify-self: right;
 }
 
+/*
 .hud {
   display: grid;
   grid-template-rows: 40px auto;
   grid-template-columns: 100px auto;
   grid-template-areas: "hud-header hud-header" "hud-body hud-body";
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   position: fixed;
-  left: 50%;
+  left: 10vw;
   bottom: 0%;
   float: none;
   z-index: 40;
-  height: 420px;
-  width: 760px;
-  min-width: 760px;
-  max-width: 9.1em;
+  height: unset;
+  width: unset;
+  max-width: 760px;
+  max-height: 260px;
   border-bottom: 0px;
-  transform: translate(-50%, -0%);
   transition: height 0.2s ease;
 }
 
 .hud-hidden {
   height: 40px;
 }
+*/
 
 /** HUD HEADER **/
 
+/*
 .hud-header {
   grid-area: hud-header;
   display: grid;
@@ -365,6 +419,7 @@ body {
 
 /** HUD BODY **/
 
+/*
 .hud-body {
   grid-area: hud-body;
   display: grid;
@@ -377,6 +432,7 @@ body {
   border-right: 1px solid var(--saito-skyline-grey);
   display: none;
 }
+*/
 
 .status {
   width: unset !important;
@@ -441,6 +497,7 @@ body {
 
 /* hud */
 
+/*
 .hud div {
   background: #333;
   color: var(--saito-skyline-grey);
@@ -474,26 +531,92 @@ body {
 .hud-menu {
   border-right: 1px solid #555;
 }
+*/
 
+/**
 .status div {
   font-size: 24px;
-overflow-wrap: break-word;
-max-width: 95vw;
+  overflow-wrap: break-word;
+  max-width: 95vw;
 }
+**/
 
 .player span {
   line-height: 40px;
 }
 
-@media only screen and (max-width: 750px) {
-  .score {
-    font-size: 1em;
-  }
-  .hud div {
-    font-size: 1em;
+
+.rack {
+  width: auto;
+}
+
+.rack-controls>div {
+  display: flex;
+  align-items: center;
+}
+
+.tile-placement-controls {
+  display: grid;
+}
+
+.action {
+  justify-self: center;
+  align-self: center;
+  padding: 1.5vh 0px;
+  width: 100%;
+}
+
+.shuffle {
+  height: 3em;
+  width: 3em;
+  cursor: pointer;
+}
+
+.hud {
+  display: block;
+  width: 600px;
+  max-height: initial;
+  height: fit-content;
+  height: -moz-fit-content;
+  background: rgb(68, 68, 68);
+  border: 1px solid rgb(136, 136, 136);
+  color: rgb(239, 239, 239);
+  border: 1px solid #888;
+}
+
+.hud-body {
+  height: fit-content;
+  height: -moz-fit-content;
+  overflow-y: visible;
+  cursor: initial;
+}
+
+.hud-header {
+  width: initial;
+  margin: 0;
+  background: linear-gradient( 45deg, black, #999);
+}
+
+.hud-status-update-message {
+  margin: 10px auto;
+}
+
+.rack-controls {
+  display: flex;
+  justify-content: space-around;
+}
+
+@media only screen and (max-width: 750px) and (orientation: portrait) {
+  .hud-status-update-message {
+    font-size: 0.8em;
   }
   #remainder {
     font-size: 1em;
+    width: unset;
+    padding-top: 0.75em;
+    padding-left: 1em;
+    float: right;
+    margin-right: 1.4em;
   }
   .hud {
     font-size: 22px;
@@ -501,16 +624,28 @@ max-width: 95vw;
     position: fixed;
     bottom: 0;
     left: 0;
-    height: calc(100vh - 100vw);
-    min-height: 350px;
+    height: unset;
+    height: -moz-fit-content;
+    min-height: unset;
     min-width: 100vw;
     transform: none;
     display: block;
-    z-index: -1;
+    z-index: 100;
   }
-  
   .hud-header, .hud-menu {
     display: none;
+  }
+  .hud-body {
+    height: unset;
+    max-height: unset;
+    height: fit-content;
+    height: -moz-fit-content;
+  }
+  .tiles {
+    width: 100%;
+  }
+  #lastmove {
+    font-size: 0.7em;
   }
   .gameboard {
     display: grid;
@@ -555,6 +690,10 @@ max-width: 95vw;
     padding: 3px 0px;
     text-align: center;
   }
+  .rack {
+    width: auto;
+    clear: left;
+  }
   .starbk {
     padding: 1px 0px;
     font-size: 3.2vw !important;
@@ -570,13 +709,12 @@ max-width: 95vw;
   .status {
     margin: 0;
     grid-gap: 0.5em;
-  }
-  .status div {
-    overflow-wrap: unset;
+    padding: 4px;
+    padding-top: 6px;
   }
   .status_container {
     grid-template-rows: 1em auto;
-    margin: 12px 0 0 0 ;
+    margin: 12px 0 0 0;
   }
   .score {
     font-size: 1rem;
@@ -588,7 +726,7 @@ max-width: 95vw;
   }
   .tiles {
     display: inline-block;
-    width: calc(100% - 3em);
+    width: auto;
     float: left;
   }
   .tiles div.tile {
@@ -603,32 +741,14 @@ max-width: 95vw;
     border-color: rgb(221, 221, 221);
     border-image: initial;
     background: rgb(70, 70, 70);
-    font-size: 1.2em;
-    width: 54px;
-    height: 54px;
-    padding: 15px 10px;
+    font-size: 7vw;
+    width: 12vw;
+    height: 12vw;
+    padding: 2vw;
   }
 }
-.rack {
-  width: calc(100vw - 2em);
-  max-width: 640px;
-}
 
-.tile-placement-controls {
-  display: grid;
-}
 
-.action {
-  justify-self: center;
-  align-self: center;
-  padding: 1.5vh 0px;
-  width: 100%;
+#promptval{
+  text-transform: uppercase;
 }
-
-.shuffle {
-  height: 3em;
-  width: 3em;
-  cursor: pointer;
-  float: left;
-}
-

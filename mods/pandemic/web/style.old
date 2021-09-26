@@ -1,0 +1,279 @@
+
+.hud {
+  z-index: 200000;
+}
+
+.hud-body {
+  overflow-x: hidden;
+}
+
+.display-cards {
+  width: 80vw;
+  height: 80vh;
+  overflow-y: scroll;
+}
+.display-cards .cardbox-hud {
+  position: relative;
+  float: left;
+  width: 20vw;
+  height: auto;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.vial {
+  position: absolute;
+  background-size: cover;
+  width: 82px;
+  height: 102px;
+}
+.vial_yellow {
+  background-image: url("/pandemic/img/Vial%20Yellow.png");
+}
+.vial_blue {
+  background-image: url("/pandemic/img/Vial%20Blue.png");
+}
+.vial_red {
+  background-image: url("/pandemic/img/Vial%20Red.png");
+}
+.vial_black {
+  background-image: url("/pandemic/img/Vial%20Black.png");
+}
+
+.cardimg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.cardbox-hud-image {
+  float:left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.cardbox_event_blocker {
+ position:absolute;
+ width:0px;
+ height:0px;
+ background-color: black;
+ z-index: 89999;
+ display:none;
+ opacity: 0.4;
+}
+
+.cardbox {
+  position: absolute;
+  left: 413;
+  height: 81vh;
+  max-height: 520px;
+  width: 100vw;
+  max-width: 375px;
+  background-image: url("/pandemic/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: none;
+  top: 30%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+/***
+
+.cardbox-hud {
+  display: block;
+  width: calc(7.0em * 0.7211);
+  height: 7.0em;
+  z-index: 2;
+  transform: translate(0%, 0%);
+
+  justify-self: center;
+}
+
+.cardbox-hud-status {
+  margin-top: 0;
+}
+***/
+
+.game-menu {
+ width: 700px;
+}
+.cardbox_menu {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  width: 10%;
+  height: 10%;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+}
+
+.cardbox-exit {
+  text-align: center;
+  font-size: 2.9em;
+  color: white;
+  z-index: 9999999999;
+}
+
+#cardbox-exit-background {
+  position: absolute;
+  left: 85%;
+  width: 5vh;
+  height: 5vh;
+  border: 3px black solid;
+  border-radius: 100px;
+  top: -1%;
+  background: #eb2d2d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardbox_menu_btn {
+  text-align: center;
+  width: 72%;
+  font-size: 2em;
+  font-weight: bold;
+  background-color: #eb2d2d;
+  border: 2px solid #111311;
+  cursor: pointer;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: white;
+  border-radius: 10px;
+  position: fixed;
+  left: 0%;
+  top: 100%;
+  z-index: 900009;
+}
+
+
+
+
+
+
+
+
+
+.card {
+  cursor: pointer;
+}
+
+body {
+ font-family: arial, helvetica, sans-serif;
+ font-size: 1.1em;
+ padding:0px;
+ margin:0px;
+}
+.link {
+ border-bottom: 1px dashed;
+}
+.dashed {
+ border-bottom: 1px dashed;
+}
+.cube {
+  height: 60px;
+}
+.player {
+  position: absolute;
+  width: 32px;
+  height: 44px;
+  /* too small -- double it */
+  width: 48px;
+  height: 66px;
+  top: 50px;
+  background-size: cover;
+  z-index: 9000;
+}
+.research_station {
+  position: absolute;
+  background-image: url("/pandemic/img/Marker%20Research%20Station.png");
+  background-size: cover;
+  width: 45px;
+  height: 51px;
+  z-index: 1000;
+}
+.research_station1 {
+ display: none;
+}
+.research_station2 {
+ display: none;
+}
+.research_station3 {
+ display: none;
+}
+.research_station4 {
+ display: none;
+}
+.research_station5 {
+ display: none;
+}
+.research_station6 {
+ display: none;
+}
+.marker_infection_rate {
+  position: absolute;
+  background-image: url("/pandemic/img/Marker%20Infection%20Rate.png");
+  background-size: cover;
+  width: 86px;
+  height: 84px;
+}
+.marker_outbreak {
+  position: absolute;
+  background-image: url("/pandemic/img/Marker%20Outbreak.png");
+  background-size: cover;
+  width: 87px;
+  height: 88px;
+}
+.back_player_card {
+  position: absolute;
+  background-image: url("/pandemic/img/Back%20Player%20Card.gif");
+  background-size: cover;
+  width: 243px;
+  height: 341px;
+}
+.player_discard_pile {
+  position: absolute;
+  background-image: url("/pandemic/img/Back%20Player%20Card.gif");
+  background-size: cover;
+  width: 243px;
+  height: 341px;
+}
+.back_infection_card {
+  position: absolute;
+  background-image: url("/pandemic/img/Back%20Infection.gif");
+  background-size: cover;
+  width: 340px;
+  height: 243px;
+}
+.infection_deck {
+  position: absolute;
+  background-size: cover;
+  width: 340px;
+  height: 243px;
+}
+.infection_discard_pile {
+  position: absolute;
+  background-image: url("/pandemic/img/Back%20Infection.gif");
+  background-size: cover;
+  width: 340px;
+  height: 243px;
+}
+.gameboard {
+  position: absolute;
+  background-image: url("/pandemic/img/Board.jpg");
+  background-size: cover;
+  width: 2602px;
+  height: 1812px;
+}
+.city {
+  position: absolute;
+  cursor: pointer;
+  height: 100px;
+  width: 100px;
+  z-index: 80;
+}
+
+

@@ -12,22 +12,28 @@ body {
   padding: 0px;
   margin: 0px;
   background-color: #4e4e4e !important;
+
+  overflow: hidden; 
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
 }
+
 
 .hud {
   display: grid;
   grid-template-rows: 40px auto;
-  font-family: visuelt-light;
-  position: fixed;
-  left: 50%;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
+  position: absolute;
+  left: 0%;
   bottom: 0%;
   float: none;
   z-index: 40;
   font-size: 1.2rem;
   border-bottom: 0px;
-  transform: translate(-50%, -0%);
   transition: height 0.2s ease, width 0.2s ease, right 0.2s ease;
   box-shadow: 0 0 3px 3px #BBB;
+  max-width: 100vw;
 }
 .hud-header {
   display: grid;
@@ -40,26 +46,112 @@ body {
 .hud-body {
   display: grid;
   width: 100%;
+  max-width: 100vw;
   height: 100%;
   overflow-y: scroll;
   cursor: move;
   background-color: whitesmoke;
   border-bottom: 1px solid var(--saito-skyline-grey);
 }
-.hud-menu {
+.game-overlay-menu {
+  padding: 10px;
+  background-color: whitesmoke;
+  opacity: 0.8;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  width: 450px;
+  max-width: 80vw;
+}
+.game-overlay-menu ul li {
+  width: 100%;
+  line-height: 3.5em;
+  border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
+  text-align: -webkit-match-parent;
+  display: list-item;
+  list-style: none;
+  padding: 0 1em;
+}
+.game-overlay-menu ul li:hover {
+  font-weight: bold;
+  background: #0001;
+}
+.game-cardbox {
+  position:absolute;
+  left: 15vw%;
+  top: 13vh;
+  height: 55vh;
+  width: calc(55vh * 0.730);
+  transform: translate(calc((100vw - (55vh * 0.73)) / 2), 0);
+  border: 0px;
+  z-index: -10; /* start behind the board */
+}
+
+.game-menu {
   position: fixed;
   top: 0px;
   left: 0px;
   display: block;
-  width: 150px;
-  height: 50px;
+  width: auto;
+  height: 40px;
   background-color: #f5f5f5cc;
-  /* background-color: whitesmoke; */
   border: 1px solid #444;
   border-radius: 5px;
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
   border-bottom: 1px solid var(--saito-skyline-grey);
   margin: 3px;
+  z-index: 50;
+}
+.game-menu ul {
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+}
+.game-menu ul li {
+  color: black;
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  width: 120px;
+  max-width: 150px;
+  border-bottom: none;
+  height: 40px;
+  line-height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  float: left;
+}
+.game-menu ul .game-menu-icon {
+  width: 40px;
+  margin-left: 10px;
+  font-size: 2em;
+  line-height: 35px;
+}
+.game-menu-icon .fa-window-maximize {
+  vertical-align: middle;
+}
+.game-menu ul .game-menu-sub-option {
+  position: relative;
+  background-color: #f5f5f5ee;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  height: 50px;
+  line-height: 50px;
+}
+.game-menu-sub-options {
+  display:none;
+}
+.game-menu-option:hover {
+  /* font-weight: bold; */
+  color: #222;
+}
+
+.game-menu-option:hover ul {
+  text-shadow: none;
+  color: #000;
+}
+
+.game-menu-sub-option:hover {
+  font-weight: bold;
+  color: #222;
 }
 
 .hud-controls {
@@ -71,21 +163,6 @@ body {
   padding-top: 2px;
 }
 
-.hud-menu ul li {
-  color: black;
-  list-style: none;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  width: 120px;
-  max-width: 150px;
-  border-bottom: none;
-  height: 50px;
-  line-height: 50px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  float: left;
-}
 ul li a {
   color: black;
 }
@@ -114,6 +191,10 @@ ul li a {
   list-style: none;
 }
 
+.gameboard {
+  user-select: none;
+}
+
 
 .status-message {
   width: 500px;
@@ -122,19 +203,30 @@ ul li a {
   padding-top: 10px;
   padding-bottom: 10px;
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  border-radius: 5px;
   background-color: #f5f5f5DD;
 }
-
+.status-message ul li {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .status-cardbox {
   display: grid;
   row-gap: 10px;
-  overflow-x: scroll;
+  overflow-x: none;
+  /* overflow-x: scroll; */
   height: 100%;
   width: 100%;
   padding: 0.25em;
   margin-top: 5px;
 }
-
+.status-cardbox li { 
+  list-style-type: none;
+}
+.status-cardbox ul li {
+  list-style-type: none;
+}
 .log {
   top: 0px;
   right: -485px;
@@ -152,29 +244,69 @@ ul li a {
   font-size: 1.25em;
   font-family: courier, sans-serif;
   padding: 2px;
+  max-width:95vw;
 }
 
 .log-lock {
   right: 0;
   border-left: 1px solid var(--my-color);
-  width: 501px;
 }
 
 
-.status {
-  padding: 5px;
+
+
+/*******************/
+/** GAME OBSERVER **/
+/*******************/
+.game-observer-last {
+  position: absolute;
+  display: block;
+  top: 10vh;
+  left: 10vw;
+  height: 60vh;
+  width: 10vw;
+  background-color: #444;
+  color: #ccc;
+  font-size: 4vh;
   text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  opacity: 0.6;
 }
-
-.status-overlay {
-  height: 100%;
-  padding: 5px;
+.game-observer-next {
+  position: absolute;
+  display: block;
+  top: 20vh;
+  left: 80vw;
+  height: 60vh;
+  width: 10vw;
+  background-color: #444;
+  color: #ccc;
+  font-size: 4vh;
   text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.game-observer-last-btn {
+  padding-top: 15vh;
+  padding-bottom: 10vh;
+  width: 100%;
+}
+.game-observer-next-btn {
+  clear: both;
+  margin-top: 4vh;
+  padding-top: 10vh;
+  padding-bottom: 15vh;
+  width: 100%;
 }
 
 
 
 
+/**************/
+/** GAME HUD **/
+/**************/
 .hud-square {
   height: 410px;
   width: 510px;
@@ -187,34 +319,11 @@ ul li a {
 .hud-square .hud-body .status .status-cardbox {
   grid-template-columns: 1fr 1fr 1fr;
 }
-.hud-long {
-  grid-template-rows: 20px auto;
-  width: 1200px;
-  max-width: 1200px;
-  height: 280px;
-  max-height: 280px;
-}
-.hud-long .hud-body {
-  min-height: 260px;
-  height: 260px;
-}
-.hud-long .hud-header {
-  opacity: 0.2;
-  background-color: #444;
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  height: 20px;
-  grid-template-rows: auto;
-}
-.hud-long .hud-body .status .status-cardbox {
-  grid-template-columns: repeat( auto-fit, minmax(80px, 1fr) );
-}
 .hud-vertical {
   width: 210px;
   max-width: 210px;
   height: 100%;
-  max-height: 100%;
+  max-height: 100vh;
   top: 50px;
   left: 105px;
   box-shadow: none;
@@ -239,46 +348,338 @@ ul li a {
   border-right: 3px solid #bbb;
 }
 .hud-vertical .hud-body .status .status-cardbox {
-  /* grid-template-columns: 1fr; */
-  /* grid-template-rows: repeat( auto-fit, minmax(40px, 1fr) ); */
   grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
 }
 
-
-/**
-.hud-vertical:hover {
-  left: 105px;
+.hud-long {
+  grid-template-rows: 20px auto;
+  width: 1200px;
+  max-width: 100vw;
+  height: 280px;
+  max-height: 280px;
+  background-color: transparent;
+  border-bottom: 0px;
+  box-shadow: 0 0 0 0 #888;
 }
-.hud-vertical-lock {
-  left: 105px;
+.hud-body {
+  min-height: 260px;
+  height: 260px;
+  background-color: transparent;
+  border-bottom: 0px;
+  box-shadow: 0 0 0 0 #888;
 }
-***/
+.hud-header {
+  opacity: 0.2;
+  background-color: #444;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 20px;
+  grid-template-rows: auto;
+  border-bottom: 0px;
+  box-shadow: 0 0 0 0 #888;
+}
+.status-header i {
+  float: left;
+}
+.status-cardbox {
+  grid-template-columns: repeat( auto-fit, minmax(40px, 1fr) );
+  overflow-y: scroll;
+}
+.status {
+  padding: 5px;
+  text-align: center;
+}
+.status-overlay {
+  height: 100%;
+  padding: 5px;
+  text-align: center;
+}
+.status-message {
+  background-color: whitesmoke;
+  box-shadow: 0 0 3px 1px #BBB
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100vw;
+  padding-left: 5px;
+  padding-right: 5px;
+
+}
+.status-message ul li {
+  background-color: whitesmoke;
+  padding: 10px;
+}
+.status-message ul li:hover {
+  background-color: #e7e7e7;
+}
+.status-message ul {
+  background-color: whitesmoke;
+  list-style-type: none;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 0px;
+}
+.status-header {
+  background-color: whitesmoke;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top:10px;
+  padding-left:10px;
+  min-height: 40px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+.cardbox-hud {
+  display: block;
+  width: calc(10vw * 0.73);
+  height: 10vw;
+  z-index: 2;
+  transform: translate(0%, 0%);
+  justify-self: center;
+}
+.card {
+  float: left;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+.game-crypto-transfer-manager-container {
+  min-width:300px;
+  max-width: 95vw;
+  border-radius: 0.5rem;
+  padding: 40px 24px;
+  text-align:center;
+  color: white;
+  background-color:rgba(0,0,0,0.9);
+}
+.auth_title {
+  font-size:1.7em;
+  margin-top: 0;
+}
+.crypto_transfer_btn {
+  background-color: var(--saito-red);
+  border: 1px solid var(--saito-red);
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  margin-top: 40px;
+  font-size: 2em;
+  text-transform: uppercase;
+  transition: all .2s ease-in-out;
+}
+.crypto_transfer_btn:hover,
+.crypto_transfer_btn:active,
+.crypto_transfer_btn:focus {
+  border-color: rgb(255, 69, 95);
+  background-color: rgb(255, 69, 95);
+  text-shadow: none;
+}
+.amount {
+  font-size: 2.4em;
+  margin: 30px auto;
+}
+.from_address {
+  margin-bottom: 20px;
+}
+.send_to {
+  margin-bottom: 20px;
+  font-size: 1.4em;
+}
+.from_address,
+.to_address {
+  font-size: 1.6em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 300px;
+}
+.game-crypto-transfer-manager-container .spinner {
+  margin-bottom: 30px;
+}
+.transfer-details {
+  display: flex;
+  align-items: center;
+}
+.transfer-details .send_to {
+  display: inline;
+  font-size: 1em;
+  margin-bottom: 0;
+  padding-right: 4px;
+}
+.transfer-details .from_address,
+.transfer-details .to_address {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 1em;
+  max-width: 120px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom: 0;
+}
 
 
 
-.status-overlay .status-cardbox {
-  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+/******************************/
+/*** Poker / Cardgame Boxes ***/
+/******************************/
+.p6 {
+  left: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.p5 {
+  left: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.p4 {
+  left: 50vw;
+  top: 1em;
+  transform: translateX(-50%);
+}
+
+.p3 {
+  right: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.p2 {
+  right: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.p1 {
+  min-width: 30vh;
+  height: 32vh;
+  bottom: 1vh;
+  left: 50vw;
+  transform: translateX(-50%);
+  width: 16vw;
   overflow-y: scroll;
 }
 
 
 
-/*** Cardfan Tilted Cards ***/
+
+
+/***************/
+/*** HexGrid ***/
+/***************/
+#game-hexgrid {
+  user-select: none;
+  display: flex;
+  width: 2000px;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  overflow: hidden;
+  font-size: 15px;
+  list-style-type: none;
+  /*
+%  3D Perspective
+%  -webkit-transform: perspective(600px) rotateX(60deg);
+%  -moz-transform: perspective(600px) rotateX(60deg);
+%  -ms-transform: perspective(600px) rotateX(60deg);
+%  -o-transform: perspective(600px) rotateX(60deg);
+%  transform: perspective(600px) rotateX(60deg);
+*/
+}
+.hex {
+  position: relative;
+  visibility: hidden;
+  outline: 1px solid transparent;
+  /* fix for jagged edges in FF on hover transition */
+  width: 12.5%;
+}
+.hex::after {
+  content: '';
+  display: block;
+  padding-bottom: 86.602%;
+  /* =  100 / tan(60) * 1.5 */
+}
+.hexIn {
+  position: absolute;
+  width: 96%;
+  padding-bottom: 110.851%;
+  /* =  width / sin(60) */
+  margin: 0 2%;
+  overflow: hidden;
+  visibility: hidden;
+  outline: 1px solid transparent;
+  /* fix for jagged edges in FF on hover transition */
+  -webkit-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+  -ms-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+  transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+}
+.hexIn * {
+  position: absolute;
+  visibility: visible;
+  outline: 1px solid transparent;
+  /* fix for jagged edges in FF on hover transition */
+}
+.hexLink {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+  -webkit-transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+  -ms-transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+  transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+}
+.hex_bg {
+  left: -100%;
+  right: -100%;
+  width: auto;
+  height: 100%;
+  margin: 0 auto;
+  -webkit-transform: rotate3d(0, 0, 0, 0deg);
+  -ms-transform: rotate3d(0, 0, 0, 0deg);
+  transform: rotate3d(0, 0, 0, 0deg);
+  transform: rotate(30deg) scale(0.88);
+}
+.hex_bg img {
+    left: -100%;
+    right: -100%;
+    width: auto;
+    height: 100%;
+    margin: 0 auto;
+    -webkit-transform: rotate3d(0, 0, 0, 0deg);
+    -ms-transform: rotate3d(0, 0, 0, 0deg);
+    transform: rotate3d(0, 0, 0, 0deg);
+}
+
+
+
+/***************/
+/*** Cardfan ***/
+/***************/
 .cardfan {
   bottom: 0px;
   left: 0px;
+  height: 100%;
+  width: auto;
 }
-
-/*
-.cardfan .card {
-  position: relative;
-  width: 0px;
-}
- below changed for president cardbox */
 
 .cardfan .card {
   position: absolute;
   width: 100%;
+  height: auto;
+}
+.cardfan .cardimg {
+  width: 100%;
+  height: auto;
 }
 
 .cardfan>.card:nth-child(1) {
@@ -360,8 +761,9 @@ input#game_board_sizer {
 /****************/
 /*** CLOCKBOX ***/
 /****************/
-.clockbox {
+.game-clock {
   position: fixed;
+  cursor: pointer;
   top:0px;
   right:0px;
   display:inline;
@@ -392,7 +794,7 @@ input#game_board_sizer {
   position: absolute;
   height: 48vh;
   max-height: 520px;
-  width: calc(48vh * 0.72110);
+  width: calc(48vh * 0.8110);
   max-width: 375px;
   z-index: 2;
   display: none;
@@ -401,23 +803,23 @@ input#game_board_sizer {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-
 .cardbox-menu {
-  position: relative;
-  left: 0%;
-  top: 100%;
-  text-align: center;
-  font-size: 2em;
-  font-weight: bold;
-  background-color: #eb2d2d;
-  border: 2px solid #111311;
-  cursor: pointer;
-  padding: 10px 25px;
-  text-decoration: none;
-  color: white;
-  border-radius: 10px;
-  z-index: 900009;
-
+    position: absolute;
+    bottom: -15px;
+    font-size: 2em;
+    font-weight: bold;
+    background-color: #eb2d2d;
+    border: 2px solid #111311;
+    cursor: pointer;
+    padding: 10px 25px;
+    text-decoration: none;
+    color: white;
+    border-radius: 10px;
+    z-index: 900009;
+    margin-left: 6%;
+    margin-right: auto;
+    width: 85%;
+    text-align: center;
 }
 
 .cardbox-exit {
@@ -426,17 +828,31 @@ input#game_board_sizer {
   top: 50%;
   transform: translate(-50%, -50%); 
   text-align: center;
-  font-size: 2.9em;
+  font-size: 2.1em;
   color: white;
   z-index: 9999999999;
   cursor: pointer;
 }
+.cardbox-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 48vh;
+  width: calc(48vh * 0.730);
+  z-index: 2;
+  display: none;
+}
+
+
+
 
 .cardbox-exit-background {
   position: absolute;
   left: 85%;
   width: 5vh;
   height: 5vh;
+  max-width: 50px;
+  max-height: 50px;
   border: 3px black solid;
   border-radius: 100px;
   top: -1%;
@@ -463,9 +879,11 @@ input#game_board_sizer {
 }
 
 .card {
-  width: 200px;
+/*  width: 1000px; */
   float:left;
   position: relative;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .deal {
@@ -476,155 +894,138 @@ input#game_board_sizer {
 
 
 
-/******************/
-/** TRANSPARENCY **/
-/******************/
-.hud-long , .hud-long .hud-body , .hud-long .hud-header {
-  background-color: transparent;
-  border-bottom: 0px;
-  box-shadow: 0 0 0 0 #888;
-}
-.hud-long .hud-body .status .status-message , .hud-long .hud-body .status-overlay .status-message {
-  background-color: whitesmoke;
-  box-shadow: 0 0 3px 1px #BBB
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.hud-long .hud-body .status .status-message ul li , .hud-long .hud-body .status-overlay .status-message ul li {
-  background-color: whitesmoke;
-  padding: 10px;
-}
-.hud-long .hud-body .status .status-message ul li:hover ,  .hud-long .hud-body .status-overlay .status-message ul li:hover {
-  background-color: #e7e7e7;
-}
-.hud-long .hud-body .status .status-message ul , .hud-long .hud-body .status-overlay .status-message ul {
-  background-color: whitesmoke;
-  list-style-type: none;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  padding-inline-start: 0px;
-}
-.hud-long .hud-body .status .status-header , .hud-long .hud-body .status-overlay .status-header {
-  background-color: whitesmoke;
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top:10px;
-  padding-left:10px;
-  min-height: 40px;
-}
-
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-}
-.status-header i {
-  float: left;
-}
 
 
 
 
-
-
-
-
-
-
-@media screen and (orientation:landscape) and (max-width: 700px) {
-
-  /****************/
-  /**** MODE 1 ****/
-  /****************/
-  .hud-long .hud-body {
-    height: 120px;
-    min-height: 120px;
-    width: 550px;
-    min-width: 549px;
-    max-width: 550px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .cardbox-hud {
-    width: calc(4em * 0.811);
-    height: 4em;
-  }
-
-  .status {
-    height: 100px;
-  }
-
-  .status-message {
-    width: 300px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 13px;
- }
-
-  .hud-long .hud-body .status .status-cardbox {
-    grid-template-columns: repeat( auto-fit, minmax(40px, 1fr) );
-  }
-
-  .hud-menu {
-    height: 25px;
-  }
-  .hud-controls {
-    font-size: 12px;
-  }
-  .hud-button {
-    padding-top: 5px; 
-  }
-  .hud-menu ul li {
-    line-height: 24px;
-    font-size: 14px;
-    height: 25px;
-  }
-
+/*********************************/
+/*** SCREEN SIZE MODIFICATIONS ***/
+/*********************************/
+@media screen and (orientation:portrait) and (min-width: 340px) {
   .log {
-    right: -200px;
-    width: 220px;
-    font-size: 10px;
+    right: -325px;
+    width: 340px;
+    max-width: 340px;
   }
-
-  .log:hover {
-    right: none; /* undefine to fix mobile */
-  }
-
   .log-lock {
     right: 0px;
-    border-left: 1px solid var(--my-color);
-    width: 220px;
+  }
+}
+@media screen and (orientation:portrait) and (min-width: 420px) {
+  .log {
+    right: -400px;
+    width: 415px;
+    max-width: 415px;
+  }
+  .log-lock {
+    right: 0px;
+  }
+}
+@media screen and (orientation:portrait) and (min-width: 421px) {
+  .log {
+    right: -400px;
+    width: 420px;
+    max-width: 420px;
+  }
+  .log-lock {
+    right: 0px;
+  }
+}
+
+
+
+/*********************/
+/*** PORTRAIT MODE ***/
+/*********************/
+@media screen and (orientation:portrait) and (max-width: 400px) {
+
+  .cardbox-hud {
+    width: calc(18vw * 0.811);
+    height: 18vw;
   }
 
-
-
-  /****************/
-  /**** MODE 2 ****/
-  /****************/
-  .hud-vertical {
-    top: 25px;
-  }
-  .hud-vertical .hud-body .status .status-cardbox {
-    grid-template-columns: 1fr;
-    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+  .status-cardbox {
+    grid-template-columns: repeat( auto-fit, minmax(17vw, 1fr) );
+    grid-template-rows: repeat(auto-fit, 20vw);
   }
 
-
-
+  .game-menu ul li {
+    max-width: 75px;
+    width: 75px;
+  }
 
 }
-/***
-@media screen and (orientation:landscape) and (max-height: 950px) {
+
+@media screen and (orientation:portrait) and (min-width: 400px) and (max-width: 650px) {
+
+  .cardbox-hud {
+    width: calc(13vw * 0.811);
+    height: 13vw;
+  }
+  .status-cardbox {
+    grid-template-columns: repeat( auto-fit, minmax(12vw, 1fr) );
+    grid-template-rows: repeat(auto-fit, 15vw);
+
+  }
+  .game-menu ul li {
+    max-width: 85px;
+    width: 85px;
+  }
+
 }
-@media screen and (orientation:landscape) and (max-height: 700px) {
+
+@media screen and (orientation:portrait) and (min-width: 650px) {
+
+  .cardbox-hud {
+    width: calc(10vw * 0.811);
+    height: 10vw;
+  }
+  .status-cardbox {
+    grid-template-columns: repeat( auto-fit, minmax(11vw, 1fr) );
+    grid-template-rows: repeat(auto-fit, 14vw);
+  }
+  .game-menu ul li {
+    max-width: 85px;
+    width: 85px;
+  }
+
 }
-@media screen and (orientation:portrait) and (max-width: 700px) {
-}
-***/
 
 
+
+
+/*****************/
+/*** LANDSCAPE ***/
+/*****************/
+@media screen and (orientation: landscape) and (max-height: 650px) {
+
+  .game-menu {
+    height: 30px;
+    line-height: 30px;
+  }
+
+  .game-menu ul li {
+    height; 30px;
+    width: 85px;
+    line-height: 30px;
+  }
+
+  .game-menu ul .game-menu-icon {
+    line-height: 25px;
+    font-size: 1.2em;
+  }
+
+  .game-overlay-menu {
+    font-size: 1.4em;
+  }
+
+}
+
+
+.chat-header {
+  display: none;
+}
+.chat-list {
+  display: none;
+}
 

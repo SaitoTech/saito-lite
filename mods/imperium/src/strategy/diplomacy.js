@@ -3,7 +3,7 @@
       name     			:       "Diplomacy",
       rank			:	2,
       img			:	"/strategy/DIPLOMACY.png",
-      text			:	"Everyone but you activates a system other than New Byzantium. All planets in that sector are refreshed. Ohters may spend a strategy token to refresh two planets." ,
+      text			:	"Pick a sector other than New Byzantium. Other players activate it. Refresh two planets.<hr />Other players may spend a strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -53,6 +53,9 @@
         if (imperium_self.game.player != strategy_card_player && imperium_self.game.player == player) {
 
           let html = '<p>Do you wish to spend 1 strategy token to unexhaust two planet cards? </p><ul>';
+	  if (imperium_self.game.state.round == 1) {
+            html = `<p class="doublespace">${imperium_self.returnFaction(strategy_card_player)} has just played the Diplomacy strategy card. This lets you to spend 1 strategy token to unexhaust two planet cards. You have ${imperium_self.game.players_info[player-1].strategy_tokens} strategy tokens. Use this ability? </p><ul>`;
+          }
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
 	    html += '<li class="option" id="yes">Yes</li>';
 	  }
@@ -101,6 +104,7 @@
 
                 if (action2 === "cancel") {
                   imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	          imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
                   imperium_self.endTurn();
                   return;
                 }
@@ -123,6 +127,7 @@
 
                 if (choices_selected >= max_choices) {
                   imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	          imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
                   imperium_self.endTurn();
                 }
 
@@ -131,6 +136,7 @@
 
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	      imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
               imperium_self.endTurn();
               return 0;
             }

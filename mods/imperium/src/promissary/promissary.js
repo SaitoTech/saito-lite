@@ -85,7 +85,7 @@
     this.importPromissary("trade", {
       name        :       "Trade Promissary" ,
       faction	  :	  -1,
-      text	  :	  "When the owner replenishes commodities, you may trigger this to gain their commodities as trade goods" ,
+      text	  :	  "When the owner replenishes commodities, this promissary triggers and you gain their commodities as trade goods" ,
       gainCommodities	:	function(imperium_self, player, amount) {
 	let promissary_name = imperium_self.game.players_info[player-1].faction + "-" + "trade";
 	let pprom = imperium_self.returnPromissaryPlayer(promissary_name);

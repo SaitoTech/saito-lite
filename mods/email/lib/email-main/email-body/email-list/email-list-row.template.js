@@ -1,13 +1,16 @@
 module.exports = EmailListRowTemplate = (tx, addr_html, helpers) => {
 
-  let message 	= tx.msg.message;
-  let title   	= tx.msg.title;
+  let txmsg     = tx.returnMessage();
+  let message 	= txmsg.message;
+  let title   	= txmsg.title;
   let from      = tx.transaction.from;
   let ts        = tx.transaction.ts;
   let sig 	= tx.transaction.sig;
 
   let { datetime_formatter } = helpers;
-  let datetime = datetime_formatter(ts);
+  let datetime = datetimeFormatter(ts);
+
+  //console.log("DATETIME: " + JSON.stringify(datetime));
 
   var tmp = document.createElement("DIV");
   tmp.innerHTML = message;

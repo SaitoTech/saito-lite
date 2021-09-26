@@ -199,8 +199,6 @@
       }
     }
 
-
-
     //
     // new_owner does not need to be provided if the player has units on the planet
     //
@@ -231,6 +229,8 @@
     }
 
     this.saveSystemAndPlanets(sys);
+    this.updateSectorGraphics(sector);
+
   }
   
   
@@ -246,7 +246,10 @@
   
     let sys = this.returnSectorAndPlanets(sector);
     let save_sector = 0;
-  
+
+    if (sys == undefined) { return; }
+    if (sys == null) { return; }
+
     //
     // in space
     //
@@ -255,7 +258,7 @@
       if (sys.s.units[player-1][z] == null) {
 	sys.s.units[player-1].splice(z, 1);
       } else {
-        if (sys.s.units[player-1][z].destroyed == 1) {
+        if ((sys.s.units[player-1][z].destroyed == 1 || sys.s.units[player-1][z].strength == 0) && (sys.s.units[player-1][z].type != "spacedock" && sys.s.units[player-1][z].type != "pds")) {
           save_sector = 1;
           sys.s.units[player-1].splice(z, 1);
           z--;
@@ -274,7 +277,7 @@
           if (sys.p[planet_idx].units[player-1][z] == null) {
 	    sys.p[planet_idx].units[player-1].splice(z, 1);
 	  } else {
-            if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+            if ((sys.p[planet_idx].units[player-1][z].destroyed == 1 || sys.p[planet_idx].units[player-1][z].strength == 0) && (sys.p[planet_idx].units[player-1][z].type != "spacedock" && sys.p[planet_idx].units[player-1][z].type != "pds")) {
               save_sector = 1;
               sys.p[planet_idx].units[player-1].splice(z, 1);
               z--;
@@ -306,7 +309,7 @@
       if (sys.p[planet_idx].units[player-1][z] == null) {
 	sys.p[planet_idx].units[player-1].splice(z, 1);
       } else {
-        if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+        if ((sys.p[planet_idx].units[player-1][z].destroyed == 1 || sys.p[planet_idx].units[player-1][z].strength == 0) && (sys.p[planet_idx].units[player-1][z].type != "spacedock" && sys.p[planet_idx].units[player-1][z].type != "pds")) {
           sys.p[planet_idx].units[player-1].splice(z, 1);
           z--;
         }
@@ -327,40 +330,39 @@
     let ground_forces_destroyed = 0;  
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
-  
+
       //
       // find weakest unit
       //
       let weakest_unit = -1;
       let weakest_unit_idx = -1;
+
       for (let z = 0; z < sys.p[planet_idx].units[defender-1].length; z++) {
         let unit = sys.p[planet_idx].units[defender-1][z];
+        if (unit != undefined) {
+          if (unit.strength > 0 && weakest_unit_idx == -1 && unit.destroyed == 0) {
+  	    weakest_unit = sys.p[planet_idx].units[defender-1].strength;
+  	    weakest_unit_idx = z;
+          }
 
-        if (unit.strength > 0 && weakest_unit_idx == -1 && unit.destroyed == 0) {
-  	  weakest_unit = sys.p[planet_idx].units[defender-1].strength;
-  	  weakest_unit_idx = z;
-        }
-
-        if (unit.strength > 0 && unit.strength < weakest_unit && weakest_unit_idx != -1) {
-  	  weakest_unit = unit.strength;
-  	  weakest_unit_idx = z;
+          if (unit.strength > 0 && unit.strength < weakest_unit && weakest_unit_idx != -1) {
+  	    weakest_unit = unit.strength;
+  	    weakest_unit_idx = z;
+          }
         }
       }
   
       //
       // and assign 1 hit
       //
-      if (weakest_unit_idx != -1) {
+      if (weakest_unit_idx > -1) {
         sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength--;
         if (sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength <= 0) {
-
           ground_forces_destroyed++;
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
-
 	  for (z_index in z) {
             sys.p[planet_idx].units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.p[planet_idx].units[defender-1][weakest_unit_idx]);
 	  }
-
         }
       }
     }
@@ -405,11 +407,9 @@
         if (sys.s.units[defender-1][weakest_unit_idx].strength <= 0) {
 	  ships_destroyed++;
           sys.s.units[defender-1][weakest_unit_idx].destroyed = 1;
-
 	  for (z_index in z) {
             sys.s.units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.s.units[defender-1][weakest_unit_idx]);
 	  }
-
         }
       }
     }

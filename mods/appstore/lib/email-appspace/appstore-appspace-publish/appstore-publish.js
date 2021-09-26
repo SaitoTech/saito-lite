@@ -1,32 +1,41 @@
 const AppStorePublishTemplate = require('./appstore-publish.template');
 const AppStorePublishSuccess = require('./appstore-publish-success/appstore-publish-success');
+const AppStoreOverlay = require('./../../appstore-overlay/appstore-overlay');
+
+
 
 module.exports = AppStorePublish = {
-  render(app, data) {
-    document.querySelector(".email-appspace")
-            .innerHTML = AppStorePublishTemplate();
-    //zip.workerScriptsPath = '/saito/lib/zip/';
+  render(app, mod) {
+    document.querySelector(".email-appspace").innerHTML = AppStorePublishTemplate();
   },
 
-  attachEvents(app, data) {
+  attachEvents(app, mod) {
 
-    data.publish = {};
+    mod.data = {};
+    mod.data.publish = {};
 
     let appstore_self = this;
 
+    app.browser.addDragAndDropFileUploadToElement('appstore-publish-moddrop-inside', function(fileres) {
+      this.files = [];
+      this.files.push(fileres);
+      mod.data.publish.zip = fileres;
+      mod.data.publish.zip = mod.data.publish.zip.substring(28);
+      document.querySelector(".submit-file-btn-box").style.display = "block";
+    }, true);
 
-    document.getElementById('appstore-publish-moddrop-inside').ondrop = function(evt) {
-    		  evt.stopPropagation()
-    		  evt.preventDefault()
-    		  var files = evt.dataTransfer.files  // FileList object.
-    		  var file = files[0]                 // File     object.
-    		  alert(file.name)
-    };
+    document.querySelector('.appstore-browse-btn').onclick = (e) => {
+      let search_options = {};
+      search_options.featured = 1;
+      AppStoreOverlay.render(app, mod, search_options);
+      AppStoreOverlay.attachEvents(app, mod);
+      try {
+        let obj = document.querySelector('.appstore-header-featured');
+        obj.style.display = "block";
+      } catch (err) {}
+    }
 
-
-
-    document.getElementById('appstore-publish-module')
-            .onchange = async function(e) {
+    document.getElementById('appstore-publish-module').onchange = async function(e) {
 
               let selectedFile = this.files[0];
               //
@@ -42,9 +51,9 @@ module.exports = AppStorePublish = {
               }
 
               base64_reader.onload = function() {
-		data.publish.zip = base64_reader.result;
+		mod.data.publish.zip = base64_reader.result;
 		// remove "data:application/zip;base64," from head of string
-		data.publish.zip = data.publish.zip.substring(28);
+		mod.data.publish.zip = data.publish.zip.substring(28);
 		try {
 		  document.querySelector(".submit-file-btn-box").style.display = "block";
 		} catch (err) {
@@ -54,26 +63,32 @@ module.exports = AppStorePublish = {
 
             }
 
-    document.getElementById('appstore-publish-form')
-            .onsubmit = (e) => {
+    document.getElementById('appstore-publish-form').onsubmit = (e) => {
 
               e.preventDefault();
 
-              if (data.publish.zip) {
+              if (mod.data.publish.zip) {
 
                 //
                 // Name + Description
                 // reg.search()
                 //
 
-                let newtx = this.createPublishTX(app, data);
+                let newtx = this.createPublishTX(app, mod.data);
                 app.network.propagateTransaction(newtx);
+
+		//
+		//
+		//
+		mod.uploading_application_id = app.crypto.hash(newtx.transaction.ts + "-" + newtx.transaction.sig);
+
                 //
                 // TODO:
                 // convert this to main one way data flow structure like email
                 //
-                AppStorePublishSuccess.render();
-                AppStorePublishSuccess.attachEvents();
+                AppStorePublishSuccess.render(app, mod);
+                AppStorePublishSuccess.attachEvents(app, mod);
+
               } else {
                 salert("Please attach a zip file of your module");
               }
@@ -88,7 +103,8 @@ module.exports = AppStorePublish = {
       request: "submit module",
       module_zip: zip,
     };
-    return app.wallet.signTransaction(newtx);
+    newtx = app.wallet.signTransaction(newtx);
+    return newtx;
   },
 
 }

@@ -10,25 +10,20 @@ class Chessgame extends GameTemplate {
 
     super(app);
 
-    this.publickey = app.wallet.returnPublicKey();
-
     this.name = "Chess";
     this.description = "Chess is a two-player strategy board game played on a checkered board with 64 squares arranged in an 8×8 grid."
-
     this.board = null;
     this.engine = null;
     this_chess = this;
+    this.publickey = app.wallet.returnPublicKey();
 
-    //
-    // USE THE TOURNAMENT CLOCK -- testing
-    //
     this.useHUD = 0;
     this.useClock = 1;
 
     this.minPlayers = 2;
     this.maxPlayers = 2;
     this.type       = "Classic Boardgame";
-    this.description = "An implimentation of Chess for the Saito Blockchain";
+    this.description = "An implementation of Chess for the Saito Blockchain";
     this.categories  = "Boardgame Game";
 
     return this;
@@ -50,7 +45,6 @@ class Chessgame extends GameTemplate {
       obj.title = "Chess";
       return obj;
     }
-
     return null;
 
   }
@@ -124,7 +118,7 @@ class Chessgame extends GameTemplate {
         }
         else {
           try {
-            opponent = await this.app.keys.fetchIdentifierPromise(opponent);
+            // opponent = await this.app.keys.fetchIdentifierPromise(opponent);
           }
           catch (err) {
             console.log(err);
@@ -147,14 +141,22 @@ class Chessgame extends GameTemplate {
   ////////////////
   handleGameLoop(msg={}) {
 
+console.log("QUEUE IN CHESS: " + JSON.stringify(this.game.queue));
+console.log(JSON.stringify(msg));
+//alert("LOOP");
+
+    if (this.game.queue[this.game.queue.length-1] == "OBSERVER_CHECKPOINT") {
+      return;
+    }
+
     msg = {};
-    console.log("QUEUE 123123: " + this.game.queue);
     if (this.game.queue.length > 0) {
       msg.extra = JSON.parse(this.app.crypto.base64ToString(this.game.queue[this.game.queue.length-1]));
     } else {
       msg.extra = {};
     }
     this.game.queue.splice(this.game.queue.length-1, 1);
+
 
     if (msg.extra == undefined) {
       console.log("NO MESSAGE DEFINED!");
@@ -177,7 +179,6 @@ class Chessgame extends GameTemplate {
 
 
     if (msg.extra.target == this.game.player) {
-
       if (this.browser_active == 1) {
         this.setBoard(this.game.position);
         if (this.useClock) { this.startClock(); }
@@ -193,8 +194,14 @@ class Chessgame extends GameTemplate {
       }
     }
 
-    this.saveGame(this.game.id);
 
+
+    if (this.game.player == 0) {
+      this.game.queue.push("OBSERVER_CHECKPOINT");
+      return 1;
+    }
+
+    this.saveGame(this.game.id);
     return 0;
    
   }
@@ -217,10 +224,15 @@ class Chessgame extends GameTemplate {
 
   attachEvents() {
 
+    let chat_icon = document.getElementById('chat_icon');
     let resign_icon = document.getElementById('resign_icon');
     let move_accept = document.getElementById('move_accept');
     let move_reject = document.getElementById('move_reject');
     if (!move_accept) return;
+
+    let chatmod = this.app.modules.returnModule("Chat");
+    if (!chatmod) { chat_icon.style.display = "none"; }
+
 
     resign_icon.onclick = () => {
       let c = confirm("Do you really want to resign?");
@@ -231,6 +243,16 @@ class Chessgame extends GameTemplate {
 	return;
       }
     }
+
+    if (chatmod) {
+    chat_icon.onclick = () => {
+      if (chatmod) {
+	chatmod.openChatBox();
+	return;
+      }
+    }
+    }
+
 
     move_accept.onclick = () => {
       console.log('send move transaction and wait for reply.');
@@ -578,25 +600,50 @@ class Chessgame extends GameTemplate {
   }
 
   returnGameOptionsHTML() {
-    return `
 
-        <label for="color">Pick Your Color:</label>
-        <select name="color">
-          <option value="black" default>Black</option>
-          <option value="white">White</option>
-        </select>
 
-        <label for="clock">Time Limit:</label>
-        <select name="clock">
-          <option value="0" default>no limit</option>
-          <option value="30">30 minutes</option>
-          <option value="60">60 minutes</option>
-          <option value="90">90 minutes</option>
-        </select>
+    let html = `
 
+      <div style="padding:40px;width:100vw;height:100vh;overflow-y:scroll;display:grid;grid-template-columns: 200px auto">
+
+        <div style="top:0;left:0;margin-right: 20px;">
+
+          <label for="color">Pick Your Color:</label>
+          <select name="color">
+            <option value="black" default>Black</option>
+            <option value="white">White</option>
+          </select>
+
+          <label for="clock">Time Limit:</label>
+          <select name="clock">
+            <option value="0" default>no limit</option>
+            <option value="2">2 minutes</option>
+            <option value="10">10 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="60">60 minutes</option>
+            <option value="90">90 minutes</option>
+          </select>
+
+          <label for="observer_mode">Observer Mode:</label>
+          <select name="observer">
+            <option value="enable" selected>enable</option>
+            <option value="disable">disable</option>
+          </select>
+
+        </div>
+        <div>
+
+          <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
+
+        </div>
+      </div>
     `;
+
+    return html;
+
   }
 }
 
 module.exports = Chessgame;
+
 

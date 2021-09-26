@@ -1,6 +1,6 @@
 module.exports = EmailControlsTemplate = () => {
   return `
-      <button class="super" id="email-compose-btn">NEW</button>
+      <button class="super" id="email-compose-btn">SEND</button>
       <div class="email-bars-menu">
       </div>
       <div id="email-loader" class="email-loader">

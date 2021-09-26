@@ -9,9 +9,18 @@
     if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
     return this.returnFactionName(this, player);
   }
+  returnFactionNickname(player) {
+    if (this.game.players_info[player-1] == null) { return "Unknown"; }
+    if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
+    return this.returnFactionNameNickname(this, player);
+  }
   returnFactionName(imperium_self, player) {
     let factions = imperium_self.returnFactions();
     return factions[imperium_self.game.players_info[player-1].faction].name;
+  }
+  returnFactionNameNickname(imperium_self, player) {
+    let factions = imperium_self.returnFactions();
+    return factions[imperium_self.game.players_info[player-1].faction].nickname;
   }
   returnPlayerHomeworld(player) {
     let factions = this.returnFactions();
@@ -30,6 +39,7 @@
   }
   returnPlayersWithHighestVP() {
 
+    let imperium_self = this;
     let highest_vp = 0;
     let array_of_leaders = [];
     let p = imperium_self.game.players_info;
@@ -53,6 +63,7 @@
 
   returnPlayersWithLowestVP() {
 
+    let imperium_self = this;
     let lowest_vp = 1000;
     let array_of_leaders = [];
     let p = imperium_self.game.players_info;
@@ -75,6 +86,23 @@
 
 
 
+  returnNameOfUnknown(name) {
+
+    if (this.tech[name] != undefined) { return this.tech[name].name; }
+    if (this.strategy_cards[name] != undefined) { return this.strategy_cards[name].name; }
+    if (this.game.planets[name] != undefined) { return this.game.planets[name].name; }
+    if (this.agenda_cards[name] != undefined) { return this.agenda_cards[name].name; }
+    if (this.action_cards[name] != undefined) { return this.action_cards[name].name; }
+    if (this.stage_i_objectives[name] != undefined) { return this.stage_i_objectives[name].name; }
+    if (this.stage_ii_objectives[name] != undefined) { return this.stage_ii_objectives[name].name; }
+    if (this.secret_objectives[name] != undefined) { return this.secret_objectives[name].name; }
+    if (this.promissary_notes[name] != undefined) { return this.promissary_notes[name].name; }
+
+    return name;
+
+  }
+
+
   returnNameFromIndex(idx=null) {
     if (idx == null) { return ""; }
     if (idx.indexOf("planet") == 0) { if (this.game.planets[idx]) { return this.game.planets[idx].name; } }
@@ -87,6 +115,7 @@
     for (let i = this.game.queue.length-1; i >= 0; i--) {
       let x = this.game.queue[i].split("\t");
       if (x[0] == "agenda") { return x[1]; }
+      if (x[0] == "simultaneous_agenda") { return x[1]; }
     }
     return "";
   }
@@ -101,7 +130,7 @@
         obj.cruisers = 0;
         obj.destroyers = 0;
         obj.dreadnaughts = 0;
-        obj.flagships = 0;
+        obj.flagship = 0;
         obj.warsuns = 0;
         obj.pds = 0;
         obj.spacedocks = 0;
@@ -272,7 +301,7 @@
   checkForVictory() {
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.game.players_info[i].vp >= this.game.state.vp_target) {
-        this.updateStatus("Game Over: " + this.returnFaction(i+1) + " has reached 14 VP");
+        this.updateStatus("Game Over: " + this.returnFaction(i+1) + " has reached "+this.game.state.vo_target+" VP");
         return 1;
       }
     }
@@ -290,7 +319,7 @@
     for (let i = 0; i < as.length; i++) {
       let addsec = 0;
       if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
-      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(as[i], player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
       if (addsec == 1) { retreat_sectors.push(as[i]); }
     }
 
@@ -302,10 +331,8 @@
     let as = this.returnAdjacentSectors(sector);
 
     for (let i = 0; i < as.length; i++) {
-      if (this.game.board[as[i]]) {
         if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-        if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-      }
+        if (this.doesSectorContainPlanetOwnedByPlayer(as[i], player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
     }
 
     return 0;
@@ -316,15 +343,12 @@
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.game.players_info[i].traded_this_turn == 0 && (i+1) != this.game.player) {
         if (this.arePlayersAdjacent(this.game.player, (i+1))) {
-	  //
-	  // anyone have anything to trade?
-	  //
+	  // must have tradeables too
 	  if (this.game.players_info[this.game.player-1].commodities > 0 || this.game.players_info[this.game.player-1].goods > 0) {
 	    if (this.game.players_info[i].commodities > 0 || this.game.players_info[i].goods > 0) {
 	      return 1;
 	    }
 	  }
-
 	  if (this.game.players_info[this.game.player-1].promissary_notes.length > 0 || this.game.players_info[i].promissary_notes.length > 0) {
 	    return 1;
 	  }
@@ -527,8 +551,6 @@
     }
 
 
-
-
     //
     // we meet the pre-reqs
     //
@@ -553,6 +575,7 @@
   canPlayerResearchTechnology(tech) {
 
     let mytech = this.game.players_info[this.game.player-1].tech;
+    let myfaction = this.game.players_info[this.game.player-1].faction;
     if (mytech.includes(tech)) { return 0; }
  
     if (this.tech[tech] == undefined) {
@@ -563,16 +586,20 @@
     let prereqs = JSON.parse(JSON.stringify(this.tech[tech].prereqs));
     let techfaction = this.tech[tech].faction;
     let techtype = this.tech[tech].type;
+    let techreplaces = this.tech[tech].replaces;
     let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
 
     //
     // do we have tech that replaces this? if so skip
     //
-    for (let i = 0; i < mytech.length; i++) {
-      if (this.tech[mytech[i]].replaces == techtype) {
-	return 0;
+    for (let untech in this.tech) {
+      if (this.tech[untech].faction == myfaction) {
+        if (this.tech[untech].replaces == tech) {
+          return 0;
+        } 
       }
     }
+
 
     //
     // we can use tech to represent researchable
@@ -706,10 +733,6 @@
       prereqs.splice(0, 1);
     }
 
-//
-//
-//
-console.log("PREREQS: " + prereqs);
 
     //
     // we don't meet the prereqs but have a skip
@@ -814,6 +837,42 @@ console.log("PREREQS: " + prereqs);
     }
     return fleet;
   }
+
+
+  returnShipInformation(ship) {
+
+    let text = ship.name;
+
+    for (let i = 1; i < ship.strength; i++) {
+      if (i == 1) { text += ' ('; }
+      text += '*';
+      if (i == (ship.strength-1)) { text += ')'; }
+    }
+
+    let fighters = 0;
+    let infantry = 0;
+    for (let i = 0; i < ship.storage.length; i++) {
+      if (ship.storage[i].type == "infantry") {
+        infantry++;
+      }
+      if (ship.storage[i].type == "fighter") {
+        fighters++;
+      }
+    }
+    if ((fighters+infantry) > 0) {
+      text += ' (';
+      if (infantry > 0) { text += infantry + "i"; }
+      if (fighters > 0) {
+        if (infantry > 0) { text += ", "; }
+        text += fighters + "f";
+      }
+      text += ')';
+    }
+
+    return text;
+
+  }
+
 
   returnTotalResources(player) {
   
@@ -1070,8 +1129,8 @@ console.log("PREREQS: " + prereqs);
   
   arePlayersAdjacent(player1, player2) {
 
-    let p1sectors = this.returnSectorsWithPlayerUnits(player1);
-    let p2sectors = this.returnSectorsWithPlayerUnits(player2);
+    let p1sectors = this.returnSectorsWithPlayerUnitsAndPlanets(player1);
+    let p2sectors = this.returnSectorsWithPlayerUnitsAndPlanets(player2);
 
     for (let i = 0; i < p1sectors.length; i++) {
       for (let ii = 0; ii < p2sectors.length; ii++) {
@@ -1163,6 +1222,20 @@ console.log("PREREQS: " + prereqs);
     return sectors_with_units;
   }
 
+  returnSectorsWithPlayerUnitsAndPlanets(player) {
+    let sectors_with_units = [];
+    for (let i in this.game.sectors) {
+      if (this.doesSectorContainPlayerUnits(player, i)) {
+	sectors_with_units.push(i);
+      } else {
+        if (this.doesSectorContainPlanetOwnedByPlayer(i, player)) {
+	  sectors_with_units.push(i);
+        }
+      }
+    }
+    return sectors_with_units;
+  }
+
   canPlayerProduceInSector(player, sector) {
     if (this.game.players_info[player-1].may_player_produce_without_spacedock == 1) {
       return 1;
@@ -1218,7 +1291,7 @@ console.log("PREREQS: " + prereqs);
   
   
   canPlayerInvadePlanet(player, sector) {
-  
+
     let sys = this.returnSectorAndPlanets(sector);
     let space_transport_available = 0;
     let planets_ripe_for_plucking = 0;
@@ -1231,6 +1304,7 @@ console.log("PREREQS: " + prereqs);
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].locked == 0 && sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
     }
+
     if (planets_ripe_for_plucking == 0) { return 0; }
 
     //
@@ -1239,20 +1313,20 @@ console.log("PREREQS: " + prereqs);
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
       for (let k = 0; k < unit.storage.length; k++) {
-        if (unit.storage[k].type == "infantry") {
+      if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
       }
-      if (unit.capacity > 0) { space_tranport_available = 1; }
+      if (unit.capacity > 0) { space_transport_available = 1; }
     }
-  
+
     //
     // return yes if troops in space
     //
     if (total_available_infantry > 0) {
       return 1;
     }
-  
+
     //
     // otherwise see if we can transfer over from another planet in the sector
     //
@@ -1359,6 +1433,7 @@ console.log("PREREQS: " + prereqs);
     let sectors = [];
     let distance = [];
     let hazards = [];
+    let hoppable = [];
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
 
     let add_at_end = [];
@@ -1366,7 +1441,7 @@ console.log("PREREQS: " + prereqs);
     sectors.push(destination);
     distance.push(0);
     hazards.push("");
-
+    hoppable.push(1);
   
     //
     // find which systems within move distance (hops)
@@ -1401,9 +1476,20 @@ console.log("PREREQS: " + prereqs);
 	    if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships == 1) {
 	    } else {
 	      if (this.doesSectorContainNonPlayerShips(player, tmp[k])) {
-	        can_hop_through_this_sector = 0;
+	        can_hop_through_this_sector = -1;
+console.log("now that we are here we can see sector: " + sectors[k] + " is unhoppable");
+		hoppable[k] = -1;
 	      }
 	    }
+
+
+	    //
+	    // EXISTING UNHOPPABLE = NEIGHBOURS UNHOPPABLE
+	    //
+	    if (hoppable[k] == -1) {
+	      can_hop_through_this_sector = -1;
+	    }
+
 
 
             //
@@ -1452,7 +1538,8 @@ console.log("PREREQS: " + prereqs);
 	  if (tmp[k] == destination) { can_hop_through_this_sector = 1; }
 
 
-	  if (can_hop_through_this_sector == 1) {
+
+	  if (can_hop_through_this_sector == -1) {
 
 	    //
 	    // board adjacency 
@@ -1461,6 +1548,7 @@ console.log("PREREQS: " + prereqs);
             for (let m = 0; m < neighbours.length; m++) {
     	      if (!sectors.includes(neighbours[m]))  {
   	        sectors.push(neighbours[m]);
+  	        hoppable.push(-1);
 		if (hazard_description === "rift") {
                   distance.push(i);
 		} else {
@@ -1482,6 +1570,7 @@ console.log("PREREQS: " + prereqs);
 		}
 		if (insert_anew == 1) {
 		  sectors.push(neighbours[m]);
+  	          hoppable.push(-1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -1499,6 +1588,7 @@ console.log("PREREQS: " + prereqs);
 	      if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
   	        if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
   	          sectors.push(this.game.state.temporary_adjacency[z][1]);
+  	          hoppable.push(-1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -1520,6 +1610,7 @@ console.log("PREREQS: " + prereqs);
                   }
                   if (insert_anew == 1) {
                     sectors.push(neighbours[m]);
+                    hoppable.push(-1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
 		    } else {
@@ -1533,6 +1624,138 @@ console.log("PREREQS: " + prereqs);
 	      if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
   	        if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
   	          sectors.push(this.game.state.temporary_adjacency[z][0]);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hoppable.push(-1);
+		  hazards.push(hazard_description);
+  	        } else {
+
+		  //
+		  // if the included sector contains a RIFT or punishing sector and we have found it
+		  // through a "clean" route, we want to add that separately so it is not marked as 
+		  // only accessible through a hazardous path
+		  //
+		  let insert_anew = 1;
+                  for (let zz = 0; zz < sectors.length; zz++) {
+                    if (sectors[zz] == this.game.state.temporary_adjacency[z][0]) {
+                      if (hazards[zz] == hazard_description) { insert_anew = 0; }
+                    }
+                  }
+                  if (insert_anew == 1) {
+                    sectors.push(this.game.state.temporary_adjacency[z][0]);
+                    hoppable.push(-1);
+		    if (hazard_description === "rift") {
+                      distance.push(i);
+		    } else {
+                      distance.push(i+1);
+		    }
+                    hazards.push(hazard_description);
+                  }
+		}
+	      }
+  	    }
+	  }
+
+
+
+
+
+	  if (can_hop_through_this_sector == 1) {
+
+	    //
+	    // board adjacency 
+	    //
+            let neighbours = s[tmp[k]].neighbours;
+            for (let m = 0; m < neighbours.length; m++) {
+    	      if (!sectors.includes(neighbours[m]))  {
+  	        sectors.push(neighbours[m]);
+  	        hoppable.push(1);
+		if (hazard_description === "rift") {
+                  distance.push(i);
+		} else {
+                  distance.push(i+1);
+		}
+		hazards.push(hazard_description);
+  	      } else {
+
+		//
+		// if the included sector is non-hoppable and this new version is clean, we want
+		// to update the existing sector so that it is not marked as unhoppable (i.e. all
+		// of the ships will be able to move.
+		//
+		// AND
+		//
+		// if the included sector contains a RIFT or punishing sector and we have found it
+		// through a "clean" route, we want to update the existing sector so that it is not
+		// marked as hazardous
+		//
+		let insert_anew = 1;
+		for (let zz = 0; zz < sectors.length; zz++) {
+		  if (sectors[zz] == neighbours[m]) {
+		    if (hazards[zz] == hazard_description) { insert_anew = 0; }
+		    if (hoppable[zz] == -1) { insert_anew = 1; }
+		  }
+		}
+		if (insert_anew == 1) {
+		  sectors.push(neighbours[m]);
+  	          hoppable.push(1);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hazards.push(hazard_description);
+		}
+	      }
+            }
+
+	    //
+	    // temporary adjacency 
+	    //
+            for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
+	      if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
+  	        if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
+  	          sectors.push(this.game.state.temporary_adjacency[z][1]);
+  	          hoppable.push(1);
+		  if (hazard_description === "rift") {
+                    distance.push(i);
+		  } else {
+                    distance.push(i+1);
+		  }
+		  hazards.push(hazard_description);
+  	        } else {
+
+		  //
+		  // if the included sector contains a RIFT or punishing sector and we have found it
+		  // through a "clean" route, we want to update the existing sector so that it is not
+		  // marked as hazardous
+		  //
+		  let insert_anew = 1;
+                  for (let zz = 0; zz < sectors.length; zz++) {
+                    if (sectors[zz] == this.game.state.temporary_adjacency[z][1]) {
+                      if (hazards[zz] == hazard_description) { insert_anew = 0; }
+                    }
+                  }
+                  if (insert_anew == 1) {
+                    sectors.push(neighbours[m]);
+  	            hoppable.push(1);
+		    if (hazard_description === "rift") {
+                      distance.push(i);
+		    } else {
+                      distance.push(i+1);
+		    }
+                    hazards.push(hazard_description);
+                  }
+
+	        }
+	      }
+	      if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
+  	        if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
+  	          sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	          hoppable.push(1);
 		  if (hazard_description === "rift") {
                     distance.push(i);
 		  } else {
@@ -1554,6 +1777,7 @@ console.log("PREREQS: " + prereqs);
                   }
                   if (insert_anew == 1) {
                     sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	            hoppable.push(1);
 		    if (hazard_description === "rift") {
                       distance.push(i);
 		    } else {
@@ -1565,13 +1789,14 @@ console.log("PREREQS: " + prereqs);
 		}
 	      }
   	    }
-	  }
+	  } // if can_hop == 1
+
 	}
       }
     }
 
     //
-    // one more shot for any sectors marked as gravity rift (+1)
+    // one more shot for any sectors marked as gravity rift (+1) / max-hop
     //
     for (let i = 0; i < sectors.length; i++) {
 
@@ -1591,6 +1816,10 @@ console.log("PREREQS: " + prereqs);
           let neighbours = s[sectors[i]].neighbours;
           for (let m = 0; m < neighbours.length; m++) {
     	    if (!sectors.includes(neighbours[m]))  {
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+	      hoppable.push(1);
   	      sectors.push(neighbours[m]);
   	      distance.push(hops);
 	      hazards.push("rift");
@@ -1606,6 +1835,10 @@ console.log("PREREQS: " + prereqs);
   	        sectors.push(this.game.state.temporary_adjacency[z][1]);
   	        distance.push(hops);
 	        hazards.push("rift");
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+		hoppable.push(1);
   	      }
 	    }
 	    if (sectors[i] == this.game.state.temporary_adjacency[z][1]) {
@@ -1613,6 +1846,10 @@ console.log("PREREQS: " + prereqs);
   	        sectors.push(this.game.state.temporary_adjacency[z][0]);
   	        distance.push(hops);
 	        hazards.push("rift");
+//
+// this is the end sector, so it has to be hoppable by definition	
+//	
+		hoppable.push(1);
 	      }
   	    }
           }
@@ -1631,6 +1868,7 @@ console.log("PREREQS: " + prereqs);
         for (let k = 0; k < sectors.length; k++) {
 	  if (sectors[i] === sectors[k] && distance[i] >= distance[k] && i != k) {
 	    sectors.splice(i, 1);
+	    hoppable.splice(i, 1);
 	    distance.splice(i, 1);
 	    hazards.splice(i, 1);
 	    i--;
@@ -1641,12 +1879,31 @@ console.log("PREREQS: " + prereqs);
       }
     }
 
-    
-    let return_obj = { sectors : sectors , distance : distance , hazards : hazards };
 
-console.log(JSON.stringify(return_obj));
 
+    //
+    // remove unhoppable paths that are uncompetitive with hoppable paths
+    //
+    sectors_to_process = sectors.length;
+    for (let i = 0; i < sectors_to_process; i++) {
+      if (hoppable[i] == -1) {
+        for (let k = 0; k < sectors.length; k++) {
+          if (sectors[i] === sectors[k] && hoppable[k] == 1 && i != k && distance[i] >= distance[k]) {
+            sectors.splice(i, 1);
+	    hoppable.splice(i, 1);
+            distance.splice(i, 1);
+            hazards.splice(i, 1);
+            i--;
+            sectors_to_process--;
+            k = sectors.length+2;
+          }
+        }
+      }
+    }
+
+    let return_obj = { sectors : sectors , distance : distance , hazards : hazards , hoppable : hoppable };
     return return_obj;
+
   }
   
 
@@ -1673,7 +1930,7 @@ console.log(JSON.stringify(return_obj));
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units.length; i++) {
       if ((i+1) != player) {
-        if (sys.s.units.length > 0) { return (i+1); }
+        if (sys.s.units[i].length > 0) { return (i+1); }
       }
     }
     return -1;
@@ -1971,9 +2228,19 @@ console.log(JSON.stringify(return_obj));
     let battery = this.returnPDSWithinRange(attacker, sector, sectors, distance);
 
     //
+    // check for weird stuff like XXCha flagship
+    //
+    let z = this.returnEventObjects();
+    for (let z_index in z) {
+      for (let i = 0; i < this.game.players_info.length; i++) {
+        battery = z[z_index].returnPDSUnitsWithinRange(this, (i+1), attacker, player, sector, battery);
+      }
+    }
+
+
+    //
     // what are the range of my PDS shots
     //
-
     for (let i = 0; i < battery.length; i++) {
       if (battery[i].owner == player) { 
         if (battery[i].sector != sector) {
@@ -2029,7 +2296,7 @@ console.log(JSON.stringify(return_obj));
     let battery = [];
   
     for (let i = 0; i < sectors.length; i++) {
-  
+
       let sys = this.returnSectorAndPlanets(sectors[i]);
 
       //
@@ -2054,6 +2321,7 @@ console.log(JSON.stringify(return_obj));
       if (sys != null) {
         for (let j = 0; j < sys.p.length; j++) {
           for (let k = 0; k < sys.p[j].units.length; k++) {
+
 
   	  if (k != attacker-1) {
   	      for (let z = 0; z < sys.p[j].units[k].length; z++) {
@@ -2084,7 +2352,9 @@ console.log(JSON.stringify(return_obj));
 
 
   returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx) {
-  
+
+    if (player == -1) { return 0; }  
+
     let sys = this.returnSectorAndPlanets(sector);
     let num = 0;
 
@@ -2182,7 +2452,15 @@ console.log(JSON.stringify(return_obj));
   
   }
   
-  
+ 
+  doesPlayerControlHomeworld(player=null) {
+    if (player == null) { player = this.game.player; }
+    let sys = this.returnSectorAndPlanets(this.returnPlayerHomeworldSector(player));
+    for (let i = 0; i < sys.p.length; i++) {
+      if (sys.p[i].owner != player) { return 0; }
+    }
+    return 1;
+  }
   returnPlayerHomeworldSector(player=null) {
     if (player == null) { player = this.game.player; }
     let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
@@ -2201,9 +2479,6 @@ console.log(JSON.stringify(return_obj));
     let tech_skips = [];
     let planet_cards = this.returnPlayerPlanetCards(player, mode);
     for (let i = 0; i < planet_cards.length; i++) {
-
-console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planets[planet_cards[i]]);
-
       if (this.game.planets[planet_cards[i]].bonus.indexOf("blue") > -1) {
 	tech_skips.push({color:"blue",planet:planet_cards[i]});
       }
@@ -2542,12 +2817,21 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
       if (sys.s.type == 4) { return 0; }
     }
 
+    //
+    // asteroid fields ?
+    //
+    if (!this.doesPlayerHaveTech(player, "antimass-deflectors")) {
+      let sys = this.returnSectorAndPlanets(destination);
+      if (sys.s.type == 3) { return 0; }
+    }
+
 
     let imperium_self = this;
     let hops = 3;
     let sectors = [];
     let distance = [];
     let hazards = [];
+    let hoppable = [];
 
     let obj = {};
     obj.max_hops = 2;
@@ -2561,12 +2845,11 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
     obj.max_hops += obj.ship_move_bonus;
     obj.max_hops += obj.fleet_move_bonus;
 
-console.log("max hops is: " + obj.max_hops);
-
     let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
     sectors = x.sectors;
     distance = x.distance;
     hazards = x.hazards;
+    hoppable = x.hoppable;
 
     for (let i = 0; i < distance.length; i++) {
       if (obj.ship_move_bonus > 0) {
@@ -2584,9 +2867,9 @@ console.log("max hops is: " + obj.max_hops);
       obj.distance_adjustment += obj.fleet_move_bonus;
     }
 
-    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards); 
-
+    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards, hoppable); 
     if (obj.ships_and_sectors.length > 0) { return 1; }
+
     return 0;
 
   }

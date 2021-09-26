@@ -13,30 +13,19 @@
   <script type="text/javascript" src="/saito/lib/jquery/jquery-ui.min.js"></script>
 
   <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/fontawesome.min.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
 
+  <link rel="stylesheet" type="text/css" href="/saito/style.css" />
   <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
   <link rel="stylesheet" type="text/css" href="/pandemic/style.css" />
+  <link rel="stylesheet" type="text/css" href="/chat/css/email-chat.css">
 
   <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
 
 </head>
 <body>
 
-  <div id="Pandemic_browser_active"></div>
-
-  <div class="main" style="display:all">
-    <div class="cardbox" id="cardbox" style="display:none">
-      <div class="cardbox-exit" id="cardbox-exit" style="display:none">×</div>
-      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard" style="display:none">PLAY</div>
-    </div>
     <div class="gameboard" id="gameboard">
-
-      <div class="role_cards">
-        <div class="player1_role_card role_card"></div>
-        <div class="player2_role_card role_card"></div>
-        <div class="player3_role_card role_card"></div>
-        <div class="player4_role_card role_card"></div>
-      </div>
 
       <div class="back_player_card"></div>
       <div class="player_discard_pile"></div>
@@ -118,10 +107,8 @@
       <div class="player_deck" id="player_deck"></div>
       <div class="player_discard" id="player_discard"></div>
     </div>
-  </div>
 
-  <script src="/saito/saito.js"></script>
-  <script src="/pandemic/script.js"></script>
+  <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
 
 </body>
 </html>

@@ -17,12 +17,19 @@ class Relay extends ModTemplate {
 
     this.description    = "Simple Message Relay for Saito";
     this.categories     = "Utilities Communications";
-
     return this;
   }
 
 
+  returnServices() {
+    let services = [];
+    services.push({ service: "relay" });
+    return services;
+  }
 
+
+
+  
   //
   // currently a 1-hop function, should abstract to take an array of
   // recipients and permit multi-hop transaction construction.
@@ -90,8 +97,9 @@ class Relay extends ModTemplate {
         //
         // forward to peer
         //
-        peer.sendRequestWithCallback("relay peer message", tx2.transaction, function(res) {
-        });
+        // peer.sendRequestWithCallback("relay peer message", tx2.transaction, function(res) {
+        // });
+        peer.sendRequest("relay peer message", tx2.transaction);
 
       }
       }
@@ -102,17 +110,57 @@ class Relay extends ModTemplate {
     return;
 
   }
+  
+  sendRelayMessageWithRetry(request, data, callback = ()=>{}) {
+    data.request = request;
+    this.app.network.peers[0].sendRequestWithCallbackAndRetry("relayPeerMessage2", data, callback.bind(this));
+  }
+  
+  sendRelayMessageToRecipientWithRetry(request, recipient, data, callback = ()=>{}) {
+    data.request = request;
+    data.recipient = recipient;
+    this.app.network.peers[0].sendRequestWithCallbackAndRetry("relayPeerMessageToRecipient", data, callback.bind(this));
+  }
 
-
-  //
-  // database queries inbound here
-  //
   async handlePeerRequest(app, message, peer, mycallback=null) {
 
     try {
-
       let relay_self = app.modules.returnModule("Relay");
-
+      if (message.request === "relayPeerMessageToRecipient") { 
+        if(message.data && message.data.request && message.data.recipient) {
+          let peer = this.app.network.returnPeerByPublicKey(message.data.recipient);
+          if(peer != null) {
+            if(mycallback === null) {
+              peer.sendRequest(message.data.request, message.data);
+            } else {
+              console.log("should get here...");
+              peer.sendRequestWithCallbackAndRetry(message.data.request, message.data, function(res) {
+                console.log("callback in peer relay...");
+                console.log(res);
+                mycallback(res);
+              });
+            }  
+          } else {
+            mycallback({err: "Peer not found"});
+          }
+        }
+      }
+      if (message.request === "relayPeerMessage2") { 
+        console.log("relay peer message2");
+        console.log(message);
+        if(message.data && message.data.request) {
+          if(mycallback === null) {
+            this.app.network.sendRequest(message.data.request, message.data);
+          } else {
+            console.log("here?");
+            this.app.network.sendRequestWithCall(message.data.request, message.data, function(res) {
+              console.log("callback in relay...");
+              console.log(res);
+              mycallback(res);
+            });
+          }
+        }
+      }
       if (message.request === "relay peer message") {
 
         //
@@ -162,6 +210,8 @@ class Relay extends ModTemplate {
         }
       }
     } catch (err) {
+      console.log("RELAY MOD ERROR");
+      console.log(err);
     }
   }
 }

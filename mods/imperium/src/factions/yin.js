@@ -2,13 +2,14 @@
     this.importFaction('faction5', {
       id		:	"faction5" ,
       name		: 	"Yin Brotherhood",
-      homeworld		: 	"sector13",
+      nickname		: 	"Yin",
+      homeworld		: 	"sector74",
       space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
-      tech		: 	["faction5-indoctrination", "faction5-devotion", "faction5-flagship"],
+      tech		: 	["sarween-tools", "faction5-indoctrination", "faction5-devotion", "faction5-flagship"],
       background	: 	'faction5.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro		:	`<div style="font-weight:bold">One must conquer the turmoil within to conquer the turmoil without. Such is the will. Such is the law. So be it.</div>`
+      intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Yin Brotherhood, a monastic order of religious zealots whose eagerness to sacrifice their lives for the collective good makes them terrifying in one-on-one combat. Direct their self-destructive passion and you can win the Imperial Throne. Good luck!</div>`
     });
 
 
@@ -24,19 +25,29 @@
       text        :       "Spend 2 influence to convert 1 enemy infantry at combat start" ,
       groundCombatTriggers : function(imperium_self, player, sector, planet_idx) {
         if (imperium_self.doesPlayerHaveTech(player, "faction5-indoctrination")) {
-          if (imperium_self.returnAvailableInfluence(player) >= 2) {
-	    return 1;
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  if (sys.p[planet_idx].units[player-1].length > 0) {
+            if (imperium_self.returnAvailableInfluence(player) >= 2) {
+	      if (imperium_self.game.state.ground_combat_round < 2) {
+	        return 1;
+	      }
+            }
           }
         }
 	return 0;
       },
       groundCombatEvent : function(imperium_self, player, sector, planet_idx) { 
-        if (imperium_self.game.player == player) {
-          imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
-	    imperium_self.endTurn();
-          });
+	if (imperium_self.game.player == player) {
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  if (sys.p[planet_idx].units[player-1].length > 0) {
+            imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
+  	      imperium_self.endTurn();
+            });
+	  } else {
+  	    imperium_self.endTurn();
+          }
+          return 0;
         }
-        return 0;
       },
     });
 
@@ -106,6 +117,7 @@
       prereqs     :       ["green", "green"] ,
       color       :       "green" ,
       type        :       "special" ,
+      text        :       "Place additional infantry on planet after producing in sector",
       initialize  :       function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].faction5_yin_spinner == null) {
           imperium_self.game.players_info[player-1].faction5_yin_spinner = 0;
@@ -165,6 +177,7 @@
       name        	:       "Yin Flagship" ,
       faction     	:       "faction5",
       type      	:       "ability" ,
+      text        	:       "Wipes out all ships in sector when destroyed" ,
       unitDestroyed : function(imperium_self, attacker, unit) {
 	if (unit.type == "flagship") {
           if (imperium_self.doesPlayerHaveTech(unit.owner, "faction5-flagship")) {
@@ -193,6 +206,7 @@
 	    }
 	  }
 	}
+	return unit;
       },
     });
 
@@ -203,6 +217,7 @@
 this.playIndoctrination = function(imperium_self, player, sector, planet_idx, mycallback) {
 
   if (this.game.player != player) { return; }
+  if (this.game.player != player) { return; }
 
   let sys = imperium_self.returnSectorAndPlanets(sector);
   let planet = sys.p[planet_idx];
@@ -210,6 +225,11 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
   let can_play_indoctrination = 0;
 
   if (imperium_self.returnNonPlayerInfantryOnPlanet(player, planet) <= 0 || opponent == -1) {
+    mycallback(imperium_self);
+    return;
+  }
+
+  if (sys.p[planet_idx].units[opponent-1].length <= 0) {
     mycallback(imperium_self);
     return;
   }
@@ -228,10 +248,19 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
       return;
     }
     if (action2 === "yes") {
-      imperium_self.addMove("destroy_infantry_on_planet"+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+1);
-      imperium_self.addMove("add_infantry_to_planet"+"\t"+player+"\t"+planet.planet+"\t"+1);
-      mycallback(imperium_self);
-      return;
+
+      imperium_self.playerSelectInfluence(2, function (success) {
+
+        if (success == 1) {
+          imperium_self.addMove("destroy_infantry_on_planet"+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+1);
+          imperium_self.addMove("add_infantry_to_planet"+"\t"+player+"\t"+planet.planet+"\t"+1);
+          imperium_self.addMove("NOTIFY\tYin Indoctrination converts opposing infantry");
+	  imperium_self.endTurn();
+        } else {
+          mycallback(imperium_self);
+          return;
+        }
+      });
     }
   });
 }
@@ -320,6 +349,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
   }
 
   let html = "<div class='sf-readable'>Assign 1 hit to which opponent ship?</div><ul>";
+
   for (let i = 0; i < sys.s.units[opponent-1].length; i++) {
 
     let unit = sys.s.units[opponent-1][i];

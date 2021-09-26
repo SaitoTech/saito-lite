@@ -1,0 +1,1332 @@
+
+/**
+.button {
+  background: var(--saito-red);
+  color: #fefefe;
+}
+.button:hover {
+  background: #fefefe;
+  color: var(--saito-red);
+}
+**/
+
+
+:root {
+  --saito-red: #639;
+  --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
+  --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
+  --tile-height: 8em;
+  --saito-width: 1500px;
+  --sidebar-width: 15em;
+  --identicon-height: 1em;
+}
+
+.saito-carousel {
+  
+}
+
+body {
+  height: 100vh;
+  font-size: 1.0em;
+  color: var(--saito-skyline-grey);
+  background: var(--saito-nightscape);
+  overflow: hidden;
+  justify-content: center;
+}
+
+a {
+  color: #BCF;
+}
+
+.arcade-container {
+  height: 100%;
+  margin: 5em auto;
+  padding: 0 1em;
+  display: grid;
+  gap: 1em;
+  grid-template-columns: var(--sidebar-width) auto;
+  font-size: 1em;
+  width: 100vw;
+  max-width: var(--saito-width);
+}
+
+.arcade-sidebar {
+  display: flex;
+  flex-flow: column;
+  z-index: 999;
+}
+
+.arcade-main {
+  display: grid;
+  grid-template-rows: 2em 45vh auto;
+}
+
+#arcade-tab-buttons {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  overflow: hidden;
+  border-left: solid 2px var(--saito-red);
+}
+
+#arcade-tab-buttons .tab-button {
+  border: solid 2px var(--saito-red);
+  font-weight: bold;
+  border-left: none;
+  border-bottom: none;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  transform: skew(20deg) translateX(-0.35em);
+}
+
+#arcade-tab-buttons .tab-button span {
+  transform: skew(-20deg);
+}
+
+#arcade-tab-buttons .tab-button:nth-child(1) {
+  border-left: solid 1px var(--saito-red);
+}
+
+#arcade-tab-buttons .tab-button.active-tab-button {
+  background: var(--saito-jester);
+}
+
+#observables-hero {
+  font-size: 4em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: solid 1px var(--saito-red);
+}
+
+#tournaments-hero {
+  font-size: 4em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: solid 1px var(--saito-red);
+}
+
+.arcade-tab-hidden {
+  display: none !important;
+}
+
+.arcade-hero {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  overflow-y: auto;
+  background: linear-gradient(-45deg, #0002, #0004);
+  border: 1px solid var(--saito-red);
+}
+
+.arcade-tile {
+  width: calc(100% - 1em);
+  overflow-y: hidden;
+  border: solid 1px #c89af6;
+  background-size: cover;
+  background-position: center;
+  margin: 0.25em;
+}
+
+.invite-tile-wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 12em auto auto 12em;
+  background: linear-gradient(45deg, #444a 38%, #0002 100%);
+  height: 7em;
+  overflow: hidden;
+  position: relative;
+  text-shadow: 1px 0 2px black, 0 1px 2px black, -1px 0 2px black, 0 -1px 2px black;
+}
+
+.game-inset-img {
+  background-size: cover;
+  background-position: center;
+  border: 1px solid darkorange;
+  max-height: 6em;
+  margin: 0.5em;
+}
+
+.arcade-tile .invite-row-2 {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.arcade-tile .gameName {
+  margin-top: 0.2em;
+  margin-left: 0.2em;
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.arcade-tile .gameShortDescription {
+  display: grid;
+  justify-items: end;
+  margin: 0.2em 0.2em 0.4em 0em;
+  font-size: 2.2em;
+}
+
+.invite-description {
+  background-color: #0009;
+  padding: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 0.55em;
+  font-weight: bold;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.arcade-tile .playerInfo {
+  margin-bottom: 0.8em;
+  display: grid;
+  justify-self: start;
+  position: relative;
+  border-radius: 3px;
+}
+
+.arcade-tile .playerName {
+  display: grid;
+  place-items: center;
+  width: 8em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.arcade-tile .identicon {
+  border: 1px solid indigo;
+  width: 100%;
+  max-width: 2em;
+  min-width: 2em;
+  
+}
+.arcade-tile .player-slot {
+  background-color: #8884;
+  font-size: 1.2em;
+  box-shadow: 1px 1px #ccc, 1px 1px #333 inset;
+  width: 2em;
+  height: 2em;
+  margin: 0.2em 0.3em;
+}
+.arcade-tile .player-slot-ellipsis {
+  align-self: end;
+}
+.arcade-tile .button {  
+  background: linear-gradient(45deg, #540e81, #b539e8) !important;
+  padding: 1em 1em; */
+  font-size: 1.2em;
+  border-radius: 5px;
+  height: 6em;
+  max-height: 6em;
+  margin: 0.5em;
+}
+
+
+.open-invite .invite-tile-join-button {}
+.open-invite .invite-tile-play-button {display: none;}
+.my-invite .invite-tile-join-button {display: none;}
+.my-invite .invite-tile-play-button {}
+
+@media only screen and (max-width: 1000px) {
+  .game-inset-img {
+    display: none;
+  }
+  .invite-tile-wrapper {
+    grid-template-columns: 4fr 3fr 12em 8em;
+  }
+  .arcade-tile .gameName {
+    font-size: 2.2em;
+  }
+    .arcade-tile .gameShortDescription {
+    font-size: 2.2em;
+  }
+  .playerInfo {
+    transform: scale(0.8);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .arcade-tile {
+    min-height: 10em;
+  }
+  .invite-tile-wrapper {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 12em;
+    height: unset;
+  }
+}
+
+.arcade-sub {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 0.5em;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: contain;
+  margin: 0.5em 0;
+}
+
+.arcade-infobox {
+  border: 1px solid var(--saito-red);
+  padding: 1em;
+  margin: 0 0 1em 0;
+  overflow-y: auto;
+}
+
+.arcade-posts {
+  border: 1px solid var(--saito-red);
+  padding: 1em;
+  background-color: #4444;
+  margin: 0 0 1em 0;
+  overflow-y: auto;
+}
+
+.arcade-post {
+  margin-bottom: 40px;
+}
+
+.arcade-post-sublinks {
+  clear: both;
+  font-size: 0.8em;
+}
+
+.arcade-post-title {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.arcade-post-user {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+}
+
+.arcade-post-title {
+  float: left;
+  font-weight: bold;
+}
+
+.arcade-post-comments {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+  text-decoration: underline;
+}
+
+.arcade-post-report {
+  float: left;
+  font-weight: bold;
+  margin-left: 1em;
+  text-decoration: underline;
+}
+
+.arcade-post-posted-by {
+  float: left;
+}
+
+/*** AppStore Loader ***/
+
+.appstore-overlay-container {
+  background-color: #171c40;
+}
+
+.appstore-overlay-app {
+  background-color: #c2cdde;
+}
+
+@media only screen and (max-width: 1000px) {
+  .main {
+    margin-left: 1em;
+  }
+  .arcade-container {
+    grid-template-columns: auto;
+  }
+  .arcade-sidebar {
+    position: absolute;
+    width: 15em;
+    top: 5em;
+    left: -14em;
+    height: calc(100vh - 5em);
+    transition: all ease-in-out 1s;
+    background-color: darkslateblue;
+  }
+  .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
+    left: 0;
+  }
+  .arcade-sub {
+    margin: 1em 0 0 0;
+    grid-template-columns: auto;
+    grid-template-rows: 20vh auto;
+  }
+  /* .arcade-main {
+    overflow-y: scroll;
+    display: grid;
+    gap: 1.5em;
+    height: 100vh;
+    grid-template-rows: 1fr 3fr;
+  }
+  .arcade-hero {
+    display: grid;
+    gap: 1em;
+    overflow-y: scroll;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-auto-flow: row;
+    justify-items: stretch;
+    align-items: stretch;
+  }
+  .arcade-tile {
+    width: 15em;
+    height: 10em;
+  } */
+  .arcade-sub {
+    /* display: none; */
+  }
+}
+
+/* 
+.hero-list {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-around;
+} */
+
+/* .game-tile {
+  cursor: pointer;
+  position: relative;
+  transition: all ease-in-out 0.5s;
+  transform-origin: center center;
+  width: 30vh;
+  max-width: 250px;
+  height: 30vh;
+  max-height: 250px;
+  margin: 1vh;
+}
+
+.game-tile-name {
+  background-color: #0008;
+  height: 20%;
+  font-size: 3vh;
+  text-align: center;
+  line-height: 6vh;
+  text-transform: uppercase;
+  position: absolute;
+  width: 100%;
+  top: 25%;
+}
+
+.game-tile-action {
+  background-color: #0008;
+  height: 20%;
+  font-size: 2vh;
+  text-align: center;
+  line-height: 7vh;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+} */
+
+/* 
+.hero-action {
+  display: grid;
+  gap: 1em;
+  grid-template-rows: 5vh auto;
+}
+
+.game-tile:hover {
+  transform: scale(1.1) translateZ(1em);
+}
+
+.game-title {
+  font-size: 3em;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 8vh;
+  display: flex;
+  justify-content: center;
+} */
+
+/* @media only screen and (min-height: 1000px) {
+  .game-tile {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .game-tile-name {
+    font-size: 2.25em;
+    line-height: 56px;
+  }
+  
+  .game-tile-action {
+    font-size: 2em;
+    line-height: 56px;
+  }
+  
+
+} */
+
+/* @media only screen and (max-width: 750px) {} */
+
+/* @media only screen and (max-width: 600px) {
+  .arcade-container {
+    padding: 0;
+  }
+  .arcade-main {
+    grid-template-columns: auto;
+    overflow-y: auto;
+  }
+  .game-tile:hover {
+    transform: none;
+  }
+  .arcade-sub {
+    gap: 0.5em;
+    grid-template-columns: auto;
+    grid-template-rows: auto 3em;
+  }
+  .arcade-infobox {
+    position: absolute;
+    transition: all ease-in-out 0.5s;
+    background-color: darkorange;
+    height: calc(100vh - 5em);
+    width: 100vw;
+    top: calc(100vh - 1em);
+  }
+  .arcade-infobox:hover, .arcade-infobox:active, .arcade-infobox.active {
+    top: 5em;
+  }
+
+} */
+
+/* controls */
+
+button, .button, .file-label {
+  background: var(--saito-jester);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+}
+
+button:hover, .button:hover {
+  background: linear-gradient(-45deg, #537 50%, #324 100%);
+}
+
+/*
+select {
+  border: 1px solid var(--saito-red);
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 10px 6px;
+  background: linear-gradient(-45deg, #222 50%, #1e1e1f 100%);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+  letter-spacing: 1px;
+  transition: transform .25s;
+  min-width: 180px;
+}
+
+input {
+  background: #55555555;
+  color: var(--saito-skyline-grey);
+} */
+
+
+.footer {
+  display: none;
+}
+
+button.add-games {
+  width: 100%;
+}
+
+.big-create-game {
+  display: none;
+}
+
+.arcade-leaderboard-row {
+  display: grid;
+  grid-template-columns: 5fr 1fr 1fr;
+  padding: 0.5em;
+  grid-gap: 1em;
+}
+
+.arcade-leaderboard-row-winner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arcade-leaderboard-row-module {}
+
+.arcade-leaderboard-row-score {
+  justify-self: end;
+}
+
+.arcade-sidebar-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.arcade-sidebar-active-games-header {
+  font-size: 0.8em;
+  text-align: left;
+  background: var(--saito-jester);
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 1px solid var(--saito-red);
+  border-bottom: 0px;
+  margin: unset;
+}
+
+.arcade-sidebar-active-games-body, .arcade-sidebar-active-leaderboard-body {
+  border: 1px solid var(--saito-red);
+  background: #1e1e1f50;
+  max-height: 30vh;
+  overflow-y: auto;
+  padding: 0 3px;
+}
+
+.arcade-sidebar-active-leaderboard-body {
+  height: 25vh;
+}
+
+#arcade-play-btn {
+  padding-bottom: 1.7em;
+}
+
+.chat-header {
+  background: var(--saito-nightscape);
+  border: 1px solid var(--saito-red);
+  border-bottom: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--saito-jester);
+}
+
+.chat-list {
+  height: 255px;
+  overflow-y: auto;
+  border: 1px solid var(--saito-red);
+  background: #1e1e1f50;
+}
+
+.arcade-gamelist {
+  width: 100%;
+}
+
+.game-options-html {
+  overflow-y: auto;
+  max-height: 4em;
+}
+
+.pill {
+  background: var(--saito-cyber-black);
+  color: white;
+  padding: 7px;
+  border-radius: 50px;
+  min-width: 4em;
+  text-align: center;
+  margin: 2px;
+}
+
+.arcade-extra {
+  width: 100%;
+}
+
+.arcade-game-invitation {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 3fr 3fr 4fr auto auto;
+  border: 1px solid #84C;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-top: 10px;
+}
+
+.arcade-main-back-button {
+  font-size: 2em;
+  display: block;
+  align-self: normal;
+  margin: 0.5em 0;
+  cursor: pointer;
+}
+
+.glide__arrows {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  bottom: 6em;
+  padding: 0px 10px;
+}
+
+.glide__arrow {
+  margin: unset;
+  background: var(--saito-cyber-black);
+  color: var(--saito-skyline-grey);
+  border: unset;
+  min-width: unset;
+  border-radius: 50px;
+}
+
+.game {
+  min-width: 150px;
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+}
+
+.game-image {
+  width: 100%;
+}
+
+/* GAME WIZARD */
+
+.saito-overlay {
+  display: none;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+}
+.background-shim {
+  /* position: fixed; */
+  padding: 5em;
+  height: 100%;
+  width: 100%;
+  /* height: calc(100vh - 80px); */
+  background-size: cover;
+  z-index: 999;
+}
+
+/* .background-shim-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000033;
+  z-index: 1000;
+} */
+
+.return-to-arcade {
+  cursor: pointer;
+  display: inline-block;
+  position: absolute;
+  right: -1em;
+  top: -1em;
+  z-index: 1001;
+}
+.create-game-tabs{
+  padding: 0 5.5em;
+  border: solid 1px white;
+}
+.create-game-tabs-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  place-items: center;
+}
+.create-game-tab-button {
+  font-size: 1.8em;
+  width: 100%;
+  text-align: center;
+}
+.arcade-tab-selected {
+  text-decoration: underline;
+  background-color: white;
+  color: black;
+  
+}
+#next-tab-button, #prev-tab-button {
+  position: absolute;
+  font-size: 1.8em;
+  padding: 0 1em;
+}
+#next-tab-button {
+  top: 50%;
+  right: 0;
+}
+#prev-tab-button {
+  top: 50%;
+  left: 0;
+}
+.game-wizard, .create-game-wizard {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding: 1em;
+  scrollbar-width: none;
+  font-size: 1em;
+  background-color: #000D;
+  width: 90vw;
+  height: 90vh;
+}
+
+.game-wizard-content {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.game-wizard-advanced-options {
+  display: none;
+  grid-area: span 1 / span 2;
+}
+.game-wizard-advanced-box {
+  display: block;
+  text-align: left;
+}
+.game-wizard-sidebar {
+
+}
+.game-wizard-main {
+  padding: 50px;
+}
+.game-buttons {
+  padding-top:20px;
+  margin-left: 10%;
+}
+.game-how-to-play {
+  width: 40%;
+  float: left;
+}
+.game-game-rules {
+  width: 40%;
+  margin-left: 25px;
+  float: left;
+}
+.game-wizard-advanced-btn {
+  display: none;
+}
+.game-wizard-form {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+
+
+.game-wizard-content::-webkit-scrollbar {
+  /* WebKit */
+  width: 3;
+}
+
+.game-info-container {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+
+.game-start-controls {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 4fr;
+}
+
+.game-description {
+  font-size: 1.2em;
+  line-height: 1.2em;
+  text-align: justify;
+}
+
+.game-details form_options {
+  display: grid;
+  grid-template-columns: 6em auto;
+  grid-gap: 1em;
+}
+
+/* USED BY WORDBLOCKS */
+
+#options {
+  /* display: grid;
+  grid-template-columns: 10em auto; */
+}
+
+/* observer mode box */
+
+.arcade-observer-game-players {
+  float: right;
+}
+
+.arcade-observer-game-players-identicon {
+  height: 24px;
+  width: 24px;
+  float: right;
+  margin-left: 8px;
+}
+
+.arcade-observer-game-name {
+  font-size: 1.2em;
+  padding: 3px 0 0 0;
+}
+
+.arcade-observer-game-row {
+  padding: 3px;
+  margin: 3px 0;
+  display: grid;
+  grid-template-columns: 3fr 2fr 3fr;
+  grid-gap: 1em;
+}
+
+.arcade-observer-game-btn {
+  width: 3em;
+  min-width: unset;
+  margin: 0;
+  padding: 2px;
+  font-size: small;
+}
+
+.arcade-observer-game-row {}
+
+/* RIBBON */
+
+.rilbon {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.ribbon::before, .ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  display: block;
+  border: 5px solid #990000;
+}
+
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 225px;
+  padding: 15px 0;
+  background-color: #990000;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+  color: #fff;
+  font: 700 18px/1 'Lato', sans-serif;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+  text-transform: uppercase;
+  text-align: center;
+  /* z-index: 5; */
+}
+
+/* top left*/
+
+.ribbon-top-left {
+  top: -10px;
+  left: -10px;
+}
+
+.ribbon-top-left::before, .ribbon-top-left::after {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+
+.ribbon-top-left::before {
+  top: 0;
+  right: 0;
+}
+
+.ribbon-top-left::after {
+  bottom: 0;
+  left: 0;
+}
+
+.ribbon-top-left span {
+  right: -25px;
+  top: 30px;
+  transform: rotate(-45deg);
+}
+
+.arcade-game-row-avi {
+  display: inline;
+}
+
+.arcade-game-row-avi img {
+  border: 1px solid grey;
+}
+
+.arcade-game-invitation {
+  clear: both;
+}
+
+.arcade-game-row-name {
+  cursor: default;
+  padding: 0 0 0 0.5em;
+  font-size: 1.2em;
+}
+
+.arcade-game-row-options {
+  margin-left: 10px;
+  float: left;
+  cursor: pointer;
+  padding-right: 5px;
+}
+
+.arcade-game-row-buttons {
+  /* display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.5em;
+  grid-area: buttons; */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 0.5em;
+}
+
+.arcade-game-row-join {
+  margin-left: 30px;
+  float: left;
+  cursor: pointer;
+}
+
+.arcade-navigator, .arcade-apps {
+  list-style: none;
+  list-style-type: none;
+  font-size: 1.2em;
+  line-height: 1.4em;
+  padding: 10px 0px;
+}
+
+.arcade-apps-wrapper {
+  border: 1px solid var(--saito-red);
+}
+
+.arcade-navigator {
+  border-bottom: 1px solid grey;
+}
+
+.arcade-navigator-item, .arcade-apps-item {
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  padding: 5px 0 2px 10px;
+}
+
+.arcade-apps-item:hover, .arcade-navigator-item:hover {
+  background-color: #33669999;
+}
+
+.remove_cards_box {
+  max-height: 400px;
+  overflow: auto;
+  padding: 1em;
+}
+
+.removecards {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background-image: none;
+}
+
+/* Remove IE arrow */
+
+select::-ms-expand {
+  display: none;
+}
+
+/* Custom Select */
+
+.saito-select {
+  position: relative;
+  display: flex;
+  width: 20em;
+  height: 3em;
+  line-height: 3;
+  background: #55555555;
+  overflow: hidden;
+  border-bottom: 1px solid var(--saito-red);
+  width: 100%;
+}
+
+select {
+  flex: 1;
+  padding: 0 .5em;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Arrow */
+
+.saito-select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 1em;
+  background: #55555533;
+  cursor: pointer;
+  pointer-events: none;
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}
+
+/* Transition */
+
+.saito-select:hover::after {
+  color: var(--saito-red);
+}
+
+option {
+  background: var(--saito-cyber-black);
+}
+
+.start-game-list {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.start-game-btn {
+  text-transform: capitalize;
+  margin: 3em 0;
+}
+
+.start-game {
+  background: #000;
+  padding: 1em;
+  width: 90%;
+  margin: auto;
+  margin-top: 12%;
+  opacity: 0;
+}
+
+.start-game-list .return-to-arcade {
+  cursor: pointer;
+  right: 45px;
+  top: 13%;
+}
+
+.arcade-game-list-item {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 2fr 3fr;
+  cursor: pointer;
+  border: 1px solid var(--saito-red);
+  padding: 10px;
+}
+
+.arcade-game-list-item:hover {
+  border: 1px solid var(--saito-red);
+}
+
+.arcade-game-list-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+#game-list-wrapper {
+  /* top: 5em; */
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  position: fixed;
+  height: calc(100vh);
+  overflow: auto;
+  margin: auto;
+  transition: all ease 0.5s;
+  background: #00000099;
+}
+
+.arcade-main-hero {
+  width: 100%;
+}
+
+.header {
+  background: none;
+}
+
+.header-icon-disabled {
+  color: #B8E;
+  text-shadow: #444 2px 1px, #666 3px 2px;
+}
+
+/** ARCADE INIT **/
+
+.arcade-initialize-game-container {
+  display: grid;
+  grid-gap: 1em;
+  padding: 2em;
+  font-size: 1.3em;
+}
+
+/** ARCADE INVITATION **/
+
+.arcade-invite-container {
+  grid-gap: 1em;
+  grid-template-rows: 4em 4em auto;
+  padding: 0 20%;
+  text-align: center;
+}
+
+.arcade-invite-initializer {
+  display: grid;
+  grid-template-rows: 4em 4em;
+}
+
+#invite-game-spinner {
+  margin: unset;
+  display: none;
+  justify-self: center;
+  width: 6em;
+  height: 6em;
+}
+
+/** CHAT STYLING **/
+
+.chat-row {
+  /* no border */
+  border-bottom: 0px solid var(--saito-red);
+}
+
+.chat-row:hover {
+  background-color: #33669999;
+}
+
+.chat-box {
+  background-color: var(--saito-cyber-black);
+  border: 1px solid var(--saito-red);
+}
+
+.chat-box-main {
+  background: var(--saito-nightscape);
+  color: #ffffff;
+}
+
+.chat-box-header {
+  border-bottom: 1px solid var(--saito-red);
+  background: var(--saito-jester);
+}
+
+.chat-message-others {
+  color: black;
+}
+
+.chat-box-input {
+  border-top: 1px solid var(--saito-red);
+}
+
+.chat-box-new-message-input {
+  background: var(--saito-cyber-black);
+  color: white;
+}
+
+.chat-room-submit-button {
+  color: #fff;
+}
+
+.chat-message-header {
+  color: #ffffff;
+}
+
+#alert-box {
+  background: var(--saito-nightscape);
+}
+
+/* .arcade-game-row-delete {
+  margin: 0 0 0 12px;
+} */
+
+.loader {
+  margin: 25%;
+}
+
+/* achiecvments */
+
+.badges {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: auto auto auto;
+}
+
+.share-link {
+  color: #ddd;
+}
+
+.arcade-sidebar-notices {
+  margin: 5px 0 0 0;
+}
+
+.arcade-sidebar-done, .achievments-cta {
+  align-self: center;
+}
+
+.arcade-sidebar-row {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 4em auto;
+  margin: 1em;
+}
+
+.arcade-sidebar-row i {
+  font-size: 2em;
+}
+
+.arcade-sidebar-row span {
+  font-size: 1.2em;
+}
+
+.badge {
+  border: 2px solid white;
+  border-radius: 1em;
+  display: inline-block;
+  padding: 5px 10px 2px;
+}
+
+.arcade-sidebar-row i span {
+  font-size: 0.7em;
+  line-height: 1.2em;
+  display: inline-block;
+}
+
+span.rewards-row-name {
+  align-self: center;
+}
+
+.arcade-sidebar-row span {
+  font-size: 1.2em;
+}
+
+.rewards-row-name {
+  text-align: left;
+  padding: 0 5px;
+}
+
+.game-details {
+  margin: 2em 0;
+  text-align: left;
+}
+
+.game-details label {
+  font-weight: bold;
+}
+
+#game-invite-controls div {
+  margin: 1em 0;
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 20em 1fr;
+}
+
+#game-invite-controls button {
+  width: 100%;
+}
+
+#game-publisher-message {
+  margin: 2em 1em 0;
+}

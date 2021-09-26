@@ -2,7 +2,6 @@
   display: grid;
   grid-template-columns: 6fr 1fr 2fr;
   grid-gap: 3px;
-  height: 250px;
   overflow-y: auto;
 }
 

@@ -1,5 +1,6 @@
 var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
+const DebugAppspace = require('./lib/email-appspace/debug-appspace');
 
 
 
@@ -15,7 +16,6 @@ class Debug extends ModTemplate {
 
     this.description = "A debug configuration dump for Saito";
     this.categories  = "Dev Utilities";
-
     return this;
   }
 
@@ -34,12 +34,11 @@ class Debug extends ModTemplate {
     return null;
   }
 
-  renderEmail(app, data) {
-     let DebugAppspace = require('./lib/email-appspace/debug-appspace');
-     DebugAppspace.render(app, data);
+  renderEmail(app, mod) {
+     DebugAppspace.render(app, this);
   }
 
-  attachEventsEmail(app, data) {
+  attachEventsEmail(app, mod) {
     document.querySelector('.sent-wallet').onclick = (event) => {
       console.log(app.options);
 

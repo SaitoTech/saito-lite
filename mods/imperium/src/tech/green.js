@@ -29,24 +29,23 @@
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "neural-motivator") {
+        if (tech == "dacxive-animators") {
           imperium_self.game.players_info[gainer-1].dacxive_animators = 1;
-          imperium_self.game.players_info[gainer-1].action_cards_bonus_when_issued = 1;
         }
       },
       groundCombatRoundEnd : function(imperium_self, attacker, defender, sector, planet_idx) {
         let attacker_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
         let defender_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
-	if (imperium_self.doesPlayerHaveTech(attacker, "dacxive-animators")) {
-	  if (attacker_forces > defender_forces && defender_forces == 0) {
-	   imperium_self.addPlanetaryUnit(attacker, sector, planet_idx, "infantry");
-	   imperium_self.updateLog(imperium_self.returnFaction(attacker) + " reinforces infantry with Dacxive Animators");
-	  }
-	}
+	//if (imperium_self.doesPlayerHaveTech(attacker, "dacxive-animators")) {
+	//  if (attacker_forces > defender_forces && defender_forces == 0) {
+	//    imperium_self.addPlanetaryUnit(attacker, sector, planet_idx, "infantry");
+	//    imperium_self.updateLog(imperium_self.returnFaction(attacker) + " reinforces infantry with Dacxive Animators");
+	//  }
+	//}
 	if (imperium_self.doesPlayerHaveTech(defender, "dacxive-animators")) {
 	  if (attacker_forces < defender_forces && attacker_forces == 0) {
-	   imperium_self.addPlanetaryUnit(defender, sector, planet_idx, "infantry");
-	   imperium_self.updateLog(imperium_self.returnFaction(defender) + " reinforces infantry with Dacxive Animators");
+	    imperium_self.addPlanetaryUnit(defender, sector, planet_idx, "infantry");
+	    imperium_self.updateLog(imperium_self.returnFaction(defender) + " reinforces infantry with Dacxive Animators");
 	  }
 	}
       },
@@ -66,7 +65,7 @@
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "hyper-metabolism") {
           imperium_self.game.players_info[gainer-1].hyper_metabolism = 1;
-          imperium_self.game.players_info[gainer-1].new_tokens_bonus_when_issued = 1;
+          imperium_self.game.players_info[gainer-1].new_token_bonus_when_issued = 1;
         }
       },
     });
@@ -82,7 +81,7 @@
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == undefined) {
           imperium_self.game.players_info[player-1].x89_bacterial_weapon = 0;
-          imperium_self.game.players_info[gainer-1].x89_bacterial_weapon_exhausted = 0;
+          imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted = 0;
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
@@ -106,6 +105,7 @@
       bombardmentEvent : function(imperium_self, player, bombarding_player, sector, planet_idx) {
 
 	if (imperium_self.game.player != bombarding_player) { return 0; }
+	if (imperium_self.game.player != player) { return 0; }
 
         let sys = imperium_self.returnSectorAndPlanets(sector);
         let planet = sys.p[planet_idx];
@@ -128,11 +128,11 @@
 	    // destroy 100 == destroy them all :)
 	    imperium_self.addMove("destroy_infantry_on_planet\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+"100");
             imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"x89_bacterial_weapon_exhausted"+"\t"+"int"+"\t"+"1");
-	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " uses Bacterial Weapons");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " uses X89 Bacterial Weapons");
 	    imperium_self.endTurn();
 	  }
 	  if (action2 == "skip") {
-	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " refrains from using Bacterial Weapons");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " refrains from using X89 Bacterial Weapons");
 	    imperium_self.endTurn();
 	  }
         });

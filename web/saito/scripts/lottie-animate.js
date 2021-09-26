@@ -1,14 +1,18 @@
 document.onreadystatechange = function () {
   var state = document.readyState
   if (state == 'interactive') {
+    if(document.getElementById('content')){
       document.getElementById('content').style.display="none";
+    }
   } else if (state == 'complete') {
-      setTimeout(function(){
-        document.getElementById('interactive');
-        document.getElementById('lottie').style.display="none";
+    setTimeout(function(){
+      document.getElementById('interactive');
+      document.getElementById('lottie').style.display="none";
+      if (document.getElementById('content')) {
         document.getElementById('content').style.visibility="unset";
         document.getElementById('content').style.display="unset";
-      },100);
+      }
+    },100);
   }
 }
 

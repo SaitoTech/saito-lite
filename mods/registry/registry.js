@@ -21,9 +21,6 @@ class Registry extends ModTemplate {
     //
     this.publickey = 'zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK';
 
-    this.description = "A naming service for Saito Addresses";
-    this.categories  = "Utilities Communications";
-
     return this;
   }
 
@@ -33,27 +30,31 @@ class Registry extends ModTemplate {
     services.push({ service : "registry" , domain : "saito" });
     return services;
   }
-
-/*******
-  respondTo(type) {
-    if (type == 'email-appspace') {
-      let obj = {};
-          obj.render = this.renderEmail;
-          obj.attachEvents = this.attachEventsEmail;
-      return obj;
+  
+  respondTo(type = "") {
+    if (type == "do-registry-prompt") {        
+      return {
+        doRegistryPrompt: async() => {
+          var requested_id = await sprompt("Pick a handle or nickname. <br /><sub>Alphanumeric characters only - Do not include an @</sub.>");
+          try {
+            let success = this.tryRegisterIdentifier(requested_id);
+            if (success) {
+              return requested_id;
+            } else {
+              throw "Unknown error";
+            }
+          } catch(err){
+            if(err.message == "Alphanumeric Characters only") {
+              salert("Alphanumeric Characters only"); 
+            } else {
+              throw err;
+            }
+          }
+        }
+      }
     }
     return null;
   }
-  renderEmail(app, data) {
-     data.registry = app.modules.returnModule("Registry");
-     let RegistryAppspace = require('./lib/email-appspace/registry-appspace');
-     RegistryAppspace.render(app, data);
-  }
-  attachEventsEmail(app, data) {
-     data.registry = app.modules.returnModule("Registry");
-     RegistryAppspace.attachEvents(app, data);
-  }
-*******/
 
 
   showModal() {
@@ -61,10 +62,40 @@ class Registry extends ModTemplate {
     RegistryModal.attachEvents(this.app, this);
   }
 
+  tryRegisterIdentifier(identifier, domain="@saito") {
+    
+      let newtx = this.app.wallet.createUnsignedTransaction(this.publickey, 0.0, this.app.wallet.wallet.default_fee);
+      if (newtx == null) {
+        console.log("NULL TX CREATED IN REGISTRY MODULE")
+        throw Error("NULL TX CREATED IN REGISTRY MODULE");
+      }
 
+      if (typeof identifier === 'string' || identifier instanceof String) {
+        var regex=/^[0-9A-Za-z]+$/;
+        if (!regex.test(identifier)) {
+          throw Error("Alphanumeric Characters only");
+        }
+
+        newtx.msg.module   	= "Registry";
+        //newtx.msg.request	= "register";
+        newtx.msg.identifier	= identifier + domain;
+
+        newtx = this.app.wallet.signTransaction(newtx);
+        this.app.network.propagateTransaction(newtx);
+
+        // sucessful send
+        return true;
+      } else {
+        throw TypeError("identifier must be a string");
+      }
+
+    
+  }
+
+  // DEPRECATED, USE tryRegisterIdentifier()
   registerIdentifier(identifier, domain="@saito") {
 
-    let newtx = this.app.wallet.createUnsignedTransaction(this.publickey, this.app.wallet.wallet.default_fee, this.app.wallet.wallet.default_fee);
+    let newtx = this.app.wallet.createUnsignedTransaction(this.publickey, 0.0, this.app.wallet.wallet.default_fee);
     if (newtx == null) {
       console.log("NULL TX CREATED IN REGISTRY MODULE")
       return;
@@ -75,7 +106,7 @@ class Registry extends ModTemplate {
       if (!regex.test(identifier)) { salert("Alphanumeric Characters only"); return false; }
 
       newtx.msg.module   	= "Registry";
-      newtx.msg.request	= "register";
+      //newtx.msg.request	= "register";
       newtx.msg.identifier	= identifier + domain;
 
       newtx = this.app.wallet.signTransaction(newtx);
@@ -108,15 +139,21 @@ class Registry extends ModTemplate {
 
     if (conf == 0) {
       if (txmsg.module === "Registry") {
-        if (tx.isTo(registry_self.publickey) && app.wallet.returnPublicKey() == registry_self.publickey) {
+
+	//
+	// this is to us, and we are the main registry server
+	//
+        if (tx.isTo(registry_self.publickey) && app.wallet.returnPublicKey() === registry_self.publickey) {
+
+console.log(registry_self.publickey + " -- " + app.wallet.returnPublicKey());
 
           let request = txmsg.request;
           let identifier = txmsg.identifier;
           let publickey = tx.transaction.from[0].add;
-            let unixtime = new Date().getTime();
+          let unixtime = new Date().getTime();
           let bid = blk.block.id;
           let bsh = blk.returnHash();
-            let lock_block = 0;
+          let lock_block = 0;
           let signed_message = identifier + publickey + bid + bsh;
           let sig = registry_self.app.wallet.signMessage(signed_message);
           let signer = this.publickey;
@@ -174,10 +211,16 @@ class Registry extends ModTemplate {
               let signed_message = tx.msg.signed_message;
               let sig		 = tx.msg.sig;
 
-              if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
-                registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
-                registry_self.app.modules.updateIdentifier();
-              }
+	      try {
+console.log("a");
+                if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
+console.log("b");
+                  registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
+console.log("c");
+                }
+  	      } catch (err) {
+		console.log("ERROR verifying username registration message: " + err);
+	      }
             }
           }
         }

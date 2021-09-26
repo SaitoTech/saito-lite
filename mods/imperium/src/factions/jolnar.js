@@ -2,13 +2,14 @@
     this.importFaction('faction2', {
       id		:	"faction2" ,
       name		: 	"Universities of Jol Nar",
+      nickname		: 	"Jol Nar",
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The Universities of Jol Nar have been preparing for War for decades...</div><div style="margin-top:10px">But the leadership is torn: assault New Byzantium or establish a regional power-base first?</div>`
+      intro		:	`<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Universities of Jol Nar, a physically weak faction which excells at science and technology. Survive long enough to amass enough protective technology and you can be a contender for the Imperial Throne. Good luck!</div>`
     });
 
 
@@ -89,7 +90,7 @@
 
 	      imperium_self.game.players_info[player-1].cost_of_technology_secondary = 6;
 
-              imperium_self.playerAcknowledgeNotice("The Jol Nar may expend a strategy token to research a technology, and then purchase another for 6 resources:", function() {
+              imperium_self.playerAcknowledgeNotice("The Tech strategy card has been played. You may expend a strategy token to research a technology. You can then purchase a second for 6 resources:", function() {
 
                 let html = '<p>Technology has been played. Do you wish to spend a strategy token to research a technology? </p><ul>';
                     html += '<li class="option" id="yes">Yes</li>';
@@ -112,6 +113,7 @@
 
 		  if (id === "no") {
                     imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                    imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
 		    imperium_self.endTurn();
 		    return 0;
 		  }
@@ -119,7 +121,15 @@
                   imperium_self.playerResearchTechnology(function(tech) {
 
                     imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                    imperium_self.addPublickeyConfirm(imperium_self.app.wallet.returnPublicKey(), 1);
                     imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+
+
+		    //
+		    // avoid double research of same tech by manually inserting
+		    //
+                    imperium_self.game.players_info[imperium_self.game.player-1].tech.push(tech);
+
 
 	  	    let resources_to_spend = 6;
                     let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';

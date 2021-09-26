@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Welcome to saito.io">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="The Saito Team">
+
+  <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Saito Network Suite">
+  <meta name="msapplication-navbutton-color" content="#FFFFFF">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="msapplication-starturl" content="/index.html">
+
+  <meta name="twitter:image:src" content="https://saito.io/arcade/img/dreamscape-logo.png" />
+  <meta property="twitter:url" content="https://saito.io/arcade" />
+  <meta name="twitter:site" content="Welcome to the Saito Network" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Saito Referral Link" />
+  <meta name="twitter:description" content="Saito is the most fun you will have on-chain. Earn SAITO as you play." />
+  <meta property="og:image" content="https://saito.io//saito/img/touch/pwa-512x512.png" />
+  <meta property="og:site_name" content="Welcome to Saito" />
+  <meta property="og:type" content="object" />
+  <meta property="og:title" content="Welcome to Saito" />
+  <meta property="og:url" content="https://saito.io/arcade/" />
+  <meta property="og:description" content="Saito is the most fun you will have on-chain. Earn SAITO as you play." />
+
+
+  <link rel="icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png">
+  <link rel="icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png">
+
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
+
+  <title>Saito.io</title>
+  
+  <link rel="stylesheet" href="/saito/style.css" />
+  <link rel="stylesheet" href="/website/style.css" />
+
+</head>
+
+<body>
+
+  <div class="header"><h2>Creating Your Account</h2></div>
+
+  <div class="site-main" style="margin-top:5em;display: flex;flex-flow: column;justify-content: space-around;height: calc(25vh - 5em);">
+
+   
+    <center>
+      <div><img style="width:90vw; max-width: 40em;" src="/arcade/img/dreamscape-logo.png"></div>
+    </center>
+  
+  
+  <center>
+      <div class="loader" id="game_spinner"></div>
+    </center>
+
+  </div>
+
+
+  <script type="text/javascript">
+
+setTimeout(function() {
+
+   // fetch referral string
+   let urlParams = new URLSearchParams(location.search);
+   let i = urlParams.get('i');
+   let j = decodeURIComponent(escape(atob(i)));
+   let robj = JSON.parse(j);
+
+   let data = null;
+
+   ////////////////////////////
+   // read from localStorage //
+   ////////////////////////////
+   if (typeof(Storage) !== "undefined") {
+     data = localStorage.getItem("options");
+     data = JSON.parse(data);
+   }
+
+   if (data != null) {
+     let c = confirm("You already have a Saito wallet. Do you really want to delete it and switch to using the version provided by your referrer?");
+     if (!c) { die; }
+     alert("Ok, updating your wallet!");
+     data = null;
+   }
+
+
+   //////////////////////////
+   // or fetch from server //
+   //////////////////////////
+   if (data == null) {
+
+     //
+     // jquery
+     //
+     $.ajax({
+       url: '/options',
+       dataType: 'json',
+       async: false,
+       success: (data) => {
+
+	 //
+	 // update SAITO with our bundle
+	 //
+         if (robj.bundle != "") {
+	         data.bundle = robj.bundle;
+         }
+
+	 //
+	 // add so encrypt will auto-DH
+	 //
+         if (robj.publickey != "") {
+	   data.encrypt   = {};
+           data.encrypt.pending = [];
+	   data.encrypt.pending.push(robj.publickey);
+	 }
+	
+
+	 //
+	 // save in localstorage
+	 //
+         localStorage.setItem("options", JSON.stringify(data));
+
+	 //
+	 // and redirect to Saito
+	 //
+	 window.location = "/wallet";
+
+       },
+       error: function(XMLHttpRequest, textStatus, errorThrown) {
+         console.log("ERROR loading options file from server");
+       }
+     });
+   }
+
+}, 1000);
+
+  </script>
+
+
+</body>
+</html>

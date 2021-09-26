@@ -1,0 +1,194 @@
+#subpage #content {
+    padding-top: 0;
+}
+
+.web3-page {
+    text-align: center;
+}
+
+/* Poker heading */
+.web3-heading {
+    background-image: url('gameboard.jpg');
+    background-position: center;
+    background-size: cover;
+    color: white;
+    padding: 5em 3em 1em;
+    margin-left: -15em;
+    margin-right: -15em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.web3-heading .left {
+    padding-right: 8em;
+    text-align: left;
+}
+.web3-heading .right {
+    max-width: 20em;
+}
+.web3-heading .right img {
+    display: block;
+    max-width: 100%;
+}
+.web3-heading h1,
+.web3-heading h2 {
+    font-family: 'visuelt-medium';
+    display: block;
+    margin: 0;
+    line-height: 1;
+    font-weight: normal;
+}
+.web3-heading h1 {
+    font-size: 5rem;
+}
+.web3-heading h2 {
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+.heading-poker {
+    color: var(--saito-red);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.powered-by .powered {
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.powered-logo img {
+    max-width: 120px;
+}
+
+
+
+/* Content Style */
+.page-heading {
+    color: var(--saito-red);
+    font-family: 'visuelt-medium';
+    font-size: 1.8em;
+    line-height: 1.4;
+    text-align: center;
+}
+.page-heading a {
+    color: black;
+    text-transform: uppercase;
+}
+.page-heading a:hover {
+    color: rgb(32, 30, 30);
+}
+.page-content {
+    background-color: white;
+    box-shadow: 0px 0px 59px #C9C9C945;
+    margin: 0 auto;
+    max-width: 48em;
+    padding: 2em 1.4em;
+}
+.page-content a {
+    font-weight: bold;
+}
+.page-content p {
+    margin-bottom: 2em;
+}
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.arcade-button {
+    border: 1px solid #707070;
+    border-radius: 30px;
+    box-shadow: 0px 5px 10px #00000069;
+    display: flex;
+    align-items: center;
+    margin: .5em;
+    padding: 4px 12px;
+    transform: translateY(-2px);
+    transition: all .2s ease-in-out;
+}
+.arcade-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0px 2px 6px #00000069;
+}
+.arcade-button img {
+    max-height: 22px;
+}
+.arcade-button .sep {
+    color: black;
+    font-size: 1.4em;
+    margin: 0 4px;
+    margin-top: 4px;
+}
+.arcade-button .arcade {
+    font-family: 'visuelt-medium';
+    font-weight: bold;
+    margin-top: 4px;
+}
+.button {
+    background-color: var(--saito-red);
+    border-radius: 30px;
+    box-shadow: 0px 16px 29px #BE0B0B69;
+    color: white;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin: 24px 12px;
+    padding: 8px 24px;
+    transition: all .2s ease-in-out;
+}
+.button:hover {
+    background-color: #d02035;
+    color: white;
+    transform: translateY(2px);
+    box-shadow: 0px 12px 24px #a0070769;
+}
+
+@media only screen and (max-width: 1280px) {
+    .flex {
+        display: block;
+        text-align: center;
+    }
+    .the-button {
+        display: block;
+        text-align: center;
+    }
+    .button {
+        margin-top: 0;
+    }
+    .arcade-button {
+        width: 166px;
+        margin: .8em auto;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .web3-heading {
+        margin-left: -4rem;
+        margin-right: -4rem;
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    .web3-heading .left {
+        padding-right: 4em;
+    }
+    .web3-heading .right {
+        max-width: 12em;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    .web3-heading .left {
+        padding-right: 0;
+        text-align: center;
+    }
+    .web3-heading .right {
+        display: none;
+    }
+    .page-content {
+        margin: 0 -4rem;
+    }
+}

@@ -2,14 +2,14 @@
     this.importFaction('faction1', {
       id		:	"faction1" ,
       name		: 	"Federation of Sol",
+      nickname		: 	"Sol",
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
       background	: 	"faction1.jpg",
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro		:	`<div style="font-weight:bold">Rise of the Sol Federation</div><div style="margin-top:10px">The fall of the Galactic Senate marked the end of Earth's pursuit of ex-terra appeasement policies...</div><div style="margin-top:10px">Rule of the day is swift action in pursuit of humanity's interest, as broadly defined by Earth's Governing Trifecta.</div>`
-
+      intro             :       `<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Sol Federation. a Terran faction under cellular military government. Your reinforced infantry and tactical flexibility will be important in your fight for the Imperial Throne. Good luck!</div>`
     });
  
 
@@ -29,9 +29,9 @@
 	return 0;
       },
       playersChooseStrategyCardsBeforeEvent : function(imperium_self, player) {
-	for (let i in this.game.sectors) {
+	for (let i in imperium_self.game.sectors) {
 	  if (imperium_self.doesSectorContainPlayerUnit(player, i, "flagship")) {
-	    let sec = this.game.sectors[i];
+	    let sec = imperium_self.game.sectors[i];
 	    for (let k = 0; k < sec.units[player-1].length; k++) {
 	      if (sec.units[player-1][k].type == "flagship") {
 		imperium_self.loadUnitOntoShip(player, i, k, "infantry");
@@ -52,7 +52,7 @@
 
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
-      type	:	"ability" ,
+      type	:	  "ability" ,
       text	  :	  "Drop two infantry onto any controlled planet" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].orbital_drop == undefined) {
@@ -75,7 +75,9 @@
       menuOptionTriggers:  function(imperium_self, menu, player) { 
         if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu === "main") {
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
-	    return 1;
+	    if (imperium_self.game.state.active_player_moved == 0) {
+	      return 1;
+	    }
 	  }
 	}
         return 0; 
@@ -97,7 +99,7 @@
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"strategy"+"\t"+"1");
-              imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
+              imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " orbital drops 2 infantry onto " + planet.name);
               imperium_self.endTurn();
               return 0;
             },
@@ -129,11 +131,13 @@
       faction     :       "faction1",
       replaces    :       "carrier-ii",
       unit        :       1 ,
-      type	:	"special",
+      type	  :	"special",
       text	  :	  "A more sophisticated carrier" ,
       prereqs     :       ["blue","blue"],
       initialize :       function(imperium_self, player) {
-	imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii = 0;
+        if (imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii == undefined) {
+	  imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii = 0;
+	}
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
 	imperium_self.game.players_info[gainer-1].faction1_advanced_carrier_ii = 1;
@@ -159,10 +163,10 @@
       faction     :       "faction1",
       replaces    :       "infantry-ii",
       unit        :       1 ,
-      type	:	"special",
+      type	  :  	  "special",
       text	  :	  "Battle-hardened infantry" ,
       prereqs     :       ["green","green"],
-      initialize :       function(imperium_self, player) {
+      initialize  :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_infantry_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {

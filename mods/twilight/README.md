@@ -31,4 +31,10 @@ CARDS ERRATA AND IMPLEMENTATION DETAILS:
 2. Red Purge:
   It is possible to event this card multiple times. The card does not stay out of the discard pile untilshould be possible to event this card multipletime
 
+3. Latin American Death Squads:
+  Coup bonus and penalities are applied only to coups in Central and South America, not across-the-board as in the original card text. The card text has been updated to reflect the proper implementation.
+
+4. Flower Power & Camp David
+  Camp David cancels the event Arab Israeli War, but playing the card will still cost the US 2 VP under Flower Power. The VP are issued if the card is played for OPs regardless of whether the event triggers (similar to Defectors).
+
 

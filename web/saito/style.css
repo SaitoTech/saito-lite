@@ -45,6 +45,7 @@ Generic Style Settings for Modules in the Saito App Suite
   --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
   --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
   --saito-wu: none;
+  --saito-width: 1500px;
 }
 
 * {
@@ -57,7 +58,7 @@ Generic Style Settings for Modules in the Saito App Suite
 
 html {
   --text-color-normal: var(--saito-cyber-black);
-  --backround-general: var(--saito-white);
+  --background-general: var(--saito-white);
   --text-color-highlight: var(--saito-red);
   --scrollbarBG: rgba(255, 255, 255, 0);
   --thumbBG: var(--saito-red);
@@ -65,16 +66,34 @@ html {
 
 html[data-theme='dark'] {
   --text-color-normal: var(--saito-skyline-grey);
-  --backround-general: var(--saito-cyber-black);
+  --background-general: var(--saito-cyber-black);
   --text-color-highlight: var(--saito-red);
 }
 
+.page-header {
+  margin-bottom: 1rem;
+}
+
+/* h1 */
+
+.page-title {
+  margin: 0 0 .5rem;
+}
+
+/* p */
+
+.page-subtitle {
+  margin: 0;
+  opacity: .9;
+}
+
 p {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 a {
   color: var(--saito-red);
+  scroll-margin-top: 6em;
 }
 
 a:hover {
@@ -93,12 +112,10 @@ a:hover {
   text-align: justify;
 }
 
-
 body {
-  
-  background-color: var(--backround-general);
+  background-color: var(--background-general);
   color: var(--text-color-normal);
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
   overflow: hidden;
@@ -113,12 +130,53 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--thumbBG) ;
+  background-color: var(--thumbBG);
   border-radius: 6px;
   border: 3px solid var(--scrollbarBG);
 }
 
+/* ALERt BOX */
+
+.alert-banner {
+  display: none;
+  border: 0.75rem solid #a6192e;
+  background: #fff;
+  margin-bottom: 1.6875rem;
+  width: 100%;
+  color: black;
+  min-height: 120px;
+}
+
+.alert-icon {
+  color: white;
+  width: 2em;
+  min-height: 100px;
+  text-align: center;
+  background-color: #a6192e;
+  font-weight: bold;
+  font-size: 200%;
+  padding-top: 20px;
+  padding-right: 0.3em;
+  float: left;
+}
+
+.alert-body {
+  padding: 1.125rem;
+  display: inline-block;
+}
+
+.alert-title {
+  font-weight: 800;
+  font-size: 1.5em;
+}
+
+.alert-notice {
+  font-size: 1.3em;
+  padding-top: 3px;
+}
+
 /* SAITO ANIMATION CSS */
+
 #content {
   visibility: hidden;
 }
@@ -164,6 +222,92 @@ hr {
   font-weight: bolder;
 }
 
+/* Overlay */
+
+.saito-overlay-backdrop, .game-overlay-backdrop {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #444;
+  opacity: 0.4;
+  z-index: 100;
+  min-width: 350px;
+}
+
+.saito-overlay, .game-overlay {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  z-index: 1000;
+  padding: 10px;
+}
+
+.saito-overlay-closebox {
+  display: none;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: 0px;
+  border-radius: 50%;
+  top: 0px;
+  background-color: white;
+  z-index: 100;
+}
+
+.saito-overlay-closebox-btn {
+  display: block;
+  height: 32px;
+  width: 32px;
+  color: red;
+  font-size: 31px;
+}
+
+.saito-overlay-closebox-btn:hover {
+  transform: scale(1.0);
+}
+
+.game-overlay {
+  z-index: 9010;
+}
+
+.game-overlay-backdrop {
+  z-index: 9000;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.saito-overlay-menu {
+  padding: 10px;
+  background-color: whitesmoke;
+  opacity: 0.8;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.saito-overlay-menu ul li {
+  width: 100%;
+  line-height: 3.5em;
+  border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
+  text-align: -webkit-match-parent;
+  display: list-item;
+  list-style: none;
+  padding: 0 1em;
+}
+
+.saito-overlay-menu ul li:hover {
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75), -2px -2px 5px #eee;
+  background: #0001;
+}
+
 /* Forms and Inputs */
 
 button, .button, .file-label {
@@ -198,7 +342,7 @@ button:active, .button:active, i:active {
   transform: scale(.96);
 }
 
-button:hover, .button:hover {
+button:hover, .button:hover, button:focus, .button:focus {
   text-shadow: #ffffff 1px 0;
   background: var(--saito-red);
   color: #ffffff;
@@ -281,6 +425,232 @@ button i {
   position: relative;
 }
 
+#appstore-compile-btn {
+  max-width: 150px;
+  margin-top: 30px;
+}
+
+#appstore-end-compile-btn {
+  max-width: 150px;
+  margin-top: 30px;
+}
+
+.trigger-appstore-btn {
+  font-weight: normal;
+  border-bottom: 1px dashed black;
+  cursor: pointer;
+}
+
+.appstore-bundler-install-notice {
+  font-size: 1.2em;
+  height: 300px;
+  width: 600px;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--saito-red);
+  background-color: var(--saito-cyber-black);
+  color: #fff;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
+  padding: 1em;
+  transform: translate(-50%, -50%);
+}
+
+.appstore-app-install-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #0009;
+  width: 100%;
+  height: 100%;
+  font-size: 1.1em;
+  z-index: 10000;
+}
+
+.appstore-app-install-content {
+  width: 80%;
+  max-width: 800px;
+  min-width: 400px;
+  padding: 1em;
+  color: var(--saito-white);
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
+  line-height: 1.5em;
+  background-color: var(--saito-cyber-black);
+  margin: auto;
+  position: relative;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 3fr;
+}
+
+.appstore-app-install-version {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 90%;
+  white-space: nowrap;
+}
+
+.appstore-app-install-publickey {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 90%;
+  white-space: nowrap;
+}
+
+.appstore-app-install-image img {
+  width: 250px;
+}
+
+.appstore-app-istall-details.grid-2 {
+  grid-gap: 0.5em;
+  margin: 0;
+}
+
+.appstore-app-istall-details.grid-2 div {
+  padding: 0;
+  margin: 0;
+}
+
+.appstore-app-install-name {
+  position: absolute;
+  z-index: 5;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 2px #000;
+}
+
+.appstore-app-install-image {
+  position: relative;
+}
+
+.appstore-app-install-description {
+  height: 3em;
+  overflow-y: auto;
+  margin: 0 0 1em 0;
+}
+
+#appstore-search-box {
+  width: 200px;
+  float: right;
+  font-size: 1em;
+  padding: 4px;
+  max-width: 200px;
+}
+
+.appstore-overlay-developers {
+  font-size: 1.2em;
+  bottom: 1em;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+}
+
+.appstore-overlay-developers:hover {
+  font-weight: bold;
+  cursor: pointer;
+  ;
+}
+
+.appstore-overlay-container {
+  background-color: whitesmoke;
+  width: 80vw;
+  height: 80vh;
+  padding: 20px;
+  overflow-y: scroll;
+}
+
+.appstore-overlay-grid {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.appstore-overlay-app {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 2fr 3fr;
+  cursor: pointer;
+  border: 1px solid var(--saito-red);
+  font-size: 20px;
+  padding: 10px;
+  background-color: whitesmoke;
+  color: #444;
+  height: 90px;
+  min-height: 90px;
+}
+
+.appstore-overlay-app:hover {
+  background-color: var(--saito-red);
+  color: whitesmoke;
+}
+
+.appstore-overlay-app-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  max-height: 70px;
+}
+
+.appstore-overlay-app-details {
+  font-size: 1em;
+}
+
+.appstore-overlay-app-title {
+  font-weight: bold;
+}
+
+.appstore-overlay-app-type {
+  font-size: 0.9em;
+}
+
+.appstore-overlay-app-btn {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 14px;
+  visibility: hidden;
+}
+
+.appstore-overlay-app-btn:hover {
+  visibility: visible;
+}
+
+.appstore-overlay-app-author {
+  margin-top: 10px;
+  font-size: 0.8em;
+}
+
+.appstore-overlay-searchbox {
+  max-width: 300px;
+  float: right;
+  font-size: 0.5em;
+}
+
+.appstore-header-featured {
+  height: 3em;
+  min-height: 2em;
+}
+
+.appstore-overlay-searchbox {
+  font-size: 0.8em;
+  padding: 4px;
+}
+
+.appstore-header-title {
+  font-size: 1.4em;
+  padding: 4px;
+}
+
 .app-category-all {
   margin: 0 1em;
 }
@@ -349,6 +719,12 @@ button i {
   transform: rotate(45deg);
 }
 
+/*--- Chat ---*/
+
+.chat-message p {
+  margin-bottom: 10px;
+}
+
 /*--------------------------*/
 
 fieldset {
@@ -378,8 +754,8 @@ fieldset {
   font-family: visuelt-medium;
   text-transform: capitalize;
   padding: 10px 0;
-    font-size: 20px;
-    line-height: 38px;
+  font-size: 20px;
+  line-height: 38px;
 }
 
 .grid-4 div, .grid-2 div {
@@ -438,7 +814,7 @@ fieldset {
 }
 
 #navigator {
-  display: none;
+  display: inline-block;
 }
 
 input {
@@ -481,6 +857,10 @@ input[type=text], input[type=number], input[type=password], input[type=date] {
   border-bottom: 1px solid var(--saito-cyber-black-wash);
 }
 
+.password {
+  font-family: p-word;
+}
+
 input[type=file] {
   border: none;
   width: 0.1px;
@@ -502,9 +882,12 @@ input[type=text].red-bottom-border {
 /* way too much stuff to clean up range sliders */
 
 input[type=range] {
-  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-  width: 100%; /* Specific width is required for Firefox. */
-  background: transparent; /* Otherwise white in Chrome */
+  -webkit-appearance: none;
+  /* Hides the slider so that custom slider can be made */
+  width: 100%;
+  /* Specific width is required for Firefox. */
+  background: transparent;
+  /* Otherwise white in Chrome */
   border: 1px solid var(--saito-red);
   padding: 3px;
   border-radius: 5px;
@@ -515,15 +898,15 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 input[type=range]:focus {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+  outline: none;
+  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
 }
 
 input[type=range]::-ms-track {
   width: 100%;
   cursor: pointer;
-
   /* Hides the slider so custom styles can be added */
-  background: transparent; 
+  background: transparent;
   border-color: transparent;
   color: transparent;
 }
@@ -535,12 +918,14 @@ input[type=range]::-webkit-slider-thumb {
   width: 8px;
   border-radius: 3px;
   cursor: pointer;
-  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  margin-top: -14px;
+  /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
   border: 1px solid var(--saito-red);
   margin: 0;
 }
 
 /* All the same stuff for Firefox */
+
 input[type=range]::-moz-range-thumb {
   background-color: var(--saito-red);
   height: 16px;
@@ -548,12 +933,7 @@ input[type=range]::-moz-range-thumb {
   border-radius: 3px;
   cursor: pointer;
   border: 1px solid var(--saito-red);
-
 }
-
-
-
-
 
 select {
   -webkit-appearance: none;
@@ -681,7 +1061,7 @@ label.treated {
 }
 
 #alert-box p {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   font-size: 1.4em;
   text-align: center;
   align-self: center;
@@ -701,6 +1081,7 @@ div#message-wrapper {
   bottom: 1em;
   left: 1em;
   color: #FFF;
+  z-index: 200;
 }
 
 .promptval {
@@ -714,19 +1095,17 @@ div#message-wrapper {
   transform: translateX(-50%) translateY(-50%);
   border: 3px solid var(--saito-red);
   border-radius: 2px;
-  padding: 1em;
-  background-color: #eee;
+  padding: 0.1em;
+  /* background-color: #eee; */
   max-width: 90%;
-    max-height: 90%;
+  max-height: 90%;
 }
 
 .img-prev {
   max-width: 90%;
   max-height: 80vh;
   box-shadow: 0 0 3px 1px #8888;
-
 }
-
 
 .top-0 {
   top: 0 !important;
@@ -735,7 +1114,6 @@ div#message-wrapper {
 /* Page Sections */
 
 .header {
-  display: grid;
   height: 5em;
   padding: 0 1em;
   background-image: url(/saito/img/dreamscape.png);
@@ -748,31 +1126,125 @@ div#message-wrapper {
   z-index: 1;
 }
 
-.header h2 {
-  color: #fff;
-  font-family: visuelt-light;
-  line-height: 60px;
+.header-wrapper {
+  display: grid;
+  width: 100%;
+  max-width: var(--saito-width);
+  margin: auto;
+  grid-template-columns: 12em auto;
+  align-items: center;
+  height: 100%;
+  padding: 0 1.1em;
 }
 
-.header h2:after {
-  overflow: hidden;
-  display: inline-block;
-  vertical-align: bottom;
-  animation: ellipsis steps(4,end) 1200ms infinite;
-  content: "\2026"; /* ascii code for the ellipsis character */
-  width: 0px;
+.header-balance {
+  font-weight: normal;
+  margin: 0 3px 0 0;
 }
 
-@keyframes ellipsis {
-  to {
-    width: 1em;    
+.header-token {
+  font-weight: normal;
+}
+
+#header-token-select {
+  max-width: 11.5em;
+  padding: 5px;
+  border-bottom: 1px solid #888 !important;
+  margin: 5px 0;
+}
+
+.pulsey {
+  animation-delay: 2s;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: 5;
+  animation-name: pulsey;
+}
+
+.account-info .saito-select::after {
+  background-color: #fff0;
+}
+
+@keyframes pulsey {
+  0% {
+    color: #000;
+    text-decoration-color: var(--saito-red);
+  }
+  50% {
+    text-decoration: underline 2px var(--saito-red);
+  }
+  100% {
+    color: #000;
+    text-decoration-color: var(--saito-red);
   }
 }
 
+.personal-info .saito-select {
+  width: 14em;
+}
+
+.header-dropdown {
+  border: solid 1px;
+  padding: 0em 0.4em;
+  height: 1.35em;
+}
+
+.header-mini-wallet {
+  padding: 0.5em 0 0 0;
+  height: 1.7em;
+  color: white;
+  margin: 0 1em 0 0;
+  cursor: pointer;
+}
+
+.header-profile-photo {
+  height: 75px;
+  width: 75px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 0px 1px 1px rgba(170, 170, 170, 0.75);
+}
+
+.header-token {
+  padding-left: 0em;
+  height: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.header-balance {
+  padding-left: 0em;
+  height: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.header-username {
+  width: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-public-key {
+  width: 275px;
+  margin: 0 9em 0 0;
+}
+
+.header-mini-wallet .header-profile-photo {}
+
+.header-mini-wallet .header-balance {}
+
+.header-mini-wallet .header-username {}
+
+.header-mini-wallet .header-icon {}
+
+/*
 .header-home {
   grid-template-columns: 12em auto;
   align-items: center;
 }
+*/
 
 .header-icon {
   color: white;
@@ -780,17 +1252,24 @@ div#message-wrapper {
   justify-self: end;
   text-shadow: #333 1px 0;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .header-icon-links {
-  text-align: right;
-  height: 44px;
-  padding-top: 10px;
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .header-icon-links i {
-  margin-left: 25px;
+  margin-left: 0px;
   font-size: 1.7em;
+}
+
+.header-icon-disabled {
+  color: #ddd;
+  text-shadow: #444 1px 2px, #aaa 3px 2px;
 }
 
 .header-dropdown {
@@ -800,7 +1279,7 @@ div#message-wrapper {
   top: 83px;
   color: var(--text-color-normal);
   padding: 15px;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   border: 1px solid var( --saito-cyber-black-wash);
   border-radius: 5px 0 0 5px;
   width: 250px;
@@ -848,22 +1327,22 @@ div#message-wrapper {
   min-width: 40px;
 }
 
-.profile-photo {
-  height: 75px;
-  width: 75px;
-  box-shadow: 0px 0px 3px 1px rgba(170, 170, 170, 0.75);
-}
-
 .profile-register-link {
   font-style: italic;
-  pointer: cursor;
+  cursor: pointer;
   width: 250px;
   padding: 5px 0px 2px 0px;
 }
 
 .account-info {
-  display: grid;
-  grid-gap: 0em;
+  display: flex;
+  flex-flow: wrap;
+}
+
+.account-info .saito-select {
+  border: 0px;
+  color: #333;
+  background-color: #fff;
 }
 
 .account-info div {
@@ -876,7 +1355,7 @@ div#message-wrapper {
   width: 100%;
   font-size: 0.9em;
   zoom: 1;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 12px 0 8px 0;
   margin: 0px;
 }
@@ -951,7 +1430,7 @@ div#message-wrapper {
 .main {
   display: grid;
   grid-gap: 1.5em;
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 1em;
   /* margin: 1em; */
   scrollbar-width: none;
@@ -981,7 +1460,6 @@ div#message-wrapper {
 }
 */
 
-
 .container {
   display: grid;
   grid-gap: 1em;
@@ -1009,7 +1487,7 @@ div#message-wrapper {
 }
 
 .wallet-container {
-  font-family: 'visuelt-light';
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
 }
 
 .wallet-container-row {
@@ -1123,9 +1601,7 @@ div#message-wrapper {
 
 .loader {
   border: 16px solid var(--saito-skyline-grey);
-  /* Light grey */
   border-top: 16px solid var(--saito-red);
-  /* Blue */
   border-radius: 50%;
   animation: spin 1.5s linear infinite;
   width: 5em;
@@ -1155,6 +1631,9 @@ div#message-wrapper {
 
 @media only screen and (max-width: 600px) {
   .header-icon-fullscreen {
+    display: none;
+  }
+  .header-username {
     display: none;
   }
   #navigator {
@@ -1190,6 +1669,27 @@ div#message-wrapper {
   .header h2 {
     font-size: 1em;
   }
+  .header-wrapper {
+    padding: 0 3px;
+    grid-template-columns: 5em auto;
+  }
+  .logo {
+    height: 2.5em;
+  }
+  .header-mini-wallet {
+    width: 50vw;
+    margin: 0 3px 0 0;
+    text-align: right;
+    padding-right: 8px;
+  }
+  .header-username {
+    width: 40vw;
+    white-space: nowrap;
+  }
+  .header-icon-links {
+    align-items: start;
+    height: 3em;
+  }
 }
 
 /* modals */
@@ -1197,19 +1697,28 @@ div#message-wrapper {
 .welcome-modal-wrapper {
   display: grid;
   grid-template-columns: 6fr 1fr;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   background-image: url(/saito/img/dreamscape.png);
   background-position: 0em;
   background-size: cover;
+  width: 80vw;
 }
 
 .welcome-invite-box {
-  display: block;
-  float: left;
   min-width: 200px;
   min-height: 120px;
+  max-width: 325px;
   padding: 10px;
-  border: 1px solid #444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  border: 1px solid;
+  margin: 1em;
+}
+
+.welcome-invite-box i {
+  margin: 1em;
 }
 
 .welcome-modal-exit {
@@ -1283,7 +1792,7 @@ div#message-wrapper {
     width: 100%;
   }
   .welcome-modal-exit .fa-arrow-right {
-    font-size: 100px;
+    font-size: 80px;
     bottom: 2px;
   }
   .welcome-modal-action {
@@ -1291,6 +1800,12 @@ div#message-wrapper {
   }
   i.fas.fa-arrow-right {
     right: -1em;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .saito-overlay {
+    width: 95vw;
   }
 }
 

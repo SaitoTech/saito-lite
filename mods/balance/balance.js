@@ -194,7 +194,7 @@ class Balance extends ModTemplate {
         await db.run(sql2_4, {});
 
       }
-    }
+  }
 
     //
     // handle staking transactions

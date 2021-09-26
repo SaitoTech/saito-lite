@@ -1,9 +1,12 @@
 
+/*****
     this.importActionCard('confusing-legal-text', {
   	name : "Confusing Legal Text" ,
   	type : "post_agenda" ,
   	text : "After the speaker has cast his votes, pick another player to win if you are the leading candidate" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+//	    imperium_self.game.state.votes_cast[bribing_player-1].votes += goods_spent;
 
 	  if (imperium_self.agenda_cards[card].elect === "player") {
 
@@ -66,6 +69,8 @@
 	  return 1;
 	}
     });
+****/
+
 
     this.importActionCard('distinguished-councillor', {
   	name : "Distinguished Coucillor" ,
@@ -85,15 +90,20 @@
     this.importActionCard('bribery', {
   	name : "Bribery" ,
   	type : "post_agenda" ,
-  	text : "After the speaker has cast his vote, spend any number of trade goods to purchase the same number of additional voutes" ,
+  	text : "After the speaker has cast his vote, spend any number of trade goods to purchase additional votes" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
 	    let html  = '<div class="sf-readable">Spend any number of trade goods to purchase additional votes: </div><ul>';
-	    for (let i = 0; i < imperium_self.game.players_info[action_card_player-1].goods+1; i++) {
-	      if (i == 1) { html   += '<li class="textchoice">'+i+' vote</li>'; }
-	      else { html   += '<li class="textchoice">'+i+' votes</li>'; }
-	    }
+	    if (imperium_self.game.players_info[action_card_player-1].goods > 0) {
+	      html   += '<li class="textchoice" id="0">0 votes</li>';
+	      for (let i = 1; i <= imperium_self.game.players_info[action_card_player-1].goods+1; i++) {
+	        if (i == 1) { html   += '<li class="textchoice" id="1">'+i+' vote</li>'; }
+	        else { html   += '<li class="textchoice" id="'+i+'">'+i+' votes</li>'; }
+	      }
+	    } else {
+	      html   += '<li class="textchoice" id="0">0 votes</li>';
+            }
 	    html += '</ul>';
 
 	    imperium_self.updateStatus(html);

@@ -1,0 +1,160 @@
+.game-menu {
+  width: 420px;
+}
+
+body {
+  background-image: url(/settlers/img/background2.jpg);
+  background-size: cover;
+}
+
+
+.hud-body {
+  overflow: unset;
+}
+
+.textchoice {
+  background-color: whitesmoke;
+}
+
+.card {
+  width: 150px;
+}
+.startmove {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.game-hexgrid-cities {
+  position: absolute;
+}
+
+.hover:hover {
+  border: 1px solid white;
+}
+
+.road {
+  position: absolute;
+  display: block;
+  width: 150px;
+  height: 30px;
+  background-color: transparent;
+/*  background-image: url('/settlers/img/sectors/road1.png'); */
+  z-index: 5892351;
+}
+
+
+
+
+.city {
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  z-index: 5892350;
+}
+
+.sector_value {
+  position: absolute;
+  font-size: 4em;
+  z-index: 99;
+  font-weight: bold;
+  border: 1px solid #fff;
+  padding: 20px;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  line-height: 1.5em;
+  text-align: center;
+  background: #444a;
+  color: white;
+  font-weight: bold;
+}
+
+.p1, .p2, .p3, .p4, .p5, .p6 {
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  left: unset;
+  transform: unset;
+  width: unset;
+  overflow-y: unset;
+}
+.p1 {
+  background-color: red;
+}
+.p2 {
+  background-color: blue;
+}
+.p3 {
+  background-color: green;
+}
+.p4 {
+  background-color: orange;
+}
+
+.city.p1 {
+  border: 10px solid red;
+  background-color: white;
+  color: red;
+  text-align: center;
+  z-index:9999999;
+  font-size: 100px;
+  padding-top: 8px;
+}
+.city.p2 {
+  border: 10px solid blue;
+  background-color: white;
+  color: blue;
+  text-align: center;
+  z-index:9999999;
+  font-size: 100px;
+  padding-top: 8px;
+}
+.city.p3 {
+  border: 10px solid green;
+  background-color: white;
+  color: green;
+  text-align: center;
+  z-index:9999999;
+  font-size: 100px;
+  padding-top: 8px;
+}
+.city.p4 {
+  border: 10px solid orange;
+  background-color: white;
+  color: orange;
+  text-align: center;
+  z-index:9999999;
+  font-size: 100px;
+  padding-top: 8px;
+}
+
+.trade_overlay {
+  background-color: whitesmoke;
+  padding: 25px;
+  font-size: 1.25em;
+  width: 50vw;
+}
+
+.trade_overlay_offers {
+  clear: both;
+}
+
+.trade_overlay_buttons {
+  clear: both;
+}
+
+.trade_overlay_button {
+  float: left;
+}
+
+.trade_button {
+  float: left;
+  width: 70px;
+  height: 90px;
+  position: relative;
+}
+
+
+

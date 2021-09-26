@@ -1,0 +1,49 @@
+/* This has been copied from saito/style.css for the homepage.
+ * I could not easily remove it from style.css because saito/style.css
+ * is referenced in many places and I using @import may not be widely supported */
+ /* TODO: Don't repeat this code here and in style.css as well... */
+#alert-shim {
+  z-index: 2000;
+  background-color: #0008;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+#alert-box {
+  width: 75vw;
+  max-width: 700px;
+  transition: all 333ms ease-in-out;
+  background: rgb(234, 234, 239);
+  margin: auto;
+  position: relative;
+  top: -500px;
+  border: 1px solid var(--saito-red);
+  border-radius: 0 0 5px 5px;
+  padding: 1em 1em 3.5em 1em;
+}
+
+#alert-buttons {
+  float: right;
+  margin: 0 0 0 1em;
+}
+
+#alert-box button {
+  margin: 0 0 0 1em;
+}
+
+#alert-ok {
+  margin: 0 0 0 1em;
+}
+
+#alert-box p {
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
+  font-size: 1.4em;
+  text-align: center;
+  align-self: center;
+  font-weight: bold;
+  display: block;
+  margin: 1em 0;
+  overflow-wrap: break-word;
+}

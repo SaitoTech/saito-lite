@@ -25,59 +25,50 @@ respondTo(type) {
 /////////////////
 /// HUD MENUS ///
 /////////////////
-menuItems() {
-  return {
-    'game.sectors': {
-      name: 'Status',
-      callback: this.handleSystemsMenuItem.bind(this)
-    },
-/***
-    'game-player': {
-      name: 'Laws',
-      callback: this.handleLawsMenuItem.bind(this)
-    },
-    'game-tech': {
-      name: 'Tech',
-      callback: this.handleTechMenuItem.bind(this)
-    },
-***/
-    'game-strategy': {
-      name: 'Strategy',
-      callback: this.handleStrategyMenuItem.bind(this)
-    },
-    'game-objectives': {
-      name: 'VP',
-      callback: this.handleObjectivesMenuItem.bind(this)
-    },
-    'board-info': {
-      name: 'Info',
-      callback: this.handleInfoMenuItem.bind(this)
-    },
-  }
-}
-
-
 hideOverlays() {
   document.querySelectorAll('.overlay').forEach(el => {
     el.classList.add('hidden');
   });
 }
 
+handleMovementMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnMovementOverlay());
+}
+handleCombatMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnCombatOverlay());
+}
+handleFactionMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnFactionOverlay());
+}
+handleHowToPlayMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnHowToPlayOverlay());
+}
+handleHowToPlayMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnHowToPlayOverlay());
+}
 handleTechMenuItem() {
-  this.hideOverlays();
-  $('.tech_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnTechOverlay());
 }
 
+handleAgendasMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnAgendasOverlay());
+}
+handleLawsMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnLawsOverlay());
+}
+handleUnitsMenuItem() {
+  this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
+  let imperium_self = this;
+  $('#close-units-btn').on('click', function() {
+    imperium_self.overlay.hideOverlay();
+  });
+}
 handleStrategyMenuItem() {
-  this.hideOverlays();
-  $('.strategy_overlay').html(this.returnStrategyOverlay());
-  $('.strategy_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnStrategyOverlay());
 }
 
 handleObjectivesMenuItem() {
-  this.hideOverlays();
-  $('.objectives_overlay').html(this.returnObjectivesOverlay());
-  $('.objectives_overlay').removeClass("hidden");
+  this.overlay.showOverlay(this.app, this, this.returnObjectivesOverlay());
 }
 
 handleInfoMenuItem() {
@@ -121,11 +112,4 @@ handleSystemsMenuItem() {
 
 
 
-handleLawsMenuItem() {
-
-  this.hideOverlays();
-  $('.laws_overlay').html(this.returnLawsOverlay());
-  $('.laws_overlay').removeClass("hidden");
-
-}
 

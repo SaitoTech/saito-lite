@@ -1,0 +1,496 @@
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden; 
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
+
+.game-menu {
+  min-width: 300px;
+  width: 300px;
+}
+.main {
+  margin-top: unset;
+  padding: unset;
+}
+
+.gameboard {
+  position: absolute;
+  background-image: url("img/gameboard.jpg");
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.status {
+  position: absolute;
+  bottom: 1vh;
+  left: 54vw;
+  height: 32vh;
+  width: 32vh !important;
+  color: #fff;
+  background-color: #4448;
+  overflow-y: auto;
+  border: none;
+  font-size: large;
+  z-index: 1;
+}
+
+.menu-player {
+  font-size: 1.1em;
+}
+
+.menu-table {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.hand {
+  margin-left: auto;
+  margin-right: auto;
+  clear: both;
+  position: relative;
+}
+
+.card {
+  width: unset;
+  float: none;
+}
+
+.deal .card {
+  width: 8vw;
+  max-width: 15vh;
+}
+
+.deal {
+  margin: 0 auto;
+  position: absolute;
+  top: 25vh;
+  left: 50vw;
+  transform: translateX(-50%);
+  width: unset;
+}
+
+.pot {
+  margin: 0 auto;
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  transform: translateX(-50%);
+  font-size: 10vh;
+  text-shadow: 0 0 5px #FFF;
+  -webkit-text-stroke: 2px #EEEA;
+}
+
+.player-info {
+  width: 25vh;
+  height: 20vh;
+  background-color: #4448;
+  color: #fff;
+  padding: 1em;
+  position: absolute;
+}
+
+.player-info.p1 {
+  min-width: 30vh;
+  height: 32vh;
+  bottom: 1vh;
+  left: 43vw;
+  transform: translateX(-50%);
+  width: 16vw;
+}
+
+.player-info-name {
+  font-size: 3vh;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-info-chips {
+  padding: 0.5em;
+  text-align: center;
+  font-size: 3vh;
+}
+
+.player-info.p6 {
+  left: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.player-info.p5 {
+  left: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.player-info.p4 {
+  left: 50vw;
+  top: 1em;
+  transform: translateX(-50%);
+}
+
+.player-info.p3 {
+  right: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.player-info.p2 {
+  right: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.p1 .hand {
+  display: none;
+}
+
+.p4 .hand, .p3 .hand, .p2 .hand {
+  right: 15vh;
+  top: 2vh;
+}
+
+.p5 .hand, .p6 .hand {
+  left: 24vh;
+  top: 2vh;
+}
+
+.player-info-hand .card {
+  width: 10vh;
+  position: absolute;
+}
+
+.cardfan {
+  position: absolute;
+  top: 70vh;
+  left: 20vw;
+}
+
+.cardfan .card {
+  position: absolute;
+  width: 15vh;
+}
+
+/* .card:nth-child(1n+2) {
+  left: -130px;
+} */
+
+.cardfan>.card:nth-child(1) {
+  transform: rotate(-20deg);
+  left: 0px;
+}
+
+.cardfan>.card:nth-child(2) {
+  transform: rotate(-10deg);
+  left: 3vh;
+}
+
+.cardfan>.card:nth-child(3) {
+  transform: rotate(0deg);
+  left: 6vh;
+}
+
+.cardfan>.card:nth-child(4) {
+  transform: rotate(10deg);
+  left: 9vh;
+}
+
+.cardfan>.card:nth-child(5) {
+  transform: rotate(20deg);
+  left: 12vh;
+}
+
+.hand>.card:nth-child(1) {
+  transform: rotate(-20deg);
+  left: 0px;
+}
+
+.hand>.card:nth-child(2) {
+  transform: rotate(-10deg);
+  left: 2vh;
+}
+
+.hand>.card:nth-child(3) {
+  transform: rotate(0deg);
+  left: 4vh;
+}
+
+.hand>.card:nth-child(4) {
+  transform: rotate(10deg);
+  left: 6vh;
+}
+
+.hand>.card:nth-child(5) {
+  transform: rotate(20deg);
+  left: 8vh;
+}
+
+.suit {
+  font-size: larger;
+}
+
+.htmlCard {
+  margin: 5px 3px;
+  display: inline-block;
+  background: #fffD;
+  padding: 4px 3px;
+  border-radius: 6px;
+}
+
+.chat-box {
+  max-height: 30vh !important;
+}
+
+/* .chat-box-main {
+  max-height: 20vh !important;
+} */
+
+.hud {
+  display: none;
+}
+
+.status ul li:hover {
+  background: #ccc3;
+}
+
+/***
+.log {
+  color: #fff;
+  background: transparent;
+  font-size: xlarge;
+  height: 23vh;
+  overflow-y: auto;
+}
+
+#log {
+  font-size: 1.5em;
+  height: 18vh;
+  overflow-y: auto;
+}
+***/
+
+.player-info-log {
+  font-size: 2vh;
+  text-align: center;
+  border: 1px solid #aaaa;
+}
+
+.menu-player {
+  font-size: 2vh;
+  font-weight: bolder;
+}
+
+.smallblind::before {
+  content: "◉";
+  margin-right: 0.5em;
+  color: aqua;
+  -webkit-text-stroke: 1px #444;
+}
+
+.bigblind::before {
+  content: "◉";
+  margin-right: 0.5em;
+  color: yellow;
+  -webkit-text-stroke: 1px #444;
+}
+
+.dealerbutton::before {
+  content: "⬤";
+  margin-right: 0.5em;
+  color: #fff;;
+  -webkit-text-stroke: 1px #444;
+}
+
+.shim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #222b;
+  z-index: 101;
+  cursor: pointer;
+}
+
+.shim-notice {
+  background: #222b;
+  position: absolute;
+  top: 50vh;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  left: 50vw;
+  padding: 5vh;
+}
+
+.hidden {
+  display: none;
+}
+
+.shim-notice .card {
+  width: 5vw;
+  max-width: 8vh;
+  min-width: 60px;
+}
+
+/**
+#log h2 {
+  font-size: larger;
+  margin: 8px 0 0px 0;
+}
+**/
+
+
+@media all and (max-aspect-ratio:13/9) {
+
+  .game-menu {
+    min-width: 220px;
+    width: 220px;
+  }
+  .deal .card {
+    width: 18vw;
+    max-width: 9vh;
+  }
+  .deal {
+    position: absolute;
+    top: calc(20vh + 4em);
+    left: 50vw;
+    transform: translateX(-50%);
+    width: 92vw;
+    max-width: 45vh;
+    margin: 0 auto;
+  }
+  .pot {
+    top: calc(19vh + 4em);
+    font-size: 6vh;
+  }
+  .player-info-hand .card {
+    width: 4vh;
+  }
+  .cardfan {
+    position: absolute;
+    top: calc(42vh + 4em);
+    left: 40vw;
+    padding: unset;
+    width: 14vh;
+    margin: auto;
+    height: unset;
+  }
+  .cardfan .card {
+    width: 10vh;
+  }
+  .p4 .hand, .p5 .hand, .p3 .hand {
+    right: 3vh;
+    left: unset;
+    top: 9vh;
+  }
+  .p6 .hand {
+    right: -3vw;
+    left: unset;
+    top: -9vh;
+  }
+  .p2 .hand {
+    right: -3vw;
+    top: -9vh;
+  }
+  .player-info {
+    width: 25vw;
+    height: 12vh;
+    background-color: #4448;
+    color: #fff;
+    padding: 1em;
+    position: absolute;
+  }
+  .player-info.p1 {
+    width: 24vw;
+    height: calc(43vh -4em);
+    bottom: 0;
+    left: unset;
+    right: 25vw;
+    transform: none;
+    min-width: unset;
+  }
+  .player-info-name {
+    font-size: 1.75vh;
+    text-align: center;
+  }
+  .player-info-log {
+    font-size: 1.5vh;
+  }
+  .player-info-chips {
+    padding: 0.5em;
+    text-align: center;
+    font-size: 2.5vh;
+    /*font-size: 14px;*/
+  }
+  .player-info.p4 {
+    left: 50vw;
+    top: 5em;
+    transform: translateX(-50%);
+  }
+  .player-info.p5 {
+    left: 1em;
+    top: 5em;
+    transform: none;
+  }
+  .player-info.p3 {
+    right: 1em;
+    top: 5em;
+    transform: none;
+  }
+  .player-info.p6 {
+    left: 1em;
+    top: 42vh;
+    transform: translateY(-50%);
+  }
+  .player-info.p2 {
+    right: 1em;
+    top: 42vh;
+    transform: translateY(-50%);
+  }
+  .status {
+    width: 24vw !important;
+    position: absolute;
+    bottom: 0;
+    left: 25vw;
+    height: calc(43vh -4em);
+    background-color: #4448;
+  }
+/**
+  #log {
+    height: 34vh;
+  }
+**/
+}
+
+@media only screen and (max-width: 750px) {
+  .status {
+    width: 50vw !important;
+    left: 0px;
+  }
+  .player-info.p1 {
+    width: 50vw;
+    right: 0;
+    left: unset;
+    transform: unset;
+  }
+/*
+  .log {
+    font-size: smaller;
+  }
+*/
+  .player-info-name {
+    font-size: 4vw;
+  }
+  .player-info-chips {
+    font-size: 3vw;
+  }
+}

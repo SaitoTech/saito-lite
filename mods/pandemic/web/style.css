@@ -1,12 +1,56 @@
 
+
+
+.status-icon-menu {
+
+}
+
+.status-message {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.menu_icon_icon {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.epidemic_overlay {
+  display: block;
+  width: 70vw;
+  height: 70vh;
+  background-color: whitesmoke;
+  text-align: center;
+}
+.welcome_overlay {
+  display: block;
+  width: 70vw;
+  height: 70vh;
+  background-color: whitesmoke;
+  text-align: center;
+}
+
+
 .hud {
-  z-index: 200000;
+
 }
-.hud-menu {
-  display: none;
+.hud-body {
+  overflow-x: hidden;
 }
 
-
+.display-cards {
+  width: 80vw;
+  height: 80vh;
+  overflow-y: scroll;
+}
+.display-cards .cardbox-hud {
+  position: relative;
+  float: left;
+  width: 20vw;
+  height: auto;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
 
 .vial {
   position: absolute;
@@ -14,31 +58,6 @@
   width: 82px;
   height: 102px;
 }
-.role_cards {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-.active_role_card {
-  float:left;
-  width: 243px;
-  height: 343px;
-}
-.role_card {
-  float:left;
-  width: 243px;
-  height: 343px;
-}
-.player1_role_card {
-}
-.player2_role_card {
-}
-.player3_role_card {
-}
-.player4_role_card {
-}
-
-
 .vial_yellow {
   background-image: url("/pandemic/img/Vial%20Yellow.png");
 }
@@ -91,22 +110,6 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-
-
-.cardbox-hud {
-  display: block;
-  width: calc(7.0em * 0.7211);
-  height: 7.0em;
-  z-index: 2;
-  transform: translate(0%, 0%);
-
-  justify-self: center;
-}
-
-.cardbox-hud-status {
-  margin-top: 0;
-}
-
 
 .cardbox_menu {
   position: absolute;
@@ -161,6 +164,30 @@
 
 
 
+.acknowledge-message {
+  background: whitesmoke;
+  display: inline-block;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.achnowledge-message:hover {
+  font-weight: bold;
+}
+.acknowledge_message ul {
+  width: 100%;
+  display: table;
+}
+.status ul #confirmit {
+  background-color: whitesmoke;
+  border-radius: 10px;
+  margin-top: 10px;
+  width: 500px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
 
 
 
@@ -172,7 +199,7 @@
 
 body {
  font-family: arial, helvetica, sans-serif;
- font-size: 1.4em;
+ font-size: 1.1em;
  padding:0px;
  margin:0px;
 }
@@ -189,20 +216,19 @@ body {
   position: absolute;
   width: 32px;
   height: 44px;
-  /* too small -- double it */
-  width: 48px;
-  height: 66px;
+  width: 72px;
+  height: 100px;
   top: 50px;
   background-size: cover;
-  z-index: 9000;
+  z-index: 30;
 }
 .research_station {
   position: absolute;
   background-image: url("/pandemic/img/Marker%20Research%20Station.png");
   background-size: cover;
-  width: 45px;
-  height: 51px;
-  z-index: 1000;
+  width: 90px;
+  height: 102px;
+  z-index: 29;
 }
 .research_station1 {
  display: none;
@@ -271,20 +297,51 @@ body {
   height: 243px;
 }
 .gameboard {
-  position: absolute;
   background-image: url("/pandemic/img/Board.jpg");
   background-size: cover;
   width: 2602px;
   height: 1812px;
-  //width: 1301px;
-  //height: 906px;
 }
 .city {
   position: absolute;
   cursor: pointer;
   height: 100px;
   width: 100px;
-  z-index: 10000;
+  z-index: 40;
 }
 
+
+/*** Player Cards ***/
+
+.player_info_box {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  clear: both;
+  padding-top: 25px;
+  min-height: 200px;
+}
+.player_role_card {
+  height: 200px;
+  margin-left: 20px;
+}
+.player_role_card img {
+  height: 200px;
+}
+.player_role_description {
+  margin-left: 20px;
+  text-align: left;
+}
+.player_role_description tr td {
+  padding-bottom: 10px;
+  padding-right: 20px;
+  font-size: 1.15em;
+  vertical-align: top;
+}
+.player_role_description_header {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.welcome_overlay {
+  overflow-y: scroll;
+}
 

@@ -13,7 +13,6 @@ class Archive extends ModTemplate {
 
     this.description = "A tool for storing transactions for asynchronous retreival.";
     this.categories  = "Utilities";
-
   }
 
 
@@ -51,7 +50,11 @@ class Archive extends ModTemplate {
         this.deleteTransaction(req.data.tx, req.data.publickey, req.data.sig);
       }
       if (req.data.request === "save") {
-        this.saveTransaction(req.data.tx);
+        this.saveTransaction(req.data.tx, req.data.type);
+      }
+      if (req.data.request === "save_key") {
+        if (!req.data.key) { return; }
+        this.saveTransactionByKey(req.data.key, req.data.tx, req.data.type);
       }
       if (req.data.request === "load") {
         let type = "";
@@ -77,12 +80,9 @@ class Archive extends ModTemplate {
 
 
 
-  async saveTransaction(tx=null) {
+  async saveTransaction(tx=null, msgtype="") {
 
     if (tx == null) { return; }
-
-    let msgtype = "";
-    if (tx.msg.module != "") { msgtype = tx.msg.module; }
 
     let sql = "";
     let params = {};
@@ -99,8 +99,64 @@ class Archive extends ModTemplate {
       await this.app.storage.executeDatabase(sql, params, "archive");
     }
 
+    //
+    // TODO:
+    //
+    // sanity check that we want to be saving this for the FROM fields
+    //
+    for (let i = 0; i < tx.transaction.from.length; i++) {    
+      sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+      params = {
+        $sig		:	tx.transaction.sig ,
+        $publickey	:	tx.transaction.from[i].add ,
+        $tx		:	JSON.stringify(tx.transaction) ,
+        $ts		:	tx.transaction.ts ,
+        $type		:	msgtype
+      };
+      await this.app.storage.executeDatabase(sql, params, "archive");
+    }
+
+    //
+    // prune periodically
+    //
+    if (Math.random() < 0.0001) { this.pruneOldTransactions(); }
+
   }
 
+
+  async pruneOldTransactions() {
+
+    let ts = (new Date().getTime()) - 100000000;
+    let sql = "DELETE FROM txs WHERE ts < $ts AND type = $type";
+    let params = {
+        $ts		:	ts ,
+        $type		:	"Chat"
+    };
+    this.app.storage.executeDatabase(sql, params, "archive");
+
+  }
+
+
+  async saveTransactionByKey(key="", tx=null, msgtype="") {
+
+    if (tx == null) { return; }
+
+    let sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+    let params = {
+      $sig:	tx.transaction.sig ,
+      $publickey:	key,
+      $tx:	JSON.stringify(tx.transaction),
+      $ts:	tx.transaction.ts,
+      $type:	msgtype
+    };
+    await this.app.storage.executeDatabase(sql, params, "archive");
+
+    //
+    // prune periodically
+    //
+    if (Math.random() < 0.0001) { this.pruneOldData(); }
+
+  }
 
 
   async deleteTransaction(tx=null, authorizing_publickey="", authorizing_sig="") {
@@ -151,27 +207,6 @@ class Archive extends ModTemplate {
 
   }
 
-  async saveTransactionByKey(key="", tx=null) {
-
-    if (tx == null) { return; }
-
-    //
-    // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
-    //
-    let msgtype = "";
-    if (tx.msg.module != "") { msgtype = tx.msg.module; }
-
-    let sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
-    let params = {
-      $sig:	tx.transaction.sig ,
-      $publickey:	key,
-      $tx:	JSON.stringify(tx.transaction),
-      $ts:	tx.transaction.ts,
-      $type:	msgtype
-    };
-    await this.app.storage.executeDatabase(sql, params, "archive");
-
-  }
 
   async loadTransactionsByKeys({keys=[], type='all', num=50}) {
     let sql = "";

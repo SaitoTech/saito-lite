@@ -13,7 +13,6 @@
 }
 
 .appstore-header-featured {
-  display: none;
 }
 
 .app-space {
@@ -51,6 +50,15 @@
   grid-column: 1 / span 2;
   display: none;
 }
+
+.appstore-overlay-container .appstore-header-featured .appstore-overlay-searchbox {
+  padding: 0px;
+  font-size: 20px;
+}
+.appstore-overlay-container .appstore-header-featured .appstore-header-title {
+  font-size: 20px;
+}
+
 
 .appstore-app-item-categories .category {
   display: inline-block;
@@ -127,7 +135,7 @@
   border: 1px solid var(--saito-red);
   background-color: var(--saito-cyber-black);
   color: #fff;
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   padding: 1em;
   transform: translate(-50%, -50%);
 }
@@ -208,6 +216,15 @@
   left: -2px;
 }
 
+@media only screen and (max-width: 900px) {
+  #appstore-publish-moddrop {
+    width: 100%;
+  }
+  #appstore-publish-moddrop-inside{
+      width: 100%;
+  }
+
+}
 .submit-file-btn-box {
   width: 400px;
   height: auto;
@@ -235,7 +252,7 @@
   min-width: 400px;
   padding: 1em;
   color: var(--saito-white);
-  font-family: visuelt-light;
+  font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
   line-height: 1.5em;
   background-color: var(--saito-cyber-black);
   margin: auto;

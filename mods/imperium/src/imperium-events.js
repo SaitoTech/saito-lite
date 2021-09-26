@@ -41,7 +41,7 @@
     //
     for (let i = 0; i < this.game.state.laws.length; i++) {
       if (this.game.state.laws[i].agenda) {
-        if (this.agenda_cards[this.game.state.laws[i].agenda]) {
+        if (this.agenda_cards[this.game.state.laws[i].agenda].name) {
           z.push(this.agenda_cards[this.game.state.laws[i].agenda]);
         }
       }
@@ -52,6 +52,14 @@
     //
     for (let i in this.action_cards) {
       z.push(this.action_cards[i]);
+    }
+
+
+    //
+    // unscored secret objectives (action phase tracking)
+    //
+    for (let i in this.secret_objectives) {
+      z.push(this.secret_objectives[i]);
     }
 
     return z;
@@ -95,6 +103,9 @@
     }
     if (obj.gainTechnology == null) {
       obj.gainTechnology = function(imperium_self, gainer, tech) { return 1; }
+    }
+    if (obj.gainActionCards == null) {
+      obj.gainActionCards = function(imperium_self, gainer, amount) { return 1; }
     }
     if (obj.gainFleetSupply == null) {
       obj.gainFleetSupply = function(imperium_self, gainer, amount) { return amount; }
@@ -146,6 +157,12 @@
     }
     if (obj.groundCombatRoundEnd == null) {
       obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
+    }
+    //
+    // synchronous -- must return 1
+    //
+    if (obj.postProduction == null) {
+      obj.postProduction = function(imperium_self, player, sector) { return 1; }
     }
 
 
@@ -221,6 +238,9 @@
     if (obj.returnAgendaOptions == null) {
       obj.returnAgendaOptions = function(imperium_self) { return ['support','oppose']; }
     }
+    if (obj.repealAgenda == null) {
+      obj.repealAgenda = function(imperium_self) { return 1; }
+    }
     //
     // when an agenda is resolved (passes) --> not necessarily if it is voted in favour
     // for permanent game effects, run initialize after setting a var if you want to have
@@ -261,8 +281,6 @@
     }
 
 
-
-
     ////////////////////
     // Victory Points //
     ////////////////////
@@ -280,7 +298,6 @@
     if (obj.returnPDSUnitsWithinRange == null) {
       obj.returnPDSUnitsWithinRange = function(imperium_self, player, attacker, defender, sector, battery) { return battery; }
     }
-
 
 
 

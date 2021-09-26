@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Welcome to Polkadot on Saito">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="The Saito Team">
+
+  <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Polkadot on Saito">
+  <meta name="msapplication-navbutton-color" content="#FFFFFF">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="msapplication-starturl" content="/index.html">
+
+  <meta name="twitter:image:src" content="https://saito.io/arcade/img/dreamscape-logo.png" />
+  <meta property="twitter:url" content="https://saito.io/arcade" />
+  <meta name="twitter:site" content="Polkadot on the Saito Network" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Polkadot on Saito" />
+  <meta name="twitter:description" content="Polkadot ecosystem tokens and parachains working with in-browser crypto apps on Saito" />
+  <meta property="og:image" content="https://saito.io//saito/img/touch/pwa-512x512.png" />
+  <meta property="og:site_name" content="Polkadot on Saito" />
+  <meta property="og:type" content="object" />
+  <meta property="og:title" content="Saito Polkadot" />
+  <meta property="og:url" content="https://saito.io/dotarcade/" />
+  <meta property="og:description" content="Saito Arcade customized with support for in-browser crypto apps on Saito" />
+
+  <link rel="icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png">
+  <link rel="icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png">
+
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
+
+  <title>Polkadot on Saito</title>
+  
+  <!-- <link rel="stylesheet" href="/saito/overlay.css" /> -->
+  <link rel="stylesheet" href="/saito/style.css" />
+  <link rel="stylesheet" href="/dotarcade/style.css" />
+
+</head>
+
+<body>
+  <div class="web3-page">
+    <div class="right">
+      <img src="/dotarcade/img/poker_cards.png" />
+    </div>
+    <div class="left">
+      <h1>Play <span class="heading-poker">Games</span></h1>
+      <h2>with Polkadot</h2>
+      <h3>Ecosystem Tokens</h3>
+      <div class="powered-by">
+        <div class="powered">powered by</div>
+        <div class="powered-logo"><a class="logo" href=".."><img src="/saito/img/logo.svg" /></a></div>
+      </div>
+      <div id="startgame" class="button">PLAY</div>
+    </div>
+  </div>
+
+  <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
+
+  <script type="text/javascript">
+
+/*****
+setTimeout(function() {
+
+  let jssource = "http://localhost:12101/saito/dotsaito.js";
+  let landpage = "/arcade";
+  let data = null;
+
+  ////////////////////////////
+  // read from localStorage //
+  ////////////////////////////
+  if (typeof(Storage) !== "undefined") {
+    data = localStorage.getItem("options");
+    data = JSON.parse(data);
+  }
+
+  if (data != null) {
+    if (data.bundle != jssource) {
+      let c = confirm("You already have a Saito wallet. Delete it and switch to using the DOT version?");
+      if (!c) { die; }
+      alert("Ok, updating your wallet!");
+      data = null;
+    } else {
+//      window.location = landpage;
+    }
+  }
+
+
+  /////////////////////////
+  // or fetch from server //
+  //////////////////////////
+  if (data == null) {
+
+    //
+    // jquery
+    //
+    $.ajax({
+      url: '/options',
+      dataType: 'json',
+      async: false,
+      success: (data) => {
+
+	//
+	// update SAITO with our bundle
+	//
+	data.bundle = jssource;
+
+	//
+	// save in localstorage
+	//
+        localStorage.setItem("options", JSON.stringify(data));
+
+	//
+	// and redirect to Saito
+	//
+//	window.location = landpage;
+
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        console.log("ERROR loading options file from server");
+      }
+    });
+  }
+
+}, 1000);
+****/
+  </script>
+
+</body>
+</html>

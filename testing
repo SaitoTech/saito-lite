@@ -1,3 +1,0 @@
-npm run nuke
-cp ./config/options.saito.tech.client ./config/options
-

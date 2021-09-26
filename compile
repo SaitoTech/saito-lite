@@ -1,8 +1,6 @@
 #!/bin/bash
 
 
-
-
 function post_compile {
 
   cp ./lib/saito/boot.js ./web/saito/saito2.js
@@ -23,11 +21,14 @@ echo ""
     mkdir -p data/blocks
     cp -rf ./lib bundler/default/lib
     cp -rf ./config bundler/default/config
+    cp -rf ./apps bundler/default/apps
 
     copy_lite_mods_to_bundler_directory
 
 echo ""
 echo "Compiling Lite-Client JS..." 
+
+    rm -rf bundler/default/mods/appstore/bundler/dist
 
     for md in bundler/default/mods/* ; do
       rm -rf "$md/web"
@@ -56,11 +57,13 @@ function reset_nonpersistent {
   # we explicitly don't delete registry/balance databases
   rm -f ./data/appstore.sq3
   #rm -f ./data/covid19.sq3
+  #rm -f ./data/post.sq3
   rm -f ./data/hospital.sq3
   rm -f ./data/records.sq3
   rm -f ./data/archive.sq3
   rm -f ./data/explorer.sq3
   rm -f ./data/timeclock.sq3
+  rm -f ./data/earlybirds.sq3
   rm -f ./data/arcade.sq3
   rm -f ./data/chat.sq3
   rm -f ./data/database.sq3
@@ -78,32 +81,38 @@ function reset_nonpersistent {
 
   rm -rf ./mods/appstore/mods
   mkdir ./mods/appstore/mods
-  rm -f ./mods/appstore/bundler/dist/*
+  # 
+  # do not delete compiled software
+  # 
+  # rm -rf ./mods/appstore/bundler/dist/
 
   rm -f ./mods/forum/web/img/thumbnails/*.png
   rm -f ./mods/registry/web/addresses.txt
   rm -f ./mods/appstore/mods/*
   rm -rf ./mods/appstore/bundler/mods/*
-  rm -f ./mods/appstore/bundler/dist/*
+  rm -rf ./mods/appstore/bundler/dist/*
   rm -f ./mods/appstore/bundler/*.js
   rm -f ./mods/appstore/bundler/*.json
   rm -f ./logs/*
 
   #let the system know that users pre-existed a reset.
+  if [ -f ./data/rewards.sq3 ]; then
   echo "update users set latest_tx = -1;" | sqlite3 ./data/rewards.sq3
-  
+  fi
+
   if [ ! -f ./config/modules.config.js ]; then
     cp ./config/modules.default.js ./config/modules.config.js
   fi
+  
   if [ -f config/options.conf ]; then
     cp config/options.conf config/options
   fi
-
 }
 
 function reset_persistent {
 
   rm -f ./data/forum.sq3
+  rm -f ./data/post.sq3
   rm -f ./data/registry.sq3
   rm -f ./data/rewards.sq3
   rm -f ./data/forum.sq3
@@ -142,17 +151,79 @@ function copy_lite_mods_to_bundler_directory {
     cp -rf ./mods/$i bundler/default/mods/$i
   done
 
-
   rm -f ./bundler/default/mods/appstore/mods/*
+  rm -f ./bundler/default/mods/appstore/bundler/*
+  rm -f ./bundler/default/mods/appstore/dist/*
 
 }
 
 
 
+if [ "$1" == "init" ]; then
+
+
+  if [ -f config/modules.config.js ]; then
+
+    echo "";
+    echo "It looks like you have already installed Saito. If you are "
+    echo "trying to change the modules that are installed on your "
+    echo "machine you can edit the file: "
+    echo "";
+    echo "  config/modules.config.js";
+    echo "";
+    echo "And run the following command: ";
+    echo "";
+    echo "  > npm run compile";
+    echo "";
+    echo "Continuing with this installation will delete existing data,"
+    echo "reset your wallet and resync the blockchain. Are you sure "
+    echo "you wish to continue? (yes/no)"
+
+    while true; do
+      read -p "> " yn
+      case $yn in
+        yes* ) cp config/modules.default.js config/modules.config.js; break;;
+        no* ) exit;;
+        * ) echo 'Please answer "yes" or "no".';;
+      esac
+    done
+
+
+  elif [ -f config/modules.default.js ]; then
+
+    echo "";
+    echo "Installing and compiling Saito with default modules..."
+    echo "";
+
+  fi
+
+
+  if [ -f config/saito.io.conf ]; then
+
+    while true; do
+
+      echo ""
+      echo "You can join the Saito Network and participate in development"
+      echo "of the public chain. Or you can setup a local node for the"
+      echo "easier development and testing of applications."
+      echo "";
+      echo "Join saito.io (saito) or local install (local): ";
+      read -p "> " yn
+      case $yn in
+        saito* ) cp config/saito.io.conf config/options; break;;
+        local* ) break;;
+        * ) echo 'Please answer "saito" or "local".';;
+      esac
+    done
+
+  fi
+
+
+fi
 
 
 
-if [ "$1" == "nuke" ]; then
+if [ "$1" == "nuke" ] || [ "$1" == "init" ]; then
 
   echo ""
   echo ""
@@ -178,11 +249,7 @@ if [ "$1" == "nuke" ]; then
   reset_persistent
   reset_bundler
 
-  if [ "$2" == "dev" ]; then 
-    node webpack/webpack.dev.js
-  else
-    node webpack/webpack.prod.js
-  fi
+  node webpack/webpack.prod.js $2 $3
 
   post_compile
 
@@ -202,11 +269,7 @@ if [ "$1" == "reset" ]; then
   reset_nonpersistent
   reset_bundler
 
-  if [ "$2" == "dev" ]; then 
-    node webpack/webpack.dev.js
-  else
-    node webpack/webpack.prod.js
-  fi
+  node webpack/webpack.prod.js $2 $3
 
   post_compile
 
@@ -222,14 +285,16 @@ if [ "$1" == "recompile" ]; then
   echo ""
   echo ""
 
-  reset_bundler
 
-  if [ "$2" == "dev" ]; then 
-    node webpack/webpack.dev.js
-  else
-    node webpack/webpack.prod.js
+  # making sure we have some modules defined.
+  if [ ! -f ./config/modules.config.js ]; then
+    cp ./config/modules.default.js ./config/modules.config.js
   fi
 
+  reset_bundler
+
+  node webpack/webpack.prod.js $2 $3
+  
   post_compile
 
 fi

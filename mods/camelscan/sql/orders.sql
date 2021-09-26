@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS payments (
-  id INTEGER,
-  PRIMARY KEY (id ASC)
-);

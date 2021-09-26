@@ -19,6 +19,7 @@ ACTION CARD - types
 ************************************/
 
 
+
     this.importActionCard('infiltrate', {
   	name : "Infiltrate" ,
   	type : "instant" ,
@@ -31,14 +32,13 @@ ACTION CARD - types
 
 
 
-
     this.importActionCard('reparations', {
   	name : "Reparations" ,
   	type : "action" ,
   	text : "If you have lost a planet this round, refresh one of your planets" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
-	  if (imperium_self.game.players_info[action_card_player-1].lost_planet_this_round != -1) {
+	  if (imperium_self.game.players_info[action_card_player-1].lost_planet_this_round != -1 && action_card_player == imperium_self.game.player) {
 
 	    let my_planets = imperium_self.returnPlayerExhaustedPlanetCards(imperium_self.game.player);
 
@@ -76,6 +76,13 @@ ACTION CARD - types
 	      let card = imperium_self.game.players_info[action_card_player-1].strategy_cards_played[i];
               html += '<li class="option" id="'+card+'">' + imperium_self.strategy_cards[card].name + '</li>';
 	    }
+	    for (let i = 0; i < imperium_self.game.players_info[action_card_player-1].strategy.length; i++) {
+    	      if (!imperium_self.game.players_info[imperium_self.game.player - 1].strategy_cards_played.includes(imperium_self.game.players_info[action_card_player-1].strategy[i])) {
+	        let card = imperium_self.game.players_info[action_card_player-1].strategy[i];
+	     
+                html += '<li class="option" id="'+card+'">' + imperium_self.strategy_cards[card].name + '</li>';
+	      }
+	    }
 	    html += '</ul>';
 
 	    imperium_self.updateStatus(html);
@@ -109,7 +116,6 @@ ACTION CARD - types
     });
 
 
-
     this.importActionCard('lost-star-chart', {
   	name : "Lost Star Chart" ,
   	type : "instant" ,
@@ -124,7 +130,7 @@ ACTION CARD - types
     this.importActionCard('plague', {
   	name : "Plague" ,
   	type : "action" ,
-  	text : "ACTION: Select a planet and destroy infantry on that planet. Roll a dice for each infantry, and destroy those with rolls of 6 or higher." ,
+  	text : "ACTION: Select a planet. Roll a dice for each infantry on planet and destroy number of rolls 6 or higher." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -204,7 +210,7 @@ ACTION CARD - types
 	    for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
 	      let law = imperium_self.game.state.laws[i];
 	      let agenda = imperium_self.agenda_cards[law];
-              html += '<li class="option" id="'+agenda+'">' + imperium_self.agenda_cards[card].name + '</li>';
+              html += '<li class="option" id="'+agenda+'">' + agenda.name + '</li>';
 	    }
             html += '<li class="option" id="cancel">cancel</li>';
 	    html += '</ul>';
@@ -237,8 +243,8 @@ ACTION CARD - types
             imperium_self.game.queue.splice(qe, 1);
 	    for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
 	      if (imperium_self.game.state.laws[i] == card) {
-		imperium_self.game.state.laws.splice(i, 1);
-		i--;
+		imperium_self.agenda_cards[card].repealAgenda(imperium_self);
+	        return 1;
 	      }
 	    }
 
@@ -248,6 +254,8 @@ ACTION CARD - types
 	  return 1;
         }
     });
+
+
 
     this.importActionCard('veto', {
   	name : "Veto" ,
@@ -325,6 +333,8 @@ ACTION CARD - types
 
 
 
+
+
     this.importActionCard('propulsion-research', {
   	name : "Propulsion Research" ,
   	type : "instant" ,
@@ -398,7 +408,7 @@ ACTION CARD - types
     this.importActionCard('reactor-meltdown', {
   	name : "Reactor Meltdown" ,
   	type : "action" ,
-  	text : "ACTION: Select a non-homeworld planet and destroy and destroy one Space Dock on that planet" ,
+  	text : "ACTION: Select a non-homeworld planet and destroy one Space Dock on that planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -439,6 +449,8 @@ ACTION CARD - types
 	  return 0;
 	}
     });
+
+
 
 
     this.importActionCard('lost-mission', {
@@ -482,7 +494,7 @@ ACTION CARD - types
 	      "Select a planet not controlled by another player: ",
               function(planet) {
 		planet = imperium_self.game.planets[planet];
-		if (planet.owner == -1) { return 1; } return 0;
+		if (planet.owner == -1) { return 1; } { return 0; }
               },
 	      function(planet) {
 
@@ -502,6 +514,7 @@ ACTION CARD - types
 	  return 0;
 	}
     });
+
 
 
 
@@ -767,7 +780,7 @@ ACTION CARD - types
               },
 	      function(player) {
                 imperium_self.addMove("expend\t"+player+"\tcommand\t"+"1");
-		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " loses one comand token");
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFactionNickname(player) + " loses one comand token");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -803,8 +816,8 @@ ACTION CARD - types
               },
 	      function(sector) {
 
-                imperium_self.playerSelectUnitInSectorWithFilter(
-	          "Select a ship in this sector to destroy: " ,
+                imperium_self.playerSelectOpponentUnitInSectorWithFilter(
+	          "Select opponent ship in this sector to destroy: " ,
 		  sector,
                   function(unit) {
 		    if (unit.type == "destroyer") { return 1; }
@@ -813,7 +826,6 @@ ACTION CARD - types
 		    return 0;
                   },
 	          function(unit_info) {
-
 		    let s = unit_info.sector;
 		    let p = parseInt(unit_info.unit.owner);
 		    let uidx = unit_info.unit_idx;
@@ -909,16 +921,15 @@ ACTION CARD - types
 		let infantry_destroyed = 0;
 
 		if (planet_owner >= 0) {
-		  for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
-		    if (infantry_destroyed > 3) {
+		  for (let i = planet_obj.units[planet_owner-1].length-1; i >= 0; i--) {
+		    if (infantry_destroyed < 3) {
 		      if (planet_obj.units[planet_owner-1][i].type == "infantry") {
-		        imperium_self.addMove("destroy\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		        imperium_self.addMove("destroy_unit\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+i+"\t"+"1");
+		    	infantry_destroyed++;
 		      }
 		    }
 		  }
 		}
-                imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+planet_res);
-		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains " + planet_res + " trade goods");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -936,7 +947,7 @@ ACTION CARD - types
 
 
 
-    this.importActionCard('Covert Operation', {
+    this.importActionCard('covert-operation', {
   	name : "Covert Operation" ,
   	type : "action" ,
   	text : "ACTION: Choose a player. They give you one of their action cards, if possible" ,
@@ -1063,10 +1074,26 @@ ACTION CARD - types
 		}
               },
 	      function(sector) {
-                imperium_self.addMove("purchase\t"+action_card_player+"\tcommand\t"+"1");
-                imperium_self.addMove("deactivate\t"+action_card_player+"\t"+sector);
-                imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " deactivates " + imperium_self.game.sectors[sector].name);
-		imperium_self.endTurn();
+
+	        let html = '<div class="sf-readable">Gain command or strategy token?</div><ul>';
+                    html += '<li class="option" id="command">command token</li>';
+                    html += '<li class="option" id="strategy">strategy token</li>';
+
+	        html += '</ul>';
+	        imperium_self.updateStatus(html);
+
+	        $('.option').off();
+	        $('.option').on('click', function() {
+
+	          let tokentype = $(this).attr("id");
+
+                  imperium_self.addMove("purchase\t"+action_card_player+"\t"+tokentype+"\t"+"1");
+                  imperium_self.addMove("deactivate\t"+action_card_player+"\t"+sector);
+                  imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " deactivates " + imperium_self.game.sectors[sector].name);
+	  	  imperium_self.endTurn();
+
+	        });
+
 		return 0;
 	      },
 	      function() {
@@ -1090,5 +1117,6 @@ ACTION CARD - types
 	  return 1;
 	}
     });
+
 
 

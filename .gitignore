@@ -1,3 +1,6 @@
+saitolitedocs
+
+*~
 .vscode
 .vscode/*
 
@@ -9,16 +12,19 @@ logs/*
 config/options
 config/options.*
 config/modules.config.js
+config/runtime.config.js
+
+
 
 .DS_Store
 node_modules
 node_modules/*
 tests/config/env
-package-lock.json
 
 
 
 data/*.sq3
+data/*/*.blk
 data/blocks/*.blk
 data/shashmaps/*.smap
 
@@ -39,6 +45,8 @@ web/saito/*.wasm
 
 mods/covid/bundler/
 
+mods/popup
+mods/popup/*
 mods/appstore/mods/*
 mods/appstore/bundler
 mods/appstore/bundler/*
@@ -62,5 +70,6 @@ mods/registry/web/addresses.txt
 mods/reddit/web
 mods/reddit/web/*
 mods/mailrelay/lib/template-credentials.js
+mods/tutorial4/web/txid
 
 extras/shashmap/build

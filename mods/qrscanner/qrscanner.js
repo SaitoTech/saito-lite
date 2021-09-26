@@ -1,9 +1,7 @@
-// const qrcode = require('./lib/scanner');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const Header = require('../../lib/ui/header/header');
+// This header was deprecated, use the new one in lib/saito/ui
+// const Header = require('../../lib/ui/header/header');
 const AddContact = require('./lib/add-contact');
-
-
 
 const HeaderDropdownTemplate = (dropdownmods) => {
   html = dropdownmods.map(mod => {
@@ -26,7 +24,6 @@ class QRScanner extends ModTemplate {
     this.name = "QRScanner";
     this.description = "Adds QRCode scanning functionality to Saito";
     this.categories = "Core";
-
     this.video = null;
     this.canvas = null;
     this.canvas_context = null;
@@ -196,11 +193,6 @@ class QRScanner extends ModTemplate {
   }
 
   render() {
-//    document.querySelector('body').innerHTML = QRScannerTemplate();
-//    let header = document.getElementsById('qr-hud-header');
-//    header.append(
-//        elParser(HeaderDropdownTemplate())
-//    );
   }
 
 
@@ -223,8 +215,6 @@ class QRScanner extends ModTemplate {
         return 1;
       } catch (err) {
         return 0;
-        //if (err.name == 'NS_ERROR_NOT_AVAILABLE') { setTimeout(() => { this.attemptQRDecode() }, 0); return; }
-        //setTimeout(() => { this.attemptQRDecode() }, 500);
       }
     } else {
       return 0;
@@ -276,8 +266,9 @@ class QRScanner extends ModTemplate {
 
       this.decoder.terminate();
 
-      AddContact.render(this.app, {publickey: msg, header: Header});
-      AddContact.attachEvents(this.app, {publickey: msg, header: Header});
+      // This header was deprecated
+      // AddContact.render(this.app, {publickey: msg, header: Header});
+      // AddContact.attachEvents(this.app, {publickey: msg, header: Header});
 
     } else {
       this.sendEvent('qrcode', msg);

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>brand / css3</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="24" height="24"></rect>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-1446.000000, -3780.000000)">
+            <g id="编组-11" transform="translate(1271.000000, 3780.000000)">
+                <g id="brand-/-css3" transform="translate(175.000000, 0.000000)">
+                    <g>
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="brand-/-css3-(Background/Mask)"></g>
+                        <path d="M19.8070164,3.14294434 L18.3870163,19.1769447 L11.9830165,20.988945 L5.61401653,19.1759453 L4.1920166,3.14294434 L19.8070164,3.14294434 Z M7.10001659,6.42194438 L7.25801659,8.37094498 L14.7870159,8.37294483 L14.5980167,10.3929443 L9.66001654,10.3929443 L9.83901644,12.3059444 L14.4360161,12.3059444 L14.1640167,14.9259443 L12.0000167,15.5239449 L9.80301714,14.9209442 L9.66201639,13.3519449 L7.72201681,13.3519449 L7.93801689,16.2189445 L12.0000167,17.4839439 L15.9950161,16.3469448 L16.9000168,6.42394423 L7.10001659,6.42194438 Z" fill="#5E5E5E" mask="url(#mask-2)"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

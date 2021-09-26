@@ -3,27 +3,22 @@
   padding: 10px;
 }
 
-.cardfan {
-  position: unset;
+
+.status-message {
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0px;
 }
 
-.hud-menu {
-  width: 550px;
+.statistics-overlay {
+  min-width:50vw;
+  min-height: 50vh;
+  padding: 10px;
+  background-color: whitesmoke;
 }
-.hud-cardbox {
-  position: absolute;
-  height: 48vh;
-  max-height: 520px;
-  width: calc(48vh * 0.72110);
-  max-width: 375px;
-  background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
-  z-index: 2;
-  display: none;
-  top: 27%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+.statistics-round-table {
+  min-width:50vw;
+  text-align: center;
 }
 
 .china_card_status_us_faceup {
@@ -69,6 +64,15 @@
   max-width: 100%;
 }
 
+.statistics-table {
+  cell-padding: 50px;
+  cell-spacing: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.statistics-info {
+  margin-top:20px;
+}
 .zoom_button {
  border: 1px solid #707070;
  background-color: #646464;
@@ -193,8 +197,6 @@ body {
   left: 50%;
   transform: translate(-50%,-50%);
 }
-
-/** **/
 
 .connection_monitor {
   position: fixed;
@@ -327,20 +329,6 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
-.cardimg-hud {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-}
-.cardimg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-}
 
 .cardbox_event_blocker {
  position:absolute;
@@ -351,36 +339,6 @@ body {
  display:none;
  opacity: 0.4;
 }
-
-
-
-.cardbox {
-  position: absolute;
-  height: 48vh;
-  max-height: 520px;
-  width: calc(48vh * 0.72110);
-  max-width: 375px;
-  background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
-  z-index: 2;
-  display: none;
-  top: 27%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-
-.cardbox-hud {
-  display: block;
-  width: calc(9em * 0.811);
-  height: 10em;
-  background-image: url(/twilight/img/Base.svg);
-  background-size: cover;
-  z-index: 2;
-  transform: translate(0%, 0%);
-  justify-self: center;
-}
-
 
 .us {
   display: inline;
@@ -439,71 +397,52 @@ body {
 }
 
 
-
-
-
-
-
-
-
-@media screen and (orientation:landscape) and (max-width: 700px) {
-
-  .hud-long {
-    height: 120px;
-    min-height: 120px;
-    width: 550px;
-    min-width: 550px;
-    max-width: 550px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hud-long .hud-body {
-    height: 120px;
-    min-height: 120px;
-    width: 550px;
-    min-width: 550px;
-    max-width: 550px;
-  }
-
-  .hud-long .hud-header {
-    visibility: hidden;
-  }
-
-  .cardbox-hud {
-    width: calc(4em * 0.811);
-    height: 4em;
-  }
-
-  .status {
-    height: 100px;
-  }
-
-  .status-message {
-    width: 300px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 13px;
- }
-
+.cardlist-container {
+  height: 80vh;
+  width: 80vw;
+  overflow-y: scroll;
+}
+.cardlist-card {
+  position: relative;
+  float:left;
+  margin-right:10px;
+  margin-bottom: 10px;
+  height: 30vh;
+  max-height: 520px;
+  width: calc(30vh * 0.72110);
+  max-width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: block;
 }
 
-/* color tweaks */
+.cardimg-hud {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  top: 0px;
+  left: 0px;
+}
 
-.hud-menu {
-  position: fixed;
-  top: 3px;
-  left: 3px;
-  background-color: #f5f5f5cc;
-  border: 1px solid #444;
-  border-radius: 5px;
-  margin: 3px;
-  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+.cardimg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.cardbox-hud {
+  background-image: url(/twilight/img/Base.svg);
+  background-size: cover;
+}
+.cardbox-card {
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
 }
 
 
-status-message {
-  background-color: #f5f5f5DD;
-  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
-}
+
+
+
+
 

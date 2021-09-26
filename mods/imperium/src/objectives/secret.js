@@ -1,5 +1,4 @@
 
-
   this.importSecretObjective('military-catastrophe', {
       name 		: 	"Military Catastrophe" ,
       text		:	"Destroy the flagship of another player" ,
@@ -22,15 +21,14 @@
 	if (imperium_self.game.state.secret_objective_military_catastrophe == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
 
-
   this.importSecretObjective('flagship-dominance', {
-      name 		: 	"" ,
+      name 		: 	"Blood Christening" ,
       text		:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
       type		: 	"secret" ,
       phase		: 	"action" ,
@@ -58,11 +56,10 @@
 	if (imperium_self.game.state.secret_objective_flagship_dominance == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
-
 
 
 
@@ -80,7 +77,7 @@
 	imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 0;
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let planet = sys.p[planet_idx];
-	let infantry_on_planet = returnInfantryOnPlanet(planet);
+	let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	for (let i = 0; i < planet.units.length; i++) {
 	  if (planet.units[i].length > 0) {
 	    if ((i+1) != bombarding_player) {
@@ -95,7 +92,7 @@
 	if (imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked > 0) {
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
-	  let infantry_on_planet = returnInfantryOnPlanet(planet);
+	  let infantry_on_planet = imperium_self.returnInfantryOnPlanet(planet);
 	  if (infantry_on_planet == 0) {
 	    imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 1;
 	  }
@@ -106,8 +103,8 @@
 	if (imperium_self.game.state.secret_objective_nuke_from_orbit == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -122,16 +119,17 @@
         return 0; 
       },
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+        imperium_self.game.state.secret_objective_anti_imperialism = 0;
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
 
-	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
-	  if (sys.s.units[defender-1].length == 0) {
+	if (imperium_self.game.player == attacker && sys.s.units[defender-1].length == 0 && sys.s.units[attacker-1].length > 0) {
+	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
 	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
 	  }
 	}
-	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
-	  if (sys.s.units[attacker-1].length == 0) {
+	if (imperium_self.game.player == defender && sys.s.units[attacker-1].length == 0 && sys.s.units[defender-1].length > 0) {
+	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
 	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
 	  }
 	}
@@ -140,6 +138,7 @@
       groundCombatRoundEnd :	function(imperium_self, attacker, defender, sector, planet_idx) {
         let sys = imperium_self.returnSectorAndPlanets(sector);
         let planet = sys.p[planet_idx];
+	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
 
 	if (imperium_self.game.player == attacker && planet.units[attacker-1].length > 0) {
 	  if (planet.units[defender-1].length == 0) {
@@ -147,7 +146,7 @@
 	  }
 	}
 	if (imperium_self.game.player == defender && planet.units[defender-1].length > 0) {
-	  if (plenet.units[attacker-1].length == 0) {
+	  if (planet.units[attacker-1].length == 0) {
 	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
 	  }
 	}
@@ -157,11 +156,10 @@
 	if (imperium_self.game.state.secret_objective_anti_imperialism == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
-
 
 
   this.importSecretObjective('end-their-suffering', {
@@ -179,13 +177,13 @@
 
 	if (imperium_self.game.player == attacker) {
 	  if (sys.s.units[defender-1].length == 0) {
-	    if (players_with_most_vp.includes(defender)) { 
+	    if (players_with_lowest_vp.includes(defender)) { 
 	      // does the player have any units left?
-	      for (let i in this.game.sectors) {
-		if (this.game.sectors[i].units[defender-1].length > 0) { return; }
+	      for (let i in imperium_self.game.sectors) {
+		if (imperium_self.game.sectors[i].units[defender-1].length > 0) { return; }
 	      }
-	      for (let i in this.game.planets) {
-		if (this.game.planets[i].units[defender-1].length > 0) { return; }
+	      for (let i in imperium_self.game.planets) {
+		if (imperium_self.game.planets[i].units[defender-1].length > 0) { return; }
 	      }
 	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
 	    }
@@ -194,11 +192,11 @@
 	if (imperium_self.game.player == defender) {
 	  if (sys.s.units[attacker-1].length == 0) {
 	    if (players_with_lowest_vp.includes(attacker)) { 
-	      for (let i in this.game.sectors) {
-		if (this.game.sectors[i].units[attacker-1].length > 0) { return; }
+	      for (let i in imperium_self.game.sectors) {
+		if (imperium_self.game.sectors[i].units[attacker-1].length > 0) { return; }
 	      }
-	      for (let i in this.game.planets) {
-		if (this.game.planets[i].units[attacker-1].length > 0) { return; }
+	      for (let i in imperium_self.game.planets) {
+		if (imperium_self.game.planets[i].units[attacker-1].length > 0) { return; }
 	      }
 	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
 	    }
@@ -209,16 +207,17 @@
       groundCombatRoundEnd :	function(imperium_self, attacker, defender, sector, planet_idx) {
         let sys = imperium_self.returnSectorAndPlanets(sector);
         let planet = sys.p[planet_idx];
+	let players_with_lowest_vp = imperium_self.returnPlayersWithLowestVP();
 
 	if (imperium_self.game.player == attacker) {
-	  if (planetunits[defender-1].length == 0) {
-	    if (players_with_most_vp.includes(defender)) { 
+	  if (planet.units[defender-1].length == 0) {
+	    if (players_with_lowest_vp.includes(defender)) { 
 	      // does the player have any units left?
-	      for (let i in this.game.sectors) {
-		if (this.game.sectors[i].units[defender-1].length > 0) { return; }
+	      for (let i in imperium_self.game.sectors) {
+		if (imperium_self.game.sectors[i].units[defender-1].length > 0) { return; }
 	      }
-	      for (let i in this.game.planets) {
-		if (this.game.planets[i].units[defender-1].length > 0) { return; }
+	      for (let i in imperium_self.game.planets) {
+		if (imperium_self.game.planets[i].units[defender-1].length > 0) { return; }
 	      }
 	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
 	    }
@@ -227,11 +226,11 @@
 	if (imperium_self.game.player == defender) {
 	  if (planet.units[attacker-1].length == 0) {
 	    if (players_with_lowest_vp.includes(attacker)) { 
-	      for (let i in this.game.sectors) {
-		if (this.game.sectors[i].units[attacker-1].length > 0) { return; }
+	      for (let i in imperium_self.game.sectors) {
+		if (imperium_self.game.sectors[i].units[attacker-1].length > 0) { return; }
 	      }
-	      for (let i in this.game.planets) {
-		if (this.game.planets[i].units[attacker-1].length > 0) { return; }
+	      for (let i in imperium_self.game.planets) {
+		if (imperium_self.game.planets[i].units[attacker-1].length > 0) { return; }
 	      }
 	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
 	    }
@@ -243,8 +242,8 @@
 	if (imperium_self.game.state.secret_objective_end_their_suffering == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -272,8 +271,8 @@
 	}
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -284,23 +283,37 @@
       phase		: 	"action" ,
       onNewTurn		: 	function(imperium_self, player, mycallback) {
 	imperium_self.game.state.secret_objective_close_the_trap = 0;
+	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
         return 0; 
+      },
+      modifyPDSRoll     :       function(imperium_self, attacker, defender, roll) {
+        if (attacker == imperium_self.game.player) {
+	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+        }
+        if (defender == imperium_self.game.player) {
+	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+        }
+      },
+      modifySpaceCombatRoll     :       function(imperium_self, attacker, defender, roll) {
+	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
       },
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
-	  if (sys.s.units[defender-1].length == 0) {
-	    
+	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
+	    if (imperium_self.game.state.secret_objective_close_the_trap_pds_fired == 1) {
+	      imperium_self.game.state.secret_objective_close_the_trap = 1;
+	      imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+	    }
 	  }
 	}
 	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
-	  if (sys.s.units[attacker-1].length == 0) {
-	    imperium_self.game.state.secret_
+	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
+	    if (imperium_self.game.state.secret_objective_close_the_trap_pds_fired == 1) {
+	      imperium_self.game.state.secret_objective_close_the_trap = 1;
+	      imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
+	    }
 	  }
-	}
-
-        if (imperium_self.game.players_info[imperium_self.game.player-1].units_i_destroyed_this_combat_round.includes("flagship")) {
-	  imperium_self.game.state.secret_objective_military_catastrophe = 1;
 	}
         return 0; 
       },
@@ -308,8 +321,8 @@
 	if (imperium_self.game.state.secret_objective_close_the_trap == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -330,8 +343,8 @@
 	if (ships_in_systems > 5) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -356,8 +369,8 @@
 	if (pds_units_in_play > 3) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -381,14 +394,14 @@
 	if (docks_in_play > 2) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
   this.importSecretObjective('wormhole-administrator', {
       name 		: 	"Wormhole Administrator" ,
-      text		:	"Have at least 1 ship in asystems containing alpha and beta wormholes respectively" ,
+      text		:	"Have at least 1 ship in systems containing alpha and beta wormholes respectively" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
 	let relevant_sectors = imperium_self.returnSectorsWithPlayerShips(player);
@@ -401,8 +414,8 @@
 	if (alpha == 1 && beta == 1) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('fleet-of-terror', {
@@ -422,8 +435,8 @@
 	if (dreadnaughts >= 5) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -434,30 +447,33 @@
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let cultural = 0;
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
         for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; } }
         if (cultural >= 4) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
 
   this.importSecretObjective('act-of-espionage', {
       name 		: 	"Act of Espionage" ,
-      text		:	"Discard 5 action cards from your hard" ,
+      text		:	"Discard five action cards from your hard" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	if (imperium_self.game.deck[1].hand.length >= 5) { return 1; }
+	if (imperium_self.returnPlayerActionCards(player).length >= 5) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
+      scoreObjective : function(imperium_self, player, mycallback) { 
 	if (imperium_self.game.player == player) {
-	  imperium_self.playerDiscardActionCards(5);
+	  imperium_self.playerDiscardActionCards(5, function() {
+	    mycallback(1);
+	  });
+	} else {
+	  mycallback(0);
 	}
-	return 0;
       }
   });
 
@@ -475,8 +491,8 @@
 	if (sectors_without_planets >= 3) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
 
@@ -508,23 +524,26 @@
 
         return 0;
       },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
+      scoreObjective : function(imperium_self, player, mycallback) {
+        mycallback(1);
       },
   });
+
+
+
   this.importSecretObjective('penal-colonies', {
       name 		: 	"Penal Colonies" ,
       text		:	"Control four planets with hazardous conditions" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let hazardous = 0;
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
         for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "hazardous")   { hazardous++; } }
         if (hazardous >= 4) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('master-of-production', {
@@ -533,13 +552,13 @@
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let industrial = 0;
-        let planetcards = imperium_self.returnPlayerPlanetCards();
+        let planetcards = imperium_self.returnPlayerPlanetCards(player);
         for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "industrial")   { industrial++; } }
         if (industrial >= 4) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('faction-technologies', {
@@ -550,13 +569,13 @@
         let techlist = imperium_self.game.players_info[player-1].tech;
         let factiontech = 0;
         for (let i = 0; i < techlist.length; i++) {
-          if (imperium_self.tech[techlist[i]].type == "normal" && techlist[i].indexOf("faction") == 0) { factiontech++; }
+          if (imperium_self.tech[techlist[i]].type == "special" && techlist[i].indexOf("faction") == 0) { factiontech++; }
         }
         if (factiontech >= 2) { return 1; }
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('occupy-new-byzantium', {
@@ -569,8 +588,8 @@
 	}
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
   this.importSecretObjective('cast-a-long-shadow', {
@@ -595,10 +614,13 @@
        
 	return 0;
       },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
+      scoreObjective : function(imperium_self, player, mycallback) { 
+	mycallback(1);
       }
   });
+
+
+
 
 
 
