@@ -452,13 +452,13 @@
   font-family: 'orbitron-medium';
   position:relative;
   float: left;
-  width: calc(52vh * 0.72110);
+  width: calc(42vh * 0.72110);
   display: block;
-  height: 52vh;
+  height: 42vh;
   color: white;
   margin-top: 50px;
   padding: 20px;
-  font-size: 2.5em;
+  font-size: 1.5em;
   line-height: 1.5em;
 }
 
@@ -472,13 +472,12 @@
 .overlay_strategy_card_text {
   position: relative;
   color: white;
-  padding-left: 25px;
-  padding-right: 30px;
-  padding-top: 65px;
+  padding-left: 15px;
+  padding-top: 45px;
   top: 0px;
   width: 100%;
   font-family: 'orbitron-light', helvetica, sans-serif;
-  font-size: 0.65em;
+  font-size: 0.7em;
   line-height: 1.4;
   z-index: 101;
 }
@@ -2621,6 +2620,7 @@ input[type=range] {
 
 
 
+
 #
 # OVerlays
 #
@@ -2667,5 +2667,8 @@ input[type=range] {
   padding-top: 20px;
 }
 
+
+
+~                             
 
 
