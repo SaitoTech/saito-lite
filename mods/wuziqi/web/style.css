@@ -3,7 +3,7 @@
     background: linear-gradient(217deg, #125552, transparent 70.71%),
     linear-gradient(127deg, #093637, #44A08D 70.71%),
     linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);
-    background-image: url("../poker/img/gameboard.jpg");
+    background-image: url("img/BG.png")/*, url("../poker/img/gameboard.jpg")*/;
     background-size: cover;
 }
 
@@ -23,12 +23,14 @@
 .board {
     display: grid;
     margin: 1em auto;
-    border: 1px solid #00cfff61;
+    /*border: 1px solid #00cfff61;
     background: #2222;
-    background-image: url("img/004-polished-wood.png");
+    background-image: url("img/004-polished-wood.png");*/
+    background-image: url("img/wood-giant.png");
+    background-size: 102%;
     /*padding: 1em 1em 3em 3em;*/
     padding:  2em;
-    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+    /*box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);*/
 }
 
 /*
@@ -58,13 +60,13 @@
 Board is a grid of wooden squares
 */
 .board > div {
-    background-image: url("img/woodtile.png");
+    /*background-image: url("img/woodtile.png");
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center center;
-    /*background-image: url("img/004-polished-wood.png");
+    background-position: center center;*/
+    /*background-image: url("img/004-polished-wood.png");*/
     border: 1px solid black;
-    margin:  0 1px 1px 0;   */
+    /*margin:  0 1px 1px 0;*/   
 }
 
 /*
@@ -94,7 +96,7 @@ Board is a grid of wooden squares
 
 /*
     Hand painted lines for proper Go board tile placement
-*/
+
 .board > .left {
     background-image: url("img/woodtile-edge.png");
     transform: rotate(90deg);
@@ -126,7 +128,7 @@ Board is a grid of wooden squares
     background-image: url("img/woodtile-corner.png");  
     transform: rotate(0deg); 
 }
-
+*/
 
 /*
  which should lite up when you hover over them
@@ -172,14 +174,17 @@ Board is a grid of wooden squares
  that are either black or white
 */
 .piece.white{
-    background: white;
-    border: 1px solid #111 !important;
-    
+    /*background: white;
+    border: 1px solid #111 !important;*/
+    background-image: url("img/whitepiece.png");
+    background-size: cover;
 }
 
 .piece.black{
-    background: black;
-    border: 1px solid #eee !important;
+    /*background: black;
+    border: 1px solid #eee !important;*/
+    background-image: url("img/blackpiece.png");
+    background-size: cover;
 }
 
 /*

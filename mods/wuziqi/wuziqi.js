@@ -45,14 +45,14 @@ class Wuziqi extends GameTemplate {
         });
 
         // Add Menu Items to standard Menu
-        this.menu.addMenuOption({
+        /*this.menu.addMenuOption({
             text: "Player: " + this.formatPlayer(),
             id: "playerno",
             class: "playerno",
             callback: function (app, game_mod) {
 
             }
-        });
+        });*/
         this.menu.addMenuOption({
             text: "Game",
             id: "game-game",
