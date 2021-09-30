@@ -41,8 +41,12 @@
         width: 80vh;
         height: 80vh;
     }
-    .status, .scoreboard {
-        width: 80vh;
+    .inner{
+        padding: 10vh;
+    }
+    .player-box{
+        top: 40vh;
+        margin: auto 5px;
     }
 }
 
@@ -50,9 +54,13 @@
     .board {
         width: 80vw;
         height: 80vw;
+        margin: auto 1em;
     }
-    .status, .scoreboard {
-        width: 80vw;
+    .inner{
+        padding: 10vw;
+    }
+    .player-box{
+        bottom: 5px;
     }
 }
 
@@ -233,28 +241,43 @@ Board is a grid of wooden squares
     border: 0.8em solid rgb(255, 166, 0) !important;
 }
 
-.scoreboard {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin: 0 auto 1em; 
-    padding: max(3em,40px) 0 0; /*Game Menu is 40px tall*/
-    color: #eee;
+
+.player-box {
+  width: 10em;
+  height: 8em;
+  background-color: #4448;
+  color: #fff;
+  position: absolute;
+  box-shadow: 0px 3px 6px #00000029;
+  border: 1px solid #FFFFFF;
+  border-radius: 18px;
+  font-size: 1.8em;
+  text-align: center;
+}
+
+.player-box.me{
+    left: 0px;
+}
+
+.player-box.notme{
+    right: 0px;
+}
+
+.player-box .info{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #FFFFFF;
+    color: black;
+    color: var(--saito-cyber-black);
+    border-radius: 18px 18px 6px 6px;
+    opacity: 1;
+    display: inline-flex;
+    width: 100%;
     justify-content: space-around;
+    align-items: center;
+    
 }
 
-.scoreboard div {
-    margin: 1em 1em 0;
-    font-size: 2em;
-}
-
-.status {
-    margin: 1em auto;
-    text-align: center;
-    padding: 1em;
-    color: #eee;
-    font-size: 2em;
-}
 
 .playertitle {
     text-transform: capitalize;
@@ -262,9 +285,7 @@ Board is a grid of wooden squares
 
 .continue {
     border: 1px solid #125552;
-    margin: 0 1em;
     background: linear-gradient(217deg, #125552, transparent 70.71%), linear-gradient(127deg, #093637, #44A08D 70.71%), linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);
-    margin: 0 1em;
     color: #eee;
 }
 
@@ -279,11 +300,7 @@ Board is a grid of wooden squares
         height: 95vh;
     }
     .inner{
-        display: flex;
-    }
-    .status, .scoreboard {
-        width: max-content;
-        flex-direction: column;
+        padding: 2.5vh;
     }
     body {
         font-size: 8px;
@@ -295,9 +312,11 @@ Board is a grid of wooden squares
         width: 95vw;
         height: 95vw;
     }
-    .status, .scoreboard {
-        width: 95vw;
+     .inner{
+        padding: 2.5vw;
+        padding-top: 45px;
     }
+    
     body {
         font-size: 8px;
     }

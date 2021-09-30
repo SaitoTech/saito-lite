@@ -1,5 +1,6 @@
 const { timingSafeEqual } = require('crypto');
 const saito = require('../../lib/saito/saito');
+const dragElement = require('../../lib/helpers/drag_element');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const { update } = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 
@@ -258,10 +259,41 @@ class Wuziqi extends GameTemplate {
         but data structures for player properties are typically 0-indexed arrays
     */
     updateScore() {
-        for (let i = 0; i < 2 /*this.game.players.length==2*/; i++){
-            document.querySelector(`.score${i+1}`).innerHTML = `${((i+1)==this.game.player)? "*" : ""}${this.game.sides[i]}: ${this.game.score[i]}`;
+           /*
+            Make player box
+        */
+        let boxobj;
+        let status = document.querySelector(".status").innerHTML;
+        for (let i = 0; i<this.game.players.length; i++){
+            let name = this.app.keys.returnIdentifierByPublicKey(this.game.players[i], 1)
+            if (name.indexOf("@") > 0) {
+                name = name.substring(0, name.indexOf("@"));
+            }
+            if (name === this.game.players[i]) {
+               name = this.game.players[i].substring(0, 10) + "...";
+            }    
+            console.log(i,this.game.player);
+            boxobj = (this.game.player == (i+1)) ? document.querySelector(".player-box.me") : document.querySelector(".player-box.notme");
+            let info = boxobj.querySelector(".info");
+            let score = boxobj.querySelector(".plog");
+
+            info.innerHTML = `<img class="piece" src="img/${this.game.sides[i]}piece.png">
+                                <div class="player-name">${name}</div>
+                                `;
+            
+            score.innerHTML = `Wins: ${this.game.score[i]} (out of ${this.game.options.best_of})`;
+            try {
+                dragElement(boxobj);
+            } catch (err) {
+                console.log("Drag error",err);
+            }
         }
-        document.querySelector(".best_of").innerHTML = "Best of " + this.game.options.best_of;
+
+
+      //  for (let i = 0; i < 2 /*this.game.players.length==2*/; i++){
+      //      document.querySelector(`.score${i+1}`).innerHTML = `${((i+1)==this.game.player)? "*" : ""}${this.game.sides[i]}: ${this.game.score[i]}`;
+      //  }
+      //  document.querySelector(".best_of").innerHTML = "Best of " + this.game.options.best_of;
     }
 
 
@@ -434,7 +466,7 @@ class Wuziqi extends GameTemplate {
                 
                     //Let player make their move
                     this.addEvents(this.game.board);
-                    this.updateStatus("Your move, "+this.formatPlayer());
+                    this.updateStatus("Your move");
                 } else {
                     //We don't need to run the above functions because this player already ran them through the board events
                     this.updateStatus("Waiting for: <span class='playertitle'>" + this.game.sides[(mv[3]) % 2] + "</span>");
