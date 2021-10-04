@@ -21,7 +21,7 @@
   "dependencies": {
     "@polkadot/api": "^4.17.1",
     "@polkadot/keyring": "^6.11.1",
-    "@polkadot/types": "^4.17.1",
+    "@polkadot/types": "^6.1.2",
     "@polkadot/util": "^6.11.1",
     "@polkadot/util-crypto": "^6.11.1",
     "adm-zip": "^0.4.16",
