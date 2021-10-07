@@ -187,14 +187,15 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 			use the SIMPLEDEAL instruction to deal the contents of a deck
 			of cards securely to all players. the deck is an associative
 			array. what is dealt to players is the INDEX that is used to 
-		  	find the card in the associative array.
+		  	find the card in the associative array. All players are dealt
+			cards.
 
 			    `);
 
 	//
-	// SIMPLEDEAL [number_of_players] [number_of_cards_to_deal] [index_of_deck] [JSON of deck]
+	// SIMPLEDEAL [number_of_cards_to_deal] [index_of_deck] [JSON of deck]
 	//
-	game_self.addMove("SIMPLEDEAL\t"+this.game.players.length+"\t"+7+"\t"+1+"\t"+JSON.stringify(game_self.returnDeck()));
+	game_self.addMove("SIMPLEDEAL\t"+3+"\t"+1+"\t"+JSON.stringify(game_self.returnDeck()));
 	game_self.endTurn();
 
       }
