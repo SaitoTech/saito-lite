@@ -176,7 +176,7 @@ class Wuziqi extends GameTemplate {
                     this.addEvents(this.game.board);
                     this.updateStatus("Your move, "+this.formatPlayer());
                 } else {
-                    this.updateStatus("Waiting for: <span class='playertitle'>Black</span>");
+                    this.updateStatus("Waiting on <span class='playertitle'>Black</span>");
                 }
                 this.updateScore();
 
@@ -277,14 +277,15 @@ class Wuziqi extends GameTemplate {
             boxobj = (this.game.player == (i+1)) ? document.querySelector(".player-box.me") : document.querySelector(".player-box.notme");
             let info = boxobj.querySelector(".info");
             let score = boxobj.querySelector(".plog");
-
+            let scoreHTML = `<div>Score: </div>`;
             info.innerHTML = `<img class="identicon" src="${identicon}">
                                 <div class="player-name">${name}</div>
                                 `;
             
-            score.innerHTML = `Score: `; //${this.game.score[i]} (out of ${this.game.options.best_of})`;
-            for (let j = 0; j < this.game.score[i])
-                score.innerHTML += `<img class="tile" src="${}">`;
+            
+            for (let j = 0; j < this.game.score[i]; j++)
+                scoreHTML += `<img class="piece" src="img/${this.game.sides[i]}piece.png">`;
+            score.innerHTML = scoreHTML; //${this.game.score[i]} (out of ${this.game.options.best_of})`;
             try {
                 dragElement(boxobj);
             } catch (err) {
@@ -472,7 +473,7 @@ class Wuziqi extends GameTemplate {
                     this.updateStatus("Your move");
                 } else {
                     //We don't need to run the above functions because this player already ran them through the board events
-                    this.updateStatus("Waiting for: <span class='playertitle'>" + this.game.sides[(mv[3]) % 2] + "</span>");
+                    this.updateStatus("Waiting on <span class='playertitle'>" + this.game.sides[(mv[3]) % 2] + "</span>");
                 }
                 // Remove this item from the queue.
                 this.game.queue.splice(this.game.queue.length - 1, 1);

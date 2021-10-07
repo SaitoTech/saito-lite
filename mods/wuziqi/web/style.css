@@ -22,7 +22,7 @@
 
 .board {
     display: grid;
-    margin: 1em auto;
+    margin: auto auto;
     /*border: 1px solid #00cfff61;
     background: #2222;
     background-image: url("img/004-polished-wood.png");*/
@@ -33,36 +33,6 @@
     /*box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);*/
 }
 
-/*
-    Size square board relative to the narrower screen dimension
-*/
-@media (orientation: landscape) {
-    .board {
-        width: 80vh;
-        height: 80vh;
-    }
-    .inner{
-        padding: 10vh;
-    }
-    .player-box{
-        top: 40vh;
-        margin: auto 5px;
-    }
-}
-
-@media (orientation: portrait) {
-    .board {
-        width: 80vw;
-        height: 80vw;
-        margin: auto 1em;
-    }
-    .inner{
-        padding: 10vw;
-    }
-    .player-box{
-        bottom: 5px;
-    }
-}
 
 /*
 Board is a grid of wooden squares
@@ -140,41 +110,6 @@ Board is a grid of wooden squares
 */
 
 
-/*
-    Hand painted lines for proper Go board tile placement
-
-.board > .left {
-    background-image: url("img/woodtile-edge.png");
-    transform: rotate(90deg);
-}
-.board > .right {
-    background-image: url("img/woodtile-edge.png");
-    transform: rotate(270deg);
-}
-.board > .top {
-    background-image: url("img/woodtile-edge.png");
-    transform: rotate(180deg);
-}
-.board > .bottom {
-    background-image: url("img/woodtile-edge.png");
-}
-.board > .top.left{
-    background-image: url("img/woodtile-corner.png");   
-    transform: rotate(180deg);      
-}
-.board > .top.right{
-    background-image: url("img/woodtile-corner.png");
-    transform: rotate(270deg);     
-}
-.board > .bottom.left{
-    background-image: url("img/woodtile-corner.png");   
-    transform: rotate(90deg);      
-}
-.board > .bottom.right{
-    background-image: url("img/woodtile-corner.png");  
-    transform: rotate(0deg); 
-}
-*/
 
 /*
  which should lite up when you hover over them
@@ -193,16 +128,6 @@ Board is a grid of wooden squares
     background-color: rgba(255,255,255,0.5);
 }
 
-/*What does this do? Possibly a shift so tiles can go on the crosses?
-.active::after { 
-    content: "";
-    position: absolute;
-    top: -2em;
-    left: -2em;
-    width: 4em;
-    height: 4em;
-    z-index: 5;
-}*/
 
 
 /*
@@ -244,32 +169,26 @@ Board is a grid of wooden squares
 
 .player-box {
   width: 10em;
-  height: 8em;
-  background-color: #4448;
+  min-height: 6em;
+  background-color: #7778;
   color: #fff;
   position: absolute;
   box-shadow: 0px 3px 6px #00000029;
   border: 1px solid #FFFFFF;
   border-radius: 0px 18px 18px 18px;
-  font-size: 1.8em;
+  font-size: 1.2em;
   text-align: center;
+  box-sizing: content-box;
 }
 
-.player-box.me{
-    left: 0px;
-}
-
-.player-box.notme{
-    right: 0px;
-}
 
 .player-box .info{
     background: #AAA;
     box-shadow: 0px 3px 6px #00000029;
-    border: 1px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
     color: black;
     color: var(--saito-cyber-black);
-    border-radius: 0px 18px 6px 0px;
+    border-radius: 0px 18px 3px 0px;
     opacity: 1;
     width: 100%;
     display: inline-flex;
@@ -280,17 +199,25 @@ Board is a grid of wooden squares
 
 .player-box .info .player-name{
     padding-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .player-box .identicon{
-    max-width: 1.8em;
     width: 1.5em;
-    overflow: hidden;
+    box-shadow: 0px 3px 6px #00000029;
 }
 
 .player-box .plog{
-    padding: 0.5em;
+    margin: 0.5em;
 }
 
+.player-box .status{
+    margin: 0.5em;
+}
+
+.player-box .piece{
+    width: 2em;
+}
 .playertitle {
     text-transform: capitalize;
 }
@@ -299,14 +226,89 @@ Board is a grid of wooden squares
     border: 1px solid #125552;
     background: linear-gradient(217deg, #125552, transparent 70.71%), linear-gradient(127deg, #093637, #44A08D 70.71%), linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);
     color: #eee;
+    min-width: 6em;
 }
+
+
+/*
+    Size square board relative to the narrower screen dimension
+*/
+@media (orientation: landscape) {
+    .board {
+        width: 80vh;
+        height: 80vh;
+    }
+    .inner{
+        padding: 10vh;
+    }
+    .player-box{
+        top: 40vh;  /*Center in screen:  50vh - 1/2 height */
+        margin: auto auto;
+        max-width: 20vw;
+    }
+
+    .player-box.me{
+        left: max(5px, calc(12vw - 5em));
+    }
+
+    .player-box.notme{
+        right: max(5px, calc(12vw - 5em));
+    }
+
+
+}
+
+@media (orientation: portrait) {
+    .board {
+        width: 80vw;
+        height: 80vw;
+   
+    }
+
+    .inner{
+        padding: 7vw;
+    }
+
+    .player-box{
+        top: calc(82vw + 7vh);
+        max-width: 35vw;
+    }
+
+    .player-box.me{
+        left: calc(30vw - 5em);
+    }
+
+    .player-box.notme{
+        right: calc(30vw - 5em);
+    }
+}
+
+@media (max-aspect-ratio:  8/7) and (min-aspect-ratio: 1/1) {
+    .inner{
+        padding: 7vh;
+    }
+
+    .player-box{
+        top: calc(100vh - 6em);
+        max-width: 35vw;
+    }
+
+    .player-box.me{
+        left: calc(30vw - 5em);
+    }
+
+    .player-box.notme{
+        right: calc(30vw - 5em);
+    }
+}
+
 
 /*
     Have board take up more space on small screens
     and if necessary move scoreboard and status window to fit on screen
 */
 
-@media (max-height: 750px) and (orientation: landscape) {
+@media (max-height: 500px) and (orientation: landscape) {
     .board {
         width: 95vh;
         height: 95vh;
@@ -314,12 +316,11 @@ Board is a grid of wooden squares
     .inner{
         padding: 2.5vh;
     }
-    body {
-        font-size: 8px;
-    }
+
+
 }
 
-@media (max-width: 650px) and (orientation: portrait) {
+@media (max-width: 500px) and (orientation: portrait) and (max-aspect-ratio: 7/8){
     .board {
         width: 95vw;
         height: 95vw;
@@ -328,9 +329,12 @@ Board is a grid of wooden squares
         padding: 2.5vw;
         padding-top: 45px;
     }
-    
-    body {
-        font-size: 8px;
+
+    .player-box{
+        top: calc(100vw + 1vh + 45px);
+        max-width: 38vw;
     }
+    
+
 }
 
