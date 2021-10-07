@@ -29,7 +29,8 @@ body {
   overflow: hidden;
 }
 
-.dealer-notice {
+
+.player-notice {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -95,7 +96,7 @@ body {
 }
 
 .player-info {
-  width: 25vh;
+  width: min(25vh,25vw);
   height: 20vh;
   background-color: #4448;
   color: #fff;
@@ -109,6 +110,11 @@ body {
 .player-info .status {
   font-size: 1.25em;
 }
+
+.status-info {
+  padding: 10px 0;
+}
+
 
 .player-info-name {
   font-size: 3vh;
@@ -124,6 +130,13 @@ body {
   text-align: center;
   font-size: 3vh;
 }
+
+.dealer .player-notice{
+  background-color: #0004;
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+}
+
 
 .p1 .hand {
   display: none;
