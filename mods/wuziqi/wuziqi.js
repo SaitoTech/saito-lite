@@ -266,6 +266,7 @@ class Wuziqi extends GameTemplate {
         let status = document.querySelector(".status").innerHTML;
         for (let i = 0; i<this.game.players.length; i++){
             let name = this.app.keys.returnIdentifierByPublicKey(this.game.players[i], 1)
+            let identicon = this.app.keys.returnIdenticon(name);
             if (name.indexOf("@") > 0) {
                 name = name.substring(0, name.indexOf("@"));
             }
@@ -277,11 +278,13 @@ class Wuziqi extends GameTemplate {
             let info = boxobj.querySelector(".info");
             let score = boxobj.querySelector(".plog");
 
-            info.innerHTML = `<img class="piece" src="img/${this.game.sides[i]}piece.png">
+            info.innerHTML = `<img class="identicon" src="${identicon}">
                                 <div class="player-name">${name}</div>
                                 `;
             
-            score.innerHTML = `Wins: ${this.game.score[i]} (out of ${this.game.options.best_of})`;
+            score.innerHTML = `Score: `; //${this.game.score[i]} (out of ${this.game.options.best_of})`;
+            for (let j = 0; j < this.game.score[i])
+                score.innerHTML += `<img class="tile" src="${}">`;
             try {
                 dragElement(boxobj);
             } catch (err) {
