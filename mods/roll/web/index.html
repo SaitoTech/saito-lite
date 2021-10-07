@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Saito Roll</title>
+
+    <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="/saito/lib/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="/saito/lib/jquery/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
+    <link rel="manifest" href="/manifest.json">
+
+    <link rel="stylesheet" type="text/css" href="/saito/style.css" />
+    <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
+    <link rel="stylesheet" type="text/css" href="/roll/style.css" />
+
+    <link rel="stylesheet" type="text/css" href="/chat/css/email-chat.css">
+
+    <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
+
+  </head>
+
+  <body>
+
+    <div class="main" id="main" style="display:all">
+
+      <div class="gameboard" id="gameboard">
+
+	<div style="margin-top:40px;margin-bottom:40px;padding:30px;background-color:whitesmoke">
+
+	  This application permits testing of the Saito Game Engine, and provides simply examples of
+	  working code that implements various core gameplay functions. These functions will work 
+	  regardless of the number of players.
+
+	  <p></p>
+
+	  Some functionality like the generation of new (secure) dice rolls are not visible. Be sure
+	  to view the log for details on what is happening behind the scenes!
+
+	  <p></p>
+
+	  Crypto Token: <div class="saito_crypto" id="saito_crypto">SAITO</div>
+
+        </div>
+
+        <div class="button secure_dice_roll" id="secure_dice_roll_button">Secure Dice Roll</div>
+
+	<p></p>
+
+        <div class="button simultaneous_moves" id="simultaneous_moves_button">Simultaneous Moves</div>
+
+	<p></p>
+
+        <div class="button deal_cards_to_pile" id="deal_cards_to_player_button">Deal Cards to Players</div>
+
+	<p></p>
+
+        <div class="button deal_cards_to_table" id="deal_cards_to_table_button">Deal Cards to Table</div>
+
+	<p></p>
+
+        <div class="button deposit_tokens" id="deposit_tokens_button">Deposit Tokens</div>
+
+	<p></p>
+
+        <div class="button request_payment" id="request_payment_button">Request Payment</div>
+
+	<p></p>
+
+        <div class="button make_payment" id="make_payment_button">Make Payment</div>
+
+	<p></p>
+
+        <div class="button check_balance" id="request_payment_button">Request Payment</div>
+
+	<p></p>
+
+        <div class="button deal_cards_to_table" id="check_balance_button">Check Balance</div>
+
+	<p></p>
+
+        <div class="button simultaneous_card_selection" id="simultaneous_card_selection_button">Simultaneous Card Selection</div>
+
+	<p></p>
+
+        <div class="button shuffle_cards" id="shuffle_cards_button">Shuffle Cards</div>
+
+      </div>
+    </div>
+    <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
+  </body>
+</html>
+
