@@ -236,41 +236,79 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
       }
 
+
+      //
+      // request transfer from first opponent
+      //
+      document.getElementById("receive_payment_button").onclick = (e) => {
+
+	let receiver = game_self.game.players[game_self.game.player-1];
+	let sender = receiver;
+	for (let i = 0; i < game_self.game.players.length; i++) {
+	  if (game_self.game.players[i] != receiver) {
+	    sender = game_self.game.players[i]; 
+	    break;
+	  }
+	}
+
+        game_self.addMove("RECEIVE" + "\t" + sender + "\t" + receiver + "\t" + "0.0001" + "\t" + (new Date().getTime()) + "\t" + game_self.game.crypto);
+        game_self.addMove("SEND" + "\t" + sender + "\t" + receiver + "\t" + "0.0001" + "\t" + (new Date().getTime()) + "\t" + game_self.game.crypto);
+	game_self.endTurn();
+
+      }
+
+      //
+      // make transfer to first opponent
+      //
+      document.getElementById("send_payment_button").onclick = (e) => {
+
+	let sender = game_self.game.players[game_self.game.player-1];
+	let receiver = sender;
+	for (let i = 0; i < game_self.game.players.length; i++) {
+	  if (game_self.game.players[i] != sender) {
+	    receiver = game_self.game.players[i]; 
+	    break;
+	  }
+	}
+
+        game_self.addMove("RECEIVE" + "\t" + sender + "\t" + receiver + "\t" + "0.0001" + "\t" + (new Date().getTime()) + "\t" + game_self.game.crypto);
+        game_self.addMove("SEND" + "\t" + sender + "\t" + receiver + "\t" + "0.0001" + "\t" + (new Date().getTime()) + "\t" + game_self.game.crypto);
+	game_self.endTurn();
+
+      }
+
+
+      //
+      // check balance 
+      //
+      document.getElementById("check_balance_button").onclick = (e) => {
+
+	let address = game_self.game.keys[game_self.game.player-1];
+	let ticker = game_self.game.crypto;
+
+	game_self.addMove("NOTIFY\tThe balance check is finished: balance adequate!");
+	game_self.updateLog(`The game engine is checking to see if the balance at address ${address} is at least ${amount} ${ticker}. The game will halt for all players until the balance is at this amount.`);
+
+        if (ticker != "") {
+	  game_self.addMove("BALANCE" + "\t" + "0" + "\t" + address + "\t" + ticker);
+        } else {
+	  game_self.addMove("BALANCE" + "\t" + "0" + "\t" + address);
+	}
+	game_self.endTurn();
+
+      }
+
     } catch (err) {
     }
+
+
+
+
 
 }
 /****
 
         <div class="button simultaneous_moves" id="simultaneous_moves_button">Simultaneous Moves</div>
-
-        <p></p>
-
-        <div class="button deal_cards_to_pile" id="deal_cards_to_player_button">Deal Cards to Players</div>
-
-        <p></p>
-
-        <div class="button deal_cards_to_table" id="deal_cards_to_table_button">Deal Cards to Table</div>
-
-        <p></p>
-
-        <div class="button deposit_tokens" id="deposit_tokens_button">Deposit Tokens</div>
-
-        <p></p>
-
-        <div class="button request_payment" id="request_payment_button">Request Payment</div>
-
-        <p></p>
-
-        <div class="button make_payment" id="make_payment_button">Make Payment</div>
-
-        <p></p>
-
-        <div class="button check_balance" id="request_payment_button">Request Payment</div>
-
-        <p></p>
-
-        <div class="button deal_cards_to_table" id="check_balance_button">Check Balance</div>
 
         <p></p>
 
@@ -304,13 +342,26 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         return 1;
       }
 
+      if (mv[0] === "init") {
+        console.log("sometimes we can handle init stuff in queue...");
+        this.game.queue.splice(qe, 1);
+        return 1;
+      }
+
     }
 
 
     return 1;
   }
 
+  playerPlay(player_id) {
 
+    if (player_id == this.game.player) {
+
+
+
+    }
+  }
 
   returnState() {
 
