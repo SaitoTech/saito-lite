@@ -166,11 +166,15 @@ Board is a grid of wooden squares
     border: 0.8em solid rgb(255, 166, 0) !important;
 }
 
+.opaque30 {
+    opacity: 0.3;
+}
+
 
 .player-box {
-  width: 10em;
-  min-height: 6em;
-  background-color: #7778;
+  width: 15em;
+  min-height: 10em;
+  background-color: #0004;
   color: #fff;
   position: absolute;
   box-shadow: 0px 3px 6px #00000029;
@@ -223,8 +227,8 @@ Board is a grid of wooden squares
 }
 
 .continue {
-    border: 1px solid #125552;
-    background: linear-gradient(217deg, #125552, transparent 70.71%), linear-gradient(127deg, #093637, #44A08D 70.71%), linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);
+    border: 1px solid #aaaaaa;
+    background: linear-gradient(217deg, #343434, transparent 70.71%), linear-gradient(127deg, #121212, #444444 70.71%), linear-gradient(336deg, #666, #222222 70.71%);
     color: #eee;
     min-width: 6em;
 }

@@ -283,8 +283,12 @@ class Wuziqi extends GameTemplate {
                                 `;
             
             
-            for (let j = 0; j < this.game.score[i]; j++)
+            for (let j = 0; j < this.game.score[i]; j++) {
                 scoreHTML += `<img class="piece" src="img/${this.game.sides[i]}piece.png">`;
+            }
+            for (let j = 0; j < (this.game.options.best_of - this.game.score[i]); j++) {
+                scoreHTML += `<img class="piece opaque30" src="img/${this.game.sides[i]}piece.png">`;
+            }
             score.innerHTML = scoreHTML; //${this.game.score[i]} (out of ${this.game.options.best_of})`;
             try {
                 dragElement(boxobj);
@@ -364,6 +368,7 @@ class Wuziqi extends GameTemplate {
                         // If this round win, wins the game - let the winner know.
                         if (this.game.score[this.game.player - 1] > this.game.options.best_of / 2) {
                             this.game.winner = this.game.player;
+                            this.updateScore();
                             salert("You Win!");
 
                             // Add a game over message to the stack.
