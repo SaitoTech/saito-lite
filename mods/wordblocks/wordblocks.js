@@ -98,14 +98,6 @@ class Wordblocks extends GameTemplate {
     });
 
     this.menu.addMenuOption({
-      text: "Player"+this.game.player,
-      id: "playerno",
-      class: "playerno",
-      callback : function(app, game_mod){
-
-      }
-    });
-    this.menu.addMenuOption({
       text : "Game",
       id : "game-game",
       class : "game-game",
@@ -442,7 +434,7 @@ class Wordblocks extends GameTemplate {
       if (this.game.player == this_player) {
         html += `
           <div class="player">
-            <span class="player_name">Your Score</span>
+            <span class="player_name">Player ${this.game.player} (you)</span>
             <span id="score_${this_player}"> ${this.game.score[i]} </span>
           </div>
         `;
@@ -639,7 +631,7 @@ class Wordblocks extends GameTemplate {
       if (this.game.player == this_player) {
         html += `
           <div class="player">
-            <span class="player_name">Your Score</span>
+            <span class="player_name">Player ${this.game.player} (you)</span>
             <span class="player_score" id="score_${this_player}"> ${this.game.score[i]} </span>
           </div>
         `;

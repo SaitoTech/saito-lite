@@ -236,6 +236,7 @@ toggleIntro() {
 
  /*
   Initalize and return state object for tracking game specific data
+  State Object contains some global properties and a single array of objects for the player-specific properties (rather than multiple arrays)
   */
   returnInitialState(num_of_players) {
     let state = {};
@@ -243,11 +244,8 @@ toggleIntro() {
     state.round = 0;
     state.turn = 0;
     state.dealer = 0;            
-
-    state.player = Array(num_of_players);
-    //_names = [];
-    //state.player_credit = [];
-
+    state.player = Array(num_of_players); 
+    //state.player contains { name, credit | wager, payout, hand, total, winner}
 
     for (let i = 0; i < num_of_players; i++) {
       state.player[i] = { credit : parseFloat(this.game.options.stake),
@@ -265,21 +263,21 @@ toggleIntro() {
   }
 
 
-
   /*
-  Unlike Game Module, game.state arrays are 0-indexed
+    Resets state variable and pushing commands to queue
   */
   initializeQueue() {
-    for (let i = 0; i < this.game.players.length; i++) {
+    /*
+      Reset each players starting position, Unlike Game Module, game.state arrays are 0-indexed
+    */
+    for (let i = 0; i < this.game.state.player.length; i++) {
       this.game.state.player[i].wager = 0;
       this.game.state.player[i].payout = 1; //Multiplier for Blackjack bonus
       this.game.state.player[i].hand = []; //Array for holding each players hand
       this.game.state.player[i].total = 0; //Score of the hand
       this.game.state.player[i].winner = null; //Is the player a winner this round
     }
-
-    
-  
+    this.game.queue = [];  
     this.game.queue.push("takebets");
       
     for (let i = this.game.players.length; i>0; i--)
@@ -293,23 +291,52 @@ toggleIntro() {
     
     this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
     //this.game.queue.push("BALANCE\t0\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
-
     
   }
 
 
+  /*
+  Updates game stats  and calls initializeQueue
+  */
   newRound() {
+    //How many players still have credit
+    let solventPlayers = this.countActivePlayers(); 
+    if (solventPlayers ==1 ){
+      console.log("No more players");
+      this.game.queue.push("winner\t");
+      return 1;
+    }else if (this.game.state.player.length > 2){ //if more than 2, remove extras
+       let removal = false;
+        for (let i = 0; i < this.game.state.player.length; i++){
+          if (this.game.state.player[i].credit<=0){
+              console.log(this.game.players,this.game.state);
+              removal = true;
+              //Remove player from game logic
+              this.game.state.player.splice(i,1);
+              this.removePlayer(this.game.players[i]);
+              i--;
+            }      
+        }
+        if (removal) console.log(this.game.players,this.game.state);
+    }
+
+    //Reset player list after removal???
+    for (let i = 0; i < this.game.players.length; i++) {
+      if (this.game.players[i] === this.app.wallet.returnPublicKey()) {
+        this.game.player = (i + 1);
+      }
+    }
+    console.log(this.game.player);
 
     //
     // advance and reset variables
-    //
     this.game.state.turn = 0;
+    this.game.state.blackjack = 0;
     this.game.state.round++;
-    this.game.state.dealer = this.game.state.dealer%this.game.players.length + 1;
+    //This is going to be a little problematic if removing people from the game
+    this.game.state.dealer = this.game.state.dealer%this.game.players.length + 1; 
 
-    console.log("Round: "+ this.game.state.round);
-
-    this.updateLog("Round: "+(this.game.state.round));
+    this.updateLog(`Round: ${this.game.state.round}, Dealer: P${this.game.state.dealer} (${this.game.state.player[this.game.state.dealer-1].name})`);
     document.querySelectorAll('.plog').forEach(el => {
        el.innerHTML = "";
     });
@@ -330,8 +357,7 @@ toggleIntro() {
       let qe = this.game.queue.length - 1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
-
-      console.log("processing: " + mv[0],mv);
+      console.log("processing: " + mv[0],mv,this.game.queue);
       this.displayBoard();
       
       if (mv[0] === "start" || mv[0] === "newround") {
@@ -344,6 +370,7 @@ toggleIntro() {
       if (mv[0] === "play") {
         this.game.queue.splice(qe, 1);
         if (parseInt(mv[1]) == this.game.player) {
+          //skip if player already finished
           this.playerTurn();
         } else {
           this.updateStatus("Waiting for " + this.game.state.player[mv[1] - 1].name);
@@ -370,17 +397,22 @@ toggleIntro() {
 
         if (this.game.player != player) {
           if (this.game.player == this.game.state.dealer)
-            this.updateStatus('<div class="">You are the dealer. Waiting for players to set their wager</div>');
+            this.updateStatus('<div class="status-info">You are the dealer. Waiting for players to set their wager</div>');
           else 
-            this.updateStatus('<div class="">Player '+player+' is picking wager</div>');
+            this.updateStatus('<div class="status-info">Player '+player+' is picking wager</div>');
         }else{
           //Should be tied to the stake, 1%, 5%, 10%, 25%
             let stake = parseFloat(this.game.options.stake);
-            let fractions = [0.05, 0.1, 0.25, 0.50];
-            let html = `<div class="">How much would you like to wager? (Available credit: ${this.game.state.player[player-1].credit})</div>`;
+            let fractions = [0.01, 0.05, 0.1, 0.25];
+            let myCredit = this.game.state.player[player-1].credit
+            let html = `<div class="status-info">How much would you like to wager? (Available credit: ${myCredit})</div>`;
             html += '<ul>';
-            for (let i = 0; i < fractions.length; i++)
-              html += `<li class="menu_option" id="${fractions[i]*stake}">${fractions[i]*stake}</li>`;
+            for (let i = 0; i < fractions.length; i++){
+              if (fractions[i]*stake<myCredit)
+                html += `<li class="menu_option" id="${fractions[i]*stake}">${fractions[i]*stake}</li>`;
+            }
+            //Add an all-in option when almost out of credit
+            if (fractions.slice(-1)*stake >= myCredit) html += `<li class="menu_option" id="${myCredit}">All In!</li>`;
             html += '</ul>';
     
             this.updateStatus(html, 1);
@@ -414,9 +446,19 @@ toggleIntro() {
         return 1;
       }
 
+      if (mv[0]==="blackjack"){
+        this.game.queue.splice(qe, 1);
+        let player = parseInt(mv[1]);
+        let playerName = (player == this.game.state.dealer) ? "Dealer" : `Player ${mv[1]}`;
+        this.game.state.player[player-1].payout = 2; //Temporary Blackjack bonus
+        this.updateLog(`${playerName} has a blackjack!`);
+        return 1;
+      }
+
       if (mv[0] === "stand") {
         this.game.queue.splice(qe, 1);
-        this.updateLog(`Player ${mv[1]} stands with ${mv[2]}`);
+        let playerName = (mv[1] == this.game.state.dealer) ? "Dealer" : `Player ${mv[1]}`;
+        this.updateLog(`${playerName} stands`);
         return 1;
       }
 
@@ -425,8 +467,8 @@ toggleIntro() {
         let player = mv[1];
         
         if (player != this.game.state.dealer){ //Player, not dealer
-          this.updateLog(`Player ${player} busts`);
           let wager = this.game.state.player[player-1].wager;
+          this.updateLog(`Player ${player} busts, loses ${wager} to dealer`);
           //Collect their chips immediately
           this.game.state.player[player-1].credit -= wager;
           this.game.state.player[this.game.state.dealer-1].wager += wager;
@@ -459,9 +501,38 @@ toggleIntro() {
             let playerID = (this.game.state.dealer+i)%this.game.players.length + 1;
             this.game.queue.push("selectwager\t"+ playerID);
           }
+        console.log("Bet order:",this.game.queue);
         return 1;
       }
-    
+      
+      if (mv[0] === "dealer"){
+        this.game.queue.splice(qe, 1);
+        //Am I the dealer        
+        if (this.game.state.dealer == this.game.player) {
+          //check for dealer blackjack  
+          let score = this.scoreArrayOfCards(this.myCards());
+          if (score == 21){
+            this.addMove("announceblackjack");
+            this.addMove(`revealhand\t${this.game.state.dealer}\t1`);
+          } 
+          this.endTurn();       
+        } else {
+          this.updateStatus("Waiting for dealer");
+        }
+        return 0;
+      }
+
+      if (mv[0] === "announceblackjack"){
+        this.game.state.blackjack = 1;
+        this.updateLog("Dealer has a blackjack! All players lose!");
+        //Clear Game queue
+        this.game.queue = [];
+        this.game.queue.push("pickwinner");
+        //Show all hands
+        for (let i = 1; i <= this.game.players.length; i++)
+          this.game.queue.push(`revealhand\t${i}\t1`); 
+        return 1;
+      }
 
       if (mv[0] === "startplay") { //Arrange the queue for players to take turns
 
@@ -469,15 +540,7 @@ toggleIntro() {
 
         this.game.queue.push("pickwinner");
         let otherPlayers = [];
-        //Check for Blackjacks
-        let myScore = this.scoreArrayOfCards(this.myCards());
-        /*
-          Each player independently checks if they have a blackjack,
-          if so, interrupt the normal queue order to announce the blackjack,
-          must be processed first, then remaining players play as normal
-          Also, the fucking dealer complicates the situation
-        */
-
+        
         //Dealer Goes Last
         this.game.queue.push("play\t"+(this.game.state.dealer));
         this.game.queue.push(`revealhand\t${this.game.state.dealer}\t1`);
@@ -489,16 +552,19 @@ toggleIntro() {
           this.game.queue.push("play\t"+otherPlayer);
           this.game.queue.push(`revealhand\t${otherPlayer}\t1`); 
         }
-
+        this.game.queue.push(`dealer`);
+        
+        console.log("Play Order:",this.game.queue);
         return 1;
       }
 
-
+      //Player either shows their top card or their full hand
       if (mv[0] === "revealhand") {
-
         this.game.queue.splice(qe, 1);
         let force_reveal = (mv[2] == "1"); //Fuzzy match, because string~int
-        if (this.game.player == parseInt(mv[1])) {
+        if (this.game.player == parseInt(mv[1])) { //Only share if it is my turn
+          // Skip if nothing to update
+          console.log(this.game.deck[0]);
            if (force_reveal){
               this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
            }else{
@@ -506,71 +572,52 @@ toggleIntro() {
               this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(cardarray));
             }
           this.endTurn();
-        }else{
-          console.log("Not my hand to reveal");
         }
+
         return 0;
       }
 
-      if (mv[0] === "hand") { //Move data into shared public data structure
+      //Move data into shared public data structure
+      if (mv[0] === "hand") { 
         let player = parseInt(mv[1]);
         let hand = JSON.parse(mv[2]);
         this.game.state.player[player-1].hand = hand;
         this.game.queue.splice(qe, 1);
+        let handScore = this.scoreArrayOfCards(this.myCards(hand));
+        let whoseHand = (player == this.game.state.dealer)?"Dealer":`Player ${mv[1]}`;
+        if (handScore>0) {
+          let message;
+          if (hand.length == 1 && player == this.game.state.dealer)
+           message= `Dealer has ${handScore} showing`;
+          else if (hand.length>1)
+            message = `${whoseHand} has ${handScore}`;
+          else return 1;
+          this.updateLog(message);
+        }
+
         return 1;
       }
 
 
       if (mv[0] === "pickwinner") {
-        this.game.queue.splice(qe, 1);
-        this.pickWinner();
-
         //
         // move to next round when done
         //
         this.game.queue.push("newround");
         
-        //Update each player's winnings
-        for (let i = 0; i < this.game.state.player.length; i++){
-          if (i != (this.game.state.dealer-1)){ //Not the Dealer
-            if (this.game.state.player[i].wager>0){ //Player still has something to resolve
-              let payout = this.game.state.player[i].wager*this.game.state.player[i].payout;
-              if (this.game.state.player[i].winner){
-                this.game.state.player[this.game.state.dealer-1].wager -= payout;
-                this.game.state.player[i].credit += payout;
-                if (i+1 == this.game.player){
-                  let msg = (this.game.state.player[i].payout == 1)? `You Win Your Bet of ${payout}`: `Blackjack! You win double your bet, total winnings: ${payout}`;
-                  this.game.queue.push("ACKNOWLEDGE\t"+msg);
-                }
-              }else{
-                this.game.state.player[this.game.state.dealer-1].wager +=payout;
-                this.game.state.player[i].credit -= payout;
-                if (i+1 == this.game.player){
-                  this.game.queue.push(`ACKNOWLEDGE\tYou Lose Your Bet of ${payout}`);
-                }
-              }
-            }
-          }
-        }
-        //Update Dealer
-        let dealerEarnings = this.game.state.player[this.game.state.dealer-1].wager
-        this.game.state.player[this.game.state.dealer-1].credit += dealerEarnings;
-        let ack = ""
-        if (dealerEarnings>0){
-          ack = `ACKNOWLEDGE\tYou win ${dealerEarnings}`;
-          this.updateLog(`Dealer collects ${dealerEarnings} from the other players`);
-        }else if (dealerEarnings<0){
-          ack = `ACKNOWLEDGE\tYou lose ${-dealerEarnings}`;
-          this.updateLog(`Dealer pays out ${-dealerEarnings} to the other players`);
-        }else{
-          ack = `ACKNOWLEDGE\tIt's a wash!`;
-          this.updateLog("Dealer has no change in credits");
-        } 
-        if (this.game.player == this.game.state.dealer){
-          this.game.queue.push(ack);  //only display message to dealer
-        }
+        this.game.queue.splice(qe, 1);
+        this.pickWinner();       
         
         return 1;
+      }
+
+      if (mv[0] === "winner") { //copied from poker
+        console.log("HI WINNER!");
+        this.updateStatus("Game Over: " + this.game.state.player[0].name + " wins!");
+        this.updateLog("Game Over: " + this.game.state.player[0].name + " wins!");
+        this.game.winner = this.game.players[0];
+        //this.resignGame(this.game.id); //post to leaderboard - ignore 'resign'
+        return 0;
       }
 
 
@@ -590,60 +637,90 @@ toggleIntro() {
     Test if any outstanding bets on the board
     Wagers are cleared (zeroed out) when players are eliminated
   */
-  areThereAnyPlayers(){
+  areThereAnyBets(){
     for (let i = 0; i < this.game.state.player.length; i++)
       if (i+1 != this.game.state.dealer)
-        if (this.game.state.player[i].wager>0)
+        if (this.game.state.player[i].wager>0 && this.game.state.player[i].payout!=2)
           return true;
     
     return false;
   }
 
+  countActivePlayers(){
+    let playerCount = 0;
+    for (let i = 0; i < this.game.state.player.length; i++)
+      //if (i+1 != this.game.state.dealer)
+        if (this.game.state.player[i].credit>0)
+          playerCount++;
 
-  myCards(){
+    return playerCount;
+  }
+
+
+  /*
+  Decodes the indexed card numbers into the Suit+Value
+  */
+  myCards(playerHand = null){
+    if (!playerHand) playerHand = this.game.deck[0].hand;
     let array_of_cards = [];
-    for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-      let tmpr = this.game.deck[0].cards[this.game.deck[0].hand[i]].name;
+    for (let i = 0; i < playerHand.length; i++) {
+      let tmpr = this.game.deck[0].cards[playerHand[i]].name;
       let tmpr2 = tmpr.split(".");
       array_of_cards.push(tmpr2[0]);
     }
     return array_of_cards;
   }
 
+  canSplit(){
+    if (this.game.player == this.game.state.dealer)
+      return false;  //Must be a player
+    let cards = this.myCards();
+    if (cards.length != 2)
+      return false;  //Must have two cards (first move)
+    let me = this.game.state.player[this.game.player-1];
+    if (me.credit < 2*me.wager)
+      return false; //Must have sufficient credit
+    if (cards[0].length == 2 && cards[1].length == 2 && cards[0][1] == cards[1][1])
+      return true;  //Cards must match Ace, 2, ... 9. Don't let players split 10s
+    return false;
+  }
+
   playerTurn() {
 
     let blackjack_self = this;
     let html;
-    //this.displayBoard();
-    //this.pickWinner(); Why do this before player acts?
+    
     my_total = this.scoreArrayOfCards(this.myCards());
 
     
     if (my_total < 0) { //Player or Dealer Busts
-      let html = "";
+      html = "";
       html += '<div class="menu-player">You have gone bust</div>';
       html += '<ul>';
       html += '<li class="menu_option" id="bust">confirm</li>';
       html += '</ul>';
-    
-      this.updateStatus(html, 1);
     } else {
-      if (!blackjack_self.areThereAnyPlayers()){  //Check if Dealer need to play
+      if (!blackjack_self.areThereAnyBets()){  //Check if Dealer need to play -- blackjacks too!
         html = `<div class="menu-player">All the players have gone bust</div><div>You win by default</div>
                     <ul><li class="menu_option" id="win">confirm</li></ul>`;
         this.updateStatus(html, 1);
       }else{ //Let Player or Dealer make choice
         if (blackjack_self.game.player == blackjack_self.game.state.dealer)
-          html = '<div class="menu-player">You are the dealer, your move:';
+          html = '<div class="menu-player">Dealer, your move:</div><ul>';
         else 
-          html = '<div class="menu-player">Your move:';
-        html += `</div><ul><li class="menu_option" id="hit">hit</li><li class="menu_option" id="stand">stand</li></ul>`;
-        this.updateStatus(html, 1);
+          html = '<div class="menu-player">Your move:</div><ul>';
+        //if (blackjack_self.canSplit()) html += `<li class="menu_option" id="split">split</li>`;
+        html += `<li class="menu_option" id="hit">hit</li><li class="menu_option" id="stand">stand</li></ul>`;
       }
-    
+    }
+    //Blackjack!
+    if (my_total == 21 && this.game.deck[0].hand.length == 2){
+      html = `<div class="menu-player">You got a blackjack</div>
+              <ul><li class="menu_option" id="blackjack">confirm</li></ul>`;
     }
     
-    //blackjack_self.addMove("hand\t"+blackjack_self.game.player+"\t"+JSON.stringify(blackjack_self.game.deck[0].hand));
+
+    this.updateStatus(html, 1);
     this.lockInterface();
 
     $('.menu_option').off();
@@ -671,6 +748,17 @@ toggleIntro() {
         blackjack_self.endTurn();
         return 0;
       }
+      if (choice === "blackjack"){
+        blackjack_self.addMove("blackjack\t"+blackjack_self.game.player);
+        blackjack_self.endTurn();
+        return 0; 
+      }
+      /*if (choice === "split"){
+        blackjack_self.split = blackjack_self.game.deck[0].hand.splice(1);
+        blackjack_self.addMove("split\t" + blackjack_self.game.player);
+        blackjack_self.endTurn();
+        return 0; 
+      }*/
     });
   }
 
@@ -772,6 +860,10 @@ toggleIntro() {
       document.querySelector('.cardfan').classList.add('hidden');
       player_box = this.returnViewBoxArray();
     }
+    if (player_box.length == 0){
+      console.log("No players to display");
+      return;
+    }
 
     for (let j = 2; j < 7; j++) { //Empty chairs are in DOM, but dynamically hidden/displayed
       let boxobj = document.querySelector("#player-info-" + j);
@@ -829,17 +921,20 @@ toggleIntro() {
           this.cardfan.attachEvents(this.app, this);
       }
 
-      boxobj.querySelector(".info").innerHTML = newhtml;
-
+      
       /*
       if (boxobj.querySelector(".plog").innerHTML == "") {
         boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
       }
       */
       if (this.game.state.dealer == (i+1)) {
-        boxobj.querySelector(".plog").innerHTML = `<div class="dealer-notice">DEALER</div>`;
+        newhtml += `<div class="player-notice">DEALER</div>`;        
+        boxobj.classList.add("dealer");
+      }else {
+        newhtml += `<div class="player-notice">Player ${i+1}</div>`;
+        boxobj.classList.remove("dealer");
       }
-
+      boxobj.querySelector(".info").innerHTML = newhtml;
     }
   }
 
@@ -857,7 +952,9 @@ toggleIntro() {
 
 
 
-
+  /*
+  Sends a message to restart the queue
+  */
   endTurn(nextTarget = 0) {
 
     $(".menu_option").off();
@@ -903,13 +1000,17 @@ toggleIntro() {
     return total;
   }
 
+  
+  /*
+  Evaluate the scores of all the players hands
+  Then update credits
 
+  When players bust, we resolve them immediately.
+  Blackjacks are held to the end for convenience so we make sure dealer can't accidentally tie a blackjack
+  If the dealer has a blackjack, this.game.state.blackjack = 1, all players lose no matter what!
+  The dealer doesn't set a wager, so we use that as a clearing house to track the total credit exchange between players and the house
+  */
   pickWinner() {
-
-    //
-    // score players
-    //
-    
     let dealerScore = 0;
     for (let i = 0; i < this.game.state.player.length; i++) {
       let array_of_cards = [];
@@ -923,18 +1024,107 @@ toggleIntro() {
  
       this.game.state.player[i].total = this.scoreArrayOfCards(array_of_cards);
       console.log("Player ",i," total:", this.game.state.player[i].total);
-
+      
       if ((i+1) == this.game.state.dealer)
         dealerScore = this.game.state.player[i].total;
       else{
-        if (this.game.state.player[i].total == 21 && this.game.state.player[i].hand.length == 2)
-          this.game.state.player[i].payout = 2; //Temporary Blackjack bonus
+        if (this.game.state.player[i].total == 21 && this.game.state.player[i].hand.length ==2)
+          this.game.state.player[i].payout = 2; //Fallback checking that player has a blackjack 
       }
     }
+
     //Tie goes to the dealer
     for (let i = 0; i < this.game.state.player.length; i++) 
-      this.game.state.player[i].winner = (this.game.state.player[i].total > dealerScore);
+      this.game.state.player[i].winner = ((this.game.state.player[i].total > dealerScore || this.game.state.player[i].payout === 2) && this.game.state.blackjack ==0);
     
+    let debt = 0;
+    let msg;
+    //If Dealer Blackjack
+    if (this.game.state.blackjack == 1){
+      for (let i = 0; i < this.game.state.player.length; i++){
+        if (i != (this.game.state.dealer-1)){ //Not the Dealer
+          //If the player also has a blackjack
+          if (this.game.state.player[i].payout == 2){
+            debt = this.game.state.player[i].wager;
+            msg = `Congrats on your blackjack, but you still lose your wager of ${debt}.`;
+          }else{
+            debt = this.game.state.player[i].wager * 2;
+            msg = `You have to pay the dealer double your wager for a total of ${debt}.`;
+          }
+          this.game.state.player[this.game.state.dealer-1].wager += debt;
+          this.game.state.player[i].credit -= debt;
+          //Check for bankruptcy to personalize message
+          if (this.game.state.player[i].credit < 0)
+            msg+= " That bankrupts you!";
+          if (i+1 == this.game.player){
+            this.game.queue.push("ACKNOWLEDGE\t"+msg);
+            //this.updateLog(`You lose ${debt}`);    
+          }//else{
+            this.updateLog(`Player ${i+1} loses ${debt}`);  
+          //}
+          
+        }
+
+      }
+    }else{
+
+    //Otherwise, normal processing
+    //Update each player's winnings
+        for (let i = 0; i < this.game.state.player.length; i++){
+          if (i != (this.game.state.dealer-1)){ //Not the Dealer
+            if (this.game.state.player[i].wager>0){ //Player still has something to resolve
+              debt = this.game.state.player[i].wager*this.game.state.player[i].payout;
+              if (this.game.state.player[i].winner){
+                this.updateLog(`Player ${i+1} wins ${debt}`);
+                this.game.state.player[this.game.state.dealer-1].wager -= debt;
+                this.game.state.player[i].credit += debt;
+                if (i+1 == this.game.player){
+                  let msg = (this.game.state.player[i].payout == 1)? `You Win Your Bet of ${debt}`: `Blackjack! You win double your bet, total winnings: ${debt}`;
+                  this.game.queue.push("ACKNOWLEDGE\t"+msg);
+                }
+              }else{
+                this.game.state.player[this.game.state.dealer-1].wager += debt;
+                this.game.state.player[i].credit -= debt;
+                this.updateLog(`Player ${i+1} loses ${debt}`);
+                if (i+1 == this.game.player){
+                  if (this.game.state.player[i].credit<=0)
+                    this.game.queue.push(`ACKNOWLEDGE\tYou Lose Your Bet of ${debt} and are out of money! Better luck next time`);
+                  else this.game.queue.push(`ACKNOWLEDGE\tYou Lose Your Bet of ${debt}`);
+                 }
+              }
+            }
+          }
+        }
+      }
+        //Update Dealer
+        let dealerEarnings = this.game.state.player[this.game.state.dealer-1].wager
+        this.game.state.player[this.game.state.dealer-1].credit += dealerEarnings;
+        let ack = ""
+        if (dealerEarnings>0){
+          ack = `You win ${dealerEarnings}`;
+          this.updateLog(`Dealer collects ${dealerEarnings} total`);
+        }else if (dealerEarnings<0){
+          ack = `You lose ${-dealerEarnings}`;
+          this.updateLog(`Dealer pays out ${-dealerEarnings} total`);
+        }else{
+          ack = `It's a wash!`;
+          this.updateLog("Dealer has no change in credits");
+        } 
+        if (this.game.player == this.game.state.dealer){
+          if (this.game.state.player[this.game.player-1].credit <= 0)
+            ack += " You are out of money! Better luck next time";
+          this.game.queue.push("ACKNOWLEDGE\t"+ack);  //only display message to dealer
+        }
+
+        //Boot bankrupt players
+        for (let i = 0; i < this.game.state.player.length; i++){
+          if (this.game.state.player[i].credit<=0){
+              //Global messaging
+              this.updateLog(`Player ${i+1} goes bankrupt!`);
+            }      
+        }
+        
+
     return 1;
   }
 
