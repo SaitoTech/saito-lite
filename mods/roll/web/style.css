@@ -23,15 +23,33 @@ body {
   overflow: hidden;
 }
 
-.player-info {
-  min-width: 30vh;
-  height: 32vh;
-  bottom: 1vh;
-  left: 50vw;
-  transform: translateX(-50%);
-  width: 16vw;
-  overflow-y: scroll;
+.introduction-container {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top:40px;
+  margin-bottom:40px;
+  padding:30px;
+  background-color:whitesmoke;
+  font-size: 2em;
 }
-.pile{
-  
+
+h2 {
+  margin: 0 0 0 0;
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  margin-left: 20px;
+  margin-bottom: 40px;
+  margin-top: 40px;
 }
+
+.button {
+  font-size: 1.2em;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  height: 40px;
+  width: 220px;
+  text-align: center;
+}
+
+

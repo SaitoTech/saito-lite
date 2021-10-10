@@ -19,8 +19,6 @@
     <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
     <link rel="stylesheet" type="text/css" href="/roll/style.css" />
 
-    <link rel="stylesheet" type="text/css" href="/chat/css/email-chat.css">
-
     <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
 
   </head>
@@ -31,30 +29,39 @@
 
       <div class="gameboard" id="gameboard">
 
-	<div style="margin-top:40px;margin-bottom:40px;padding:30px;background-color:whitesmoke">
+	<div class="introduction-container">
 
-	  This application permits testing of the Saito Game Engine, and provides simply examples of
-	  working code that implements various core gameplay functions. These functions will work 
-	  regardless of the number of players.
-
-	  <p></p>
-
-	  Some functionality like the generation of new (secure) dice rolls are not visible. Be sure
-	  to view the log for details on what is happening behind the scenes!
-
-	  <p></p>
-
-	  Crypto Token: <div class="saito_crypto" id="saito_crypto">SAITO</div>
+	  Saito Game Engine: test suite - active crypto is <span class="saito_crypto" id="saito_crypto">SAITO</span>
 
         </div>
 
-        <div class="button secure_dice_roll" id="secure_dice_roll_button">Secure Dice Roll</div>
+	<h2>Interfaces</h2>
+
+        <div class="button add_menu" id="add_menu_button">Display Menu</div>
 
 	<p></p>
 
-        <div class="button simultaneous_moves" id="simultaneous_moves_button">Simultaneous Moves</div>
+        <div class="button display_cardfan" id="display_cardfan_button">Display Cardfan</div>
 
 	<p></p>
+
+        <div class="button display_hud" id="display_cardhud_button">Display Hud</div>
+
+	<p></p>
+
+        <div class="button toggle_cardbox" id="toggle_cardbox_button">Toggle Cardbox</div>
+
+	<p></p>
+
+        <div class="button display_overlay" id="display_overlay_button">Display Overlay</div>
+
+	<p></p>
+
+        <div class="button display_blocking_overlay" id="display_blocking_overlay_button">Display Blocking Overlay</div>
+
+	<p></p>
+
+	<h2>Dice and Decks</h2>
 
         <div class="button deal_cards_to_pile" id="deal_cards_to_player_button">Deal Cards to Players</div>
 
@@ -64,9 +71,29 @@
 
 	<p></p>
 
-        <div class="button deposit_tokens" id="deposit_tokens_button">Deposit Tokens</div>
+        <div class="button shuffle_cards" id="shuffle_deck_button">Shuffle Deck</div>
 
 	<p></p>
+
+        <div class="button insecure_dice_roll" id="insecure_dice_roll_button">Roll Dice Non-Securely</div>
+
+	<p></p>
+
+        <div class="button secure_dice_roll" id="secure_dice_roll_button">Roll Dice Securely</div>
+
+	<p></p>
+
+	<h2>Players and Turns</h2>
+
+        <div class="button consecutive_moves" id="consecutive_moves_button">Test Consecutive Moves</div>
+
+	<p></p>
+
+        <div class="button simultaneous_moves" id="simultaneous_moves_button">Test Simultaneous Moves</div>
+
+	<p></p>
+
+	<h2>Cryptocurrency Integration and Support</h2>
 
         <div class="button receive_payment" id="receive_payment_button">Request Payment</div>
 
@@ -81,10 +108,6 @@
 	<p></p>
 
         <div class="button simultaneous_card_selection" id="simultaneous_card_selection_button">Simultaneous Card Selection</div>
-
-	<p></p>
-
-        <div class="button shuffle_cards" id="shuffle_cards_button">Shuffle Cards</div>
 
       </div>
     </div>
