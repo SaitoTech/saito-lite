@@ -22,7 +22,7 @@ class GameTestSuite extends GameTemplate {
     this.useHUD = 0;
 
     this.minPlayers = 2;
-    this.maxPlayers = 4;
+    this.maxPlayers = 6;
 
     return this;
 
@@ -32,7 +32,7 @@ class GameTestSuite extends GameTemplate {
 
 
   //
-  // manually announce arcade banner support
+  // the contents of this function allow the Arcade to display and start games.
   //
   respondTo(type) {
 
@@ -67,10 +67,13 @@ class GameTestSuite extends GameTemplate {
 
 
   //
-  // every time the game boots
+  // initialize module when it starts
   //
   initializeGame(game_id) {
 
+    //
+    // create game if it does not exist
+    //
     if (!this.game.state) {
 
       this.game.state = this.returnState();
@@ -86,20 +89,20 @@ class GameTestSuite extends GameTemplate {
   }
 
   //
-  // initialize HTML (overwrites game template stuff, so include...)
+  // initialize HTML and UI components
   //
   initializeHTML(app) {
 
     super.initializeHTML(app);
 
     //
-    // add ui components here
+    // add log
     //
     this.log.render(app, this);
     this.log.attachEvents(app, this);
 
     //
-    // ADD CHAT
+    // add chat
     //
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
@@ -109,16 +112,12 @@ class GameTestSuite extends GameTemplate {
 
     //
     // if we support cardbox, we have to re-render the hud after
-    // it has already been initiatized.
+    // it has already been initiatized. this can be done here in 
+    // the initializeHTML function as below. we have this code 
+    // disabled as we are not showing the HUD by default.
     //
     //this.hud.render(app, this);
     //this.hud.attachEvents(app, this);
-
-
-    //
-    // make the log visible
-    //
-    this.log.toggleLog();
 
     let game_self = this;
 
@@ -533,26 +532,12 @@ console.log("error: " + err);
     return 1;
   }
 
-  playerPlay(player_id) {
-    if (player_id == this.game.player) {
-    }
-  }
 
   returnState() {
-
     let state = {};
-
     return state;
   }
 
-  returnCardFromDeck(idx) {
-
-    let deck = this.returnDeck();
-    let card = deck[idx];
-
-    return card.name.substring(0, card.name.indexOf('.'));
-
-  }
 
   returnDeck() {
 
@@ -613,11 +598,6 @@ console.log("error: " + err);
 
     return deck;
 
-  }
-
-  addShowCardEvents(onCardClickFunction=null) {
-    this.changeable_callback = onCardClickFunction;
-    this.hud.attachCardEvents(this.app, this);
   }
 
 }
