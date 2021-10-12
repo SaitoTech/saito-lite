@@ -5,17 +5,18 @@ const saito = require('../../lib/saito/saito');
 //////////////////
 // CONSTRUCTOR  //
 //////////////////
-class Roll extends GameTemplate {
+class GameTestSuite extends GameTemplate {
 
   constructor(app) {
 
     super(app);
 
-    this.name = "Roll";
-    this.description = 'A version of Roll for the Saito Arcade';
+    this.name = "GameTestSuite";
+    this.gamename = "Game Test Suite";
+    this.description = 'A test suite covering core functions for the Saito Game Engine';
     this.categories = "Games Arcade Entertainment";
-    this.type            = "Classic Cardgame";
-    this.card_img_dir = '/roll/img/cards';
+    this.type            = "Education Development";
+    this.card_img_dir = '/gametestsuite/img/cards';
 
     // disable by default
     this.useHUD = 0;
@@ -53,8 +54,8 @@ class Roll extends GameTemplate {
 
     if (type == "arcade-carousel") {
       let obj = {};
-      obj.background = "/roll/img/arcade/arcade-banner-background.png";
-      obj.title = "Roll";
+      obj.background = "/gametestsuite/img/arcade/arcade-banner-background.png";
+      obj.title = "GameTestSuite";
       return obj;
     }
 
@@ -131,6 +132,19 @@ class Roll extends GameTemplate {
       }
 
       //
+      // add player boxes button
+      //
+      document.getElementById("add_player_boxes_button").onclick = (e) => {
+	this.playerbox.render(app, this);
+	this.playerbox.attachEvents(app, this);
+	for (let i = 0; i < this.game.players.length; i++) {
+	  this.playerbox.refreshName(i+1);
+	  this.playerbox.refreshCards(i+3);
+	}
+      }
+
+
+      //
       // secure dice roll
       //
       document.getElementById("secure_dice_roll_button").onclick = (e) => {
@@ -139,7 +153,7 @@ class Roll extends GameTemplate {
 
 			Calling the function requestSecureRoll() prior to submitting 
 			a move will initiate a cryptographically-secure re-generation 
-			of the random number used to generate dice rolls. This prevents 
+			of the random number used to generate dice roll. This prevents 
 			any player from being able to pre-calculate. The mechanism 
 		     	implemented requires all players to contribute randomization to 
 			the number.
@@ -149,6 +163,45 @@ class Roll extends GameTemplate {
         game_self.endTurn();
       }
 
+
+      //
+      // simultaneous pick
+      //
+      document.getElementById("simultaneous_pick_button").onclick = (e) => {
+
+	let simultaneous_pick_card = Math.random().toString();
+
+	game_self.updateLog(`
+
+			All players must click this button. The backend code
+			will consequently perform a cryptographic exchange that
+			permits provably-fair reconstruction of simultaneously-
+			selected numbers, without revealing those numbers until
+			all players have committed and publicized their
+			selections:
+
+			Your card is ${simultaneous_pick_card};
+
+			    `);
+
+	let hash1 = game_self.app.crypto.hash(simultaneous_pick_card);;
+	let hash2 = game_self.app.crypto.hash(Math.random().toString());
+	let hash3 = game_self.app.crypto.hash(hash2 + hash1);
+
+        let card_sig = game_self.app.crypto.signMessage(simultaneous_pick_card, game_self.app.wallet.returnPrivateKey());
+        let hash2_sig = game_self.app.crypto.signMessage(hash2, game_self.app.wallet.returnPrivateKey());
+        let hash3_sig = game_self.app.crypto.signMessage(hash3, game_self.app.wallet.returnPrivateKey());
+
+	game_self.game.spick_card = simultaneous_pick_card;
+	game_self.game.spick_hash = hash2;
+
+        game_self.addMove("SIMULTANEOUS_PICK\t"+game_self.game.player+"\t"+hash3+"\t"+hash3_sig);
+        game_self.endTurn();
+
+      };
+
+
+      //
 
       //
       // consecutive moves
@@ -243,26 +296,6 @@ class Roll extends GameTemplate {
       }
 
 
-
-      //
-      // secure dice roll
-      //
-      document.getElementById("secure_dice_roll_button").onclick = (e) => {
-
-         // request secure roll
-	 game_self.updateLog(`
-
-			Calling the function requestSecureRoll() prior to submitting 
-			a move will initiate a cryptographically-secure re-generation 
-			of the random number used to generate dice rolls. This prevents 
-			any player from being able to pre-calculate. The mechanism 
-		     	implemented requires all players to contribute randomization to 
-			the number.
-
-			    `);
-         game_self.requestSecureRoll();
-         game_self.endTurn();
-      }
 
       //
       // deal cards to players
@@ -525,58 +558,58 @@ console.log("error: " + err);
 
     var deck = {};
 
-    deck['1'] = { name: "S1.png" , img: "/roll/img/cards/S1.png" }
-    deck['2'] = { name: "S2.png" , img: "/roll/img/cards/S2.png" }
-    deck['3'] = { name: "S3.png" , img: "/roll/img/cards/S3.png" }
-    deck['4'] = { name: "S4.png" , img: "/roll/img/cards/S4.png" }
-    deck['5'] = { name: "S5.png" , img: "/roll/img/cards/S5.png" }
-    deck['6'] = { name: "S6.png" , img: "/roll/img/cards/S6.png" }
-    deck['7'] = { name: "S7.png" , img: "/roll/img/cards/S7.png" }
-    deck['8'] = { name: "S8.png" , img: "/roll/img/cards/S8.png" }
-    deck['9'] = { name: "S9.png" , img: "/roll/img/cards/S9.png" }
-    deck['10'] = { name: "S10.png" , img: "/roll/img/cards/S10.png" }
-    deck['11'] = { name: "S11.png" , img: "/roll/img/cards/S11.png" }
-    deck['12'] = { name: "S12.png" , img: "/roll/img/cards/S12.png" }
-    deck['13'] = { name: "S13.png" , img: "/roll/img/cards/S13.png" } 
-    deck['14'] = { name: "C1.png" , img: "/roll/img/cards/C1.png" }
-    deck['15'] = { name: "C2.png" , img: "/roll/img/cards/C2.png" }
-    deck['16'] = { name: "C3.png" , img: "/roll/img/cards/C3.png" }
-    deck['17'] = { name: "C4.png" , img: "/roll/img/cards/C4.png" }
-    deck['18'] = { name: "C5.png" , img: "/roll/img/cards/C5.png" }
-    deck['19'] = { name: "C6.png" , img: "/roll/img/cards/C6.png" }
-    deck['20'] = { name: "C7.png" , img: "/roll/img/cards/C7.png" }
-    deck['21'] = { name: "C8.png" , img: "/roll/img/cards/C8.png" }
-    deck['22'] = { name: "C9.png" , img: "/roll/img/cards/C9.png" }
-    deck['23'] = { name: "C10.png" , img: "/roll/img/cards/C10.png" }
-    deck['24'] = { name: "C11.png" , img: "/roll/img/cards/C11.png" }
-    deck['25'] = { name: "C12.png" , img: "/roll/img/cards/C12.png" }
-    deck['26'] = { name: "C13.png" , img: "/roll/img/cards/C13.png" }
-    deck['27'] = { name: "H1.png" , img: "/roll/img/cards/H1.png" }
-    deck['28'] = { name: "H2.png" , img: "/roll/img/cards/H2.png" }
-    deck['29'] = { name: "H3.png" , img: "/roll/img/cards/H3.png" }
-    deck['30'] = { name: "H4.png" , img: "/roll/img/cards/H4.png" }
-    deck['31'] = { name: "H5.png" , img: "/roll/img/cards/H5.png" }
-    deck['32'] = { name: "H6.png" , img: "/roll/img/cards/H6.png" }
-    deck['33'] = { name: "H7.png" , img: "/roll/img/cards/H7.png" }
-    deck['34'] = { name: "H8.png" , img: "/roll/img/cards/H8.png" }
-    deck['35'] = { name: "H9.png" , img: "/roll/img/cards/H9.png" }
-    deck['36'] = { name: "H10.png" , img: "/roll/img/cards/H10.png" }
-    deck['37'] = { name: "H11.png" , img: "/roll/img/cards/H11.png" }
-    deck['38'] = { name: "H12.png" , img: "/roll/img/cards/H12.png" }
-    deck['39'] = { name: "H13.png" , img: "/roll/img/cards/H13.png" }
-    deck['40'] = { name: "D1.png" , img: "/roll/img/cards/D1.png" }
-    deck['41'] = { name: "D2.png" , img: "/roll/img/cards/D2.png" }
-    deck['42'] = { name: "D3.png" , img: "/roll/img/cards/D3.png" }
-    deck['43'] = { name: "D4.png" , img: "/roll/img/cards/D4.png" }
-    deck['44'] = { name: "D5.png" , img: "/roll/img/cards/D5.png" }
-    deck['45'] = { name: "D6.png" , img: "/roll/img/cards/D6.png" }
-    deck['46'] = { name: "D7.png" , img: "/roll/img/cards/D7.png" }
-    deck['47'] = { name: "D8.png" , img: "/roll/img/cards/D8.png" }
-    deck['48'] = { name: "D9.png" , img: "/roll/img/cards/D9.png" }
-    deck['49'] = { name: "D10.png" , img: "/roll/img/cards/D10.png" }
-    deck['50'] = { name: "D11.png" , img: "/roll/img/cards/D11.png" }
-    deck['51'] = { name: "D12.png" , img: "/roll/img/cards/D12.png" }
-    deck['52'] = { name: "D13.png" , img: "/roll/img/cards/D13.png" }
+    deck['1'] = { name: "S1.png" , img: "/gametestsuite/img/cards/S1.png" }
+    deck['2'] = { name: "S2.png" , img: "/gametestsuite/img/cards/S2.png" }
+    deck['3'] = { name: "S3.png" , img: "/gametestsuite/img/cards/S3.png" }
+    deck['4'] = { name: "S4.png" , img: "/gametestsuite/img/cards/S4.png" }
+    deck['5'] = { name: "S5.png" , img: "/gametestsuite/img/cards/S5.png" }
+    deck['6'] = { name: "S6.png" , img: "/gametestsuite/img/cards/S6.png" }
+    deck['7'] = { name: "S7.png" , img: "/gametestsuite/img/cards/S7.png" }
+    deck['8'] = { name: "S8.png" , img: "/gametestsuite/img/cards/S8.png" }
+    deck['9'] = { name: "S9.png" , img: "/gametestsuite/img/cards/S9.png" }
+    deck['10'] = { name: "S10.png" , img: "/gametestsuite/img/cards/S10.png" }
+    deck['11'] = { name: "S11.png" , img: "/gametestsuite/img/cards/S11.png" }
+    deck['12'] = { name: "S12.png" , img: "/gametestsuite/img/cards/S12.png" }
+    deck['13'] = { name: "S13.png" , img: "/gametestsuite/img/cards/S13.png" } 
+    deck['14'] = { name: "C1.png" , img: "/gametestsuite/img/cards/C1.png" }
+    deck['15'] = { name: "C2.png" , img: "/gametestsuite/img/cards/C2.png" }
+    deck['16'] = { name: "C3.png" , img: "/gametestsuite/img/cards/C3.png" }
+    deck['17'] = { name: "C4.png" , img: "/gametestsuite/img/cards/C4.png" }
+    deck['18'] = { name: "C5.png" , img: "/gametestsuite/img/cards/C5.png" }
+    deck['19'] = { name: "C6.png" , img: "/gametestsuite/img/cards/C6.png" }
+    deck['20'] = { name: "C7.png" , img: "/gametestsuite/img/cards/C7.png" }
+    deck['21'] = { name: "C8.png" , img: "/gametestsuite/img/cards/C8.png" }
+    deck['22'] = { name: "C9.png" , img: "/gametestsuite/img/cards/C9.png" }
+    deck['23'] = { name: "C10.png" , img: "/gametestsuite/img/cards/C10.png" }
+    deck['24'] = { name: "C11.png" , img: "/gametestsuite/img/cards/C11.png" }
+    deck['25'] = { name: "C12.png" , img: "/gametestsuite/img/cards/C12.png" }
+    deck['26'] = { name: "C13.png" , img: "/gametestsuite/img/cards/C13.png" }
+    deck['27'] = { name: "H1.png" , img: "/gametestsuite/img/cards/H1.png" }
+    deck['28'] = { name: "H2.png" , img: "/gametestsuite/img/cards/H2.png" }
+    deck['29'] = { name: "H3.png" , img: "/gametestsuite/img/cards/H3.png" }
+    deck['30'] = { name: "H4.png" , img: "/gametestsuite/img/cards/H4.png" }
+    deck['31'] = { name: "H5.png" , img: "/gametestsuite/img/cards/H5.png" }
+    deck['32'] = { name: "H6.png" , img: "/gametestsuite/img/cards/H6.png" }
+    deck['33'] = { name: "H7.png" , img: "/gametestsuite/img/cards/H7.png" }
+    deck['34'] = { name: "H8.png" , img: "/gametestsuite/img/cards/H8.png" }
+    deck['35'] = { name: "H9.png" , img: "/gametestsuite/img/cards/H9.png" }
+    deck['36'] = { name: "H10.png" , img: "/gametestsuite/img/cards/H10.png" }
+    deck['37'] = { name: "H11.png" , img: "/gametestsuite/img/cards/H11.png" }
+    deck['38'] = { name: "H12.png" , img: "/gametestsuite/img/cards/H12.png" }
+    deck['39'] = { name: "H13.png" , img: "/gametestsuite/img/cards/H13.png" }
+    deck['40'] = { name: "D1.png" , img: "/gametestsuite/img/cards/D1.png" }
+    deck['41'] = { name: "D2.png" , img: "/gametestsuite/img/cards/D2.png" }
+    deck['42'] = { name: "D3.png" , img: "/gametestsuite/img/cards/D3.png" }
+    deck['43'] = { name: "D4.png" , img: "/gametestsuite/img/cards/D4.png" }
+    deck['44'] = { name: "D5.png" , img: "/gametestsuite/img/cards/D5.png" }
+    deck['45'] = { name: "D6.png" , img: "/gametestsuite/img/cards/D6.png" }
+    deck['46'] = { name: "D7.png" , img: "/gametestsuite/img/cards/D7.png" }
+    deck['47'] = { name: "D8.png" , img: "/gametestsuite/img/cards/D8.png" }
+    deck['48'] = { name: "D9.png" , img: "/gametestsuite/img/cards/D9.png" }
+    deck['49'] = { name: "D10.png" , img: "/gametestsuite/img/cards/D10.png" }
+    deck['50'] = { name: "D11.png" , img: "/gametestsuite/img/cards/D11.png" }
+    deck['51'] = { name: "D12.png" , img: "/gametestsuite/img/cards/D12.png" }
+    deck['52'] = { name: "D13.png" , img: "/gametestsuite/img/cards/D13.png" }
 
     return deck;
 
@@ -589,6 +622,6 @@ console.log("error: " + err);
 
 }
 
-module.exports = Roll;
+module.exports = GameTestSuite;
 
 

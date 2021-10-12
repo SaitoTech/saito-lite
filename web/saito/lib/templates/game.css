@@ -577,6 +577,56 @@ ul li a {
 }
 
 
+.player-info {
+  width: 25vh;
+  height: 20vh;
+  background-color: #4448;
+  color: #fff;
+  padding: 1em;
+  position: absolute;
+}
+
+.player-info.p1 {
+  height: 30vh;
+}
+.player-info .status {
+  font-size: 1.25em;
+}
+
+.player-info-name {
+  font-size: 3vh;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-info-chips {
+  padding: 0.5em;
+  text-align: center;
+  font-size: 3vh;
+  overflow: hidden;
+}
+
+.p1 .hand {
+  display: none;
+}
+
+.p4 .hand, .p3 .hand, .p2 .hand {
+  right: 15vh;
+  top: 2vh;
+}
+
+.p5 .hand, .p6 .hand {
+  left: 24vh;
+  top: 2vh;
+}
+
+.player-info-hand .card {
+  width: 12vh;
+  position: absolute;
+}
 
 
 
