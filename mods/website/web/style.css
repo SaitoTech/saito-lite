@@ -1737,6 +1737,40 @@ h2, h5 {
   padding: 0 10px 0 0;
 }
 
+#text-sizer{
+
+  letter-spacing: .25px;
+  padding: 0.6em;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 0.5em;
+ 
+}
+
+.text-sizer-small{
+
+ 
+  
+
+
+}
+
+.text-sizer-medium{
+
+
+  
+
+
+}
+.text-sizer-large{
+
+
+
+
+}
+
+
 .terms {
   border-top: 1px solid rgba(0, 0, 0, .1);
   padding: 14px 41px 4px 41px;
