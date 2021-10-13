@@ -111,6 +111,11 @@ body {
   font-size: 1.25em;
 }
 
+.status-info {
+  padding: 10px 0;
+}
+
+
 .player-info-name {
   font-size: 3vh;
   font-weight: bold;
@@ -126,9 +131,10 @@ body {
   font-size: 3vh;
 }
 
-.dealer{
-  background-color: var(--saito-red-wash);
-  border: 1px solid gold;
+.dealer .player-notice{
+  background-color: #0004;
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
 }
 
 

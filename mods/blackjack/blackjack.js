@@ -397,15 +397,15 @@ toggleIntro() {
 
         if (this.game.player != player) {
           if (this.game.player == this.game.state.dealer)
-            this.updateStatus('<div class="">You are the dealer. Waiting for players to set their wager</div>');
+            this.updateStatus('<div class="status-info">You are the dealer. Waiting for players to set their wager</div>');
           else 
-            this.updateStatus('<div class="">Player '+player+' is picking wager</div>');
+            this.updateStatus('<div class="status-info">Player '+player+' is picking wager</div>');
         }else{
           //Should be tied to the stake, 1%, 5%, 10%, 25%
             let stake = parseFloat(this.game.options.stake);
             let fractions = [0.01, 0.05, 0.1, 0.25];
             let myCredit = this.game.state.player[player-1].credit
-            let html = `<div class="">How much would you like to wager? (Available credit: ${myCredit})</div>`;
+            let html = `<div class="status-info">How much would you like to wager? (Available credit: ${myCredit})</div>`;
             html += '<ul>';
             for (let i = 0; i < fractions.length; i++){
               if (fractions[i]*stake<myCredit)
