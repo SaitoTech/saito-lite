@@ -3,7 +3,7 @@
 
 ## Introduction
 
-In traditional single-player game engines there is little need for cryptographic implementations of dice rolls or deck shuffles. This changes with multiplayer games that interact with on-chain assets. Or any games that require fair and trustless play between distributed parties.
+In traditional single-player game engines there is little need for cryptographic implementations of dice rolls or deck shuffles. This changes with multiplayer games that interact with on-chain assets, or any games that require genuinely fair and trustless play between distributed parties.
 
 The traditional approach to address trust issues in multiplayer games has been a reliance on trusted third-parties. Centralized game servers typically handle random number generation and monitor players to prevent them patching their software in ways that enable cheating. This approach has problems because it is hard to enforce honest behavior in users, and because many third parties are themselves not trustworthy.
 

@@ -1,7 +1,15 @@
 
 # Saito Game Engine -- API
 
-This file contains information on default instructions supported by the underlying game engine. Games may add these instructions (with the appropriate arguments) to their game queue and the game engine will handle the rest of the . Developers please note that these instructions much be added to the queue in capital letters. 
+
+| Field   | Value             |
+| ------- | ----------------- |
+| Author  | David Lancashire  |
+| Status  | Published         |
+| Type    | Protocol Standard |
+| Created | August 31, 2021   |
+
+This file contains documentation on the low-level functions supported by the Saito game engine. Games may add these instructions (with the appropriate arguments) to their game queue and the game engine will handle the rest of the . Developers please note that these instructions much be added to the queue in capital letters. 
 
 ## Common Arguments
 
@@ -10,6 +18,10 @@ This file contains information on default instructions supported by the underlyi
 The Saito application object contains a reference to the runtime state of the Saito platform. It is mostly used for access to common cryptographic functions like hashing [app.crypto.hash()] or to retrieve the publickey of the current player [app.wallet.returnPublicKey()]. Access to the appliation function can provide very detailed control of the stack.
 
 #### deck - a deck of cards
+
+A deck consists of a closed set of cards. Each card should be an entry in an associative array where the key is a unique string. In the event of a deck with multiple identical cards, the content of the cards can be the same but the key used to index them should be different (i.e. joker1, joker2). The Saito Game Engine supports the existence of multiple decks -- decks are assigned a specific deck_id number and interactions with them after creation work by specifying which deck is being used by reference to this deck_id number.
+
+#### deck_json - JSON.stringify representation of a deck object, where the keys are unique strings that identify cards and the objects contain the information associated with the deck, such as the text or value of cards.
 
 A deck consists of a closed set of cards. Each card should be an entry in an associative array where the key is a unique string. In the event of a deck with multiple identical cards, the content of the cards can be the same but the key used to index them should be different (i.e. joker1, joker2). The Saito Game Engine supports the existence of multiple decks -- decks are assigned a specific deck_id number and interactions with them after creation work by specifying which deck is being used by reference to this deck_id number.
 
@@ -47,7 +59,7 @@ An html message is a string of text intended for display and markup as in-browse
 The Saito Game Engine supports the following 
 
 
-####ACKNOWLEDGE [text/html]
+#### ACKNOWLEDGE [text/html]
 
 Prompts all players to acknowledge the text or html message provided. The message is typically displayed in the status field of the GameHud UI element. Execution of gameplay and further processing of the game queue is halted until players acknowledge the message.
 
@@ -58,7 +70,7 @@ Prompts all players to acknowledge the text or html message provided. The messag
 This instruction is useful to allow players to more easily track what is happening on the gameboard. Red Imperium uses the ACKNOWLEDGE command to ensure that players are aware of key developments in the game, such as when opponents play action cards. Using this command for notifications can also prevent information from leaking about player hands, the requirement that players manually intervene can prevent other players from guessing -- by speed of user response -- whether they in fact have the ability to do more than simply acknowledge.
 
 
-####DEAL [deck_id] [player_id] [number_of_cards_to_deal]
+#### DEAL [deck_id] [player_id] [number_of_cards_to_deal]
 
 A simple function that deals the specified number of cards from the deck identified by deck_id to the player identified by player_id. Note that this is an unsafe function that performs low-level cryptographic work and does not check the availability of cards in the deck. If you are building a game that will run out of cards and require a reshuffle we recommend using SAFEDEAL instead.
 
@@ -66,7 +78,7 @@ A simple function that deals the specified number of cards from the deck identif
   game_self.addMove("DEAL\t1\t1\t7");
 ```
 
-####GAMEOVER
+#### GAMEOVER
 
 ends the game
 
@@ -74,191 +86,138 @@ ends the game
   game_self.addMove("GAMEOVER");
 ```
 
-ISSUEKEYS
-this is an internal function used in the course of dealing cards
+### ISSUEKEYS
+An internal function used in the course of dealing cards
 
 
-LOGDECK [deck_id]
-prints the cards in the specified deck to the log. this is primarily used for debugging. See the DECK command for instructions on how to import a deck.
+### LOGDECK [deck_id]
+Prints the cards in the specified deck to the log, used primarily for debugging.
 
-  game_self.addMove("LOGDECK\t");
-  game_self.endTurn();
-
-
+```javascript
+  game_self.addMove("LOGDECK\t1");
+```
 
 LOGHAND [deck_id]
-prints the cards that have been dealt to a player from the specified deck to the log. this is primarily used for debugging. See the DECK command for instructions on how to import a deck. See the DEAL command for instructions on how to deal cards from that deck into the player's hand.
+Prints the cards that have been dealt to the active player from the specified deck, used primarily for debugging.
 
-  game_self.addMove("LOGDECK\t");
-  game_self.endTurn();
+```javascript
+  game_self.addMove("LOGDECK\t1");
+```
 
+#### LOGPOOL [pool_id]
+Prints the cards that have been dealt into the specified pool, used primarily for debugging.
 
-LOGPOOL [pool_id]
-prints the cards in the specified pool to the log. this is primarily used for debugging - confirming that a deal has successfully issued cards to a pool. See the DECK command for instructions on how to import a deck. See the POOL command for instructions on creating a POOL (i.e. publicly visible pool of cards). See the POOLDEAL command for instructions on dealing cards from a deck into a pool.
+```javascript
+  game_self.addMove("LOGPOOL\t1");
+```
 
-  game_self.addMove("LOGPOOL\t");
-  game_self.endTurn();
+#### OBSERVER
+enables observer mode, an optional mode of gameplay in which information on the content of player hands is permitted to leak into public so that third-parties can watch the game in real-time or step through it steo-by-step after the fact.
 
-
-
-OBSERVER
-enables observer mode
-
-example:
-
+```javascript
   game_self.addMove("OBSERVER");
+```
 
-practical use case:
-Twilight Struggle supports an Observer Mode that allows third parties to monitor the game in real-time. Implementing this functionality can result in the ability for players to leak information on their hands or strategy, which should be handled by the game engine to ensure all players are aware and agree.
+#### PLAY [player_id or array of player_ids]
+this instruction takes either the player_id of the player who should move, or an array of the player_ids of the players who should move. if a single player is specified that player should prependMove("RESOLVE") to clear the PLAY command once they have finished their move. If multiple players are provided players should prepend the same RESOLVE command, but with the publickey of the current player as the second argument. valid examples of triggering player turns include:
 
-
-
-
-PLAY [
-enables observer mode
-
-example:
-
+```javascript
   game_self.addMove("PLAY\tall");
   game_self.addMove("PLAY\t[1,2]");
   game_self.addMove("PLAY\t1");
   game_self.addMove("PLAY\t2");
+```
 
-outcome:
+when PLAY is triggered the state of the game will halt for all non-moving players until all players who are required to move have submitted a RESOLVE instruction with their publickey. this resolve move must be submitted even if players do nothing, as follows:
 
-  in the event a single player is being invited to move, their player number should be provided. if multiple players are being invited to move, they can . this function automatically handles simultaneous moves, and prepares the game engine.
-
-  the state of the game will halt until players submit their moves, which should begin with a turn which clears their move with RESOLVE. such as:
-
+```javascript
   game_self.addMove("RESOLVE\t[publickey]");
   game_self.addMove("NOTIFY\tPlayer 1 does nothing");
+```
 
-  it should be noted that recursive simultaneous moves are not permitted. this means that if you are permitting players to make simultaneous moves the content of those moves as broadcast by players which RESOLVE their turn should not trigger the requirement for other simultaneous moves.
+if you use PLAY to permit multiple players to move simultaneously please note that recursive simultaneous moves are not permitted. it is useful to remember that if multiple players are able to move simultaneously the order in which player moves are executed cannot be guaranteed by the underlying game engine, so do not structure gameplay that requires sequential execution of moves using this technique. instead, use an explicitly round-robin approach. this technique is primarily useful for speeding up game responses.
 
-  for similar reasons, the order in which player moves are executed is not structured. moves may arrive in any other, so gameplay should not fork based on the order of execution. this technique is thus useful for parallelization of game responses rather than strategic moves conducted in sequence.
+#### NOTIFY [text]
+notifies the player by printing a text message to the player log
 
-
-practical use case:
-RED IMPERIUM allows players to execute the secondary of most strategy cards in parallel, as decisions to build infantry or purchase action cards is not something that matters in terms of order-or-execution, but simultaneous execution speeds up gameplay considerably and makes for a more exciting and faster game.
-
-
-
-
-
-
-NOTIFY
-notifies the player by printing a message to the player log
-
-example:
-
-  game_self.addMove("NOTIFY\tPlayer 2 wins this round!");
-
-outcome:
-
-  the log is updated with this text as the latest entry
-
-practical use case:
-Poker keeps a detailed log of player activities to keep a human-readable history of who has called, folded or raised. Card details are also printed on the log at the end of each turn for easy reference.
-
-
-READY
-updates the game to indicate that initialization is complete. this is used by some external applications like the Arcade to indicate that a game has finished loading and is ready for the player to join it. It is typical to push this instruction to the back of the stack after decks have been shuffled and dealt on initialization.
-
-example:
+#### READY
+executing this instruction tells the game engine that the game has finished initializing and is ready for play. third-party appliations like the Saito Arcade that permit users to create and join games wait until this command is run until they permit users to click-through and join the games in process. this approach has been taken to avoid users joining games that are being initialized and getting confused. 
 
   game_self.game.queue.push("READY");
 
-outcome:
+#### RESETCONFIRMSNEEDED
+specifies the number of RESOLVE messages that must be received from different players for the next RESOLVE instruction to clear. see the comments on the PLAY instruction for clarity on how this works. note that this is an advanced function that should only be used if you know what you are doing and know you really need to be playing around with when and how the game engine continues executing the queue.
 
-some applications like the Arcade will show an initialization page and wait to invite players to join the game until this command has been executed. it is considered good form to execute this on the queue when the game has reached a point that players should join.
-
-
-
-
-
-RESETCONFIRMSNEEDED
-specifies the number of RESOLVE messages that must be received from different players for the next RESOLVE instruction to clear. 
-
-example:
-
+```javascript
   game_self.addMove("RESETCONFIRMSNEEDED\tall");
   game_self.addMove("RESETCONFIRMSNEEDED\t[1,2]");
   game_self.addMove("RESETCONFIRMSNEEDED\t2");
   game_self.addMove("RESETCONFIRMSNEEDED\t1");
+```
 
-
-outcome:
-
-the RESOLVE command will wait for the appropriate number of confirmations or confirmations from the specified players before clearing and permitting the stack to continue execution.
-
-
-REQUESTKEYS
+#### REQUESTKEYS
 this is an internal function used in the course of dealing cards
 
+#### RESOLVE [publickey]
+this instruction clears the previous entry in the queue and then clears itself, permitting the game engine to continue to execute instructions. if a publickey is submitted as the first argument this indicates that multiple players need to submit these instructions for the RESOLVE command to take effect and for gameplay to continue.
 
-RESOLVE [publickey]
-if no publickey is provided this removes the previous instruction from the game queue if possible. if the game is managing simultaneous moves the publickey of the player issuing this command must be provided in order for the instruction to have any effecft.
-
-example:
-
+```javascript
   game_self.addMove("RESOLVE");
   game_self.addMove("RESOLVE\tnD7zNvTX9BzyPmQvVbKjP1RJhbftyiTjjFB6uxA5mfoX");
-
-outcome:
-
-the RESOLVE command will remove the immediately-preceding instruction from the game-stack if the conditions for removal are met (set either by PLAY or by RESETCONFIRMSNEEDED).
+```
 
 
-RESOLVEDEAL
+#### RESOLVEDEAL
 this is an internal function used in the course of dealing cards to players.
 
-RESOLVEFLIP
+#### RESOLVEFLIP
 this is an internal function used in the course of dealing cards to pools.
 
-
-SHUFFLE [deck_id]
+#### SHUFFLE [deck_id]
 shuffles the cards in the deck identified by the deck_id. See the DECK command for instructions on how to import a deck. 
 
-example:
-
+```javascript
   game_self.addMove("SHUFFLE\t1");
-  game_self.endTurn();
+```
+
+#### SIMPLEDEAL [number_of_cards] [deck_id] [deck_json]
+simple function that automates importing a deck to the specified deck index, and then dealing the specified number of cards to all players in the game. See DECK for requirements on how decks are formatted and converted into JSON for processing by the game engine..
+
+```javascript
+  game_self.addMove("SIMPLEDEAL\t1\t"+JSON.stringify(game_self.returnDeck()));
+```
 
 
-
-
-SIMPLEDEAL [number_of_cards] [deck_id] [deck_json]
-simple function that automates importing a deck to the specified deck index, and then dealing the specified number of cards to all players in the game. See DECK for requirements on the second and third arguments.
-
-SAFEDEAL [deck_id] [player] [cards_to_deal]
-simple function that deals the specified number of cards from the specified deck to the specified player. this is intended as the "safe" alternative to the DEAL command above. if an inadequate number of undealt cards exist it will add any cards that have been added to the discard pile and reshuffle them before dealing.
-
-
-
-
-SECUREROLL [player] [hash] [sig]
+#### SECUREROLL [player] [hash] [sig]
 this provides a method for players to reset the random number generator in the game using inputs from all players so as to prevent look-ahead attacks on random number generation. please see the test suite for an example of how to implement this function.
 
-SECUREROLL_END
+```javascript
+  game_self.addMove("SECUREROLL\t1\taaab76f16ad484b2aa02d167272bf0a51cd8c6d5e0ddc9c44ba7f77f12c9940b\t3gHZjty6oghJ8rMCPnBbhRkRhq3xi2SsdwD93zK52kT3nRK6AZ6v7bvYtskdGh9KTb69zYhVxUm6d6PZELB9jMQJ");
+```
+
+#### SECUREROLL_END
 this is an internal function used in secure roll generation. please see the test suite for an example of how to implement this function.
 
-SIMULTANEOUS_PICK [player] [hash] [sig]
+#### SIMULTANEOUS_PICK [player] [hash] [sig]
 this provides a method for players to select and broadcast cards or other information securely. both players must independently send this move and then the game engine will take over and complete the action.
 
-one the instructions have been executed the cards will be available for perusal in the game state in an array which stores the results submitted by each player, i.e.
+  game_self.addMove("SIMULTANEOUS_PICK\t1\taaab76f16ad484b2aa02d167272bf0a51cd8c6d5e0ddc9c44ba7f77f12c9940b\t3gHZjty6oghJ8rMCPnBbhRkRhq3xi2SsdwD93zK52kT3nRK6AZ6v7bvYtskdGh9KTb69zYhVxUm6d6PZELB9jMQJ");
 
-  game_self.game.state.sp[0] <-- player 1
-  game_self.game.state.sp[1] <-- player 2
+see the Game Test Suite for sample code that shows how players should send information. This instruction needs to be the output of a process of information selection by the player, and that is UI dependent. once the instructions have been executed the cards will be available for perusal in the game state in an array which stores the results submitted by each player.
 
-SIMULTANEOUS_PICK_END
+```javascript
+  game_self.game.state.sp[0] // plater 1
+  game_self.game.state.sp[1] // player 2
+```
+
+#### SIMULTANEOUS_PICK_END
 this is an internal function used in the simultaneous pick of cards.
 
-
-DECKBACKUP
+#### DECKBACKUP
 this is a partner function with DECKRESTORE that is used when shuffling cards into . the technique requires backing up the existing cards, shuffling the new cards into the deck (overwriting the content) and the DECKRESTORE to add the backed-up cards into the newly shuffled deck. At the end of this process SHUFFLE can be called to randomize the new cards together with the old ones.
 
-example:
 
+```javascript
                   //
                   // shuffle in discarded cards
                   //
@@ -270,14 +229,13 @@ example:
                   this.game.queue.push("DECKXOR\t1\t1");
                   this.game.queue.push("DECK\t1\t"+JSON.stringify(discarded_cards));
                   this.game.queue.push("DECKBACKUP\t1");
+```
 
 
-
-DECKRESTORE
+#### DECKRESTORE
 this is a partner function with DECKBACKUP that is used when reshuffling old cards into an existing deck. the technique requires backing up the existing cards with DECKBACKUP, shuffling the new cards into the deck (overwriting the content) and then using DECKRESTORE to add the backed-up cards into the newly shuffled deck. At the end of this process SHUFFLE can be called to randomize the new cards together with the old ones.
 
-example:
-
+```javascript
                   //
                   // shuffle in discarded cards
                   //
@@ -289,85 +247,102 @@ example:
                   this.game.queue.push("DECKXOR\t1\t1");
                   this.game.queue.push("DECK\t1\t"+JSON.stringify(discarded_cards));
                   this.game.queue.push("DECKBACKUP\t1");
+```
 
-
-CARDS
+#### CARDS
 this is an internal function used in encrypting and shuffling decks of cards
 
-
-POOL [pool_id]
+#### POOL [pool_id]
 this createa an empty "pool" of cards into which cards can be dealt by POOLDEAL. any cards dealt into this pool will be visible to all players in the game. the index number of the pool should be a unique number known by the game.
 
+```javascript
+  game_self.addMove("POOL\t1");
+```
 
-POOLDEAL [number_of_cards] [deck_id] [pool_id]
+#### POOLDEAL [number_of_cards] [deck_id] [pool_id]
 this function deals the number of cards specified from the deck specified into the pool specified. it assumes that there are enough cards in the deck to deal into the pool.
 
+```javascript
+  game_self.addMove("POOLDEAL\t7\t1\t1");
+```
 
-FLIPRESET
+#### FLIPRESET
 this is an internal function for dealing cards into pools
 
-FLIPCARD
+#### FLIPCARD
 this is an internal function for dealing cards into pools
 
-OBSERVER_CHECKPOINT
-if observer mode is enabled in a game, adding this command will halt execution for the observer, allowing them to step through the game move-by-move, even if that game has been completed. it is ignored by players in the game.
-
-DECK [deck_id] [deck_json]
+#### DECK [deck_id] [deck_json]
 This function creates a deck at the deck_id specified using the cards specified in the second argument. This second argument is the JSON output of an associative array, where the keys to the array are the names of the cards. the shuffled cards can then be dealt out to player through SIMPLEDEAL or DEAL commands by providing the deck_id into which the cards have been inserted.
+
+```javascript
+  game_self.addMove("DECK\t1\t"+JSON.stringify(game_self.returnDeck()));
+```
 
 if you wish to deal cards into an existing deck, you should use the DECKBACK and DECKRESTORE functionality (see those entries) as this will by default simply overwrite any existing content in that deck_id.
 
 the keys to the associative array should be unique, as it is these items which are shuffled in the deck and then dealt out to players. if you need to create a deck that has duplicate cards, you can simply have duplicate entries in the associative array with similar contents but slightly different names ("joker1", "joker2", etc.). It is conventional to have the associative arrays needed to create decks in the returnDeck() functions in games. See RED IMPERIUM for a practical example of complex card deals and deck management with multiple decks and complicated criteria for dealing cards.
 
 
-
-DECKXOR
+#### DECKXOR
 an internal function used in the encryption and shuffle of cards
 
-DECKFLUSH
+#### DECKFLUSH
 an internal function that deletes all "discards" associated with a deck.
 
-
-DECKENCRYPT
+#### DECKENCRYPT
 an internal function used in the encryption and shuffling of cards
 
-RECEIVED [sender] [receiver] [amount] [timestamp] [ticker]
-the receiver will halt execution of the game until they have received payment from the sender in the AMOUNT of cryptocurrency TICKER. the payment must be authorized by the sender and then handled by a module accessible to the game engine (such as the DOT/KUSAMA/WESTEND module).
+#### RECEIVE [sender] [receiver] [amount] [timestamp] [ticker]
 
-this instruction will not clear until the payment has been made. it will not trigger payment from the sender, which requires a SEND instruction. most payments thus consist of a SEND instruction which is auto-cleared by all non-senders, and a RECEIVE instruction which halts execution for the recipients. 
+```javascript
+  game_self.addMove("RECEIVE\t${sender}\t${receiver}\t${amount}\t${timestamp}\tDOT");
+```
+
+the receiver will halt execution of the game until they have received payment from the sender in the AMOUNT of cryptocurrency TICKER. the payment must be authorized by the sender and then handled by a module accessible to the game engine (such as the DOT/KUSAMA/WESTEND module). the game engine will halt execution until the payment is received, but cannot enforce that payment is made in this situation.
+
+this instruction will not clear until the payment has been made and confirmed as received according to the settlement logic of the module that supports cryptocurrency integration with Saito. it will not trigger payment from the sender, which requires a SEND instruction. most payments thus consist of a SEND instruction which is auto-cleared by all non-senders, and a RECEIVE instruction which halts execution for the recipients. 
 
 
 BALANCE [amount] [address] [ticker]
+
+```javascript
+  game_self.addMove("RECEIVED\t${amount}\t${address}\tDOT");
+```
+
 check that the address provided in the cryptocurrency identified by the third argument contains at least the amount specified. the game is halted until this condition holds. the Saito Game Engine cannot enforce that funds on third-party networks do not move during the course of gameplay, but this provides a safe and useful way to ensure that funds are available when checks are required.
 
 
-SEND [sender] [receiver] [amount] [timestamp] [ticker]
+#### SEND [sender] [receiver] [amount] [timestamp] [ticker]
 triggers the sender to make a payment to the receiver of the AMOUNT in cryptocurrency TICKER. the payment must be authorized by the sender and then handled by a module accessible to the game engine (such as the DOT/KUSAMA/WESTEND module).
+
+```javascript
+  game_self.addMove("SEND\t${sender}\t${receiver}\t${amount}\t${timestamp}\tDOT");
+```
 
 this instruction will not clear until the payment has been made, but will fall through automatically once the payment has been made. note that the timestamp entry here is designed to prevent double-payment -- only payments that are recorded as being made after the timestamp provided will be acceptable and permit this instruction to clear.
 
 
-CRYPTOKEY [saito_publickey] [third_party_crypto_publickey] [sig]
-a player broadcasting this message is updating their peers on the publickey at which they can receive payments in the cryptocurrency which is set as the default for the game. the Saito publickey is used to sign the cryptographic sig that confirms the submission of this publickey. any instructions after this point on the stack will use the newly-submitted payment publickey.
+#### CRYPTOKEY [saito_publickey] [third_party_crypto_publickey] [sig]
+a player broadcasting this message is updating their peers on the publickey at which they can receive payments in the cryptocurrency which is set as the default for the game. the Saito publickey is used to sign the cryptographic sig that confirms the submission of the new receiving address. the game engine should enforce that any payments made after this point will use the newly-submitted publickey/address for payment receipt.
 
 if games are initialized using a Web3 cryptocurrency, the game engine will automatically initialize the game with this command so that payments are handled transparently across the Web3 Stack.
 
+```javascript
 
-SETVAR
+```
+
+
+#### SETVAR
 sets a variable on the game object where it will be available to all players.
 
-example:
 
+```javascript
   game_self.addMove("SETVAR\tstate\thealth\t20");
 
-outcome:
+  // outcome is equivalent to all players setting
 
   game_self.state.health = 20;
-
-practical use case:
-Twilight Struggle uses the SETVAR variable to allow players to specify how many cards are still in their hand at the end of their turn, so that all players can calculate the number of cards that must be dealt for the next round and determine when deck reshuffles are needed.
-
-
-
+```
 
 
