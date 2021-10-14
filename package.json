@@ -11,7 +11,7 @@
     "reset": " ./compile reset",
     "compile": " ./compile recompile",
     "old": " webpack --config ./webpack/old/webpack.config.js",
-    "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
+    "test": "jest",
     "analyze": "webpack --config ./webpack/old/webpack.analyze.js",
     "jsdoc": "jsdoc --destination saitolitedocs lib/templates/abstractcryptomodule.js lib/templates/substratebasedcrypto.js lib/saito/wallet.js README.md"
   },
@@ -26,6 +26,7 @@
     "base-58": "0.0.1",
     "big.js": "^5.2.2",
     "bitwise-xor": "0.0.0",
+    "blake3": "^2.1.4",
     "body-parser": "^1.19.0",
     "chess.js": "^0.12.0",
     "crypto": "^1.0.1",
@@ -74,7 +75,8 @@
     "ua-parser-js": "^0.7.22",
     "unzipper": "^0.10.5",
     "url": "^0.11.0",
-    "utf-8-validate": "^5.0.2"
+    "utf-8-validate": "^5.0.2",
+    "ws": "^7.5.3"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
@@ -82,6 +84,7 @@
     "babel-loader": "^8.0.6",
     "babel-polyfill": "^6.26.0",
     "file-loader": "^6.2.0",
+    "jest": "^27.0.6",
     "jsdoc": "^3.6.6",
     "webpack": "^4.44.1",
     "webpack-bundle-analyzer": "^3.8.0",

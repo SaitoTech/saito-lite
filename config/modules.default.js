@@ -18,7 +18,7 @@ module.exports = {
     'website/website.js',
   ],
   lite: [
-    'arcade/arcade.js',     
+    'arcade/arcade.js',
     'archive/archive.js',
     'chess/chess.js',
     'chat/chat.js',
