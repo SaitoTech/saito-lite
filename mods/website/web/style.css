@@ -1750,26 +1750,29 @@ h2, h5 {
 
 .text-sizer-small{
 
+  font-size:1em;
  
-  
-
-
-}
-
-.text-sizer-medium{
-
-
-  
-
-
-}
-.text-sizer-large{
-
-
-
-
-}
-
+ }
+ 
+ .text-sizer-medium{
+ 
+ 
+   font-size:1.2em;
+ 
+ 
+ }
+ .text-sizer-large{
+ 
+   font-size:1.3em;
+ 
+ }
+ 
+ .text-sizer-table {
+ 
+   padding: 0.6em;
+   letter-spacing:1em;
+ 
+ }
 
 .terms {
   border-top: 1px solid rgba(0, 0, 0, .1);
