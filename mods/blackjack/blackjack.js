@@ -1060,7 +1060,8 @@ toggleIntro() {
             debt = this.game.state.player[i].wager * 2;
             msg = `You have to pay the dealer double your wager for a total of ${debt}.`;
           }
-          this.game.state.player[this.game.state.dealer-1].wager += debt;
+          //Temporarily store all chips collected from players in the dealer's "wager"
+          this.game.state.player[this.game.state.dealer-1].wager += Math.min(debt,this.game.state.player[i].credit);
           this.game.state.player[i].credit -= debt;
           //Check for bankruptcy to personalize message
           if (this.game.state.player[i].credit < 0)
@@ -1086,13 +1087,13 @@ toggleIntro() {
               if (this.game.state.player[i].winner){
                 this.updateLog(`Player ${i+1} wins ${debt}`);
                 this.game.state.player[this.game.state.dealer-1].wager -= debt;
-                this.game.state.player[i].credit += debt;
+                this.game.state.player[i].credit += Math.min(debt, this.game.state.player[this.game.state.dealer-1].credit);
                 if (i+1 == this.game.player){
                   let msg = (this.game.state.player[i].payout == 1)? `You Win Your Bet of ${debt}`: `Blackjack! You win double your bet, total winnings: ${debt}`;
                   this.game.queue.push("ACKNOWLEDGE\t"+msg);
                 }
               }else{
-                this.game.state.player[this.game.state.dealer-1].wager += debt;
+                this.game.state.player[this.game.state.dealer-1].wager += Math.min(debt, this.game.state.player[i].credit);
                 this.game.state.player[i].credit -= debt;
                 this.updateLog(`Player ${i+1} loses ${debt}`);
                 if (i+1 == this.game.player){
