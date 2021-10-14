@@ -125,7 +125,11 @@ class GameTestSuite extends GameTemplate {
   // default game state
   //
   returnState() {
+
     let state = {};
+
+    state.cards_dealt_to_players = 0;
+
     return state;
   }
 
@@ -196,9 +200,15 @@ class GameTestSuite extends GameTemplate {
 
 
 
-  /////////////////////////////
-  // GAME SPECIFIC FUNCTIONS //
-  /////////////////////////////
+  //////////////////////////////
+  // MODULE SPECIFIC FUNCTION //
+  //////////////////////////////
+  //
+  // this is a non-standard function that we called in initializeHTML() to handle
+  // all of the DOM events. It is not part of the game engine and is included here
+  // merely to isolate the code away from the core components so that the logic of
+  // game creation is cleaner and easier to see.
+  //
   addEventsToDom(app) {
 
       let game_self = this;
@@ -298,6 +308,10 @@ class GameTestSuite extends GameTemplate {
       // display cardfan
       //
       document.getElementById("display_cardfan_button").onclick = (e) => {
+	if (!game_self.game.deck[0]) {
+	  alert("Deal cards to players before testing the Cardfan");
+	  return;
+	}
         game_self.display_cardfan_test(game_self.app);
       }
 
@@ -305,13 +319,21 @@ class GameTestSuite extends GameTemplate {
       // display cardhud
       //
       document.getElementById("display_cardhud_button").onclick = (e) => {
-        game_self.display_cardfan_test(game_self.app);
+	if (!game_self.game.deck[0]) {
+	  alert("Deal cards to players before testing the CardHud");
+	  return;
+	}
+        game_self.display_cardhud_test(game_self.app);
       }
 
       //
       // toggle cardbox
       //
       document.getElementById("toggle_cardbox_button").onclick = (e) => {
+	if (!game_self.game.deck[0]) {
+	  alert("Deal cards to players before toggling the Popup Cardbox");
+	  return;
+	}
 	game_self.toggle_cardbox_test(game_self.app);
       }
 
@@ -322,16 +344,17 @@ class GameTestSuite extends GameTemplate {
 	game_self.add_menu_test(game_self.app);
       }
 
-    } catch (err) {
-      console.log("error: " + err);
-    }
   }
-
-
 
   ////////////////////
   // TEST FUNCTIONS //
   ////////////////////
+  //
+  // these functions illustrate how the underlying game engine is used to 
+  // handle the desired functionality or load and manipulate the UI components
+  // that we are testing. This code exists as a reference for third-party
+  // developers. Questions and feedback are welcome, as are contributions.
+  //
   add_player_boxes_test(app) {
     this.playerbox.render(app, this);
     this.playerbox.attachEvents(app, this);
@@ -429,7 +452,6 @@ class GameTestSuite extends GameTemplate {
 
   }
 
-
   display_overlay_test(app) {
 
     let overlay_html = `
@@ -446,8 +468,9 @@ class GameTestSuite extends GameTemplate {
 
   }
 
-
   display_blocking_overlay_test(app) {
+
+    let game_self = this;
 
     let overlay_html = `
       <div style="background-color:whitesmoke;width:80vw;padding:40px;font-size:1.2em;">
@@ -488,7 +511,6 @@ class GameTestSuite extends GameTemplate {
     game_self.endTurn();
 
   }
-
 
   deal_cards_to_table(app) {
 
@@ -591,7 +613,7 @@ class GameTestSuite extends GameTemplate {
     });
   }
 
-  display_toggle_cardbox_test(app) {
+  toggle_cardbox_test(app) {
     this.hud.render(this.app, this);
     this.hud.attachEvents(this.app, this);
     if (this.hud.use_cardbox == 1) {
@@ -642,8 +664,9 @@ class GameTestSuite extends GameTemplate {
   // the contents of this function allow the Arcade to display and start games. 
   // extending the respondTo function allows this module to return data to other
   // modules based on specific inbound requests. in this case we respond to the
-  // request that checks if we can create games, and whether we have an image
-  // to list on the Arcade Banner.
+  // request that checks if we can create games. The Arcade makes this request 
+  // when it loads to determine which modules support interactions with users 
+  // through the Arcade interface.
   //
   respondTo(type) {
 

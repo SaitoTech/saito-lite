@@ -14,6 +14,14 @@ body {
   padding: unset;
 }
 
+.test-buttons {
+
+}
+.test-commentary {
+  background-color: whitesmoke;
+  padding: 20px;
+}
+
 .gameboard {
   position: absolute;
   background-image: url("img/gameboard.jpg");
@@ -45,12 +53,13 @@ h2 {
 }
 
 .button {
-  font-size: 1.2em;
+  font-size: 1.5em;
   margin-left: 20px;
   margin-bottom: 20px;
-  height: 40px;
-  width: 220px;
   text-align: center;
+  height: 60px;
+  width: 320px;
+  padding: 15px;
 }
 
 
