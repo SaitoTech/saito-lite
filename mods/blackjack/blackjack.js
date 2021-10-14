@@ -303,7 +303,7 @@ toggleIntro() {
     let solventPlayers = this.countActivePlayers(); 
     if (solventPlayers ==1 ){
       console.log("No more players");
-      this.game.queue.push("winner\t");
+      this.game.queue.push(`winner\t${this.firstActivePlayer()}`);
       return 1;
     }else if (this.game.state.player.length > 2){ //if more than 2, remove extras
        let removal = false;
@@ -612,10 +612,12 @@ toggleIntro() {
       }
 
       if (mv[0] === "winner") { //copied from poker
+        let player = parseInt(mv[1]);
         console.log("HI WINNER!");
-        this.updateStatus("Game Over: " + this.game.state.player[0].name + " wins!");
-        this.updateLog("Game Over: " + this.game.state.player[0].name + " wins!");
-        this.game.winner = this.game.players[0];
+        let winner = this.game.state.player[player].name + " wins!";
+        this.updateStatus("Game Over: " + (player == this.game.player)? "You win!" : winner);
+        this.updateLog("Game Over: " + winner);
+        this.game.winner = this.game.players[player];
         //this.resignGame(this.game.id); //post to leaderboard - ignore 'resign'
         return 0;
       }
@@ -649,13 +651,20 @@ toggleIntro() {
   countActivePlayers(){
     let playerCount = 0;
     for (let i = 0; i < this.game.state.player.length; i++)
-      //if (i+1 != this.game.state.dealer)
         if (this.game.state.player[i].credit>0)
           playerCount++;
 
     return playerCount;
   }
 
+  /*
+  Only called when countActivePlayer returns 1, so we don't need additional checks
+  */
+  firstActivePlayer(){
+    for (let i = 0; i < this.game.state.player.length; i++)
+        if (this.game.state.player[i].credit>0)
+          return i;
+  }
 
   /*
   Decodes the indexed card numbers into the Suit+Value
