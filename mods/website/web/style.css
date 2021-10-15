@@ -1737,31 +1737,6 @@ h2, h5 {
   padding: 0 10px 0 0;
 }
 
-.text-sizer-small{
-
-  font-size:1em;
- 
- }
- 
- .text-sizer-medium{
- 
- 
-   font-size:1.2em;
- 
- 
- }
- .text-sizer-large{
- 
-   font-size:1.3em;
- 
- }
- 
- .text-sizer-table {
- 
-   padding: 0.6em;
- 
- }
-
 
 .terms {
   border-top: 1px solid rgba(0, 0, 0, .1);

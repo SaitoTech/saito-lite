@@ -1979,3 +1979,18 @@ a.header-icon-fullscreen.tip {
 .align-top {
   align-self: auto !important;
 }
+
+.text-sizer-small{
+  font-size:1em;
+ }
+ 
+ .text-sizer-medium{
+   font-size:1.2em;
+ }
+ .text-sizer-large{
+   font-size:1.3em;
+ }
+ 
+ .text-sizer-table {
+   padding: 0.6em;
+ }
