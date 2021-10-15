@@ -303,7 +303,7 @@ toggleIntro() {
     let solventPlayers = this.countActivePlayers(); 
     if (solventPlayers ==1 ){
       console.log("No more players");
-      this.game.queue.push("winner\t");
+      this.game.queue.push(`winner\t${this.firstActivePlayer()}`);
       return 1;
     }else if (this.game.state.player.length > 2){ //if more than 2, remove extras
        let removal = false;
@@ -612,10 +612,12 @@ toggleIntro() {
       }
 
       if (mv[0] === "winner") { //copied from poker
+        let player = parseInt(mv[1]);
         console.log("HI WINNER!");
-        this.updateStatus("Game Over: " + this.game.state.player[0].name + " wins!");
-        this.updateLog("Game Over: " + this.game.state.player[0].name + " wins!");
-        this.game.winner = this.game.players[0];
+        let winner = this.game.state.player[player].name + " wins!";
+        this.updateStatus("Game Over: " + (player == this.game.player)? "You win!" : winner);
+        this.updateLog("Game Over: " + winner);
+        this.game.winner = this.game.players[player];
         //this.resignGame(this.game.id); //post to leaderboard - ignore 'resign'
         return 0;
       }
@@ -649,13 +651,20 @@ toggleIntro() {
   countActivePlayers(){
     let playerCount = 0;
     for (let i = 0; i < this.game.state.player.length; i++)
-      //if (i+1 != this.game.state.dealer)
         if (this.game.state.player[i].credit>0)
           playerCount++;
 
     return playerCount;
   }
 
+  /*
+  Only called when countActivePlayer returns 1, so we don't need additional checks
+  */
+  firstActivePlayer(){
+    for (let i = 0; i < this.game.state.player.length; i++)
+        if (this.game.state.player[i].credit>0)
+          return i;
+  }
 
   /*
   Decodes the indexed card numbers into the Suit+Value
@@ -1051,7 +1060,8 @@ toggleIntro() {
             debt = this.game.state.player[i].wager * 2;
             msg = `You have to pay the dealer double your wager for a total of ${debt}.`;
           }
-          this.game.state.player[this.game.state.dealer-1].wager += debt;
+          //Temporarily store all chips collected from players in the dealer's "wager"
+          this.game.state.player[this.game.state.dealer-1].wager += Math.min(debt,this.game.state.player[i].credit);
           this.game.state.player[i].credit -= debt;
           //Check for bankruptcy to personalize message
           if (this.game.state.player[i].credit < 0)
@@ -1077,13 +1087,13 @@ toggleIntro() {
               if (this.game.state.player[i].winner){
                 this.updateLog(`Player ${i+1} wins ${debt}`);
                 this.game.state.player[this.game.state.dealer-1].wager -= debt;
-                this.game.state.player[i].credit += debt;
+                this.game.state.player[i].credit += Math.min(debt, this.game.state.player[this.game.state.dealer-1].credit);
                 if (i+1 == this.game.player){
                   let msg = (this.game.state.player[i].payout == 1)? `You Win Your Bet of ${debt}`: `Blackjack! You win double your bet, total winnings: ${debt}`;
                   this.game.queue.push("ACKNOWLEDGE\t"+msg);
                 }
               }else{
-                this.game.state.player[this.game.state.dealer-1].wager += debt;
+                this.game.state.player[this.game.state.dealer-1].wager += Math.min(debt, this.game.state.player[i].credit);
                 this.game.state.player[i].credit -= debt;
                 this.updateLog(`Player ${i+1} loses ${debt}`);
                 if (i+1 == this.game.player){
