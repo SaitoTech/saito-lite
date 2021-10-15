@@ -1737,17 +1737,6 @@ h2, h5 {
   padding: 0 10px 0 0;
 }
 
-#text-sizer{
-
-  letter-spacing: .25px;
-  padding: 0.6em;
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: auto;
-  grid-gap: 0.5em;
- 
-}
-
 .text-sizer-small{
 
   font-size:1em;
