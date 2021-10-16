@@ -612,12 +612,15 @@ toggleIntro() {
       }
 
       if (mv[0] === "winner") { //copied from poker
-        let player = parseInt(mv[1]);
-        console.log("HI WINNER!");
-        let winner = this.game.state.player[player].name + " wins!";
-        this.updateStatus("Game Over: " + (player == this.game.player)? "You win!" : winner);
-        this.updateLog("Game Over: " + winner);
-        this.game.winner = this.game.players[player];
+        let winner = parseInt(mv[1]);
+        let winnerName = this.game.state.player[winner].name + " wins!";
+        this.updateLog("Game Over: " + winnerName);
+        let status = "<h2>Game Over: </h2><p>";
+        status += (winner+1 == this.game.player)? "You win!" : winnerName;
+        status += "</p>";
+        this.updateStatus(status);
+          
+        this.game.winner = this.game.players[winner];
         //this.resignGame(this.game.id); //post to leaderboard - ignore 'resign'
         return 0;
       }
@@ -778,12 +781,12 @@ toggleIntro() {
 
     if (this.browser_active == 0) { return; }
 
-    try {
+   // try {
       this.displayPlayers();
       this.displayHand();
-    } catch (err) {
-      console.log("err: " + err);
-    }
+   // } catch (err) {
+    //  console.log("err: " + err);
+   // }
 
   }
 
@@ -813,90 +816,41 @@ toggleIntro() {
 
   }
 
-  updatePlayerLog(player, msg) {
+  
 
-    let divname = "#player-info-log-" + (player);
-    let logobj = document.querySelector(divname);
-    if (logobj) {
-      logobj.innerHTML = msg;
-    }
-
-  }
-
-
-  returnPlayersBoxArray() {
-
-    let player_box = [];
-
-    if (this.game.players.length == 2) { player_box = [1, 4]; }
-    if (this.game.players.length == 3) { player_box = [1, 3, 5]; }
-    if (this.game.players.length == 4) { player_box = [1, 3, 4, 5]; }
-    if (this.game.players.length == 5) { player_box = [1, 2, 3, 5, 6]; }
-    if (this.game.players.length == 6) { player_box = [1, 2, 3, 4, 5, 6]; }
-
-    return player_box;
-
-  }
-
-  returnViewBoxArray() { //Does this.game.players.length decrement when player eliminated
-
-    let player_box = [];
-
-    if (this.game.players.length == 2) { player_box = [3, 5]; }
-    if (this.game.players.length == 3) { player_box = [3, 4, 5]; }
-    if (this.game.players.length == 4) { player_box = [2, 3, 5, 6]; }
-    if (this.game.players.length == 5) { player_box = [2, 3, 4, 5, 6]; }
-
-    return player_box;
-
-  }
-
+  
   /*
   Player should see their hand in position 1 of player_box, other players are even spaced around "poker table"
   */
   displayPlayers() {
 
     if (this.browser_active == 0) { return; }
-
-    let player_box = "";
-
-    var prank = 0;
-    if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
-      player_box = this.returnPlayersBoxArray();
-      prank = this.game.players.indexOf(this.app.wallet.returnPublicKey());
-    } else {
-      document.querySelector('.status').innerHTML = "You are out of the game.<br />Feel free to hang out and chat.";
-      document.querySelector('.cardfan').classList.add('hidden');
-      player_box = this.returnViewBoxArray();
-    }
-    if (player_box.length == 0){
-      console.log("No players to display");
-      return;
-    }
-
-    for (let j = 2; j < 7; j++) { //Empty chairs are in DOM, but dynamically hidden/displayed
-      let boxobj = document.querySelector("#player-info-" + j);
-      if (!player_box.includes(j)) {
-        boxobj.style.display = "none";
-      } else {
-        boxobj.style.display = "block";
-      }
-    }
-
+    this.playerbox.render(this.app, this); 
+    this.playerbox.addGraphicClass("hand");   
+    this.playerbox.addGraphicClass("tinyhand");   
+  
     for (let i = 0; i < this.game.players.length; i++) {
-      let seat = i - prank;
-      if (seat < 0) { seat += this.game.players.length }
-
-      let player_box_num = player_box[seat];
-      let divname = "#player-info-" + player_box_num;
-      let boxobj = document.querySelector(divname);
       let newhtml = '';
       let player_hand_shown = 0;
 
       if (this.game.state.player.length > 0) {
+        //this.playerbox.refreshName(i);
+
+        newhtml = `<div class="chips">Chips: ${this.game.state.player[i].credit} ${this.game.options.crypto}</div>`;
+        if (this.game.state.dealer == (i+1)){
+          newhtml += `<div class="player-notice dealer">DEALER</div>`;  
+        }else{
+          newhtml += `<div class="player-notice">Player ${i+1}</div>`;  
+        }
+        
+        
+      
+        this.playerbox.refreshInfo(newhtml, i);
+        newhtml = "";
+        
         if (this.game.state.player[i].hand) {
             player_hand_shown = 1;
-            newhtml = `<div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">`;
+            //Make Image Content     
             if (this.game.state.player[i].hand.length < 2) { //One Hidden Card
                 newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
             }
@@ -904,11 +858,8 @@ toggleIntro() {
               let card = this.game.deck[0].cards[this.game.state.player[i].hand[z]];
               newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
             }
-       
-           newhtml += `</div>
-              <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player[i].name}</div>
-              <div class="player-info-chips" id="player-info-chips-${i + 1}">Chips: ${this.game.state.player[i].credit} ${this.game.options.crypto}</div> 
-           `;
+            newhtml += `</div>`;
+            this.playerbox.refreshGraphic(newhtml, i);
         }
       }
       /*
@@ -929,21 +880,7 @@ toggleIntro() {
           this.cardfan.render(this.app, this, cardfan_backs);
           this.cardfan.attachEvents(this.app, this);
       }
-
-      
-      /*
-      if (boxobj.querySelector(".plog").innerHTML == "") {
-        boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
-      }
-      */
-      if (this.game.state.dealer == (i+1)) {
-        newhtml += `<div class="player-notice">DEALER</div>`;        
-        boxobj.classList.add("dealer");
-      }else {
-        newhtml += `<div class="player-notice">Player ${i+1}</div>`;
-        boxobj.classList.remove("dealer");
-      }
-      boxobj.querySelector(".info").innerHTML = newhtml;
+    
     }
   }
 
@@ -1195,13 +1132,18 @@ toggleIntro() {
   }
 
 
+  /*
+    This function may be less than ideal, abusing the concept of status, 
+    since it is mostly being used to update the DOM for user interface
+  */
   updateStatus(str, hide_info=0) {
-
     try {
       if (hide_info == 0) {
-        document.querySelector(".p1 > .info").style.display = "block";
+        this.playerbox.showInfo();
+        //document.querySelector(".p1 > .info").style.display = "block";
       } else {
-        document.querySelector(".p1 > .info").style.display = "none";
+        this.playerbox.hideInfo();
+        //document.querySelector(".p1 > .info").style.display = "none";
       }
 
       if (this.lock_interface == 1) { return; }

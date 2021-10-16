@@ -115,7 +115,7 @@ body {
   text-align: center;
   padding: 0;
   margin: 0;
-  width: 120px;
+  width: 125px;
   max-width: 150px;
   border-bottom: none;
   height: 40px;
@@ -139,6 +139,7 @@ body {
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
   height: 50px;
   line-height: 50px;
+  width: 125px;
 }
 .game-menu-sub-options {
   display:none;
@@ -577,7 +578,7 @@ ul li a {
 }
 
 
-.player-info {
+.player-box {
   width: 25vh;
   height: 20vh;
   background-color: #4448;
@@ -586,23 +587,38 @@ ul li a {
   position: absolute;
 }
 
-.player-info.p1 {
+.player-box.p1 {
   height: 30vh;
 }
-.player-info .status {
+
+.player-box .plog {
+  margin: 0.5em;
   font-size: 1.25em;
 }
 
+.player-box-head{
+   width: 100%;
+   display: inline-flex;
+   align-items: center;
+}
+
+.player-box-head .player-identicon{
+    width: 3vh;
+    box-shadow: 0px 3px 6px #00000029;
+}
+
 .player-info-name {
-  font-size: 3vh;
   font-weight: bold;
-  text-align: center;
+  font-size: 3vh;
+  padding-left: 0.5em;
+  text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.player-info-chips {
+
+.player-box-info .chips {
   padding: 0.5em;
   text-align: center;
   font-size: 3vh;
@@ -623,7 +639,7 @@ ul li a {
   top: 2vh;
 }
 
-.player-info-hand .card {
+.player-box-graphic .card {
   width: 12vh;
   position: absolute;
 }
@@ -996,6 +1012,7 @@ input#game_board_sizer {
   .game-menu ul li {
     max-width: 75px;
     width: 75px;
+    font-size: 0.9rem;
   }
 
 }
@@ -1012,8 +1029,9 @@ input#game_board_sizer {
 
   }
   .game-menu ul li {
-    max-width: 85px;
-    width: 85px;
+    max-width: 100px;
+    width: 100px;
+    font-size: 1rem;
   }
 
 }
@@ -1031,6 +1049,7 @@ input#game_board_sizer {
   .game-menu ul li {
     max-width: 85px;
     width: 85px;
+    font-size: 1rem;
   }
 
 }
