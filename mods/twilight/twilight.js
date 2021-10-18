@@ -45,6 +45,8 @@ class Twilight extends GameTemplate {
     //
     this.boardgameWidth  = 5100;
 
+    this.card_height_ratio = 1.39; // height is 1.39x width
+
     this.moves           = [];
     this.cards    	 = [];
     this.is_testing 	 = 0;
