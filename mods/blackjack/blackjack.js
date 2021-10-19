@@ -192,6 +192,12 @@ toggleIntro() {
     this.log.render(app, this);
     this.log.attachEvents(app, this);
 
+    this.playerbox.render(app, this);
+    //this.playerbox.attachEvents(app.this);
+    this.playerbox.addClassAll("p",true);
+    this.playerbox.addGraphicClass("hand");   
+    this.playerbox.addGraphicClass("tinyhand");   
+  
   }
 
 
@@ -825,16 +831,13 @@ toggleIntro() {
   displayPlayers() {
 
     if (this.browser_active == 0) { return; }
-    this.playerbox.render(this.app, this); 
-    this.playerbox.addGraphicClass("hand");   
-    this.playerbox.addGraphicClass("tinyhand");   
   
     for (let i = 0; i < this.game.players.length; i++) {
       let newhtml = '';
       let player_hand_shown = 0;
 
       if (this.game.state.player.length > 0) {
-        //this.playerbox.refreshName(i);
+        this.playerbox.refreshName(i);
 
         newhtml = `<div class="chips">Chips: ${this.game.state.player[i].credit} ${this.game.options.crypto}</div>`;
         if (this.game.state.dealer == (i+1)){

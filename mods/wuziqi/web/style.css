@@ -7,6 +7,10 @@
     background-size: cover;
 }
 
+.main{
+    margin-top: unset;
+    padding: unset;
+}
 /*
     Format the help overlay
 */
@@ -38,14 +42,7 @@
 Board is a grid of wooden squares
 */
 .board > div {
-    /*background-image: url("img/woodtile.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;*/
-    /*background-image: url("img/004-polished-wood.png");
-    border: 1px solid black;
-    margin:  0 1px 1px 0;*/   
-    position: relative;
+     position: relative;
 }
 
 .board > div::after {
@@ -84,30 +81,6 @@ Board is a grid of wooden squares
 .board > div.bottom.right::after {
     border: 0px solid black;
 }
-
-/*
-    Pseudo-element shifted box border to simulate Go board lines
-
-.board > div::after{
-    content: "";
-    position: relative;
-    z-index: 0;
-    top:  -50%;
-    left: -50%;
-    border: 2px solid black;
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.board > .left::after{
-    display:  none;
-}
-
-.board > .bottom::after{
-    display: none;   
-}
-*/
 
 
 
@@ -172,7 +145,7 @@ Board is a grid of wooden squares
 
 
 .player-box {
-  width: 15em;
+  width: 12em;
   min-height: 10em;
   background-color: #0004;
   color: #fff;
@@ -183,10 +156,12 @@ Board is a grid of wooden squares
   font-size: 1.2em;
   text-align: center;
   box-sizing: content-box;
+  padding: 0px;
+  height: unset;
 }
 
 
-.player-box .info{
+.player-box-head{
     background: #AAA;
     box-shadow: 0px 3px 6px #00000029;
     border-bottom: 1px solid #FFFFFF;
@@ -201,27 +176,18 @@ Board is a grid of wooden squares
     
 }
 
-.player-box .info .player-name{
-    padding-left: 8px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.player-box .identicon{
-    width: 1.5em;
-    box-shadow: 0px 3px 6px #00000029;
-}
-
-.player-box .plog{
-    margin: 0.5em;
-}
-
-.player-box .status{
-    margin: 0.5em;
+/*
+Make name a little smaller than default
+*/
+.player-box-head .player-info-name{
+    font-size: 1.5em;
 }
 
 .player-box .piece{
     width: 2em;
+    margin: 0.25em;
 }
+
 .playertitle {
     text-transform: capitalize;
 }
@@ -237,13 +203,15 @@ Board is a grid of wooden squares
 /*
     Size square board relative to the narrower screen dimension
 */
+
+
 @media (orientation: landscape) {
     .board {
-        width: 80vh;
-        height: 80vh;
+        width: 90vh;
+        height: 90vh;
     }
     .inner{
-        padding: 10vh;
+        padding: 5vh;
     }
     .player-box{
         top: 40vh;  /*Center in screen:  50vh - 1/2 height */
@@ -252,11 +220,11 @@ Board is a grid of wooden squares
     }
 
     .player-box.me{
-        left: max(5px, calc(12vw - 5em));
+        left: max(5px, calc(12vw - 7em));
     }
 
     .player-box.notme{
-        right: max(5px, calc(12vw - 5em));
+        right: max(5px, calc(12vw - 7em));
     }
 
 
@@ -264,47 +232,67 @@ Board is a grid of wooden squares
 
 @media (orientation: portrait) {
     .board {
-        width: 80vw;
-        height: 80vw;
-   
+        width: 90vw;
+        height: 90vw;
+        margin-top: max(5vw,5vh);
     }
 
     .inner{
-        padding: 7vw;
+        padding: 5vw;
+        padding-top: 0px;
     }
 
     .player-box{
-        top: calc(82vw + 7vh);
+        top: calc(65vw + 26vh);
         max-width: 35vw;
     }
 
     .player-box.me{
-        left: calc(30vw - 5em);
+        left: calc(30vw - 6em);
     }
 
     .player-box.notme{
-        right: calc(30vw - 5em);
+        right: calc(30vw - 6em);
     }
 }
 
-@media (max-aspect-ratio:  8/7) and (min-aspect-ratio: 1/1) {
-    .inner{
-        padding: 7vh;
+
+/*
+    Intermediate (roughly square screen size, technically landscape, but keep portrait layout)
+*/
+@media (max-aspect-ratio:  8/7) and (min-aspect-ratio: 7/8) {
+    .board{
+        margin-top: 0px;
+        width: 80vh;
+        height: 80vh;
     }
+    .inner{
+        padding: 5vh;
+        padding-top: 45px;
+     }
 
     .player-box{
-        top: calc(100vh - 6em);
-        max-width: 35vw;
+        top: unset;
+        bottom: 0px;
+        max-width: 40vw;
     }
 
+    .player-box-info{
+        display: inline-flex;
+        align-items: center;
+        margin: 3px;
+    }
     .player-box.me{
-        left: calc(30vw - 5em);
+        left: calc(30vw - 5.5em);
     }
 
     .player-box.notme{
-        right: calc(30vw - 5em);
+        right: calc(30vw - 5.5em);
     }
 }
+
+
+
 
 
 /*
@@ -328,6 +316,7 @@ Board is a grid of wooden squares
     .board {
         width: 95vw;
         height: 95vw;
+        margin-top: max(5vw,5vh);
     }
      .inner{
         padding: 2.5vw;
@@ -335,7 +324,7 @@ Board is a grid of wooden squares
     }
 
     .player-box{
-        top: calc(100vw + 1vh + 45px);
+        top: calc(95vw + 15vh);
         max-width: 38vw;
     }
     

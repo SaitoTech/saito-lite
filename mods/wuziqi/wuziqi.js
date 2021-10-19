@@ -1,6 +1,5 @@
 const { timingSafeEqual } = require('crypto');
 const saito = require('../../lib/saito/saito');
-const dragElement = require('../../lib/helpers/drag_element');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const { update } = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 
@@ -17,7 +16,7 @@ class Wuziqi extends GameTemplate {
         this.description = "五子棋 aka Gokomu and Gobang! is a simple game where two players alternately place black and white tiles on a go board attempting to place 5 of them in adjacent positions."
         this.categories = "Boardgame Strategy";
         this.type = "Boardgame";
-        this.status = "Alpha";
+        this.status = "Beta";
 
         this.minPlayers = 2;
         this.maxPlayers = 2;
@@ -163,6 +162,13 @@ class Wuziqi extends GameTemplate {
             this.generateBoard(this.game.size);
         }
 
+
+        //Player Boxes
+        this.playerbox.render(this.app,this);
+        this.playerbox.addClass("me",this.game.player-1);
+        this.playerbox.addClass("notme",this.game.player);
+        this.playerbox.attachEvents(this.app);
+
         // Render board and set up values.
         try {
             // Check if anyone has played yet (black goes first)
@@ -259,49 +265,34 @@ class Wuziqi extends GameTemplate {
         but data structures for player properties are typically 0-indexed arrays
     */
     updateScore() {
-           /*
-            Make player box
-        */
-        let boxobj;
-        let status = document.querySelector(".status").innerHTML;
+        let roundsToWin = Math.ceil(this.game.options.best_of/2);
         for (let i = 0; i<this.game.players.length; i++){
-            let name = this.app.keys.returnIdentifierByPublicKey(this.game.players[i], 1)
-            let identicon = this.app.keys.returnIdenticon(name);
-            if (name.indexOf("@") > 0) {
-                name = name.substring(0, name.indexOf("@"));
-            }
-            if (name === this.game.players[i]) {
-               name = this.game.players[i].substring(0, 10) + "...";
-            }    
-            console.log(i,this.game.player);
-            boxobj = (this.game.player == (i+1)) ? document.querySelector(".player-box.me") : document.querySelector(".player-box.notme");
-            let info = boxobj.querySelector(".info");
-            let score = boxobj.querySelector(".plog");
+            //this.playerbox.refreshName(i);
             let scoreHTML = `<div>Score: </div>`;
-            info.innerHTML = `<img class="identicon" src="${identicon}">
-                                <div class="player-name">${name}</div>
-                                `;
-            
-            
             for (let j = 0; j < this.game.score[i]; j++) {
                 scoreHTML += `<img class="piece" src="img/${this.game.sides[i]}piece.png">`;
             }
-            for (let j = 0; j < (this.game.options.best_of - this.game.score[i]); j++) {
+            for (let j = 0; j < (roundsToWin - this.game.score[i]); j++) {
                 scoreHTML += `<img class="piece opaque30" src="img/${this.game.sides[i]}piece.png">`;
             }
-            score.innerHTML = scoreHTML; //${this.game.score[i]} (out of ${this.game.options.best_of})`;
-            try {
-                dragElement(boxobj);
-            } catch (err) {
-                console.log("Drag error",err);
-            }
+            this.playerbox.refreshInfo(scoreHTML,i);                        
         }
+    }
 
+    updateStatus(str) {
+    
+      if (this.lock_interface == 1) { return; }
 
-      //  for (let i = 0; i < 2 /*this.game.players.length==2*/; i++){
-      //      document.querySelector(`.score${i+1}`).innerHTML = `${((i+1)==this.game.player)? "*" : ""}${this.game.sides[i]}: ${this.game.score[i]}`;
-      //  }
-      //  document.querySelector(".best_of").innerHTML = "Best of " + this.game.options.best_of;
+      this.game.status = str;
+
+      if (this.browser_active == 1) {
+        let status_obj = document.querySelector(".status");
+        if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
+          status_obj.innerHTML = str;
+        }
+      }
+    } catch (err) { 
+      console.log("ERR: " + err);
     }
 
 
