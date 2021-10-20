@@ -1717,7 +1717,7 @@ h2, h5 {
 
 
 .wallet-action-row {
-  font-size: 18px;
+  font-size: 1.3em;
   font-weight: 400;
   color: #1C1C23;
   box-sizing: content-box;
@@ -1737,6 +1737,18 @@ h2, h5 {
   padding: 0 10px 0 0;
 }
 
+.text-sizer-small{
+  font-size:1em;
+ }
+
+ .text-sizer-medium{
+   font-size:1.2em;
+ }
+ 
+ .text-sizer-large{
+   font-size:1.3em;
+ }
+ 
 
 .terms {
   border-top: 1px solid rgba(0, 0, 0, .1);
