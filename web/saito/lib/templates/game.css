@@ -584,7 +584,8 @@ ul li a {
   height: 20vh;
   background-color: #4448;
   color: #fff;
-  padding: 1em;
+  font-size: 1.25em;
+  padding: 0.5em;
   position: absolute;
 }
 
@@ -594,13 +595,13 @@ ul li a {
 
 .player-box .plog {
   margin: 0.5em;
-  font-size: 1.25em;
 }
 
 .player-box-head{
    width: 100%;
    display: inline-flex;
    align-items: center;
+   cursor: pointer;
 }
 
 .player-box-head .player-identicon{
@@ -618,6 +619,9 @@ ul li a {
   text-overflow: ellipsis;
 }
 
+.player-box-info{
+  margin: 0.5em;
+}
 
 .player-box-info .chips {
   padding: 0.5em;
@@ -1011,8 +1015,8 @@ input#game_board_sizer {
   }
 
   .game-menu ul li {
-    max-width: 75px;
-    width: 75px;
+    max-width: 85px;
+    width: 85px;
     font-size: 0.9rem;
   }
 
@@ -1048,8 +1052,8 @@ input#game_board_sizer {
     grid-template-rows: repeat(auto-fit, 14vw);
   }
   .game-menu ul li {
-    max-width: 85px;
-    width: 85px;
+    max-width: 115px;
+    width: 115px;
     font-size: 1rem;
   }
 
@@ -1070,7 +1074,7 @@ input#game_board_sizer {
 
   .game-menu ul li {
     height; 30px;
-    width: 85px;
+    width: 115px;
     line-height: 30px;
   }
 
