@@ -668,9 +668,7 @@ class Post extends ModTemplate {
     let delete_tx = this.createDeleteTransaction(txmsg.post_id);
     let base_58_tx = Base58.encode(Buffer.from(JSON.stringify(delete_tx)));
 
-    this.sendPeerRequestWithServiceFilter(
-      'mailrelay',
-      'send email', {
+    this.app.network.sendRequest('send email', {
       from: 'network@saito.tech',
       to: 'moderators@saito.tech', 
       subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
