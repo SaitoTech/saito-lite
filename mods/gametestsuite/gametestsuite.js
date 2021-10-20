@@ -18,6 +18,11 @@ class GameTestSuite extends GameTemplate {
     this.type            = "Education Development";
     this.card_img_dir = '/gametestsuite/img/cards';
 
+
+    this.categories = "Demonstration Utility";
+    this.type = "Utilitty";
+    this.status = "Demonstration";
+
     // disable by default
     this.useHUD = 0;
 
