@@ -99,7 +99,7 @@ let makeDescription = (app, invite) => {
       for (let i in sgoa) {
         let output_me = 1;
         if (output_me == 1) {
-          html += `<div class="gameShortDescriptionRow"><div class="gameShortDescriptionKey">${i}: </div><div class="gameShortDescriptionValue">${sgoa[i]}</div></div>`;
+          html += `<div class="gameShortDescriptionRow"><div class="gameShortDescriptionKey">${i.replace(/_/g, ' ')}: </div><div class="gameShortDescriptionValue">${sgoa[i]}</div></div>`;
         }
       }
     }
