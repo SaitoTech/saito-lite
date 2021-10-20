@@ -668,11 +668,13 @@ class Post extends ModTemplate {
     let delete_tx = this.createDeleteTransaction(txmsg.post_id);
     let base_58_tx = Base58.encode(Buffer.from(JSON.stringify(delete_tx)));
 
+    console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
+
     this.app.network.sendRequest('send email', {
       from: 'network@saito.tech',
       to: 'moderators@saito.tech', 
       subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
-      ishtml: false,
+      ishtml: true,
       body: `
         Post #${txmsg.post_id} was reported.
         Click <a href="https://saito.io/post/delete/${base_58_tx}">here</a> to delete it.
@@ -715,11 +717,17 @@ class Post extends ModTemplate {
   webServer(app, expressapp, express) {
     super.webServer(app, expressapp, express);
     expressapp.get('/post/delete/:serialized_tx', async (req, res) => {
-      let decoded_tx = JSON.parse(Buffer.from(Base58.decode(req.params.serialized_tx)).toString("utf-8"));
-      this.receiveDeleteTransaction(new saito.transaction(decoded_tx));
-      res.setHeader('Content-type', 'text/javascript');
-      res.charset = 'UTF-8';
-      res.end();
+      try {
+        let decoded_tx = JSON.parse(Buffer.from(Base58.decode(req.params.serialized_tx)).toString("utf-8"));
+        this.receiveDeleteTransaction(new saito.transaction(decoded_tx));
+        res.setHeader('Content-type', 'text/javascript');
+        res.write("OK");
+        res.charset = 'UTF-8';
+        res.end();
+      } catch (err) {
+        console.log("error trying to decode moderation transaction");
+        console.log(err);
+      }
     });
   }
 }
