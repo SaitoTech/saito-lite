@@ -73,7 +73,3 @@ mods/mailrelay/lib/template-credentials.js
 mods/tutorial4/web/txid
 
 extras/shashmap/build
-package-lock.json
-package.json
-.gitignore
-package.json

@@ -1980,14 +1980,16 @@ a.header-icon-fullscreen.tip {
   align-self: auto !important;
 }
 
-.text-sizer-small{
-  font-size:1em;
+.text-sizer-small {
+  font-size: 1em;
+  text-indent: 1em;
  }
 
- .text-sizer-medium{
-   font-size:1.2em;
+.text-sizer-medium {
+   font-size: 1.2em;
  }
  
- .text-sizer-large{
-   font-size:1.3em;
+.text-sizer-large {
+   font-size: 1.3em;
  }
+ 
