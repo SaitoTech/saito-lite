@@ -254,7 +254,7 @@ section {
 }
 
 .section1 .left .crumbs a {
-  font-size: 18px;
+  font-size: 1.5em;
   font-weight: 400;
   text-decoration: none;
 }
@@ -314,7 +314,7 @@ section {
 }
 
 .section2 .part .title {
-  font-size: 18px;
+  font-size: 1.5em;
   font-weight: bold;
   color: #FE7A36;
 }
@@ -324,7 +324,7 @@ section {
   width: 27rem;
   height: 8rem;
   line-height: 2rem;
-  font-size: 18px;
+  font-size: 1.5em;
   font-weight: 400;
   color: #FFFFFF;
 }
@@ -525,7 +525,7 @@ section {
 }
 
 .toolDescWrapper {
-  font-size: 20px;
+  font-size: 1.6em;
   font-weight: 500;
   color: #FFFFFF;
   line-height: 2.4rem;
