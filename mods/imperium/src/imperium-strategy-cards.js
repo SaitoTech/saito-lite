@@ -14,6 +14,19 @@
     if (obj.name == null) 	{ obj.name = "Strategy Card"; }
     if (obj.rank == null) 	{ obj.rank = 1; }
 
+
+    if (obj.returnCardImage == null) {
+      obj.returnCardImage = function() {
+        return `
+          <div class="strategy_card" id="${name}">
+	    <img class="strategy_card_img" id="${name}" src="/imperium/img${obj.img}" style="width:100%">
+	    <div class="strategy_card_text">${obj.text}</div>
+	  </div>
+        `;
+      };
+    }
+
+
     obj = this.addEvents(obj);
     this.strategy_cards[name] = obj;
 

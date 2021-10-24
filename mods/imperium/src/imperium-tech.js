@@ -12,11 +12,14 @@
   // faction -> is this restricted to a specific faction
   // prereqs -> array of colors needed
   // unit --> unit technology
-  // 
+  // returnCardImage(cardkey) --> returns image of card
+  //
   returnTechnology() {
     return this.tech;
   }
   
+
+
   importTech(name, obj) {
 
     if (obj.name == null) 	{ obj.name = "Unknown Technology"; }
@@ -27,6 +30,24 @@
     if (obj.type == null)	{ obj.type = "normal"; }
     if (obj.text == null)	{ obj.text = ""; }
     if (obj.unit == null)	{ obj.unit = 0; }
+    if (obj.key == null)	{ obj.key = name; }
+    if (obj.returnCardImage == null)	{ obj.returnCardImage = function() {
+
+      let prereqs = "";
+
+      for (let i = 0; i < obj.prereqs.length; i++) {
+        if (obj.prereqs[i] == "yellow") { prereqs += '<span class="yellow">♦</span>'; }
+        if (obj.prereqs[i] == "blue") { prereqs += '<span class="blue">♦</span>'; }
+        if (obj.prereqs[i] == "green") { prereqs += '<span class="green">♦</span>'; }
+        if (obj.prereqs[i] == "red") { prereqs += '<span class="red">♦</span>'; }      
+      }
+
+      return `<div id="${obj.key}" class="tech_${obj.color} tech_card card_nonopaque">
+        <div class="tech_card_name">${obj.name}</div>
+        <div class="tech_card_content">${obj.text}</div>
+        <div class="tech_card_level">${prereqs}</div>
+      </div>`;
+    }; }
 
     obj = this.addEvents(obj);
     this.tech[name] = obj;
@@ -40,28 +61,4 @@
     return 0;
   }
 
-  returnTechCardHTML(tech, tclass="tech_card") {
-
-    let name = this.tech[tech].name;
-    let text = this.tech[tech].text;
-    let color = this.tech[tech].color;
-    let prereqs = "";
-
-    for (let i = 0; i < this.tech[tech].prereqs.length; i++) {
-      if (this.tech[tech].prereqs[i] == "yellow") { prereqs += '<span class="yellow">♦</span>'; }
-      if (this.tech[tech].prereqs[i] == "blue") { prereqs += '<span class="blue">♦</span>'; }
-      if (this.tech[tech].prereqs[i] == "green") { prereqs += '<span class="green">♦</span>'; }
-      if (this.tech[tech].prereqs[i] == "red") { prereqs += '<span class="red">♦</span>'; }
-    }
-
-    let html = `
-    <div class="tech_${color} ${tclass}">
-      <div class="tech_card_name">${name}</div>
-      <div class="tech_card_content">${text}</div>
-      <div class="tech_card_level">${prereqs}</div>
-    </div>
-    `;
-
-    return html;
-  }
 
