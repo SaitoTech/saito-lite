@@ -10863,7 +10863,24 @@ console.log("Active Agenda: " + active_agenda);
       class : "game-tech-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnTechnology(), { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
+	let tech = game_mod.returnTechnology();
+        let t2 = [];
+        for (let x in tech) { if (tech[x].type == "normal" && tech[x].unit != 1) { t2.push(tech[x]); } }
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Upgrades",
+      id : "game-unit-cardlist",
+      class : "game-unit-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	let tech = game_mod.returnTechnology();
+        let t2 = [];
+        for (let x in tech) { if (tech[x].type == "normal" && tech[x].unit == 1) { t2.push(tech[x]); } }
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
 	  alert("cardlist close strategy init menu");
 	});
       }
@@ -10874,7 +10891,7 @@ console.log("Active Agenda: " + active_agenda);
       class : "game-agenda-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.game.deck[2].cards, { title : "Agendas" }, function() {
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
 	  alert("cardlist close strategy init menu");
 	});
       }
@@ -10912,37 +10929,6 @@ console.log("Active Agenda: " + active_agenda);
 	});
       }
     });
-
-
-
-    this.menu.addMenuOption({
-      text : "Sectors",
-      id : "game-info",
-      class : "game-info",
-      callback : function(app, game_mod) {
-        game_mod.menu.showSubMenu("game-info");
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Sectors",
-      id : "game-sectors",
-      class : "game-sectors",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleSystemsMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Planets",
-      id : "game-planets",
-      class : "game-planets",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleInfoMenuItem();
-      }
-    });
-
-
 
 
 
@@ -12823,6 +12809,17 @@ handleSystemsMenuItem() {
     if (obj.text == null)	{ obj.text = "Unknown Document"; }
     if (obj.img  == null)	{ obj.img = "/imperium/img/agenda_card_template.png"; }
     if (obj.elect == null)	{ obj.elect = "other"; }
+
+    if (obj.returnCardImage == null) {
+      obj.returnCardImage = function() {
+        return `
+  	  <div style="background-image: url('/imperium/img/agenda_card_template.png');" class="overlay_agendacard card option" id="${name}">
+	    <div class="overlay_agendatitle">${obj.name}</div>
+	    <div class="overlay_agendacontent">${obj.text}</div>
+	  </div>
+        `;
+      }
+    }
 
     obj = this.addEvents(obj);
     this.agenda_cards[name] = obj;
@@ -29174,7 +29171,7 @@ returnNewSecretObjectiveOverlay(card) {
 
 
 returnTechOverlay() {
-  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png"></div>';
+  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="width:90vw"></div>';
   return html;
 }
 
@@ -29568,8 +29565,16 @@ returnUnitsOverlay() {
 
   if (this.game.state.round == 1) {
     html += `
-      <div style="width:100%;text-align:center"><div class="units-overlay-title">Starting Units</div></div>
-      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the cards menu...</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text" style="line-height: 1.4em; font-size: 1.8em; margin-top: 50px; margin-bottom: 30px; padding: 20px;">
+        ships <b>MOVE</b> a maximum number of hexes
+<p style="margin-top:10px"></p>
+	some <b>CARRY</b> infantry or fighters
+<p style="margin-top:10px"></p>
+	lower <b>COMBAT</b> ratings score more hits
+<p style="margin-top:10px"></p>
+        units <b>COST</b> resources to produce
+
+      </div></div>
       <div class="unit-table">
     `;
 
@@ -29578,7 +29583,7 @@ returnUnitsOverlay() {
     if (fleet.carriers > 0) 	{ units.push("carrier"); }
     if (fleet.cruisers > 0) 	{ units.push("cruiser"); }
     if (fleet.destroyers > 0) 	{ units.push("destroyer"); }
-    if (fleet.dreadnaughts > 0) { units.push("dreadnaughts"); }
+    if (fleet.dreadnaughts > 0) { units.push("dreadnaught"); }
     if (fleet.warsuns > 0) 	{ units.push("warsun"); }
     if (fleet.fighters > 0) 	{ units.push("fighter"); }
     if (fleet.infantry > 0) 	{ units.push("infantry"); }
@@ -29720,6 +29725,8 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
+console.log("UNIT: " + unittype);
+
   let preobj = this.units[unittype];
   let obj = JSON.parse(JSON.stringify(preobj));
 
@@ -29727,12 +29734,6 @@ returnUnitTableEntry(unittype) {
   obj = this.upgradeUnit(obj, this.game.player);
 
   if (!obj) { return ""; }
-
-  if (this.game.state.round == 1) {
-    if (obj.type == "carrier") {
-      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is the most important starting ship. Move it into a neighbouring sector and invade planets to gain their resources and influence.</div>';
-    }
-  }
 
   let html = `
       <div class="unit-element">

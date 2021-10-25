@@ -898,7 +898,7 @@ toggleIntro() {
        
            newhtml += `</div>
               <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player[i].name}</div>
-              <div class="player-info-chips" id="player-info-chips-${i + 1}">Chips: ${this.game.state.player[i].credit} ${this.game.options.crypto}</div> 
+              <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player[i].credit} ${this.game.options.crypto}</div> 
            `;
         }
       }

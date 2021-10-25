@@ -206,7 +206,24 @@
       class : "game-tech-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnTechnology(), { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
+	let tech = game_mod.returnTechnology();
+        let t2 = [];
+        for (let x in tech) { if (tech[x].type == "normal" && tech[x].unit != 1) { t2.push(tech[x]); } }
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Upgrades",
+      id : "game-unit-cardlist",
+      class : "game-unit-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	let tech = game_mod.returnTechnology();
+        let t2 = [];
+        for (let x in tech) { if (tech[x].type == "normal" && tech[x].unit == 1) { t2.push(tech[x]); } }
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
 	  alert("cardlist close strategy init menu");
 	});
       }
@@ -217,7 +234,7 @@
       class : "game-agenda-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.game.deck[2].cards, { title : "Agendas" }, function() {
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
 	  alert("cardlist close strategy init menu");
 	});
       }
@@ -255,37 +272,6 @@
 	});
       }
     });
-
-
-
-    this.menu.addMenuOption({
-      text : "Sectors",
-      id : "game-info",
-      class : "game-info",
-      callback : function(app, game_mod) {
-        game_mod.menu.showSubMenu("game-info");
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Sectors",
-      id : "game-sectors",
-      class : "game-sectors",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleSystemsMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Planets",
-      id : "game-planets",
-      class : "game-planets",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleInfoMenuItem();
-      }
-    });
-
-
 
 
 

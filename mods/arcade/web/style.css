@@ -316,6 +316,8 @@ body {
 .gameShortDescriptionRow {
   padding: 2px;
   font-weight: bold;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 .gameShortDescriptionKey {
   clear: both;

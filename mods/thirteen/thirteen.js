@@ -15,7 +15,7 @@ class Thirteen extends GameTemplate {
 
     this.app             = app;
 
-    this.name  		 = "Thirteen";
+    //this.name		 = "Thirteen";
     this.name  		 = "Thirteen Days";
     this.slug		 = "thirteen";
     this.description     = `Thirteen Days is a mid-length simulation of the Cuban Missile Crisis created by Asger Granerud and Daniel Skjold Pedersenmade.`;
@@ -128,6 +128,15 @@ class Thirteen extends GameTemplate {
         game_mod.log.toggleLog();
       }
     });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
+      }
+    });
+
 
 
     this.menu.addMenuOption({
@@ -643,6 +652,29 @@ class Thirteen extends GameTemplate {
 	    thirteen_self.endTurn();
 
 	  });
+
+	  this.overlay.showCardSelectionOverlay(this.app, this, this.game.deck[0].hand, { columns : 3 , textAlign : "center" , cardlistWidth: "90vw" , title : html , subtitle : "earn points by having more influence in this region than your opponent by turn's end" , onCardSelect : function (card) {
+
+	    thirteen_self.overlay.hideOverlay();
+
+	    thirteen_self.addMove("RESOLVE");
+	    for (let i = 0; i < thirteen_self.game.deck[0].hand.length; i++) {
+	      thirteen_self.addMove("flag\t"+thirteen_self.game.player+"\t" + ac[thirteen_self.game.deck[0].hand[i]].flag);
+	      if (thirteen_self.game.deck[0].hand[i] == card) {
+		if (player == 1) {
+		  thirteen_self.game.state.ussr_agenda_selected = card;
+	        }
+		if (player == 2) {
+		  thirteen_self.game.state.us_agenda_selected = card;
+		}
+	      }
+
+	      thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t" + "1" + "\t" + thirteen_self.game.deck[0].hand[i] + "\t" + "0"); // 0 = do not announce - TODO actually prevent info sharing
+	    }
+	    thirteen_self.endTurn();
+	  }}, function () {});
+	  this.overlay.blockClose();
+
 	} else {
 
 	  if (player == 1) {
@@ -3133,6 +3165,11 @@ console.log("CARDS: "+JSON.stringify(cards));
 
 
 
+  returnCardImage(card) {
+    let thirteen_self = this;
+    let agenda_cards = thirteen_self.returnAgendaCards();
+    return `<div class="agenda_card" style="background-image: url('/thirteen/img/${agenda_cards[card].img}');background-size: cover;" class="cardimg showcard" id="${card}" /></div>`;
+  }
 
   returnAgendaCards() {
 

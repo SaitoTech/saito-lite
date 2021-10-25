@@ -28,6 +28,11 @@
 }
 
 
+/*** generic cardlist overlays ***/
+.game-overlay-cardlist-title {
+  font-family: 'orbitron-medium',helvetica;
+}
+
 /*** unit overlay ***/
 
 #close-units-btn {
@@ -448,10 +453,10 @@
   display: block;
   height: 42vh;
   color: white;
-  margin-top: 50px;
   padding: 20px;
   font-size: 1.5em;
   line-height: 1.5em;
+  cursor: pointer;
 }
 .strategy_card_img {
   position: absolute;
@@ -479,6 +484,7 @@
   font-size: 1em;
   transition: all 50ms;
   border: 1px solid;
+  cursor: pointer;
 }
 .action_card_title {
   position: relative;

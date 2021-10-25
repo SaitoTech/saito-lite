@@ -76,6 +76,12 @@ body {
   left: 465px;
 }
 
+.agenda_card {
+  width: 20vw;
+  height: 28vw;
+}
+
+
 .country {
   width:100px;
   height:100px;

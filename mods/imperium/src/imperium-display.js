@@ -335,7 +335,7 @@ returnNewSecretObjectiveOverlay(card) {
 
 
 returnTechOverlay() {
-  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png"></div>';
+  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="width:90vw"></div>';
   return html;
 }
 
@@ -729,8 +729,16 @@ returnUnitsOverlay() {
 
   if (this.game.state.round == 1) {
     html += `
-      <div style="width:100%;text-align:center"><div class="units-overlay-title">Starting Units</div></div>
-      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the cards menu...</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text" style="line-height: 1.4em; font-size: 1.8em; margin-top: 50px; margin-bottom: 30px; padding: 20px;">
+        ships <b>MOVE</b> a maximum number of hexes
+<p style="margin-top:10px"></p>
+	some <b>CARRY</b> infantry or fighters
+<p style="margin-top:10px"></p>
+	lower <b>COMBAT</b> ratings score more hits
+<p style="margin-top:10px"></p>
+        units <b>COST</b> resources to produce
+
+      </div></div>
       <div class="unit-table">
     `;
 
@@ -739,7 +747,7 @@ returnUnitsOverlay() {
     if (fleet.carriers > 0) 	{ units.push("carrier"); }
     if (fleet.cruisers > 0) 	{ units.push("cruiser"); }
     if (fleet.destroyers > 0) 	{ units.push("destroyer"); }
-    if (fleet.dreadnaughts > 0) { units.push("dreadnaughts"); }
+    if (fleet.dreadnaughts > 0) { units.push("dreadnaught"); }
     if (fleet.warsuns > 0) 	{ units.push("warsun"); }
     if (fleet.fighters > 0) 	{ units.push("fighter"); }
     if (fleet.infantry > 0) 	{ units.push("infantry"); }
@@ -881,6 +889,8 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
+console.log("UNIT: " + unittype);
+
   let preobj = this.units[unittype];
   let obj = JSON.parse(JSON.stringify(preobj));
 
@@ -888,12 +898,6 @@ returnUnitTableEntry(unittype) {
   obj = this.upgradeUnit(obj, this.game.player);
 
   if (!obj) { return ""; }
-
-  if (this.game.state.round == 1) {
-    if (obj.type == "carrier") {
-      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is the most important starting ship. Move it into a neighbouring sector and invade planets to gain their resources and influence.</div>';
-    }
-  }
 
   let html = `
       <div class="unit-element">
