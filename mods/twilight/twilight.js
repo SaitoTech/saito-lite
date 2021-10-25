@@ -2437,7 +2437,7 @@ try {
             if (this.game.player == 2) {
               this.game.deck[0].hand = ["unintervention","asknot","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
             } else {
-              this.game.deck[0].hand = ["quagmire", "redscare", "missileenvy", "brezhnev", "saltnegotiations", "grainsales","africa", "cubanmissile","china"];
+              this.game.deck[0].hand = ["quagmire", "unintervention", "cia", "brezhnev", "saltnegotiations", "grainsales","africa", "cubanmissile","china"];
             }
           }
 
@@ -14531,7 +14531,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
         //
         this.addMove("resolve\tunintervention");
         this.addMove("play\t"+this.game.player);
-        this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
+        //this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
 
         this.playerTurn();
         return 0;

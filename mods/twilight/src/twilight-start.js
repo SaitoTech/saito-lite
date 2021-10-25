@@ -2437,7 +2437,7 @@ try {
             if (this.game.player == 2) {
               this.game.deck[0].hand = ["unintervention","asknot","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
             } else {
-              this.game.deck[0].hand = ["quagmire", "redscare", "missileenvy", "brezhnev", "saltnegotiations", "grainsales","africa", "cubanmissile","china"];
+              this.game.deck[0].hand = ["quagmire", "unintervention", "cia", "brezhnev", "saltnegotiations", "grainsales","africa", "cubanmissile","china"];
             }
           }
 

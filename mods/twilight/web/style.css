@@ -6,7 +6,6 @@
 
 .hud-long {
   max-width:90vw;
-
 }
 
 .status-message {
@@ -441,7 +440,7 @@ body {
   background-image: url(/twilight/img/Base.svg);
   background-size: contain;
   background-repeat: no-repeat;
-  max-width: 140px;
+  max-width: 120px;
 }
 .cardbox-card {
   background-image: url("/twilight/img/Base.svg");

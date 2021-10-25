@@ -31,7 +31,7 @@
         //
         this.addMove("resolve\tunintervention");
         this.addMove("play\t"+this.game.player);
-        this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
+        //this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
 
         this.playerTurn();
         return 0;
