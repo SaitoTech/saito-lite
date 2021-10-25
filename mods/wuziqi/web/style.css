@@ -2,99 +2,190 @@
     height: 100%;
     background: linear-gradient(217deg, #125552, transparent 70.71%),
     linear-gradient(127deg, #093637, #44A08D 70.71%),
-    linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);}
+    linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);
+    background-image: url("img/BG.png")/*, url("../poker/img/gameboard.jpg")*/;
+    background-size: cover;
+}
+
+.main{
+    margin-top: unset;
+    padding: unset;
+}
+/*
+    Format the help overlay
+*/
+.intro {
+  background-color: whitesmoke;
+  padding: 30px;
+  font-size: 1.6em;
+}
+
+.intro p{
+    margin: 1em 0;
+}
 
 .board {
     display: grid;
-    margin: 1em auto;
-    border: 1px solid #00cfff61;
+    margin: auto auto;
+    /*border: 1px solid #00cfff61;
     background: #2222;
-    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
-}
-
-@media (orientation: landscape) {
-    .board {
-        width: 70vh;
-        height: 70vh;
-    }
-    .status, .scoreboard {
-        width: 70vh;
-    }
-}
-
-@media (orientation: portrait) {
-    .board {
-        width: 80vw;
-        height: 80vw;
-    }
-    .status, .scoreboard {
-        width: 80vw;
-    }
+    background-image: url("img/004-polished-wood.png");*/
+    background-image: url("img/wood-giant.png");
+    background-size: 102%;
+    /*padding: 1em 1em 3em 3em;*/
+    padding:  2em;
+    /*box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);*/
 }
 
 
-.board div {
-    border: 2px solid #ccc;
+/*
+Board is a grid of wooden squares
+*/
+.board > div {
+     position: relative;
+}
+
+.board > div::after {
+    content: "";
+    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+
+.board > div.top::after {
+    border-top: 2px solid black;
+    top: calc(50% - 1px);
+}
+
+.board > div.left::after {
+    border-left: 2px solid black;
+    left: calc(50% - 1px);
+}
+
+.board > div.bottom::after, .board > div.right::after {
+    border: 0px solid black;
+}
+
+.board > div.bottom::after {
+    border-top: 1px solid black;
+}
+
+.board > div.right::after {
+    border-left: 1px solid black;
+}
+
+.board > div.bottom.right::after {
+    border: 0px solid black;
+}
+
+
+
+/*
+ which should lite up when you hover over them
+ for which I need a place holder
+*/
+.board div.empty{
+    margin: auto;
+    height: 98%;
+    width: 98%;
     border-radius: 100%;
-    position: relative;
 }
 
-.active:hover {
+.active:hover .empty{
     cursor: pointer;
     border: 2px solid white;
+    background-color: rgba(255,255,255,0.5);
 }
 
-.active::after {
-    content: "";
-    position: absolute;
-    top: -2em;
-    left: -2em;
-    width: 4em;
-    height: 4em;
-    z-index: 5;
+
+
+/*
+ squares contain round pieces
+*/
+.board div.piece{
+    border-radius: 100%;
+    z-index: 2;
+    position: relative; /* z-index does not imact 'unpositioned elements'. */
+    margin: 10%;
+    height: 80%;
+    width: 80%;
 }
 
-.owner_white {
-    background: white;
-    border: 1px solid #111 !important;
-    margin: 15%;
+/*
+ that are either black or white
+*/
+.piece.white{
+    /*background: white;
+    border: 1px solid #111 !important;*/
+    background-image: url("img/whitepiece.png");
+    background-size: cover;
 }
 
-.owner_black {
-    background: black;
-    border: 1px solid #eee !important;
-    margin: 15%;
+.piece.black{
+    /*background: black;
+    border: 1px solid #eee !important;*/
+    background-image: url("img/blackpiece.png");
+    background-size: cover;
 }
 
-.owner_none {
-    margin: 40%;
+/*
+  We mark the cells of the 5-in-a-row winning combination
+*/
+.winner .piece{
+    border: 0.8em solid rgb(255, 166, 0) !important;
 }
 
-.winner_yes {
-    border: 7px solid rgb(255, 166, 0) !important;
+.opaque30 {
+    opacity: 0.3;
 }
 
-.scoreboard {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin: 0 auto 1em;
-    padding: 3em 0 0;
-    color: #eee;
-    justify-content: space-around;
+
+.player-box {
+  width: 12em;
+  min-height: 10em;
+  background-color: #0004;
+  color: #fff;
+  position: absolute;
+  box-shadow: 0px 3px 6px #00000029;
+  border: 1px solid #FFFFFF;
+  border-radius: 0px 18px 18px 18px;
+  font-size: 1.2em;
+  text-align: center;
+  box-sizing: content-box;
+  padding: 0px;
+  height: unset;
 }
 
-.scoreboard div {
-    margin: 1em 1em 0;
-    font-size: 2em;
+
+.player-box-head{
+    background: #AAA;
+    box-shadow: 0px 3px 6px #00000029;
+    border-bottom: 1px solid #FFFFFF;
+    color: black;
+    color: var(--saito-cyber-black);
+    border-radius: 0px 18px 3px 0px;
+    opacity: 1;
+    width: 100%;
+    display: inline-flex;
+   
+    align-items: center;
+    
 }
 
-.status {
-    margin: 1em auto;
-    text-align: left;
-    padding: 1em;
-    color: #eee;
-    font-size: 2em;
+/*
+Make name a little smaller than default
+*/
+.player-box-head .player-info-name{
+    font-size: 1.5em;
+}
+
+.player-box .piece{
+    width: 2em;
+    margin: 0.25em;
 }
 
 .playertitle {
@@ -102,30 +193,141 @@
 }
 
 .continue {
-    border: 1px solid #125552;
-    margin: 0 1em;
-    background: linear-gradient(217deg, #125552, transparent 70.71%), linear-gradient(127deg, #093637, #44A08D 70.71%), linear-gradient(336deg, #67B26F, #4ca2cd 70.71%);
-    margin: 0 1em;
+    border: 1px solid #aaaaaa;
+    background: linear-gradient(217deg, #343434, transparent 70.71%), linear-gradient(127deg, #121212, #444444 70.71%), linear-gradient(336deg, #666, #222222 70.71%);
     color: #eee;
+    min-width: 6em;
 }
 
-@media (max-height: 750px) and (orientation: landscape) {
+
+/*
+    Size square board relative to the narrower screen dimension
+*/
+
+
+@media (orientation: landscape) {
     .board {
-        width: 100vh;
-        height: 100vh;
+        width: 90vh;
+        height: 90vh;
     }
-    .status, .scoreboard {
-        width: 100vh;
+    .inner{
+        padding: 5vh;
+    }
+    .player-box{
+        top: 40vh;  /*Center in screen:  50vh - 1/2 height */
+        margin: auto auto;
+        max-width: 20vw;
+    }
+
+    .player-box.me{
+        left: max(5px, calc(12vw - 7em));
+    }
+
+    .player-box.notme{
+        right: max(5px, calc(12vw - 7em));
+    }
+
+
+}
+
+@media (orientation: portrait) {
+    .board {
+        width: 90vw;
+        height: 90vw;
+        margin-top: max(5vw,5vh);
+    }
+
+    .inner{
+        padding: 5vw;
+        padding-top: 0px;
+    }
+
+    .player-box{
+        top: calc(65vw + 26vh);
+        max-width: 35vw;
+    }
+
+    .player-box.me{
+        left: calc(30vw - 6em);
+    }
+
+    .player-box.notme{
+        right: calc(30vw - 6em);
     }
 }
 
-@media (max-width: 650px) and (orientation: portrait) {
+
+/*
+    Intermediate (roughly square screen size, technically landscape, but keep portrait layout)
+*/
+@media (max-aspect-ratio:  8/7) and (min-aspect-ratio: 7/8) {
+    .board{
+        margin-top: 0px;
+        width: 80vh;
+        height: 80vh;
+    }
+    .inner{
+        padding: 5vh;
+        padding-top: 45px;
+     }
+
+    .player-box{
+        top: unset;
+        bottom: 0px;
+        max-width: 40vw;
+    }
+
+    .player-box-info{
+        display: inline-flex;
+        align-items: center;
+        margin: 3px;
+    }
+    .player-box.me{
+        left: calc(30vw - 5.5em);
+    }
+
+    .player-box.notme{
+        right: calc(30vw - 5.5em);
+    }
+}
+
+
+
+
+
+/*
+    Have board take up more space on small screens
+    and if necessary move scoreboard and status window to fit on screen
+*/
+
+@media (max-height: 500px) and (orientation: landscape) {
     .board {
-        width: 99vw;
-        height: 99vw;
+        width: 95vh;
+        height: 95vh;
     }
-    .status, .scoreboard {
-        width: 99vw;
+    .inner{
+        padding: 2.5vh;
     }
+
+
+}
+
+@media (max-width: 500px) and (orientation: portrait) and (max-aspect-ratio: 7/8){
+    .board {
+        width: 95vw;
+        height: 95vw;
+        margin-top: max(5vw,5vh);
+    }
+     .inner{
+        padding: 2.5vw;
+        padding-top: 45px;
+    }
+
+    .player-box{
+        top: calc(95vw + 15vh);
+        max-width: 38vw;
+    }
+    
+
 }
 

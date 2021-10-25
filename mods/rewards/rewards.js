@@ -279,6 +279,7 @@ class Rewards extends ModTemplate {
   }
 
   async onConfirmation(blk, tx, conf, app) {
+    console.log("rewards onConfirmation");
     if (app.BROWSER == 1) {
       //
       // only handle our stuff
