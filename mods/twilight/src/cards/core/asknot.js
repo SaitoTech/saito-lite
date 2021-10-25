@@ -39,6 +39,17 @@
 
           if (action2 == "finished") {
 
+	    //
+	    // cards to deal first
+	    //
+	    let cards_to_deal_before_reshuffle = cards_discarded;
+	    let cards_to_deal_after_reshuffle = 0;
+	    
+            if (cards_to_deal_before_reshuffle > twilight_self.game.deck[0].crypt.length) {
+	      cards_to_deal_before_reshuffle = twilight_self.game.deck[0].crypt.length;
+	      cards_to_deal_after_reshuffle = cards_discarded - cards_to_deal_before_reshuffle;
+	    }
+
             //
             // if Aldrich Ames is active, US must reveal cards
             //
@@ -46,7 +57,9 @@
               twilight_self.addMove("aldrichreveal\tus");
             }
 
-            twilight_self.addMove("DEAL\t1\t2\t"+cards_discarded);
+	    if (cards_to_deal_after_reshuffle > 0) {
+              twilight_self.addMove("DEAL\t1\t2\t"+cards_to_deal_after_reshuffle);
+	    }
 
             //
             // are there enough cards available, if not, reshuffle
@@ -85,6 +98,7 @@
               }
             }
 
+            twilight_self.addMove("DEAL\t1\t2\t"+cards_to_deal_before_reshuffle);
             twilight_self.endTurn();
 
           } else {

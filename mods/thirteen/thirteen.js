@@ -15,7 +15,6 @@ class Thirteen extends GameTemplate {
 
     this.app             = app;
 
-    this.name  		 = "Thirteen";
     this.name  		 = "Thirteen Days";
     this.slug		 = "thirteen";
     this.description     = `Thirteen Days is a mid-length simulation of the Cuban Missile Crisis created by Asger Granerud and Daniel Skjold Pedersenmade.`;
@@ -126,6 +125,14 @@ class Thirteen extends GameTemplate {
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
         game_mod.log.toggleLog();
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
+      text : "Exit",
+      id : "game-exit",
+      class : "game-exit",
+      callback : function(app, game_mod) {
+        window.location.href = "/arcade";
       }
     });
 
@@ -517,6 +524,7 @@ class Thirteen extends GameTemplate {
       let qe = this.game.queue.length-1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
+      let thirteen_self = this;
 
       //
       // init
@@ -615,6 +623,11 @@ class Thirteen extends GameTemplate {
       }
       if (mv[0] === "pick_agenda_card") {
 
+	//
+	// player needs to be here
+	//
+	if (this.browser_active == 0) { return 0; }
+
 	let player = parseInt(mv[1]);
 	let ac = this.returnAgendaCards();
 	
@@ -624,6 +637,7 @@ class Thirteen extends GameTemplate {
 	  if (this.game.player == 1) { html = 'USSR pick your Agenda Card: '; }
 	  if (this.game.player == 2) { html = 'US pick your Agenda Card: '; }
 
+/**** replaced with BIG OVERLAY ****
           this.updateStatusAndListCards(html, this.game.deck[0].hand, function(card) {
 
 	    thirteen_self.addMove("RESOLVE");
@@ -643,6 +657,32 @@ class Thirteen extends GameTemplate {
 	    thirteen_self.endTurn();
 
 	  });
+*** replaced with BIG OVERLAY ****/
+
+
+	  this.overlay.showCardSelectionOverlay(this.app, this, this.game.deck[0].hand, { columns : 3 , textAlign : "center" , cardlistWidth: "90vw" , title : html , subtitle : "earn points by beating your opponent in this domain by turn's end" , onCardSelect : function (card) {
+
+	    thirteen_self.overlay.hideOverlay();
+
+	    thirteen_self.addMove("RESOLVE");
+	    for (let i = 0; i < thirteen_self.game.deck[0].hand.length; i++) {
+	      thirteen_self.addMove("flag\t"+thirteen_self.game.player+"\t" + ac[thirteen_self.game.deck[0].hand[i]].flag);
+	      if (thirteen_self.game.deck[0].hand[i] == card) {
+		if (player == 1) {
+		  thirteen_self.game.state.ussr_agenda_selected = card;
+	        }
+		if (player == 2) {
+		  thirteen_self.game.state.us_agenda_selected = card;
+		}
+	      }
+
+	      thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t" + "1" + "\t" + thirteen_self.game.deck[0].hand[i] + "\t" + "0"); // 0 = do not announce - TODO actually prevent info sharing
+	    }
+	    thirteen_self.endTurn();
+	    
+	  }}, function () {});
+	  this.overlay.blockClose();
+
 	} else {
 
 	  if (player == 1) {
@@ -1585,13 +1625,13 @@ console.log("SHOULD PLACE: " + player);
 	if (this.game.player == 2) {
 
           let html = "<div class='status-message' id='status-message'>you must either remove two influence from alliance battleground or choose not to use events to lower defcon for this round: <p></p><ul>";
-              html += '<li class="card" id="remove">remove influence</li>';
-              html += '<li class="card" id="restrict">defcon restriction</li>';
+              html += '<li class="textcard" id="remove">remove influence</li>';
+              html += '<li class="textcard" id="restrict">defcon restriction</li>';
               html += '</ul></div>';
           thirteen_self.updateStatus(html);
 
-          $('.card').off();
-          $('.card').on('click', function() {
+          $('.textcard').off();
+          $('.textcard').on('click', function() {
 
 	    let action = $(this).attr("id");
 
@@ -1728,8 +1768,8 @@ console.log("CARDS: "+JSON.stringify(cards));
     if (this_card.side == "neutral" || this_card.side == me) {
 
       html = '<div class="status-message" id="status-message">how would you like to play this card: <p></p><ul>';
-      html += '<li class="card" id="playevent">play for event</li>';
-      html += '<li class="card" id="playcommand">play for command</li>';
+      html += '<li class="textcard" id="playevent">play event</li>';
+      html += '<li class="textcard" id="playcommand">add/remove cubes</li>';
       html += '</ul></div>';
 
     //
@@ -1738,17 +1778,18 @@ console.log("CARDS: "+JSON.stringify(cards));
     } else {
 
       html = "<div class='status-message' id='status-message'>how would you like to play this card: <p></p><ul>";
-      html += '<li class="card" id="playcommand">play for command</li>';
+      html += '<li class="textcard" id="playcommand">add/remove cubes</li>';
       html += '</ul></div>';
 
     }
     thirteen_self.updateStatus(html);
 
-    $('.card').off();
-    $('.card').on('click', function() {
+    $('.textcard').off();
+    $('.textcard').on('click', function() {
+
 
       let action = $(this).attr("id");
-      $('.card').off();
+      $('.textcard').off();
 
       if (action == "playevent") {
 	thirteen_self.hideCard();
@@ -1893,51 +1934,51 @@ console.log("CARDS: "+JSON.stringify(cards));
       let html2 = "<div class='status-message' id='status-message'>" + 'Adjust which DEFCON track: <p></p><ul>';
       if (only_one_defcon_track == 1) {
 	if (selected_defcon_track == 0) {
-          html2 += '<li class="card" id="1">political</li>';
-          html2 += '<li class="card" id="2">military</li>';
-          html2 += '<li class="card" id="3">world opinion</li>';
+          html2 += '<li class="textcard" id="1">political</li>';
+          html2 += '<li class="textcard" id="2">military</li>';
+          html2 += '<li class="textcard" id="3">world opinion</li>';
         } else {
 	  if (selected_defcon_track < 0) {
 	    if (options.includes(1)) {
-              html2 += '<li class="card" id="1">military</li>';
+              html2 += '<li class="textcard" id="1">military</li>';
 	    }
 	    if (options.includes(2)) {
-              html2 += '<li class="card" id="2">political</li>';
+              html2 += '<li class="textcard" id="2">political</li>';
 	    }
 	    if (options.includes(3)) {
-              html2 += '<li class="card" id="3">world opinion</li>';
+              html2 += '<li class="textcard" id="3">world opinion</li>';
             }
 	  } else {
 	    if (selected_defcon_track == 1) {
-              html2 += '<li class="card" id="1">military</li>';
+              html2 += '<li class="textcard" id="1">military</li>';
 	    }
 	    if (selected_defcon_track == 2) {
-              html2 += '<li class="card" id="2">political</li>';
+              html2 += '<li class="textcard" id="2">political</li>';
 	    }
 	    if (selected_defcon_track == 3) {
-              html2 += '<li class="card" id="3">world opinion</li>';
+              html2 += '<li class="textcard" id="3">world opinion</li>';
             }
           }
         }
       } else {
         if (options.includes(1)) {
-          html2 += '<li class="card" id="1">military</li>';
+          html2 += '<li class="textcard" id="1">military</li>';
         }
         if (options.includes(2)) {
-          html2 += '<li class="card" id="2">political</li>';
+          html2 += '<li class="textcard" id="2">political</li>';
         }
         if (options.includes(3)) {
-          html2 += '<li class="card" id="3">world opinion</li>';
+          html2 += '<li class="textcard" id="3">world opinion</li>';
         }
       }
-      html2 += '<li class="card" id="done">finish move</li>';
+      html2 += '<li class="textcard" id="done">finish move</li>';
       html2 += '</ul>';
       html2 += '</div>';
 
       thirteen_self.updateStatus(html2);
 
-      $('.card').off();
-      $('.card').on('click', function() {
+      $('.textcard').off();
+      $('.textcard').on('click', function() {
 
         action2 = $(this).attr("id");
 
@@ -1959,18 +2000,18 @@ console.log("CARDS: "+JSON.stringify(cards));
 
       let html = "<div class='status-message' id='status-message'>escalate or de-escalate defcon track? <p></p><ul>";
 	if (directions != "decrease") {
-          html += '<li class="card" id="increase">escalate defcon</li>';
+          html += '<li class="textcard" id="increase">escalate defcon</li>';
 	}
 	if (directions != "increase") {
-          html += '<li class="card" id="decrease">de-escalate defcon</li>';
+          html += '<li class="textcard" id="decrease">de-escalate defcon</li>';
 	}
-          html += '<li class="card" id="done">done</li>';
+          html += '<li class="textcard" id="done">done</li>';
           html += '</ul></div>';
       thirteen_self.updateStatus(html);
 
 
-      $('.card').off();
-      $('.card').on('click', function() {
+      $('.textcard').off();
+      $('.textcard').on('click', function() {
 
 	$('.done').off();
 	$('.done').on('click', function() {
@@ -2045,7 +2086,7 @@ console.log("CARDS: "+JSON.stringify(cards));
     if (!testdone) {
        let num_to_announce = number;
        if (number == 100) { num_to_announce = max_per_arena; }
-	this.updateStatus("<div class='status-message' id='status-message'>"+ 'Add ' + num_to_announce + ' Influence: <p></p><ul><li class="card" id="done">finish turn</li></ul></div>');
+	this.updateStatus("<div class='status-message' id='status-message'>"+ 'Add ' + num_to_announce + ' Influence: <p></p><ul><li class="textcard" id="done">finish turn</li></ul></div>');
     }
 
     let thirteen_self = this;
@@ -2182,7 +2223,7 @@ console.log("CARDS: "+JSON.stringify(cards));
     if (!testdone) {
        let num_to_announced = number;
        if (number == 100) { num_to_announce = max_per_arena; }
-	this.updateStatus("<div class='status-message' id='status-message'>"+'Remove ' + num_to_announce + ' Influence: <p></p><ul><li class="card" id="done">finish turn</li></ul></div>');
+	this.updateStatus("<div class='status-message' id='status-message'>"+'Remove ' + num_to_announce + ' Influence: <p></p><ul><li class="textcard" id="done">finish turn</li></ul></div>');
     }
 
     let thirteen_self = this;
@@ -2375,27 +2416,27 @@ console.log("CARDS: "+JSON.stringify(cards));
 
           html = "<div class='status-message' id='status-message'>" + 'how many command tokens do you wish to add? <p></p><ul>';
 	  if (tokens >= 1) {
-            html += '<li class="card" id="1">one</li>';
+            html += '<li class="textcard" id="1">one</li>';
 	  }
 	  if (tokens >= 2) {
-            html += '<li class="card" id="2">two</li>';
+            html += '<li class="textcard" id="2">two</li>';
 	  }
 	  if (tokens >= 3) {
-            html += '<li class="card" id="3">three</li>';
+            html += '<li class="textcard" id="3">three</li>';
 	  }
 	  if (tokens >= 4) {
-            html += '<li class="card" id="4">four</li>';
+            html += '<li class="textcard" id="4">four</li>';
 	  }
 	  if (tokens >= 5) {
-            html += '<li class="card" id="5">five</li>';
+            html += '<li class="textcard" id="5">five</li>';
 	  }
           html += '</ul>';
 	  html += '</div>';
 
           thirteen_self.updateStatus(html);
 
-	  $('.card').off();
-	  $('.card').on('click', function() {
+	  $('.textcard').off();
+	  $('.textcard').on('click', function() {
 
 	    let action = parseInt($(this).attr("id"));
 	    let defcon_increase = action-1;
@@ -2443,26 +2484,26 @@ console.log("CARDS: "+JSON.stringify(cards));
 
           html = "<div class='status-message' id='status-message'>" + 'how many command tokens do you wish to remove? <p></p><ul>';
 	  if (tokens >= 1) {
-            html += '<li class="card" id="1">one</li>';
+            html += '<li class="textcard" id="1">one</li>';
 	  }
 	  if (tokens >= 2) {
-            html += '<li class="card" id="2">two</li>';
+            html += '<li class="textcard" id="2">two</li>';
 	  }
 	  if (tokens >= 3) {
-            html += '<li class="card" id="3">three</li>';
+            html += '<li class="textcard" id="3">three</li>';
 	  }
 	  if (tokens >= 4) {
-            html += '<li class="card" id="4">four</li>';
+            html += '<li class="textcard" id="4">four</li>';
 	  }
 	  if (tokens >= 5) {
-            html += '<li class="card" id="5">five</li>';
+            html += '<li class="textcard" id="5">five</li>';
 	  }
           html += '</ul></div>';
 
           thirteen_self.updateStatus(html);
 
-	  $('.card').off();
-	  $('.card').on('click', function() {
+	  $('.textcard').off();
+	  $('.textcard').on('click', function() {
 
 	    let action = parseInt($(this).attr("id"));
 	    let defcon_decrease = action-1;
@@ -3133,6 +3174,18 @@ console.log("CARDS: "+JSON.stringify(cards));
 
 
 
+  returnCardImage(card) {
+    let thirteen_self = this;
+    let agenda_cards = thirteen_self.returnAgendaCards();
+    let strategy_cards = thirteen_self.returnStrategyCards();
+    if (agenda_cards[card]) {
+      return `<div class="agenda_card cardimg showcard" style="background-image: url('/thirteen/img/${agenda_cards[card].img}');background-size: cover;" id="${card}" /></div>`;
+    } 
+    if (strategy_cards[card]) { 
+      return `<div class="strategy_card cardimg showcard" style="background-image: url('/thirteen/img/${strategy_cards[card].img}');background-size: cover;" id="${card}" /></div>`;
+    }
+    return "";
+  }
 
   returnAgendaCards() {
 
@@ -3606,7 +3659,6 @@ console.log("CARDS: "+JSON.stringify(cards));
     let thirteen_self = this;
     let deck = {};
 
-
     deck['s01b']            = { 
 	img : "Strategy Card 01b.png" ,
 	name : "Speech to the Nation",
@@ -4034,13 +4086,13 @@ console.log("CARDS: "+JSON.stringify(cards));
 	event : function(player) {
 
           let html  = "<div class='status-message' id='status-message'>Which would you like to do, remove half of USSR influence from one Cuban battleground (rounded up) or place up to 2 Influence on the Alliances battleground? <p></p><ul>";
-              html += '<li class="card" id="remove_from_cuba">remove from cuba</li>';
-              html += '<li class="card" id="add_alliances">place in alliances</li>';
+              html += '<li class="textcard" id="remove_from_cuba">remove from cuba</li>';
+              html += '<li class="textcard" id="add_alliances">place in alliances</li>';
           html += '</ul></div>';
           thirteen_self.updateStatus(html);
 
-          $('.card').off();
-          $('.card').on('click', function() {
+          $('.textcard').off();
+          $('.textcard').on('click', function() {
 
 	    let action = $(this).attr("id");
 

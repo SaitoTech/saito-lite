@@ -839,7 +839,7 @@ toggleIntro() {
       if (this.game.state.player.length > 0) {
         this.playerbox.refreshName(i);
 
-        newhtml = `<div class="chips">Chips: ${this.game.state.player[i].credit} ${this.game.options.crypto}</div>`;
+        newhtml = `<div class="chips">${this.game.state.player[i].credit} ${this.game.options.crypto}</div>`;
         if (this.game.state.dealer == (i+1)){
           newhtml += `<div class="player-notice dealer">DEALER</div>`;  
         }else{
@@ -852,6 +852,7 @@ toggleIntro() {
         newhtml = "";
         
         if (this.game.state.player[i].hand) {
+
             player_hand_shown = 1;
             //Make Image Content     
             if (this.game.state.player[i].hand.length < 2) { //One Hidden Card
@@ -861,8 +862,15 @@ toggleIntro() {
               let card = this.game.deck[0].cards[this.game.state.player[i].hand[z]];
               newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
             }
+       
+            newhtml += `</div>
+              <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player[i].name}</div>
+              <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player[i].credit} ${this.game.options.crypto}</div> 
+           `;
+
             newhtml += `</div>`;
             this.playerbox.refreshGraphic(newhtml, i);
+
         }
       }
       /*

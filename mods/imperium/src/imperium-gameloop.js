@@ -1700,30 +1700,68 @@ this.game.state.end_round_scoring = 0;
   
       if (mv[0] === "shownewobjectives") {
 
-        this.overlay.showOverlay(this.app, this, this.returnNewObjectivesOverlay());
-        try {
-          document.getElementById("close-objectives-btn").onclick = () => {
-	    if (this.game.state.round == 1) {
-	      //this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
-              //document.getElementById("close-units-btn").onclick = () => {
-                this.overlay.hideOverlay();
-              //}
-            } else {
-	      if (this.game.planets['new-byzantium'].owner != -1 ) {
-		this.overlay.showOverlay(this.app, this, this.returnNewAgendasOverlay());
-              	document.getElementById("close-agendas-btn").onclick = () => {
-                  this.overlay.hideOverlay();
-              	}
-              } else {
-                this.overlay.hideOverlay();
-              }
-	    }
-          }
-        } catch (err) {}
+	let game_mod = this;
+	let title = "Your Objectives";
+	let subtitle = "check objectives, strategy cards and more in the CARDS menu...";
+	let cards = [];
+
+        for (let i = 0; i < this.game.state.new_objectives.length; i++) {
+	  if (this.game.state.new_objectives[i].type == "secret") {
+	    cards.push(this.secret_objectives[this.game.state.new_objectives[i].card]);
+	  }
+	  if (this.game.state.new_objectives[i].type == "stage1") {
+	    cards.push(this.stage_i_objectives[this.game.state.new_objectives[i].card]);
+	  }
+	  if (this.game.state.new_objectives[i].type == "stage2") {
+	    cards.push(this.stage_ii_objectives[this.game.state.new_objectives[i].card]);
+	  }
+	}  
+
+  	if (this.game.state.round > 1) {
+  	  title = "New Objectives"; 
+  	  subtitle = "view all public and secret objectives in the CARDS menu...";
+  	}
+
+        this.overlay.showCardSelectionOverlay(this.app, this, cards, {
+
+	  title : title,
+	  subtitle : subtitle,
+	  columns : cards.length ,
+	  backgroundImage : "/imperium/img/starscape_background1.jpg",
+	  padding: "20px",
+	  textAlign: "center",
+	  onContinue : function() {
+
+	    game_mod.overlay.hideOverlay();
+
+	    if (game_mod.game.planets['new-byzantium'].owner != -1 ) {
+
+	      let ac = [];
+	      let laws = game_mod.returnAgendaCards();
+	      for (let i = 0; i < game_mod.game.state.agendas.length; i++) {
+		ac.push(laws[game_mod.game.state.agendas[i]]);
+	      }
+
+              game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, ac, {
+	        title : "New Agendas",
+	        subtitle : "check all agendas, objectives and more in the CARDS menu",
+	        columns : cards.length ,
+	        backgroundImage : "/imperium/img/starscape_background1.jpg",
+	        padding: "20px",
+	        textAlign: "center",
+	        onClose : function() {
+		  game_mod.overlay.hideOverlay();
+	        }
+	      }, function () {
+		game_mod.overlay.hideOverlay();
+	      });
+            }
+	  },
+	}, function () {});
 
   	this.game.queue.splice(qe, 1);
-
   	return 1;
+
       }
 
 
@@ -2613,7 +2651,9 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	let z            = this.returnEventObjects();
 
         if (item === "strategycard") {
-  
+
+console.log(player + " - " + item + " - " + amount); 
+
   	  this.updateLog(this.returnFactionNickname(player) + " takes " + this.strategy_cards[mv[3]].name);
 
 	  let strategy_card = mv[3];  

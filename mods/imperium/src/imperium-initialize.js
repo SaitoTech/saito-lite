@@ -164,33 +164,111 @@
 
 
     this.menu.addMenuOption({
-      text : "Sectors",
-      id : "game-info",
-      class : "game-info",
+      text : "Cards",
+      id : "game-cardlist",
+      class : "game-cardlist",
       callback : function(app, game_mod) {
-        game_mod.menu.showSubMenu("game-info");
+        game_mod.menu.showSubMenu("game-cardlist");
       }
     });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Sectors",
-      id : "game-sectors",
-      class : "game-sectors",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleSystemsMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Planets",
-      id : "game-planets",
-      class : "game-planets",
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Strategy",
+      id : "game-strategy-cardlist",
+      class : "game-strategy-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleInfoMenuItem();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnStrategyCards(), { 
+		title : "Strategy Cards" , 
+		columns : 4 , 
+		backgroundImage : "/imperium/img/starscape_background3.jpg" , 
+	}, function() {
+	  alert("cardlist close strategy init menu");
+	});
       }
     });
-
-
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Action",
+      id : "game-action-cardlist",
+      class : "game-action-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnActionCards(), {}, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Tech",
+      id : "game-tech-cardlist",
+      class : "game-tech-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	let tech = game_mod.returnTechnology();
+        let t2 = [];
+        for (let x in tech) { if (tech[x].type == "normal" && tech[x].unit != 1) { t2.push(tech[x]); } }
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Upgrades",
+      id : "game-unit-cardlist",
+      class : "game-unit-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	let tech = game_mod.returnTechnology();
+        let t2 = [];
+        for (let x in tech) { if (tech[x].type == "normal" && tech[x].unit == 1) { t2.push(tech[x]); } }
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Agendas",
+      id : "game-agenda-cardlist",
+      class : "game-agenda-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Objectives I",
+      id : "game-objectives-i-cardlist",
+      class : "game-objectives-i-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.stage_i_objectives, { cardlistHeight: "90vh" , cardlistWidth : "90vw" }, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Objectives II",
+      id : "game-objectives-ii-cardlist",
+      class : "game-objectives-ii-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.stage_ii_objectives, { cardlistHeight: "90vh" , cardlistWidth : "90vw" }, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Secrets",
+      id : "game-secret-objectives-cardlist",
+      class : "game-secret-objectives-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.secret_objectives, { cardlistHeight: "90vh" , cardlistWidth : "90vw" }, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
 
 
 
