@@ -1,7 +1,15 @@
 
+
 .game-menu ul li {
     width: 160px;
 }
+.game-overlay-cardlist-title {
+  font-family: 'orbitron-medium', helvetica;
+}
+.game-overlay-cardlist-subtitle {
+  font-family: 'orbitron-light', helvetica;
+}
+
 
 @font-face {
   font-family: 'bank-gothic';
@@ -463,7 +471,7 @@
 }
 .strategy_card_text {
   position: absolute;
-  font-size: 20px;
+  font-size: 13px;
   color: whitesmoke;
   margin-top: 19%;
   padding-left: 7%;

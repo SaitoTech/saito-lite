@@ -3969,6 +3969,7 @@ playerSelectStrategyCards(mycallback) {
   }
   let scards = [];
   let scards_objs = [];
+  let unselect_scards = [];
 
   for (let z in this.strategy_cards) {
     scards.push("");
@@ -3987,6 +3988,20 @@ playerSelectStrategyCards(mycallback) {
       html += scards[z];
     }
   }
+
+  for (let y in cards) {
+    let contained = 0;
+    for (let z = 0; z < scards_objs.length; z++) {
+      if (cards[y].name === scards_objs[z].name) { contained = 1; }
+    }
+    let insert_rank = parseInt(cards[y].rank);
+    if (contained == 0) {
+      scards_objs[insert_rank-1] = cards[y];
+      unselect_scards.push(cards[y]);
+    }
+  }
+
+console.log(unselect_scards);
 
   html += '</ul></p>';
   this.updateStatus(html);
@@ -4024,14 +4039,14 @@ playerSelectStrategyCards(mycallback) {
 
     imperium_self.overlay.showCardSelectionOverlay(imperium_self.app, imperium_self, scards_objs, {
                 title : "Select a Strategy Card" ,
-                subtitle : "you will need to play this card sometime during your turn before you pass" ,
+                subtitle : "you must play this card sometime during your turn" ,
 		textAlign: "center",
 		rowGap: "30px",
 		columnGap: "30px",
                 columns : 4 ,
+		unselectableCards : unselect_scards,
                 backgroundImage : "/imperium/img/starscape_background3.jpg" ,
                 onCardSelect : function(cardname) {
-alert("cardname: " + cardname);
 		  imperium_self.overlay.hideOverlay();
 	   	  imperium_self.hideStrategyCard(cardname);
     		  mycallback(cardname);

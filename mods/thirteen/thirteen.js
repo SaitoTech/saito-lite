@@ -137,7 +137,6 @@ class Thirteen extends GameTemplate {
     });
 
 
-
     this.menu.addMenuOption({
       text : "Cards",
       id : "game-cards",

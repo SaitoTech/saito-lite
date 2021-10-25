@@ -3624,7 +3624,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
       rank			:	4,
       img			:	"/strategy/BUILD.png",
 
-      text			:	"Build a PDS or Space Dock. Then build a PDS.<hr />Other players may spend a strategy token and activate a sector to build a PDS or Space Dock in it." ,
+      text			:	"<b>Player</b> builds Space Dock and PDS or two PDS units.<hr /><b>Others</b> may spend strategy token and activate sector to build PDS or Space Dock." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -3703,7 +3703,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
       name     			:       "Diplomacy",
       rank			:	2,
       img			:	"/strategy/DIPLOMACY.png",
-      text			:	"Pick a sector other than New Byzantium. Other players activate it. Refresh two planets.<hr />Other players may spend a strategy token to refresh two planets." ,
+      text			:	"<b>Player</b> activates non-Byzantium sector for others, refreshes two planets.</hr><b>Others</b> may spend strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -3854,7 +3854,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
       name     			:       "Imperial",
       rank			:	8,
       img			:	"/strategy/EMPIRE.png",
-      text			:	"You may score a public objective. If you control New Byzantium gain 1 VP. Otherwise gain a secret objective.<hr />All players score objectives in Initiative Order" ,
+      text			:	"<b>Player</b> may score a public objective, gains 1 VP for controlling New Byzantium or secret objective if not.<hr /><b>Others</b> may spend strategy token to purchase secret objective" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -4059,7 +4059,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
       name     			:       "Leadership",
       rank			:	1,
       img			:	"/strategy/INITIATIVE.png",
-      text			:	"You may gain and distribute three tokens.<hr />All players may purchase extra tokens at three influence per token." ,
+      text			:	"<b>Player</b> gains three tokens.<hr /><b>All players</b> may purchase tokens for three influence each." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 	if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -4098,7 +4098,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
       name     			:       "Politics",
       rank			:	3,
       img			:	"/strategy/POLITICS.png",
-      text			:	"Pick a new Speaker. Gain 2 action cards. Vote on two agendas if New Byzantium is controlled.<hr />Other players may spend a strategy token to purchase two action cards.",
+      text			:	"<b>Player</b> picks new Speaker and gains 2 action cards.<hr /><b>Others</b> may spend strategy token for two action cards.",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         //
@@ -4271,7 +4271,7 @@ if (imperium_self.game.state.agenda_voting_order === "simultaneous") {
       name     			:       "Technology",
       rank			:	7,
       img			:	"/strategy/TECH.png",
-      text			:	"Research a technology. You may spend 6 resources to research another.<hr />Other players may spend a strategy token and 4 resources to research a technology" ,
+      text			:	"<b>Player</b> may Research a technology and spend 6 resources to research another.<hr /><b>Others</b> may spend strategy token and 4 resources to research a technology" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 console.log("STRAT PRIM: " + player + " -- " + strategy_card_player);
@@ -4498,7 +4498,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
       name     			:       "Trade",
       rank			:	5,
       img			:	"/strategy/TRADE.png",
-      text			:	"Gain 3 trade goods. Refresh your commodities and those of any other players.<hr />Unrefreshed players may spend a strategy token to refresh their commodities." ,
+      text			:	"<b>Player</b> gains 3 trade goods, may refresh any player's commodities.<hr /><b>Others</b> may spend strategy token to refresh their commodities." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -4606,7 +4606,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
       name     			:       "Warfare",
       rank			:	6,
       img			:	"/strategy/MILITARY.png",
-      text			:	"De-activate a sector. Gain and distribute 1 free token.<hr />Other players may spend a strategy token to producein their home system" ,
+      text			:	"<b>Player</b> may de-activate any sector and gain 1 token.<hr /><b>Others</b> may spend strategy token to produce in home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -10838,9 +10838,6 @@ console.log("Active Agenda: " + active_agenda);
 		title : "Strategy Cards" , 
 		columns : 4 , 
 		backgroundImage : "/imperium/img/starscape_background3.jpg" , 
-		onCardSelect : function(cardname) {
-		  alert("ok, you picked: " + cardname);
-		}
 	}, function() {
 	  alert("cardlist close strategy init menu");
 	});
@@ -22631,6 +22628,7 @@ playerSelectStrategyCards(mycallback) {
   }
   let scards = [];
   let scards_objs = [];
+  let unselect_scards = [];
 
   for (let z in this.strategy_cards) {
     scards.push("");
@@ -22649,6 +22647,20 @@ playerSelectStrategyCards(mycallback) {
       html += scards[z];
     }
   }
+
+  for (let y in cards) {
+    let contained = 0;
+    for (let z = 0; z < scards_objs.length; z++) {
+      if (cards[y].name === scards_objs[z].name) { contained = 1; }
+    }
+    let insert_rank = parseInt(cards[y].rank);
+    if (contained == 0) {
+      scards_objs[insert_rank-1] = cards[y];
+      unselect_scards.push(cards[y]);
+    }
+  }
+
+console.log(unselect_scards);
 
   html += '</ul></p>';
   this.updateStatus(html);
@@ -22686,14 +22698,14 @@ playerSelectStrategyCards(mycallback) {
 
     imperium_self.overlay.showCardSelectionOverlay(imperium_self.app, imperium_self, scards_objs, {
                 title : "Select a Strategy Card" ,
-                subtitle : "you will need to play this card sometime during your turn before you pass" ,
+                subtitle : "you must play this card sometime during your turn" ,
 		textAlign: "center",
 		rowGap: "30px",
 		columnGap: "30px",
                 columns : 4 ,
+		unselectableCards : unselect_scards,
                 backgroundImage : "/imperium/img/starscape_background3.jpg" ,
                 onCardSelect : function(cardname) {
-alert("cardname: " + cardname);
 		  imperium_self.overlay.hideOverlay();
 	   	  imperium_self.hideStrategyCard(cardname);
     		  mycallback(cardname);
@@ -29566,13 +29578,13 @@ returnUnitsOverlay() {
   if (this.game.state.round == 1) {
     html += `
       <div style="width:100%;text-align:center"><div class="units-overlay-text" style="line-height: 1.4em; font-size: 1.8em; margin-top: 50px; margin-bottom: 30px; padding: 20px;">
+        units <b>COST</b> resources to produce
+<p style="margin-top:10px"></p>
         ships <b>MOVE</b> a maximum number of hexes
 <p style="margin-top:10px"></p>
 	some <b>CARRY</b> infantry or fighters
 <p style="margin-top:10px"></p>
-	lower <b>COMBAT</b> ratings score more hits
-<p style="margin-top:10px"></p>
-        units <b>COST</b> resources to produce
+	lower <b>COMBAT</b> scores hit more often
 
       </div></div>
       <div class="unit-table">

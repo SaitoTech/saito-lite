@@ -181,9 +181,6 @@
 		title : "Strategy Cards" , 
 		columns : 4 , 
 		backgroundImage : "/imperium/img/starscape_background3.jpg" , 
-		onCardSelect : function(cardname) {
-		  alert("ok, you picked: " + cardname);
-		}
 	}, function() {
 	  alert("cardlist close strategy init menu");
 	});

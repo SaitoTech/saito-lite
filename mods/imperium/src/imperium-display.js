@@ -730,13 +730,13 @@ returnUnitsOverlay() {
   if (this.game.state.round == 1) {
     html += `
       <div style="width:100%;text-align:center"><div class="units-overlay-text" style="line-height: 1.4em; font-size: 1.8em; margin-top: 50px; margin-bottom: 30px; padding: 20px;">
+        units <b>COST</b> resources to produce
+<p style="margin-top:10px"></p>
         ships <b>MOVE</b> a maximum number of hexes
 <p style="margin-top:10px"></p>
 	some <b>CARRY</b> infantry or fighters
 <p style="margin-top:10px"></p>
-	lower <b>COMBAT</b> ratings score more hits
-<p style="margin-top:10px"></p>
-        units <b>COST</b> resources to produce
+	lower <b>COMBAT</b> scores hit more often
 
       </div></div>
       <div class="unit-table">
