@@ -3,13 +3,10 @@
   padding: 10px;
 }
 
+
 .hud-long {
   max-width:90vw;
 
-}
-.cardbox-hud {
-  background-size: contain;
-  background-repeat: no-repeat;
 }
 
 .status-message {
@@ -444,6 +441,7 @@ body {
   background-image: url(/twilight/img/Base.svg);
   background-size: contain;
   background-repeat: no-repeat;
+  max-width: 140px;
 }
 .cardbox-card {
   background-image: url("/twilight/img/Base.svg");
