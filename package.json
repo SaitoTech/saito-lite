@@ -41,7 +41,7 @@
     "html2canvas": "^1.0.0-rc.7",
     "identicon.js": "^2.3.3",
     "image-resolver": "^0.6.1",
-    "jimp": "^0.9.3",
+    "jimp": "^0.16.1",
     "json-tree-viewer": "0.0.2",
     "jspdf": "^2.3.1",
     "jszip": "^3.5.0",
