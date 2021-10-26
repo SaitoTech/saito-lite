@@ -193,10 +193,10 @@ toggleIntro() {
     this.log.attachEvents(app, this);
 
     this.playerbox.render(app, this);
-    //this.playerbox.attachEvents(app.this);
     this.playerbox.addClassAll("p",true);
     this.playerbox.addGraphicClass("hand");   
     this.playerbox.addGraphicClass("tinyhand");   
+    //this.playerbox.attachEvents(app.this);
   
   }
 
@@ -833,6 +833,7 @@ toggleIntro() {
     if (this.browser_active == 0) { return; }
   
     for (let i = 0; i < this.game.players.length; i++) {
+
       let newhtml = '';
       let player_hand_shown = 0;
 
@@ -854,20 +855,22 @@ toggleIntro() {
         if (this.game.state.player[i].hand) {
 
             player_hand_shown = 1;
-            //Make Image Content     
-            if (this.game.state.player[i].hand.length < 2) { //One Hidden Card
-                newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
-            }
-            for (let z = 0; z < this.game.state.player[i].hand.length; z++) { //Show all cards
-              let card = this.game.deck[0].cards[this.game.state.player[i].hand[z]];
-              newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
-            }
-       
-            newhtml += `</div>
-              <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player[i].name}</div>
-              <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player[i].credit} ${this.game.options.crypto}</div> 
-           `;
 
+	    //
+            //Make Image Content     
+	    //
+            if (this.game.state.player[i].hand.length == 0) {
+                newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
+                newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
+            } else {
+              if (this.game.state.player[i].hand.length == 1) {
+                newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
+              }
+              for (let z = 0; z < this.game.state.player[i].hand.length; z++) { // show all cards
+                let card = this.game.deck[0].cards[this.game.state.player[i].hand[z]];
+                newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
+              }
+       	    }
             newhtml += `</div>`;
             this.playerbox.refreshGraphic(newhtml, i);
 
@@ -881,13 +884,17 @@ toggleIntro() {
         newhtml = `
           <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
             <img class="card" src="${this.card_img_dir}/red_back.png">
+            <img class="card" src="${this.card_img_dir}/red_back.png">
           </div>
           <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player[i].name}</div>
           <div class="player-info-chips" id="player-info-chips-${i + 1}">Chis: ${this.game.state.player[i].credit} ${this.game.options.crypto}</div> 
         `;
 
 
-          let cardfan_backs = `<img class="card" src="${this.card_img_dir}/red_back.png">`;
+          let cardfan_backs = `
+	    <img class="card" src="${this.card_img_dir}/red_back.png">
+	    <img class="card" src="${this.card_img_dir}/red_back.png">
+	  `;
           this.cardfan.render(this.app, this, cardfan_backs);
           this.cardfan.attachEvents(this.app, this);
       }
@@ -898,6 +905,13 @@ toggleIntro() {
 
   displayHand() {
     this.cardfan.render(this.app, this);
+
+    //
+    // if only 1 card in hand, show the back of the second they will be dealt after wager made
+    //
+    if (this.game.deck[0].hand.length == 1) {
+      this.cardfan.prependCard(this.app, this, `<img class="card" src="${this.card_img_dir}/red_back.png">`);
+    }
     this.cardfan.attachEvents(this.app, this);
   }
 
