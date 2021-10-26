@@ -1,3 +1,25 @@
+/*
+  Undo poker playerbox positions....
+*/
+.p1, .p2, .p3, .p4, .p5, .p6 {
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  top: unset;
+  right: unset;
+  left: unset;
+  transform: unset;
+  width: unset;
+  overflow-y: unset;
+}
+
+.hexIn{
+  overflow: unset;
+}
+.hexLink{
+  overflow: unset;
+}
+
 .game-menu {
   width: 420px;
 }
@@ -6,6 +28,11 @@ body {
   background-image: url(/settlers/img/background2.jpg);
   background-size: cover;
 }
+
+#game-hexgrid{
+  width: 1000px;
+}
+
 
 
 .hud-body {
@@ -35,53 +62,60 @@ body {
 .road {
   position: absolute;
   display: block;
-  width: 150px;
-  height: 30px;
+  width: 60%;
+  height: 10%;
   background-color: transparent;
-/*  background-image: url('/settlers/img/sectors/road1.png'); */
+
   z-index: 5892351;
 }
 
+.road5{
+    transform: rotate(90deg);
+    left: -32%;
+    top: 45%;
+}
+.road6{
+    transform: rotate(-30deg);
+    top: 6%;
+    left: -6%;
+}
 
+.road1{
+  transform: rotate(30deg);
+  right: -6%;
+  top: 6%;
+}
 
+.road2{ /* Overlaps with Road5 */ 
+    transform: rotate(90deg); 
+    right: -35%;
+    top: 45%;
+}
+.road3{ /* Overlaps with Road6 */
+    transform: rotate(-30deg);
+    bottom: 6%;
+    right: -6%;
+}
+.road4{ /* Overlaps with Road1 */
+    transform:  rotate(30deg);
+    bottom: 6%;
+    left: -6%;
+}
 
 .city {
   position: absolute;
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 30%;
+  height: 25%;
   background-color: transparent;
   z-index: 5892350;
-}
-
-.sector_value {
-  position: absolute;
-  font-size: 4em;
-  z-index: 99;
-  font-weight: bold;
-  border: 1px solid #fff;
-  padding: 20px;
-  border-radius: 50%;
-  width: 2em;
-  height: 2em;
-  line-height: 1.5em;
+  font-size: 2em;
   text-align: center;
-  background: #444a;
-  color: white;
-  font-weight: bold;
 }
 
-.p1, .p2, .p3, .p4, .p5, .p6 {
-  min-width: unset;
-  height: unset;
-  bottom: unset;
-  left: unset;
-  transform: unset;
-  width: unset;
-  overflow-y: unset;
-}
 .p1 {
   background-color: red;
+
 }
 .p2 {
   background-color: blue;
@@ -93,41 +127,72 @@ body {
   background-color: orange;
 }
 
+
+.city1{
+  top: -10%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.city2{
+  top: 15%;
+  right: -18%;
+}
+.city3{
+  bottom: 15%;
+  right: -18%;
+}
+.city4{
+  bottom: -10%;
+  left: 50%;
+  transform: translate(-50%);
+}
+.city5{
+  bottom:  15%;
+  left: -18%;
+}
+.city6{
+  top: 15%;
+  left: -18%;
+}
+
+.sector_value {
+  position: absolute;
+  font-size: 2.5em;
+  /*z-index: 99;*/
+  font-weight: bold;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: #6664;
+  color: white;
+}
+
+
 .city.p1 {
   border: 10px solid red;
   background-color: white;
   color: red;
-  text-align: center;
-  z-index:9999999;
-  font-size: 100px;
-  padding-top: 8px;
 }
 .city.p2 {
   border: 10px solid blue;
   background-color: white;
   color: blue;
-  text-align: center;
-  z-index:9999999;
-  font-size: 100px;
-  padding-top: 8px;
+ 
 }
 .city.p3 {
   border: 10px solid green;
   background-color: white;
   color: green;
-  text-align: center;
-  z-index:9999999;
-  font-size: 100px;
-  padding-top: 8px;
+ 
 }
 .city.p4 {
   border: 10px solid orange;
   background-color: white;
   color: orange;
-  text-align: center;
-  z-index:9999999;
-  font-size: 100px;
-  padding-top: 8px;
 }
 
 .trade_overlay {
@@ -157,4 +222,11 @@ body {
 }
 
 
+
+.hexTileCenter{
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
 

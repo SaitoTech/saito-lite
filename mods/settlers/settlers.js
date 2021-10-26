@@ -1246,12 +1246,12 @@ console.log("QUEUE: " + this.game.queue);
 
   addSectorValuesToGameboard() {
 
-    var el = document.querySelector('.game-hexgrid-container');
+   //var el = document.querySelector('.game-hexgrid-container');
 
-    if (!document.getElementById('game-hexgrid-cities')) {
+    /*if (!document.getElementById('game-hexgrid-cities')) {
       el.prepend(this.app.browser.htmlToElement('<div id="game-hexgrid-cities" class="game-hexgrid-cities"></div>'));
       el = document.querySelector('.game-hexgrid-cities');
-    }
+    }*/
 
     this.addSectorValueToGameboard("1_1", 6);
     this.addSectorValueToGameboard("1_2", 4);
@@ -1281,35 +1281,32 @@ console.log("QUEUE: " + this.game.queue);
 
   addSectorValueToGameboard(hex, sector_value) {
 
-    let el = document.querySelector('.game-hexgrid-cities');
-    let hexobj = document.getElementById(hex);
+    let selector = "hex_bg_"+hex;
+    console.log(selector);
+    let hexobj = document.getElementById(selector);
     let svid = `sector_value_${hex}`;
 
     if (document.getElementById(svid)) { return; }
 
-    let sector_value_html = `<div class="sector_value sector_value_${sector_value}" id="sector_value_${hex}">${sector_value}</div>`;
+    let sector_value_html = `<div class="sector_value hexTileCenter sector_value_${sector_value}" id="sector_value_${hex}">${sector_value}</div>`;
     let sector_value_obj = this.app.browser.htmlToElement(sector_value_html);
-    el.appendChild(sector_value_obj);
-
-    let desired_width = (hexobj.offsetWidth/2);
-    sector_value_obj.style.left		= hexobj.offsetLeft + (desired_width/2) + (desired_width/8);
-    sector_value_obj.style.top 		= hexobj.offsetTop + (desired_width) - (desired_width/4);
-    sector_value_obj.style.width 	= ((desired_width/4)+(desired_width/2)) + "px";
-    sector_value_obj.style.height 	= ((desired_width/4)+(desired_width/2)) + "px";
-    sector_value_obj.style.fontSize     = (desired_width/8)+(desired_width/4) + "px";
-    sector_value_obj.style.padding      = ((desired_width/16) + (desired_width/32)) + "px";
+    hexobj.after(sector_value_obj);
 
   }
 
 
+  /*
+  Creates DOM stuctures to hold cities, 
+  addCityToGameboard calculates where to (absolutely) position them
+  */
   addCitiesToGameboard() {
 
-    var el = document.querySelector('.game-hexgrid-container');
+    /*var el = document.querySelector('.game-hexgrid-container');
 
     if (!document.getElementById('game-hexgrid-cities')) {
       el.prepend(this.app.browser.htmlToElement('<div id="game-hexgrid-cities" class="game-hexgrid-cities"></div>'));
       el = document.querySelector('.game-hexgrid-cities');
-    }
+    }*/
 
     this.addCityToGameboard("1_1", 6);
     this.addCityToGameboard("1_1", 1);
@@ -1372,198 +1369,149 @@ console.log("QUEUE: " + this.game.queue);
 
   }
 
+  /*
+  Hexboard row_col indexed, city_component is point of hexagon (1 = top, 2 = upper right, ... )
+  */
   addCityToGameboard(hex, city_component) {
 
-    let el = document.querySelector('.game-hexgrid-cities');
-    let hexobj = document.getElementById(hex);
+    //let el = document.querySelector('.game-hexgrid-cities');
+    //let hexobj = document.getElementById(hex);
     let city_id = "city_"+city_component+"_"+hex;
+
+    let selector = "hex_bg_"+hex;
+    console.log(selector);
+    let hexobj = document.getElementById(selector);
 
     if (!document.getElementById(city_id)) {
 
-      if (city_component == 1) {
-        let road = `<div class="city" id="${city_id}"></div>`;
-        let roadobj = this.app.browser.htmlToElement(road);
-        el.appendChild(roadobj);
-        let desired_width = (hexobj.offsetWidth/2);
-        roadobj.style.left	= hexobj.offsetLeft + desired_width - (desired_width/4) - (desired_width/8);
-        roadobj.style.top 	= hexobj.offsetTop - (desired_width/8) - (desired_width/4);
-        roadobj.style.width 	= ((desired_width/4)+(desired_width/2)) + "px";
-        roadobj.style.height 	= ((desired_width/4)+(desired_width/2)) + "px";
-      }
-
-      if (city_component == 2) {
-        let road = `<div class="city" id="${city_id}"></div>`;
-        let roadobj = this.app.browser.htmlToElement(road);
-        el.appendChild(roadobj);
-        let desired_width = (hexobj.offsetWidth/2);
-        roadobj.style.left	= hexobj.offsetLeft + desired_width + desired_width - (desired_width/8) - (desired_width/4);
-        roadobj.style.top 	= hexobj.offsetTop + (desired_width/8);
-        roadobj.style.width 	= ((desired_width/4)+(desired_width/2)) + "px";
-        roadobj.style.height 	= ((desired_width/4)+(desired_width/2)) + "px";
-      }
-
-      if (city_component == 6) {
-        let road = `<div class="city" id="${city_id}"></div>`;
-        let roadobj = this.app.browser.htmlToElement(road);
-        el.appendChild(roadobj);
-        let desired_width = (hexobj.offsetWidth/2);
-        roadobj.style.left	= hexobj.offsetLeft - (desired_width/8) - (desired_width/4);
-        roadobj.style.top 	= hexobj.offsetTop + (desired_width/8);
-        roadobj.style.width 	= ((desired_width/4)+(desired_width/2)) + "px";
-        roadobj.style.height 	= ((desired_width/4)+(desired_width/2)) + "px";
-      }
-
-      if (city_component == 4) {
-        let road = `<div class="city" id="${city_id}"></div>`;
-        let roadobj = this.app.browser.htmlToElement(road);
-        el.appendChild(roadobj);
-        let desired_width = (hexobj.offsetWidth/2);
-        roadobj.style.left	= hexobj.offsetLeft + desired_width - (desired_width/4) - (desired_width/8);
-        roadobj.style.top 	= hexobj.offsetTop + desired_width + desired_width - (desired_width/4);
-        roadobj.style.width 	= ((desired_width/4)+(desired_width/2)) + "px";
-        roadobj.style.height 	= ((desired_width/4)+(desired_width/2)) + "px";
-      }
-
-      if (city_component == 3) {
-        let road = `<div class="city" id="${city_id}"></div>`;
-        let roadobj = this.app.browser.htmlToElement(road);
-        el.appendChild(roadobj);
-        let desired_width = (hexobj.offsetWidth/2);
-        roadobj.style.left	= hexobj.offsetLeft + desired_width + desired_width - (desired_width/8) - (desired_width/4);
-        roadobj.style.top 	= hexobj.offsetTop + desired_width + (desired_width/8) + (desired_width/4);
-        roadobj.style.width 	= ((desired_width/4)+(desired_width/2)) + "px";
-        roadobj.style.height 	= ((desired_width/4)+(desired_width/2)) + "px";
-      }
-
-      if (city_component == 5) {
-        let road = `<div class="city" id="${city_id}"></div>`;
-        let roadobj = this.app.browser.htmlToElement(road);
-        el.appendChild(roadobj);
-        let desired_width = (hexobj.offsetWidth/2);
-        roadobj.style.left	= hexobj.offsetLeft - (desired_width/8) - (desired_width/4);
-        roadobj.style.top 	= hexobj.offsetTop + desired_width + (desired_width/8) + (desired_width/4);
-        roadobj.style.width 	= ((desired_width/4)+(desired_width/2)) + "px";
-        roadobj.style.height 	= ((desired_width/4)+(desired_width/2)) + "px";
-      }
-
+      let city_html = `<div class="city city${city_component}" id="${city_id}"></div>`;
+      let city_obj = this.app.browser.htmlToElement(city_html);
+      hexobj.after(city_obj);
     }
   }
 
 
+  /*
+  Create DOM structures to hold roads positioned on the edges of the hexagons
+  1 connects city1 to city2 (upper-right edge), 2 is vertical right edge, ...
+  */
   addRoadsToGameboard() {
 
-    var el = document.querySelector('.game-hexgrid-container');
+    /*var el = document.querySelector('.game-hexgrid-container');
 
     if (!document.getElementById('game-hexgrid-cities')) {
       el.prepend(this.app.browser.htmlToElement('<div id="game-hexgrid-cities" class="game-hexgrid-cities"></div>'));
       el = document.querySelector('.game-hexgrid-cities');
-    }
+    }*/
 
+    this.addRoadToGameboard("1_1", 5);
     this.addRoadToGameboard("1_1", 6);
     this.addRoadToGameboard("1_1", 1);
-    this.addRoadToGameboard("1_1", 5);
 
+    this.addRoadToGameboard("1_2", 5);
     this.addRoadToGameboard("1_2", 6);
     this.addRoadToGameboard("1_2", 1);
-    this.addRoadToGameboard("1_2", 5);
 
+    this.addRoadToGameboard("1_3", 5);
     this.addRoadToGameboard("1_3", 6);
     this.addRoadToGameboard("1_3", 1);
-    this.addRoadToGameboard("1_3", 5);
+    this.addRoadToGameboard("1_3", 2);
 
+    this.addRoadToGameboard("2_1", 5);
     this.addRoadToGameboard("2_1", 6);
     this.addRoadToGameboard("2_1", 1);
-    this.addRoadToGameboard("2_1", 5);
 
+    this.addRoadToGameboard("2_2", 5);
     this.addRoadToGameboard("2_2", 6);
     this.addRoadToGameboard("2_2", 1);
-    this.addRoadToGameboard("2_2", 5);
 
+    this.addRoadToGameboard("2_3", 5);
     this.addRoadToGameboard("2_3", 6);
     this.addRoadToGameboard("2_3", 1);
-    this.addRoadToGameboard("2_3", 5);
 
+    this.addRoadToGameboard("2_4", 5);
     this.addRoadToGameboard("2_4", 6);
     this.addRoadToGameboard("2_4", 1);
-    this.addRoadToGameboard("2_4", 5);
-
-    this.addRoadToGameboard("3_1", 6);
-    this.addRoadToGameboard("3_1", 1);
-    this.addRoadToGameboard("3_1", 5);
-
-    this.addRoadToGameboard("3_2", 6);
-    this.addRoadToGameboard("3_2", 1);
-    this.addRoadToGameboard("3_2", 5);
-
-    this.addRoadToGameboard("3_3", 6);
-    this.addRoadToGameboard("3_3", 1);
-    this.addRoadToGameboard("3_3", 5);
-
-    this.addRoadToGameboard("3_4", 6);
-    this.addRoadToGameboard("3_4", 1);
-    this.addRoadToGameboard("3_4", 5);
-
-    this.addRoadToGameboard("3_5", 6);
-    this.addRoadToGameboard("3_5", 1);
-    this.addRoadToGameboard("3_5", 5);
-
-    this.addRoadToGameboard("4_1", 6);
-    this.addRoadToGameboard("4_1", 1);
-    this.addRoadToGameboard("4_1", 5);
-
-    this.addRoadToGameboard("4_2", 6);
-    this.addRoadToGameboard("4_2", 1);
-    this.addRoadToGameboard("4_2", 5);
-
-    this.addRoadToGameboard("4_3", 6);
-    this.addRoadToGameboard("4_3", 1);
-    this.addRoadToGameboard("4_3", 5);
-
-    this.addRoadToGameboard("4_4", 6);
-    this.addRoadToGameboard("4_4", 1);
-    this.addRoadToGameboard("4_4", 5);
-
-    this.addRoadToGameboard("5_1", 6);
-    this.addRoadToGameboard("5_1", 1);
-    this.addRoadToGameboard("5_1", 5);
-
-    this.addRoadToGameboard("5_2", 6);
-    this.addRoadToGameboard("5_2", 1);
-    this.addRoadToGameboard("5_2", 5);
-
-    this.addRoadToGameboard("5_3", 6);
-    this.addRoadToGameboard("5_3", 1);
-    this.addRoadToGameboard("5_3", 5);
-
-    this.addRoadToGameboard("1_3", 2);
     this.addRoadToGameboard("2_4", 2);
-    this.addRoadToGameboard("3_5", 2);
-    this.addRoadToGameboard("4_4", 2);
-    this.addRoadToGameboard("5_3", 2);
-
-    this.addRoadToGameboard("3_5", 3);
-    this.addRoadToGameboard("4_4", 3);
-    this.addRoadToGameboard("5_1", 3);
-    this.addRoadToGameboard("5_2", 3);
-    this.addRoadToGameboard("5_3", 3);
 
     this.addRoadToGameboard("3_1", 4);
-    this.addRoadToGameboard("4_1", 4);
-    this.addRoadToGameboard("5_1", 4);
-    this.addRoadToGameboard("5_2", 4);
-    this.addRoadToGameboard("5_3", 4);
+    this.addRoadToGameboard("3_1", 5);
+    this.addRoadToGameboard("3_1", 6);
+    this.addRoadToGameboard("3_1", 1);
 
+    this.addRoadToGameboard("3_2", 5);
+    this.addRoadToGameboard("3_2", 6);
+    this.addRoadToGameboard("3_2", 1);
+
+    this.addRoadToGameboard("3_3", 5);
+    this.addRoadToGameboard("3_3", 6);
+    this.addRoadToGameboard("3_3", 1);
+
+    this.addRoadToGameboard("3_4", 5);
+    this.addRoadToGameboard("3_4", 6);
+    this.addRoadToGameboard("3_4", 1);
+
+    this.addRoadToGameboard("3_5", 5);
+    this.addRoadToGameboard("3_5", 6);
+    this.addRoadToGameboard("3_5", 1);
+    this.addRoadToGameboard("3_5", 2);
+    this.addRoadToGameboard("3_5", 3);
+
+    this.addRoadToGameboard("4_1", 4);
+    this.addRoadToGameboard("4_1", 5);
+    this.addRoadToGameboard("4_1", 6);
+    this.addRoadToGameboard("4_1", 1);
+
+    this.addRoadToGameboard("4_2", 5);
+    this.addRoadToGameboard("4_2", 6);
+    this.addRoadToGameboard("4_2", 1);
+
+    this.addRoadToGameboard("4_3", 5);
+    this.addRoadToGameboard("4_3", 6);
+    this.addRoadToGameboard("4_3", 1);
+
+    this.addRoadToGameboard("4_4", 5);
+    this.addRoadToGameboard("4_4", 6);
+    this.addRoadToGameboard("4_4", 1);
+    this.addRoadToGameboard("4_4", 2);
+
+    this.addRoadToGameboard("5_1", 5);
+    this.addRoadToGameboard("5_1", 6);
+    this.addRoadToGameboard("5_1", 1);
+
+    this.addRoadToGameboard("5_2", 5);
+    this.addRoadToGameboard("5_2", 6);
+    this.addRoadToGameboard("5_2", 1);
+
+    this.addRoadToGameboard("5_3", 5);
+    this.addRoadToGameboard("5_3", 6);
+    this.addRoadToGameboard("5_3", 1);
+    this.addRoadToGameboard("5_3", 2);
+
+    
+    this.addRoadToGameboard("5_1", 4);
+    this.addRoadToGameboard("5_1", 3);
+    this.addRoadToGameboard("5_2", 4);
+    this.addRoadToGameboard("5_2", 3);
+    this.addRoadToGameboard("5_3", 4);
+    this.addRoadToGameboard("5_3", 3);
   }
 
   addRoadToGameboard(hex, road_component) {
 
-    let el = document.querySelector('.game-hexgrid-cities');
-    let hexobj = document.getElementById(hex);
+    //let el = document.querySelector('.game-hexgrid-cities');
+    let selector = "hex_bg_"+hex;
+    let hexobj = document.getElementById(selector);
     let road_id = "road_"+road_component+"_"+hex;
+     console.log(selector);
+    
 
     if (!document.getElementById(road_id)) {
+      let road_html = `<div class="road road${road_component}" id="${road_id}"></div>`;
+      let road_obj = this.app.browser.htmlToElement(road_html);
+      hexobj.after(road_obj);
 
-      if (road_component == 1) {
+     /* if (road_component == 1) {
         let road = `<div class="road" id="${road_id}"></div>`;
         let roadobj = this.app.browser.htmlToElement(road);
         el.appendChild(roadobj);
@@ -1634,7 +1582,7 @@ console.log("QUEUE: " + this.game.queue);
         roadobj.style.height 	= (desired_width/4.4) + "px";
         roadobj.style.transform 	= "rotate(-30deg)";
       }
-
+  */
     }
   }
 
@@ -1676,7 +1624,7 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
       let divname = "#"+this.game.state.roads[i].slot;
       let classname = "p"+this.game.state.roads[i].player;
       $(divname).addClass(classname);
-      $(divname).css('background-image', 'url("/settlers/img/sectors/road1.png")');
+      //$(divname).css('background-image', 'url("/settlers/img/sectors/road1.png")');
     }
 
   }
@@ -1778,7 +1726,7 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
     let classname = "p"+player;
     let neighbours = this.returnAdjacentHexes(slot);
     $(divname).addClass(classname);
-    $(divname).html("1");
+    //$(divname).html("1");
 
     for (let i = 0; i < this.game.state.cities.length; i++) {
       if (this.game.state.cities[i].slot == slot) { return; }
@@ -1816,7 +1764,7 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
     let divname = "#"+slot;
     let classname = "p"+player;
     $(divname).addClass(classname);
-    $(divname).css('background-image', 'url("/settlers/img/sectors/road1.png")');
+    //$(divname).css('background-image', 'url("/settlers/img/sectors/road1.png")');
 
     for (let i = 0; i < this.game.state.roads.length; i++) {
       if (this.game.state.roads[i].slot == slot) { return; }
