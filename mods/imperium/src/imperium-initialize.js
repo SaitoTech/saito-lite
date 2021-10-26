@@ -70,6 +70,24 @@
       }
     });
     this.menu.addSubMenuOption("game-howto", {
+      text : "Units",
+      id : "game-unit-rules",
+      class : "game-unit-rules",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnUnitsOverlay());
+      }
+    });
+    this.menu.addSubMenuOption("game-howto", {
+      text : "Production",
+      id : "game-production-rules",
+      class : "game-production-rules",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	game_mod.overlay.showOverlay(game_mod.app, game_mod, '<div style="margin-left:auto;margin-right:auto;width:1200px;height:auto"><img src="/imperium/img/tutorials/production.png" style="width:100%; height:auto;" /></div>');
+      }
+    });
+    this.menu.addSubMenuOption("game-howto", {
       text : "Movement",
       id : "game-basic-rules",
       class : "game-basic-rules",
@@ -123,15 +141,6 @@
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
         game_mod.handleTechMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-cards", {
-      text : "Units",
-      id : "game-units",
-      class : "game-units",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleUnitsMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-cards", {
@@ -209,6 +218,15 @@
         game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
 	  alert("cardlist close strategy init menu");
 	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Units",
+      id : "game-units-cardlist",
+      class : "game-units-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnUnitsOverlay());
       }
     });
     this.menu.addSubMenuOption("game-cardlist", {
