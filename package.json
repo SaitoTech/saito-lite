@@ -24,7 +24,7 @@
     "archiver": "^3.1.1",
     "babel": "^6.23.0",
     "base-58": "0.0.1",
-    "big.js": "^5.2.2",
+    "big.js": "^6.1.1",
     "bitwise-xor": "0.0.0",
     "blake3": "^2.1.4",
     "body-parser": "^1.19.0",
