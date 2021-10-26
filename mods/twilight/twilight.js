@@ -1153,6 +1153,29 @@ try {
           }
           this.game.queue.splice(qe, 1);
         }
+
+	//
+	// remove from discards (will still be in cards)
+	//
+        if (mv[0] === "undiscard") {
+
+	  let deckidx = parseInt(mv[1]);
+	  let cardkey = mv[2];
+
+          for (var i in this.game.deck[deckidx-1].discards) {
+            if (mv[2] == i) {
+              if (this.game.deck[deckidx-1].discards[mv[2]] != undefined) {
+                //
+                // remove from discards
+                //
+                this.updateLog("<span class=\"logcard\" id=\""+mv[2]+"\">" + this.game.deck[deckidx-1].cards[mv[2]].name + "</span> <span>removed from discard pile</span>");
+		delete this.game.deck[deckidx-1].discards[i];
+              }
+            }
+          }
+          this.game.queue.splice(qe, 1);
+        }
+
         //
         // wargames
         //
@@ -2412,9 +2435,9 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["containment","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
+              this.game.deck[0].hand = ["unintervention","asknot","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
             } else {
-              this.game.deck[0].hand = ["quagmire", "redscare", "missileenvy", "brezhnev", "opec", "grainsales","africa", "cubanmissile","china"];
+              this.game.deck[0].hand = ["quagmire", "unintervention", "cia", "brezhnev", "saltnegotiations", "grainsales","africa", "cubanmissile","china"];
             }
           }
 
@@ -3739,6 +3762,8 @@ if (this.game.player == 0) {
 
       if (bind_back_button_state) {
         twilight_self.bindBackButtonFunction(() => {
+          twilight_self.game.state.events.vietnam_revolts_eligible = 1;
+          twilight_self.game.state.events.china_card_eligible = 1;
           twilight_self.addMove("revert");
           twilight_self.endTurn();
   	  return;
@@ -3862,6 +3887,13 @@ if (this.game.player == 0) {
               // undo all of the influence placed this turn
               //
               if (twilight_self.undoMove(action2, ops - j)) {
+
+		//
+		// reset china and vietnam revolts eligibility
+		//
+    		twilight_self.game.state.events.vietnam_revolts_eligible = 1;
+    		twilight_self.game.state.events.china_card_eligible = 1;
+
                 twilight_self.playOps(player, ops, card);
               }
             });
@@ -6493,18 +6525,17 @@ this.startClock();
           let country = last_move[3];
           let ops = last_move[4];
 
-    let opponent = "us";
-    if (player == "us") { opponent = "ussr"; }
+          let opponent = "us";
+          if (player == "us") { opponent = "ussr"; }
           this.removeInfluence(country, ops, player);
 
-    //
-    // if the country is now enemy controlled, it must have taken an extra move
-    // for the play to place there....
-    //
+          //
+          // if the country is now enemy controlled, it must have taken an extra move
+          // for the play to place there....
+          //
           if (this.isControlled(opponent, country) == 1) {
-      i++;
+            i++;
           }
-
         }
 
         // use this to clear the "resolve ops" move
@@ -10249,6 +10280,17 @@ this.startClock();
 
           if (action2 == "finished") {
 
+	    //
+	    // cards to deal first
+	    //
+	    let cards_to_deal_before_reshuffle = cards_discarded;
+	    let cards_to_deal_after_reshuffle = 0;
+	    
+            if (cards_to_deal_before_reshuffle > twilight_self.game.deck[0].crypt.length) {
+	      cards_to_deal_before_reshuffle = twilight_self.game.deck[0].crypt.length;
+	      cards_to_deal_after_reshuffle = cards_discarded - cards_to_deal_before_reshuffle;
+	    }
+
             //
             // if Aldrich Ames is active, US must reveal cards
             //
@@ -10256,7 +10298,9 @@ this.startClock();
               twilight_self.addMove("aldrichreveal\tus");
             }
 
-            twilight_self.addMove("DEAL\t1\t2\t"+cards_discarded);
+	    if (cards_to_deal_after_reshuffle > 0) {
+              twilight_self.addMove("DEAL\t1\t2\t"+cards_to_deal_after_reshuffle);
+	    }
 
             //
             // are there enough cards available, if not, reshuffle
@@ -10295,6 +10339,7 @@ this.startClock();
               }
             }
 
+            twilight_self.addMove("DEAL\t1\t2\t"+cards_to_deal_before_reshuffle);
             twilight_self.endTurn();
 
           } else {
@@ -13681,6 +13726,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
         } else {
           twilight_self.addMove("notify\t"+player.toUpperCase() +" does not retrieve card");
         }
+        twilight_self.addMove("undiscard\t1\t"+action2); // cards are deckidx 1
         twilight_self.endTurn();
 
       });
@@ -14029,6 +14075,7 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
       twilight_self.addShowCardEvents(function(action2) {
         twilight_self.addMove("event\tus\t"+action2);
         twilight_self.addMove("notify\t"+player+" retrieved "+twilight_self.game.deck[0].cards[action2].name);
+        twilight_self.addMove("undiscard\t1\t"+action2);
         twilight_self.endTurn();
       });
 
@@ -14484,6 +14531,8 @@ console.log("1 - scale: " + twilight_self.scale(twilight_self.game.state.defcon_
         //
         this.addMove("resolve\tunintervention");
         this.addMove("play\t"+this.game.player);
+        //this.addMove("setvar\tgame\tstate\tback_button_cancelled\t1");
+
         this.playerTurn();
         return 0;
       }

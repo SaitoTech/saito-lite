@@ -12,6 +12,17 @@
     if (obj.img  == null)	{ obj.img = "/imperium/img/agenda_card_template.png"; }
     if (obj.elect == null)	{ obj.elect = "other"; }
 
+    if (obj.returnCardImage == null) {
+      obj.returnCardImage = function() {
+        return `
+  	  <div style="background-image: url('/imperium/img/agenda_card_template.png');" class="overlay_agendacard card option" id="${name}">
+	    <div class="overlay_agendatitle">${obj.name}</div>
+	    <div class="overlay_agendacontent">${obj.text}</div>
+	  </div>
+        `;
+      }
+    }
+
     obj = this.addEvents(obj);
     this.agenda_cards[name] = obj;
 

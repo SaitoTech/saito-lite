@@ -4,7 +4,7 @@
       name     			:       "Politics",
       rank			:	3,
       img			:	"/strategy/POLITICS.png",
-      text			:	"Pick a new Speaker. Gain 2 action cards. Vote on two agendas if New Byzantium is controlled.<hr />Other players may spend a strategy token to purchase two action cards.",
+      text			:	"<b>Player</b> picks new Speaker and gains 2 action cards.<hr /><b>Others</b> may spend strategy token for two action cards.",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         //

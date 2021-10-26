@@ -3968,15 +3968,19 @@ playerSelectStrategyCards(mycallback) {
     html += '<li class="option" id="action">play action card</li>';
   }
   let scards = [];
+  let scards_objs = [];
+  let unselect_scards = [];
 
   for (let z in this.strategy_cards) {
     scards.push("");
+    scards_objs.push({});
   }
 
   for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
     let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
     while (scards[rank - 1] != "") { rank++; }
     scards[rank - 1] = '<li class="textchoice" id="' + this.game.state.strategy_cards[z] + '">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
+    scards_objs[rank - 1] = cards[this.game.state.strategy_cards[z]];
   }
 
   for (let z = 0; z < scards.length; z++) {
@@ -3984,6 +3988,20 @@ playerSelectStrategyCards(mycallback) {
       html += scards[z];
     }
   }
+
+  for (let y in cards) {
+    let contained = 0;
+    for (let z = 0; z < scards_objs.length; z++) {
+      if (cards[y].name === scards_objs[z].name) { contained = 1; }
+    }
+    let insert_rank = parseInt(cards[y].rank);
+    if (contained == 0) {
+      scards_objs[insert_rank-1] = cards[y];
+      unselect_scards.push(cards[y]);
+    }
+  }
+
+console.log(unselect_scards);
 
   html += '</ul></p>';
   this.updateStatus(html);
@@ -4012,6 +4030,33 @@ playerSelectStrategyCards(mycallback) {
     imperium_self.hideStrategyCard(action2);
     mycallback(action2);
   });
+
+
+  //
+  // provide simple interface for non-AC users
+  //
+  if (ac.length == 0) {
+
+    imperium_self.overlay.showCardSelectionOverlay(imperium_self.app, imperium_self, scards_objs, {
+                title : "Select a Strategy Card" ,
+                subtitle : "you must play this card sometime during your turn" ,
+		textAlign: "center",
+		rowGap: "30px",
+		columnGap: "30px",
+                columns : 4 ,
+		unselectableCards : unselect_scards,
+                backgroundImage : "/imperium/img/starscape_background3.jpg" ,
+                onCardSelect : function(cardname) {
+		  imperium_self.overlay.hideOverlay();
+	   	  imperium_self.hideStrategyCard(cardname);
+    		  mycallback(cardname);
+                }
+    }, function() {});
+
+  }
+
+
+
 
 }
 
