@@ -56,6 +56,23 @@ class GameTestSuite extends GameTemplate {
 
     }
 
+    //
+    // let opponents know my game crypto
+    //
+    // normally this is automatically done when moves are made, but since 
+    // this is a demo app it is possible that people will click immediately
+    // on web3 testing functionality, in which case we already want the keys
+    // to have been exchanged / set.
+    //
+    if (this.game.options.crypto != undefined) { 
+      this.game.crypto = this.game.options.crypto;
+      let crypto_key = this.app.wallet.returnCryptoAddressByTicker(this.game.options.crypto);
+      this.addMove("CRYPTOKEY\t"+this.app.wallet.returnPublicKey()+"\t"+crypto_key+"\t"+this.app.crypto.signMessage(crypto_key, this.app.wallet.returnPrivateKey()));
+      this.endTurn();
+    }
+
+console.log("GAME CRYPTO IS: " + this.game.crypto);
+
   }
 
   //
@@ -123,6 +140,36 @@ class GameTestSuite extends GameTemplate {
     }
 
     return 1;
+  }
+
+
+  //
+  // ( advanced options on Arcade start )
+  //
+  // used here to allow users to select in-game web3 crypto
+  // 
+  returnGameOptionsHTML() {
+
+    let options_html = `
+      <h1 class="overlay-title">Select a Web3 Crypto:</h1>
+      <div class="overlay-input">
+        <label for="crypto">Crypto:</label>
+        <select name="crypto">
+          <option value="" selected>None</option>
+          <option value="SAITO">SAITO</option>
+    `;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].ticker != "" && this.app.modules.mods[i].ticker != undefined) {
+        options_html += `<option value="${this.app.modules.mods[i].ticker}">${this.app.modules.mods[i].ticker}</option>`;
+      }
+    }
+    options_html += `
+        </select>
+      </div>
+      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
+    `;
+
+    return options_html;
   }
 
 
@@ -222,7 +269,9 @@ class GameTestSuite extends GameTemplate {
       // update active crypto
       //
       if (game_self.game.crypto != "") {
-        document.getElementById("saito_crypto").innerHTML = game_self.game.crypto;
+	if (document.getElementById("saito_crypto")) {
+          document.getElementById("saito_crypto").innerHTML = game_self.game.crypto;
+        }
       }
 
       //
@@ -365,7 +414,6 @@ class GameTestSuite extends GameTemplate {
     this.playerbox.attachEvents(app, this);
     for (let i = 0; i < this.game.players.length; i++) {
       this.playerbox.refreshName(i+1);
-      this.playerbox.refreshCards(i+3);
     }
   }
 
