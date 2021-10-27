@@ -660,11 +660,10 @@ returnStrategyOverlay() {
       
     }
 
-    let card_html = `
-	<div class="overlay_strategy_card_box">
-	  <img class="overlay_strategy_card_box_img" src="/imperium/img/${thiscard.img}" style="width:100%" />
-	  <div class="overlay_strategy_card_text">${thiscard.text}</div>
-    `;
+    let card_html = thiscard.returnCardImage();
+    let cutpos = card_html.lastIndexOf('</div>');
+    card_html = card_html.substring(0, cutpos);
+
      if (strategy_card_state != "not picked") {
        card_html += `
 	  <div class="strategy_card_state p${strategy_card_player}">
@@ -1893,7 +1892,8 @@ updateSectorGraphics(sector) {
       </div>`;
 
     }
-    this.cardbox.showCardboxHTML(thiscard, '<img src="/imperium/img' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
+    //this.cardbox.showCardboxHTML(thiscard, '<img src="/imperium/img' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
+    this.cardbox.showCardboxHTML(thiscard, thiscard.returnCardImage());
   }
 
   hideStrategyCard(c) {

@@ -1590,6 +1590,13 @@ this.game.state.end_round_scoring = 0;
         this.game.queue.push("playerschoosestrategycards_after");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
+
+        if (this.game.state.round == 1) {
+          this.game.queue.push("ACKNOWLEDGE\tNEXT: all players must select a strategy card. If you are new to Red Imperium, consider taking Leadership, Politics, or Technology. They are simple but valuable cards!");
+	} else {
+          this.game.queue.push(`ACKNOWLEDGE\tNEXT: all players select their strategy card(s) for Round ${this.game.state.round}.`);
+	}
+
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
           this.game.queue.push("shownewobjectives");

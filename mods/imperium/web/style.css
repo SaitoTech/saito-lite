@@ -471,13 +471,13 @@
 }
 .strategy_card_text {
   position: absolute;
-  font-size: 13px;
+  font-size: 16px;
   color: whitesmoke;
-  margin-top: 19%;
+  padding-top: 19%;
   padding-left: 7%;
   padding-right: 20%;
   font-family: 'orbitron-light', helvetica, sans-serif;
-  line-height: 1.4em;
+  line-height: 1.7em;
   z-index: 101;
 }
 
