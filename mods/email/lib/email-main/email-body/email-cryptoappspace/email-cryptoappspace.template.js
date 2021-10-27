@@ -15,7 +15,7 @@ module.exports = EmailCryptoAppspaceTemplate = (app, cryptomod) => {
           <div>Address:</div>
           <div class="address">loading...</div>
           <div>Balance:</div>
-          <div class="balance">loading...</div>
+          <div class="balance">activate ${cryptomod.ticker} module</div>
           <div>Private Key:</div>
           <div id="private-key" class="private-key password">${cryptomod.returnPrivateKey()}<i style="margin-left:5px" class="see-password fas fa-eye" id="see-password"></i></div>
         </div>

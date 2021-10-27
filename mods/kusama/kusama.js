@@ -3,7 +3,7 @@ const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto")
 const parityArchiveNodeEndpoint = 'wss://kusama-rpc.polkadot.io/';
 const web3FoundationArchiveNodeEndpoint = 'wss://cc3-5.kusama.network/';
 const saitoEndpoint = 'ws://206.189.221.128:9932';
-const saitoEndpointSecure = 'wss://saito.io:9931/kusamawss/';
+const saitoEndpointSecure = 'wss://parity.saito.io:9931/kusamawss/';
 
 class Kusama extends SubstrateBasedCrypto {
   constructor(app) {
@@ -67,8 +67,9 @@ Before you deposit Kusama, please <b>backup your wallet</b>. While Saito is unde
       let dotgo = document.getElementById("dot-warning-confirm");
       if (dotgo) {
         dotgo.onclick = (e) => {
-	  app.wallet.backupWallet();
+          cryptomod.activate();
           cryptomod.modal_overlay.hideOverlay();
+          app.connection.emit('update_balance');
         }
       }
     } catch (err) {

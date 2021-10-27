@@ -17,7 +17,7 @@ module.exports = EmailBarsMenu = {
       }
     }
 
-    app.wallet.returnAvailableCryptos().forEach(async(responseInterface, i) => {
+    app.wallet.returnActivatedCryptos().forEach(async(responseInterface, i) => {
       if (responseInterface.name !== "Saito") {
         app.browser.addElementToDom(`<li id="email-nav-${responseInterface.name}" class="crypto-apps-item">
           ${responseInterface.ticker}
