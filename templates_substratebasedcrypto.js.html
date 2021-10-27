@@ -59,23 +59,23 @@ class SubstrateBasedCrypto extends AbstractCryptoModule {
     super(app, ticker);
     this.endpoint = endpoint;
     //this.subscanEndpoint = "https://westend.api.subscan.io/";
-    this.subscanEndpoint = "https://saito.io:9931/subscanapi";
+    this.subscanEndpoint = "https://parity.saito.io:9931/subscanapi";
     //this.subscanEndpoint = "http://kaolinite/subscanapi";
     this.info = info;
-    this.optionsStorage = {};
     this._api = null; // treat as private, please use getApi to access
     this.mods = [];
     this.keypair = null;
     this.keyring = null;
   }
+
  /**
   * installModule runs when a node initialized a module for the first time
   * @param {Object} app - Saito Application Context
   */
-  
   installModule(app) {
-    // disable for now
-    //app.wallet.setPreferredCrypto(this.ticker);
+    // if a module would like to forcibly set itself as the preffered crypto
+    // this should be done:
+    // app.wallet.setPreferredCrypto(this.ticker);
   }
  /**
   * Initialize Endpoint API connection and keyring
@@ -83,29 +83,35 @@ class SubstrateBasedCrypto extends AbstractCryptoModule {
   */
   initialize(app) {
     if (app.BROWSER) {
-      super.initialize(app);
+      // load optionStorage from local storage
       this.load();
-      const wsProvider = new WsProvider(this.endpoint);
-      this._api = new ApiPromise({ provider: wsProvider });
-      this._api.on('connected', (stream) => {
-        //console.log(this.description + ' Polkadot Socket Provider connected');
+      this._api = null;
+      let that = this;
+      this.eventEmitter.on('activated', () => {
+        const wsProvider = new WsProvider(this.endpoint);
+        that._api = new ApiPromise({ provider: wsProvider });
+        that._api.on('connected', (stream) => {
+          //console.log(this.description + ' Polkadot Socket Provider connected');
+        });
+        that._api.on('disconnected', (stream) => {
+          //console.log(this.description + ' Polkadot Socket Provider disconnected');
+        });
+        that._api.on('ready', (stream) => {
+          //console.log(this.description + ' Polkadot Socket Provider ready');
+        });
+        that._api.on('error', (stream) => {
+          //console.log(this.description + ' Polkadot Socket Provider error');
+        });
       });
-      this._api.on('disconnected', (stream) => {
-        //console.log(this.description + ' Polkadot Socket Provider disconnected');
-      });
-      this._api.on('ready', (stream) => {
-        //console.log(this.description + ' Polkadot Socket Provider ready');
-      });
-      this._api.on('error', (stream) => {
-        //console.log(this.description + ' Polkadot Socket Provider error');
-      });
+      
       this.keyring = new Keyring({ type: 'ed25519'});
       this.keyring.setSS58Format(0);
       if(!this.optionsStorage.keypair) {
         let keypair = this.keyring.addFromSeed(randomBytes(32), { name: 'polkadot pair' }, 'ed25519');
         this.optionsStorage.keypair = keypair.toJson();
-        this.save();
       }
+      // done writing to optionsStorage, save()
+      this.save();
       this.keypair = this.keyring.addFromJson(this.optionsStorage.keypair);  
       this.keypair.decodePkcs8();
       super.initialize(app);
@@ -118,19 +124,14 @@ class SubstrateBasedCrypto extends AbstractCryptoModule {
   */
  
   async getApi() {
-    await this._api.isReady;
-    return this._api;
+    if(this._api) {
+      await this._api.isReady;
+      return this._api;
+    } else {
+      throw "Cannot get API from inactive module, no API connection was initialized";
+    }
   }
-  // Token decimals:
-  //
-  //     Polkadot (DOT): 10
-  //     Kusama (KSM): 12
-  getFormatedAmount(amount) {
 
-  }
-  fromFormatedAmount(amount) {
-
-  }
   /**
    * Forces input address into the desired format.
    * Input address can be any format, DOT, KSM, or Substrate.
@@ -173,8 +174,8 @@ class SubstrateBasedCrypto extends AbstractCryptoModule {
   * overrides AbstractCryptoModule returnBalance
   */
   async returnBalance(){
-    let api = await this.getApi();
     let balance = 0.0;
+    let api = await this.getApi();
     if(api.query.system.account) {
       const { nonce, data: balanceObj } = await api.query.system.account(this.keypair.publicKey);
       balance = balanceObj.free;
@@ -186,7 +187,6 @@ class SubstrateBasedCrypto extends AbstractCryptoModule {
     } else {
       return balance/1.0;
     }
-    return balance
   }
  /**
   * overrides AbstractCryptoModule transfer.
@@ -263,29 +263,6 @@ class SubstrateBasedCrypto extends AbstractCryptoModule {
         });
     });
   }
- /**
-  * save state of this module to local storage
-  */
-  save() {
-    let moduleOptions = this.app.storage.getModuleOptionsByName(this.name);
-    moduleOptions.storage = this.optionsStorage;
-    this.app.storage.saveOptions();
-  }
- /**
-  * load state of this module from local storage
-  */
-  load() {
-    let moduleOptions = this.app.storage.getModuleOptionsByName(this.name);
-    if(moduleOptions) {
-      if(!moduleOptions.storage) {
-        moduleOptions.storage = {};
-        this.save();
-      }
-      this.optionsStorage = moduleOptions.storage;
-    } else {
-      throw "Module Not Installed: " + this.name;
-    }
-  }
 }
 module.exports = SubstrateBasedCrypto;
 </code></pre>
@@ -304,7 +281,7 @@ module.exports = SubstrateBasedCrypto;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Oct 27 2021 11:05:12 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Oct 27 2021 12:04:19 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
