@@ -353,7 +353,7 @@ createToSlips(num, address, amount, change_amount)
 
 createReplacementTransaction(oldtx) 
 
-returnAvailableCryptos() 
+returnInstalledCryptos() 
 
 returnPreferredCrypto() 
 

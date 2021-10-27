@@ -42,10 +42,16 @@ let EmailCryptoAppspace = {
   },
   async rerender(app) {
     let loadBalance = async(responseInterface) => {
-      let balance = await responseInterface.returnBalance();
-      document.querySelectorAll(`.email-appspace-${responseInterface.ticker} .crypto-container .balance`).forEach((elem, i) => {
-        elem.innerHTML = balance;
-      });
+      if(responseInterface.returnIsActivated()) {
+        document.querySelectorAll(`.email-appspace-${responseInterface.ticker} .crypto-container .balance`).forEach((elem, i) => {
+          elem.innerHTML = "loading...";
+        });
+        let balance = await responseInterface.returnBalance();
+        document.querySelectorAll(`.email-appspace-${responseInterface.ticker} .crypto-container .balance`).forEach((elem, i) => {
+          elem.innerHTML = balance;
+        });
+      }
+
     }
     let loadPubkey = async(responseInterface) => {
       let address = await responseInterface.returnAddress();
@@ -56,12 +62,21 @@ let EmailCryptoAppspace = {
     document.querySelector(".email-body").innerHTML = EmailCryptoAppspaceTemplate(app, cryptoMod);
     loadBalance(cryptoMod);
     loadPubkey(cryptoMod);
-    
+
+    document.querySelectorAll(`.email-appspace-${cryptoMod.ticker} .crypto-container .balance`).forEach((elem, i) => {
+      elem.onclick = function (e) {
+        cryptoMod.activate();
+        loadBalance(cryptoMod);
+      }
+    });
+
     try {
       document.getElementById("private-key").onclick = function (e) {
         document.getElementById("private-key").toggleClass("password");
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
 
 
     document.querySelector(`.crypto-container .sendbutton`).onclick = () => {

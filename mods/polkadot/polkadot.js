@@ -2,7 +2,7 @@ const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto")
 
 const parityArchiveNodeEndpoint = 'wss://rpc.polkadot.io';
 const saitoEndpoint = 'ws://206.189.222.218:9932';
-const saitoEndpointSecure = 'wss://saito.io:9931/polkadotwss/'; // This routes through ssl to 206.189.222.218:9932
+const saitoEndpointSecure = 'wss://parity.saito.io:9931/polkadotwss/'; // This routes through ssl to 206.189.222.218:9932
 const mysteryEndpointFoundOnPolkaStatsIO = 'wss://polkastats.io/api/v3';
 class Polkadot extends SubstrateBasedCrypto {
   constructor(app) {
@@ -75,7 +75,9 @@ Additionally, <b>with this module you can lose significant amounts of money with
       let dotgo = document.getElementById("dot-warning-confirm");
       if (dotgo) {
         dotgo.onclick = (e) => {
+          cryptomod.activate();
           cryptomod.modal_overlay.hideOverlay();
+          app.connection.emit('update_balance');
         }
       }
       let dotno = document.getElementById("revert-to-saito");

@@ -48,8 +48,8 @@ class Email extends ModTemplate {
     this.app.connection.on("update_balance", async (wallet) => {
       let bobj = document.getElementById("email-balance");
       if (bobj) {
-	let bal = await wallet.returnPreferredCryptoBalance();
-	bobj.innerHTML = bal;
+        let bal = await app.wallet.returnPreferredCryptoBalance();
+        bobj.innerHTML = bal;
       }
     });
     if (app.BROWSER && this.browser_active && (!app.options.email || !app.options.email.welcomesent)) {
@@ -262,10 +262,14 @@ class Email extends ModTemplate {
 
   cacheAndRenderPreferredCryptoBalance() {
     this.preferredCryptoBalance = "...";
-    this.app.wallet.returnPreferredCrypto().formatBalance().then((value) => {
-      this.preferredCryptoBalance = value;
-      this.renderBalance();
-    });
+    let preferred_crypto_module = this.app.wallet.returnPreferredCrypto();
+    if(preferred_crypto_module.returnIsActivated()) {
+      preferred_crypto_module.formatBalance().then((value) => {
+        this.preferredCryptoBalance = value;
+        this.renderBalance();
+      });
+      
+    }
     this.renderBalance();
   }
   async renderBalance() {
