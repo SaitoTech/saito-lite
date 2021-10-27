@@ -26,6 +26,8 @@ class Wuziqi extends GameTemplate {
         this.moves = [];
         this.bestof = 1;
 
+        this.seats = [2,5]
+
         return this;
     }
 
