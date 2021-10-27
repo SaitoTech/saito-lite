@@ -962,7 +962,7 @@ input#game_board_sizer {
 }
 .cardbox-menu {
     position: absolute;
-    bottom: -15px;
+    bottom: -0px;
     font-size: 2em;
     font-weight: bold;
     background-color: #eb2d2d;
@@ -973,7 +973,7 @@ input#game_board_sizer {
     color: white;
     border-radius: 10px;
     z-index: 900009;
-    margin-left: 6%;
+    margin-left: 0px;
     margin-right: auto;
     width: 85%;
     text-align: center;

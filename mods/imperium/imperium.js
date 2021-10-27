@@ -12901,8 +12901,6 @@ handleSystemsMenuItem() {
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("move: " + mv[0]);
-
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
   	  salert("Game Over");
@@ -13075,7 +13073,6 @@ console.log("move: " + mv[0]);
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
 	      this.resetConfirmsNeeded(0);
-	      // JAN 29
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
 
@@ -14798,7 +14795,7 @@ this.game.state.end_round_scoring = 0;
   	      let this_player = this.game.state.speaker+i;
   	      if (this_player > this.game.players_info.length) { this_player -= this.game.players_info.length; }
 	      if ((cts+cards_issued[(this_player-1)]) < cards_to_select) {
-  	        this.rmoves.push("pickstrategy\t"+this_player);
+  	        this.rmoves.push("pickstrategy\t"+this_player+"\t"+(cts+1));
               }
             }
   	  }
@@ -14882,15 +14879,16 @@ this.game.state.end_round_scoring = 0;
       if (mv[0] === "pickstrategy") {
   
   	let player       = parseInt(mv[1]);
+  	let selection    = parseInt(mv[2]);
 
         this.setPlayerActiveOnly(player);
 
   	if (this.game.player == player) {
-  	  this.playerSelectStrategyCards(function(card) {
+  	  this.playerSelectStrategyCards(function(card) {	// mode 0
   	    imperium_self.addMove("resolve\tpickstrategy");
   	    imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tstrategycard\t"+card);
   	    imperium_self.endTurn();
-  	  });
+  	  }, selection);
   	  return 0;
   	} else {
 
@@ -15486,12 +15484,20 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	if (mv[4] === "0") { run_events = 0; }
 	let z            = this.returnEventObjects();
 
+ 
+
 	if (type == "action_cards") {
 
           if (this.game.player == player && this.browser_active == 1) {
-	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
+
+	    // maybe we are already looking at an action card overlay? 
+	    let bonus_buff = 0;
+	    document.querySelectorAll('.overlay_action_card').forEach(el => { bonus_buff++; });
+
+	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-(amount+bonus_buff), this.game.deck[1].hand.length)));
 	    document.getElementById("close-action-cards-btn").onclick = (e) => {
 	      this.overlay.hideOverlay();
+	      this.game.state.showing_action_cards_amounts = 0;
             }
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
@@ -15516,7 +15522,7 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	//
 	try {
           let html = this.returnTokenDisplay();
-          document.querySelector('.hud-header').html(html);
+          document.querySelector('.hud-header').innerHTML = html;
 	} catch (err) {
 	  console.log("error updating hud-header: " + err);
  	}
@@ -22637,14 +22643,13 @@ playerSelectStrategyCard(mycallback, mode = 0) {
 // this is when players select at the begining of the round, not when they 
 // are chosing to play the cards that they have already selected
 //
-playerSelectStrategyCards(mycallback) {
+playerSelectStrategyCards(mycallback, selection = 0) {
 
   let imperium_self = this;
   let cards = this.returnStrategyCards();
   let playercol = "player_color_" + this.game.player;
   let relevant_action_cards = ["strategy"];
   let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
-
 
   let html = "<div class='terminal_header'><div class='player_color_box " + playercol + "'></div>" + this.returnFaction(this.game.player) + ": select your strategy card:</div><ul>";
   if (this.game.state.round > 1) {
@@ -22687,8 +22692,6 @@ playerSelectStrategyCards(mycallback) {
     }
   }
 
-console.log(unselect_scards);
-
   html += '</ul></p>';
   this.updateStatus(html);
 
@@ -22723,8 +22726,14 @@ console.log(unselect_scards);
   //
   if (ac.length == 0) {
 
+    let t = "Select Your Strategy Card";
+    if (selection == 1) { t = "Select Your FIRST Strategy Card"; }
+    if (selection == 2) { t = "Select Your SECOND Strategy Card"; }
+    if (selection == 3) { t = "Select Your THIRD Strategy Card"; }
+    if (selection == 4) { t = "Select Your FOURTH Strategy Card"; }
+
     imperium_self.overlay.showCardSelectionOverlay(imperium_self.app, imperium_self, scards_objs, {
-                title : "Select a Strategy Card" ,
+                title : t ,
                 subtitle : "you must play this card sometime during your turn" ,
 		textAlign: "center",
 		rowGap: "30px",

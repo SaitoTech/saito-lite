@@ -3,6 +3,10 @@
   padding: 10px;
 }
 
+.cardbox-menu.cardbox-card {
+  bottom: 10px;
+  width: 83%;
+}
 
 .hud-long {
   max-width:90vw;

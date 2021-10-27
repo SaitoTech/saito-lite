@@ -59,6 +59,7 @@
             
               twilight_self.addMove("resolve\tche");
               twilight_self.addMove("checoup\tussr\t"+c+"\t"+couppower);
+              twilight_self.addMove("notify\tChe launches coup in "+twilight_self.countries[c].name);
               twilight_self.addMove("milops\tussr\t"+couppower);
               twilight_self.endTurn();
             });

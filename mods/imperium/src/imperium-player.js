@@ -3953,14 +3953,13 @@ playerSelectStrategyCard(mycallback, mode = 0) {
 // this is when players select at the begining of the round, not when they 
 // are chosing to play the cards that they have already selected
 //
-playerSelectStrategyCards(mycallback) {
+playerSelectStrategyCards(mycallback, selection = 0) {
 
   let imperium_self = this;
   let cards = this.returnStrategyCards();
   let playercol = "player_color_" + this.game.player;
   let relevant_action_cards = ["strategy"];
   let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
-
 
   let html = "<div class='terminal_header'><div class='player_color_box " + playercol + "'></div>" + this.returnFaction(this.game.player) + ": select your strategy card:</div><ul>";
   if (this.game.state.round > 1) {
@@ -4003,8 +4002,6 @@ playerSelectStrategyCards(mycallback) {
     }
   }
 
-console.log(unselect_scards);
-
   html += '</ul></p>';
   this.updateStatus(html);
 
@@ -4039,8 +4036,14 @@ console.log(unselect_scards);
   //
   if (ac.length == 0) {
 
+    let t = "Select Your Strategy Card";
+    if (selection == 1) { t = "Select Your FIRST Strategy Card"; }
+    if (selection == 2) { t = "Select Your SECOND Strategy Card"; }
+    if (selection == 3) { t = "Select Your THIRD Strategy Card"; }
+    if (selection == 4) { t = "Select Your FOURTH Strategy Card"; }
+
     imperium_self.overlay.showCardSelectionOverlay(imperium_self.app, imperium_self, scards_objs, {
-                title : "Select a Strategy Card" ,
+                title : t ,
                 subtitle : "you must play this card sometime during your turn" ,
 		textAlign: "center",
 		rowGap: "30px",
