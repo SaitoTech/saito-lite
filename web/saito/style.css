@@ -1190,6 +1190,8 @@ div#message-wrapper {
   padding: 5px;
   border-bottom: 1px solid #888 !important;
   margin: 5px 0;
+  background: var(--saito-nightscape);
+  color: white;
 }
 
 .pulsey {
@@ -1338,6 +1340,8 @@ div#message-wrapper {
   width: 400px;
   right: -405px;
   position: absolute;
+  background: var(--saito-nightscape);
+  color: white;
 }
 
 .show-right-sidebar,
@@ -1386,7 +1390,7 @@ div#message-wrapper {
 .account-info .saito-select {
   border: 0px;
   color: #333;
-  background-color: #fff;
+  background: var(--saito-nightscape);
 }
 
 .account-info div {
@@ -1460,7 +1464,7 @@ div#message-wrapper {
 
 .header-dropdown a {
   text-decoration: none;
-  color: black;
+  color: white;
 }
 
 #back-button {
