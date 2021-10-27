@@ -159,6 +159,7 @@ Board is a grid of wooden squares
   padding: 0px;
   height: unset;
   left: unset;
+  right: unset;
 }
 
 
