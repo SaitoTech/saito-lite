@@ -167,8 +167,8 @@ p {
   margin-bottom: 1px;
   word-wrap: break-word;
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
-  line-height: 1em;
-  font-size: 1em;
+  line-height: 1.2em;
+  font-size: 1.05em;
 }
 
 .saito-address {
