@@ -20,13 +20,25 @@
   overflow: unset;
 }
 
-.game-menu {
-  width: 420px;
+.hex_bg{
+  margin: unset;
+   left: -12.5%;
+  right: -12.5%;
+}
+
+.hex_bg img{
+  left: -12.5%;
+  right: -12.5%;
 }
 
 body {
-  background-image: url(/settlers/img/background2.jpg);
+  background-color: lightseagreen;
+  background-image: url(/settlers/img/water.JPG);
   background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: unset; /* fixed from game.css does weird stuff*/
+
 }
 
 #game-hexgrid{
@@ -57,6 +69,8 @@ body {
 
 .hover:hover {
   border: 1px solid white;
+  background-color: whitesmoke;
+  cursor: crosshair;
 }
 
 .road {
@@ -66,7 +80,7 @@ body {
   height: 10%;
   background-color: transparent;
 
-  z-index: 5892351;
+  z-index: 10;
 }
 
 .road5{
@@ -108,9 +122,16 @@ body {
   width: 30%;
   height: 25%;
   background-color: transparent;
-  z-index: 5892350;
+  z-index: 12;
   font-size: 2em;
   text-align: center;
+}
+
+.city > svg{
+  width: 100%;
+  height: 100%;
+  top:  0px;
+  left: 0px;
 }
 
 .p1 {
@@ -159,7 +180,7 @@ body {
 .sector_value {
   position: absolute;
   font-size: 2.5em;
-  /*z-index: 99;*/
+  z-index: 15;
   font-weight: bold;
   border: 1px solid #fff;
   border-radius: 50%;
