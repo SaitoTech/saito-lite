@@ -170,17 +170,50 @@ class Relay extends ModTemplate {
         //
         // get the inner-tx / tx-to-relay
         //
+        tx.decryptMessage(this.app);
         let txmsg = tx.returnMessage();
-	if (!txmsg.data) { return; }
-        let tx2 = new saito.transaction(txmsg.data);
+
+
+	//
+	// we have a handlePeerRequest, not a transaction
+	//
+	if (txmsg.data) { 
+          app.modules.handlePeerRequest(txmsg, peer, mycallback);
+          if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
+	  return;
+	}
+
+
+	//
+	// inside the relayed txmsg is a transaction
+	//
+ 	let tx2 = new saito.transaction(txmsg);
 
         //
         // if interior transaction is intended for me, I process regardless
         //
-        if (tx2.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
+        if (tx2.isTo(app.wallet.returnPublicKey())) {
 
-	  // relay message arrived for me and interior is for me, so hand to HPR
-          app.modules.handlePeerRequest(txmsg, peer, mycallback);
+	  //
+	  // the transaction is FOR me
+	  //
+	  tx2.decryptMessage(app);
+	  let txmsg2 = tx2.returnMessage();
+
+	  if (txmsg2.request) {
+            app.modules.handlePeerRequest(tx3msg, peer, mycallback);
+            if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
+	    return;
+	  }
+
+	  //
+	  // the transaction wraps the real transaction
+	  //
+	  let tx3 = new saito.transaction(txmsg2);
+	  tx3.decryptMessage(app);
+	  let tx3msg = tx3.returnMessage();
+
+          app.modules.handlePeerRequest(tx3msg, peer, mycallback);
           if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
 
         } else {

@@ -172,7 +172,6 @@ class Chat extends ModTemplate {
     // create mastodon server
     //
     if (peer.isMainPeer()) {
- 
       this.createChatGroup([peer.peer.publickey], "Saito Community Chat");
     } else {
 
@@ -300,15 +299,14 @@ class Chat extends ModTemplate {
         case "chat message":
 
           //
-          // update TS before save -- TODO -- find a better fix that doesn't break 
-          // our ability to validate the chat messages.
-          //
           let modified_tx_obj = JSON.parse(JSON.stringify(tx.transaction));
           let modified_tx = new saito.transaction(modified_tx_obj);
           modified_tx.transaction.ts = new Date().getTime();
 
-	  // see chat message below
-          this.receiveMessage(app, new saito.transaction(tx.transaction));
+	  // decrypt if needed
+	  let tx2 = new saito.transaction(tx.transaction);	  
+	  tx2.decryptMessage(app);
+          this.receiveMessage(app, tx2);
           this.app.storage.saveTransaction(modified_tx);
 
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
@@ -322,15 +320,11 @@ class Chat extends ModTemplate {
            routed_tx.transaction.ts = new Date().getTime();
 
 	   //
-	   // this might be a message for us! check and process if so
+	   // this might be a message for us! process if so
 	   //
 	   if (routed_tx.isTo(app.wallet.returnPublicKey())) {
-
-	     // see chat message above
 	     this.receiveMessage(app, routed_tx);
-             this.app.storage.saveTransaction(routed_tx);
-
-	     break;
+             //this.app.storage.saveTransaction(routed_tx);
 	   }
 
            //
@@ -342,7 +336,7 @@ class Chat extends ModTemplate {
            modified_routed_tx.transaction.ts = new Date().getTime();
 
            //
-           // serversaves
+           // server saves
            //
            let archive = this.app.modules.returnModule("Archive");
            if (archive) { archive.saveTransactionByKey(routed_tx_msg.group_id, modified_routed_tx); }     
@@ -363,7 +357,7 @@ class Chat extends ModTemplate {
 
 
 
-  sendMessage(app, tx) {
+  sendMessage(app, tx, broadcast=0) {
 
     if (tx.msg.message.substring(0,4) == "<img") {
       if (this.inTransitImageMsgSig != null) {
@@ -372,7 +366,7 @@ class Chat extends ModTemplate {
       }
       this.inTransitImageMsgSig = tx.transaction.sig;
     }
-     if (app.network.peers.length > 0) {
+    if (app.network.peers.length > 0) {
 
       let recipient = app.network.peers[0].peer.publickey;
       let relay_mod = app.modules.returnModule('Relay');
@@ -381,8 +375,8 @@ class Chat extends ModTemplate {
       if (this.relay_moves_onchain_if_possible == 1) {
         this.app.network.propagateTransaction(tx);
       }
+
       relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
-      //relay_mod.sendRelayMessage2(tx);  
     } else {
       salert("Connection to chat server lost");
     }
