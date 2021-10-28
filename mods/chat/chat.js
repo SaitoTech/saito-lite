@@ -365,11 +365,8 @@ class Chat extends ModTemplate {
 
   sendMessage(app, tx) {
 
-console.log("SENDING MESSAGE");
-
     if (tx.msg.message.substring(0,4) == "<img") {
       if (this.inTransitImageMsgSig != null) {
-        console.log("Image already being sent");
         salert("Image already being sent");
         return;
       }
@@ -384,11 +381,9 @@ console.log("SENDING MESSAGE");
       if (this.relay_moves_onchain_if_possible == 1) {
         this.app.network.propagateTransaction(tx);
       }
-console.log("sending relay message!");
       relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
       //relay_mod.sendRelayMessage2(tx);  
     } else {
-      console.log("Connection to chat server lost");
       salert("Connection to chat server lost");
     }
     
@@ -516,11 +511,7 @@ console.log("sending relay message!");
       this.inTransitImageMsgSig = null;
     }
 
-console.log("pre rm");
-
     let txmsg = tx.returnMessage();
-
-console.log("post rm");
 
     //
     // if to someone else and encrypted
