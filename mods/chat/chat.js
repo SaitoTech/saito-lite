@@ -307,20 +307,32 @@ class Chat extends ModTemplate {
           let modified_tx = new saito.transaction(modified_tx_obj);
           modified_tx.transaction.ts = new Date().getTime();
 
+	  // see chat message below
           this.receiveMessage(app, new saito.transaction(tx.transaction));
-
-          // JAN 29, prev commented out all but receiveMessage above
           this.app.storage.saveTransaction(modified_tx);
 
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
 
         case "chat broadcast message":
-     
+
            let routed_tx = new saito.transaction(tx.transaction);
            routed_tx.decryptMessage(this.app);
            let routed_tx_msg = routed_tx.returnMessage();
-           
+           routed_tx.transaction.ts = new Date().getTime();
+
+	   //
+	   // this might be a message for us! check and process if so
+	   //
+	   if (routed_tx.isTo(app.wallet.returnPublicKey())) {
+
+	     // see chat message above
+	     this.receiveMessage(app, routed_tx);
+             this.app.storage.saveTransaction(routed_tx);
+
+	     break;
+	   }
+
            //
            // update TS before save -- TODO -- find a better fix that doesn't break 
            // our ability to validate the chat messages.
@@ -353,6 +365,8 @@ class Chat extends ModTemplate {
 
   sendMessage(app, tx) {
 
+console.log("SENDING MESSAGE");
+
     if (tx.msg.message.substring(0,4) == "<img") {
       if (this.inTransitImageMsgSig != null) {
         console.log("Image already being sent");
@@ -362,6 +376,7 @@ class Chat extends ModTemplate {
       this.inTransitImageMsgSig = tx.transaction.sig;
     }
      if (app.network.peers.length > 0) {
+
       let recipient = app.network.peers[0].peer.publickey;
       let relay_mod = app.modules.returnModule('Relay');
 
@@ -369,6 +384,7 @@ class Chat extends ModTemplate {
       if (this.relay_moves_onchain_if_possible == 1) {
         this.app.network.propagateTransaction(tx);
       }
+console.log("sending relay message!");
       relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
       //relay_mod.sendRelayMessage2(tx);  
     } else {
@@ -499,7 +515,12 @@ class Chat extends ModTemplate {
     if (this.inTransitImageMsgSig == tx.transaction.sig) {
       this.inTransitImageMsgSig = null;
     }
+
+console.log("pre rm");
+
     let txmsg = tx.returnMessage();
+
+console.log("post rm");
 
     //
     // if to someone else and encrypted
