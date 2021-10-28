@@ -307,20 +307,32 @@ class Chat extends ModTemplate {
           let modified_tx = new saito.transaction(modified_tx_obj);
           modified_tx.transaction.ts = new Date().getTime();
 
+	  // see chat message below
           this.receiveMessage(app, new saito.transaction(tx.transaction));
-
-          // JAN 29, prev commented out all but receiveMessage above
           this.app.storage.saveTransaction(modified_tx);
 
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
 
         case "chat broadcast message":
-     
+
            let routed_tx = new saito.transaction(tx.transaction);
            routed_tx.decryptMessage(this.app);
            let routed_tx_msg = routed_tx.returnMessage();
-           
+           routed_tx.transaction.ts = new Date().getTime();
+
+	   //
+	   // this might be a message for us! check and process if so
+	   //
+	   if (routed_tx.isTo(app.wallet.returnPublicKey())) {
+
+	     // see chat message above
+	     this.receiveMessage(app, routed_tx);
+             this.app.storage.saveTransaction(routed_tx);
+
+	     break;
+	   }
+
            //
            // update TS before save -- TODO -- find a better fix that doesn't break 
            // our ability to validate the chat messages.
@@ -355,13 +367,13 @@ class Chat extends ModTemplate {
 
     if (tx.msg.message.substring(0,4) == "<img") {
       if (this.inTransitImageMsgSig != null) {
-        console.log("Image already being sent");
         salert("Image already being sent");
         return;
       }
       this.inTransitImageMsgSig = tx.transaction.sig;
     }
      if (app.network.peers.length > 0) {
+
       let recipient = app.network.peers[0].peer.publickey;
       let relay_mod = app.modules.returnModule('Relay');
 
@@ -372,7 +384,6 @@ class Chat extends ModTemplate {
       relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
       //relay_mod.sendRelayMessage2(tx);  
     } else {
-      console.log("Connection to chat server lost");
       salert("Connection to chat server lost");
     }
     
@@ -499,6 +510,7 @@ class Chat extends ModTemplate {
     if (this.inTransitImageMsgSig == tx.transaction.sig) {
       this.inTransitImageMsgSig = null;
     }
+
     let txmsg = tx.returnMessage();
 
     //

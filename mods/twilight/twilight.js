@@ -1381,6 +1381,7 @@ try {
                       $(divname).on('click', function() {
                         let c = $(this).attr('id');
                         twilight_self.addMove("coup\tussr\t"+c+"\t"+couppower);
+                        twilight_self.addMove("notify\tChe launches coup in "+twilight_self.countries[c].name);
                         twilight_self.endTurn();
                       });
                     } else {
@@ -2435,7 +2436,7 @@ try {
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["unintervention","asknot","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
+              this.game.deck[0].hand = ["che","asknot","communistrevolution","nuclearsubs", "abmtreaty","colonial","puppet","cia", "europe","asia"];
             } else {
               this.game.deck[0].hand = ["quagmire", "unintervention", "cia", "brezhnev", "saltnegotiations", "grainsales","africa", "cubanmissile","china"];
             }
@@ -10744,6 +10745,7 @@ this.startClock();
             
               twilight_self.addMove("resolve\tche");
               twilight_self.addMove("checoup\tussr\t"+c+"\t"+couppower);
+              twilight_self.addMove("notify\tChe launches coup in "+twilight_self.countries[c].name);
               twilight_self.addMove("milops\tussr\t"+couppower);
               twilight_self.endTurn();
             });
