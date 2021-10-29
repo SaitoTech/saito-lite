@@ -319,9 +319,9 @@ class Settlers extends GameTemplate {
       // Preliminary DOM set up, adding elements to display
       // cities (and settlements), roads, and the numeric tokens
       //
-      this.addSectorValuesToGameboard();
+      //this.addSectorValuesToGameboard();
       this.addCitiesToGameboard();
-      this.addRoadsToGameboard();
+      //this.addRoadsToGameboard();
 
 
       //
@@ -374,17 +374,42 @@ class Settlers extends GameTemplate {
       }
 
       this.game.queue.push("READY");
+      //Board
       this.game.queue.push("generate_map");
+      /*
+      For some fucking reason, you can only flip one card at a time, otherwise the decrypting fucks up
+      */
+      for (let j = 0; j <19; j++){
+      for (let i = this.game.players.length - 1; i >= 0; i--) {
+          this.game.queue.push("FLIPCARD\t2\t1\t1\t"+(i+1)); //tiles
+        }
+        this.game.queue.push("FLIPRESET\t1");
+      }
+      for (let j = 0; j <18; j++){
+        for (let i = this.game.players.length - 1; i >= 0; i--) {
+          this.game.queue.push("FLIPCARD\t3\t1\t2\t"+(i+1)); //tokens
+      }
+      this.game.queue.push("FLIPRESET\t2");
+      }
+      
+      //this.game.queue.push("POOL\t2");
+      //this.game.queue.push("POOL\t1");
+      this.game.queue.push("DECKANDENCRYPT\t3\t"+this.game.players.length+"\t"+JSON.stringify(this.returnDiceTokens()));
+      this.game.queue.push("DECKANDENCRYPT\t2\t"+this.game.players.length+"\t"+JSON.stringify(this.returnHexes()));
+
+      //Development Cards
       this.game.queue.push("DECKANDENCRYPT\t1\t"+this.game.players.length+"\t"+JSON.stringify(this.returnDeck()));
 
     }
   }
 
 
+  /*
+  Create Initial Game State
+  */
   returnState() {
-
     let state = {};
-    state.hexes     = this.returnHexes();
+    state.hexes     = {};
     state.roads     = [];
     state.cities    = [];
     state.players   = [];
@@ -652,33 +677,6 @@ console.log(adjacent);
   }
 
 
-  returnHexes() {
-
-    let hexes = {};
-
-    hexes['1_1'] = { resource : "brick" ,  value : 6 , neighbours : ["1_2", "2_1", "2_2"] }
-    hexes['1_2'] = { resource : "wool" , value : 4 , neighbours : ["1_1", "1_3", "2_2", "2_3"] }
-    hexes['1_3'] = { resource : "wood" , value : 12 , neighbours : ["1_2", "2_3", "2_4"] }
-    hexes['2_1'] = { resource : "wool" , value : 11 , neighbours : ["1_1", "2_2", "3_1", "3_2"] }
-    hexes['2_2'] = { resource : "wheat" , value : 3 , neighbours : ["1_1", "1_2", "2_1", "2_3", "3_2", "3_3"] }
-    hexes['2_3'] = { resource : "ore" , value : 5 , neighbours : ["1_2", "1_3", "2_2", "2_4", "3_3", "3_4"] }
-    hexes['2_4'] = { resource : "brick" , value : 4 , neighbours : ["1_3", "2_3", "3_4", "3_5"] }
-    hexes['3_1'] = { resource : "wheat" , value : 5 , neighbours : ["2_1", "3_2", "4_1"] }
-    hexes['3_2'] = { resource : "wood" , value : 8 , neighbours : ["2_1", "2_2", "3_1", "3_3", "4_1", "4_2"] }
-    hexes['3_3'] = { resource : "desert" , value : 7 , neighbours : ["2_2", "2_3", "3_2", "3_4", "4_2", "4_3"] }
-    hexes['3_4'] = { resource : "wood" , value : 10 , neighbours : ["2_3", "2_4", "3_3", "3_5", "4_3", "4_4"] }
-    hexes['3_5'] = { resource : "wool" , value : 6 , neighbours : ["2_4", "3_4", "4_4"] }
-    hexes['4_1'] = { resource : "ore" , value : 10 , neighbours : ["3_1", "3_2", "4_2", "5_1"] }
-    hexes['4_2'] = { resource : "brick" , value : 9 , neighbours : ["3_2", "3_3", "4_1", "5_1", "5_2"] }
-    hexes['4_3'] = { resource : "wool" , value : 2 , neighbours : ["3_3", "3_4", "4_2", "4_4", "5_2", "5_3"] }
-    hexes['4_4'] = { resource : "wheat" , value : 9 , neighbours : ["3_4", "3_5", "4_3", "5_3"] }
-    hexes['5_1'] = { resource : "wood" , value : 3 , neighbours : ["4_1", "4_2", "5_2"] }
-    hexes['5_2'] = { resource : "wheat" , value : 11 , neighbours : ["4_2", "4_3", "5_1", "5_3"] }
-    hexes['5_3'] = { resource : "ore" , value : 8 , neighbours : ["4_3", "4_4", "5_2"] }
-
-    return hexes;
-
-  }
 
 
 
@@ -697,7 +695,7 @@ console.log(adjacent);
       let qe = this.game.queue.length-1;
       let mv = this.game.queue[qe].split("\t");
 
-console.log("QUEUE: " + this.game.queue);
+      console.log("QUEUE: " + this.game.queue);
 
       //
       // init
@@ -706,9 +704,9 @@ console.log("QUEUE: " + this.game.queue);
 
 	// no splice, we want to bounce off this
         //this.game.queue.splice(qe, 1);
-
-	for (let i = 0; i < this.game.players.length; i++) {
-	  this.game.queue.push(`play\t${i+1}`);
+        this.game.state.placedCity = null; //We are in game play mode, not initial set up
+	     for (let i = 0; i < this.game.players.length; i++) {
+	     this.game.queue.push(`play\t${i+1}`);
 	}
 
 	return 1;
@@ -759,10 +757,10 @@ console.log("QUEUE: " + this.game.queue);
       // generate_map
       //
       if (mv[0] == "generate_map") {
-
+        console.log("Build the map");
         this.game.queue.splice(qe, 1);
-	this.generateMap();
-	return 1;
+	       this.generateMap();
+	       return 1;
 
       }
 
@@ -1240,14 +1238,14 @@ console.log("QUEUE: " + this.game.queue);
     this.addSectorValueToGameboard("3_4", 10);
     this.addSectorValueToGameboard("3_5", 6);
 
-    this.addSectorValueToGameboard("4_1", 10);
+    this.addSectorValueToGameboard("4_5", 10);
     this.addSectorValueToGameboard("4_2", 9);
     this.addSectorValueToGameboard("4_3", 2);
     this.addSectorValueToGameboard("4_4", 9);
 
-    this.addSectorValueToGameboard("5_1", 3);
-    this.addSectorValueToGameboard("5_2", 11);
-    this.addSectorValueToGameboard("5_3", 8);
+    this.addSectorValueToGameboard("5_3", 3);
+    this.addSectorValueToGameboard("5_4", 11);
+    this.addSectorValueToGameboard("5_5", 8);
 
   }
 
@@ -1260,8 +1258,8 @@ console.log("QUEUE: " + this.game.queue);
 
     let sector_value_html = `<div class="sector_value hexTileCenter" id="sector_value_${hex}">${sector_value}</div>`;
     let sector_value_obj = this.app.browser.htmlToElement(sector_value_html);
-    hexobj.after(sector_value_obj);
-
+    if (hexobj) hexobj.after(sector_value_obj);
+      else console.log("Null selector: "+selector);
   }
 
 
@@ -1270,16 +1268,7 @@ console.log("QUEUE: " + this.game.queue);
   addCityToGameboard calculates where to (absolutely) position them
   */
   addCitiesToGameboard() {
-
-    /*var el = document.querySelector('.game-hexgrid-container');
-
-    if (!document.getElementById('game-hexgrid-cities')) {
-      el.prepend(this.app.browser.htmlToElement('<div id="game-hexgrid-cities" class="game-hexgrid-cities"></div>'));
-      el = document.querySelector('.game-hexgrid-cities');
-    }*/
-
-    let hexes = this.returnHexes();
-    for(const i in hexes){
+    for(const i of this.hexgrid.hexes){
       this.addCityToGameboard(i,6);
       this.addCityToGameboard(i,1);
     }
@@ -1288,25 +1277,23 @@ console.log("QUEUE: " + this.game.queue);
     this.addCityToGameboard("1_3", 2);
     this.addCityToGameboard("2_4", 2);
     this.addCityToGameboard("3_5", 2);
+    this.addCityToGameboard("4_5", 2);
+    this.addCityToGameboard("5_5", 2);
+    
     this.addCityToGameboard("3_5", 3);
-    this.addCityToGameboard("4_4", 2);
-    this.addCityToGameboard("4_4", 3);
-    this.addCityToGameboard("5_3", 2);
-    this.addCityToGameboard("5_3", 3);
-
+    this.addCityToGameboard("4_5", 3);
+    this.addCityToGameboard("5_5", 3);
 
     //Left Under side
     this.addCityToGameboard("3_1", 5);
-    this.addCityToGameboard("4_1", 5);
-    
-    //Bottom  
-    this.addCityToGameboard("5_1", 5);
-    this.addCityToGameboard("5_1", 4);
-    this.addCityToGameboard("5_2", 5);
-    this.addCityToGameboard("5_2", 4);
+    this.addCityToGameboard("4_2", 5);
     this.addCityToGameboard("5_3", 5);
+    //Bottom  
     this.addCityToGameboard("5_3", 4);
-
+    this.addCityToGameboard("5_4", 5);
+    this.addCityToGameboard("5_4", 4);
+    this.addCityToGameboard("5_5", 5);
+    this.addCityToGameboard("5_5", 4);
   }
 
   /*
@@ -1337,8 +1324,7 @@ console.log("QUEUE: " + this.game.queue);
   addRoadsToGameboard() {
     /*Tops */
 
-   let hexes = this.returnHexes();
-    for(const i in hexes){
+    for(const i of this.hexgrid.hexes){
       this.addRoadToGameboard(i, 5);
       this.addRoadToGameboard(i, 6);
       this.addRoadToGameboard(i, 1);
@@ -1351,17 +1337,17 @@ console.log("QUEUE: " + this.game.queue);
     this.addRoadToGameboard("3_5", 2);
     this.addRoadToGameboard("3_5", 3);
 
-    this.addRoadToGameboard("4_1", 4);
-    this.addRoadToGameboard("4_4", 2);
-    this.addRoadToGameboard("5_3", 2);
+    this.addRoadToGameboard("4_2", 4);
+    this.addRoadToGameboard("4_5", 2);
+    this.addRoadToGameboard("5_5", 2);
 
     /*Bottom*/
-    this.addRoadToGameboard("5_1", 4);
-    this.addRoadToGameboard("5_1", 3);
-    this.addRoadToGameboard("5_2", 4);
-    this.addRoadToGameboard("5_2", 3);
     this.addRoadToGameboard("5_3", 4);
     this.addRoadToGameboard("5_3", 3);
+    this.addRoadToGameboard("5_4", 4);
+    this.addRoadToGameboard("5_4", 3);
+    this.addRoadToGameboard("5_5", 4);
+    this.addRoadToGameboard("5_5", 3);
   }
 
   addRoadToGameboard(hex, road_component) {
@@ -1374,18 +1360,62 @@ console.log("QUEUE: " + this.game.queue);
     if (!document.getElementById(road_id)) {
       let road_html = `<div class="road road${road_component} empty" id="${road_id}"></div>`;
       let road_obj = this.app.browser.htmlToElement(road_html);
-      hexobj.after(road_obj);
-
+      if (hexobj) hexobj.after(road_obj);
+      else console.log("Null selector: "+selector);
     }
   }
 
 
+  returnHexes() {
 
+    let hexes = [];
+    for (let i = 1; i <= 4; i++){
+      hexes.push({resource: "wool"});
+      hexes.push({resource: "wood"});
+      hexes.push({resource: "wheat"});
+    }
+    for (let i = 1; i <= 3; i++){
+      hexes.push({resource: "brick"});
+      hexes.push({resource: "ore"});
+    }
+    hexes.push({resource: "desert"});
+
+    return hexes;
+
+  }
+  returnDiceTokens(){
+    let dice = [];
+    dice.push({value:2});
+    dice.push({value:12});
+    for (let i=3; i<7; i++){
+      dice.push({value:i});
+      dice.push({value:i});
+      dice.push({value:i+5});
+      dice.push({value:i+5});
+    }
+    return dice;
+  }
+
+  /*
+  Every player should have in deck[2] and deck[3] the board tiles and tokens in the same order
+  */
   generateMap() {
-
-    // mix up resources in 
-    // this.game.state.hexes
-
+    let tileCt = 0;
+    let tokenCt = 0;
+    let tile,resourceName,token;
+    for (let hex of this.hexgrid.hexes){
+      tile = this.game.pool[0].hand[tileCt++];
+      resourceName = this.game.deck[1].cards[tile].resource;
+      if (resourceName != "desert"){
+        let temp = this.game.pool[1].hand[tokenCt++];
+        token = this.game.deck[2].cards[temp].value;
+      }else token = 0;
+      this.game.state.hexes[hex] = {resource: resourceName, value:token, neighbours:[], robber:false};
+      if (token) this.addSectorValueToGameboard(hex,token);
+    }
+      console.log(this.game.state.hexes);
+      //card = this.game.pool[0].hand[0]
+      //       this.game.deck[0].cards[card].name;
   }
 
   displayBoard() {
@@ -1397,6 +1427,9 @@ console.log("QUEUE: " + this.game.queue);
       let divname = "#hex_bg_"+i;
       let x = Math.floor(Math.random()*3)+1;
       $(divname).html(`<img class="hex_img2" id="" src="/settlers/img/sectors/${this.game.state.hexes[i].resource}${x}.png">`);
+      if (this.game.state.hexes[i].resource!="desert"){
+        this.addSectorValueToGameboard(i,this.game.state.hexes[i].value);
+      }
     }
 
 
@@ -1423,13 +1456,19 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
         try { $(d).remove(); } catch (err) {}
       }
 
-
     }
 
+    /*
+    Add roads to gameboard
+    */
     for (let i in this.game.state.roads) {
       //Not the most efficient, but should work
       this.buildRoad(this.game.state.roads[i].player, this.game.state.roads[i].slot);
     }
+
+    /*
+    Add sector values
+    */
 
   }
 
@@ -1458,6 +1497,7 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
         //$('.city').css('z-index', 99999999);
         $('.city.empty').off();
         let slot = $(this).attr("id");
+        settlers_self.game.state.placedCity=slot;
         settlers_self.buildCity(settlers_self.game.player, slot);
         settlers_self.addMove(`build_city\t${settlers_self.game.player}\t${slot}`);
         settlers_self.endTurn();
@@ -1539,8 +1579,16 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
     $(divname).html(`<svg viewbox="0 0 200 200" class="${classname}"><polygon points="0,75 100,0, 200,75 200,200 0,200"/></svg>`);
     
     //Enable player to put roads on adjacent edges
-
-
+    if (this.game.player == player){
+      let newRoads = this.hexgrid.edgesFromVertex(slot.replace("city_",""));
+      console.log(newRoads);
+      for (let road of newRoads){
+        console.log("road: ",road);
+        this.addRoadToGameboard(road.substring(2),road[0]);
+      }
+  
+    }
+    
 
     //Save City to Internal Game Logic
     for (let i = 0; i < this.game.state.cities.length; i++) {
@@ -1561,10 +1609,39 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
 
     this.updateStatus(`<div class="status-message">You may build a road...</div>`);
 
-    $('.road.empty').addClass('hover');
-    //$('.road').css('z-index', 9999999);
-    $('.road.empty').off();
-    $('.road.empty').on('click', function() {
+    if (this.game.state.placedCity){
+      /*Initial placing of settlements and roads, road must connect to settlement just placed
+        Use a "new" class tag to restrict scope
+        This is literally just a fix for the second road in the initial placement
+      */
+      let newRoads = this.hexgrid.edgesFromVertex(this.game.state.placedCity.replace("city_",""));
+      for (let road of newRoads){
+        $(`#road_${road}`).addClass("new");
+      }
+    
+      $('.road.new').addClass('hover');
+      //$('.road').css('z-index', 9999999);
+      $('.road.new').off();
+      $('.road.new').on('click', function() {
+
+      $('.road.new').off();
+      $('.road.new').removeClass('hover');
+      $('.road.new').removeClass('new');
+      //$('.road').css('z-index', 1999999);
+      let slot = $(this).attr("id");
+      settlers_self.buildRoad(settlers_self.game.player, slot);
+      settlers_self.addMove(`build_road\t${settlers_self.game.player}\t${slot}`);
+      settlers_self.endTurn();
+
+    });
+
+
+    }else{
+      /*Normal game play, can play road anywhere empty connected to my possessions*/
+      $('.road.empty').addClass('hover');
+      //$('.road').css('z-index', 9999999);
+      $('.road.empty').off();
+      $('.road.empty').on('click', function() {
 
       $('.road.empty').off();
       $('.road.empty').removeClass('hover');
@@ -1575,6 +1652,10 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
       settlers_self.endTurn();
 
     });
+        
+    }
+
+    
   
   }
 
@@ -1595,11 +1676,12 @@ console.log("----> lev: " + JSON.stringify(this.game.state.cities[i]));
     $(divname).removeClass("empty");
 
     //Add adjacent road slots
-    /*if (this.game.player == player){
-      let adjEdges = this.findAdjacentEdgesOfEdge(slot);
-      for (let j of adjEdges)
-        this.addRoadToGameboard();
-    }*/
+    if (this.game.player == player){
+      for (let road of this.hexgrid.adjacentEdges(slot.replace("road_",""))){
+        console.log("road: ",road);  
+        this.addRoadToGameboard(road.substring(2),road[0]);
+      }
+    }
 
     /* Store road in game state if not already*/
     for (let i = 0; i < this.game.state.roads.length; i++) {
