@@ -75,7 +75,6 @@ class Saito {
       await this.blockchain.initialize();
 
       this.network.initialize();
-      this.networkapi.initialize();
 
       if (this.server) {
         this.server.initialize();
