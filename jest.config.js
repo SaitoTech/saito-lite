@@ -11,7 +11,8 @@ module.exports = {
     ],
     testPathIgnorePatterns: [
         "/node_modules/",
-        "/mods/"
+        "/mods/",
+        "/bundler/"
     ],
     coverageReporters: [
         'json',
