@@ -2271,15 +2271,23 @@ this.game.state.end_round_scoring = 0;
 		}
 	      }
 
-	      let roll = this.rollDice(selectable.length);
-	      let action_card = selectable[roll-1];
-	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
-	        if (this.game.deck[1].hand[i] === action_card) {
-		  this.game.deck[1].hand.splice((roll-1), 1);
-		}
+	      if (selectable.length == 0) {
+
+	        this.addMove("NOTIFY\t" + this.returnFaction(pullee) + " does not have any action cards");
+
+	      } else {
+
+	        let roll = this.rollDice(selectable.length);
+	        let action_card = selectable[roll-1];
+	        for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+	          if (this.game.deck[1].hand[i] === action_card) {
+	  	    this.game.deck[1].hand.splice((roll-1), 1);
+		  }
+	        }
+	        this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
+	        this.addMove("NOTIFY\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
 	      }
-	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
-	      this.addMove("NOTIFY\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
+
 	      this.endTurn();
 	    } else {
 	      let roll = this.rollDice();

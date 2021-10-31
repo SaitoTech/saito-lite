@@ -332,7 +332,6 @@ toggleIntro() {
         this.game.player = (i + 1);
       }
     }
-    console.log(this.game.player);
 
     //
     // advance and reset variables
@@ -363,7 +362,6 @@ toggleIntro() {
       let qe = this.game.queue.length - 1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
-      console.log("processing: " + mv[0],mv,this.game.queue);
       this.displayBoard();
       
       if (mv[0] === "start" || mv[0] === "newround") {
@@ -482,10 +480,9 @@ toggleIntro() {
           if (player == this.game.player){
             this.updateStatus(`<div>You lose your bet of ${wager}</div>`);
           }
-        }else{
+        } else {
           this.updateLog(`Dealer busts`);
         }
-        console.log(this.game.state.player);
         return 1;
       }
 
@@ -560,7 +557,6 @@ toggleIntro() {
         }
         this.game.queue.push(`dealer`);
         
-        console.log("Play Order:",this.game.queue);
         return 1;
       }
 
@@ -569,8 +565,6 @@ toggleIntro() {
         this.game.queue.splice(qe, 1);
         let force_reveal = (mv[2] == "1"); //Fuzzy match, because string~int
         if (this.game.player == parseInt(mv[1])) { //Only share if it is my turn
-          // Skip if nothing to update
-          console.log(this.game.deck[0]);
            if (force_reveal){
               this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
            }else{
@@ -838,7 +832,8 @@ toggleIntro() {
       let player_hand_shown = 0;
 
       if (this.game.state.player.length > 0) {
-        this.playerbox.refreshName(i);
+
+        this.playerbox.refreshName(i+1);
 
         newhtml = `<div class="chips">${this.game.state.player[i].credit} ${this.game.options.crypto}</div>`;
         if (this.game.state.dealer == (i+1)){
