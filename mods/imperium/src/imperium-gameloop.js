@@ -2599,7 +2599,6 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	if (mv[4] === "0") { run_events = 0; }
 	let z            = this.returnEventObjects();
 
- 
 
 	if (type == "action_cards") {
 
@@ -2652,7 +2651,6 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	// if action cards over limit
 	return this.handleActionCardLimit(player);
 
-
       }
   
 
@@ -2664,8 +2662,6 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	let z            = this.returnEventObjects();
 
         if (item === "strategycard") {
-
-console.log(player + " - " + item + " - " + amount); 
 
   	  this.updateLog(this.returnFactionNickname(player) + " takes " + this.strategy_cards[mv[3]].name);
 
@@ -2707,10 +2703,24 @@ console.log(player + " - " + item + " - " + amount);
   	    amount = z[z_index].gainTradeGoods(imperium_self, player, amount);
   	  }
 	  this.game.players_info[player-1].goods += amount;
+
+          if (this.game.state.use_tutorials == 1 && !this.game.state.seen_goods_tutorial) {
+            this.game.state.seen_goods_tutorial = 1;
+            this.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;height:90vh;width:auto"><img src="/imperium/img/tutorials/trade_goods.png" style="width:auto;height:100%" /></div>');
+            this.playerAcknowledgeNotice("REMEMBER: use the trade strategy card to get trade goods. Commercial partnerships can be as valuable as large fleets in Red Imperium", function() {});
+          }
+
   	}
 
 
         if (item === "commodities") {
+
+	  if (this.game.state.use_tutorials == 1 && !this.game.state.seen_commodities_tutorial) {
+	    this.game.state.seen_commodities_tutorial = 1;
+            this.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;height:90vh;width:auto"><img src="/imperium/img/tutorials/commodities.png" style="width:auto;height:100%" /></div>');
+            this.playerAcknowledgeNotice("REMEMBER: when you have commodities, trade them with a neighbouring player. They receive trade goods. Two players can trade commodities to each other and receive trade goods in return!", function() {});
+	  }
+
   	  this.updateLog(this.returnFactionNickname(player) + " gains " + mv[3] + " commodities");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainCommodities(imperium_self, player, amount);

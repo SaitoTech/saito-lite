@@ -668,7 +668,7 @@
 	    for (let ii = 0; ii < imperium_self.game.planets[planetidx].units[i].length; ii++) {
 	      if (imperium_self.game.planets[planetidx].units[i][ii].type == "infantry") {
 	        if (destroy == 1) {
-	          imperium_self.game.players[planetidx].units[i].splice(ii, 1);
+	          imperium_self.game.planets[planetidx].units[i].splice(ii, 1);
 		  ii--;
 		  destroy = 0;
 		} else {

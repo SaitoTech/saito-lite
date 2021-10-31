@@ -3703,7 +3703,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
       name     			:       "Diplomacy",
       rank			:	2,
       img			:	"/strategy/DIPLOMACY.png",
-      text			:	"<b>Player</b> activates non-Byzantium sector for others, refreshes two planets.</hr><b>Others</b> may spend strategy token to refresh two planets." ,
+      text			:	"<b>Player</b> activates non-Byzantium sector for others, refreshes two planets.<hr /><b>Others</b> may spend strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -6425,7 +6425,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
 	    for (let ii = 0; ii < imperium_self.game.planets[planetidx].units[i].length; ii++) {
 	      if (imperium_self.game.planets[planetidx].units[i][ii].type == "infantry") {
 	        if (destroy == 1) {
-	          imperium_self.game.players[planetidx].units[i].splice(ii, 1);
+	          imperium_self.game.planets[planetidx].units[i].splice(ii, 1);
 		  ii--;
 		  destroy = 0;
 		} else {
@@ -15484,7 +15484,6 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	if (mv[4] === "0") { run_events = 0; }
 	let z            = this.returnEventObjects();
 
- 
 
 	if (type == "action_cards") {
 
@@ -15537,7 +15536,6 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	// if action cards over limit
 	return this.handleActionCardLimit(player);
 
-
       }
   
 
@@ -15549,8 +15547,6 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	let z            = this.returnEventObjects();
 
         if (item === "strategycard") {
-
-console.log(player + " - " + item + " - " + amount); 
 
   	  this.updateLog(this.returnFactionNickname(player) + " takes " + this.strategy_cards[mv[3]].name);
 
@@ -15592,10 +15588,24 @@ console.log(player + " - " + item + " - " + amount);
   	    amount = z[z_index].gainTradeGoods(imperium_self, player, amount);
   	  }
 	  this.game.players_info[player-1].goods += amount;
+
+          if (this.game.state.use_tutorials == 1 && !this.game.state.seen_goods_tutorial) {
+            this.game.state.seen_goods_tutorial = 1;
+            this.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;height:90vh;width:auto"><img src="/imperium/img/tutorials/trade_goods.png" style="width:auto;height:100%" /></div>');
+            this.playerAcknowledgeNotice("REMEMBER: use the trade strategy card to get trade goods. Commercial partnerships can be as valuable as large fleets in Red Imperium", function() {});
+          }
+
   	}
 
 
         if (item === "commodities") {
+
+	  if (this.game.state.use_tutorials == 1 && !this.game.state.seen_commodities_tutorial) {
+	    this.game.state.seen_commodities_tutorial = 1;
+            this.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;height:90vh;width:auto"><img src="/imperium/img/tutorials/commodities.png" style="width:auto;height:100%" /></div>');
+            this.playerAcknowledgeNotice("REMEMBER: when you have commodities, trade them with a neighbouring player. They receive trade goods. Two players can trade commodities to each other and receive trade goods in return!", function() {});
+	  }
+
   	  this.updateLog(this.returnFactionNickname(player) + " gains " + mv[3] + " commodities");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainCommodities(imperium_self, player, amount);
@@ -19041,6 +19051,7 @@ playerTurn(stage = "main") {
 
       if (action2 == "tutorial_move_ships") {
         imperium_self.tutorial_move_clicked = 1;
+        imperium_self.game.state.use_tutorials = 1;
         imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;width:1200px;height:auto"><img src="/imperium/img/tutorials/movement.png" style="width:100%; height:auto;" /></div>');
         imperium_self.playerAcknowledgeNotice("REMEMBER: to move ships select \"activate sector\" and pick the sector you are moving into. Most ships can only move 1-hex and you cannot move ships from sectors that are already activated. You will be able to choose the ships to move, and load infantry and fighters into units that can carry them.", function () {
           imperium_self.playerTurn();
@@ -19049,6 +19060,7 @@ playerTurn(stage = "main") {
       }
       if (action2 == "tutorial_produce_units") {
         imperium_self.tutorial_produce_clicked = 1;
+        imperium_self.game.state.use_tutorials = 1;
         imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;width:1200px;height:auto"><img src="/imperium/img/tutorials/production.png" style="width:100%; height:auto;" /></div>');
         imperium_self.playerAcknowledgeNotice("REMEMBER: to produce units, select \"activate sector\" and activate a sector with a space dock (like your home system). You are limited to producing +2 more units than the resources of the planet on which the Space Dock sits. And you can only have as many non-fighter ships in any sector as your fleet supply, so move your ships out before producing more!", function () {
           imperium_self.playerTurn();
@@ -23725,8 +23737,10 @@ playerActivateSystem() {
 
       if (imperium_self.game.state.round == 1) {
         if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
-          imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
-	  return;
+          if (!imperium_self.canPlayerProduceInSector(imperium_self.game.player, pid)) {
+            imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
+	    return;
+          }
         }
       } else {
         if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
@@ -23743,8 +23757,10 @@ playerActivateSystem() {
       // understand 
       //
       if (imperium_self.returnPlayerHomeworldSector() == sys.s.sector && imperium_self.game.state.round == 1) {
-	let confirm_choice = confirm("If you activate your homeworld you will not be able to move ships out of it until Round 2. Are you sure you want to do this?");
-	if (!confirm_choice) { return; }
+        if (imperium_self.doesPlayerHaveShipsInSector(imperium_self.game.player, pid) == 1) {
+	  let confirm_choice = confirm("Ships cannot move out of activated sectors -- if you activate your homeworld you will not be able to move ships out of it until Round 2. Are you sure you want to do this?");
+	  if (!confirm_choice) { return; }
+        }
       }
 
 
@@ -25064,6 +25080,7 @@ playerDiscardActionCards(num, mycallback=null) {
         state.turn = 1;
         state.round_scoring = 0;
         state.events = {};
+	state.show_tutorials = 0;
 
 	//
 	// these are the laws, cards, etc. in force
