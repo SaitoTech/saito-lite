@@ -658,3 +658,12 @@ hr {
   text-decoration: none;
   color: black;
 }
+
+#header-token-select {
+  max-width: 11.5 em;
+  padding: 5 px;
+  border-bottom: 1 px solid #888 !important;
+  margin: 5 px 0;
+  background: var(--saito-nightscape);
+  color: black;
+}
