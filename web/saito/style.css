@@ -1430,6 +1430,7 @@ div#message-wrapper {
 
 .wallet-action-row:hover {
   background-color: var(--saito-skyline-grey);
+  color: black;
 }
 
 .wallet-action-row i {
