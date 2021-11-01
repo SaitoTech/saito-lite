@@ -351,14 +351,18 @@ playerTurn(stage = "main") {
 
       if (action2 == "tutorial_move_ships") {
         imperium_self.tutorial_move_clicked = 1;
-        imperium_self.playerAcknowledgeNotice("To move ships select \"activate sector\". Be careful as most ships can only move 1-hexagon and you cannot move ships from sectors that are already activated. You will be able to choose the ships to move, and load infantry and fighters into units that can carry them.", function () {
+        imperium_self.game.state.use_tutorials = 1;
+        imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;width:1200px;height:auto"><img src="/imperium/img/tutorials/movement.png" style="width:100%; height:auto;" /></div>');
+        imperium_self.playerAcknowledgeNotice("REMEMBER: to move ships select \"activate sector\" and pick the sector you are moving into. Most ships can only move 1-hex and you cannot move ships from sectors that are already activated. You will be able to choose the ships to move, and load infantry and fighters into units that can carry them.", function () {
           imperium_self.playerTurn();
         });
         return;
       }
       if (action2 == "tutorial_produce_units") {
         imperium_self.tutorial_produce_clicked = 1;
-        imperium_self.playerAcknowledgeNotice("To produce units, select \"activate sector\" and activate a sector with a space dock (like your home system). You can only have as many non-fighter ships in any sector as your fleet supply, so move your ships out before producing more!", function () {
+        imperium_self.game.state.use_tutorials = 1;
+        imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;width:1200px;height:auto"><img src="/imperium/img/tutorials/production.png" style="width:100%; height:auto;" /></div>');
+        imperium_self.playerAcknowledgeNotice("REMEMBER: to produce units, select \"activate sector\" and activate a sector with a space dock (like your home system). You are limited to producing +2 more units than the resources of the planet on which the Space Dock sits. And you can only have as many non-fighter ships in any sector as your fleet supply, so move your ships out before producing more!", function () {
           imperium_self.playerTurn();
         });
         return;
@@ -3951,14 +3955,13 @@ playerSelectStrategyCard(mycallback, mode = 0) {
 // this is when players select at the begining of the round, not when they 
 // are chosing to play the cards that they have already selected
 //
-playerSelectStrategyCards(mycallback) {
+playerSelectStrategyCards(mycallback, selection = 0) {
 
   let imperium_self = this;
   let cards = this.returnStrategyCards();
   let playercol = "player_color_" + this.game.player;
   let relevant_action_cards = ["strategy"];
   let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
-
 
   let html = "<div class='terminal_header'><div class='player_color_box " + playercol + "'></div>" + this.returnFaction(this.game.player) + ": select your strategy card:</div><ul>";
   if (this.game.state.round > 1) {
@@ -3968,20 +3971,36 @@ playerSelectStrategyCards(mycallback) {
     html += '<li class="option" id="action">play action card</li>';
   }
   let scards = [];
+  let scards_objs = [];
+  let unselect_scards = [];
 
   for (let z in this.strategy_cards) {
     scards.push("");
+    scards_objs.push({});
   }
 
   for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
     let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
     while (scards[rank - 1] != "") { rank++; }
     scards[rank - 1] = '<li class="textchoice" id="' + this.game.state.strategy_cards[z] + '">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
+    scards_objs[rank - 1] = cards[this.game.state.strategy_cards[z]];
   }
 
   for (let z = 0; z < scards.length; z++) {
     if (scards[z] != "") {
       html += scards[z];
+    }
+  }
+
+  for (let y in cards) {
+    let contained = 0;
+    for (let z = 0; z < scards_objs.length; z++) {
+      if (cards[y].name === scards_objs[z].name) { contained = 1; }
+    }
+    let insert_rank = parseInt(cards[y].rank);
+    if (contained == 0) {
+      scards_objs[insert_rank-1] = cards[y];
+      unselect_scards.push(cards[y]);
     }
   }
 
@@ -4012,6 +4031,39 @@ playerSelectStrategyCards(mycallback) {
     imperium_self.hideStrategyCard(action2);
     mycallback(action2);
   });
+
+
+  //
+  // provide simple interface for non-AC users
+  //
+  if (ac.length == 0) {
+
+    let t = "Select Your Strategy Card";
+    if (selection == 1) { t = "Select Your FIRST Strategy Card"; }
+    if (selection == 2) { t = "Select Your SECOND Strategy Card"; }
+    if (selection == 3) { t = "Select Your THIRD Strategy Card"; }
+    if (selection == 4) { t = "Select Your FOURTH Strategy Card"; }
+
+    imperium_self.overlay.showCardSelectionOverlay(imperium_self.app, imperium_self, scards_objs, {
+                title : t ,
+                subtitle : "you must play this card sometime during your turn" ,
+		textAlign: "center",
+		rowGap: "30px",
+		columnGap: "30px",
+                columns : 4 ,
+		unselectableCards : unselect_scards,
+                backgroundImage : "/imperium/img/starscape_background3.jpg" ,
+                onCardSelect : function(cardname) {
+		  imperium_self.overlay.hideOverlay();
+	   	  imperium_self.hideStrategyCard(cardname);
+    		  mycallback(cardname);
+                }
+    }, function() {});
+
+  }
+
+
+
 
 }
 
@@ -4985,8 +5037,10 @@ playerActivateSystem() {
 
       if (imperium_self.game.state.round == 1) {
         if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
-          imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
-	  return;
+          if (!imperium_self.canPlayerProduceInSector(imperium_self.game.player, pid)) {
+            imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
+	    return;
+          }
         }
       } else {
         if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
@@ -5003,8 +5057,10 @@ playerActivateSystem() {
       // understand 
       //
       if (imperium_self.returnPlayerHomeworldSector() == sys.s.sector && imperium_self.game.state.round == 1) {
-	let confirm_choice = confirm("If you activate your homeworld you will not be able to move ships out of it until Round 2. Are you sure you want to do this?");
-	if (!confirm_choice) { return; }
+        if (imperium_self.doesPlayerHaveShipsInSector(imperium_self.game.player, pid) == 1) {
+	  let confirm_choice = confirm("Ships cannot move out of activated sectors -- if you activate your homeworld you will not be able to move ships out of it until Round 2. Are you sure you want to do this?");
+	  if (!confirm_choice) { return; }
+        }
       }
 
 

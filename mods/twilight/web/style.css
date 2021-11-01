@@ -3,6 +3,14 @@
   padding: 10px;
 }
 
+.cardbox-menu.cardbox-card {
+  bottom: 10px;
+  width: 83%;
+}
+
+.hud-long {
+  max-width:90vw;
+}
 
 .status-message {
   padding-left: 0;
@@ -412,9 +420,10 @@ body {
   width: calc(30vh * 0.72110);
   max-width: 375px;
   background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
   z-index: 2;
   display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .cardimg-hud {
@@ -433,11 +442,14 @@ body {
 
 .cardbox-hud {
   background-image: url(/twilight/img/Base.svg);
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
+  max-width: 120px;
 }
 .cardbox-card {
   background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 

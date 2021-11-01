@@ -4,7 +4,7 @@ const PostMain = require('./lib/post-main/post-main');
 const PostSidebar = require('./lib/post-sidebar/post-sidebar');
 const ArcadePosts = require('./lib/arcade-posts/arcade-posts');
 const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
-
+const Base58            = require("base-58");
 
 class Post extends ModTemplate {
 
@@ -68,15 +68,11 @@ class Post extends ModTemplate {
 
   }
 
-
   returnServices() {
     let services = [];
     services.push({ service: "post" });
     return services;
   }
-
-
-
 
   initializeHTML(app) {
 
@@ -141,7 +137,7 @@ class Post extends ModTemplate {
     //
     // fetch posts from server
     //
-    let sql = `SELECT id, children, img, lite_tx FROM posts WHERE parent_id = "" ORDER BY ts DESC LIMIT 12`;
+    let sql = `SELECT id, children, img, lite_tx FROM posts WHERE parent_id = "" AND deleted = 0 ORDER BY ts DESC LIMIT 12`;
     this.sendPeerDatabaseRequestWithFilter(
 
         "Post" ,
@@ -667,19 +663,24 @@ class Post extends ModTemplate {
     let params = {
       $pid 		: txmsg.post_id 
     };
-
     await this.app.storage.executeDatabase(sql, params, "post");
 
-    // Send reported post to Email
+    let delete_tx = this.createDeleteTransaction(txmsg.post_id);
+    let base_58_tx = Base58.encode(Buffer.from(JSON.stringify(delete_tx)));
+
+    console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
+
     this.app.network.sendRequest('send email', {
       from: 'network@saito.tech',
-      to: 'clay@saito.tech', 
+      to: 'moderators@saito.tech', 
       subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
-      ishtml: false,
-      body: `Post #${txmsg.post_id} was reported.`
+      ishtml: true,
+      body: `
+        Post #${txmsg.post_id} was reported.
+        Click <a href="https://saito.io/post/delete/${base_58_tx}">here</a> to delete it.
+      `
     });
   }
-
 
   createDeleteTransaction(post_id) {
 
@@ -694,28 +695,41 @@ class Post extends ModTemplate {
   }
 
   async receiveDeleteTransaction(tx) {
-
-    let txmsg = tx.returnMessage();
-    let sql = `
-        UPDATE 
-          posts
-        SET
-          deleted = 1
-        WHERE
-          id = $post_id
-        AND
-          publickey = $author 
-      `;
-    let params = { $post_id : txmsg.post_id , $author : tx.transaction.from[0].add }
-    await this.app.storage.executeDatabase(sql, params, "post");
-
+    
+    if (this.app.crypto.verifyMessage(tx.returnSignatureSource(this.app), tx.transaction.sig, tx.transaction.from[0].add)) {
+      let txmsg = tx.returnMessage();
+      console.log(txmsg);
+      let sql = `
+          UPDATE 
+            posts
+          SET
+            deleted = 1
+          WHERE
+            id = $post_id
+        `;
+      let params = { $post_id : txmsg.post_id };
+      await this.app.storage.executeDatabase(sql, params, "post");
+    } else {
+      console.log("Delete Post Transaction signature is not valid");
+    }
   }
 
-
-
-  returnPosts(count) { }
-
-
+  webServer(app, expressapp, express) {
+    super.webServer(app, expressapp, express);
+    expressapp.get('/post/delete/:serialized_tx', async (req, res) => {
+      try {
+        let decoded_tx = JSON.parse(Buffer.from(Base58.decode(req.params.serialized_tx)).toString("utf-8"));
+        this.receiveDeleteTransaction(new saito.transaction(decoded_tx));
+        res.setHeader('Content-type', 'text/javascript');
+        res.write("OK");
+        res.charset = 'UTF-8';
+        res.end();
+      } catch (err) {
+        console.log("error trying to decode moderation transaction");
+        console.log(err);
+      }
+    });
+  }
 }
 module.exports = Post
 

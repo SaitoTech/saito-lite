@@ -335,7 +335,7 @@ returnNewSecretObjectiveOverlay(card) {
 
 
 returnTechOverlay() {
-  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png"></div>';
+  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="width:90vw"></div>';
   return html;
 }
 
@@ -660,11 +660,10 @@ returnStrategyOverlay() {
       
     }
 
-    let card_html = `
-	<div class="overlay_strategy_card_box">
-	  <img class="overlay_strategy_card_box_img" src="/imperium/img/${thiscard.img}" style="width:100%" />
-	  <div class="overlay_strategy_card_text">${thiscard.text}</div>
-    `;
+    let card_html = thiscard.returnCardImage();
+    let cutpos = card_html.lastIndexOf('</div>');
+    card_html = card_html.substring(0, cutpos);
+
      if (strategy_card_state != "not picked") {
        card_html += `
 	  <div class="strategy_card_state p${strategy_card_player}">
@@ -729,8 +728,16 @@ returnUnitsOverlay() {
 
   if (this.game.state.round == 1) {
     html += `
-      <div style="width:100%;text-align:center"><div class="units-overlay-title">Starting Units</div></div>
-      <div style="width:100%;text-align:center"><div class="units-overlay-text">check unit and movement properties anytime in the cards menu...</div></div>
+      <div style="width:100%;text-align:center"><div class="units-overlay-text" style="line-height: 1.4em; font-size: 1.8em; margin-top: 50px; margin-bottom: 30px; padding: 20px;">
+        units <b>COST</b> resources to produce
+<p style="margin-top:10px"></p>
+        ships <b>MOVE</b> a maximum number of hexes
+<p style="margin-top:10px"></p>
+	some <b>CARRY</b> infantry or fighters
+<p style="margin-top:10px"></p>
+	lower <b>COMBAT</b> scores hit more often
+
+      </div></div>
       <div class="unit-table">
     `;
 
@@ -739,7 +746,7 @@ returnUnitsOverlay() {
     if (fleet.carriers > 0) 	{ units.push("carrier"); }
     if (fleet.cruisers > 0) 	{ units.push("cruiser"); }
     if (fleet.destroyers > 0) 	{ units.push("destroyer"); }
-    if (fleet.dreadnaughts > 0) { units.push("dreadnaughts"); }
+    if (fleet.dreadnaughts > 0) { units.push("dreadnaught"); }
     if (fleet.warsuns > 0) 	{ units.push("warsun"); }
     if (fleet.fighters > 0) 	{ units.push("fighter"); }
     if (fleet.infantry > 0) 	{ units.push("infantry"); }
@@ -881,6 +888,8 @@ returnUnitPopupEntry(unittype) {
 
 returnUnitTableEntry(unittype) {
 
+console.log("UNIT: " + unittype);
+
   let preobj = this.units[unittype];
   let obj = JSON.parse(JSON.stringify(preobj));
 
@@ -888,12 +897,6 @@ returnUnitTableEntry(unittype) {
   obj = this.upgradeUnit(obj, this.game.player);
 
   if (!obj) { return ""; }
-
-  if (this.game.state.round == 1) {
-    if (obj.type == "carrier") {
-      obj.description = '<div style="padding: 10px; background-color:yellow;color:black">The CARRIER is the most important starting ship. Move it into a neighbouring sector and invade planets to gain their resources and influence.</div>';
-    }
-  }
 
   let html = `
       <div class="unit-element">
@@ -923,111 +926,6 @@ returnUnitTableEntry(unittype) {
 }
 
 
-returnNewAgendasOverlay() {
-
-  let title = "New Agendas";
-  let laws = this.returnAgendaCards();
-
-  let html = `
-    <div class="new_objectives_overlay_container" style="">
-      <div class="new_objectives_title">${title}</div>
-      <div style="width:100%"><div class="new_objectives_text">check agendas under debate in the INFO menu...</div>
-    </div>
-    <div class="new_objectives_container">
-  `;
-
-  if (this.game.state.agendas.length > 0) {
-    html += '<div class="overlay_laws_list">';
-    for (let i = 0; i < this.game.state.agendas.length; i++) {
-      html += `  <div style="background-image: url('/imperium/img/agenda_card_template.png');" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.agendas[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.agendas[i]].text}</div></div>`;
-    }
-    html += '</div>';
-  }
-
-
-  html += `
-      </div>
-      <div id="close-agendas-btn" class="button" style="">CONTINUE</div>
-    </div>
-  `;
-
-  return html;
-}
-
-
-returnNewObjectivesOverlay() {
-
-  let title = "Your Objectives";
-  if (this.game.state.round > 1) { title = "New Objectives"; }
-
-  let html = `
-    <div class="new_objectives_overlay_container" style="">
-      <div class="new_objectives_title">${title}</div>
-  `;
-
-  if (this.game.state.round == 1) {
-    html += `
-      <div style="width:100%"><div class="new_objectives_text">check objectives, strategy cards and more in the CARDS menu...</div></div>
-    `;
-  } else {
-    html += `
-      <div style="width:100%"><div class="new_objectives_text">view all public and secret objectives in the CARDS menu...</div></div>
-    `;
-  }
-  
-
-  html += `
-      <div class="new_objectives_container">
-  `;
-
-  for (let i = 0; i < this.game.state.new_objectives.length; i++) {
-    let ob = this.game.state.new_objectives[i];
-    if (ob.type == "secret") {
-      let obj = this.secret_objectives[ob.card];
-      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
-                 <div class="objectives_card_name">${obj.name}</div>
-                 <div class="objectives_card_content">
-		   ${obj.text}
-		   <div class="objectives_secret_notice">secret</div>
-		 </div>
-	       </div>
-      `;
-    }
-    if (ob.type == "stage1") {
-      let obj = this.stage_i_objectives[ob.card];
-      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
-               <div class="objectives_card_name">${obj.name}</div>
-               <div class="objectives_card_content">${obj.text}</div>
-	       </div>
-     ` ;
-    }
-    if (ob.type == "stage2") {
-      let obj = this.stage_ii_objectives[ob.card];
-      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
-               <div class="objectives_card_name">${obj.name}</div>
-               <div class="objectives_card_content">${obj.text}</div>
-               <div class="objectives_players_scored players_scored_${(i+1)} p${(i+1)}"><div class="bk" style="width:100%;height:100%"></div></div>
-             </div>
-      `;
-    }
-  }
-  html += `
-      </div>
-  `;
-
-  if (this.game.state.round == 1) {
-    html += `
-      <div class="unit-description"><div style="margin-left:auto;margin-right:auto;max-width:80%;padding:10px;background-color:yellow;color:black;font-size:1.4em;line-height:1.5em">New to Red Imperium? The CARRIER is your most important starting ship. Move it into a neighbouring sector first turn and invade planets to gain their resources and influence.</div>.</div>
-    `;
-  }
-
-  html += `
-      <div id="close-objectives-btn" class="button" style="">CONTINUE</div>
-    </div>
-  `;
-
-  return html;
-}
 
 returnNewActionCardsOverlay(cards) {
 
@@ -1280,13 +1178,8 @@ returnFactionSheet(imperium_self, player=null) {
     for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
       let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
       if (tech.type == "ability") {
-        html += `
-          <div class="faction_sheet_tech_card bc">
-            <div class="tech_card_name">${tech.name}</div>
-            <div class="tech_card_content">${tech.text}</div>
-            <div class="tech_card_level">♦♦</div>
-          </div>
-        `;
+	let unmodded = tech.returnCardImage();
+	html += unmodded.replace(/card_nonopaque/g, 'bc');
       }
     }
     html += `</div>`;
@@ -1305,7 +1198,7 @@ returnFactionSheet(imperium_self, player=null) {
       let techname = imperium_self.game.players_info[player-1].tech[i];
       let tech = imperium_self.tech[techname];
       if (tech.type != "ability") {
-        html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card");
+	html += tech.returnCardImage();
       }
     }
     //
@@ -1316,7 +1209,8 @@ returnFactionSheet(imperium_self, player=null) {
       if (tech.type == "special") {
 	if (!imperium_self.game.players_info[player-1].tech.includes(i)) {
  	  if (imperium_self.game.players_info[player-1].faction == tech.faction) {
-            html += imperium_self.returnTechCardHTML(i, "faction_sheet_tech_card faction_sheet_unearned_tech");
+	    let unmodded = tech.returnCardImage();
+	    html += unmodded.replace(/card_nonopaque/g, 'card_opaque');
 	  }
 	}
       }
@@ -1998,32 +1892,10 @@ updateSectorGraphics(sector) {
       </div>`;
 
     }
-    this.cardbox.showCardboxHTML(thiscard, '<img src="/imperium/img' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
+    //this.cardbox.showCardboxHTML(thiscard, '<img src="/imperium/img' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
+    this.cardbox.showCardboxHTML(thiscard, thiscard.returnCardImage());
   }
-  /*
-  // overriding this because imperium is incompatible with the generic function
-  returnCardImage(cardname) {
-    
-    let c = null;
-    
-    for (let z = 0; c == undefined && z < this.game.deck.length; z++) {
-      c = this.game.deck[z].cards[cardname];
-      if (c == undefined) { c = this.game.deck[z].discards[cardname]; }
-      if (c == undefined) { c = this.game.deck[z].removed[cardname]; }
-    }
-    
-    // 
-    // this is not a card, it is something like "skip turn" or cancel
-    // 
-    if (c == undefined) {
-      return '<div class="noncard">'+cardname+'</div>';
-    
-    }
-    // the generic function adds another "img/" into the path which breaks imperium.
-    return `<img class="cardimg showcard" id="${cardname}" src="/${this.returnSlug()}/${c.img}" />`;
-  
-  }
-*/
+
   hideStrategyCard(c) {
     this.cardbox.hideCardbox(1);
   }

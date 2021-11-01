@@ -1,0 +1,65 @@
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden; 
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main {
+  margin-top: unset;
+  padding: unset;
+}
+
+.test-buttons {
+
+}
+.test-commentary {
+  background-color: whitesmoke;
+  padding: 20px;
+}
+
+.gameboard {
+  position: absolute;
+  background-image: url("img/gameboard.jpg");
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.introduction-container {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top:40px;
+  margin-bottom:40px;
+  padding:30px;
+  background-color:whitesmoke;
+  font-size: 2em;
+}
+
+h2 {
+  margin: 0 0 0 0;
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  margin-left: 20px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
+
+.button {
+  font-size: 1.5em;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  height: 60px;
+  width: 320px;
+  padding: 15px;
+}
+
+

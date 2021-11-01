@@ -13,6 +13,20 @@
     if (obj.img  == null) 	{ obj.img = "/imperium/img/secret_objective.jpg"; }
     if (obj.vp == null)		{ obj.vp = 1; }
 
+    if (obj.returnCardImage == null) {
+      obj.returnCardImage = function() {
+        return `
+	  <div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+            <div class="objectives_card_name">${obj.name}</div>
+              <div class="objectives_card_content">
+                ${obj.text}
+              <div class="objectives_secret_notice">secret</div>
+            </div>
+	  </div>
+	`;
+      };
+    }
+
     obj = this.addEvents(obj);
     this.secret_objectives[name] = obj;
 
@@ -33,6 +47,17 @@
     if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
     if (obj.vp == null)		{ obj.vp = 1; }
 
+    if (obj.returnCardImage == null) {
+      obj.returnCardImage = function() {
+        return `
+          <div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+            <div class="objectives_card_name">${obj.name}</div>
+            <div class="objectives_card_content">${obj.text}</div>
+          </div>
+        `;
+      };
+    }
+
     obj = this.addEvents(obj);
     this.stage_i_objectives[name] = obj;
 
@@ -50,6 +75,17 @@
     if (obj.type == null)	{ obj.type = "normal"; }
     if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
     if (obj.vp == null)		{ obj.vp = 2; }
+
+    if (obj.returnCardImage == null) {
+      obj.returnCardImage = function() {
+        return `
+          <div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+            <div class="objectives_card_name">${obj.name}</div>
+            <div class="objectives_card_content">${obj.text}</div>
+          </div>
+        `;
+      };
+    }
 
     obj = this.addEvents(obj);
     this.stage_ii_objectives[name] = obj;

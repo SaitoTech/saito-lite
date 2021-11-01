@@ -1,0 +1,140 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Saito Game Engine - Test Suite Application</title>
+
+    <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="/saito/lib/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="/saito/lib/jquery/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
+    <link rel="manifest" href="/manifest.json">
+
+    <link rel="stylesheet" type="text/css" href="/saito/style.css" />
+    <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
+    <link rel="stylesheet" type="text/css" href="/gametestsuite/style.css" />
+
+    <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
+
+  </head>
+
+  <body>
+
+    <div class="main" id="main" style="display:all">
+
+      <div class="gameboard" id="gameboard">
+
+	<div class="introduction-container">
+
+	  This application provides click-to-test functionality of core backend components in the Saito Game Engine. It also serves as a showcase for how to simply and easily handle common game tasks like rolling dice, dealing cards or displaying UI elements. It also provides a basic starting point for coding games!
+
+	  <p></p>
+
+	  Online Docs: <a href="https://github.com/SaitoTech/saito-lite/blob/master/docs/saito-game-engine/readme.md" target="_newsaito">game engine overview</a> | <a href="https://github.com/SaitoTech/saito-lite/blob/master/docs/saito-game-engine/api.md" target="_newsaito">api details</a>
+
+	  <p></p>
+
+	  Please note that testing web3 cryptocurrency support requires your wallet to be configured to support those cryptocurrencies. Some card-related functionality may require you to have dealt cards to players.
+
+	  <p></p>
+
+
+        </div>
+
+	<div class="test-buttons">
+
+	<h2>Interfaces</h2>
+
+        <div class="button add_menu" id="add_menu_button">Display Menu</div>
+
+	<p></p>
+
+        <div class="button add_player_boxes" id="add_player_boxes_button">Add Player Boxes</div>
+
+	<p></p>
+
+        <div class="button display_cardfan" id="display_cardfan_button">Display Cardfan</div>
+
+	<p></p>
+
+        <div class="button display_hud" id="display_cardhud_button">Display Hud</div>
+
+	<p></p>
+
+        <div class="button toggle_cardbox" id="toggle_cardbox_button">Toggle Cardbox</div>
+
+	<p></p>
+
+        <div class="button display_overlay" id="display_overlay_button">Display Overlay</div>
+
+	<p></p>
+
+        <div class="button display_blocking_overlay" id="display_blocking_overlay_button">Display Blocking Overlay</div>
+
+	<p></p>
+
+	<h2>Dice and Decks</h2>
+
+        <div class="button deal_cards_to_pile" id="deal_cards_to_player_button">Deal Cards to Players</div>
+
+	<p></p>
+
+        <div class="button deal_cards_to_table" id="deal_cards_to_table_button">Deal Cards to Table</div>
+
+	<p></p>
+
+        <div class="button shuffle_cards" id="shuffle_deck_button">Shuffle Deck</div>
+
+	<p></p>
+
+        <div class="button insecure_dice_roll" id="insecure_dice_roll_button">Roll Dice Non-Securely</div>
+
+	<p></p>
+
+        <div class="button secure_dice_roll" id="secure_dice_roll_button">Roll Dice Securely</div>
+
+	<p></p>
+
+	<h2>Players and Turns</h2>
+
+        <div class="button consecutive_moves" id="consecutive_moves_button">Test Consecutive Moves</div>
+
+	<p></p>
+
+        <div class="button simultaneous_moves" id="simultaneous_moves_button">Test Simultaneous Moves</div>
+
+	<p></p>
+
+        <div class="button simultaneous_pick" id="simultaneous_pick_button">Test Simultaneous Reveal</div>
+
+	<p></p>
+
+	<h2>Web3 Support</h2>
+
+        <div class="button receive_payment" id="receive_payment_button">Request Payment</div>
+
+	<p></p>
+
+        <div class="button send_payment" id="send_payment_button">Make Payment</div>
+
+	<p></p>
+
+        <div class="button check_balance" id="check_balance_button">Check Balance</div>
+
+	</div>
+
+	<div class="test-commentary">
+	
+	</div>
+
+      </div>
+    </div>
+    <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
+  </body>
+</html>
+

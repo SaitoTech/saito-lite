@@ -45,17 +45,20 @@ body {
 }
 
 .deal .card {
-  width: 10vw;
+  width: 9vw;
   max-width: 20vh;
 }
 
 .deal {
   margin: 0 auto;
   position: absolute;
-  top: 30vh;
+  top: 32vh;
   left: 50vw;
   transform: translateX(-50%);
   width: unset;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-column-gap: 1em;
 }
 
 .pot {
@@ -409,6 +412,11 @@ body {
     visibility: hidden;
   }
 
+  .deal .card {
+    width: 15vw;
+    max-width: 20vh;
+  }
+
   .deal {
     top: 10vh;
   }
@@ -418,10 +426,6 @@ body {
   }
 
 }
-
-
-
-
 
 
 

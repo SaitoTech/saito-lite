@@ -54,6 +54,7 @@
         } else {
           twilight_self.addMove("notify\t"+player.toUpperCase() +" does not retrieve card");
         }
+        twilight_self.addMove("undiscard\t1\t"+action2); // cards are deckidx 1
         twilight_self.endTurn();
 
       });

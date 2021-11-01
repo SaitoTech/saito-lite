@@ -3,7 +3,7 @@
       name     			:       "Technology",
       rank			:	7,
       img			:	"/strategy/TECH.png",
-      text			:	"Research a technology. You may spend 6 resources to research another.<hr />Other players may spend a strategy token and 4 resources to research a technology" ,
+      text			:	"<b>Player</b> may Research a technology and spend 6 resources to research another.<hr /><b>Others</b> may spend strategy token and 4 resources to research a technology" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 console.log("STRAT PRIM: " + player + " -- " + strategy_card_player);

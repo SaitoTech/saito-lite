@@ -81,7 +81,12 @@ class MailRelay extends ModTemplate {
         });
 
     }
-
+    returnServices() {
+        let services = [];
+        services.push({ service: "mailrelay" });
+        return services;
+    }
+    
     shouldAffixCallbackToModule() { return 1; }
 
 }

@@ -68,6 +68,7 @@ class Relay extends ModTemplate {
     // ... wrapped in transaction to relaying peer
     //
     for (let i = 0; i < this.app.network.peers.length; i++) {
+
       if (this.app.network.peers[i].peer) {
       if (this.app.network.peers[i].peer.modules) {
       if (this.app.network.peers[i].peer.modules.length > 0) {
@@ -125,18 +126,17 @@ class Relay extends ModTemplate {
   async handlePeerRequest(app, message, peer, mycallback=null) {
 
     try {
+
       let relay_self = app.modules.returnModule("Relay");
       if (message.request === "relayPeerMessageToRecipient") { 
-        if(message.data && message.data.request && message.data.recipient) {
+
+        if (message.data && message.data.request && message.data.recipient) {
           let peer = this.app.network.returnPeerByPublicKey(message.data.recipient);
           if(peer != null) {
             if(mycallback === null) {
               peer.sendRequest(message.data.request, message.data);
             } else {
-              console.log("should get here...");
               peer.sendRequestWithCallbackAndRetry(message.data.request, message.data, function(res) {
-                console.log("callback in peer relay...");
-                console.log(res);
                 mycallback(res);
               });
             }  
@@ -146,16 +146,11 @@ class Relay extends ModTemplate {
         }
       }
       if (message.request === "relayPeerMessage2") { 
-        console.log("relay peer message2");
-        console.log(message);
         if(message.data && message.data.request) {
           if(mycallback === null) {
             this.app.network.sendRequest(message.data.request, message.data);
           } else {
-            console.log("here?");
             this.app.network.sendRequestWithCall(message.data.request, message.data, function(res) {
-              console.log("callback in relay...");
-              console.log(res);
               mycallback(res);
             });
           }
@@ -175,26 +170,65 @@ class Relay extends ModTemplate {
         //
         // get the inner-tx / tx-to-relay
         //
+        tx.decryptMessage(this.app);
         let txmsg = tx.returnMessage();
-        let tx2 = new saito.transaction(tx.returnMessage());
 
-        //
-        // is original tx addressed to me
-        //
-        if (tx.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
 
+	//
+	// we have a handlePeerRequest, not a transaction
+	//
+	if (txmsg.data) { 
           app.modules.handlePeerRequest(txmsg, peer, mycallback);
+          if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
+	  return;
+	}
+
+
+	//
+	// inside the relayed txmsg is a transaction
+	//
+ 	let tx2 = new saito.transaction(txmsg);
+
+        //
+        // if interior transaction is intended for me, I process regardless
+        //
+        if (tx2.isTo(app.wallet.returnPublicKey())) {
+
+	  //
+	  // the transaction is FOR me
+	  //
+	  tx2.decryptMessage(app);
+	  let txmsg2 = tx2.returnMessage();
+
+	  if (txmsg2.request) {
+            app.modules.handlePeerRequest(tx3msg, peer, mycallback);
+            if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
+	    return;
+	  }
+
+	  //
+	  // the transaction wraps the real transaction
+	  //
+	  let tx3 = new saito.transaction(txmsg2);
+	  tx3.decryptMessage(app);
+	  let tx3msg = tx3.returnMessage();
+
+          app.modules.handlePeerRequest(tx3msg, peer, mycallback);
           if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
 
         } else {
 
+	  //
+	  // check to see if original tx is for a peer
+	  //
           let peer_found = 0;
 
           for (let i = 0; i < app.network.peers.length; i++) {
             if (tx2.isTo(app.network.peers[i].peer.publickey)) {
+
               peer_found = 1;
 
-              app.network.peers[i].sendRequest("relay peer message", tx2.msg, function() {
+              app.network.peers[i].sendRequest("relay peer message", message.data, function() {
 	        if (mycallback != null) {
                   mycallback({ err : "" , success : 1 });
 		}
@@ -210,7 +244,6 @@ class Relay extends ModTemplate {
         }
       }
     } catch (err) {
-      console.log("RELAY MOD ERROR");
       console.log(err);
     }
   }
