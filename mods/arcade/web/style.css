@@ -1,4 +1,3 @@
-
 :root {
   --saito-red: #639;
   --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
@@ -12,7 +11,7 @@
 
 body {
   min-height: 100vh;
-  font-size: 1.0em;
+  font-size: 1em;
   color: var(--saito-skyline-grey);
   background: var(--saito-nightscape);
   justify-content: center;
@@ -23,11 +22,11 @@ body {
   padding: 1rem;
 }
 .game-overlay .long-scroll {
-  padding:40px;
-  width:100vw;
-  height:100vh;
-  overflow-y:scroll;
-  display:grid;
+  padding: 40px;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  display: grid;
   grid-template-columns: 200px auto;
 }
 .game-overlay .overlay-title {
@@ -41,7 +40,7 @@ body {
 }
 
 #arcade-posts-insert-add-contact {
-  margin-right:15px;
+  margin-right: 15px;
 }
 
 .invite-tile-button-join {
@@ -68,7 +67,7 @@ body {
   font-size: 1em;
   width: 100vw;
   overflow-y: auto;
-  padding: 0 calc((100vw - var(--saito-width))/2);
+  padding: 0 calc((100vw - var(--saito-width)) / 2);
 }
 .arcade-container .page-header {
   grid-column-start: 1;
@@ -87,7 +86,7 @@ body {
   padding-bottom: 10px;
   padding-left: 10px;
 }
-.arcade-sidebar>div {
+.arcade-sidebar > div {
   overflow-x: hidden;
 }
 /*/
@@ -97,7 +96,7 @@ body {
 */
 .email-chat {
   height: unset;
-  min-height: 300px;;
+  min-height: 300px;
   display: grid;
   grid-template-rows: auto 1fr;
 }
@@ -109,7 +108,6 @@ body {
 .arcade-apps-wrapper {
   overflow-y: scroll;
 }
-
 
 .chat-list {
   overflow-y: scroll;
@@ -192,7 +190,8 @@ body {
   display: none !important;
 }
 
-.arcade-hero, .observables-hero {
+.arcade-hero,
+.observables-hero {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -282,7 +281,8 @@ body {
   height: 7em;
   overflow: hidden;
   position: relative;
-  text-shadow: 1px 0 2px black, 0 1px 2px black, -1px 0 2px black, 0 -1px 2px black;
+  text-shadow: 1px 0 2px black, 0 1px 2px black, -1px 0 2px black,
+    0 -1px 2px black;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -428,21 +428,24 @@ body {
   padding-top: 0.5em;
   font-size: 1em;
 }
-.leaderboard-rankings{
-  display:grid;
+.leaderboard-rankings {
+  display: grid;
 }
-.leaderboard-game-module, .leaderboard-rankings, .leaderboard-container hr {
+.leaderboard-game-module,
+.leaderboard-rankings,
+.leaderboard-container hr {
   visibility: hidden;
   opacity: 0;
   height: 0;
   margin: 0;
   transition: visibility 0s, transform 2.2s ease-out, opacity 2.2s linear;
 }
-.leaderboard-game-module.shown, .leaderboard-rankings.shown, .leaderboard-container hr.shown {
+.leaderboard-game-module.shown,
+.leaderboard-rankings.shown,
+.leaderboard-container hr.shown {
   visibility: visible;
   opacity: 1;
   height: auto;
-  
 }
 .leaderboard-container hr.shown {
   margin: 1em 0;
@@ -462,7 +465,6 @@ body {
   height: 32px;
 }
 
-
 /* Post */
 
 .arcade-posts-add {
@@ -470,79 +472,78 @@ body {
   top: 0;
   right: 0;
   float: right;
-  }
-  
-  .arcade-post {
+}
+
+.arcade-post {
   display: grid;
   grid-template-columns: 3em auto;
-  }
-  
-  .arcade-post-thumbnail {
+}
+
+.arcade-post-thumbnail {
   background-image: url(/post/img/post-logo.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position-y: top;
   width: 2.5em;
   height: 2.5em;
-  }
-  
-  .arcade-post-header {
-    align-items: center;
-    display: flex;
-    cursor: pointer;
-    margin-bottom: .2rem;
-  }
+}
 
-  .arcade-post-sublinks {
-    display: flex;
-    align-items: center;
+.arcade-post-header {
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+  margin-bottom: 0.2rem;
+}
+
+.arcade-post-sublinks {
+  display: flex;
+  align-items: center;
   font-size: 0.85em;
   padding-top: 2px;
-  }
-  .arcade-post-sublinks > * {
-    margin: 0 .5em 0 0;
-  }
-  
-  .arcade-post-title {
-    font-weight: bold;
-    font-size: 1em;
-  }
-  
-  .arcade-post-title > a {
+}
+.arcade-post-sublinks > * {
+  margin: 0 0.5em 0 0;
+}
+
+.arcade-post-title {
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.arcade-post-title > a {
   text-decoration: none;
   color: var(--saito-red);
-  }
-  
-  
-  .arcade-post-user {
+}
+
+.arcade-post-user {
   font-weight: bold;
-  }
-  
-  .arcade-post-comments {
+}
+
+.arcade-post-comments {
   float: left;
   font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
   opacity: 0.7;
-  }
-  
-  .arcade-post-report {
+}
+
+.arcade-post-report {
   float: left;
   font-weight: bold;
   margin-left: 1em;
   text-decoration: underline;
-  }
-  
-  .arcade-post-front {
+}
+
+.arcade-post-front {
   width: 3em;
-  }
-  .arcade-post-back {
+}
+.arcade-post-back {
   padding-bottom: 15px;
-  }
-  .arcade-post-ts {
-    font-size: .9em;
-    opacity: 0.7;
-  }
+}
+.arcade-post-ts {
+  font-size: 0.9em;
+  opacity: 0.7;
+}
 
 @media only screen and (max-width: 1000px) {
   .main {
@@ -559,7 +560,9 @@ body {
     transition: all ease-in-out 1s;
     background: var(--saito-nightscape);
   }
-  .arcade-sidebar:hover, .arcade-sidebar:active, .arcade-sidebar.active {
+  .arcade-sidebar:hover,
+  .arcade-sidebar:active,
+  .arcade-sidebar.active {
     left: 0;
   }
   .arcade-sub {
@@ -574,841 +577,891 @@ body {
     padding-left: 10px;
   }
   .arcade-main .forum-title {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
   .arcade-posts {
     padding-left: 0;
   }
 }
 
+/* controls */
+button,
+.button,
+.file-label {
+  background: var(--saito-jester);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+}
+button:hover,
+.button:hover {
+  background: linear-gradient(-45deg, #537 50%, #324 100%);
+}
+.background-shim {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 80px);
+  background-size: cover;
+  z-index: 999;
+}
+.background-shim-cover {
+  width: 100%;
+  height: 100%;
+  background-color: #00000099;
+}
+.footer {
+  display: none;
+}
+button.add-games {
+  width: 100%;
+}
+.big-create-game {
+  display: none;
+}
+.arcade-leaderboard-row {
+  display: grid;
+  grid-template-columns: 5fr 1fr 1fr;
+  padding: 0.5em;
+  grid-gap: 1em;
+}
+.arcade-leaderboard-row-winner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.arcade-leaderboard-row-score {
+  justify-self: end;
+}
+.arcade-sidebar-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.arcade-sidebar-active-games-header {
+  font-size: 0.8em;
+  text-align: left;
+  background: var(--saito-jester);
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 1px solid var(--saito-red);
+  border-bottom: 0px;
+  margin: unset;
+}
+.arcade-sidebar-active-games-body,
+.arcade-sidebar-active-leaderboard-body {
+  border: 1px solid var(--saito-red);
+  background: #1e1e1f50;
+  max-height: 30vh;
+  overflow-y: auto;
+  padding: 0 3px;
+}
+.arcade-sidebar-active-leaderboard-body {
+  height: 25vh;
+}
+#arcade-play-btn {
+  padding-bottom: 1.7em;
+}
+.chat-header {
+  background: var(--saito-nightscape);
+  border: 1px solid var(--saito-red);
+  border-bottom: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--saito-jester);
+}
+.chat-list {
+  border: 1px solid var(--saito-red);
+  background: #1e1e1f50;
+}
+.arcade-gamelist {
+  width: 100%;
+}
+.game-options-html {
+  overflow-y: auto;
+  max-height: 4em;
+}
+.pill {
+  background: var(--saito-cyber-black);
+  color: white;
+  padding: 7px;
+  border-radius: 50px;
+  min-width: 4em;
+  text-align: center;
+  margin: 2px;
+}
+.arcade-extra {
+  width: 100%;
+}
+.arcade-game-invitation {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 3fr 3fr 4fr auto auto;
+  border: 1px solid #84c;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-top: 10px;
+}
+.arcade-main-back-button {
+  font-size: 2em;
+  display: block;
+  align-self: normal;
+  margin: 0.5em 0;
+  cursor: pointer;
+}
+.glide__arrows {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  bottom: 6em;
+  padding: 0px 10px;
+}
+.glide__arrow {
+  margin: unset;
+  background: var(--saito-cyber-black);
+  color: var(--saito-skyline-grey);
+  border: unset;
+  min-width: unset;
+  border-radius: 50px;
+}
+.game {
+  min-width: 150px;
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+}
+/* GAME WIZARD */
+.game-wizard {
+  padding: 1em;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-size: 1em;
+  background-color: #0009;
+  width: 60vw;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+.game-wizard-advanced-box {
+  display: block;
+  text-align: left;
+}
+.game-wizard-advanced-box .list-header:nth-of-type(n + 2) {
+  margin-top: 1.2rem;
+}
+.game-wizard-main {
+  padding: 50px;
+}
+.game-wizard-header {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+}
+.game-wizard-intro {
+  padding: 10px;
+}
+.game-wizard-title {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+.game-wizard-description {
+  font-size: 1.2em;
+  line-height: 1.5em;
+}
+.game-wizard-status {
+  margin: 1em 0 0;
+}
 
-  /* controls */
-  button, .button, .file-label {
-    background: var(--saito-jester);
-    border: 1px solid var(--saito-red);
-    color: var(--saito-skyline-grey);
-  }
-  button:hover, .button:hover {
-    background: linear-gradient(-45deg, #537 50%, #324 100%);
-  }
-  .background-shim {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 80px);
-    background-size: cover;
-    z-index: 999;
-  }
-  .background-shim-cover {
-    width: 100%;
-    height: 100%;
-    background-color: #00000099;
-  }
-  .footer {
-    display: none;
-  }
-  button.add-games {
-    width: 100%;
-  }
-  .big-create-game {
-    display: none;
-  }
-  .arcade-leaderboard-row {
-    display: grid;
-    grid-template-columns: 5fr 1fr 1fr;
-    padding: 0.5em;
-    grid-gap: 1em;
-  }
-  .arcade-leaderboard-row-winner {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .arcade-leaderboard-row-score {
-    justify-self: end;
-  }
-  .arcade-sidebar-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .arcade-sidebar-active-games-header {
-    font-size: 0.8em;
-    text-align: left;
-    background: var(--saito-jester);
-    padding-left: 15px;
-    padding-right: 15px;
-    border: 1px solid var(--saito-red);
-    border-bottom: 0px;
-    margin: unset;
-  }
-  .arcade-sidebar-active-games-body, .arcade-sidebar-active-leaderboard-body {
-    border: 1px solid var(--saito-red);
-    background: #1e1e1f50;
-    max-height: 30vh;
-    overflow-y: auto;
-    padding: 0 3px;
-  }
-  .arcade-sidebar-active-leaderboard-body {
-    height: 25vh;
-  }
-  #arcade-play-btn {
-    padding-bottom: 1.7em;
-  }
-  .chat-header {
-    background: var(--saito-nightscape);
-    border: 1px solid var(--saito-red);
-    border-bottom: 0px;
-    padding-left: 15px;
-    padding-right: 15px;
-    background: var(--saito-jester);
-  }
-  .chat-list {
-    border: 1px solid var(--saito-red);
-    background: #1e1e1f50;
-  }
-  .arcade-gamelist {
-    width: 100%;
-  }
-  .game-options-html {
-    overflow-y: auto;
-    max-height: 4em;
-  }
-  .pill {
-    background: var(--saito-cyber-black);
-    color: white;
-    padding: 7px;
-    border-radius: 50px;
-    min-width: 4em;
-    text-align: center;
-    margin: 2px;
-  }
-  .arcade-extra {
-    width: 100%;
-  }
-  .arcade-game-invitation {
-    display: grid;
-    align-items: center;
-    grid-template-columns: 3fr 3fr 4fr auto auto;
-    border: 1px solid #84C;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 14px;
-    padding-right: 14px;
-    margin-top: 10px;
-  }
-  .arcade-main-back-button {
-    font-size: 2em;
-    display: block;
-    align-self: normal;
-    margin: 0.5em 0;
-    cursor: pointer;
-  }
-  .glide__arrows {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    bottom: 6em;
-    padding: 0px 10px;
-  }
-  .glide__arrow {
-    margin: unset;
-    background: var(--saito-cyber-black);
-    color: var(--saito-skyline-grey);
-    border: unset;
-    min-width: unset;
-    border-radius: 50px;
-  }
-  .game {
-    min-width: 150px;
-    position: relative;
-    list-style: none;
-    cursor: pointer;
-  }
-  /* GAME WIZARD */
-  .game-wizard {
-    padding: 1em;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    font-size: 1em;
-    background-color: #0009;
-    width: 60vw;
-    max-height: 50vh;
-    overflow-y: scroll;
-  }
-  .game-wizard-advanced-box {
-    display: block;
-    text-align: left;
-  }
-  .game-wizard-advanced-box .list-header:nth-of-type(n+2) {
-    margin-top: 1.2rem;
-  }
-  .game-wizard-main {
-    padding: 50px;
-  }
-  .game-wizard-header {
-    display: grid;
-    grid-template-columns: 3fr 7fr;
-  }
-  .game-wizard-intro {
-    padding: 10px;
-  }
-  .game-wizard-title {
-    font-size: 1.6em;
-    font-weight: bold;
-  }
-  .game-wizard-description {
-    font-size: 1.2em;
-    line-height: 1.5em;
-  }
-  .game-wizard-status {
-    margin: 1em 0 0;
-  }
-
-  .game-wizard-image {
-    padding: 10px;
-  }
-  .game-image {
-    width: 100%;
-  }
-  .game-wizard-controls {
-    display: grid;
-    grid-template-columns: 3fr 7fr;
-  }
-  .game-wizard-players {
-    padding: 10px;
-    width: 100%;
-  }
-  .game-wizard-options-toggle {
-    padding-top: 10px;
-  }
-  .game-wizard-options-toggle-text {
-    border-bottom: 1px dashed;
-    cursor: pointer;
-  }
-  .game-wizard-invite {
-    padding: 10px;
-    width: 100%;
-    height: 90px;
-  }
-  .game-invite-btn {
-    width: 100%;
-    min-height: 80px;
-    font-weight: bold;
-    margin: 0px;
-  }
-  .game-wizard-publisher-message {
-    padding: 10px;
-    margin-top: 10px;
-    font-size: 0.9em;
-  }
-  .game-wizard-advanced-options {
-    display: none;
-  }
-  .game-wizard-basic-options {
-    display: none;
-  }
-  .game-buttons {
-    padding-top: 20px;
-    margin-left: 10%;
-  }
-  .game-wizard-form {
-    display: grid;
-    grid-gap: 1em;
-    grid-template-columns: 1fr;
-  }
-  .game-wizard-content::-webkit-scrollbar {
-    /* WebKit */
-    width: 3;
-  }
-  .game-info-container {
-    display: grid;
-    grid-gap: 1em;
-    grid-template-columns: 1fr 1fr;
-  }
-  .game-start-controls {
-    display: grid;
-    grid-gap: 1em;
-    grid-template-columns: 1fr 4fr;
-  }
-  .return-to-arcade {
-    cursor: pointer;
-    display: inline-block;
-    position: absolute;
-    right: -16px;
-    top: -16px;
-  }
-  .game-description {
-    font-size: 1.2em;
-    line-height: 1.2em;
-    text-align: justify;
-  }
-  .game-details form_options {
-    display: grid;
-    grid-template-columns: 6em auto;
-    grid-gap: 1em;
-  }
-  /* USED BY WORDBLOCKS */
-  #options {
-    display: grid;
-    grid-template-columns: 10em auto;
-  }
-  /* observer mode box */
-  .arcade-observer-game-players {
-    float: right;
-  }
-  .arcade-observer-game-players-identicon {
-    height: 24px;
-    width: 24px;
-    float: right;
-    margin-left: 8px;
-  }
-  .arcade-observer-game-name {
-    font-size: 1.2em;
-    padding: 3px 0 0 0;
-  }
-  .arcade-observer-game-row {
-    padding: 3px;
-    margin: 3px 0;
-    display: grid;
-    grid-template-columns: 3fr 2fr 3fr;
-    grid-gap: 1em;
-  }
-  .arcade-observer-game-btn {
-    width: 3em;
-    min-width: unset;
-    margin: 0;
-    padding: 2px;
-    font-size: small;
-  }
-  /* RIBBON */
-  .rilbon {
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
-    position: absolute;
-  }
-  .ribbon::before, .ribbon::after {
-    position: absolute;
-    z-index: -1;
-    content: '';
-    display: block;
-    border: 5px solid #990000;
-  }
-  .ribbon span {
-    position: absolute;
-    display: block;
-    width: 225px;
-    padding: 15px 0;
-    background-color: #990000;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
-    color: #fff;
-    font: 700 18px/1 'Lato', sans-serif;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
-    text-transform: uppercase;
-    text-align: center;
-    /* z-index: 5; */
-  }
-  /* top left*/
-  .ribbon-top-left {
-    top: -10px;
-    left: -10px;
-  }
-  .ribbon-top-left::before, .ribbon-top-left::after {
-    border-top-color: transparent;
-    border-left-color: transparent;
-  }
-  .ribbon-top-left::before {
-    top: 0;
-    right: 0;
-  }
-  .ribbon-top-left::after {
-    bottom: 0;
-    left: 0;
-  }
-  .ribbon-top-left span {
-    right: -25px;
-    top: 30px;
-    transform: rotate(-45deg);
-  }
-  .arcade-game-row-avi {
-    display: inline;
-  }
-  .arcade-game-row-avi img {
-    border: 1px solid grey;
-  }
-  .arcade-game-invitation {
-    clear: both;
-  }
-  .arcade-game-row-name {
-    cursor: default;
-    padding: 0 0 0 0.5em;
-    font-size: 1.2em;
-  }
-  .arcade-game-row-options {
-    margin-left: 10px;
-    float: left;
-    cursor: pointer;
-    padding-right: 5px;
-  }
-  .arcade-game-row-buttons {
-    /* display: grid;
+.game-wizard-image {
+  padding: 10px;
+}
+.game-image {
+  width: 100%;
+}
+.game-wizard-controls {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+}
+.game-wizard-players {
+  padding: 10px;
+  width: 100%;
+}
+.game-wizard-options-toggle {
+  padding-top: 10px;
+}
+.game-wizard-options-toggle-text {
+  border-bottom: 1px dashed;
+  cursor: pointer;
+}
+.game-wizard-invite {
+  padding: 10px;
+  width: 100%;
+  height: 90px;
+}
+.game-invite-btn {
+  width: 100%;
+  min-height: 80px;
+  font-weight: bold;
+  margin: 0px;
+}
+.game-wizard-publisher-message {
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+.game-wizard-advanced-options {
+  display: none;
+}
+.game-wizard-basic-options {
+  display: none;
+}
+.game-buttons {
+  padding-top: 20px;
+  margin-left: 10%;
+}
+.game-wizard-form {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr;
+}
+.game-wizard-content::-webkit-scrollbar {
+  /* WebKit */
+  width: 3;
+}
+.game-info-container {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+.game-start-controls {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 4fr;
+}
+.return-to-arcade {
+  cursor: pointer;
+  display: inline-block;
+  position: absolute;
+  right: -16px;
+  top: -16px;
+}
+.game-description {
+  font-size: 1.2em;
+  line-height: 1.2em;
+  text-align: justify;
+}
+.game-details form_options {
+  display: grid;
+  grid-template-columns: 6em auto;
+  grid-gap: 1em;
+}
+/* USED BY WORDBLOCKS */
+#options {
+  display: grid;
+  grid-template-columns: 10em auto;
+}
+/* observer mode box */
+.arcade-observer-game-players {
+  float: right;
+}
+.arcade-observer-game-players-identicon {
+  height: 24px;
+  width: 24px;
+  float: right;
+  margin-left: 8px;
+}
+.arcade-observer-game-name {
+  font-size: 1.2em;
+  padding: 3px 0 0 0;
+}
+.arcade-observer-game-row {
+  padding: 3px;
+  margin: 3px 0;
+  display: grid;
+  grid-template-columns: 3fr 2fr 3fr;
+  grid-gap: 1em;
+}
+.arcade-observer-game-btn {
+  width: 3em;
+  min-width: unset;
+  margin: 0;
+  padding: 2px;
+  font-size: small;
+}
+/* RIBBON */
+.rilbon {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  display: block;
+  border: 5px solid #990000;
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 225px;
+  padding: 15px 0;
+  background-color: #990000;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  font: 700 18px/1 "Lato", sans-serif;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  text-align: center;
+  /* z-index: 5; */
+}
+/* top left*/
+.ribbon-top-left {
+  top: -10px;
+  left: -10px;
+}
+.ribbon-top-left::before,
+.ribbon-top-left::after {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+.ribbon-top-left::before {
+  top: 0;
+  right: 0;
+}
+.ribbon-top-left::after {
+  bottom: 0;
+  left: 0;
+}
+.ribbon-top-left span {
+  right: -25px;
+  top: 30px;
+  transform: rotate(-45deg);
+}
+.arcade-game-row-avi {
+  display: inline;
+}
+.arcade-game-row-avi img {
+  border: 1px solid grey;
+}
+.arcade-game-invitation {
+  clear: both;
+}
+.arcade-game-row-name {
+  cursor: default;
+  padding: 0 0 0 0.5em;
+  font-size: 1.2em;
+}
+.arcade-game-row-options {
+  margin-left: 10px;
+  float: left;
+  cursor: pointer;
+  padding-right: 5px;
+}
+.arcade-game-row-buttons {
+  /* display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 0.5em;
   grid-area: buttons; */
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-gap: 0.5em;
-  }
-  .arcade-game-row-join {
-    margin-left: 30px;
-    float: left;
-    cursor: pointer;
-  }
-  .arcade-navigator, .arcade-apps {
-    list-style: none;
-    list-style-type: none;
-    font-size: 1.2em;
-    line-height: 1.4em;
-    /* padding: 10px 0px; */
-  }
-  .arcade-apps-wrapper {
-    border: 1px solid var(--saito-red);
-  }
-  .arcade-navigator {
-    border-bottom: 1px solid grey;
-  }
-  .arcade-navigator-item, .arcade-apps-item {
-    cursor: pointer;
-    border-bottom: 1px solid transparent;
-    padding: 5px 0 2px 10px;
-  }
-  .arcade-apps-item:hover, .arcade-navigator-item:hover {
-    background-color: #33669999;
-  }
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 0.5em;
+}
+.arcade-game-row-join {
+  margin-left: 30px;
+  float: left;
+  cursor: pointer;
+}
+.arcade-navigator,
+.arcade-apps {
+  list-style: none;
+  list-style-type: none;
+  font-size: 1.2em;
+  line-height: 1.4em;
+  /* padding: 10px 0px; */
+}
+.arcade-apps-wrapper {
+  border: 1px solid var(--saito-red);
+}
+.arcade-navigator {
+  border-bottom: 1px solid grey;
+}
+.arcade-navigator-item,
+.arcade-apps-item {
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  padding: 5px 0 2px 10px;
+}
+.arcade-apps-item:hover,
+.arcade-navigator-item:hover {
+  background-color: #33669999;
+}
 
-  .arcade-navigator-item .tiptext {
-    width: 90%;
-    background-color: #000a;
-    color: #ffffff !important;
-    min-width: 0px;
-    padding: 3px;
+.arcade-navigator-item .tiptext {
+  width: 90%;
+  background-color: #000a;
+  color: #ffffff !important;
+  min-width: 0px;
+  padding: 3px;
 }
 
 .arcade-navigator-item .tiptext:hover {
   visibility: hidden;
 }
 
-  .remove_cards_box {
-    max-height: 400px;
-    overflow: auto;
-    padding: 1em;
+.remove_cards_box {
+  max-height: 400px;
+  overflow: auto;
+  padding: 1em;
+}
+.removecards {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background-image: none;
+}
+/* Remove IE arrow */
+select::-ms-expand {
+  display: none;
+}
+/* Custom Select */
+.saito-select {
+  position: relative;
+  display: flex;
+  width: 20em;
+  height: 3em;
+  line-height: 3;
+  background: #55555555;
+  overflow: hidden;
+  border-bottom: 1px solid var(--saito-red);
+  width: 100%;
+}
+select {
+  flex: 1;
+  padding: 0 0.5em;
+  color: #fff;
+  cursor: pointer;
+}
+.account-info select {
+  color: #333;
+}
+.account-info saito-select {
+  background-color: #fff;
+}
+/* Arrow */
+.saito-select::after {
+  content: "\25BC";
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 1em;
+  background: #55555533;
+  cursor: pointer;
+  pointer-events: none;
+  -webkit-transition: 0.25s all ease;
+  -o-transition: 0.25s all ease;
+  transition: 0.25s all ease;
+}
+/* Transition */
+.saito-select:hover::after {
+  color: var(--saito-red);
+}
+option {
+  background: var(--saito-cyber-black);
+}
+.start-game-list {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.start-game-btn {
+  text-transform: capitalize;
+  margin: 3em 0;
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.start-game {
+  background: #000;
+  padding: 1em;
+  width: 90%;
+  margin: auto;
+  margin-top: 12%;
+  opacity: 0;
+}
+.start-game-list .return-to-arcade {
+  cursor: pointer;
+  right: 45px;
+  top: 13%;
+}
+.arcade-game-list-item {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 2fr 3fr;
+  cursor: pointer;
+  border: 1px solid var(--saito-red);
+  padding: 10px;
+}
+.arcade-game-list-item:hover {
+  border: 1px solid var(--saito-red);
+}
+.arcade-game-list-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+#game-list-wrapper {
+  /* top: 5em; */
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  position: fixed;
+  height: calc(100vh);
+  overflow: auto;
+  margin: auto;
+  transition: all ease 0.5s;
+  background: #00000099;
+}
+.arcade-main-hero {
+  width: 100%;
+}
+.header {
+  background: none;
+}
+.header-icon-disabled {
+  color: #b8e;
+  text-shadow: #444 2px 1px, #666 3px 2px;
+}
+/** ARCADE INIT **/
+.arcade-initialize-game-container {
+  display: grid;
+  grid-gap: 1em;
+  padding: 2em;
+  font-size: 1.3em;
+}
+/** ARCADE INVITATION **/
+.arcade-invite-container {
+  grid-gap: 1em;
+  grid-template-rows: 4em 4em auto;
+  padding: 0 20%;
+  text-align: center;
+}
+.arcade-invite-initializer {
+  display: grid;
+  grid-template-rows: 4em 4em;
+}
+#invite-game-spinner {
+  margin: unset;
+  display: block;
+  justify-self: center;
+  width: 6em;
+  height: 6em;
+}
+/** CHAT STYLING **/
+.chat-row {
+  /* no border */
+  border-bottom: 0px solid var(--saito-red);
+}
+.chat-row:hover {
+  background-color: #33669999;
+}
+.chat-box {
+  background-color: var(--saito-cyber-black);
+  border: 1px solid var(--saito-red);
+}
+.chat-box-main {
+  background: var(--saito-nightscape);
+  color: #ffffff;
+}
+.chat-box-header {
+  border-bottom: 1px solid var(--saito-red);
+  background: var(--saito-jester);
+}
+.chat-message-others {
+  color: black;
+}
+.chat-box-input {
+  border-top: 1px solid var(--saito-red);
+}
+.chat-box-new-message-input {
+  background: var(--saito-cyber-black);
+  color: white;
+}
+.chat-room-submit-button {
+  color: #fff;
+}
+.chat-message-header {
+  color: #ffffff;
+}
+#alert-box {
+  background: var(--saito-nightscape);
+}
+.loader {
+  margin: 12.5%;
+}
+/* achiecvments */
+.badges {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: auto auto auto;
+}
+.share-link {
+  color: #ddd;
+}
+.arcade-sidebar-notices {
+  margin: 5px 0 0 0;
+}
+.arcade-sidebar-done,
+.achievments-cta {
+  align-self: center;
+}
+.arcade-sidebar-row {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 4em auto;
+  margin: 1em;
+}
+.arcade-sidebar-row i {
+  font-size: 2em;
+}
+.arcade-sidebar-row span {
+  font-size: 1.2em;
+}
+.badge {
+  border: 2px solid white;
+  border-radius: 1em;
+  display: inline-block;
+  padding: 5px 10px 2px;
+}
+.arcade-sidebar-row i span {
+  font-size: 0.7em;
+  line-height: 1.2em;
+  display: inline-block;
+}
+span.rewards-row-name {
+  align-self: center;
+}
+.arcade-sidebar-row span {
+  font-size: 1.2em;
+}
+.rewards-row-name {
+  text-align: left;
+  padding: 0 5px;
+}
+.game-details {
+  margin: 2em 0;
+  text-align: left;
+}
+.game-details label {
+  font-weight: bold;
+}
+#game-invite-controls div {
+  margin: 1em 0;
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 20em 1fr;
+}
+#game-invite-controls button {
+  width: 100%;
+}
+.game-loader {
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  z-index: 1000;
+  padding: 10px;
+  background-color: whitesmoke;
+}
+.game-loader-backdrop {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #444;
+  opacity: 0.4;
+  z-index: 100;
+}
+.game-loader-spinner {
+  justify-self: center;
+  width: 6em;
+  height: 6em;
+  margin: 25%;
+}
+.game-wizard-advanced-return-btn {
+  font-size: 1.4em;
+  margin-top: 20px;
+  padding: 16px 30px 12px;
+  text-align: center;
+  text-transform: uppercase;
+}
+@media only screen and (max-width: 1000px) {
+  .arcade-container {
+    padding: 0;
   }
-  .removecards {
-    display: grid;
-    grid-gap: 1em;
-    grid-template-columns: 1fr 1fr;
-  }
-  select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    appearance: none;
-    outline: 0;
-    box-shadow: none;
-    border: 0 !important;
-    background-image: none;
-  }
-  /* Remove IE arrow */
-  select::-ms-expand {
+  .game-inset-img {
     display: none;
   }
-  /* Custom Select */
-  .saito-select {
-    position: relative;
-    display: flex;
-    width: 20em;
-    height: 3em;
-    line-height: 3;
-    background: #55555555;
-    overflow: hidden;
-    border-bottom: 1px solid var(--saito-red);
-    width: 100%;
+  .invite-tile-wrapper {
+    grid-template-columns: 4fr 3fr 1fr;
   }
-  select {
-    flex: 1;
-    padding: 0 .5em;
-    color: #fff;
-    cursor: pointer;
+  .arcade-tile .invite-row-2 {
+    grid-template-columns: 3fr 2fr;
   }
-  .account-info select {
-    color: #333;
+  .arcade-tile .gameName {
+    font-size: 2.2em;
   }
-  .account-info saito-select {
-    background-color: #fff;
+  .arcade-tile .gameShortDescription {
+    font-size: 1em;
   }
-  /* Arrow */
-  .saito-select::after {
-    content: '\25BC';
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0 1em;
-    background: #55555533;
-    cursor: pointer;
-    pointer-events: none;
-    -webkit-transition: .25s all ease;
-    -o-transition: .25s all ease;
-    transition: .25s all ease;
+  .playerInfo {
+    transform: scale(0.8);
+    transform-origin: top left;
   }
-  /* Transition */
-  .saito-select:hover::after {
-    color: var(--saito-red);
-  }
-  option {
-    background: var(--saito-cyber-black);
-  }
-  .start-game-list {
-    display: grid;
-    grid-gap: 1em;
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-  .start-game-btn {
-    text-transform: capitalize;
-    margin: 3em 0;
-    max-width: 240px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .start-game {
-    background: #000;
-    padding: 1em;
+  .saito-overlay,
+  game-overlay {
     width: 90%;
-    margin: auto;
-    margin-top: 12%;
+  }
+  .game-wizard {
+    width: 100%;
+    max-height: calc(100vh - 7em);
+  }
+  .arcade-sidebar::after {
+    content: "›";
+    position: absolute;
+    right: -32px;
+    font-size: 3em;
+    border-radius: 0 30px 30px 0;
+    border: 1px solid var(--saito-orange);
+    border-left: 0px;
+    width: 25px;
+    height: 1em;
+    letter-spacing: 43px;
+    font-weight: bolder;
+    background: #000a;
+    line-height: 1.25em;
+    margin: 0;
+    transition: ease 1s all;
+    z-index: 9;
+    padding-left: 7px;
+    padding-bottom: 7px;
+    cursor: ew-resize;
+  }
+  .arcade-sidebar:hover::after {
     opacity: 0;
   }
-  .start-game-list .return-to-arcade {
-    cursor: pointer;
-    right: 45px;
-    top: 13%;
+}
+@media only screen and (max-width: 600px) {
+  .arcade-tile {
+    min-height: 4.3em;
   }
-  .arcade-game-list-item {
-    display: grid;
-    grid-gap: 1em;
-    grid-template-columns: 2fr 3fr;
-    cursor: pointer;
-    border: 1px solid var(--saito-red);
-    padding: 10px;
+  .arcade-main {
+    grid-template-rows: 1.3em auto 1fr;
   }
-  .arcade-game-list-item:hover {
-    border: 1px solid var(--saito-red);
+  .invite-tile-wrapper {
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 9em;
+    min-height: 7em;
+    height: unset;
+    font-size: 0.6em;
   }
-  .arcade-game-list-image {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+  .invite-tile-button {
+    min-width: 8em;
+    max-width: 8em;
+    font-size: 0.8em;
   }
-  #game-list-wrapper {
-    /* top: 5em; */
-    top: 0;
-    left: 0;
-    z-index: 5;
-    width: 100%;
-    position: fixed;
-    height: calc(100vh);
-    overflow: auto;
-    margin: auto;
-    transition: all ease 0.5s;
-    background: #00000099;
+  .arcade-tile .button {
+    font-size: 1em;
   }
-  .arcade-main-hero {
-    width: 100%;
+  .arcade-tile .gameShortDescription {
+    display: none;
   }
-  .header {
-    background: none;
+  .arcade-tile .invite-row-2 {
+    grid-column: 1 / span 2;
   }
-  .header-icon-disabled {
-    color: #B8E;
-    text-shadow: #444 2px 1px, #666 3px 2px;
-  }
-  /** ARCADE INIT **/
-  .arcade-initialize-game-container {
-    display: grid;
-    grid-gap: 1em;
-    padding: 2em;
-    font-size: 1.3em;
-  }
-  /** ARCADE INVITATION **/
-  .arcade-invite-container {
-    grid-gap: 1em;
-    grid-template-rows: 4em 4em auto;
-    padding: 0 20%;
-    text-align: center;
-  }
-  .arcade-invite-initializer {
-    display: grid;
-    grid-template-rows: 4em 4em;
-  }
-  #invite-game-spinner {
-    margin: unset;
-    display: block;
-    justify-self: center;
-    width: 6em;
-    height: 6em;
-  }
-  /** CHAT STYLING **/
-  .chat-row {
-    /* no border */
-    border-bottom: 0px solid var(--saito-red);
-  }
-  .chat-row:hover {
-    background-color: #33669999;
-  }
-  .chat-box {
-    background-color: var(--saito-cyber-black);
-    border: 1px solid var(--saito-red);
-  }
-  .chat-box-main {
-    background: var(--saito-nightscape);
-    color: #ffffff;
-  }
-  .chat-box-header {
-    border-bottom: 1px solid var(--saito-red);
-    background: var(--saito-jester);
-  }
-  .chat-message-others {
-    color: black;
-  }
-  .chat-box-input {
-    border-top: 1px solid var(--saito-red);
-  }
-  .chat-box-new-message-input {
-    background: var(--saito-cyber-black);
-    color: white;
-  }
-  .chat-room-submit-button {
-    color: #fff;
-  }
-  .chat-message-header {
-    color: #ffffff;
-  }
-  #alert-box {
-    background: var(--saito-nightscape);
-  }
-  .loader {
-    margin: 12.5%;
-  }
-  /* achiecvments */
-  .badges {
-    display: grid;
-    grid-gap: 5px;
-    grid-template-columns: auto auto auto;
-  }
-  .share-link {
-    color: #ddd;
-  }
-  .arcade-sidebar-notices {
-    margin: 5px 0 0 0;
-  }
-  .arcade-sidebar-done, .achievments-cta {
-    align-self: center;
-  }
-  .arcade-sidebar-row {
-    display: grid;
-    grid-gap: 1em;
-    grid-template-columns: 4em auto;
-    margin: 1em;
-  }
-  .arcade-sidebar-row i {
-    font-size: 2em;
-  }
-  .arcade-sidebar-row span {
-    font-size: 1.2em;
-  }
-  .badge {
-    border: 2px solid white;
-    border-radius: 1em;
-    display: inline-block;
-    padding: 5px 10px 2px;
-  }
-  .arcade-sidebar-row i span {
-    font-size: 0.7em;
-    line-height: 1.2em;
-    display: inline-block;
-  }
-  span.rewards-row-name {
-    align-self: center;
-  }
-  .arcade-sidebar-row span {
-    font-size: 1.2em;
-  }
-  .rewards-row-name {
-    text-align: left;
-    padding: 0 5px;
-  }
-  .game-details {
-    margin: 2em 0;
-    text-align: left;
-  }
-  .game-details label {
-    font-weight: bold;
-  }
-  #game-invite-controls div {
-    margin: 1em 0;
-    display: grid;
-    grid-gap: 1em;
-    grid-template-columns: 20em 1fr;
-  }
-  #game-invite-controls button {
-    width: 100%;
-  }
-  .game-loader {
-    position: relative;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: transparent;
-    z-index: 1000;
-    padding: 10px;
-    background-color: whitesmoke;
-  }
-  .game-loader-backdrop {
-    position: absolute;
-    display: block;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #444;
-    opacity: 0.4;
-    z-index: 100;
-  }
-  .game-loader-spinner {
-    justify-self: center;
-    width: 6em;
-    height: 6em;
-    margin: 25%;
-  }
-  .game-wizard-advanced-return-btn {
-    font-size: 1.4em;
-    margin-top:20px;
-    padding: 16px 30px 12px;
-    text-align:center;
+  #arcade-tab-buttons {
+    font-size: 0.8em;
+    line-height: 1.3em;
     text-transform: uppercase;
+    max-height: 1.3em;
+    height: 1.3em;
   }
-  @media only screen and (max-width: 1000px) {
-    .arcade-container {
-      padding: 0;
-    }
-    .game-inset-img {
-      display: none;
-    }
-    .invite-tile-wrapper {
-      grid-template-columns: 4fr 3fr 1fr;
-    }
-    .arcade-tile .invite-row-2 {
-      grid-template-columns: 3fr 2fr;
-    }
-    .arcade-tile .gameName {
-      font-size: 2.2em;
-    }
-    .arcade-tile .gameShortDescription {
-      font-size: 1em;
-    }
-    .playerInfo {
-      transform: scale(0.8);
-      transform-origin: top left;
-    }
-    .saito-overlay, game-overlay {
-      width: 90%;
-    }
-    .game-wizard {
-      width: 100%;
-      max-height: calc(100vh - 7em);
-    }
-    .arcade-sidebar::after {
-      content: "›";
-      position: absolute;
-      right: -32px;
-      font-size: 3em;
-      border-radius: 0 30px 30px 0;
-      border: 1px solid var(--saito-orange);
-      border-left: 0px;
-      width: 25px;
-      height: 1em;
-      letter-spacing: 43px;
-      font-weight: bolder;
-      background: #000a;
-      line-height: 1.25em;
-      margin: 0;
-      transition: ease 1s all;
-      z-index: 9;
-      padding-left: 7px;
-      padding-bottom: 7px;
-      cursor: ew-resize;
-    }
-    .arcade-sidebar:hover::after {
-      opacity: 0;
-    }
+  .tab-button {
+    font-size: smaller;
   }
-  @media only screen and (max-width: 600px) {
-    .arcade-tile {
-      min-height: 4.3em;
-    }
-    .arcade-main {
-      grid-template-rows: 1.3em auto 1fr;
-    }
-    .invite-tile-wrapper {
-      grid-template-rows: 1fr;
-      grid-template-columns: 1fr 9em;
-      min-height: 7em;
-      height: unset;
-      font-size:0.6em;
-    }
-    .invite-tile-button {
-      min-width: 8em;
-      max-width: 8em;
-      font-size: 0.8em;
-    }
-    .arcade-tile .button {
-      font-size: 1em;
-    }
-    .arcade-tile .gameShortDescription {
-      display: none;
-    }
-    .arcade-tile .invite-row-2 {
-      grid-column: 1 / span 2;
-    }
-    #arcade-tab-buttons {
-      font-size: 0.8em;
-      line-height: 1.3em;
-      text-transform: uppercase;
-      max-height: 1.3em;
-      height: 1.3em;
-    }
-    .tab-button {
-      font-size: smaller;
-    }
-    .saito-overlay, .game-overlay {
-      width: 100%;
-    }
-    .game-wizard-controls {
-      grid-template-columns: auto;
-    }
-    .arcade-posts {
-      font-size: 0.85em;
-    }
-    .arcade-post {
-      margin-bottom: 0px;
-    }
-    .arcade-post-title {
-      font-size: 1em;
-    }
+  .saito-overlay,
+  .game-overlay {
+    width: 100%;
+  }
+  .game-wizard-controls {
+    grid-template-columns: auto;
+  }
+  .arcade-posts {
+    font-size: 0.85em;
+  }
+  .arcade-post {
+    margin-bottom: 0px;
+  }
+  .arcade-post-title {
+    font-size: 1em;
+  }
 
-    
-    .game-wizard-header {
-      display: block;
-    }
-    
+  .game-wizard-header {
+    display: block;
   }
+}
+
+#settings-dropdown {
+  width: 400px;
+  right: -405px;
+  position: absolute;
+  background: var(--saito-nightscape);
+  color: white;
+}
+
+.wallet-action-row {
+  letter-spacing: 0.25px;
+  padding: 0.6em;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 0.5em;
+  color: white;
+}
+
+#header-token-select {
+  max-width: 11.5em;
+  padding: 5px;
+  border-bottom: 1 px solid #888 !important;
+  margin: 5 px 0;
+  background: var(--saito-nightscape);
+  color: white;
+}
+
+.account-info .saito-select {
+  border: 0px;
+  background: var(--saito-nightscape);
+}
+
+.header-dropdown a {
+  text-decoration: none;
+  color: white;
+}
+
+.header-dropdown a:hover {
+  color: black;
+}
