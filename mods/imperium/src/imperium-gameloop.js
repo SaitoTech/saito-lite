@@ -16,8 +16,6 @@
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("move: " + mv[0]);
-
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
   	  salert("Game Over");
@@ -190,7 +188,6 @@ console.log("move: " + mv[0]);
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
 	      this.resetConfirmsNeeded(0);
-	      // JAN 29
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
 
@@ -1590,6 +1587,13 @@ this.game.state.end_round_scoring = 0;
         this.game.queue.push("playerschoosestrategycards_after");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
+
+        if (this.game.state.round == 1) {
+          this.game.queue.push("ACKNOWLEDGE\tNEXT: all players must select a strategy card. If you are new to Red Imperium, consider taking Leadership, Politics, or Technology. They are simple but valuable cards!");
+	} else {
+          this.game.queue.push(`ACKNOWLEDGE\tNEXT: all players select their strategy card(s) for Round ${this.game.state.round}.`);
+	}
+
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
           this.game.queue.push("shownewobjectives");
@@ -1700,30 +1704,68 @@ this.game.state.end_round_scoring = 0;
   
       if (mv[0] === "shownewobjectives") {
 
-        this.overlay.showOverlay(this.app, this, this.returnNewObjectivesOverlay());
-        try {
-          document.getElementById("close-objectives-btn").onclick = () => {
-	    if (this.game.state.round == 1) {
-	      //this.overlay.showOverlay(this.app, this, this.returnUnitsOverlay());
-              //document.getElementById("close-units-btn").onclick = () => {
-                this.overlay.hideOverlay();
-              //}
-            } else {
-	      if (this.game.planets['new-byzantium'].owner != -1 ) {
-		this.overlay.showOverlay(this.app, this, this.returnNewAgendasOverlay());
-              	document.getElementById("close-agendas-btn").onclick = () => {
-                  this.overlay.hideOverlay();
-              	}
-              } else {
-                this.overlay.hideOverlay();
-              }
-	    }
-          }
-        } catch (err) {}
+	let game_mod = this;
+	let title = "Your Objectives";
+	let subtitle = "check objectives, strategy cards and more in the CARDS menu...";
+	let cards = [];
+
+        for (let i = 0; i < this.game.state.new_objectives.length; i++) {
+	  if (this.game.state.new_objectives[i].type == "secret") {
+	    cards.push(this.secret_objectives[this.game.state.new_objectives[i].card]);
+	  }
+	  if (this.game.state.new_objectives[i].type == "stage1") {
+	    cards.push(this.stage_i_objectives[this.game.state.new_objectives[i].card]);
+	  }
+	  if (this.game.state.new_objectives[i].type == "stage2") {
+	    cards.push(this.stage_ii_objectives[this.game.state.new_objectives[i].card]);
+	  }
+	}  
+
+  	if (this.game.state.round > 1) {
+  	  title = "New Objectives"; 
+  	  subtitle = "view all public and secret objectives in the CARDS menu...";
+  	}
+
+        this.overlay.showCardSelectionOverlay(this.app, this, cards, {
+
+	  title : title,
+	  subtitle : subtitle,
+	  columns : cards.length ,
+	  backgroundImage : "/imperium/img/starscape_background1.jpg",
+	  padding: "20px",
+	  textAlign: "center",
+	  onContinue : function() {
+
+	    game_mod.overlay.hideOverlay();
+
+	    if (game_mod.game.planets['new-byzantium'].owner != -1 ) {
+
+	      let ac = [];
+	      let laws = game_mod.returnAgendaCards();
+	      for (let i = 0; i < game_mod.game.state.agendas.length; i++) {
+		ac.push(laws[game_mod.game.state.agendas[i]]);
+	      }
+
+              game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, ac, {
+	        title : "New Agendas",
+	        subtitle : "check all agendas, objectives and more in the CARDS menu",
+	        columns : cards.length ,
+	        backgroundImage : "/imperium/img/starscape_background1.jpg",
+	        padding: "20px",
+	        textAlign: "center",
+	        onClose : function() {
+		  game_mod.overlay.hideOverlay();
+	        }
+	      }, function () {
+		game_mod.overlay.hideOverlay();
+	      });
+            }
+	  },
+	}, function () {});
 
   	this.game.queue.splice(qe, 1);
-
   	return 1;
+
       }
 
 
@@ -1868,7 +1910,7 @@ this.game.state.end_round_scoring = 0;
   	      let this_player = this.game.state.speaker+i;
   	      if (this_player > this.game.players_info.length) { this_player -= this.game.players_info.length; }
 	      if ((cts+cards_issued[(this_player-1)]) < cards_to_select) {
-  	        this.rmoves.push("pickstrategy\t"+this_player);
+  	        this.rmoves.push("pickstrategy\t"+this_player+"\t"+(cts+1));
               }
             }
   	  }
@@ -1952,15 +1994,16 @@ this.game.state.end_round_scoring = 0;
       if (mv[0] === "pickstrategy") {
   
   	let player       = parseInt(mv[1]);
+  	let selection    = parseInt(mv[2]);
 
         this.setPlayerActiveOnly(player);
 
   	if (this.game.player == player) {
-  	  this.playerSelectStrategyCards(function(card) {
+  	  this.playerSelectStrategyCards(function(card) {	// mode 0
   	    imperium_self.addMove("resolve\tpickstrategy");
   	    imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tstrategycard\t"+card);
   	    imperium_self.endTurn();
-  	  });
+  	  }, selection);
   	  return 0;
   	} else {
 
@@ -2228,15 +2271,23 @@ this.game.state.end_round_scoring = 0;
 		}
 	      }
 
-	      let roll = this.rollDice(selectable.length);
-	      let action_card = selectable[roll-1];
-	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
-	        if (this.game.deck[1].hand[i] === action_card) {
-		  this.game.deck[1].hand.splice((roll-1), 1);
-		}
+	      if (selectable.length == 0) {
+
+	        this.addMove("NOTIFY\t" + this.returnFaction(pullee) + " does not have any action cards");
+
+	      } else {
+
+	        let roll = this.rollDice(selectable.length);
+	        let action_card = selectable[roll-1];
+	        for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+	          if (this.game.deck[1].hand[i] === action_card) {
+	  	    this.game.deck[1].hand.splice((roll-1), 1);
+		  }
+	        }
+	        this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
+	        this.addMove("NOTIFY\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
 	      }
-	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
-	      this.addMove("NOTIFY\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
+
 	      this.endTurn();
 	    } else {
 	      let roll = this.rollDice();
@@ -2556,12 +2607,19 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	if (mv[4] === "0") { run_events = 0; }
 	let z            = this.returnEventObjects();
 
+
 	if (type == "action_cards") {
 
           if (this.game.player == player && this.browser_active == 1) {
-	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-amount, this.game.deck[1].hand.length)));
+
+	    // maybe we are already looking at an action card overlay? 
+	    let bonus_buff = 0;
+	    document.querySelectorAll('.overlay_action_card').forEach(el => { bonus_buff++; });
+
+	    this.overlay.showOverlay(this.app, this, this.returnNewActionCardsOverlay(this.game.deck[1].hand.slice(this.game.deck[1].hand.length-(amount+bonus_buff), this.game.deck[1].hand.length)));
 	    document.getElementById("close-action-cards-btn").onclick = (e) => {
 	      this.overlay.hideOverlay();
+	      this.game.state.showing_action_cards_amounts = 0;
             }
 	  }
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
@@ -2586,7 +2644,7 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	//
 	try {
           let html = this.returnTokenDisplay();
-          document.querySelector('.hud-header').html(html);
+          document.querySelector('.hud-header').innerHTML = html;
 	} catch (err) {
 	  console.log("error updating hud-header: " + err);
  	}
@@ -2601,7 +2659,6 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	// if action cards over limit
 	return this.handleActionCardLimit(player);
 
-
       }
   
 
@@ -2613,7 +2670,7 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
 	let z            = this.returnEventObjects();
 
         if (item === "strategycard") {
-  
+
   	  this.updateLog(this.returnFactionNickname(player) + " takes " + this.strategy_cards[mv[3]].name);
 
 	  let strategy_card = mv[3];  
@@ -2654,10 +2711,26 @@ console.log("POST TRADE PROCESSING: " + JSON.stringify(this.game.players_info));
   	    amount = z[z_index].gainTradeGoods(imperium_self, player, amount);
   	  }
 	  this.game.players_info[player-1].goods += amount;
+
+          if (this.game.state.use_tutorials == 1 && !this.game.state.seen_goods_tutorial) {
+            this.game.state.seen_goods_tutorial = 1;
+            this.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;height:90vh;width:auto"><img src="/imperium/img/tutorials/trade_goods.png" style="width:auto;height:100%" /></div>');
+// this likely causes disconnects as is not guaranteed to run on player turn
+//            this.playerAcknowledgeNotice("REMEMBER: use the trade strategy card to get trade goods. Commercial partnerships can be as valuable as large fleets in Red Imperium", function() {});
+          }
+
   	}
 
 
         if (item === "commodities") {
+
+	  if (this.game.state.use_tutorials == 1 && !this.game.state.seen_commodities_tutorial) {
+	    this.game.state.seen_commodities_tutorial = 1;
+            this.overlay.showOverlay(imperium_self.app, imperium_self, '<div style="margin-left:auto;margin-right:auto;height:90vh;width:auto"><img src="/imperium/img/tutorials/commodities.png" style="width:auto;height:100%" /></div>');
+// this likely causes disconnects as is not guaranteed to run on player turn
+//            this.playerAcknowledgeNotice("REMEMBER: when you have commodities, trade them with a neighbouring player. They receive trade goods. Two players can trade commodities to each other and receive trade goods in return!", function() {});
+	  }
+
   	  this.updateLog(this.returnFactionNickname(player) + " gains " + mv[3] + " commodities");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainCommodities(imperium_self, player, amount);

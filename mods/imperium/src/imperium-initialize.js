@@ -41,6 +41,54 @@
       }
     });
     this.menu.addSubMenuOption("game-game", {
+      text : "Rules",
+      id : "game-rules",
+      class : "game-rules",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+
+        let html = `
+        <div class="game-overlay-menu" id="game-overlay-menu">
+          <div>Game Rules:</div>
+            <ul style="font-family: 'orbitron-medium', helvetica">
+              <li class="menu-item" id="basic">Basic Rules</li>
+              <li class="menu-item" id="movement">Moving Units</li>
+              <li class="menu-item" id="production">Producing Units</li>
+              <li class="menu-item" id="combat">Combat</li>
+              <li class="menu-item" id="factions">Factions</li>
+            </ul>
+          </div>
+        `;
+
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, html);
+
+        $('.menu-item').on('click', function() {
+
+          let player_action = $(this).attr("id");
+
+          switch (player_action) {
+            case "basic":
+	      game_mod.handleHowToPlayMenuItem();
+              break;
+            case "movement":
+              game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnUnitsOverlay());
+              break;
+            case "production":
+	      game_mod.overlay.showOverlay(game_mod.app, game_mod, '<div style="margin-left:auto;margin-right:auto;width:auto;height:90vh"><img src="/imperium/img/tutorials/production.png" style="width:auto; height:90vh;" /></div>');
+              break;
+            case "combat":
+	      game_mod.handleCombatMenuItem();
+              break;
+            case "factions":
+	      game_mod.handleFactionMenuItem();
+              break;
+            default:
+              break;
+          }
+        });
+      }
+    });
+    this.menu.addSubMenuOption("game-game", {
       text : "Exit",
       id : "game-exit",
       class : "game-exit",
@@ -49,148 +97,135 @@
       }
     });
 
+
     //
     // factions
     //
     this.menu.addMenuOption({
-      text : "Rules",
-      id : "game-howto",
-      class : "game-howto",
-      callback : function(app, game_mod) {
-        game_mod.menu.showSubMenu("game-howto");
-      }
-    });
-    this.menu.addSubMenuOption("game-howto", {
-      text : "Basic",
-      id : "game-rules",
-      class : "game-basic-rules",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleHowToPlayMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-howto", {
-      text : "Movement",
-      id : "game-basic-rules",
-      class : "game-basic-rules",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleMovementMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-howto", {
-      text : "Combat",
-      id : "game-combat",
-      class : "game-combat",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleCombatMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-howto", {
       text : "Factions",
       id : "game-factions",
       class : "game-factions",
       callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleFactionMenuItem();
+        game_mod.menu.showSubMenu("game-factions");
       }
     });
-
+    for (let i = 0; i < this.game.players.length; i++) {
+      this.menu.addSubMenuOption("game-factions", {
+        text : this.returnFactionNickname(i+1),
+        id : "game-faction-"+(i+1),
+        class : "game-faction-"+(i+1),
+        callback : function(app, game_mod) {
+          game_mod.menu.hideSubMenus();
+          game_mod.displayFactionSheet((i+1));
+        }
+      });
+    }
 
 
     this.menu.addMenuOption({
-      text : "Info",
-      id : "game-cards",
-      class : "game-cards",
+      text : "Cards",
+      id : "game-cardlist",
+      class : "game-cardlist",
       callback : function(app, game_mod) {
-        game_mod.menu.showSubMenu("game-cards");
+        game_mod.menu.showSubMenu("game-cardlist");
       }
     });
-    this.menu.addSubMenuOption("game-cards", {
-      text : "Strategy Cards",
-      id : "game-strategy",
-      class : "game-strategy",
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Strategy",
+      id : "game-strategy-cardlist",
+      class : "game-strategy-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleStrategyMenuItem();
+	//game_mod.handleStrategyMenuItem();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnStrategyCards(), { 
+		columns : 4 , 
+		backgroundImage : "/imperium/img/starscape_background3.jpg" , 
+	}, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Action",
+      id : "game-action-cardlist",
+      class : "game-action-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnActionCards(), {}, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Tech",
+      id : "game-tech-cardlist",
+      class : "game-tech-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	let tech = game_mod.returnTechnology();
+        let t2 = [];
+        for (let x in tech) { if (tech[x].type == "normal" && tech[x].unit != 1) { t2.push(tech[x]); } }
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
+	  alert("cardlist close strategy init menu");
+	});
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Units",
+      id : "game-units-cardlist",
+      class : "game-units-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnUnitsOverlay());
+      }
+    });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Upgrades",
+      id : "game-unit-cardlist",
+      class : "game-unit-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+	let tech = game_mod.returnTechnology();
+        let t2 = [];
+        for (let x in tech) { if (tech[x].type == "normal" && tech[x].unit == 1) { t2.push(tech[x]); } }
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, t2, { backgroundImage : "/imperium/img/starscape-background4.jpg" , padding : "50px"}, function() {
+	  alert("cardlist close strategy init menu");
+	});
       }
     });
     this.menu.addSubMenuOption("game-cards", {
-      text : "Tech Tree",
-      id : "game-tech",
-      class : "game-tech",
+      text : "Dependencies",
+      id : "game-tech-dependencies",
+      class : "game-tech-dependencies",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
         game_mod.handleTechMenuItem();
       }
     });
-    this.menu.addSubMenuOption("game-cards", {
-      text : "Units",
-      id : "game-units",
-      class : "game-units",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleUnitsMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-cards", {
+    this.menu.addSubMenuOption("game-cardlist", {
       text : "Agendas",
-      id : "game-agendas",
-      class : "game-agendas",
+      id : "game-agenda-cardlist",
+      class : "game-agenda-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
 	game_mod.handleAgendasMenuItem();
+        //game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
+	//  alert("cardlist close strategy init menu");
+	//});
       }
     });
-    this.menu.addSubMenuOption("game-cards", {
-      text : "Laws",
-      id : "game-laws",
-      class : "game-laws",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleLawsMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-cards", {
+    this.menu.addSubMenuOption("game-cardlist", {
       text : "Objectives",
-      id : "game-vp",
-      class : "game-vp",
+      id : "game-objectives-cardlist",
+      class : "game-objectives-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
 	game_mod.handleObjectivesMenuItem();
+        //game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.stage_i_objectives, { cardlistHeight: "90vh" , cardlistWidth : "90vw" }, function() {
+	//  alert("cardlist close strategy init menu");
+	//});
       }
     });
-
-
-    this.menu.addMenuOption({
-      text : "Sectors",
-      id : "game-info",
-      class : "game-info",
-      callback : function(app, game_mod) {
-        game_mod.menu.showSubMenu("game-info");
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Sectors",
-      id : "game-sectors",
-      class : "game-sectors",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleSystemsMenuItem();
-      }
-    });
-    this.menu.addSubMenuOption("game-info", {
-      text : "Planets",
-      id : "game-planets",
-      class : "game-planets",
-      callback : function(app, game_mod) {
-        game_mod.menu.hideSubMenus();
-	game_mod.handleInfoMenuItem();
-      }
-    });
-
-
 
 
 

@@ -311,7 +311,7 @@ p {
   width: 100%;
 }
 
-.chat-room-input>textarea {
+.chat-room-input > textarea {
   height: 2.75em;
   font-size: 1em;
   padding: 8px 5px;
@@ -470,7 +470,38 @@ p {
   white-space: normal;
 }
 
-.chat-message>p {
+.chat-message > p {
   display: inline-block;
   margin: 0;
+}
+
+#settings-dropdown {
+  width: 400px;
+  right: -405px;
+  position: absolute;
+  background: #ffffff;
+  color: black;
+}
+
+.header-dropdown a {
+  text-decoration: none;
+  color: black;
+}
+
+#header-token-select {
+  max-width: 11.5em;
+  padding: 5px;
+  border-bottom: 1px solid #888 !important;
+  margin: 5px 0;
+  color: black;
+}
+
+.wallet-action-row {
+  letter-spacing: 0.25px;
+  padding: 0.6em;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 0.5em;
+  color: black;
 }

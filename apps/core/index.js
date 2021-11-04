@@ -28,7 +28,7 @@ class Saito {
     this.miner      = new saito_lib.miner(this);
     this.keys       = new saito_lib.keychain(this);
     this.network    = new saito_lib.network(this);
-    this.networkapi = new saito_lib.networkapi(this);
+    //this.networkapi = new saito_lib.networkapi(this);
     this.burnfee    = new saito_lib.burnfee(this);
     this.blockchain = new saito_lib.blockchain(this);
 
@@ -75,7 +75,7 @@ class Saito {
       await this.blockchain.initialize();
 
       this.network.initialize();
-      this.networkapi.initialize();
+      //this.networkapi.initialize();
 
       if (this.server) {
         this.server.initialize();

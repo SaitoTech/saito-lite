@@ -5,32 +5,41 @@ Generic Style Settings for Modules in the Saito App Suite
 /* Visuelt fonts */
 
 @font-face {
-  font-family: 'visuelt-black';
-  src: url('/saito/fonts/visuelt-black.eot');
-  src: url('/saito/fonts/visuelt-black.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-black.woff2') format('woff2'), url('/saito/fonts/visuelt-black.woff') format('woff'), url('/saito/fonts/visuelt-black.ttf') format('truetype');
+  font-family: "visuelt-black";
+  src: url("/saito/fonts/visuelt-black.eot");
+  src: url("/saito/fonts/visuelt-black.eot?#iefix") format("embedded-opentype"),
+    url("/saito/fonts/visuelt-black.woff2") format("woff2"),
+    url("/saito/fonts/visuelt-black.woff") format("woff"),
+    url("/saito/fonts/visuelt-black.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'visuelt-light';
-  src: url('/saito/fonts/visuelt-light.eot');
-  src: url('/saito/fonts/visuelt-light.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-light.woff2') format('woff2'), url('/saito/fonts/visuelt-light.woff') format('woff'), url('/saito/fonts/visuelt-light.ttf') format('truetype');
+  font-family: "visuelt-light";
+  src: url("/saito/fonts/visuelt-light.eot");
+  src: url("/saito/fonts/visuelt-light.eot?#iefix") format("embedded-opentype"),
+    url("/saito/fonts/visuelt-light.woff2") format("woff2"),
+    url("/saito/fonts/visuelt-light.woff") format("woff"),
+    url("/saito/fonts/visuelt-light.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'visuelt-medium';
-  src: url('/saito/fonts/visuelt-medium.eot');
-  src: url('/saito/fonts/visuelt-medium.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-medium.woff2') format('woff2'), url('/saito/fonts/visuelt-medium.woff') format('woff'), url('/saito/fonts/visuelt-medium.ttf') format('truetype');
+  font-family: "visuelt-medium";
+  src: url("/saito/fonts/visuelt-medium.eot");
+  src: url("/saito/fonts/visuelt-medium.eot?#iefix") format("embedded-opentype"),
+    url("/saito/fonts/visuelt-medium.woff2") format("woff2"),
+    url("/saito/fonts/visuelt-medium.woff") format("woff"),
+    url("/saito/fonts/visuelt-medium.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'p-word';
-  src: url('/saito/fonts/password.ttf') format('truetype');
+  font-family: "p-word";
+  src: url("/saito/fonts/password.ttf") format("truetype");
 }
 
 /* HTML and Page Structure */
@@ -64,7 +73,7 @@ html {
   --thumbBG: var(--saito-red);
 }
 
-html[data-theme='dark'] {
+html[data-theme="dark"] {
   --text-color-normal: var(--saito-skyline-grey);
   --background-general: var(--saito-cyber-black);
   --text-color-highlight: var(--saito-red);
@@ -77,14 +86,14 @@ html[data-theme='dark'] {
 /* h1 */
 
 .page-title {
-  margin: 0 0 .5rem;
+  margin: 0 0 0.5rem;
 }
 
 /* p */
 
 .page-subtitle {
   margin: 0;
-  opacity: .9;
+  opacity: 0.9;
 }
 
 p {
@@ -100,15 +109,18 @@ a:hover {
   color: var(--saito-cyber-black);
 }
 
-.rightj, .right {
+.rightj,
+.right {
   text-align: right;
 }
 
-.centerj, .center {
+.centerj,
+.center {
   text-align: center;
 }
 
-.justifyj, .justify {
+.justifyj,
+.justify {
   text-align: justify;
 }
 
@@ -193,7 +205,13 @@ body {
   opacity: 1;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0.5em 0;
 }
 
@@ -210,7 +228,7 @@ hr {
 }
 
 .monospace {
-  font-family: monospace, 'Courier New', Courier;
+  font-family: monospace, "Courier New", Courier;
 }
 
 .boldred {
@@ -224,7 +242,8 @@ hr {
 
 /* Overlay */
 
-.saito-overlay-backdrop, .game-overlay-backdrop {
+.saito-overlay-backdrop,
+.game-overlay-backdrop {
   position: absolute;
   display: none;
   top: 0;
@@ -237,7 +256,8 @@ hr {
   min-width: 350px;
 }
 
-.saito-overlay, .game-overlay {
+.saito-overlay,
+.game-overlay {
   position: absolute;
   display: inline-block;
   left: 50%;
@@ -271,7 +291,7 @@ hr {
 }
 
 .saito-overlay-closebox-btn:hover {
-  transform: scale(1.0);
+  transform: scale(1);
 }
 
 .game-overlay {
@@ -310,7 +330,9 @@ hr {
 
 /* Forms and Inputs */
 
-button, .button, .file-label {
+button,
+.button,
+.file-label {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
@@ -321,7 +343,7 @@ button, .button, .file-label {
   margin: 0 1em 1em 0;
   color: var(--saito-red);
   letter-spacing: 1px;
-  transition: transform .25s;
+  transition: transform 0.25s;
   margin: 0.2em 0;
   min-width: 180px;
 }
@@ -331,18 +353,23 @@ a.button {
 }
 
 i {
-  transition: all .25s;
+  transition: all 0.25s;
 }
 
 i:hover {
-  transform: scale(.90);
+  transform: scale(0.9);
 }
 
-button:active, .button:active, i:active {
-  transform: scale(.96);
+button:active,
+.button:active,
+i:active {
+  transform: scale(0.96);
 }
 
-button:hover, .button:hover, button:focus, .button:focus {
+button:hover,
+.button:hover,
+button:focus,
+.button:focus {
   text-shadow: #ffffff 1px 0;
   background: var(--saito-red);
   color: #ffffff;
@@ -361,7 +388,8 @@ button.super {
   width: 100%;
 }
 
-button.super:hover, .button.super:hover {
+button.super:hover,
+.button.super:hover {
   text-shadow: var(--saito-skyline-grey) 1px 0;
 }
 
@@ -375,12 +403,14 @@ button.action {
   color: var(--saito-white);
 }
 
-button.sub:hover, .button.sub:hover {
+button.sub:hover,
+.button.sub:hover {
   text-shadow: var(--saito-cyber-black) 1px 0;
   background: var(--saito-skyline-grey);
 }
 
-button:disabled, button[disabled] {
+button:disabled,
+button[disabled] {
   border: 1px solid #999999;
   background: #cccccc;
   color: #666666;
@@ -554,7 +584,6 @@ button i {
 .appstore-overlay-developers:hover {
   font-weight: bold;
   cursor: pointer;
-  ;
 }
 
 .appstore-overlay-container {
@@ -681,13 +710,13 @@ button i {
 
 /* On mouse-over, add a grey background color */
 
-.s-container:hover input~.s-checkmark {
+.s-container:hover input ~ .s-checkmark {
   background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
 
-.s-container input:checked~.s-checkmark {
+.s-container input:checked ~ .s-checkmark {
   background-color: #fff;
   border: 1px solid var(--saito-cyber-black-cut);
   box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 7px var(--saito-red);
@@ -703,7 +732,7 @@ button i {
 
 /* Show the checkmark when checked */
 
-.s-container input:checked~.checkmark:after {
+.s-container input:checked ~ .checkmark:after {
   display: block;
 }
 
@@ -750,7 +779,8 @@ fieldset {
   margin: 0 0 1em 0;
 }
 
-.grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) {
+.grid-4 div:nth-child(2n-1),
+.grid-2 div:nth-child(2n-1) {
   font-family: visuelt-medium;
   text-transform: capitalize;
   padding: 10px 0;
@@ -758,7 +788,8 @@ fieldset {
   line-height: 38px;
 }
 
-.grid-4 div, .grid-2 div {
+.grid-4 div,
+.grid-2 div {
   align-self: center;
 }
 
@@ -804,7 +835,8 @@ fieldset {
   margin: 0 0 1em 0;
 }
 
-.grid-2 div, .grid-4 div {
+.grid-2 div,
+.grid-4 div {
   padding: 0.5em 0;
 }
 
@@ -834,22 +866,29 @@ input {
   display: none;
 }
 
-input[type=text], input[type=number], input[type=range], input[type=password] {
+input[type="text"],
+input[type="number"],
+input[type="range"],
+input[type="password"] {
   width: 100%;
   border: none;
 }
 
-input[type=number] {
+input[type="number"] {
   width: 80%;
 }
 
-input[type=checkbox], input[type=radio] {
+input[type="checkbox"],
+input[type="radio"] {
   margin: 0 1em;
   width: 20px;
   height: 20px;
 }
 
-input[type=text], input[type=number], input[type=password], input[type=date] {
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="date"] {
   border: none;
   padding: 10px 5px;
   border-radius: 0px;
@@ -861,7 +900,7 @@ input[type=text], input[type=number], input[type=password], input[type=date] {
   font-family: p-word;
 }
 
-input[type=file] {
+input[type="file"] {
   border: none;
   width: 0.1px;
   height: 0.1px;
@@ -871,17 +910,17 @@ input[type=file] {
   z-index: -1;
 }
 
-input[type=text].green-bottom-border {
+input[type="text"].green-bottom-border {
   border-bottom: 2px solid green;
 }
 
-input[type=text].red-bottom-border {
+input[type="text"].red-bottom-border {
   border-bottom: 2px solid red;
 }
 
 /* way too much stuff to clean up range sliders */
 
-input[type=range] {
+input[type="range"] {
   -webkit-appearance: none;
   /* Hides the slider so that custom slider can be made */
   width: 100%;
@@ -893,16 +932,16 @@ input[type=range] {
   border-radius: 5px;
 }
 
-input[type=range]::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
 }
 
-input[type=range]:focus {
+input[type="range"]:focus {
   outline: none;
   /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
 }
 
-input[type=range]::-ms-track {
+input[type="range"]::-ms-track {
   width: 100%;
   cursor: pointer;
   /* Hides the slider so custom styles can be added */
@@ -911,7 +950,7 @@ input[type=range]::-ms-track {
   color: transparent;
 }
 
-input[type=range]::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   background-color: var(--saito-red);
   height: 16px;
@@ -926,7 +965,7 @@ input[type=range]::-webkit-slider-thumb {
 
 /* All the same stuff for Firefox */
 
-input[type=range]::-moz-range-thumb {
+input[type="range"]::-moz-range-thumb {
   background-color: var(--saito-red);
   height: 16px;
   width: 8px;
@@ -969,7 +1008,7 @@ select::-ms-expand {
 select {
   font-size: 1.2em;
   flex: 1;
-  padding: 0 .5em;
+  padding: 0 0.5em;
   cursor: pointer;
   background: none;
 }
@@ -977,7 +1016,7 @@ select {
 /* Arrow */
 
 .saito-select::after {
-  content: '\25BC';
+  content: "\25BC";
   position: absolute;
   top: 0;
   right: 0;
@@ -985,9 +1024,9 @@ select {
   background: #fff;
   cursor: pointer;
   pointer-events: none;
-  -webkit-transition: .25s all ease;
-  -o-transition: .25s all ease;
-  transition: .25s all ease;
+  -webkit-transition: 0.25s all ease;
+  -o-transition: 0.25s all ease;
+  transition: 0.25s all ease;
 }
 
 /* Transition */
@@ -1080,7 +1119,7 @@ div#message-wrapper {
   position: fixed;
   bottom: 1em;
   left: 1em;
-  color: #FFF;
+  color: #fff;
   z-index: 200;
 }
 
@@ -1151,6 +1190,8 @@ div#message-wrapper {
   padding: 5px;
   border-bottom: 1px solid #888 !important;
   margin: 5px 0;
+  background: var(--saito-nightscape);
+  color: white;
 }
 
 .pulsey {
@@ -1231,13 +1272,17 @@ div#message-wrapper {
   margin: 0 9em 0 0;
 }
 
-.header-mini-wallet .header-profile-photo {}
+.header-mini-wallet .header-profile-photo {
+}
 
-.header-mini-wallet .header-balance {}
+.header-mini-wallet .header-balance {
+}
 
-.header-mini-wallet .header-username {}
+.header-mini-wallet .header-username {
+}
 
-.header-mini-wallet .header-icon {}
+.header-mini-wallet .header-icon {
+}
 
 /*
 .header-home {
@@ -1280,7 +1325,7 @@ div#message-wrapper {
   color: var(--text-color-normal);
   padding: 15px;
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
-  border: 1px solid var( --saito-cyber-black-wash);
+  border: 1px solid var(--saito-cyber-black-wash);
   border-radius: 5px 0 0 5px;
   width: 250px;
   font-size: 1.2em;
@@ -1295,9 +1340,12 @@ div#message-wrapper {
   width: 400px;
   right: -405px;
   position: absolute;
+  background: var(--saito-nightscape);
+  color: white;
 }
 
-.show-right-sidebar, .show-right-sidebar-hard {
+.show-right-sidebar,
+.show-right-sidebar-hard {
   right: 0 !important;
 }
 
@@ -1342,7 +1390,7 @@ div#message-wrapper {
 .account-info .saito-select {
   border: 0px;
   color: #333;
-  background-color: #fff;
+  background: var(--saito-nightscape);
 }
 
 .account-info div {
@@ -1372,7 +1420,7 @@ div#message-wrapper {
 }
 
 .wallet-action-row {
-  letter-spacing: .25px;
+  letter-spacing: 0.25px;
   padding: 0.6em;
   cursor: pointer;
   display: grid;
@@ -1382,6 +1430,7 @@ div#message-wrapper {
 
 .wallet-action-row:hover {
   background-color: var(--saito-skyline-grey);
+  color: black;
 }
 
 .wallet-action-row i {
@@ -1389,7 +1438,7 @@ div#message-wrapper {
 }
 
 .terms {
-  border-top: 1px solid rgba(0, 0, 0, .1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding: 14px 41px 4px 41px;
   font-size: 14px;
   text-align: center;
@@ -1560,7 +1609,7 @@ div#message-wrapper {
   width: 80%;
   font-size: 1.3em;
   border-radius: 5px;
-  transition: max-width linear .25s;
+  transition: max-width linear 0.25s;
 }
 
 .modal-content-blank {
@@ -1568,7 +1617,7 @@ div#message-wrapper {
   margin: 15% auto;
   width: 66%;
   font-size: 1.3em;
-  transition: max-width linear .25s;
+  transition: max-width linear 0.25s;
 }
 
 .modal-med-size {
@@ -1585,7 +1634,8 @@ div#message-wrapper {
   height: 0px;
 }
 
-.close:hover, .close:focus {
+.close:hover,
+.close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
@@ -1621,10 +1671,15 @@ div#message-wrapper {
   .grid-4 {
     grid-template-columns: 5em 1fr;
   }
-  .grid-1-2-columns, .grid-3-columns {
+  .grid-1-2-columns,
+  .grid-3-columns {
     grid-template-columns: 1fr;
   }
-  .grid-2 div, .grid-4 div, .grid-2-columns div, .grid-3-columns div, .grid-1-2-columns div {
+  .grid-2 div,
+  .grid-4 div,
+  .grid-2-columns div,
+  .grid-3-columns div,
+  .grid-1-2-columns div {
     overflow: hidden;
   }
 }
@@ -1743,7 +1798,8 @@ div#message-wrapper {
   font-size: 2em;
 }
 
-.welcome-modal-main {}
+.welcome-modal-main {
+}
 
 .welcome-modal-info {
   clear: both;
@@ -1818,26 +1874,26 @@ blockquote {
 
 .medium-toolbar-arrow-under:after {
   top: 60px;
-  border-color: var(--saito-red) transparent transparent
+  border-color: var(--saito-red) transparent transparent;
 }
 
 .medium-toolbar-arrow-over:before {
   top: -8px;
-  border-color: transparent transparent var(--saito-red)
+  border-color: transparent transparent var(--saito-red);
 }
 
 .medium-editor-toolbar {
-  background-color: var(--saito-red)
+  background-color: var(--saito-red);
 }
 
 .medium-editor-toolbar-input {
   height: 60px;
   background: var(--saito-red);
-  color: #fff
+  color: #fff;
 }
 
 .medium-editor-toolbar li {
-  padding: 0
+  padding: 0;
 }
 
 .medium-editor-toolbar li button {
@@ -1848,55 +1904,57 @@ blockquote {
   border-right: 1px solid #fb5e5e;
   background-color: transparent;
   color: #fff;
-  -webkit-transition: background-color .2s ease-in, color .2s ease-in;
-  transition: background-color .2s ease-in, color .2s ease-in
+  -webkit-transition: background-color 0.2s ease-in, color 0.2s ease-in;
+  transition: background-color 0.2s ease-in, color 0.2s ease-in;
 }
 
 .medium-editor-toolbar li button:hover {
   background-color: #aa1d0a;
-  color: #fff
+  color: #fff;
 }
 
 .medium-editor-toolbar li .medium-editor-button-active {
   background-color: #aa1d0a;
-  color: #fff
+  color: #fff;
 }
 
 .medium-editor-toolbar li .medium-editor-button-last {
-  border-right: none
+  border-right: none;
 }
 
-.medium-editor-toolbar-form .medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
+.medium-editor-toolbar-form
+  .medium-editor-toolbar-form
+  .medium-editor-toolbar-input::-webkit-input-placeholder {
   color: #fff;
-  color: rgba(255, 255, 255, .8)
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .medium-editor-toolbar-form .medium-editor-toolbar-input:-moz-placeholder {
   color: #fff;
-  color: rgba(255, 255, 255, .8)
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .medium-editor-toolbar-form .medium-editor-toolbar-input::-moz-placeholder {
   color: #fff;
-  color: rgba(255, 255, 255, .8)
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .medium-editor-toolbar-form .medium-editor-toolbar-input:-ms-input-placeholder {
   color: #fff;
-  color: rgba(255, 255, 255, .8)
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .medium-editor-toolbar-form a {
-  color: #fff
+  color: #fff;
 }
 
 .medium-editor-toolbar-anchor-preview {
   background: var(--saito-red);
-  color: #fff
+  color: #fff;
 }
 
 .medium-editor-placeholder:after {
-  color: #888888
+  color: #888888;
 }
 
 .medium-editor-element {
@@ -1978,4 +2036,17 @@ a.header-icon-fullscreen.tip {
 
 .align-top {
   align-self: auto !important;
+}
+
+.text-sizer-small {
+  font-size: 1em;
+  text-indent: 1em;
+}
+
+.text-sizer-medium {
+  font-size: 1.2em;
+}
+
+.text-sizer-large {
+  font-size: 1.3em;
 }

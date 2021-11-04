@@ -26,6 +26,8 @@ class Wuziqi extends GameTemplate {
         this.moves = [];
         this.bestof = 1;
 
+        this.seats = [2,5]
+
         return this;
     }
 
@@ -286,7 +288,7 @@ class Wuziqi extends GameTemplate {
       this.game.status = str;
 
       if (this.browser_active == 1) {
-        let status_obj = document.querySelector(".status");
+        let status_obj = document.querySelector(".me .plog");
         if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
           status_obj.innerHTML = str;
         }
@@ -490,7 +492,7 @@ class Wuziqi extends GameTemplate {
             this.addEvents(this.game.board);
             this.updateStatus("You go first");
         });
-        document.querySelector(".status").append(el);
+        document.querySelector(".me .plog").append(el);
     }
 
     // Check if a player won the round

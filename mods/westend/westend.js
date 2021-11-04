@@ -2,7 +2,7 @@ const SubstrateBasedCrypto = require("../../lib/templates/substratebasedcrypto")
 
 let kaoliniteTestServerEndpoint = "ws://138.197.202.211:9932";
 let saitoWestendEndpoint = "ws://178.128.181.212:9932";
-let saitoWestendEndpointSecure = "wss://saito.io:9931/argylewss/";
+let saitoWestendEndpointSecure = "wss://parity.saito.io:9931/argylewss/";
 
 class Westend extends SubstrateBasedCrypto {
   constructor(app) {
@@ -84,8 +84,9 @@ Please note that while Saito is under development your wallet may periodically g
       let dotgo = document.getElementById("dot-warning-confirm");
       if (dotgo) {
         dotgo.onclick = (e) => {
-          //app.wallet.backupWallet();
+          cryptomod.activate();
           cryptomod.modal_overlay.hideOverlay();
+          app.connection.emit('update_balance');
         }
       }
       let dotno = document.getElementById("westend-token-faucet");

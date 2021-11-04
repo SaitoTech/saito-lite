@@ -167,8 +167,8 @@ p {
   margin-bottom: 1px;
   word-wrap: break-word;
   font-family: "visuelt-light", "Microsoft Yahei", "Hiragino Sans GB";
-  line-height: 16px;
-  font-size: 15px;
+  line-height: 1.2em;
+  font-size: 1.05em;
 }
 
 .saito-address {
@@ -200,7 +200,7 @@ p {
 
 .chat-message-header {
   display: flex;
-  line-height: 14px;
+  line-height: 1em;
 }
 
 .chat-message-others .chat-message-header {
@@ -229,8 +229,8 @@ p {
 }
 
 .chat-box-header-title {
-  font-size: 17.28px;
-  line-height: 17px;
+  font-size: 0.8em;
+  line-height: 1em;
   margin-left: 0.5em;
   max-width: 20em;
   text-overflow: ellipsis;
@@ -292,7 +292,7 @@ p {
   margin-left: 1em;
   background-color: white;
   border: 1px solid #a5a5a5;
-  font-size: 0.8rem;
+  font-size: 0.8em;
   grid-template-columns: 1fr;
   grid-template-rows: 3.2em auto 3.0em;
   grid-template-areas: "chat_header" "chat_main" ".";

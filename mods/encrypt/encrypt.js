@@ -165,9 +165,19 @@ class Encrypt extends ModTemplate {
       parties_to_exchange = 2;
     }
 
+console.log("recipient is: " + recipient);
     if (recipient == "") { return; }
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (parties_to_exchange * this.app.wallet.wallet.default_fee));
+
+    //
+    // we had an issue creating the transaction, try zero-fee
+    //
+    if (!tx) {
+console.log("zero fee tx creating...");
+      tx = this.app.wallet.createUnsignedTransaction(recipient, 0.0, 0.0);
+    }
+
     tx.msg.module = this.name;
     tx.msg.request = "key exchange request";
     tx.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
@@ -193,7 +203,6 @@ console.log("sending request on network");
       this.app.network.sendPeerRequest("diffie hellman key exchange", data, peer);
     }
     this.saveEncrypt();
-
 
   }
 
