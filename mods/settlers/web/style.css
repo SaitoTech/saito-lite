@@ -46,27 +46,111 @@ body {
 }
 
 
+/* Dice */
+.diceroll{
+  position: absolute;
+  width: 10vw;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-5vw);
+  border: 2px solid black;
+  border-radius: 1vw;
+  background-color: #222B;
+  padding: 0.5vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  z-index: 3;
+}
 
+.die{
+  width: 3vw;
+}
 .hud-body {
   overflow: unset;
 }
 
 .textchoice {
-  background-color: whitesmoke;
+  
 }
 
-.card {
-  width: 150px;
+.status-message ul li:hover, .status ul li:hover{
+  color: black;
+  background-color: #e7e7e7;
 }
+
+/*
+  Shrink Development cards
+*/
+.devcards > .card{
+  width: 8vh;
+  position: absolute;
+}
+
+.tinycard{
+  width: 8vh;
+}
+
+/* Make room to display two hands of cards*/
+.devcards{
+  top: -2vh;
+  position: absolute;
+}
+
+.devcards+.rescards{
+  top: 2vh;
+  position: absolute;
+}
+
+.bighand>.card:nth-child(5n+1) {
+  transform: rotate(-20deg);
+  left: 0px;
+}
+
+.bighand>.card:nth-child(5n+2) {
+  transform: rotate(-10deg);
+  left: 2vh;
+}
+
+.bighand>.card:nth-child(5n+3) {
+  transform: rotate(0deg);
+  left: 4vh;
+}
+
+.bighand>.card:nth-child(5n+4) {
+  transform: rotate(10deg);
+  left: 6vh;
+}
+
+.bighand>.card:nth-child(5n+5) {
+  transform: rotate(20deg);
+  left: 8vh;
+}
+
+.bighand>.card:nth-child(n+6) {
+  top: 3vh;
+}
+.bighand>.card:nth-child(n+11) {
+  top: 6vh;
+}
+.bighand>.card:nth-child(n+16) {
+  top: 9vh;
+}
+
+
 .startmove {
   cursor: pointer;
   display: inline-block;
+  text-decoration: underline;
 }
 
 .game-hexgrid-cities {
   position: absolute;
 }
 
+.hover{
+  z-index: 1000;
+}
 .hover:hover {
   border: 1px solid white;
   background-color: whitesmoke;
@@ -148,6 +232,16 @@ body {
   background-color: orange;
 }
 
+.c1 .player-info-name{
+  color: red;
+}
+.c2 .player-info-name{
+  color: blue;
+}
+
+.producer polygon{
+  fill: white;
+}
 
 .city1{
   top: -10%;
@@ -192,6 +286,10 @@ body {
   color: white;
 }
 
+.bandit{
+  background-color: black;
+  color: darkgray;
+}
 
 .city.p1 {
   border: 10px solid red;
@@ -242,12 +340,128 @@ body {
   position: relative;
 }
 
+.highlight{
+  font-size: 1.1em;
+  font-weight: bold;
+}
 
+.status-message{
+  width: unset;
+  background-color: unset;
+}
 
 .hexTileCenter{
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);
   text-align: center;
+}
+
+.me > .player-box-graphic{
+  position: relative;
+  left: calc(150px + 8vw);
+  z-index: -1;
+}
+
+.notme > .player-box-graphic{
+  position: relative;
+  right: 8vw;
+  z-index: -1;
+}
+
+.flexline{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.token{
+  margin: min(3px,1vh);
+  width: 2.5vh;
+  background-color: unset;
+}
+
+.token.p1 polygon{
+  fill: red;
+}
+
+.token.p2 polygon{
+  fill: blue;
+}
+
+.token.p3 polygon{
+  fill: green;
+}
+
+.token.p4 polygon{
+  fill: orange;
+}
+
+
+.player-box.notme{
+  height: fit-content;
+}
+/*
+    Copied from WuziQi
+*/
+
+@media (orientation: landscape) {
+    .player-box{
+        top: 40vh;  /*Center in screen:  50vh - 1/2 height */
+        margin: auto auto;
+        max-width: 20vw;
+    }
+
+    .player-box.me{
+        left: max(5px, calc(12vw - 7em));
+        top:  80vh;
+    }
+
+    .player-box.notme{
+        right: max(5px, calc(12vw - 7em));
+        top:  10vh;
+    }
+}
+
+@media (orientation: portrait) {
+    .player-box{
+        top: calc(65vw + 26vh);
+        max-width: 35vw;
+    }
+
+    .player-box.me{
+        left: calc(30vw - 6em);
+    }
+
+    .player-box.notme{
+        right: calc(30vw - 6em);
+    }
+}
+
+/*
+    Intermediate (roughly square screen size, technically landscape, but keep portrait layout)
+*/
+@media (max-aspect-ratio:  8/7) and (min-aspect-ratio: 7/8) {
+    .player-box{
+        top: unset;
+        bottom: 0px;
+        max-width: 40vw;
+    }
+    .player-box.me{
+        left: calc(30vw - 5.5em);
+    }
+
+    .player-box.notme{
+        right: calc(30vw - 5.5em);
+    }
+}
+
+@media (max-width: 500px) and (orientation: portrait) and (max-aspect-ratio: 7/8){
+    .player-box{
+        top: calc(95vw + 15vh);
+        max-width: 38vw;
+    }
 }
 
