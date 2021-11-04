@@ -538,7 +538,7 @@ ACTION CARD - types
 		planet = imperium_self.game.planets[planet];
 		let goods = planet.resources;
 
-                imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
+                imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+goods);
                 imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet.planet);
                 imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
                 imperium_self.endTurn();
@@ -576,7 +576,7 @@ ACTION CARD - types
 		planet = imperium_self.game.planets[planet];
 		let goods = planet.resources;
 
-                imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
+                imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+goods);
                 imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planetname);
                 imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
                 imperium_self.endTurn();
@@ -631,7 +631,7 @@ ACTION CARD - types
 	  if (imperium_self.game.player == action_card_player) {
 
             imperium_self.playerResearchTechnology(function(tech) {
-              imperium_self.addMove("purchase\t"+imperium_self.game.player+"\ttech\t"+tech);
+              imperium_self.addMove("purchase\t"+action_card_player+"\ttech\t"+tech);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\tgoods\t4");
               imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
               imperium_self.endTurn();
@@ -755,7 +755,7 @@ ACTION CARD - types
 	  }
 
 	  if (trade_goods_to_gain > 0 ) {
-            imperium_self.game.queue.push("purchase\t"+imperium_self.game.player+"\tgoods\t"+trade_goods_to_gain);
+            imperium_self.game.queue.push("purchase\t"+action_card_player+"\tgoods\t"+trade_goods_to_gain);
 	  }
 
 	  return 1;
@@ -868,7 +868,7 @@ ACTION CARD - types
 	      }
 	    }
 
-            imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+maximum_resources);
+            imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+maximum_resources);
             imperium_self.endTurn();
 	    return 0;
 

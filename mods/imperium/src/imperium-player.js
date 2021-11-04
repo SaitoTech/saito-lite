@@ -1081,7 +1081,7 @@ playerDestroyUnits(player, total, sector, capital = 0) {
     if (targetted_units.includes(unit.type)) { total_targetted_units++; }
     html += '<li class="textchoice player_ship_' + i + '" id="' + i + '">' + unit.name + '</li>';
   }
-  for (let p = 0; i < sys.p.length; p++) {
+  for (let p = 0; p < sys.p.length; p++) {
     for (let i = 0; i < sys.p[p].units[imperium_self.game.player - 1].length; i++) {
       let unit = sys.p[p].units[imperium_self.game.player - 1][i];
       maximum_assignable_hits++;
@@ -1103,18 +1103,18 @@ playerDestroyUnits(player, total, sector, capital = 0) {
   $('.textchoice').off();
   $('.textchoice').on('click', function () {
 
-
     let ship_idx = $(this).attr("id");
     let planet_idx = 0;
     let unit_idx = 0;
     let unit_type = "ship";
 
-    if (ship_idx.indexOf("_unit_") > 0) {
+    if (ship_idx.indexOf("nd_unit_") > 0) {
       unit_type = "ground";
       let tmpk = ship_idx.split("_");
-      planet_idx = tmpk[1];
-      unit_idx = tmpk[2];
-
+      planet_idx = parseInt(tmpk[2]);
+      unit_idx = parseInt(tmpk[3]);
+    } else {
+      ship_idx = parseInt(ship_idx);
     }
 
     let selected_unit = null;

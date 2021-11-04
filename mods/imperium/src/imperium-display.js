@@ -1924,7 +1924,7 @@ updateSectorGraphics(sector) {
     this.cardbox.hideCardbox(1);
   }
   showTechCard(tech) {
-    this.cardbox.showCardboxHTML(tech, this.returnTechCardHTML(tech));
+    this.cardbox.showCardboxHTML(tech, this.tech[tech].returnCardImage());
   }
   hideTechCard(tech) {
     this.cardbox.hideCardbox(1);

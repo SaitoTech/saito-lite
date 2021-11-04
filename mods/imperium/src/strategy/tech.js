@@ -3,11 +3,8 @@
       name     			:       "Technology",
       rank			:	7,
       img			:	"/strategy/TECH.png",
-      text			:	"<b>Player</b> may Research a technology and spend 6 resources to research another.<hr /><b>Others</b> may spend strategy token and 4 resources to research a technology" ,
+      text			:	"<b>Player</b> researches a tech and may spend 6 resources for a second.<hr /><b>Others</b> may research for strategy token and 4 resources" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
-
-console.log("STRAT PRIM: " + player + " -- " + strategy_card_player);
-
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
             imperium_self.playerResearchTechnology(function(tech) {
