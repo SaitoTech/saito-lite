@@ -10871,10 +10871,14 @@ console.log("Active Agenda: " + active_agenda);
     });
     this.menu.addSubMenuOption("game-cardlist", {
       text : "Laws",
-      id : "game-agenda-cardlist",
-      class : "game-agenda-cardlist",
+      id : "game-laws-cardlist",
+      class : "game-laws-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
+        if (game_mod.game.state.laws.length == 0) {
+	  salert("There are currently no Active Laws");
+	  return;
+	}
         game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnLawsOverlay());
       }
     });
@@ -29251,7 +29255,7 @@ returnNewSecretObjectiveOverlay(card) {
 
 
 returnTechOverlay() {
-  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="width:90vw"></div>';
+  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="height:90vh;width:auto"></div>';
   return html;
 }
 
