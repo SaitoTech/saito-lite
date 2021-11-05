@@ -88,6 +88,7 @@ body {
   row-gap: 1em;
   column-gap: 1em;
   text-align: left;
+  justify-items: center;
 }
 .game-overlay-button-close {
   margin-left: 50px;

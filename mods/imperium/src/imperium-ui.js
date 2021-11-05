@@ -65,12 +65,10 @@ handleUnitsMenuItem() {
 }
 handleStrategyMenuItem() {
 
-  //this.overlay.showOverlay(this.app, this, this.returnStrategyOverlay());
-
   //
   // show overlay
   //
-  game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnStrategyCards(), {
+  this.overlay.showCardSelectionOverlay(this.app, this, this.returnStrategyCards(), {
     columns : 4 ,
     backgroundImage : "/imperium/img/starscape_background3.jpg" ,
   }, function() {
@@ -84,8 +82,8 @@ handleStrategyMenuItem() {
 
     let strategy_card_state = "not picked";
     let strategy_card_player = -1;
-
     let strategy_card_bonus = 0;
+
     for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
       if (s === this.game.state.strategy_cards[i]) {
         strategy_card_bonus = this.game.state.strategy_cards_bonus[i];
@@ -121,7 +119,6 @@ handleStrategyMenuItem() {
         </div>
      `;
     }
-    card_html += `  ${strategy_card_bonus_html}`;
 
     this.app.browser.addElementToDom(card_html, s);   
 

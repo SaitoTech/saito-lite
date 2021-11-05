@@ -204,10 +204,10 @@
       class : "game-agenda-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleAgendasMenuItem();
-        //game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
-	//  alert("cardlist close strategy init menu");
-	//});
+	//game_mod.handleAgendasMenuItem();
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
+	  alert("cardlist close strategy init menu");
+	});
       }
     });
     this.menu.addSubMenuOption("game-cardlist", {
