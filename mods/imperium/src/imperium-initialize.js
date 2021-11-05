@@ -98,6 +98,7 @@
     });
 
 
+
     //
     // factions
     //
@@ -122,6 +123,7 @@
     }
 
 
+
     this.menu.addMenuOption({
       text : "Cards",
       id : "game-cardlist",
@@ -136,13 +138,7 @@
       class : "game-strategy-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	//game_mod.handleStrategyMenuItem();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnStrategyCards(), { 
-		columns : 4 , 
-		backgroundImage : "/imperium/img/starscape_background3.jpg" , 
-	}, function() {
-	  alert("cardlist close strategy init menu");
-	});
+	game_mod.handleStrategyMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-cardlist", {
