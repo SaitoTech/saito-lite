@@ -1,87 +1,226 @@
-.game-menu {
-  width: 420px;
+/*
+  Undo poker playerbox positions....
+*/
+.p1, .p2, .p3, .p4, .p5, .p6 {
+  min-width: unset;
+  height: unset;
+  bottom: unset;
+  top: unset;
+  right: unset;
+  left: unset;
+  transform: unset;
+  width: unset;
+  overflow-y: unset;
+}
+
+.hexIn{
+  overflow: unset;
+}
+.hexLink{
+  overflow: unset;
+}
+
+.hex_bg{
+  margin: unset;
+   left: -12.5%;
+  right: -12.5%;
+}
+
+.hex_bg img{
+  left: -12.5%;
+  right: -12.5%;
 }
 
 body {
-  background-image: url(/settlers/img/background2.jpg);
+  background-color: lightseagreen;
+  background-image: url(/settlers/img/water.JPG);
   background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: unset; /* fixed from game.css does weird stuff*/
+
+}
+
+#game-hexgrid{
+  width: 1000px;
 }
 
 
+/* Dice */
+.diceroll{
+  position: absolute;
+  width: 10vw;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-5vw);
+  border: 2px solid black;
+  border-radius: 1vw;
+  background-color: #222B;
+  padding: 0.5vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  z-index: 3;
+}
+
+.die{
+  width: 3vw;
+}
 .hud-body {
   overflow: unset;
 }
 
 .textchoice {
-  background-color: whitesmoke;
+  
 }
 
-.card {
-  width: 150px;
+.status-message ul li:hover, .status ul li:hover{
+  color: black;
+  background-color: #e7e7e7;
 }
+
+/*
+  Shrink Development cards
+*/
+.devcards > .card{
+  width: 8vh;
+  position: absolute;
+}
+
+.tinycard{
+  width: 8vh;
+}
+
+/* Make room to display two hands of cards*/
+.devcards{
+  top: -2vh;
+  position: absolute;
+}
+
+.devcards+.rescards{
+  top: 2vh;
+  position: absolute;
+}
+
+.bighand>.card:nth-child(5n+1) {
+  transform: rotate(-20deg);
+  left: 0px;
+}
+
+.bighand>.card:nth-child(5n+2) {
+  transform: rotate(-10deg);
+  left: 2vh;
+}
+
+.bighand>.card:nth-child(5n+3) {
+  transform: rotate(0deg);
+  left: 4vh;
+}
+
+.bighand>.card:nth-child(5n+4) {
+  transform: rotate(10deg);
+  left: 6vh;
+}
+
+.bighand>.card:nth-child(5n+5) {
+  transform: rotate(20deg);
+  left: 8vh;
+}
+
+.bighand>.card:nth-child(n+6) {
+  top: 3vh;
+}
+.bighand>.card:nth-child(n+11) {
+  top: 6vh;
+}
+.bighand>.card:nth-child(n+16) {
+  top: 9vh;
+}
+
+
 .startmove {
   cursor: pointer;
   display: inline-block;
+  text-decoration: underline;
 }
 
 .game-hexgrid-cities {
   position: absolute;
 }
 
+.hover{
+  z-index: 1000;
+}
 .hover:hover {
   border: 1px solid white;
+  background-color: whitesmoke;
+  cursor: crosshair;
 }
 
 .road {
   position: absolute;
   display: block;
-  width: 150px;
-  height: 30px;
+  width: 60%;
+  height: 10%;
   background-color: transparent;
-/*  background-image: url('/settlers/img/sectors/road1.png'); */
-  z-index: 5892351;
+
+  z-index: 10;
 }
 
+.road5{
+    transform: rotate(90deg);
+    left: -32%;
+    top: 45%;
+}
+.road6{
+    transform: rotate(-30deg);
+    top: 6%;
+    left: -6%;
+}
 
+.road1{
+  transform: rotate(30deg);
+  right: -6%;
+  top: 6%;
+}
 
+.road2{ /* Overlaps with Road5 */ 
+    transform: rotate(90deg); 
+    right: -35%;
+    top: 45%;
+}
+.road3{ /* Overlaps with Road6 */
+    transform: rotate(-30deg);
+    bottom: 6%;
+    right: -6%;
+}
+.road4{ /* Overlaps with Road1 */
+    transform:  rotate(30deg);
+    bottom: 6%;
+    left: -6%;
+}
 
 .city {
   position: absolute;
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 30%;
+  height: 25%;
   background-color: transparent;
-  z-index: 5892350;
-}
-
-.sector_value {
-  position: absolute;
-  font-size: 4em;
-  z-index: 99;
-  font-weight: bold;
-  border: 1px solid #fff;
-  padding: 20px;
-  border-radius: 50%;
-  width: 2em;
-  height: 2em;
-  line-height: 1.5em;
+  z-index: 12;
+  font-size: 2em;
   text-align: center;
-  background: #444a;
-  color: white;
-  font-weight: bold;
 }
 
-.p1, .p2, .p3, .p4, .p5, .p6 {
-  min-width: unset;
-  height: unset;
-  bottom: unset;
-  left: unset;
-  transform: unset;
-  width: unset;
-  overflow-y: unset;
+.city > svg{
+  width: 100%;
+  height: 100%;
+  top:  0px;
+  left: 0px;
 }
+
 .p1 {
   background-color: red;
+
 }
 .p2 {
   background-color: blue;
@@ -93,41 +232,86 @@ body {
   background-color: orange;
 }
 
+.c1 .player-info-name{
+  color: red;
+}
+.c2 .player-info-name{
+  color: blue;
+}
+
+.producer polygon{
+  fill: white;
+}
+
+.city1{
+  top: -10%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.city2{
+  top: 15%;
+  right: -18%;
+}
+.city3{
+  bottom: 15%;
+  right: -18%;
+}
+.city4{
+  bottom: -10%;
+  left: 50%;
+  transform: translate(-50%);
+}
+.city5{
+  bottom:  15%;
+  left: -18%;
+}
+.city6{
+  top: 15%;
+  left: -18%;
+}
+
+.sector_value {
+  position: absolute;
+  font-size: 2.5em;
+  z-index: 15;
+  font-weight: bold;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: #6664;
+  color: white;
+}
+
+.bandit{
+  background-color: black;
+  color: darkgray;
+}
+
 .city.p1 {
   border: 10px solid red;
   background-color: white;
   color: red;
-  text-align: center;
-  z-index:9999999;
-  font-size: 100px;
-  padding-top: 8px;
 }
 .city.p2 {
   border: 10px solid blue;
   background-color: white;
   color: blue;
-  text-align: center;
-  z-index:9999999;
-  font-size: 100px;
-  padding-top: 8px;
+ 
 }
 .city.p3 {
   border: 10px solid green;
   background-color: white;
   color: green;
-  text-align: center;
-  z-index:9999999;
-  font-size: 100px;
-  padding-top: 8px;
+ 
 }
 .city.p4 {
   border: 10px solid orange;
   background-color: white;
   color: orange;
-  text-align: center;
-  z-index:9999999;
-  font-size: 100px;
-  padding-top: 8px;
 }
 
 .trade_overlay {
@@ -156,5 +340,128 @@ body {
   position: relative;
 }
 
+.highlight{
+  font-size: 1.1em;
+  font-weight: bold;
+}
 
+.status-message{
+  width: unset;
+  background-color: unset;
+}
+
+.hexTileCenter{
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+
+.me > .player-box-graphic{
+  position: relative;
+  left: calc(150px + 8vw);
+  z-index: -1;
+}
+
+.notme > .player-box-graphic{
+  position: relative;
+  right: 8vw;
+  z-index: -1;
+}
+
+.flexline{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.token{
+  margin: min(3px,1vh);
+  width: 2.5vh;
+  background-color: unset;
+}
+
+.token.p1 polygon{
+  fill: red;
+}
+
+.token.p2 polygon{
+  fill: blue;
+}
+
+.token.p3 polygon{
+  fill: green;
+}
+
+.token.p4 polygon{
+  fill: orange;
+}
+
+
+.player-box.notme{
+  height: fit-content;
+}
+/*
+    Copied from WuziQi
+*/
+
+@media (orientation: landscape) {
+    .player-box{
+        top: 40vh;  /*Center in screen:  50vh - 1/2 height */
+        margin: auto auto;
+        max-width: 20vw;
+    }
+
+    .player-box.me{
+        left: max(5px, calc(12vw - 7em));
+        top:  80vh;
+    }
+
+    .player-box.notme{
+        right: max(5px, calc(12vw - 7em));
+        top:  10vh;
+    }
+}
+
+@media (orientation: portrait) {
+    .player-box{
+        top: calc(65vw + 26vh);
+        max-width: 35vw;
+    }
+
+    .player-box.me{
+        left: calc(30vw - 6em);
+    }
+
+    .player-box.notme{
+        right: calc(30vw - 6em);
+    }
+}
+
+/*
+    Intermediate (roughly square screen size, technically landscape, but keep portrait layout)
+*/
+@media (max-aspect-ratio:  8/7) and (min-aspect-ratio: 7/8) {
+    .player-box{
+        top: unset;
+        bottom: 0px;
+        max-width: 40vw;
+    }
+    .player-box.me{
+        left: calc(30vw - 5.5em);
+    }
+
+    .player-box.notme{
+        right: calc(30vw - 5.5em);
+    }
+}
+
+@media (max-width: 500px) and (orientation: portrait) and (max-aspect-ratio: 7/8){
+    .player-box{
+        top: calc(95vw + 15vh);
+        max-width: 38vw;
+    }
+}
 
