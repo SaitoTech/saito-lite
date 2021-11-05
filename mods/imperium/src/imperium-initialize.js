@@ -98,6 +98,7 @@
     });
 
 
+
     //
     // factions
     //
@@ -122,6 +123,7 @@
     }
 
 
+
     this.menu.addMenuOption({
       text : "Cards",
       id : "game-cardlist",
@@ -136,13 +138,7 @@
       class : "game-strategy-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	//game_mod.handleStrategyMenuItem();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnStrategyCards(), { 
-		columns : 4 , 
-		backgroundImage : "/imperium/img/starscape_background3.jpg" , 
-	}, function() {
-	  alert("cardlist close strategy init menu");
-	});
+	game_mod.handleStrategyMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-cardlist", {
@@ -193,8 +189,8 @@
 	});
       }
     });
-    this.menu.addSubMenuOption("game-cards", {
-      text : "Dependencies",
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Tech Tree",
       id : "game-tech-dependencies",
       class : "game-tech-dependencies",
       callback : function(app, game_mod) {
@@ -208,12 +204,31 @@
       class : "game-agenda-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleAgendasMenuItem();
-        //game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
-	//  alert("cardlist close strategy init menu");
-	//});
+
+	let ac = [];
+	for (let i = 0; i < game_mod.game.state.agendas.length; i++) {
+	  ac.push(game_mod.agenda_cards[game_mod.game.state.agendas[i]]);
+        }
+
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, ac, { columns : 3 , cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
+	  alert("cardlist close strategy init menu");
+	});
       }
     });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Laws",
+      id : "game-laws-cardlist",
+      class : "game-laws-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        if (game_mod.game.state.laws.length == 0) {
+	  salert("There are currently no Active Laws");
+	  return;
+	}
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnLawsOverlay());
+      }
+    });
+
     this.menu.addSubMenuOption("game-cardlist", {
       text : "Objectives",
       id : "game-objectives-cardlist",

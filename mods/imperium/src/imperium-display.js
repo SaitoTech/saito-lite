@@ -335,7 +335,7 @@ returnNewSecretObjectiveOverlay(card) {
 
 
 returnTechOverlay() {
-  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="width:90vw"></div>';
+  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="height:90vh;width:auto"></div>';
   return html;
 }
 
@@ -613,110 +613,6 @@ returnAgendasOverlay() {
   return html;
 
 }
-
-
-
-
-returnStrategyOverlay() {
-
-  let html = '';
-  let rank = [];
-  let cards = [];
-  let ranked_cards = [];
-  let imperium_self = this;
-  let card_no = 0;
-
-  for (let s in this.strategy_cards) {
-
-    let strategy_card_state = "not picked";
-    let strategy_card_player = -1;
-
-    let strategy_card_bonus = 0;
-    for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
-      if (s === this.game.state.strategy_cards[i]) {
-        strategy_card_bonus = this.game.state.strategy_cards_bonus[i];
-      }
-    }
-
-    let strategy_card_bonus_html = "";
-    if (strategy_card_bonus > 0) {
-      strategy_card_bonus_html = 
-      `<div class="strategy_card_bonus">    
-        <i class="fas fa-database white-stroke"></i>
-        <span>${strategy_card_bonus}</span>
-      </div>`;
-
-    }
-  
-    let thiscard = this.strategy_cards[s];
-    for (let i = 0; i < this.game.players_info.length; i++) {
-      if (this.game.players_info[i].strategy.includes(s)) {
-        strategy_card_state = "unplayed";
-	strategy_card_player = (i+1);
-        if (this.game.players_info[i].strategy_cards_played.includes(s)) {
-  	  strategy_card_state = "played";
-        };
-      };
-      
-    }
-
-    let card_html = thiscard.returnCardImage();
-    let cutpos = card_html.lastIndexOf('</div>');
-    card_html = card_html.substring(0, cutpos);
-
-     if (strategy_card_state != "not picked") {
-       card_html += `
-	  <div class="strategy_card_state p${strategy_card_player}">
-	    <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
-          </div>
-       `;
-     }
-     card_html += `
-          ${strategy_card_bonus_html}
-	</div>
-    `;
-    cards.push(card_html);
-
-     rank.push(this.strategy_cards[s].rank);
-     card_no++;
-  }
-
-  let sorted_cards = [];
-  let crashguard = 0;
-
-  while (cards.length > 0) {
-
-    crashguard++;
-    if (crashguard > 100) { break; }
-
-    let lowest_rank = 100;
-    let lowest_idx = -1;
-    for (let i = 0; i < rank.length; i++) {
-      if (lowest_rank > rank[i]) {
-	lowest_rank = rank[i];
-	lowest_idx = i;
-      }
-    }
-
-    sorted_cards.push(cards[lowest_idx]);
-    cards.splice(lowest_idx, 1);
-    rank.splice(lowest_idx, 1);
-
-  }
-
-  let final_result = "";
-  final_result += '<div class="overlay_strategy_container">';
-  for (let i = 0; i < sorted_cards.length; i++) {
-    final_result += sorted_cards[i];
-  }
-  final_result += '</div>';
-
-  return final_result;
-
-}
-
-
-
 
 
 
@@ -1913,7 +1809,7 @@ updateSectorGraphics(sector) {
   showAgendaCard(agenda) {
     let thiscard = this.agenda_cards[agenda];
     let html = `
-      <div style="background-image: url('/imperium/img/agenda_card_template.png');height:100%;" class="overlay_agendacard card option" id="${agenda}">
+      <div style="background-image: url('/imperium/img/agenda_card_template.png');width:100%;height:100%;" class="overlay_agendacard card option" id="${agenda}">
         <div class="overlay_agendatitle">${thiscard.name}</div>
         <div class="overlay_agendacontent">${thiscard.text}</div>
       </div>

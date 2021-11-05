@@ -1748,8 +1748,8 @@ this.game.state.end_round_scoring = 0;
 
               game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, ac, {
 	        title : "New Agendas",
-	        subtitle : "check all agendas, objectives and more in the CARDS menu",
-	        columns : cards.length ,
+	        subtitle : "check active agendas, strategy cards and more in the CARDS menu",
+	        columns : ac.length ,
 	        backgroundImage : "/imperium/img/starscape_background1.jpg",
 	        padding: "20px",
 	        textAlign: "center",

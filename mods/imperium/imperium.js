@@ -10752,6 +10752,7 @@ console.log("Active Agenda: " + active_agenda);
     });
 
 
+
     //
     // factions
     //
@@ -10776,6 +10777,7 @@ console.log("Active Agenda: " + active_agenda);
     }
 
 
+
     this.menu.addMenuOption({
       text : "Cards",
       id : "game-cardlist",
@@ -10790,13 +10792,7 @@ console.log("Active Agenda: " + active_agenda);
       class : "game-strategy-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	//game_mod.handleStrategyMenuItem();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnStrategyCards(), { 
-		columns : 4 , 
-		backgroundImage : "/imperium/img/starscape_background3.jpg" , 
-	}, function() {
-	  alert("cardlist close strategy init menu");
-	});
+	game_mod.handleStrategyMenuItem();
       }
     });
     this.menu.addSubMenuOption("game-cardlist", {
@@ -10847,8 +10843,8 @@ console.log("Active Agenda: " + active_agenda);
 	});
       }
     });
-    this.menu.addSubMenuOption("game-cards", {
-      text : "Dependencies",
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Tech Tree",
       id : "game-tech-dependencies",
       class : "game-tech-dependencies",
       callback : function(app, game_mod) {
@@ -10862,12 +10858,31 @@ console.log("Active Agenda: " + active_agenda);
       class : "game-agenda-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	game_mod.handleAgendasMenuItem();
-        //game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
-	//  alert("cardlist close strategy init menu");
-	//});
+
+	let ac = [];
+	for (let i = 0; i < game_mod.game.state.agendas.length; i++) {
+	  ac.push(game_mod.agenda_cards[game_mod.game.state.agendas[i]]);
+        }
+
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, ac, { columns : 3 , cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
+	  alert("cardlist close strategy init menu");
+	});
       }
     });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Laws",
+      id : "game-laws-cardlist",
+      class : "game-laws-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        if (game_mod.game.state.laws.length == 0) {
+	  salert("There are currently no Active Laws");
+	  return;
+	}
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnLawsOverlay());
+      }
+    });
+
     this.menu.addSubMenuOption("game-cardlist", {
       text : "Objectives",
       id : "game-objectives-cardlist",
@@ -11890,7 +11905,65 @@ handleUnitsMenuItem() {
   });
 }
 handleStrategyMenuItem() {
-  this.overlay.showOverlay(this.app, this, this.returnStrategyOverlay());
+
+  //
+  // show overlay
+  //
+  this.overlay.showCardSelectionOverlay(this.app, this, this.returnStrategyCards(), {
+    columns : 4 ,
+    backgroundImage : "/imperium/img/starscape_background3.jpg" ,
+  }, function() {
+    alert("cardlist close strategy init menu");
+  });
+
+  //
+  // add player, state and bonus
+  //
+  for (let s in this.strategy_cards) {
+
+    let strategy_card_state = "not picked";
+    let strategy_card_player = -1;
+    let strategy_card_bonus = 0;
+
+    for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
+      if (s === this.game.state.strategy_cards[i]) {
+        strategy_card_bonus = this.game.state.strategy_cards_bonus[i];
+      }
+    }
+
+    let strategy_card_bonus_html = "";
+    if (strategy_card_bonus > 0) {
+      strategy_card_bonus_html =
+      `<div class="strategy_card_bonus">
+        <i class="fas fa-database white-stroke"></i>
+        <span>${strategy_card_bonus}</span>
+      </div>`;
+      this.app.browser.addElementToDom(strategy_card_bonus_html, s);
+    }
+
+    let thiscard = this.strategy_cards[s];
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (this.game.players_info[i].strategy.includes(s)) {
+        strategy_card_state = "unplayed";
+        strategy_card_player = (i+1);
+        if (this.game.players_info[i].strategy_cards_played.includes(s)) {
+          strategy_card_state = "played";
+        };
+      };
+    }
+
+    card_html = '';
+    if (strategy_card_state != "not picked") {
+      card_html += `
+        <div class="strategy_card_state p${strategy_card_player}">
+          <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
+        </div>
+     `;
+    }
+
+    this.app.browser.addElementToDom(card_html, s);   
+
+  }
 }
 
 handleObjectivesMenuItem() {
@@ -14569,8 +14642,8 @@ this.game.state.end_round_scoring = 0;
 
               game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, ac, {
 	        title : "New Agendas",
-	        subtitle : "check all agendas, objectives and more in the CARDS menu",
-	        columns : cards.length ,
+	        subtitle : "check active agendas, strategy cards and more in the CARDS menu",
+	        columns : ac.length ,
 	        backgroundImage : "/imperium/img/starscape_background1.jpg",
 	        padding: "20px",
 	        textAlign: "center",
@@ -29182,7 +29255,7 @@ returnNewSecretObjectiveOverlay(card) {
 
 
 returnTechOverlay() {
-  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="width:90vw"></div>';
+  let html = '<div class="tech_overlay overlay" id="tech_overlay"><img src="/imperium/img/tech_tree.png" style="height:90vh;width:auto"></div>';
   return html;
 }
 
@@ -29460,110 +29533,6 @@ returnAgendasOverlay() {
   return html;
 
 }
-
-
-
-
-returnStrategyOverlay() {
-
-  let html = '';
-  let rank = [];
-  let cards = [];
-  let ranked_cards = [];
-  let imperium_self = this;
-  let card_no = 0;
-
-  for (let s in this.strategy_cards) {
-
-    let strategy_card_state = "not picked";
-    let strategy_card_player = -1;
-
-    let strategy_card_bonus = 0;
-    for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
-      if (s === this.game.state.strategy_cards[i]) {
-        strategy_card_bonus = this.game.state.strategy_cards_bonus[i];
-      }
-    }
-
-    let strategy_card_bonus_html = "";
-    if (strategy_card_bonus > 0) {
-      strategy_card_bonus_html = 
-      `<div class="strategy_card_bonus">    
-        <i class="fas fa-database white-stroke"></i>
-        <span>${strategy_card_bonus}</span>
-      </div>`;
-
-    }
-  
-    let thiscard = this.strategy_cards[s];
-    for (let i = 0; i < this.game.players_info.length; i++) {
-      if (this.game.players_info[i].strategy.includes(s)) {
-        strategy_card_state = "unplayed";
-	strategy_card_player = (i+1);
-        if (this.game.players_info[i].strategy_cards_played.includes(s)) {
-  	  strategy_card_state = "played";
-        };
-      };
-      
-    }
-
-    let card_html = thiscard.returnCardImage();
-    let cutpos = card_html.lastIndexOf('</div>');
-    card_html = card_html.substring(0, cutpos);
-
-     if (strategy_card_state != "not picked") {
-       card_html += `
-	  <div class="strategy_card_state p${strategy_card_player}">
-	    <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
-          </div>
-       `;
-     }
-     card_html += `
-          ${strategy_card_bonus_html}
-	</div>
-    `;
-    cards.push(card_html);
-
-     rank.push(this.strategy_cards[s].rank);
-     card_no++;
-  }
-
-  let sorted_cards = [];
-  let crashguard = 0;
-
-  while (cards.length > 0) {
-
-    crashguard++;
-    if (crashguard > 100) { break; }
-
-    let lowest_rank = 100;
-    let lowest_idx = -1;
-    for (let i = 0; i < rank.length; i++) {
-      if (lowest_rank > rank[i]) {
-	lowest_rank = rank[i];
-	lowest_idx = i;
-      }
-    }
-
-    sorted_cards.push(cards[lowest_idx]);
-    cards.splice(lowest_idx, 1);
-    rank.splice(lowest_idx, 1);
-
-  }
-
-  let final_result = "";
-  final_result += '<div class="overlay_strategy_container">';
-  for (let i = 0; i < sorted_cards.length; i++) {
-    final_result += sorted_cards[i];
-  }
-  final_result += '</div>';
-
-  return final_result;
-
-}
-
-
-
 
 
 
@@ -30760,7 +30729,7 @@ updateSectorGraphics(sector) {
   showAgendaCard(agenda) {
     let thiscard = this.agenda_cards[agenda];
     let html = `
-      <div style="background-image: url('/imperium/img/agenda_card_template.png');height:100%;" class="overlay_agendacard card option" id="${agenda}">
+      <div style="background-image: url('/imperium/img/agenda_card_template.png');width:100%;height:100%;" class="overlay_agendacard card option" id="${agenda}">
         <div class="overlay_agendatitle">${thiscard.name}</div>
         <div class="overlay_agendacontent">${thiscard.text}</div>
       </div>
