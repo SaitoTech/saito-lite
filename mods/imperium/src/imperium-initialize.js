@@ -189,8 +189,8 @@
 	});
       }
     });
-    this.menu.addSubMenuOption("game-cards", {
-      text : "Dependencies",
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Tech Tree",
       id : "game-tech-dependencies",
       class : "game-tech-dependencies",
       callback : function(app, game_mod) {
@@ -204,12 +204,27 @@
       class : "game-agenda-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-	//game_mod.handleAgendasMenuItem();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.agenda_cards, { cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
+
+	let ac = [];
+	for (let i = 0; i < game_mod.game.state.agendas.length; i++) {
+	  ac.push(game_mod.agenda_cards[game_mod.game.state.agendas[i]]);
+        }
+
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, ac, { columns : 3 , cardlistWidth : "90vw" , cardlistHeight : "90vh" }, function() {
 	  alert("cardlist close strategy init menu");
 	});
       }
     });
+    this.menu.addSubMenuOption("game-cardlist", {
+      text : "Laws",
+      id : "game-agenda-cardlist",
+      class : "game-agenda-cardlist",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.overlay.showOverlay(game_mod.app, game_mod, game_mod.returnLawsOverlay());
+      }
+    });
+
     this.menu.addSubMenuOption("game-cardlist", {
       text : "Objectives",
       id : "game-objectives-cardlist",
