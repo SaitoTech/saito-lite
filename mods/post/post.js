@@ -668,13 +668,11 @@ class Post extends ModTemplate {
     let delete_tx = this.createDeleteTransaction(txmsg.post_id);
     let base_58_tx = Base58.encode(Buffer.from(JSON.stringify(delete_tx)));
 
-    // console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
-    console.log(JSON.stringify(txmsg)); // lets see who is this guy
-    // console.log(`POSTS Title ${txmsg.title}`);
-    // console.log(`POSTS ID ${txmsg.post_id}`);
+    console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
+    //console.log(JSON.stringify(txmsg)); // lets see who is this guy
 
     // ---- There should be a better way for this -arks
-    sql = `SELECT * from posts WHERE id = $pid`;
+    sql = `SELECT title from posts WHERE id = $pid`;
     params = { $pid : txmsg.post_id };
     let resp = await this.app.storage.queryDatabase(sql, params, "post");
     console.log(resp);
