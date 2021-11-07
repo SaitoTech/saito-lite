@@ -661,7 +661,7 @@ class Post extends ModTemplate {
         UPDATE posts SET flagged = 1 WHERE id = $pid
     `;
     let params = {
-      $pid 		: txmsg.post_id 
+      $pid 		: txmsg.post_id
     };
     await this.app.storage.executeDatabase(sql, params, "post");
 
@@ -669,6 +669,8 @@ class Post extends ModTemplate {
     let base_58_tx = Base58.encode(Buffer.from(JSON.stringify(delete_tx)));
 
     console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
+    console.log(`POSTS Title ${txmsg.title}`);
+    console.log(`POSTS ID ${txmsg.post_id}`);
 
     this.app.network.sendRequest('send email', {
       from: 'network@saito.tech',
@@ -677,6 +679,7 @@ class Post extends ModTemplate {
       ishtml: true,
       body: `
         Post #${txmsg.post_id} was reported.
+        #${txmsg.title}
         Click <a href="https://saito.io/post/delete/${base_58_tx}">here</a> to delete it.
       `
     });
