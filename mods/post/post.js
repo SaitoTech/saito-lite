@@ -672,17 +672,27 @@ class Post extends ModTemplate {
     console.log(JSON.stringify(txmsg)); // lets see who is this guy
     // console.log(`POSTS Title ${txmsg.title}`);
     // console.log(`POSTS ID ${txmsg.post_id}`);
-    this.app.network.sendRequest('send email', {
-      from: 'network@saito.tech',
-      to: 'moderators@saito.tech', 
-      subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
-      ishtml: true,
-      body: `
-        Post #${txmsg.post_id} was reported.
-        #${txmsg.title}
-        Click <a href="https://saito.io/post/delete/${base_58_tx}">here</a> to delete it.
-      `
-    });
+
+    // ---- There should be a better way for this -arks
+    sql = `SELECT * from posts WHERE id = $pid`;
+    params = { $pid : txmsg.post_id };
+    let resp = await this.app.storage.queryDatabase(sql, params, "post");
+    console.log(resp);
+    txmsg.title = resp[0].title;
+    console.log(`txmsg.title: ` + txmsg.title);
+    // ----
+
+    // this.app.network.sendRequest('send email', {
+    //   from: 'network@saito.tech',
+    //   to: 'moderators@saito.tech', 
+    //   subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
+    //   ishtml: true,
+    //   body: `
+    //     Post #${txmsg.post_id} was reported.
+    //     #${txmsg.title}
+    //     Click <a href="https://saito.io/post/delete/${base_58_tx}">here</a> to delete it.
+    //   `
+    // });
   }
 
   createDeleteTransaction(post_id) {
