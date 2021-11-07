@@ -23,6 +23,10 @@ async function initSaito() {
 
   await app.init();
 
+  const { protocol, host, port } = app.options.server
+
+  const localServer = `${protocol}://${host}:${port}`
+
   console.log(`
 
                                            
@@ -58,8 +62,13 @@ async function initSaito() {
 
     Welcome to Saito
 
+    ########################################################
+    
     address: ${app.wallet.returnPublicKey()}
     balance: ${app.wallet.returnBalance()}
+    local module server: ${localServer}
+
+    ########################################################
 
     This is the address and balance of your computer on the Saito network. Once Saito
     is running it will generate tokens automatically over time. The more transactions
