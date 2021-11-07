@@ -18,12 +18,23 @@ class GameTestSuite extends GameTemplate {
     this.type            = "Education Development";
     this.card_img_dir = '/gametestsuite/img/cards';
 
+
+    this.categories = "Demonstration Utility";
+    this.type = "Utilitty";
+    this.status = "Demonstration";
+
     // disable by default
     this.useHUD = 0;
 
     // player numbers
     this.minPlayers = 2;
     this.maxPlayers = 6;
+
+    this.game_cardfan_visible = 0;
+    this.game_menu_visible = 0;
+    this.game_hud_visible = 0;
+    this.game_cardbox_visible = 0;
+    this.game_playerboxes_visible = 0;
 
     return this;
 
@@ -51,7 +62,23 @@ class GameTestSuite extends GameTemplate {
 
     }
 
+    //
+    // let opponents know my game crypto
+    //
+    // normally this is automatically done when moves are made, but since 
+    // this is a demo app it is possible that people will click immediately
+    // on web3 testing functionality, in which case we already want the keys
+    // to have been exchanged / set.
+    //
+    if (this.game.options.crypto != undefined) { 
+      this.game.crypto = this.game.options.crypto;
+      let crypto_key = this.app.wallet.returnCryptoAddressByTicker(this.game.options.crypto);
+      this.addMove("CRYPTOKEY\t"+this.app.wallet.returnPublicKey()+"\t"+crypto_key+"\t"+this.app.crypto.signMessage(crypto_key, this.app.wallet.returnPrivateKey()));
+      this.endTurn();
+    }
+
   }
+
 
   //
   // initialize HTML and UI components
@@ -122,6 +149,36 @@ class GameTestSuite extends GameTemplate {
 
 
   //
+  // ( advanced options on Arcade start )
+  //
+  // used here to allow users to select in-game web3 crypto
+  // 
+  returnGameOptionsHTML() {
+
+    let options_html = `
+      <h1 class="overlay-title">Select a Web3 Crypto:</h1>
+      <div class="overlay-input">
+        <label for="crypto">Crypto:</label>
+        <select name="crypto">
+          <option value="" selected>None</option>
+          <option value="SAITO">SAITO</option>
+    `;
+    for (let i = 0; i < this.app.modules.mods.length; i++) {
+      if (this.app.modules.mods[i].ticker != "" && this.app.modules.mods[i].ticker != undefined) {
+        options_html += `<option value="${this.app.modules.mods[i].ticker}">${this.app.modules.mods[i].ticker}</option>`;
+      }
+    }
+    options_html += `
+        </select>
+      </div>
+      <div id="game-wizard-advanced-return-btn" class="game-wizard-advanced-return-btn button">accept</div>
+    `;
+
+    return options_html;
+  }
+
+
+  //
   // default game state
   //
   returnState() {
@@ -129,6 +186,7 @@ class GameTestSuite extends GameTemplate {
     let state = {};
 
     state.cards_dealt_to_players = 0;
+    state.simultaneous_pick_submitted = 0;
 
     return state;
   }
@@ -217,7 +275,9 @@ class GameTestSuite extends GameTemplate {
       // update active crypto
       //
       if (game_self.game.crypto != "") {
-        document.getElementById("saito_crypto").innerHTML = game_self.game.crypto;
+	if (document.getElementById("saito_crypto")) {
+          document.getElementById("saito_crypto").innerHTML = game_self.game.crypto;
+        }
       }
 
       //
@@ -225,6 +285,13 @@ class GameTestSuite extends GameTemplate {
       //
       document.getElementById("add_player_boxes_button").onclick = (e) => {
         game_self.add_player_boxes_test(game_self.app);
+      }
+
+      //
+      // insecure dice roll
+      //
+      document.getElementById("secure_dice_roll_button").onclick = (e) => {
+	game_self.insecure_dice_roll_test(game_self.app);
       }
 
       //
@@ -273,7 +340,14 @@ class GameTestSuite extends GameTemplate {
       // deal cards to players
       //
       document.getElementById("deal_cards_to_player_button").onclick = (e) => {
-	game_self.deal_cards_to_player(game_self.app);
+	game_self.deal_cards_to_player_test(game_self.app);
+      }
+
+      //
+      // deal cards to the table
+      //
+      document.getElementById("shuffle_deck_button").onclick = (e) => {
+	game_self.shuffle_deck_test(game_self.app);
       }
 
       //
@@ -356,15 +430,29 @@ class GameTestSuite extends GameTemplate {
   // developers. Questions and feedback are welcome, as are contributions.
   //
   add_player_boxes_test(app) {
-    this.playerbox.render(app, this);
-    this.playerbox.attachEvents(app, this);
-    for (let i = 0; i < this.game.players.length; i++) {
-      this.playerbox.refreshName(i+1);
-      this.playerbox.refreshCards(i+3);
+    if (this.game_playerboxes_visible == 0) {
+      this.playerbox.render(app, this);
+      this.playerbox.attachEvents(app, this);
+      for (let i = 0; i < this.game.players.length; i++) {
+        this.playerbox.refreshName(i+1);
+      }
+      this.game_playerboxes_visible = 1;
+    } else {
+      this.game_playerboxes_visible = 0;
+      this.playerbox.hide();
     }
   }
 
+  insecure_dice_roll_test(app) {
+    // individual machines can do this, but to keep dice rolls in sync wrap rolls in 
+    // a function that can be called simultaneously on both machines on the queue...
+    // this.diceRoll(6);
+    this.addTurn("LOGDICE");
+    this.endTurn();
+  }
+
   secure_dice_roll_test(app) {
+    this.addTurn("LOGDICE");
     this.requestSecureRoll();
     this.endTurn();
   }
@@ -373,6 +461,13 @@ class GameTestSuite extends GameTemplate {
 
     let game_self = this;
     let simultaneous_pick_card = Math.random().toString();
+
+    if (game_self.game.state.simultaneous_pick_submitted) {
+      salert("All players need to click on the simultaneous pick button. The results will be printed in the console.log. The test is restricted to running a single time, to avoid players making multiple submissions before all players have contributed and triggering failures in card selection.");
+      return 0;
+    }
+
+    game_self.game.state.simultaneous_pick_submitted = 1;
 
     game_self.updateLog(`
 
@@ -481,12 +576,13 @@ class GameTestSuite extends GameTemplate {
       </div>
     `;
 
-    this.overlay.showOverlayBlocking(this.app, this, overlay_html);
+    this.overlay.showOverlay(this.app, this, overlay_html);
+    this.overlay.blockClose();
     document.getElementById("close_overlay_button").onclick = (e) => { game_self.overlay.hideOverlay(); }
 
   }
 
-  deal_cards_to_player(app) {
+  deal_cards_to_player_test(app) {
 
     let game_self = this;
 
@@ -512,7 +608,7 @@ class GameTestSuite extends GameTemplate {
 
   }
 
-  deal_cards_to_table(app) {
+  deal_cards_to_table_test(app) {
 
     let game_self = this;
 
@@ -537,6 +633,25 @@ class GameTestSuite extends GameTemplate {
       game_self.addMove("DECKXOR\t1\t"+i);
     }
     game_self.addMove("DECK\t1\t" + JSON.stringify(game_self.returnDeck())); // create deck with index 1 (deck-1)
+    game_self.endTurn();
+
+  }
+
+
+  shuffle_deck_test(app) {
+
+    let game_self = this;
+
+    game_self.updateLog(`
+
+			shuffling a deck uses a random number to re-arrange the order of
+			undealt (encrypted or unencrypted) cards. simply use the SHUFFLE
+			instruction and deck-number and the game engine will handle this
+			for all players, while keeping decryption keys in sync, etc.			
+    `);
+
+    game_self.addMove("NOTIFY\tDeck 1 shuffle complete");
+    game_self.addMove("SHUFFLE\t1");
     game_self.endTurn();
 
   }
@@ -600,17 +715,29 @@ class GameTestSuite extends GameTemplate {
   }
 
   display_cardfan_test(app) {
-    this.cardfan.render(this.app, this);
-    this.cardfan.attachEvents(this.app, this);
+    if (this.game_cardfan_visible == 0) {
+      this.cardfan.render(this.app, this);
+      this.cardfan.attachEvents(this.app, this);
+      this.game_cardfan_visible = 1;
+    } else {
+      this.cardfan.hide();
+      this.game_cardfan_visible = 0;
+    }
   }
 
   display_cardhud_test(app) {
-    this.hud.render(this.app, this);
-    this.hud.attachEvents(this.app, this);
-    this.hud.updateStatusMessageAndShowCards('updating the status message', this.game.deck[0].hand, this.game.deck[0].cards);
-    this.hud.onCardClick(function(card) {
-      alert("Selected a card: "+card);
-    });
+    if (this.game_hud_visible == 0) {
+      this.hud.render(this.app, this);
+      this.hud.attachEvents(this.app, this);
+      this.hud.updateStatusMessageAndShowCards('updating the status message', this.game.deck[0].hand, this.game.deck[0].cards);
+      this.hud.onCardClick(function(card) {
+        alert("Selected a card: "+card);
+      });
+      this.game_hud_visible = 1;
+    } else {
+      this.hud.hide();
+      this.game_hud_visible = 0;
+    }
   }
 
   toggle_cardbox_test(app) {
@@ -626,15 +753,16 @@ class GameTestSuite extends GameTemplate {
   }
 
   add_menu_test(app) {
-    this.menu.addMenuOption({
+    if (this.game_menu_visible == 0) {
+      this.menu.addMenuOption({
           text : "Game",
           id : "game-game",
           class : "game-game",
           callback : function(app, game_mod) {
             game_mod.menu.showSubMenu("game-game");
           },
-    });
-    this.menu.addSubMenuOption("game-game", {
+      });
+      this.menu.addSubMenuOption("game-game", {
           text : "Log",
           id : "game-log",
           class : "game-log",
@@ -642,17 +770,22 @@ class GameTestSuite extends GameTemplate {
             game_mod.menu.hideSubMenus();
             game_mod.log.toggleLog();
           },
-    });
-    this.menu.addSubMenuOption("game-game", {
+      });
+      this.menu.addSubMenuOption("game-game", {
           text : "Exit",
           id : "game-exit",
           class : "game-exit",
           callback : function(app, game_mod) {
             window.location.href = "/arcade";
           },
-    });
-    this.menu.render(this.app, this);
-    this.menu.attachEvents(this.app, this);
+      });
+      this.menu.render(this.app, this);
+      this.menu.attachEvents(this.app, this);
+      this.game_menu_visible = 1;
+    } else {
+      this.menu.hide();
+      this.game_menu_visible = 0;
+    }
   }
 
 
