@@ -682,17 +682,17 @@ class Post extends ModTemplate {
     console.log(`txmsg.title: ` + txmsg.title);
     // ----
 
-    // this.app.network.sendRequest('send email', {
-    //   from: 'network@saito.tech',
-    //   to: 'moderators@saito.tech', 
-    //   subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
-    //   ishtml: true,
-    //   body: `
-    //     Post #${txmsg.post_id} was reported.
-    //     #${txmsg.title}
-    //     Click <a href="https://saito.io/post/delete/${base_58_tx}">here</a> to delete it.
-    //   `
-    // });
+    this.app.network.sendRequest('send email', {
+      from: 'network@saito.tech',
+      to: 'moderators@saito.tech', 
+      subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
+      ishtml: true,
+      body: `
+        Post #${txmsg.post_id} was reported.
+        #${txmsg.title}
+        Click <a href="https://saito.io/post/delete/${base_58_tx}">here</a> to delete it.
+      `
+    });
   }
 
   createDeleteTransaction(post_id) {
