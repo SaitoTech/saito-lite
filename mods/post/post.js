@@ -668,10 +668,10 @@ class Post extends ModTemplate {
     let delete_tx = this.createDeleteTransaction(txmsg.post_id);
     let base_58_tx = Base58.encode(Buffer.from(JSON.stringify(delete_tx)));
 
-    console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
-    console.log(`POSTS Title ${txmsg.title}`);
-    console.log(`POSTS ID ${txmsg.post_id}`);
-
+    // console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
+    console.log(JSON.stringify(txmsg)); // lets see who is this guy
+    // console.log(`POSTS Title ${txmsg.title}`);
+    // console.log(`POSTS ID ${txmsg.post_id}`);
     this.app.network.sendRequest('send email', {
       from: 'network@saito.tech',
       to: 'moderators@saito.tech', 
