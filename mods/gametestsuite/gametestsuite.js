@@ -288,6 +288,13 @@ class GameTestSuite extends GameTemplate {
       }
 
       //
+      // insecure dice roll
+      //
+      document.getElementById("insecure_dice_roll_button").onclick = (e) => {
+	game_self.insecure_dice_roll_test(game_self.app);
+      }
+
+      //
       // secure dice roll
       //
       document.getElementById("secure_dice_roll_button").onclick = (e) => {
@@ -436,7 +443,16 @@ class GameTestSuite extends GameTemplate {
     }
   }
 
+  insecure_dice_roll_test(app) {
+    // individual machines can do this, but to keep dice rolls in sync wrap rolls in 
+    // a function that can be called simultaneously on both machines on the queue...
+    // this.diceRoll(6);
+    this.addMove("LOGDICE");
+    this.endTurn();
+  }
+
   secure_dice_roll_test(app) {
+    this.addMove("LOGDICE");
     this.requestSecureRoll();
     this.endTurn();
   }

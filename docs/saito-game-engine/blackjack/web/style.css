@@ -1,0 +1,353 @@
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden; 
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main {
+  margin-top: unset;
+  padding: unset;
+}
+
+.intro {
+  background-color: whitesmoke;
+  padding: 30px;
+  font-size: 1.6em;
+}
+
+.gameboard {
+  position: absolute;
+  background-image: url("img/gameboard.jpg");
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+.player-notice {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-weight: bold;
+  background-color: #0002;
+  padding: 10px;
+}
+
+.dealer {
+  background-color: #0004;
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+}
+
+
+.hand {
+  margin-left: auto;
+  margin-right: auto;
+  clear: both;
+  position: relative;
+}
+
+.card {
+  width: unset;
+  float: none;
+}
+
+
+.suit {
+  font-size: larger;
+}
+
+.htmlCard {
+  margin: 5px 3px;
+  display: inline-block;
+  background: #fffD;
+  padding: 4px 3px;
+  border-radius: 6px;
+}
+
+.hud {
+  display: none;
+}
+
+.status-message {
+  background-color: transparent;
+  box-shadow: none;
+  width: 100%;
+}
+.status ul li:hover {
+  background: #ccc3;
+}
+
+.player-info-log {
+  font-size: 2vh;
+  text-align: center;
+  border: 1px solid #aaaa;
+}
+
+.menu-player {
+  font-size: 2vh;
+  font-weight: bolder;
+}
+
+
+.menu_option{
+  text-transform: uppercase;
+}
+
+.menu-table {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+
+
+.hidden {
+  display: none;
+}
+
+
+
+
+@media screen and (orientation: landscape) and (max-height: 450px) {
+
+  .player-info {
+    padding: 5px;
+  }
+
+  .deal .card {
+    width: 8vw;
+  }
+
+  .player-info.p1 {
+    height: 40vh;
+    width: 30vw;
+  }
+
+  .status ul li { 
+    line-height: 2.5em;
+    font-size: 1em;
+    width: 100%;
+  }
+
+  .cardfan {
+    left: 15vw;
+    top: 60vh;
+  }
+
+  .cardfan .card {
+    width: 14vw;
+  }
+
+
+}
+
+
+@media screen and (orientation: portrait) and (max-width: 450px) {
+
+  .player-info {
+    padding: 5px;
+  }
+
+
+  .player-info.p1 {
+    height: 25vh;
+    width: 60vw;
+  }
+
+  .player-info-hand .card {
+    width: 16vw;
+  }
+
+  .status ul li { 
+    line-height: 2.5em;
+    font-size: 1em;
+    width: 100%;
+  }
+
+ 
+
+  .cardfan {
+    left: 25vw;
+    top: 46vh;
+  }
+
+  .cardfan .card {
+    width: 35vw;
+  }
+
+  .p4 .hand, .p3 .hand, .p2 .hand {
+    right: 15vw;
+    top: 10vh;
+  }
+
+}
+
+
+
+
+@media screen and (orientation: portrait) and (max-width: 450px) {
+
+  .player-info.p2 {
+    display: none;
+    visibility: hidden;
+  }
+  .player-info.p3 {
+    display: none;
+    visibility: hidden;
+  }
+  .player-info.p4 {
+    display: none;
+    visibility: hidden;
+  }
+  .player-info.p5 {
+    display: none;
+    visibility: hidden;
+  }
+  .player-info.p6 {
+    display: none;
+    visibility: hidden;
+  }
+
+
+  .cardfan {
+    top: 36vh;
+  }
+
+}
+
+
+/*
+  This CSS is duplicated in game.css
+*/
+
+/*.player-info {
+  width: min(25vh,25vw);
+  height: 20vh;
+  background-color: #4448;
+  color: #fff;
+  padding: 1em;
+  position: absolute;
+}
+
+.player-info.p1 {
+  height: 30vh;
+}
+.player-info .status {
+  font-size: 1.25em;
+}
+
+
+.player-info-name {
+  font-size: 3vh;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-info-chips {
+  padding: 0.5em;
+  text-align: center;
+  font-size: 3vh;
+}
+
+.dealer .player-notice{
+  background-color: #0004;
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+}
+
+
+.p1 .hand {
+  display: none;
+}
+
+.p4 .hand, .p3 .hand, .p2 .hand {
+  right: 15vh;
+  top: 2vh;
+}
+
+.p5 .hand, .p6 .hand {
+  left: 24vh;
+  top: 2vh;
+}
+
+.player-info-hand .card {
+  width: 12vh;
+  position: absolute;
+}
+*/
+
+/*
+
+.cardfan {
+  position: absolute;
+  top: 70vh;
+  left: 10vw;
+}
+
+.cardfan .card {
+  position: absolute;
+  width: 17.5vh;
+}
+
+.card:nth-child(1n+2) {
+  left: -130px;
+} 
+
+.cardfan>.card:nth-child(1) {
+  transform: rotate(-20deg);
+  left: 0px;
+}
+
+.cardfan>.card:nth-child(2) {
+  transform: rotate(-10deg);
+  left: 3vh;
+}
+
+.cardfan>.card:nth-child(3) {
+  transform: rotate(0deg);
+  left: 6vh;
+}
+
+.cardfan>.card:nth-child(4) {
+  transform: rotate(10deg);
+  left: 9vh;
+}
+
+.cardfan>.card:nth-child(5) {
+  transform: rotate(20deg);
+  left: 12vh;
+}
+
+.hand>.card:nth-child(1) {
+  transform: rotate(-20deg);
+  left: 0px;
+}
+
+.hand>.card:nth-child(2) {
+  transform: rotate(-10deg);
+  left: 2vh;
+}
+
+.hand>.card:nth-child(3) {
+  transform: rotate(0deg);
+  left: 4vh;
+}
+
+.hand>.card:nth-child(4) {
+  transform: rotate(10deg);
+  left: 6vh;
+}
+
+.hand>.card:nth-child(5) {
+  transform: rotate(20deg);
+  left: 8vh;
+} */
