@@ -605,37 +605,37 @@ ul li a {
 /******************************/
 /*** Poker / Cardgame Boxes ***/
 /******************************/
-.p6 {
+.p6 , #player-box-6 {
   left: 1em;
   top: 60vh;
   transform: translateY(-50%);
 }
 
-.p5 {
+.p5 , #player-box-5 {
   left: 1em;
   top: 30vh;
   transform: translateY(-50%);
 }
 
-.p4 {
+.p4 , #player-box-4 {
   left: 50vw;
   top: 1em;
   transform: translateX(-50%);
 }
 
-.p3 {
+.p3 , #player-box-3 {
   right: 1em;
   top: 30vh;
   transform: translateY(-50%);
 }
 
-.p2 {
+.p2 , #player-box-2 {
   right: 1em;
   top: 60vh;
   transform: translateY(-50%);
 }
 
-.p1 {
+.p1 , #player-box-1 {
   min-width: 30vh;
   height: 32vh;
   bottom: 1vh;
