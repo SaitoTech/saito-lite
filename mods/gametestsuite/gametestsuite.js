@@ -186,6 +186,7 @@ class GameTestSuite extends GameTemplate {
     let state = {};
 
     state.cards_dealt_to_players = 0;
+    state.simultaneous_pick_submitted = 0;
 
     return state;
   }
@@ -444,6 +445,13 @@ class GameTestSuite extends GameTemplate {
 
     let game_self = this;
     let simultaneous_pick_card = Math.random().toString();
+
+    if (game_self.game.state.simultaneous_pick_submitted) {
+      salert("All players need to click on the simultaneous pick button. The results will be printed in the console.log. The test is restricted to running a single time, to avoid players making multiple submissions before all players have contributed and triggering failures in card selection.");
+      return 0;
+    }
+
+    game_self.game.state.simultaneous_pick_submitted = 1;
 
     game_self.updateLog(`
 
