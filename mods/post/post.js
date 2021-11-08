@@ -639,13 +639,14 @@ class Post extends ModTemplate {
 
 
 
-  createReportTransaction(post_id, comment) {
+  createReportTransaction(post_id, title, comment) {
 
       let newtx = this.app.wallet.createUnsignedTransaction();
 
       newtx.msg.module = "Post";
       newtx.msg.type = "report";
       newtx.msg.post_id = post_id;
+      newtx.msg.title = title;
 
       return this.app.wallet.signTransaction(newtx);
       
@@ -671,14 +672,14 @@ class Post extends ModTemplate {
     console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
     //console.log(JSON.stringify(txmsg)); // lets see who is this guy
 
-    // ---- There should be a better way for this -arks
+    /*/ ---- There should be a better way for this -arks
     sql = `SELECT title from posts WHERE id = $pid`;
     params = { $pid : txmsg.post_id };
     let resp = await this.app.storage.queryDatabase(sql, params, "post");
     console.log(resp);
     txmsg.title = resp[0].title;
     console.log(`txmsg.title: ` + txmsg.title);
-    // ----
+    // ----*/
 
     this.app.network.sendRequest('send email', {
       from: 'network@saito.tech',
@@ -686,9 +687,9 @@ class Post extends ModTemplate {
       subject: `Saito.io - Post #${txmsg.post_id} was reported.`,
       ishtml: true,
       body: `
-        Post #${txmsg.post_id} was reported.
-        #${txmsg.title}
-        Click <a href="https://saito.io/post/delete/${base_58_tx}">here</a> to delete it.
+        <b>Post #${txmsg.title} was reported.<br/></b>
+        Post ID${txmsg.post_id}<br/><br/>
+        <a href="https://saito.io/post/delete/${base_58_tx}">Delete Post</a><hr/>.
       `
     });
   }

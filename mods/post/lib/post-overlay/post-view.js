@@ -193,6 +193,10 @@ console.log("error showing comment or gallery");
         const reportit = await sconfirm("Report this post or comments to the mods?");
         if (reportit) {
           const sig = el.getAttribute("data-id");
+          //this only works for posts - needs fix for comments.
+          //solution will be to add the coment id and title from post to 
+          // the data element.
+          const title = el.getAttribute("data-title");
           await salert("Thank you for flagging this");
           for (let i = 0; i < mod.posts.length; i++) {
             if (mod.posts[i].transaction.sig === sig) {
@@ -207,7 +211,7 @@ console.log("error showing comment or gallery");
           mod.render();
           mod.overlay.hideOverlay();
 
-          const newtx = mod.createReportTransaction(sig);
+          const newtx = mod.createReportTransaction(sig, title);
           app.network.propagateTransaction(newtx);
         }
     }
