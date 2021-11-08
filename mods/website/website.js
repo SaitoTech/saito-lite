@@ -6,7 +6,7 @@ const SaitoHeader = require('../../lib/saito/ui/saito-header/saito-header');
 const SaitoOverlay = require('../../lib/saito/ui/saito-overlay/saito-overlay');
 const TokenTemplate = require('./lib/subpage/token/token.template.js');
 const TokenBurnTemplate = require('./lib/subpage/token/tokenburn.template.js');
-const PolkadotOverlay = require('../dotarcade/lib/polkadot-overlay');
+// const PolkadotOverlay = require('../dotarcade/lib/polkadot-overlay');
 const PoolsTemplate = require('./lib/subpage/token/pools.template.js');
 const Web3Template = require('./lib/subpage/web3.template.js');
 const TeamTemplate = require('./lib/subpage/team.template.js');
@@ -163,8 +163,8 @@ class Website extends ModTemplate {
       this.initializeHompage(app);
     }
 
-    PolkadotOverlay.render(this.app, this);
-    PolkadotOverlay.attachEvents(this.app, this);
+    // PolkadotOverlay.render(this.app, this);
+    // PolkadotOverlay.attachEvents(this.app, this);
 
   }
   initialize(app) {

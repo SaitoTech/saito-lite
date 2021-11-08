@@ -203,12 +203,10 @@ section {
   width: 100%;
   padding: 6rem 4rem 4rem;
   margin: 0 auto;
-  background-image: url("/website/img/hex_background.png"),
-    var(--saito-gradient);
+  background-image: url("/website/img/bg-hero.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-blend-mode: multiply;
   box-shadow: var(--saito-shadow-light);
 }
 
@@ -285,11 +283,12 @@ section {
 }
 
 #subpage #content {
-  margin: 2.5rem 0rem;
+  margin: 2.5rem auto;
   line-height: 3rem;
   font-size: 2.25rem;
   font-weight: 400;
-  color: var(--saito-white);
+  color: var(--saito-cyber-black);
+  max-width: 75ch;
 }
 
 #subpage #content {
@@ -363,68 +362,73 @@ section {
 }
 
 .section2 {
-  display: grid;
-  grid-template-rows: repeat(10, 80px);
-  grid-template-columns: repeat(8, 1fr);
-  grid-gap: 1rem;
-  max-width: 80vw;
+  position: relative;
+  height: 800px;
+  max-width: max(768px, 80vw);
+  width: 100%;
   margin: 0 auto;
 }
 
 .section2 .part {
+  position: absolute;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  width: clamp(180px, 20vw, 280px);
+  padding: 0.5rem 2rem;
   border: 1px dotted var(--saito-cyber-black);
 }
 
 .section2 .part:first-child {
-  grid-row: 3 / 5;
-  grid-column: 1 / 3;
+  top: 120px;
+  left: -1rem;
   border-top: 0;
   border-right: 0;
+  padding-right: 4rem;
 }
 .section2 .part:nth-child(2) {
-  grid-row: 1 / 3;
-  grid-column: 4 / 6;
-  justify-self: right;
+  top: 6%;
+  left: 37%;
   border-top: 0;
   border-left: 0;
   border-bottom: 0;
+  padding-bottom: 4rem;
   text-align: right;
 }
 .section2 .part:nth-child(3) {
-  grid-row: 4 / 6;
-  grid-column: 7 / 9;
-  justify-self: right;
+  top: 36%;
+  right: -1rem;
   text-align: right;
   border-top: 0;
   border-left: 0;
 }
 .section2 .part:nth-child(4) {
-  grid-row: 7 / 9;
-  grid-column: 1 / 3;
+  top: 52%;
+  left: -1rem;
   border-right: 0;
   border-bottom: 0;
 }
 .section2 .part:nth-child(5) {
-  grid-row: 8 / 10;
-  grid-column: 4 / 6;
+  bottom: 8%;
+  left: 45%;
   border-top: 0;
   border-right: 0;
   border-bottom: 0;
 }
 
 .section2 .computer {
-  grid-row: 3 / 8;
-  grid-column: 3 / 7;
-  background: var(--saito-orange);
+  width: 600px;
+  height: 600px;
+  margin: 100px auto;
+  background-image: url("/website/img/laptop.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .section2 .part .title {
   font-size: 2rem;
   font-weight: bold;
-  color: var(--saito-orange);
+  color: var(--saito-red);
 }
 
 .section2 .part .desc {
@@ -656,7 +660,10 @@ section {
   margin-bottom: 8rem;
   width: 100%;
   padding: 2rem 0;
-  background-image: var(--saito-gradient);
+  background-image: url("/website/img/bg-strip.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: var(--saito-white);
   box-shadow: var(--saito-shadow-light);
 }
@@ -707,7 +714,11 @@ section {
 
 .section4 .item .icon {
   width: 100%;
+  max-width: 6rem;
   height: auto;
+}
+.section4 .item:first-child .icon {
+  max-width: 8rem;
 }
 
 /* Part five */
@@ -1129,7 +1140,7 @@ section {
   justify-content: space-between;
   align-items: center;
   margin-top: 2.3rem;
-  width: 21.6rem;
+  gap: 1rem;
 }
 
 .iconWrapperMobile .desc a {
@@ -1215,15 +1226,6 @@ h5 {
   }
   .section1 .left .desc {
     font-size: 4.6rem;
-  }
-  .section2 .part {
-    width: 50%;
-  }
-  .section2 .part .desc {
-    margin-top: 2rem;
-    width: 40rem;
-    height: auto;
-    font-size: 18px;
   }
   .section4 .itemWrapper .item:nth-child(2) {
     margin: 0 10rem;
@@ -1568,12 +1570,11 @@ h5 {
 
 .header-wrapper {
   display: flex;
-  z-index: 99;
   align-items: center;
   width: 100%;
   padding: 0 4rem;
   position: absolute;
-  z-index: 9;
+  z-index: 1338;
   top: 0;
   left: 0;
   right: 0;
@@ -1600,6 +1601,7 @@ h5 {
   width: 100%;
   height: 100%;
   grid-template-columns: auto auto 1em;
+  color: var(--saito-cyber-black);
 }
 .header-mini-wallet {
   justify-content: right;
@@ -1616,7 +1618,7 @@ h5 {
 .header-icon-links a:hover {
   transform: scale(1.1);
   transform-origin: center;
-  color: #000;
+  color: var(--saito-cyber-black);
 }
 
 .header-icon-links a {
@@ -1624,10 +1626,15 @@ h5 {
   line-height: 80px;
   font-size: 16px;
   font-weight: bold;
-  color: var(--saito-white);
+  color: var(--saito-cyber-black);
   margin-right: 40px;
   text-decoration: none;
   transition: transform var(--saito-transition);
+}
+
+.header-home .header-icon-links,
+.header-home .header-icon-links a {
+  color: var(--saito-white);
 }
 
 .header-icon-links .logo {
@@ -1946,14 +1953,10 @@ This whole rule is kind of useless as it shrinks .alert from the 768-1200px rang
 
 @media only screen and (max-width: 768px) {
   .alert {
-    /*line-height: 20px; adjusting line-height through child element*/
-    padding: 1em;
-    margin: 0 1em 7em;
-    left: 1rem;
-    top: 2rem;
-    position: relative;
-    max-width: calc(100% - 4rem);
-    /*top: 100px; redundant*/
+    padding: 1rem;
+    margin: 4rem 2rem;
+    position: static;
+    width: calc(100% - 4rem);
   }
   .alert span {
     display: block;
@@ -1973,6 +1976,14 @@ This whole rule is kind of useless as it shrinks .alert from the 768-1200px rang
   }
   .section1 .littleIcon > *:last-child {
     margin-right: 0;
+  }
+
+  .section4 .item {
+    width: 100%;
+  }
+
+  .section4 .item img {
+    filter: brightness(0.5) sepia(1) saturate(10000%);
   }
 }
 
