@@ -197,6 +197,8 @@ console.log("error showing comment or gallery");
           //solution will be to add the coment id and title from post to 
           // the data element.
           const title = el.getAttribute("data-title");
+          const text = el.getAttribute("data-text");
+          const parent_id = el.getAttribute("data-parent_id");
           await salert("Thank you for flagging this");
           for (let i = 0; i < mod.posts.length; i++) {
             if (mod.posts[i].transaction.sig === sig) {
@@ -211,7 +213,7 @@ console.log("error showing comment or gallery");
           mod.render();
           mod.overlay.hideOverlay();
 
-          const newtx = mod.createReportTransaction(sig, title);
+          const newtx = mod.createReportTransaction(sig, title, parent_id, text);
           app.network.propagateTransaction(newtx);
         }
     }

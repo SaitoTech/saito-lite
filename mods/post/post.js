@@ -639,7 +639,7 @@ class Post extends ModTemplate {
 
 
 
-  createReportTransaction(post_id, title, comment) {
+  createReportTransaction(post_id, title, text, parent_id, comment) {
 
       let newtx = this.app.wallet.createUnsignedTransaction();
 
@@ -647,6 +647,8 @@ class Post extends ModTemplate {
       newtx.msg.type = "report";
       newtx.msg.post_id = post_id;
       newtx.msg.title = title;
+      newtx.msg.text = text;
+      newtx.msg.parent_id = parent_id;
 
       return this.app.wallet.signTransaction(newtx);
       
@@ -670,7 +672,7 @@ class Post extends ModTemplate {
     let base_58_tx = Base58.encode(Buffer.from(JSON.stringify(delete_tx)));
 
     console.log(`POSTS MODERATION https://saito.io/post/delete/${base_58_tx}`);
-    //console.log(JSON.stringify(txmsg)); // lets see who is this guy
+    console.log(JSON.stringify(txmsg)); // lets see who is this guy
 
     /*/ ---- There should be a better way for this -arks
     sql = `SELECT title from posts WHERE id = $pid`;
