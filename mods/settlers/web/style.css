@@ -38,10 +38,27 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   position: unset; /* fixed from game.css does weird stuff*/
-
+  z-index: 0;
 }
 
-#game-hexgrid{
+#game-hexgrid-container{
+  z-index: 2;
+}
+
+.player-box{
+  background-color: #444A;
+  z-index: 3;
+}
+
+.player-box > .player-box-graphic{
+  z-index: -1;
+}
+
+.game-board-size{
+  z-index: 1000;
+}
+
+#game-hexgrid, #game-hexgrid-container{
   width: 1000px;
 }
 
@@ -83,12 +100,16 @@ body {
   Shrink Development cards
 */
 .devcards > .card{
-  width: 8vh;
+  width: 10vh;
   position: absolute;
 }
 
-.tinycard{
+.notme .player-box-graphic .devcards .tinycard{
   width: 8vh;
+}
+
+.notme .player-box-graphic .rescards .tinycard{
+  width: 10vh;
 }
 
 /* Make room to display two hands of cards*/
@@ -144,9 +165,6 @@ body {
   text-decoration: underline;
 }
 
-.game-hexgrid-cities {
-  position: absolute;
-}
 
 .hover{
   z-index: 1000;
@@ -155,6 +173,67 @@ body {
   border: 1px solid white;
   background-color: whitesmoke;
   cursor: crosshair;
+}
+
+.ship{
+  font-size: 2em;
+  overflow-x: visible;
+  white-space: nowrap;
+}
+.port{
+  width: 100%;
+  height: 60%;
+}
+
+.port1{
+  top: -40%;
+  left: 40%;
+  transform: rotate(30deg);
+}
+.port2{
+  top: 20%;
+  left: 80%;
+  transform: rotate(90deg);
+}
+
+.port3{
+  top: 80%;
+  left: 40%;
+  transform: rotate(150deg);
+}
+
+.port4{
+  top: 80%;
+  right: 40%;
+  transform: rotate(-150deg);
+}
+.port5{
+  right: 80%;
+  top: 20%;
+  transform: rotate(-90deg);
+}
+.port6{
+  top: -40%;
+  right: 40%;
+  transform: rotate(-30deg);
+}
+.harbor{
+  position:  absolute;
+  display: block;
+  width: 50px;
+  height: 15px;
+  background-color: brown;
+  bottom: 20%;
+}
+
+.rharbor{
+  transform: rotate(50deg);
+  right: 25%;
+}
+
+.lharbor{
+  transform: rotate(-50deg);
+  left: 25%;
 }
 
 .road {
@@ -238,9 +317,20 @@ body {
 .c2 .player-info-name{
   color: blue;
 }
+.c3 .player-info-name{
+  color: green;
+}
+.c4 .player-info-name{
+  color: orange;
+}
+
 
 .producer polygon{
   fill: white;
+}
+
+.producer line{
+  stroke: white;
 }
 
 .city1{
@@ -293,24 +383,19 @@ body {
 
 .city.p1 {
   border: 10px solid red;
-  background-color: white;
   color: red;
 }
 .city.p2 {
   border: 10px solid blue;
-  background-color: white;
   color: blue;
- 
 }
 .city.p3 {
   border: 10px solid green;
-  background-color: white;
   color: green;
  
 }
 .city.p4 {
   border: 10px solid orange;
-  background-color: white;
   color: orange;
 }
 
@@ -319,10 +404,17 @@ body {
   padding: 25px;
   font-size: 1.25em;
   width: 50vw;
+  max-height: 70vh;
+  overflow-y: scroll;
 }
 
 .trade_overlay_offers {
   clear: both;
+}
+
+.trade_overlay .noselect{
+  color: grey;
+  font-style: italic;
 }
 
 .trade_overlay_buttons {
@@ -338,6 +430,7 @@ body {
   width: 70px;
   height: 90px;
   position: relative;
+  cursor: pointer;
 }
 
 .highlight{
@@ -360,7 +453,6 @@ body {
 .me > .player-box-graphic{
   position: relative;
   left: calc(150px + 8vw);
-  z-index: -1;
 }
 
 .notme > .player-box-graphic{
@@ -399,8 +491,31 @@ body {
   fill: orange;
 }
 
+.token.p1 line{
+  stroke: red;
+}
 
-.player-box.notme{
+.token.p2 line{
+  stroke: blue;
+}
+
+.token.p3 line{
+  stroke: green;
+}
+
+.token.p4 line{
+  stroke: orange;
+}
+
+.opponents{
+  position: absolute;
+}
+
+.opponents > .player-box{
+  position: unset;
+}
+
+.player-box.notme, .opponents{
   height: fit-content;
 }
 /*
@@ -419,7 +534,7 @@ body {
         top:  80vh;
     }
 
-    .player-box.notme{
+    .player-box.notme, .opponents{
         right: max(5px, calc(12vw - 7em));
         top:  10vh;
     }
@@ -435,7 +550,7 @@ body {
         left: calc(30vw - 6em);
     }
 
-    .player-box.notme{
+    .player-box.notme, .opponents{
         right: calc(30vw - 6em);
     }
 }
@@ -453,7 +568,7 @@ body {
         left: calc(30vw - 5.5em);
     }
 
-    .player-box.notme{
+    .player-box.notme, .opponents{
         right: calc(30vw - 5.5em);
     }
 }
