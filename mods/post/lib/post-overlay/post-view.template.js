@@ -13,7 +13,6 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
   const username = app.keys.returnUsername(tx.transaction.from[0].add);
   const title = tx.msg.title;
   const text = tx.msg.text;
-  const parent_id = tx.msg.parent_id;
 
 
   let edit = "";
