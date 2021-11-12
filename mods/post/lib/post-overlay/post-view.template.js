@@ -11,9 +11,19 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
   const time =  datetimeRelative(tx.transaction.ts);
   const avatar = app.keys.returnIdenticon(tx.transaction.from[0].add);
   const username = app.keys.returnUsername(tx.transaction.from[0].add);
-  const title = tx.msg.title;
+  const title = "";
   const text = tx.msg.text;
   const parent_id = tx.msg.parent_id;
+
+
+  //test this. 
+  //the idea is to grab the text here - then pass it through in all cases.
+  //title becomes a bit of a misnomer in this case.
+  if (typeof tx.msg.title != 'undefined') {
+    title = tx.msg.title; 
+  }else {
+    title = txt.msg.text.substr(0, 35);
+  }
 
 
   let edit = "";
@@ -49,7 +59,7 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
           <div id="post-view-ts" class="post-view-ts">${time}</div>
         </div>
       </div>
-      <h2 class="post-view-title">${tx.msg.title}</h2>
+      <h2 class="post-view-title">${title}</h2>
   `;
   if (tx.msg.link != "") {
     html = `
