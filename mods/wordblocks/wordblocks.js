@@ -519,7 +519,7 @@ class Wordblocks extends GameTemplate {
     // attach events
     //
     if (this.game.target == this.game.player) {
-      this.addEventsToBoard();
+      this.enableEvents(); //addEventsToBoard
     }
 
     try {
@@ -529,13 +529,14 @@ class Wordblocks extends GameTemplate {
           $('#tiles')[0].appendChild($('#tiles')[0].childNodes[Math.random() * i | 0]);
         }
       });
-      $('#tiles').sortable();
+      
+//Permanently make tiles sortable>>>>>>
+      $('#tiles').sortable({axis:"x",tolerance:"pointer",containment:"parent"});
       $('#tiles').disableSelection();
       $(window).resize(function () {
         resizeBoard();
       });
-
-      var element = document.getElementById('gameboard');
+      
   
       $('#game_status').on('click', () => {
         $('.log').hide();
@@ -628,10 +629,21 @@ class Wordblocks extends GameTemplate {
     for (let i = 0; i < players; i++) {
       let this_player = i + 1;
 
+
+      let name = this.app.keys.returnUsername(this.game.players[i]);
+      let identicon = this.app.keys.returnIdenticon(this.game.players[i]);
+
+      if (name != "") {
+        if (name.indexOf("@") > 0) {
+          name = name.substring(0, name.indexOf("@"));
+        }
+      }
+      //>>>>>>>>Improving HUD display
       if (this.game.player == this_player) {
         html += `
           <div class="player">
-            <span class="player_name">Player ${this.game.player} (you)</span>
+            <img class="player-identicon" src="${identicon}">
+            <span class="player_name">Me (Player ${this.game.player})</span>
             <span class="player_score" id="score_${this_player}"> ${this.game.score[i]} </span>
           </div>
         `;
@@ -641,7 +653,8 @@ class Wordblocks extends GameTemplate {
         op++;
         html += `
           <div class="player">
-            <span class="player_name">${opponent.substring(0, 16)}</span>
+            <img class="player-identicon" src="${identicon}">
+            <span class="player_name">Player ${this_player}: ${name}</span>
             <span class="player_score" id="score_${this_player}"> ${this.game.score[i]} </span>
           </div>
         `;
@@ -881,10 +894,12 @@ class Wordblocks extends GameTemplate {
         $('#tiles')[0].appendChild($('#tiles')[0].childNodes[Math.random() * i | 0]);
       }
     });
+    //Make tile sortable each round>>>>>
+    /*So we aren't sure if we want to re-up these each time we add events, or once during initialization...
     $('#tiles').sortable();
     $('#tiles').disableSelection();
     //$(window).resize(function () { resizeBoard(); });
-
+    */
     } catch (err) {}
   }
 

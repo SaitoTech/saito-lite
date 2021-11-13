@@ -346,11 +346,17 @@ thead,  tfoot{
   display: block;
 }
 
+.player .player-identicon{
+    width: 80%;
+    box-shadow: 0px 3px 6px #00000029;
+}
+
 .player {
-  margin: 3px 0 12px;
+  margin: 0.125em 0 0.75em;
   white-space: nowrap;
   display: grid;
-  grid-template-columns: 90% 10%;
+  grid-template-columns: 7% 82% 10%;
+  height: 1.5em;
 }
 
 .player_name {
@@ -362,7 +368,7 @@ thead,  tfoot{
 }
 
 .player span {
-  line-height: 20px;
+  line-height: 1.5em;
 }
 
 .player_score {
@@ -540,10 +546,6 @@ thead,  tfoot{
   max-width: 95vw;
 }
 **/
-
-.player span {
-  line-height: 40px;
-}
 
 
 .rack {
