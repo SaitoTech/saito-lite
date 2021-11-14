@@ -1463,7 +1463,7 @@ body {
 
 
 .hud-header {
-  height: 100%;
+  min-height: 40px;
   width: 100%;
   opacity: 1;
   visibility: visible;

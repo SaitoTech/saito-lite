@@ -12902,6 +12902,8 @@ handleSystemsMenuItem() {
     let imperium_self = this;
     let z = imperium_self.returnEventObjects();
 
+console.log("HGL: " + JSON.stringify(this.game.queue));
+
     if (this.game.queue.length > 0) {
 
       imperium_self.saveGame(imperium_self.game.id);
@@ -12909,6 +12911,8 @@ handleSystemsMenuItem() {
       let qe = this.game.queue.length-1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
+
+console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
