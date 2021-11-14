@@ -13,6 +13,28 @@
   overflow-y: unset;
 }
 
+/* prevent left-shift */
+.p2, #player-box-2 {
+  left: unset;
+  transform: unset;
+}
+.p3, #player-box-3 {
+  left: unset;
+  transform: unset;
+}
+.p4, #player-box-4 {
+  left: unset;
+  transform: unset;
+}
+.p5, #player-box-5 {
+  left: unset;
+  transform: unset;
+}
+.p6, #player-box-6 {
+  left: unset;
+  transform: unset;
+}
+
 .hexIn{
   overflow: unset;
 }
@@ -33,7 +55,7 @@
 
 body {
   background-color: lightseagreen;
-  background-image: url(/settlers/img/water.JPG);
+  background-image: url(/settlers/img/background2.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -65,6 +87,7 @@ body {
 
 /* Dice */
 .diceroll{
+  display: none;
   position: absolute;
   width: 10vw;
   top: 0px;
@@ -311,17 +334,17 @@ body {
   background-color: orange;
 }
 
-.c1 .player-info-name{
-  color: red;
+.player-box.c1 {
+  border: 2px solid red;
 }
-.c2 .player-info-name{
-  color: blue;
+.player-box.c2 {
+  border: 2px solid blue;
 }
-.c3 .player-info-name{
-  color: green;
+.player-box.c3 {
+  border: 2px solid green;
 }
-.c4 .player-info-name{
-  color: orange;
+.player-box.c4 {
+  border: 2px solid orange;
 }
 
 
@@ -457,8 +480,9 @@ body {
 
 .notme > .player-box-graphic{
   position: relative;
-  right: 8vw;
   z-index: -1;
+  top: 5vh;
+  left: 1vw;
 }
 
 .flexline{
