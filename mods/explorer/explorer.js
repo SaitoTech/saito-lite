@@ -1,4 +1,5 @@
 const ModTemplate = require('../../lib/templates/modtemplate');
+const sanitizer = require('sanitize')();
 
 class ExplorerCore extends ModTemplate {
   constructor(app) {
@@ -40,7 +41,7 @@ class ExplorerCore extends ModTemplate {
     ///////////////////
     expressapp.get('/explorer/block', function (req, res) {
 
-      var hash = req.query.hash;
+      var hash = sanitizer.sanitize(req.query.hash);
 
       if (hash == null) {
 
@@ -73,7 +74,7 @@ class ExplorerCore extends ModTemplate {
 
     expressapp.get('/explorer/blocksource', function (req, res) {
 
-      var hash = req.query.hash;
+      var hash = sanitizer.sanitize(req.query.hash);
 
       if (hash == null) {
         res.setHeader('Content-type', 'text/html');
