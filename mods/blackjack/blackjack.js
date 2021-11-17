@@ -836,15 +836,14 @@ toggleIntro() {
         this.playerbox.refreshName(i+1);
 
         newhtml = `<div class="chips">${this.game.state.player[i].credit} ${this.game.options.crypto}</div>`;
-        if (this.game.state.dealer == (i+1)){
+        if (this.game.state.dealer == (i+1)) {
           newhtml += `<div class="player-notice dealer">DEALER</div>`;  
         }else{
           newhtml += `<div class="player-notice">Player ${i+1}</div>`;  
         }
         
-        
       
-        this.playerbox.refreshInfo(newhtml, i);
+        this.playerbox.refreshInfo(newhtml, (i+1));
         newhtml = "";
         
         if (this.game.state.player[i].hand) {
@@ -867,7 +866,7 @@ toggleIntro() {
               }
        	    }
             newhtml += `</div>`;
-            this.playerbox.refreshGraphic(newhtml, i);
+            this.playerbox.refreshGraphic(newhtml, (i+1));
 
         }
       }
