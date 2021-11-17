@@ -2115,10 +2115,27 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
   }
 
 
+  doesPlayerHaveSpaceDockOnPlanet(player, planet) {
+
+    if (planet.owner != player) { return 0; }
+
+    for (let i = 0; i < planet.units[player-1].length; i++) {
+      if (planet.units[player-1][i].type == "spacedock") { return 1; }
+    }
+    return 0;
+
+  }
+
+
+
   doesPlayerHaveInfantryOnPlanet(player, sector, planet_idx) {
 
     let sys = this.returnSectorAndPlanets(sector);
-    if (sys.p[planet_idx].units[player-1].length > 0) { return 1; }
+    if (sys.p[planet_idx].units[player-1].length > 0) {
+      for (let i = 0; i < sys.p[planet_idx].units[player-1].length; i++) {
+        if (sys.p[planet_idx].units[player-1][i].type == "infantry") { return 1; }
+      }
+    }
     return 0;
 
   }
