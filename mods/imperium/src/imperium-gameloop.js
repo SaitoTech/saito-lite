@@ -1536,7 +1536,7 @@ this.game.state.end_round_scoring = 0;
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
     	this.updateLog("ROUND: " + this.game.state.round);
-  	this.updateStatus("Moving into Round " + this.game.state.round);
+  	this.updateStatus("Moving into Round " + this.game.state.round + "<p></p> Please be patient as we deal cards securely...");
 
 
 	//
