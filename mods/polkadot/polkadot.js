@@ -14,6 +14,7 @@ class Polkadot extends SubstrateBasedCrypto {
     this.categories = "Cryptocurrency";
   }
 
+
   renderModalSelectCrypto(app, cryptomod) {
     return `
       <div id="dot-warning" class="dot-warning">
