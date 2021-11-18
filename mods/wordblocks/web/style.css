@@ -761,16 +761,38 @@ thead,  tfoot{
   text-shadow: 2px 2px black;
   text-align: center;
 }
-.slot .tile.ui-sortable-handle{
-  background-color: #32CD3279
-}
+
+/* Highlight selected tile in rack*/
 .tiles .tile.highlighttile{
   color: limegreen;
   border-color: limegreen;
 }
 
+/* Highlight temporary tiles on board*/
+.slot .tile.tempplacement{
+  background-color: #32CD3279;
+  color: black;
+}
+
+/* Highlight selected tile on board*/
 .slot .tile.highlighttile{
   background-color: limegreen;
+  color: black;
+}
+
+#helper{
+  position: fixed;
+  transition: transform 0.13s;
+  pointer-events: none;
+  width: 54px;
+  height: 54px;
+  background-color: limegreen;
+  font-size: 2rem;
+  text-align: center;
+  padding-top: 6px;
+  border-radius: 3px;
+  z-index: 50;
+  cursor: grabbing;
 }
 
 #deletectrl i{
