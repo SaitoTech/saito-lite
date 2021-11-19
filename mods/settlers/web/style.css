@@ -1,7 +1,7 @@
 /*
   Undo poker playerbox positions....
 */
-.p1, .p2, .p3, .p4, .p5, .p6 {
+.p1, .p2, .p3, .p4 {
   min-width: unset;
   height: unset;
   bottom: unset;
@@ -13,33 +13,13 @@
   overflow-y: unset;
 }
 
-/* prevent left-shift */
-.p2, #player-box-2 {
-  left: unset;
-  transform: unset;
-}
-.p3, #player-box-3 {
-  left: unset;
-  transform: unset;
-}
-.p4, #player-box-4 {
-  left: unset;
-  transform: unset;
-}
-.p5, #player-box-5 {
-  left: unset;
-  transform: unset;
-}
-.p6, #player-box-6 {
-  left: unset;
-  transform: unset;
-}
-
 .hexIn{
   overflow: unset;
+  padding-bottom: 113%;
 }
 .hexLink{
   overflow: unset;
+  height: 102.5%;
 }
 
 .hex_bg{
@@ -54,11 +34,13 @@
 }
 
 body {
-  background-color: lightseagreen;
-  background-image: url(/settlers/img/background2.jpg);
-  background-size: cover;
+  background-color: lightseagreen !important;
+  background: radial-gradient(circle farthest-corner at 50% 0%, lightseagreen 40%, blue 45%, lightseagreen 50%);
+  background-size: 25px 25px;
+  /*background-image: url(/settlers/img/background2.jpg);*/
+  /*background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center;*/
   position: unset; /* fixed from game.css does weird stuff*/
   z-index: 0;
 }
@@ -70,13 +52,14 @@ body {
 .player-box{
   background-color: #444A;
   z-index: 3;
+  border: 4px solid;
 }
 
 .player-box > .player-box-graphic{
   z-index: -1;
 }
 
-.game-board-size{
+.game_board_sizer{
   z-index: 1000;
 }
 
@@ -320,9 +303,9 @@ body {
   left: 0px;
 }
 
+/* p1-4 is legacy code for ownership of cities/roads, not playerboxes  */
 .p1 {
   background-color: red;
-
 }
 .p2 {
   background-color: blue;
@@ -335,16 +318,16 @@ body {
 }
 
 .player-box.c1 {
-  border: 2px solid red;
+  border-color: red;
 }
 .player-box.c2 {
-  border: 2px solid blue;
+  border-color: blue;
 }
 .player-box.c3 {
-  border: 2px solid green;
+  border-color: green;
 }
 .player-box.c4 {
-  border: 2px solid orange;
+  border-color: orange;
 }
 
 
@@ -531,6 +514,10 @@ body {
   stroke: orange;
 }
 
+.bottom-margin{
+  margin-bottom: 0.5em;
+}
+
 .opponents{
   position: absolute;
 }
@@ -539,6 +526,9 @@ body {
   position: unset;
 }
 
+.player-box.me{
+  height: unset;
+}
 .player-box.notme, .opponents{
   height: fit-content;
 }
@@ -555,7 +545,7 @@ body {
 
     .player-box.me{
         left: max(5px, calc(12vw - 7em));
-        top:  80vh;
+        /*top:  80vh;*/
     }
 
     .player-box.notme, .opponents{

@@ -292,8 +292,10 @@ class Settlers extends GameTemplate {
         this.playerbox.addClass(`c${i}`,i);
         if (i != this.game.player) this.playerbox.addClass("notme",i);
       }
-      this.playerbox.groupOpponents();
-      
+      if (this.game.players.length>2){
+        this.playerbox.groupOpponents();  
+      }
+            
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
@@ -866,50 +868,57 @@ class Settlers extends GameTemplate {
       	let player = parseInt(mv[1]);
         this.game.queue.splice(qe, 1);
 
-	this.cardfan.render(this.app, this);
-	this.cardfan.attachEvents(this.app, this);
-
+      	
         if (!mv[2]) {
           this.game.state.canPlayCard = true; //Can only play one dev card per turn (during your turn)
-	}
+	       }
 
         if (this.game.player == player) {
-
+          //Update this player's number of devcards ?? >>>>>>
           this.game.state.players[player-1].devcards = this.game.deck[0].hand.length;           
 
-    	  let html = `<div class="tbd"><div style="margin-bottom:5px">Your turn:</div>`;
-    	  html += `<ul>`;
+          //Messaging to User
+      	  let html = `<div class="tbd"><div style="margin-bottom:5px">Your turn:</div>`;
+      	  html += `<ul>`;
           html += `<li class="option" id="rolldice">roll dice</li>`;
           if (settlers_self.canPlayerPlayCard(player)){
-            html += `<li class="option" id="knight">move robber</li>`;
+            html += `<li class="option" id="knight">play card</li>`;
           }
           html += `</ul>`;
           html += `</div>`;
 
-	  this.updateStatus(html, 1);
+          this.updateStatus(html, 1);
 
-          $('.option').off();
-          $('.option').on('click', function () {
-
-            let choice = $(this).attr("id");
-
-	    if (choice === "rolldice") {
+          //roll the dice by clicking on the dice
+           if (document.querySelector("#diceroll")){
+              $("#diceroll").off();
+              $("#diceroll").addClass("hover");
+              $("#diceroll").on("click",function(){
+              $("#diceroll").off();
+              $("#diceroll").removeClass("hover");
               settlers_self.addMove("roll\t"+player);
               settlers_self.endTurn();
+              });
             }
 
-	    if (choice === "knight") {
-              settlers_self.addMove(`play\t${player}\tSTOP`); //Still have to roll
-              settlers_self.playerPlayCard();
-            }
+          //Or, choose menu option
+          $('.option').off();
+          $('.option').on('click', function () {
+            let choice = $(this).attr("id");
 
-	  });
-
-	} else {
+      	    if (choice === "rolldice") {
+                    settlers_self.addMove("roll\t"+player);
+                    settlers_self.endTurn();
+                  }
+      	    if (choice === "knight") {
+                    settlers_self.addMove(`play\t${player}\tSTOP`); //Still have to roll
+                    settlers_self.playerPlayCard();
+                  }
+      	  });
+      	} else {
           let notice = `<div class="tbd">Player ${player} rolling dice...</div>`;  
           this.updateStatus(notice);
       	}
-
         return 0;
       }
 
@@ -1116,7 +1125,7 @@ class Settlers extends GameTemplate {
       	} else {
       	  if (this.game.state.canTrade){
             let settlers_self = this;
-            let html = `<div>Player ${player} is taking their turn.</div><ul><li id='tradenow' class='option'>Propose a trade</li></ul>`;
+            let html = `<div class="bottom-margin">Player ${player} is taking their turn.</div><ul><li id='tradenow' class='option'>Propose a trade</li></ul>`;
             this.updateStatus(html);
             $("#tradenow").on("click",function(){
               settlers_self.privateTrade(player);
@@ -1576,9 +1585,6 @@ class Settlers extends GameTemplate {
   Draw the board (Tiles are already in DOM), add/update sector_values, add/update built cities and roads
   */
   displayBoard() {
-
-    this.displayCardfan();
-
     /*
       Set the tile backgrounds to display resources and display sector values (dice value tokens)
     */
@@ -1693,20 +1699,33 @@ console.log(JSON.stringify(this.game.state.players[this.game.player-1].resources
 	//
         //Stats
 	//
-        //newhtml = `<div class="flexline"><div class="player-notice">Player ${i}</div>`;  
+        newhtml = `<div class="flexline"><div class="player-notice">Player ${i}</div>`;  
         //Victory Point Card Tokens
-        //for (let j = 0; j < this.game.state.players[i-1].vpc; j++){
-        //  newhtml += `<div class="token"></div>`;
-        //}
-        //if (this.game.state.largestArmy.player == i) {
-        //  newhtml += `<div class="token">${this.skin.largest.svg}</div>`; 
-	//}
-        //if (this.game.state.longestRoad.player == i) {
-        //  newhtml += `<div class="token">${this.skin.longest.svg}</div>`; 
-        //}
-	//newhtml += `<div class="vp">${this.skin.vp.name}: ${this.game.state.players[i-1].vp}</div></div>`;
-        
+        for (let j = 0; j < this.game.state.players[i-1].vpc; j++){
+          newhtml += `<div class="token"></div>`;
+        }
+        if (this.game.state.largestArmy.player == i) {
+          newhtml += `<div class="token">${this.skin.largest.svg}</div>`; 
+	     }
+        if (this.game.state.longestRoad.player == i) {
+          newhtml += `<div class="token">${this.skin.longest.svg}</div>`; 
+        }
+	newhtml += `<div class="vp">${this.skin.vp.name}: ${this.game.state.players[i-1].vp}</div></div>`;
       
+        if (this.game.state.players[i-1].knights>0){
+          newhtml += `<div class="flexline">`;
+          for (let j = 0; j < this.game.state.players[i-1].knights; j++) {
+            newhtml += this.skin.s.img;
+          }
+          newhtml += `</div>`;       
+        }  
+        //For opponents, summarize their hands numerically
+        if (this.game.player != i){
+          newhtml += `<div class="flexline">`;
+          newhtml += `<div class="cardct">Resources: ${this.game.state.players[i-1].resources.length}</div>`;
+          newhtml += `<div class="cardct">Cards: ${this.game.state.players[i-1].devcards}</div>`;
+        }
+
 	//
         //Available buildings
 	//
@@ -1716,48 +1735,45 @@ console.log(JSON.stringify(this.game.state.players[this.game.player-1].resources
         //}
         //for (let j = 0; j < this.game.state.players[i-1].towns; j++) {
         //  newhtml += `<div class="token p${i}">${this.skin.c1.svg}</div>`;
-	//} 
-        //Played knights
-        // for (let j = 0; j < this.game.state.players[i-1].knights; j++) {
-        //  newhtml += this.skin.s.img;
-	//}
+      	//} 
         //newhtml += `</div>`; 
       
         //TODO add code for longest road/largest army, and remaining pieces
         this.playerbox.refreshInfo(newhtml, i);
-        
+        /* Fuck all graphics in the playerbox
         newhtml = "";
         if (this.game.player == i){
          if(this.game.deck[0].hand.length>0){ //How do we track how many cards other players have drawn?
           //Dev Cards
           newhtml = `<div class="devcards bighand">`;
           for (let x = 0; x < this.game.deck[0].hand.length; x++) {
-            //let cardname = this.game.deck[0].cards[this.game.deck[0].hand[x]].card;
             let card = this.game.deck[0].cards[this.game.deck[0].hand[x]];
             newhtml += `<img class="card" src="${card.img}" title="${card.card}: ${this.skin.rules[card.action]}">`;
           }
           newhtml += "</div>";
           }
-        } else { //Display backs of opponents devcards
+        } /*else { //Display backs of opponents devcards
           if (this.game.state.players[i-1].devcards>0){
             newhtml = `<div class="devcards bighand">`;
             for (let z=0; z<this.game.state.players[i-1].devcards; z++)
               newhtml += `<img class="card tinycard" src="${this.skin.card.back}">`; 
             newhtml += "</div>"; 
           }
-        }
+        }*/
         //Resource Cards //Make Image Content     
-        newhtml += `<div class="rescards bighand">`;        
+        /*newhtml += `<div class="rescards bighand">`;        
         for (let z = 0; z < this.game.state.players[i-1].resources.length; z++) { //Show all cards
             if (this.game.player == i){
-              newhtml += `<img class="card" src="${this.skin.resourceCard(this.game.state.players[i-1].resources[z])}">`;
+              newhtml += `<img class="card" src="${this.skin.resourceCard(this.game.state.players[i-1].resources[z])}" title="${this.game.state.players[i-1].resources[z]}">`;
             }else{
-              newhtml += `<img class="card tinycard" src="${this.skin.back}">`; 
+              //newhtml += `<img class="card tinycard" src="${this.skin.back}">`; 
             }
         }
         newhtml += "</div>"
         this.playerbox.refreshGraphic(newhtml, i);
+        */
     }
+    this.displayCardfan(); //Only shows this player's
   }
 
 
@@ -2085,7 +2101,7 @@ console.log(JSON.stringify(this.game.state.players[this.game.player-1].resources
       let cardname = this.game.deck[0].cards[this.game.deck[0].hand[i]].card;
       //If already played a "knight", we can still see and play victory points
       if (this.game.state.canPlayCard || !this.skin.isActionCard(cardname))
-    	 html += `<li class="option" id="${i}">${cardname}</li>`;
+    	 html += `<li class="option" id="${i}" title="${this.skin.rules[card.action]}">${cardname}</li>`;
     }
     html += `<li class="option" id="cancel">Cancel</li>`;
     html += "</ul></div>";
