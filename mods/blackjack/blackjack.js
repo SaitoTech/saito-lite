@@ -193,7 +193,7 @@ toggleIntro() {
     this.log.attachEvents(app, this);
 
     this.playerbox.render(app, this);
-    this.playerbox.addClassAll("p",true);
+    this.playerbox.addClassAll("poker-seat-",true);
     this.playerbox.addGraphicClass("hand");   
     this.playerbox.addGraphicClass("tinyhand");   
     //this.playerbox.attachEvents(app.this);
@@ -1159,10 +1159,8 @@ toggleIntro() {
     try {
       if (hide_info == 0) {
         this.playerbox.showInfo();
-        //document.querySelector(".p1 > .info").style.display = "block";
       } else {
         this.playerbox.hideInfo();
-        //document.querySelector(".p1 > .info").style.display = "none";
       }
 
       if (this.lock_interface == 1) { return; }
