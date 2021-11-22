@@ -193,10 +193,10 @@ toggleIntro() {
     this.log.attachEvents(app, this);
 
     this.playerbox.render(app, this);
+    this.playerbox.attachEvents(app, this); //empty function
     this.playerbox.addClassAll("poker-seat-",true);
     this.playerbox.addGraphicClass("hand");   
     this.playerbox.addGraphicClass("tinyhand");   
-    //this.playerbox.attachEvents(app.this);
   
   }
 

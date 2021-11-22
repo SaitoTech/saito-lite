@@ -170,6 +170,7 @@ class Wuziqi extends GameTemplate {
         this.playerbox.addClass("me",this.game.player-1);
         this.playerbox.addClass("notme",this.game.player);
         this.playerbox.attachEvents(this.app);
+        this.playerbox.makeDraggable(); //I think we still want to be able to move them
 
         // Render board and set up values.
         try {
