@@ -26,7 +26,7 @@ class Wuziqi extends GameTemplate {
         this.moves = [];
         this.bestof = 1;
 
-        this.seats = [2,5]
+        this.seats = [2,5];
 
         return this;
     }
@@ -167,8 +167,8 @@ class Wuziqi extends GameTemplate {
 
         //Player Boxes
         this.playerbox.render(this.app,this);
-        this.playerbox.addClass("me",this.game.player-1);
-        this.playerbox.addClass("notme",this.game.player);
+        this.playerbox.addClass("me",this.game.player);
+        this.playerbox.addClass("notme",3-this.game.player);
         this.playerbox.attachEvents(this.app);
         this.playerbox.makeDraggable(); //I think we still want to be able to move them
 
@@ -278,7 +278,7 @@ class Wuziqi extends GameTemplate {
             for (let j = 0; j < (roundsToWin - this.game.score[i]); j++) {
                 scoreHTML += `<img class="piece opaque30" src="img/${this.game.sides[i]}piece.png">`;
             }
-            this.playerbox.refreshInfo(scoreHTML,i);                        
+            this.playerbox.refreshInfo(scoreHTML,i+1);                        
         }
     }
 

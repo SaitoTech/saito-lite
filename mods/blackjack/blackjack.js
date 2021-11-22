@@ -197,6 +197,7 @@ toggleIntro() {
     this.playerbox.addClassAll("poker-seat-",true);
     this.playerbox.addGraphicClass("hand");   
     this.playerbox.addGraphicClass("tinyhand");   
+    this.playerbox.addStatus(); //enable update Status to display in playerbox
   
   }
 
