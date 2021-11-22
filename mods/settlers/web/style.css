@@ -13,6 +13,11 @@
   overflow-y: unset;
 }
 
+#player-box-1 {
+  height: unset;
+  overflow-y: unset;
+}
+
 .hexIn{
   overflow: unset;
   padding-bottom: 113%;
@@ -97,7 +102,7 @@ body {
   
 }
 
-.status-message ul li:hover, .status ul li:hover{
+.status-message ul li:hover, .status ul li:hover, .cardselector:hover{
   color: black;
   background-color: #e7e7e7;
 }
@@ -414,8 +419,16 @@ body {
   overflow-y: scroll;
 }
 
-.trade_overlay_offers {
-  clear: both;
+.trade_overlay_title{
+  width: 100%;
+  text-align: center;
+}
+
+.trade_overlay_offers, .trade_overlay_buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 1em 0px;
 }
 
 .trade_overlay .noselect{
@@ -423,20 +436,19 @@ body {
   font-style: italic;
 }
 
-.trade_overlay_buttons {
-  clear: both;
-}
-
-.trade_overlay_button {
-  float: left;
+.option.noselect{
+  font-style: italic;
+  color: lightgrey;
 }
 
 .trade_button {
-  float: left;
-  width: 70px;
-  height: 90px;
-  position: relative;
+  width: fit-content;
+  text-transform: uppercase;
   cursor: pointer;
+}
+
+.trade_button div{
+  text-align: center;
 }
 
 .highlight{
@@ -471,14 +483,28 @@ body {
 .flexline{
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex-direction: row;
   width: 100%;
   flex-wrap: wrap;
+  margin-bottom: 0.5em;
 }
 
+.cardct{
+  width: fit-content;
+}
+.cardselector{
+  border: 1px solid whitesmoke;
+  cursor: pointer;
+  width: 45%;
+  text-align: center;
+  padding: 3px;
+}
+
+/*SVG token coloring*/
 .token{
   margin: min(3px,1vh);
-  width: 2.5vh;
+  width: 1.2em;
   background-color: unset;
 }
 
@@ -512,6 +538,20 @@ body {
 
 .token.p4 line{
   stroke: orange;
+}
+
+.c1 i {
+  color: rgb(255,100,100); /*a slightly lighter red*/
+}
+
+.c2 i{
+  color: rgb(100,100,255); /*a slightly lighter blue*/
+}
+.c3 i{
+  color: green;
+}
+.c4 i{
+  color: orange;
 }
 
 .bottom-margin{
