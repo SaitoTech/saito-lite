@@ -57,11 +57,11 @@ class SettlersSkin {
 		      						<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">2</text></svg><i class="fas fa-road" style="color:goldenrod;"></i>`};
 				this.largest = {name:"Largest Army",svg:`<svg viewbox="0 0 200 200"><circle fill="silver" cx="100" cy="100" r="95" stroke="goldenrod" stroke-width="5"/>
 		      <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">2</text></svg><i class="fas fa-horse-head" style="color:goldenrod;"></i>`};
-				this.resources = [{name: "brick",count:3,ict:3},
-								  {name: "wood",count:4,ict:3},
-								  {name: "wheat",count:4,ict:1},
-								  {name: "wool",count:4,ict:1},
-								  {name: "ore",count:3,ict:3},
+				this.resources = [{name: "brick",count:3,ict:3,icon:"/settlers/img/icons/brick-icon.png"},
+								  {name: "wood",count:4,ict:3,icon:"/settlers/img/icons/wood-icon.png"},
+								  {name: "wheat",count:4,ict:1,icon:"/settlers/img/icons/wheat-icon.png"},
+								  {name: "wool",count:4,ict:1,icon:"/settlers/img/icons/wool-icon.png"},
+								  {name: "ore",count:3,ict:3,icon:"/settlers/img/icons/ore-icon.png"},
 								  {name: "desert",count:1,ict:1}];
 
 								  //Order is IMPORTANT
@@ -116,9 +116,21 @@ class SettlersSkin {
 			}
 
 		}
+		return null;	
+	}
+
+	resourceIcon(res){
+		for (let i of this.resources){
+			if (i.name == res){
+				if (i.icon){
+					return i.icon;
+				}
+			}
+		}
 		return null;
 	}
 
+	
 	/*
 		Return the name of the "desert" (i.e. the singular, non-producing tile)
 	*/

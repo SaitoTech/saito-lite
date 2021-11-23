@@ -115,6 +115,21 @@ body {
   position: absolute;
 }
 
+.card > img{
+  width: 100%;
+}
+
+.card .icon{
+  position: absolute;
+  width: 15%;
+  left: 7%;
+  top: 5%;
+}
+
+.ship > .icon{
+  position: relative;
+  top: -20%;
+}
 .notme .player-box-graphic .devcards .tinycard{
   width: 8vh;
 }
@@ -169,6 +184,24 @@ body {
   top: 9vh;
 }
 
+.card .cardtitle{
+  position: absolute;
+  font-family: fantasy;
+  font-size: 1.2em;
+  top: 9.5%;
+  width: 100%;
+  text-align: center;
+
+}
+
+.card .cardrules{
+  position: absolute;
+  font-family: fantasy;
+  top: 60%;
+  height: 40%;
+  width: 100%;
+  padding: 1em 2em;
+}
 
 .startmove {
   cursor: pointer;
@@ -180,7 +213,15 @@ body {
 .hover{
   z-index: 1000;
 }
-.hover:hover {
+
+.chover:hover, .producer.chover:hover {
+  fill: yellow;
+  stroke: yellow;
+  cursor: crosshair;
+}
+
+
+.rhover:hover {
   border: 1px solid white;
   background-color: whitesmoke;
   cursor: crosshair;
@@ -451,9 +492,21 @@ body {
   text-align: center;
 }
 
+.button{
+  min-width: 90px;
+  text-align: center;
+}
 .highlight{
   font-size: 1.1em;
   font-weight: bold;
+}
+
+.status .disabled:hover{
+  color: inherit;
+  background-color: inherit;
+}
+.disabled .icon{
+  width: 10%;
 }
 
 .status-message{
