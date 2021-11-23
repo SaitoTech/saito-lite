@@ -13,6 +13,9 @@
   overflow-y: unset;
 }
 
+#player-box1, #player-box-2, #player-box-3, #player-box-4, #player-box-5{
+  transform: unset;
+}
 #player-box-1 {
   height: unset;
   overflow-y: unset;
@@ -124,6 +127,7 @@ body {
   width: 15%;
   left: 7%;
   top: 5%;
+  pointer-events: none; 
 }
 
 .ship > .icon{
@@ -191,7 +195,7 @@ body {
   top: 9.5%;
   width: 100%;
   text-align: center;
-
+  pointer-events: none;
 }
 
 .card .cardrules{
@@ -201,6 +205,7 @@ body {
   height: 40%;
   width: 100%;
   padding: 1em 2em;
+  pointer-events: none;
 }
 
 .startmove {
@@ -505,7 +510,7 @@ body {
   color: inherit;
   background-color: inherit;
 }
-.disabled .icon{
+.disabled .icon, .player-box .icon{
   width: 10%;
 }
 

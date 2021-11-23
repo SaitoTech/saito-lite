@@ -168,35 +168,35 @@ class Settlers extends GameTemplate {
     let community_menu_added = 0;
     for (let i = 0; i < this.app.modules.mods.length; i++) {
       if (this.app.modules.mods[i].slug === "chat") {
-	for (let ii = 0; ii < this.game.players.length; ii++) {
-	  if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
+	       for (let ii = 0; ii < this.game.players.length; ii++) {
+	         if (this.game.players[ii] != this.app.wallet.returnPublicKey()) {
 
-	    // add main menu
-	    if (main_menu_added == 0) {
-              this.menu.addMenuOption({
-                text : "Chat",
-          	id : "game-chat",
-          	class : "game-chat",
-          	callback : function(app, game_mod) {
-		  game_mod.menu.showSubMenu("game-chat");
-          	}
-              })
-	      main_menu_added = 1;
-	    }
+    	    // add main menu
+    	    if (main_menu_added == 0) {
+                  this.menu.addMenuOption({
+                    text : "Chat",
+              	id : "game-chat",
+              	class : "game-chat",
+              	callback : function(app, game_mod) {
+                    		  game_mod.menu.showSubMenu("game-chat");
+              	           }
+                  });
+    	      main_menu_added = 1;
+    	    }
 
-	    if (community_menu_added == 0) {
-    	      this.menu.addSubMenuOption("game-chat", {
-    	        text : "Community",
-      	        id : "game-chat-community",
-      	        class : "game-chat-community",
-      	        callback : function(app, game_mod) {
-	  	  game_mod.menu.hideSubMenus();
-        	  chatmod.sendEvent('chat-render-request', {});
-		  chatmod.openChatBox();
-    	        }
-              });
-	      community_menu_added = 1;
-	    }
+    	    if (community_menu_added == 0) {
+        	      this.menu.addSubMenuOption("game-chat", {
+        	        text : "Community",
+          	        id : "game-chat-community",
+          	        class : "game-chat-community",
+          	        callback : function(app, game_mod) {
+    	  	  game_mod.menu.hideSubMenus();
+            	  chatmod.sendEvent('chat-render-request', {});
+    		  chatmod.openChatBox();
+        	        }
+                  });
+    	      community_menu_added = 1;
+    	    }
 
 	    // add peer chat
   	    let data = {};
@@ -247,12 +247,21 @@ class Settlers extends GameTemplate {
       }
     });
     this.menu.addSubMenuOption("game-trade", {
-      text : "Offer",
+      text : "Advertise",
       id : "game-offer",
       class : "game-offer",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
         game_mod.showTradeOverlay();
+      }
+    });
+    this.menu.addSubMenuOption("game-trade", {
+      text : "Cancel",
+      id : "game-rescind",
+      class : "game-rescind",
+      callback : function(app, game_mod) {
+        game_mod.menu.hideSubMenus();
+        game_mod.clearAdvert();
       }
     });
 
@@ -290,7 +299,9 @@ class Settlers extends GameTemplate {
       
       for (let i = 1; i <= this.game.players.length; i++){
         this.playerbox.addClass(`c${i}`,i);
-        if (i != this.game.player) this.playerbox.addClass("notme",i);
+        if (i != this.game.player) {
+          this.playerbox.addClass("notme",i);
+        }
       }
       if (this.game.players.length>2){
         this.playerbox.groupOpponents();  
@@ -649,41 +660,19 @@ class Settlers extends GameTemplate {
       // trade advertisement
       //
       if (mv[0] == "advertisement") {
-
-        let settlers_self = this;
         let offering_player = parseInt(mv[1]);
         let stuff_on_offer = JSON.parse(mv[2]);
         let stuff_in_return = JSON.parse(mv[3]);
-        
         this.game.queue.splice(qe, 1);
 
         if (this.game.player != offering_player){
-         //Simplify resource objects
-            let offer = "";
-            for (let resource in stuff_on_offer){
-              if (stuff_on_offer[resource]>0){
-                if (stuff_on_offer[resource]>1)
-                  offer += ` and ${stuff_on_offer[resource]} ${resource}s`;
-                  else offer += ` and ${resource}`;
-              }
-            }
-            if (offer.length>0) offer = offer.substring(5);
-            else offer = "nothing";
-
-            let ask = "";
-            for (let resource in stuff_in_return){
-              if (stuff_in_return[resource]>0)
-                if (stuff_in_return[resource]>1)
-                  ask += ` and ${stuff_in_return[resource]} ${resource}s`;
-                  else ask += ` and ${resource}`;
-            }
-            if (ask.length>0) ask = ask.substring(5);
-            else ask = "nothing";
-        
-            //console.log(`Player ${offering_player} wants ${ask} for ${offer}`);
-            this.updateLog(`Player ${offering_player} wants ${ask} for ${offer}`);
-            this.updateStatus(`<div>Player ${offering_player} wants ${ask} for ${offer}</div>`+$(".status").innerHTML);
-            this.showTradeOffer(offering_player,stuff_in_return, stuff_on_offer);
+          //Simplify resource objects
+          let offer = this.wishListToString(stuff_on_offer);
+          let ask = this.wishListToString(stuff_in_return);
+            
+          this.playerbox.refreshLog(`<div class="flexline">Wants: ${ask}</div><div class="flexline">Has: ${offer}</div>`,offering_player);            
+            //this.updateStatus(`<div>Player ${offering_player} wants ${ask} for ${offer}</div>`+$(".status").innerHTML);
+            //this.showTradeOffer(offering_player,stuff_in_return, stuff_on_offer);
           }
           
          //
@@ -694,6 +683,14 @@ class Settlers extends GameTemplate {
          return 1;
       }
 
+      if (mv[0] == "clear_advert"){
+        let player = parseInt(mv[1]);
+        this.game.queue.splice(qe, 1);
+        if (this.game.player != player){
+          this.playerbox.refreshLog("",player);
+        }
+
+      }
       //
       // Player A has offered another player a trade on A's turn
       //
@@ -729,8 +726,15 @@ class Settlers extends GameTemplate {
           if (ask.length>0) ask = ask.substring(5);
           else ask = "nothing";
 
+          /*
+            Overlay Trade offer
+          */
           this.showTradeOffer(offering_player, stuff_on_offer, stuff_in_return);
-        	  let html = `<div class="tbd">You have been offered <span class="highlight">${offer}</span> in exchange for <span class="highlight">${ask}</span>`;
+        	
+          /*
+          Within the playerbox status to evaluate a trade offer
+          */
+            let html = `<div class="tbd">You have been offered <span class="highlight">${offer}</span> in exchange for <span class="highlight">${ask}</span>`;
         	  html += '<ul>';
         	  html += '<li class="option" id="accept">accept</li>';
         	  html += '<li class="option" id="reject">reject</li>';
@@ -1206,6 +1210,27 @@ class Settlers extends GameTemplate {
       }      
     }
     return 1;
+  }
+
+  //Convert Resource Object to readable string
+  wishListToString(stuff){
+    let offer = "";
+    for (let resource in stuff){
+      if (stuff[resource]>0){
+        if (stuff[resource]>1){
+           offer += `<span> and ${stuff[resource]}x</span><img class="icon" src="${this.skin.resourceIcon(resource)}" title=${resource}>`;
+        }else {
+            offer += `<span> and </span><img class="icon" src="${this.skin.resourceIcon(resource)}" title=${resource}>`;
+        }
+      }
+    }
+    offer = (offer.length>0) ? offer.substring(5) : "<em>nothing</em>"; 
+    return offer;        
+  }
+
+  clearAdvert(){
+    this.addMove("clear_advert\t"+this.game.player);
+    this.endTurn();
   }
 
 
@@ -2910,7 +2935,7 @@ class Settlers extends GameTemplate {
 
         $('.trade_overlay_broadcast_button').on('click', function() {
           /*<><><><><><><>
-              This callback never gets called in gametemplate.js
+              This callback never gets called in gametemplate.js ???
           // add directly to this.game.turn as game should handle rest as moves
           let old_turn = settlers_self.game.turn;
           console.log(settlers_self.game.turn);
@@ -2920,8 +2945,6 @@ class Settlers extends GameTemplate {
           settlers_self.sendMessage("game", {}, function() {
             settlers_self.game.turn = old_turn;
             //settlers_self.overlay.hideOverlay();
-            
-            
           });
           */
           settlers_self.addMove(`advertisement\t${settlers_self.game.player}\t${JSON.stringify(offering)}\t${JSON.stringify(receiving)}`);
@@ -2937,6 +2960,10 @@ class Settlers extends GameTemplate {
 
   }
 
+
+  /*
+    Alternate interface for viewing a trade offer with accept/reject commands
+  */
   showTradeOffer(player, offering, receiving){
     let settlers_self = this;
     let resList = settlers_self.skin.resourceArray();
@@ -2969,12 +2996,47 @@ class Settlers extends GameTemplate {
     settlers_self.overlay.blockClose();
     $(".trade_overlay_button").on("click",function(){
       settlers_self.overlay.hideOverlay();
+      let choice = $(this).attr("id");
+
+      if (choice == "accept") {
+          settlers_self.updateStatus('<div class="tbd">offer accepted</div>');
+          settlers_self.addMove("accept_offer\t"+settlers_self.game.player+"\t"+player+"\t"+JSON.stringify(offering)+"\t"+JSON.stringify(receiving));
+          settlers_self.endTurn(); 
+      }
+      if (choice == "reject") {
+           settlers_self.updateStatus('<div class="tbd">offer rejected</div>');
+           settlers_self.addMove("reject_offer\t"+settlers_self.game.player+"\t"+player);
+           settlers_self.endTurn(); 
+           }
+      //Short cut to chat window
+      if (choice == "chat"){
+        settlers_self.chatWith(player);
+      }
 
     });
 
   }
 
-
+  chatWith(player){
+    let members = [settlers_self.game.players[player-1], settlers_self.app.wallet.returnPublicKey()].sort();
+        let gid = settlers_self.app.crypto.hash(members.join('_'));
+        let chatmod = null;
+        for (let i = 0; i < settlers_self.app.modules.mods.length; i++){
+          if (settlers_self.app.modules.mods[i].slug === "chat") {
+            chatmod = settlers_self.app.modules.mods[i];
+          }
+        } 
+        let newgroup = chatmod.createChatGroup(members);
+          if (newgroup) {
+            chatmod.addNewGroup(newgroup);
+            chatmod.sendEvent('chat-render-request', {});
+            chatmod.saveChat();
+            chatmod.openChatBox(newgroup.id);
+          } else {
+            chatmod.sendEvent('chat-render-request', {});
+            chatmod.openChatBox(gid);
+          }
+  }
   
   displayDice(){
 
