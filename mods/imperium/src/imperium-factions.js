@@ -12,6 +12,9 @@
     if (obj.homeworld  == null) 	{ obj.homeworld = "sector32"; }
     if (obj.space_units == null) 	{ obj.space_units = []; }
     if (obj.ground_units == null) 	{ obj.ground_units = []; }
+    if (obj.action_cards == null)  	{ obj.action_cards = []; }
+    if (obj.objectives == null)  	{ obj.objectives = []; }
+    if (obj.ground_units == null) 	{ obj.ground_units = []; }
     if (obj.tech == null) 		{ obj.tech = []; }
     if (obj.intro == null) 		{ obj.intro = `
         <div style="font-weight:bold">The Republic has fallen!</div>

@@ -8,8 +8,6 @@
     let imperium_self = this;
     let z = imperium_self.returnEventObjects();
 
-console.log("HGL: " + JSON.stringify(this.game.queue));
-
     if (this.game.queue.length > 0) {
 
       imperium_self.saveGame(imperium_self.game.id);
@@ -1483,7 +1481,7 @@ console.log("TRYING");
   	//
   	// SCORING
   	//
-this.game.state.end_round_scoring = 1;
+        this.game.state.end_round_scoring = 1;
         if (this.game.state.round >= 1 && this.game.state.round_scoring == 0) {
 
 	  if (this.game.planets['new-byzantium'].owner != -1) {
@@ -1507,6 +1505,7 @@ this.game.state.end_round_scoring = 0;
 
 	// testing - give everyone a sabotage
 	//this.game.deck[1].hand.push(("sabotage"+this.game.player));
+
 
 
 	//
@@ -1584,10 +1583,17 @@ this.game.state.end_round_scoring = 0;
   	//
         this.game.queue.push("setinitiativeorder");
 
+
+	//
+	// ENABLE TESTINGvMODE
+	//
+        this.game.queue.push("is_testing");
+
   
   	//
   	// STRATEGY CARDS
   	//
+// is_testing
         this.game.queue.push("playerschoosestrategycards_after");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
@@ -1805,7 +1811,57 @@ this.game.state.end_round_scoring = 0;
   	this.game.queue.splice(qe, 1);
   	return 1;
       }
-  
+
+
+      if (mv[0] === "is_testing") {
+ 
+	//
+	// allows specifying objectives and action cards R1
+	//
+        if (this.game.state.round == 1) {
+	  //
+	  // is_testing - give action cards / objectives
+          //
+          // put specified objectives onto the board
+          //
+          let my_stage1_objectives = this.returnStageIPublicObjectives();
+          let my_stage2_objectives = this.returnStageIIPublicObjectives();
+          let my_secret_objectives = this.returnSecretObjectives();
+
+	  for (let i = 0; i < this.game.players_info.length; i++) {
+          for (let k = 0; k < this.factions[this.game.players_info[i].faction].action_cards.length; k++) {
+            if (this.game.player == (i+1)) {
+              this.game.deck[1].hand.push(this.factions[this.game.players_info[i].faction].action_cards[k]);
+            }
+          }
+          for (let k = 0; k < this.factions[this.game.players_info[i].faction].objectives.length; k++) {
+            if (this.game.player == (i+1)) {
+              let obj = this.factions[this.game.players_info[i].faction].objectives[k];
+              if (my_stage1_objectives[obj]) {
+                this.game.pool[1].hand.push(obj);
+                this.game.state.stage_i_objectives.push(obj);
+                this.game.state.new_objectives.push({ type : "stage1" , card : obj});
+              }
+              if (my_stage2_objectives[obj]) {
+                this.game.pool[2].hand.push(obj);
+                this.game.state.stage_ii_objectives.push(obj);
+                this.game.state.new_objectives.push({ type : "stage2" , card : obj});
+              }
+              if (my_secret_objectives[obj]) {
+                this.game.deck[5].hand.push(obj);
+                this.game.state.secret_objectives.push(obj);
+                this.game.state.new_objectives.push({ type : "secret" , card : obj});
+              }
+            }
+          }
+          }
+        }
+
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+
+      }
 
       if (mv[0] === "score") {
 
@@ -3981,6 +4037,9 @@ console.log("bonus: " + (i+1));
 
 	    for (let z_index in z) {
 	      roll = z[z_index].modifyCombatRoll(this, player, attacker, player, "pds", roll);
+console.log("roll 1: " + roll);
+	      roll = z[z_index].modifyPDSRoll(this, player, attacker, player, roll);
+console.log("roll 2: " + roll);
 	      imperium_self.game.players_info[attacker-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[attacker-1].target_units);
 	    }
 
@@ -4695,6 +4754,17 @@ console.log("bonus: " + (i+1));
 	    this.endTurn();
 	    return 0;
 	  } else {
+
+	    //
+	    // maybe defender will score secret objective? - Nov 24
+	    //
+	    if (this.game.state.space_combat_defender != -1) {
+	      let z = this.returnEventObjects();
+	      for (let z_index in z) {
+	        z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
+	      }
+	    }
+
 	    return 0;
 	  }
 	} else {
@@ -4707,13 +4777,14 @@ console.log("bonus: " + (i+1));
 
  	  this.game.queue.splice(qe, 1);
 
-	  if (this.game.player == player) {
-            if (this.game.state.space_combat_defender != -1) {
-              let z = this.returnEventObjects();
-              for (let z_index in z) {
-                z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
-              }
+          if (this.game.state.space_combat_defender != -1) {
+            let z = this.returnEventObjects();
+            for (let z_index in z) {
+              z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
             }
+          }
+
+	  if (this.game.player == player) {
 	    this.endTurn();
 	  }
 

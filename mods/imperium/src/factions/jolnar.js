@@ -5,8 +5,11 @@
       nickname		: 	"Jol Nar",
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
-      ground_units	: 	["infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
+      //ground_units	: 	["infantry","infantry","pds","spacedock"],
+      ground_units	: 	["infantry","infantry","pds","pds","spacedock"],
+      action_cards	:	["experimental-battlestation"],
+      objectives	:	["close-the-trap"],
+      tech		: 	["pds-ii","sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro		:	`<div style="font-weight:bold">Welcome to Red Imperium!</div><div style="margin-top:10px;margin-bottom:15px;">You are playing as the Universities of Jol Nar, a physically weak faction which excells at science and technology. Survive long enough to amass enough protective technology and you can be a contender for the Imperial Throne. Good luck!</div>`
