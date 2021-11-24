@@ -204,7 +204,7 @@ body {
   top: 60%;
   height: 40%;
   width: 100%;
-  padding: 1em 2em;
+  padding: 5% 10%;
   pointer-events: none;
 }
 
@@ -477,9 +477,34 @@ body {
   margin: 1em 0px;
 }
 
+.trade_overlay .icon{
+  width: 2em;
+}
+
+.trade_overlay .select{
+  padding: 0.5em;
+}
+
+.trade_overlay .selected{
+  padding: 0em;
+}
+
 .trade_overlay .noselect{
   color: grey;
   font-style: italic;
+}
+
+.trade_overlay .selected{
+  /*border: 1px solid black;*/
+  font-weight: bold;
+}
+
+.trade_overlay .selected .icon{
+  width: 3em;
+}
+
+.noselect .icon{
+  filter: grayscale(100%);
 }
 
 .option.noselect{
@@ -506,12 +531,16 @@ body {
   font-weight: bold;
 }
 
+.tbd .icon{
+  height: 1.25em;
+}
+
 .status .disabled:hover{
   color: inherit;
   background-color: inherit;
 }
 .disabled .icon, .player-box .icon{
-  width: 10%;
+  width: 1.5em;
 }
 
 .status-message{
@@ -546,6 +575,18 @@ body {
   width: 100%;
   flex-wrap: wrap;
   margin-bottom: 0.5em;
+}
+
+.pbtrade ul li{
+  width: 100%;
+  line-height: 1.5em;
+  cursor: pointer;
+  list-style: none;
+  border-top: 1px solid var(--saito-skyline-grey);
+}
+.pbtrade ul li:hover{
+  color: black;
+  background-color: #e7e7e7;
 }
 
 .cardct{
@@ -612,8 +653,14 @@ body {
   color: orange;
 }
 
-.bottom-margin{
+.player-notice{
   margin-bottom: 0.5em;
+  line-height: 1.25em;
+}
+.player-box .player-notice .icon{
+  height: 1.25em;
+  width: 1.25em;
+  border-radius: 5px;
 }
 
 .opponents{

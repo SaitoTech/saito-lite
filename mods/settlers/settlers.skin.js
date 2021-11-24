@@ -50,7 +50,7 @@ class SettlersSkin {
 				this.c2 = {name: "city", svg:`<svg viewbox="0 0 200 200"><polygon points="0,100 100,100, 100,50 150,0 200,50 200,200 0,200"/></svg>`};
 				this.r = {name: "road"};
 				this.b = {name: "bandit"};
-				this.s = {name: "soldier", img:`<i class="fas fa-horse-head"></i>`};
+				this.s = {name: "knight", img:`<i class="fas fa-horse-head"></i>`};
 				this.t = {name: "bank"};
 				this.vp = {name: "VP", svg:`<svg viewbox="0 0 200 200"><circle fill="gold" cx="100" cy="100" r="95" stroke="goldenrod" stroke-width="5"/> <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">1</text></svg>`};
 				this.longest = {name: "Longest Road",svg:`<svg viewbox="0 0 200 200"><circle fill="gold" cx="100" cy="100" r="95" stroke="goldenrod" stroke-width="5"/>
