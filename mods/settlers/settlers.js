@@ -287,6 +287,8 @@ class Settlers extends GameTemplate {
       //Let's Try a PlayerBox instead of hud
       this.playerbox.render(app, this);
       this.playerbox.attachEvents(app);
+
+      this.playerbox.addStatus();
       this.playerbox.addClass("me",this.game.player);
       
       for (let i = 1; i <= this.game.players.length; i++){
@@ -298,7 +300,7 @@ class Settlers extends GameTemplate {
       if (this.game.players.length>2){
         this.playerbox.groupOpponents();  
       }
-            
+      this.playerbox.makeDraggable();      
       $(".player-box *").disableSelection();
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
@@ -1149,6 +1151,7 @@ class Settlers extends GameTemplate {
 
       //End Player's Turn
       if (mv[0] == "end_turn"){
+        this.stopTrading();
         this.game.state.boughtCard = false;
         this.game.state.canPlayCard = true; //Can only play one dev card per turn (during your turn)
         this.game.queue.splice(qe-1,2);
@@ -2536,7 +2539,7 @@ class Settlers extends GameTemplate {
   }
 
   /*
-  Cancel all outstanding trade offers
+  Cancel all outstanding trade offers (well... just delete from dom)
   */
   stopTrading(){
     this.game.state.canTrade = false; //Once you spend resources, you can no longer trade

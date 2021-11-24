@@ -1,6 +1,5 @@
 /*
   Undo poker playerbox positions....
-*/
 .p1, .p2, .p3, .p4 {
   min-width: unset;
   height: unset;
@@ -12,14 +11,7 @@
   width: unset;
   overflow-y: unset;
 }
-
-#player-box1, #player-box-2, #player-box-3, #player-box-4, #player-box-5{
-  transform: unset;
-}
-#player-box-1 {
-  height: unset;
-  overflow-y: unset;
-}
+*/
 
 .hexIn{
   overflow: unset;
