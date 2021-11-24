@@ -650,7 +650,7 @@ hr {
   width: 400px;
   right: -405px;
   position: absolute;
-  background: var(--saito-nightscape);
+  background: white;
   color: black;
 }
 
