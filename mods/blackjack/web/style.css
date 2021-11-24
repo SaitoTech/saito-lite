@@ -124,7 +124,7 @@ body {
     width: 8vw;
   }
 
-  .player-info.p1 {
+  .player-info.poker-seat-1 {
     height: 40vh;
     width: 30vw;
   }
@@ -155,7 +155,7 @@ body {
   }
 
 
-  .player-info.p1 {
+  .player-info.poker-seat-1 {
     height: 25vh;
     width: 60vw;
   }
@@ -181,7 +181,7 @@ body {
     width: 35vw;
   }
 
-  .p4 .hand, .p3 .hand, .p2 .hand {
+  .poker-seat-4 .hand, .poker-seat-3 .hand, .poker-seat-2 .hand {
     right: 15vw;
     top: 10vh;
   }
@@ -193,23 +193,23 @@ body {
 
 @media screen and (orientation: portrait) and (max-width: 450px) {
 
-  .player-info.p2 {
+  .player-info.poker-seat-2 {
     display: none;
     visibility: hidden;
   }
-  .player-info.p3 {
+  .player-info.poker-seat-3 {
     display: none;
     visibility: hidden;
   }
-  .player-info.p4 {
+  .player-info.poker-seat-4 {
     display: none;
     visibility: hidden;
   }
-  .player-info.p5 {
+  .player-info.poker-seat-5 {
     display: none;
     visibility: hidden;
   }
-  .player-info.p6 {
+  .player-info.poker-seat-6 {
     display: none;
     visibility: hidden;
   }
@@ -220,134 +220,3 @@ body {
   }
 
 }
-
-
-/*
-  This CSS is duplicated in game.css
-*/
-
-/*.player-info {
-  width: min(25vh,25vw);
-  height: 20vh;
-  background-color: #4448;
-  color: #fff;
-  padding: 1em;
-  position: absolute;
-}
-
-.player-info.p1 {
-  height: 30vh;
-}
-.player-info .status {
-  font-size: 1.25em;
-}
-
-
-.player-info-name {
-  font-size: 3vh;
-  font-weight: bold;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.player-info-chips {
-  padding: 0.5em;
-  text-align: center;
-  font-size: 3vh;
-}
-
-.dealer .player-notice{
-  background-color: #0004;
-  border-top: 1px solid #efefef;
-  border-bottom: 1px solid #efefef;
-}
-
-
-.p1 .hand {
-  display: none;
-}
-
-.p4 .hand, .p3 .hand, .p2 .hand {
-  right: 15vh;
-  top: 2vh;
-}
-
-.p5 .hand, .p6 .hand {
-  left: 24vh;
-  top: 2vh;
-}
-
-.player-info-hand .card {
-  width: 12vh;
-  position: absolute;
-}
-*/
-
-/*
-
-.cardfan {
-  position: absolute;
-  top: 70vh;
-  left: 10vw;
-}
-
-.cardfan .card {
-  position: absolute;
-  width: 17.5vh;
-}
-
-.card:nth-child(1n+2) {
-  left: -130px;
-} 
-
-.cardfan>.card:nth-child(1) {
-  transform: rotate(-20deg);
-  left: 0px;
-}
-
-.cardfan>.card:nth-child(2) {
-  transform: rotate(-10deg);
-  left: 3vh;
-}
-
-.cardfan>.card:nth-child(3) {
-  transform: rotate(0deg);
-  left: 6vh;
-}
-
-.cardfan>.card:nth-child(4) {
-  transform: rotate(10deg);
-  left: 9vh;
-}
-
-.cardfan>.card:nth-child(5) {
-  transform: rotate(20deg);
-  left: 12vh;
-}
-
-.hand>.card:nth-child(1) {
-  transform: rotate(-20deg);
-  left: 0px;
-}
-
-.hand>.card:nth-child(2) {
-  transform: rotate(-10deg);
-  left: 2vh;
-}
-
-.hand>.card:nth-child(3) {
-  transform: rotate(0deg);
-  left: 4vh;
-}
-
-.hand>.card:nth-child(4) {
-  transform: rotate(10deg);
-  left: 6vh;
-}
-
-.hand>.card:nth-child(5) {
-  transform: rotate(20deg);
-  left: 8vh;
-} */

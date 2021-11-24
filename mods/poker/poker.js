@@ -2810,9 +2810,9 @@ console.log("STATE: " + JSON.stringify(state));
 
     try {
     if (hide_info == 0) {
-      document.querySelector(".p1 > .info").style.display = "block";
+      document.querySelector(".poker-seat-1 > .info").style.display = "block";
     } else {
-      document.querySelector(".p1 > .info").style.display = "none";
+      document.querySelector(".poker-seat-1 > .info").style.display = "none";
     }
 
     if (this.lock_interface == 1) { return; }
