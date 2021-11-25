@@ -44,6 +44,8 @@
     "transactions": {"en": "Transactions", "zh": "交易"},
     "30_popular": {"en": "30+ Popular", "zh": "30+热门"},
     "apps_and_modules": {"en": "Applications and Modules", "zh": "应用和模块"},
+    "open_source": {"en": "Open source", "zh": "开源"},
+    "antimonopoly": {"en": "Anti-monopoly", "zh": "避免垄断"},
     "roadmap": {"en": "Roadmap", "zh": "路线图"},
     "arcade_comm_growth": {"en": "Arcade and community growth", "zh": "商城和社区发展"},
     "new_game_releases_arcade": {"en": "New Game Releases on Arcade", "zh": "2020商城游戏上新"},
