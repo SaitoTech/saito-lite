@@ -11,6 +11,8 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
   const time =  datetimeRelative(tx.transaction.ts);
   const avatar = app.keys.returnIdenticon(tx.transaction.from[0].add);
   const username = app.keys.returnUsername(tx.transaction.from[0].add);
+  const title = tx.msg.title;
+  const text = tx.msg.text;
 
 
   let edit = "";
@@ -24,7 +26,7 @@ module.exports = PostViewTemplate = (app, mod, sig) => {
   let post_view_actions = `
       <div class="post-view-actions">
         ${edit}
-        <div data-id="${sig}" id="post-view-report" class="post-view-report"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <div data-title="${title}" data-id="${sig}" id="post-view-report-${sig}" data-text="${text}" class="post-view-report"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
           </svg>
           report
