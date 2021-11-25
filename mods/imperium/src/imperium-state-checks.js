@@ -1477,7 +1477,6 @@
 	    } else {
 	      if (this.doesSectorContainNonPlayerShips(player, tmp[k])) {
 	        can_hop_through_this_sector = -1;
-console.log("now that we are here we can see sector: " + sectors[k] + " is unhoppable");
 		hoppable[k] = -1;
 	      }
 	    }
@@ -2115,10 +2114,27 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
   }
 
 
+  doesPlayerHaveSpaceDockOnPlanet(player, planet) {
+
+    if (planet.owner != player) { return 0; }
+
+    for (let i = 0; i < planet.units[player-1].length; i++) {
+      if (planet.units[player-1][i].type == "spacedock") { return 1; }
+    }
+    return 0;
+
+  }
+
+
+
   doesPlayerHaveInfantryOnPlanet(player, sector, planet_idx) {
 
     let sys = this.returnSectorAndPlanets(sector);
-    if (sys.p[planet_idx].units[player-1].length > 0) { return 1; }
+    if (sys.p[planet_idx].units[player-1].length > 0) {
+      for (let i = 0; i < sys.p[planet_idx].units[player-1].length; i++) {
+        if (sys.p[planet_idx].units[player-1][i].type == "infantry") { return 1; }
+      }
+    }
     return 0;
 
   }
@@ -2300,7 +2316,7 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
       let sys = this.returnSectorAndPlanets(sectors[i]);
 
       //
-      // experimental battlestation
+      // experimental battlestation +3 shots
       //
       for (let z = 0; z < this.game.players_info.length; z++) {
         if (this.game.players_info[z].experimental_battlestation === sectors[i]) {
@@ -2311,6 +2327,20 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
   	      pds.sector = sectors[i];
   	      pds.unit = this.returnUnit("pds", (z+1));
     	  battery.push(pds);
+          let pds2 = {};
+  	      pds2.range = this.returnUnit("pds", (z+1)).range;
+  	      pds2.combat = this.returnUnit("pds", (z+1)).combat;
+  	      pds2.owner = (z+1);
+  	      pds2.sector = sectors[i];
+  	      pds2.unit = this.returnUnit("pds", (z+1));
+    	  battery.push(pds2);
+          let pds3 = {};
+  	      pds3.range = this.returnUnit("pds", (z+1)).range;
+  	      pds3.combat = this.returnUnit("pds", (z+1)).combat;
+  	      pds3.owner = (z+1);
+  	      pds3.sector = sectors[i];
+  	      pds3.unit = this.returnUnit("pds", (z+1));
+    	  battery.push(pds3);
         }  
       }
 
@@ -2321,8 +2351,6 @@ console.log("now that we are here we can see sector: " + sectors[k] + " is unhop
       if (sys != null) {
         for (let j = 0; j < sys.p.length; j++) {
           for (let k = 0; k < sys.p[j].units.length; k++) {
-
-
   	  if (k != attacker-1) {
   	      for (let z = 0; z < sys.p[j].units[k].length; z++) {
     	        if (sys.p[j].units[k][z].type == "pds") {

@@ -602,50 +602,10 @@ ul li a {
 
 
 
-/******************************/
-/*** Poker / Cardgame Boxes ***/
-/******************************/
-.p6 , #player-box-6 {
-  left: 1em;
-  top: 60vh;
-  transform: translateY(-50%);
-}
 
-.p5 , #player-box-5 {
-  left: 1em;
-  top: 30vh;
-  transform: translateY(-50%);
-}
-
-.p4 , #player-box-4 {
-  left: 50vw;
-  top: 1em;
-  transform: translateX(-50%);
-}
-
-.p3 , #player-box-3 {
-  right: 1em;
-  top: 30vh;
-  transform: translateY(-50%);
-}
-
-.p2 , #player-box-2 {
-  right: 1em;
-  top: 60vh;
-  transform: translateY(-50%);
-}
-
-.p1 , #player-box-1 {
-  min-width: 30vh;
-  height: 32vh;
-  bottom: 1vh;
-  left: 50vw;
-  transform: translateX(-50%);
-  width: 16vw;
-  overflow-y: scroll;
-}
-
-
+/**********************************************/
+/*** Playerbox Layout (Often overwritten) ***/
+/**********************************************/
 .player-box {
   width: 25vh;
   height: 20vh;
@@ -654,10 +614,6 @@ ul li a {
   font-size: 1.25em;
   padding: 0.5em;
   position: absolute;
-}
-
-.player-box.p1 {
-  height: 30vh;
 }
 
 .player-box .plog {
@@ -697,25 +653,66 @@ ul li a {
   overflow: hidden;
 }
 
-.p1 .hand {
-  display: none;
-}
-
-.p4 .hand, .p3 .hand, .p2 .hand {
-  right: 15vh;
-  top: 2vh;
-}
-
-.p5 .hand, .p6 .hand {
-  left: 24vh;
-  top: 2vh;
-}
-
 .player-box-graphic .card {
   width: 12vh;
   position: absolute;
 }
 
+/******************************/
+/*** Poker / Cardgame Boxes ***/
+/******************************/
+.poker-seat-6{
+  left: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.poker-seat-5 {
+  left: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.poker-seat-4 {
+  left: 50vw;
+  top: 1em;
+  transform: translateX(-50%);
+}
+
+.poker-seat-3 {
+  right: 1em;
+  top: 30vh;
+  transform: translateY(-50%);
+}
+
+.poker-seat-2 {
+  right: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
+}
+
+.poker-seat-1{
+  min-width: 30vh;
+  height: 32vh;
+  bottom: 1vh;
+  left: 50vw;
+  transform: translateX(-50%);
+  width: 16vw;
+  overflow-y: scroll;
+}
+.poker-seat-1 .hand {
+  display: none;
+}
+
+.poker-seat-4 .hand, .poker-seat-3 .hand, .poker-seat-2 .hand {
+  right: 15vh;
+  top: 2vh;
+}
+
+.poker-seat-5 .hand, .poker-seat-6 .hand {
+  left: 24vh;
+  top: 2vh;
+}
 
 
 /***************/

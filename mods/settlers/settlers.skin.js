@@ -13,7 +13,7 @@ class SettlersSkin {
 				this.c2 = {name: "pagoda", svg:`<svg viewbox="0 0 200 200"><polygon points="100,0 160,30, 120,25 120,40 170,70 130,65 130,100 180,130 140,125 140,180 190,180 200,200 0,200 10,180 60,180 60,125 20,130 70,100 70,65 30,70 80,40 80,25 40,30"/></svg>`};
 				this.r = {name: "foot path"};
 				this.b = {name: "demon"};
-				this.s = {name: "yinyang master", img:`<img class="token" src="/settlers/img/wN.png">`};
+				this.s = {name: "yinyang master", img:`<i class="fas fa-magic"></i>`};
 				this.t = {name: "nature"};
 				this.vp = {name: "Mana", svg:`<svg viewbox="0 0 200 200"><circle fill="gold" cx="100" cy="100" r="95" stroke="goldenrod" stroke-width="5"/> <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">1</text></svg>`};
 				this.longest = {name: "Philosopher's Path",svg:`<svg viewbox="0 0 200 200"><circle fill="gold" cx="100" cy="100" r="95" stroke="goldenrod" stroke-width="5"/>
@@ -50,18 +50,18 @@ class SettlersSkin {
 				this.c2 = {name: "city", svg:`<svg viewbox="0 0 200 200"><polygon points="0,100 100,100, 100,50 150,0 200,50 200,200 0,200"/></svg>`};
 				this.r = {name: "road"};
 				this.b = {name: "bandit"};
-				this.s = {name: "soldier", img:`<img class="token" src="/settlers/img/wN.png">`};
+				this.s = {name: "knight", img:`<i class="fas fa-horse-head"></i>`};
 				this.t = {name: "bank"};
 				this.vp = {name: "VP", svg:`<svg viewbox="0 0 200 200"><circle fill="gold" cx="100" cy="100" r="95" stroke="goldenrod" stroke-width="5"/> <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">1</text></svg>`};
 				this.longest = {name: "Longest Road",svg:`<svg viewbox="0 0 200 200"><circle fill="gold" cx="100" cy="100" r="95" stroke="goldenrod" stroke-width="5"/>
-		      						<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">2</text></svg>`};
+		      						<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">2</text></svg><i class="fas fa-road" style="color:goldenrod;"></i>`};
 				this.largest = {name:"Largest Army",svg:`<svg viewbox="0 0 200 200"><circle fill="silver" cx="100" cy="100" r="95" stroke="goldenrod" stroke-width="5"/>
-		      <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">2</text></svg>`};
-				this.resources = [{name: "brick",count:3,ict:3},
-								  {name: "wood",count:4,ict:3},
-								  {name: "wheat",count:4,ict:1},
-								  {name: "wool",count:4,ict:1},
-								  {name: "ore",count:3,ict:3},
+		      <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="132px" fill="saddlebrown">2</text></svg><i class="fas fa-horse-head" style="color:goldenrod;"></i>`};
+				this.resources = [{name: "brick",count:3,ict:3,icon:"/settlers/img/icons/brick-icon.png"},
+								  {name: "wood",count:4,ict:3,icon:"/settlers/img/icons/wood-icon.png"},
+								  {name: "wheat",count:4,ict:1,icon:"/settlers/img/icons/wheat-icon.png"},
+								  {name: "wool",count:4,ict:1,icon:"/settlers/img/icons/wool-icon.png"},
+								  {name: "ore",count:3,ict:3,icon:"/settlers/img/icons/ore-icon.png"},
 								  {name: "desert",count:1,ict:1}];
 
 								  //Order is IMPORTANT
@@ -116,9 +116,21 @@ class SettlersSkin {
 			}
 
 		}
+		return null;	
+	}
+
+	resourceIcon(res){
+		for (let i of this.resources){
+			if (i.name == res){
+				if (i.icon){
+					return i.icon;
+				}
+			}
+		}
 		return null;
 	}
 
+	
 	/*
 		Return the name of the "desert" (i.e. the singular, non-producing tile)
 	*/

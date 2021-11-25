@@ -39,13 +39,13 @@
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
 	if (imperium_self.doesSectorContainPlayerUnit(imperium_self.game.player, sector, "flagship")) { 
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
-	  if (sys.s.units[defender-1].length == 0) {
-	    if (attacker == imperium_self.game.player && sys.s.units[attacker-1].length > 0) {
+	  if (!imperium_self.doesPlayerHaveShipsInSector(defender, sector)) {
+	    if (attacker == imperium_self.game.player && imperium_self.doesPlayerHaveShipsInSector(attacker, sector)) {
 	      imperium_self.game.state.secret_objective_flagship_dominance = 1;
 	    }
 	  }
-	  if (sys.s.units[attacker-1].length == 0) {
-	    if (defender == imperium_self.game.player && sys.s.units[defender-1].length > 0) {
+	  if (!imperium_self.doesPlayerHaveShipsInSector(attacker, sector)) {
+	    if (defender == imperium_self.game.player && imperium_self.doesPlayerHaveShipsInSector(defender, sector)) {
 	      imperium_self.game.state.secret_objective_flagship_dominance = 1;
 	    }
 	  }
@@ -123,12 +123,12 @@
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
 
-	if (imperium_self.game.player == attacker && sys.s.units[defender-1].length == 0 && sys.s.units[attacker-1].length > 0) {
+	if (imperium_self.game.player == attacker && !imperium_self.doesPlayerHaveShipsInSector(defender, sector) && imperium_self.doesPlayerHaveShipsInSector(attacker, sector)) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
 	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
 	  }
 	}
-	if (imperium_self.game.player == defender && sys.s.units[attacker-1].length == 0 && sys.s.units[defender-1].length > 0) {
+	if (imperium_self.game.player == defender && !imperium_self.doesPlayerHaveShipsInSector(attacker, sector) && imperium_self.doesPlayerHaveShipsInSector(defender, sector)) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
 	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
 	  }
@@ -286,20 +286,22 @@
 	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
         return 0; 
       },
-      modifyPDSRoll     :       function(imperium_self, attacker, defender, roll) {
+      modifyPDSRoll     :       function(imperium_self, attacker, defender, player, roll) {
         if (attacker == imperium_self.game.player) {
 	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
         }
         if (defender == imperium_self.game.player) {
 	  imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 1;
         }
+	// return roll, this is just pass-through tracking
+	return roll;
       },
       modifySpaceCombatRoll     :       function(imperium_self, attacker, defender, roll) {
 	imperium_self.game.state.secret_objective_close_the_trap_pds_fired = 0;
       },
       spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
 	let sys = imperium_self.returnSectorAndPlanets(sector);
-	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
+	if (imperium_self.game.player == attacker && !imperium_self.doesPlayerHaveShipsInSector(defender, sector)) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(attacker, sector) == 0) {
 	    if (imperium_self.game.state.secret_objective_close_the_trap_pds_fired == 1) {
 	      imperium_self.game.state.secret_objective_close_the_trap = 1;
@@ -307,7 +309,7 @@
 	    }
 	  }
 	}
-	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
+	if (imperium_self.game.player == defender && !imperium_self.doesPlayerHaveShipsInSector(attacker, sector)) {
 	  if (imperium_self.hasUnresolvedSpaceCombat(defender, sector) == 0) {
 	    if (imperium_self.game.state.secret_objective_close_the_trap_pds_fired == 1) {
 	      imperium_self.game.state.secret_objective_close_the_trap = 1;

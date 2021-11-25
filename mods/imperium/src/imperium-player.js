@@ -282,6 +282,10 @@ playerTurn(stage = "main") {
       }
     }
 
+    if (this.canPlayerScoreActionStageVictoryPoints(this.game.player) != "") {
+      html += '<li class="option" id="score">score secret objective</li>';
+    }
+
     if (this.game.players_info[this.game.player - 1].command_tokens > 0) {
       if (this.game.state.active_player_moved == 0) {
         html += '<li class="option" id="activate">activate sector</li>';
@@ -344,6 +348,18 @@ playerTurn(stage = "main") {
           }
         }
       }
+
+
+      if (action2 == "score") {
+        imperium_self.playerScoreActionStageVictoryPoints(imperium_self, function (imperium_self, vp, objective) {
+          //imperium_self.addMove("continue\t" + imperium_self.game.player + "\t" + sector);
+          if (vp > 0) { imperium_self.addMove("score\t" + imperium_self.game.player + "\t" + vp + "\t" + objective); }
+          imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored_this_round.push(objective);
+          imperium_self.endTurn();
+          return;
+        });
+      }
+
 
       if (action2 == "activate") {
         imperium_self.playerActivateSystem();
@@ -4743,6 +4759,8 @@ playerSelectInfantryToLand(sector) {
 	}
 
       });
+
+      return;
     };
 
     //
@@ -4751,6 +4769,7 @@ playerSelectInfantryToLand(sector) {
     if (id == "clear") {
       salert("To change movement options, just reload!");
       window.location.reload(true);
+      return;
     }
 
 

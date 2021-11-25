@@ -83,7 +83,7 @@ body {
   position: absolute;
 }
 
-.player-info.p1 {
+.player-info.poker-seat-1 {
   height: 30vh;
 }
 .player-info .status {
@@ -106,16 +106,16 @@ body {
   overflow: hidden;
 }
 
-.p1 .hand {
+.poker-seat-1 .hand {
   display: none;
 }
 
-.p4 .hand, .p3 .hand, .p2 .hand {
+.poker-seat-4 .hand, .poker-seat-3 .hand, .poker-seat-2 .hand {
   right: 15vh;
   top: 2vh;
 }
 
-.p5 .hand, .p6 .hand {
+.poker-seat-5 .hand, .poker-seat-6 .hand {
   left: 24vh;
   top: 2vh;
 }
@@ -293,7 +293,7 @@ body {
     font-size: 1.4em;
   }
 
-  .player-info.p1 {
+  .player-info.poker-seat-1 {
     height: 40vh;
     width: 30vw;
   }
@@ -333,7 +333,7 @@ body {
     font-size: 2.4em;
   }
 
-  .player-info.p1 {
+  .player-info.poker-seat-1 {
     height: 25vh;
     width: 60vw;
   }
@@ -373,7 +373,7 @@ body {
     width: 35vw;
   }
 
-  .p4 .hand, .p3 .hand, .p2 .hand {
+  .poker-seat-4 .hand, .poker-seat-3 .hand, .poker-seat-2 .hand {
     right: 15vw;
     top: 10vh;
   }
@@ -391,23 +391,23 @@ body {
 
 @media screen and (orientation: portrait) and (max-width: 450px) {
 
-  .player-info.p2 {
+  .player-info.poker-seat-2 {
     display: none;
     visibility: hidden;
   }
-  .player-info.p3 {
+  .player-info.poker-seat-3 {
     display: none;
     visibility: hidden;
   }
-  .player-info.p4 {
+  .player-info.poker-seat-4 {
     display: none;
     visibility: hidden;
   }
-  .player-info.p5 {
+  .player-info.poker-seat-5 {
     display: none;
     visibility: hidden;
   }
-  .player-info.p6 {
+  .player-info.poker-seat-6 {
     display: none;
     visibility: hidden;
   }

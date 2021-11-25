@@ -256,7 +256,7 @@
 	    let sys = imperium_self.returnSectorAndPlanets(adjacent_sectors[n]);
 	    for (let p = 0; p < sys.p.length; p++) {
 	      if (sys.p[p].owner == imperium_self.game.player) {
-  	        if (imperium_self.doesPlayerHaveSpaceDock(sys.p[p])) {
+  	        if (imperium_self.doesPlayerHaveSpaceDockOnPlanet(imperium_self.game.player, sys.p[p])) {
 		  imperium_self.game.players_info[action_card_player-1].experimental_battlestation = sector;
 		  return 1;
 		}

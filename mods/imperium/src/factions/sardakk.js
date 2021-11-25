@@ -128,17 +128,20 @@
         return unit;
       },
       spaceCombatRoundEnd :    function(imperium_self, attacker, defender, sector) {
-        if (imperium_self.doesPlayerHaveTech(attacker, "faction4-exotrireme-ii")) {
-	  if (imperium_self.doesSectorContainPlayerUnit(attacker, sector, "dreadnaught")) {
-	    imperium_self.addMove("faction4_exotrireme_ii_sacrifice\t"+attacker+"\t"+sector);
+        if (imperium_self.game.player == attacker) {
+          if (imperium_self.doesPlayerHaveTech(attacker, "faction4-exotrireme-ii")) {
+	    if (imperium_self.doesSectorContainPlayerUnit(attacker, sector, "dreadnaught")) {
+	      imperium_self.addMove("faction4_exotrireme_ii_sacrifice\t"+attacker+"\t"+sector);
+	    }
 	  }
-	}
-        if (imperium_self.doesPlayerHaveTech(defender, "faction4-exotrireme-ii")) {
-	  if (imperium_self.doesSectorContainPlayerUnit(defender, sector, "dreadnaught")) {
-	    imperium_self.addMove("faction4_exotrireme_ii_sacrifice\t"+defender+"\t"+sector);
+          if (imperium_self.doesPlayerHaveTech(defender, "faction4-exotrireme-ii")) {
+	    if (imperium_self.doesSectorContainPlayerUnit(defender, sector, "dreadnaught")) {
+	      imperium_self.addMove("faction4_exotrireme_ii_sacrifice\t"+defender+"\t"+sector);
+	    }
 	  }
-	}
-	return 1;
+	  return 1;
+        }
+	return 0;
       },
       handleGameLoop : function(imperium_self, qe, mv) {
 

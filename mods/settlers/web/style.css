@@ -1,7 +1,6 @@
 /*
   Undo poker playerbox positions....
-*/
-.p1, .p2, .p3, .p4, .p5, .p6 {
+.p1, .p2, .p3, .p4 {
   min-width: unset;
   height: unset;
   bottom: unset;
@@ -12,34 +11,15 @@
   width: unset;
   overflow-y: unset;
 }
-
-/* prevent left-shift */
-.p2, #player-box-2 {
-  left: unset;
-  transform: unset;
-}
-.p3, #player-box-3 {
-  left: unset;
-  transform: unset;
-}
-.p4, #player-box-4 {
-  left: unset;
-  transform: unset;
-}
-.p5, #player-box-5 {
-  left: unset;
-  transform: unset;
-}
-.p6, #player-box-6 {
-  left: unset;
-  transform: unset;
-}
+*/
 
 .hexIn{
   overflow: unset;
+  padding-bottom: 113%;
 }
 .hexLink{
   overflow: unset;
+  height: 102.5%;
 }
 
 .hex_bg{
@@ -54,11 +34,13 @@
 }
 
 body {
-  background-color: lightseagreen;
-  background-image: url(/settlers/img/background2.jpg);
-  background-size: cover;
+  background-color: lightseagreen !important;
+  background: radial-gradient(circle farthest-corner at 50% 0%, lightseagreen 40%, blue 45%, lightseagreen 50%);
+  background-size: 25px 25px;
+  /*background-image: url(/settlers/img/background2.jpg);*/
+  /*background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center;*/
   position: unset; /* fixed from game.css does weird stuff*/
   z-index: 0;
 }
@@ -70,13 +52,14 @@ body {
 .player-box{
   background-color: #444A;
   z-index: 3;
+  border: 4px solid;
 }
 
 .player-box > .player-box-graphic{
   z-index: -1;
 }
 
-.game-board-size{
+.game_board_sizer{
   z-index: 1000;
 }
 
@@ -114,7 +97,7 @@ body {
   
 }
 
-.status-message ul li:hover, .status ul li:hover{
+.status-message ul li:hover, .status ul li:hover, .cardselector:hover{
   color: black;
   background-color: #e7e7e7;
 }
@@ -127,6 +110,22 @@ body {
   position: absolute;
 }
 
+.card > img{
+  width: 100%;
+}
+
+.card .icon{
+  position: absolute;
+  width: 15%;
+  left: 7%;
+  top: 5%;
+  pointer-events: none; 
+}
+
+.ship > .icon{
+  position: relative;
+  top: -20%;
+}
 .notme .player-box-graphic .devcards .tinycard{
   width: 8vh;
 }
@@ -181,6 +180,25 @@ body {
   top: 9vh;
 }
 
+.card .cardtitle{
+  position: absolute;
+  font-family: fantasy;
+  font-size: 1.2em;
+  top: 9.5%;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.card .cardrules{
+  position: absolute;
+  font-family: fantasy;
+  top: 60%;
+  height: 40%;
+  width: 100%;
+  padding: 5% 10%;
+  pointer-events: none;
+}
 
 .startmove {
   cursor: pointer;
@@ -192,7 +210,15 @@ body {
 .hover{
   z-index: 1000;
 }
-.hover:hover {
+
+.chover:hover, .producer.chover:hover {
+  fill: yellow;
+  stroke: yellow;
+  cursor: crosshair;
+}
+
+
+.rhover:hover {
   border: 1px solid white;
   background-color: whitesmoke;
   cursor: crosshair;
@@ -320,9 +346,9 @@ body {
   left: 0px;
 }
 
+/* p1-4 is legacy code for ownership of cities/roads, not playerboxes  */
 .p1 {
   background-color: red;
-
 }
 .p2 {
   background-color: blue;
@@ -335,16 +361,16 @@ body {
 }
 
 .player-box.c1 {
-  border: 2px solid red;
+  border-color: red;
 }
 .player-box.c2 {
-  border: 2px solid blue;
+  border-color: blue;
 }
 .player-box.c3 {
-  border: 2px solid green;
+  border-color: green;
 }
 .player-box.c4 {
-  border: 2px solid orange;
+  border-color: orange;
 }
 
 
@@ -431,8 +457,28 @@ body {
   overflow-y: scroll;
 }
 
-.trade_overlay_offers {
-  clear: both;
+.trade_overlay_title{
+  width: 100%;
+  text-align: center;
+}
+
+.trade_overlay_offers, .trade_overlay_buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 1em 0px;
+}
+
+.trade_overlay .icon{
+  width: 2em;
+}
+
+.trade_overlay .select{
+  padding: 0.5em;
+}
+
+.trade_overlay .selected{
+  padding: 0em;
 }
 
 .trade_overlay .noselect{
@@ -440,25 +486,53 @@ body {
   font-style: italic;
 }
 
-.trade_overlay_buttons {
-  clear: both;
+.trade_overlay .selected{
+  /*border: 1px solid black;*/
+  font-weight: bold;
 }
 
-.trade_overlay_button {
-  float: left;
+.trade_overlay .selected .icon{
+  width: 3em;
+}
+
+.noselect .icon{
+  filter: grayscale(100%);
+}
+
+.option.noselect{
+  font-style: italic;
+  color: lightgrey;
 }
 
 .trade_button {
-  float: left;
-  width: 70px;
-  height: 90px;
-  position: relative;
+  width: fit-content;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
+.trade_button div{
+  text-align: center;
+}
+
+.button{
+  min-width: 90px;
+  text-align: center;
+}
 .highlight{
   font-size: 1.1em;
   font-weight: bold;
+}
+
+.tbd .icon{
+  height: 1.25em;
+}
+
+.status .disabled:hover{
+  color: inherit;
+  background-color: inherit;
+}
+.disabled .icon, .player-box .icon{
+  width: 1.5em;
 }
 
 .status-message{
@@ -488,14 +562,40 @@ body {
 .flexline{
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex-direction: row;
   width: 100%;
   flex-wrap: wrap;
+  margin-bottom: 0.5em;
 }
 
+.pbtrade ul li{
+  width: 100%;
+  line-height: 1.5em;
+  cursor: pointer;
+  list-style: none;
+  border-top: 1px solid var(--saito-skyline-grey);
+}
+.pbtrade ul li:hover{
+  color: black;
+  background-color: #e7e7e7;
+}
+
+.cardct{
+  width: fit-content;
+}
+.cardselector{
+  border: 1px solid whitesmoke;
+  cursor: pointer;
+  width: 45%;
+  text-align: center;
+  padding: 3px;
+}
+
+/*SVG token coloring*/
 .token{
   margin: min(3px,1vh);
-  width: 2.5vh;
+  width: 1.2em;
   background-color: unset;
 }
 
@@ -531,6 +631,30 @@ body {
   stroke: orange;
 }
 
+.c1 i {
+  color: rgb(255,100,100); /*a slightly lighter red*/
+}
+
+.c2 i{
+  color: rgb(100,100,255); /*a slightly lighter blue*/
+}
+.c3 i{
+  color: green;
+}
+.c4 i{
+  color: orange;
+}
+
+.player-notice{
+  margin-bottom: 0.5em;
+  line-height: 1.25em;
+}
+.player-box .player-notice .icon{
+  height: 1.25em;
+  width: 1.25em;
+  border-radius: 5px;
+}
+
 .opponents{
   position: absolute;
 }
@@ -539,6 +663,9 @@ body {
   position: unset;
 }
 
+.player-box.me{
+  height: unset;
+}
 .player-box.notme, .opponents{
   height: fit-content;
 }
@@ -555,7 +682,7 @@ body {
 
     .player-box.me{
         left: max(5px, calc(12vw - 7em));
-        top:  80vh;
+        /*top:  80vh;*/
     }
 
     .player-box.notme, .opponents{

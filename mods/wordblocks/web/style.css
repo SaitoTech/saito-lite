@@ -73,7 +73,6 @@ thead,  tfoot{
 }
 
 .wb-main {
-  border: 1px solid orange;
   max-width: 902px;
 }
 
@@ -346,11 +345,17 @@ thead,  tfoot{
   display: block;
 }
 
+.player .player-identicon{
+    width: 80%;
+    box-shadow: 0px 3px 6px #00000029;
+}
+
 .player {
-  margin: 3px 0 12px;
+  margin: 0.125em 0 0.75em;
   white-space: nowrap;
   display: grid;
-  grid-template-columns: 90% 10%;
+  grid-template-columns: 7% 82% 10%;
+  height: 1.5em;
 }
 
 .player_name {
@@ -362,7 +367,7 @@ thead,  tfoot{
 }
 
 .player span {
-  line-height: 20px;
+  line-height: 1.5em;
 }
 
 .player_score {
@@ -540,10 +545,6 @@ thead,  tfoot{
   max-width: 95vw;
 }
 **/
-
-.player span {
-  line-height: 40px;
-}
 
 
 .rack {
@@ -728,6 +729,7 @@ thead,  tfoot{
     display: inline-block;
     width: auto;
     float: left;
+    position: relative;
   }
   .tiles div.tile {
     display: inline-block;
@@ -748,6 +750,59 @@ thead,  tfoot{
   }
 }
 
+.hidden{
+  display: none;
+}
+
+.tile-placement-controls .playable{
+  font-size: 1.5em;
+  color: white;
+  text-shadow: 2px 2px black;
+  text-align: center;
+}
+
+/* Highlight selected tile in rack*/
+.tiles .tile.highlighttile{
+  color: limegreen;
+  border-color: limegreen;
+}
+
+/* Highlight temporary tiles on board*/
+.slot .tile.tempplacement{
+  background-color: #32CD3279;
+  color: black;
+}
+
+/* Highlight selected tile on board*/
+.slot .tile.highlighttile{
+  background-color: limegreen;
+  color: black;
+}
+
+#helper{
+  position: fixed;
+  transition: transform 0.13s;
+  pointer-events: none;
+  width: 54px;
+  height: 54px;
+  background-color: limegreen;
+  font-size: 2rem;
+  text-align: center;
+  padding-top: 6px;
+  border-radius: 3px;
+  z-index: 50;
+  cursor: grabbing;
+}
+
+#deletectrl i{
+  margin: 0px 1em;
+}
+
+.tiles .tile.todelete{
+  position: relative;
+  bottom: 10px;
+  background-color: #940404;
+}
 
 #promptval{
   text-transform: uppercase;

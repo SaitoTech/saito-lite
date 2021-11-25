@@ -146,6 +146,7 @@
     if (obj.onNewTurn == null) {
       obj.onNewTurn = function(imperium_self, player, mycallback) { return 0; }
     }
+    // runs for everyone, so if anyone makes moves, restrict to single player, return 0 for others
     if (obj.spaceCombatRoundEnd == null) {
       obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
     }
@@ -259,7 +260,7 @@
     // are active for either the attacker or the defender when executing.
     //
     if (obj.modifyPDSRoll == null) {
-      obj.modifyPDSRoll = function(imperium_self, attacker, defender, roll) { return roll; }
+      obj.modifyPDSRoll = function(imperium_self, attacker, defender, player, roll) { return roll; }
     }
     if (obj.modifySpaceCombatRoll == null) {
       obj.modifySpaceCombatRoll = function(imperium_self, attacker, defender, roll) { return roll; }

@@ -634,6 +634,7 @@ console.log("error initing chat: " + err);
           this.game.players_info[i].promissary_notes.push(promissary);
         }
 
+
         this.saveSystemAndPlanets(sys);
   
       }
@@ -671,7 +672,6 @@ console.log("error initing chat: " + err);
         // add cards to deck and shuffle as needed
         //
         for (let i = 0; i < this.game.players_info.length; i++) {
-
 	  // everyone gets 1 secret objective to start
           this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t1");
           this.game.queue.push("DEAL\t6\t"+(i+1)+"\t1");
