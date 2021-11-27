@@ -12,7 +12,7 @@ module.exports = AppStorePublishSuccess = {
       app.browser.addElementToDom('<div id="appstore-app-install-overlay" class="appstore-app-install-overlay"></div>');
     }
 
-    document.querySelector('.appstore-app-install-overlay').innerHTML = AppStorePublishWaitingTemplate(app, data);
+    document.querySelector('.appstore-app-install-overlay').innerHTML = AppStorePublishWaitingTemplate(app, mod.data);
     document.querySelector('.appstore-app-install-overlay').style.display = "block";
 
 /**
