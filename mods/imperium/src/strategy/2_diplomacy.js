@@ -2,7 +2,7 @@
     this.importStrategyCard("diplomacy", {
       name     			:       "Diplomacy",
       rank			:	2,
-      img			:	"/strategy/DIPLOMACY.png",
+      img			:	"/strategy/2_DIPLOMACY.png",
       text			:	"<b>Player</b> activates non-Byzantium sector for others, refreshes two planets.<hr /><b>Others</b> may spend strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 

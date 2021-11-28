@@ -16,7 +16,7 @@
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("QUEUE: " + JSON.stringify(this.game.queue));
+//console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
@@ -1862,6 +1862,12 @@ this.game.state.end_round_scoring = 0;
         let objective_name = objective;
         let objective_text = "";
         let player_return_value = 1;
+
+	// do not score if we sneak through
+	if (objective == "cancel") {
+	  this.game.queue.splice(qe, 1);
+	  return 1;
+	}
 
         if (this.secret_objectives[objective] != null) {
 	  objective_name = this.secret_objectives[objective].name; 

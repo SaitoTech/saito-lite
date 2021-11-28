@@ -2,7 +2,7 @@
     this.importStrategyCard("warfare", {
       name     			:       "Warfare",
       rank			:	6,
-      img			:	"/strategy/MILITARY.png",
+      img			:	"/strategy/6_WARFARE.png",
       text			:	"<b>Player</b> may de-activate any sector and gain 1 token.<hr /><b>Others</b> may spend strategy token to produce in home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 

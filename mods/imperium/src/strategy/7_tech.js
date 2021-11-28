@@ -2,7 +2,7 @@
     this.importStrategyCard("technology", {
       name     			:       "Technology",
       rank			:	7,
-      img			:	"/strategy/TECH.png",
+      img			:	"/strategy/7_TECHNOLOGY.png",
       text			:	"<b>Player</b> researches a tech and may spend 6 resources for a second.<hr /><b>Others</b> may research for strategy token and 4 resources" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {

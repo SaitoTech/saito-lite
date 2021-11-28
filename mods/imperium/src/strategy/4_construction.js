@@ -3,7 +3,7 @@
     this.importStrategyCard("construction", {
       name     			:       "Construction",
       rank			:	4,
-      img			:	"/strategy/BUILD.png",
+      img			:	"/strategy/4_CONSTRUCTION.png",
 
       text			:	"<b>Player</b> builds Space Dock and PDS or two PDS units.<hr /><b>Others</b> may spend strategy token and activate sector to build PDS or Space Dock." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {

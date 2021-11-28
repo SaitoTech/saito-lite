@@ -1801,6 +1801,8 @@ console.log("P: " + planet);
       name        :       "Magmus Reactor" ,
       faction     :       "faction7",
       type        :       "special" ,
+      color        :       "red" ,
+      prereqs     :       ["red","red"],
       text        :       "Player may move into supernovas. Gain 1 trade good producing with Warsun or adjacent to Supernova" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].magmus_reactor == undefined) {
@@ -3629,7 +3631,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
     this.importStrategyCard("leadership", {
       name     			:       "Leadership",
       rank			:	1,
-      img			:	"/strategy/INITIATIVE.png",
+      img			:	"/strategy/1_LEADERSHIP.png",
       text			:	"<b>Player</b> gains three tokens.<hr /><b>All players</b> may purchase tokens for three influence each." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
@@ -3667,7 +3669,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
     this.importStrategyCard("diplomacy", {
       name     			:       "Diplomacy",
       rank			:	2,
-      img			:	"/strategy/DIPLOMACY.png",
+      img			:	"/strategy/2_DIPLOMACY.png",
       text			:	"<b>Player</b> activates non-Byzantium sector for others, refreshes two planets.<hr /><b>Others</b> may spend strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
@@ -3819,7 +3821,7 @@ this.playDevotion = function(imperium_self, player, sector, mycallback, impulse_
     this.importStrategyCard("politics", {
       name     			:       "Politics",
       rank			:	3,
-      img			:	"/strategy/POLITICS.png",
+      img			:	"/strategy/3_POLITICS.png",
       text			:	"<b>Player</b> picks new Speaker and gains 2 action cards.<hr /><b>Others</b> may spend strategy token for two action cards.",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
@@ -3993,7 +3995,7 @@ if (imperium_self.game.state.agenda_voting_order === "simultaneous") {
     this.importStrategyCard("construction", {
       name     			:       "Construction",
       rank			:	4,
-      img			:	"/strategy/BUILD.png",
+      img			:	"/strategy/4_CONSTRUCTION.png",
 
       text			:	"<b>Player</b> builds Space Dock and PDS or two PDS units.<hr /><b>Others</b> may spend strategy token and activate sector to build PDS or Space Dock." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
@@ -4073,7 +4075,7 @@ if (imperium_self.game.state.agenda_voting_order === "simultaneous") {
     this.importStrategyCard("trade", {
       name     			:       "Trade",
       rank			:	5,
-      img			:	"/strategy/TRADE.png",
+      img			:	"/strategy/5_TRADE.png",
       text			:	"<b>Player</b> gains 3 trade goods, may refresh any player's commodities.<hr /><b>Others</b> may spend strategy token to refresh their commodities." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
@@ -4181,7 +4183,7 @@ if (imperium_self.game.state.agenda_voting_order === "simultaneous") {
     this.importStrategyCard("warfare", {
       name     			:       "Warfare",
       rank			:	6,
-      img			:	"/strategy/MILITARY.png",
+      img			:	"/strategy/6_WARFARE.png",
       text			:	"<b>Player</b> may de-activate any sector and gain 1 token.<hr /><b>Others</b> may spend strategy token to produce in home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
@@ -4252,7 +4254,7 @@ if (imperium_self.game.state.agenda_voting_order === "simultaneous") {
     this.importStrategyCard("technology", {
       name     			:       "Technology",
       rank			:	7,
-      img			:	"/strategy/TECH.png",
+      img			:	"/strategy/7_TECHNOLOGY.png",
       text			:	"<b>Player</b> researches a tech and may spend 6 resources for a second.<hr /><b>Others</b> may research for strategy token and 4 resources" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
@@ -4476,7 +4478,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
     this.importStrategyCard("imperial", {
       name     			:       "Imperial",
       rank			:	8,
-      img			:	"/strategy/EMPIRE.png",
+      img			:	"/strategy/8_IMPERIAL.png",
       text			:	"<b>Player</b> may score a public objective, gains 1 VP for controlling New Byzantium or secret objective if not.<hr /><b>Others</b> may spend strategy token to purchase secret objective" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
@@ -5307,7 +5309,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
 /***
   this.importStageIPublicObjective('manage-to-breathe', {
       name 	: 	"Deep Breathing" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Just score this for free..." ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	return 1;
@@ -5320,7 +5322,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
 
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Control four planets of the same planet type" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5347,7 +5349,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIPublicObjective('forge-of-war', {
       name 	: 	"Forge of War" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Research 2 unit upgrade technologies" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	let techlist = imperium_self.game.players_info[player-1].tech;
@@ -5366,7 +5368,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIPublicObjective('diversified-research', {
       name 	: 	"Diversified Research" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Research 2 technologies in two different color paths" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5400,7 +5402,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIPublicObjective('mining-conglomerate', {
       name 	: 	"Mining Conglomerate" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Spend eight resources when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	if (imperium_self.returnAvailableResources(player) >= 8) { return 1; }
@@ -5419,7 +5421,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   this.importStageIPublicObjective('conquest-of-science', {
       name 	: 	"Conquest of Science" ,
       minPlayers :	4,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Control 3 planets with tech specialities" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5443,7 +5445,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIPublicObjective('colonization', {
       name 	: 	"Colonization" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Control six planets outside your home system" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5473,7 +5475,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
 
   this.importStageIPublicObjective('grand-gesture', {
       name 	: 	"A Grand Gesture" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Spend 3 command or strategy tokens when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	if ((imperium_self.game.players_info[player-1].strategy_tokens + imperium_self.game.players_info[player-1].command_tokens) >= 3) { return 1; }
@@ -5493,7 +5495,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
 
   this.importStageIPublicObjective('establish-trade-outposts', {
       name 	: 	"Establish Trade Outposts" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Spend 5 trade goods when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	if (imperium_self.returnAvailableTradeGoods(player) >= 5) { return 1; }
@@ -5507,7 +5509,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIPublicObjective('pecuniary-diplomacy', {
       name 	: 	"Pecuniary Diplomacy" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Spend 8 influence when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	if (imperium_self.returnAvailableInfluence(player) >= 8) { return 1; }
@@ -5529,7 +5531,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
 
   this.importStageIIPublicObjective('master-of-commerce', {
       name 	: 	"Master of Commerce" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Spend 10 trade goods when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if (imperium_self.returnAvailableTradeGoods(player) >= 10) { return 1; }
@@ -5543,7 +5545,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIIPublicObjective('display-of-dominance', {
       name 	: 	"Display of Dominance" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Control at least 1 planet in another player's home sector" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5572,7 +5574,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   this.importStageIIPublicObjective('technological-empire', {
       name 	: 	"Technological Empire" ,
       minPlayers :	4,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Control 5 planets with tech bonuses" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5596,7 +5598,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIIPublicObjective('establish-galactic-currency', {
       name 	: 	"Establish Galactic Currency" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Spend 16 resources when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if (imperium_self.returnAvailableResources(player) >= 16) { return 1; }
@@ -5614,7 +5616,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIIPublicObjective('master-of-science', {
       name 	: 	"Master of Science" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Own 2 tech upgrades in each of 4 tech color paths" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5649,7 +5651,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIIPublicObjective('imperial-unity', {
       name 	: 	"Imperial Unity" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Control 6 planets of the same planet type" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5677,7 +5679,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIIPublicObjective('advanced-technologies', {
       name 	: 	"Advanced Technologies" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Research 3 unit upgrade technologies" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         let techlist = imperium_self.game.players_info[player-1].tech;
@@ -5696,7 +5698,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIIPublicObjective('colonial-dominance', {
       name 	: 	"Colonial Dominance" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Control 11 planets outside your home system" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -5724,7 +5726,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIIPublicObjective('power-broker', {
       name 	: 	"Power Broker" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Spend 16 influence when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if (imperium_self.returnAvailableInfluence(player) >= 16) { return 1; }
@@ -5742,7 +5744,7 @@ console.log("STRAT SEC: " + player + " -- " + strategy_card_player);
   });
   this.importStageIIPublicObjective('cultural-revolution', {
       name 	: 	"Cultural Revolution" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
+      img	:	"/imperium/img/victory_point_2.png" ,
       text	:	"Spend 6 command or strategy tokens when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if ((imperium_self.game.players_info[player-1].strategy_tokens + imperium_self.game.players_info[player-1].command_tokens) >= 6) { return 1; }
@@ -10810,7 +10812,7 @@ console.log("Active Agenda: " + active_agenda);
       class : "game-action-cardlist",
       callback : function(app, game_mod) {
         game_mod.menu.hideSubMenus();
-        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnActionCards(), {}, function() {
+        game_mod.overlay.showCardSelectionOverlay(game_mod.app, game_mod, game_mod.returnPlayerActionCards(), {}, function() {
 	  alert("cardlist close strategy init menu");
 	});
       }
@@ -12284,25 +12286,31 @@ handleSystemsMenuItem() {
   };
   unloadUnitFromShip(player, sector, ship_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
+console.log("unloading 1 "+unitname+" from ship...");
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
       if (sys.s.units[player - 1][ship_idx].storage[i].type === unitname) {
+console.log("found an appropriate unit.");
         let unitjson = JSON.stringify(sys.s.units[player-1][ship_idx].storage[i]);
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return unitjson;
       }
     }
+console.log("did not find unit...");
     return "";
   };
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
+console.log("unloading 1 unit from ship... 2");
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][ship_idx].storage[i]) === unitjson) {
+console.log("found appropriate unit.");
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return unitjson;
       }
     }
+console.log("did not find appropriate unit.");
     return "";
   };
   unloadUnitFromShipByJSON(player, sector, shipjson, unitname) {
@@ -12687,7 +12695,7 @@ handleSystemsMenuItem() {
     if (obj.minPlayers == null) { obj.minPlayers = 2; }
     if (obj.type == null)	{ obj.type = "normal"; }
     if (obj.phase == null)	{ obj.type = "imperial"; } // "action" if can be scored at end of turn
-    if (obj.img  == null) 	{ obj.img = "/imperium/img/secret_objective.jpg"; }
+    if (obj.img  == null) 	{ obj.img = "/imperium/img/secret_objective_1.png"; }
     if (obj.vp == null)		{ obj.vp = 1; }
 
     if (obj.returnCardImage == null) {
@@ -12721,7 +12729,7 @@ handleSystemsMenuItem() {
     if (obj.name == null) 	{ obj.name = "Unknown Objective"; }
     if (obj.text == null)	{ obj.type = "Unclear Objective"; }
     if (obj.type == null)	{ obj.type = "normal"; }
-    if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
+    if (obj.img  == null) 	{ obj.img = "/imperium/img/victory_point_1.png"; }
     if (obj.vp == null)		{ obj.vp = 1; }
 
     if (obj.returnCardImage == null) {
@@ -12922,7 +12930,7 @@ handleSystemsMenuItem() {
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("QUEUE: " + JSON.stringify(this.game.queue));
+//console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
@@ -14768,6 +14776,12 @@ this.game.state.end_round_scoring = 0;
         let objective_name = objective;
         let objective_text = "";
         let player_return_value = 1;
+
+	// do not score if we sneak through
+	if (objective == "cancel") {
+	  this.game.queue.splice(qe, 1);
+	  return 1;
+	}
 
         if (this.secret_objectives[objective] != null) {
 	  objective_name = this.secret_objectives[objective].name; 
@@ -21903,6 +21917,14 @@ console.log("Calculated Production Limit: " + calculated_production_limit);
         imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
       }
 
+      //
+      // sanity check on people trying to produce nothing
+      //
+      if (total_cost == 0 && stuff_to_build.length == 0) {
+	let c = confirm("Are you sure you want to produce no units at all? Click cancel to re-pick!");
+	if (!c) { return; }
+      }
+
       imperium_self.unlockInterface();
       imperium_self.playerSelectResources(total_cost, function (success) {
 
@@ -23133,6 +23155,8 @@ playerSelectUnitsToMove(destination) {
 	  let this_ship_ii = obj.stuff_to_move[y].ii;
 	  let this_ship_hazard = obj.ships_and_sectors[this_ship_i].hazards[this_ship_ii];
 
+	  // Nov 24
+          imperium_self.addMove("check_fleet_supply\t" + imperium_self.game.player + "\t" + obj.ships_and_sectors[obj.stuff_to_move[y].i].sector);
           imperium_self.addMove("move\t" + imperium_self.game.player + "\t" + 1 + "\t" + obj.ships_and_sectors[obj.stuff_to_move[y].i].sector + "\t" + destination + "\t" + JSON.stringify(obj.ships_and_sectors[obj.stuff_to_move[y].i].ships[obj.stuff_to_move[y].ii]) + "\t" + this_ship_hazard);
         }
         for (let y = obj.stuff_to_load.length - 1; y >= 0; y--) {
@@ -23584,6 +23608,7 @@ playerInvadePlanet(player, sector) {
   let space_transport_used = 0;
 
   let landing_forces = [];
+  let total_landing_forces = 0;
   let landing_on_planet_idx = [];
   let planets_invaded = [];
 
@@ -23612,12 +23637,10 @@ playerInvadePlanet(player, sector) {
 
     if (planet_idx === "confirm") {
 
-/***
-      if (landing_forces.length == 0) {
+      if (total_landing_forces == 0) {
 	let sanity_check = confirm("Invade without landing forces? Are you sure -- the invasion will fail.");
 	if (!sanity_check) { return; }
       }
-***/
 
       for (let i = 0; i < planets_invaded.length; i++) {
 
@@ -23774,6 +23797,7 @@ playerInvadePlanet(player, sector) {
           imperium_self.addMove("land\t" + imperium_self.game.player + "\t" + 1 + "\t" + landing_forces[y].sector + "\t" + landing_forces[y].source + "\t" + landing_forces[y].source_idx + "\t" + landing_forces[y].planet_idx + "\t" + landing_forces[y].unitjson);
 	  if (!landing_on_planet_idx.includes(landing_forces[y].planet_idx)) { landing_on_planet_idx.push(landing_forces[y].planet_idx); }
         };
+	total_landing_forces += landing_forces.length;
         landing_forces = [];
 	
 
@@ -23828,9 +23852,13 @@ playerActivateSystem() {
 
       if (imperium_self.game.state.round == 1) {
         if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
-          if (!imperium_self.canPlayerProduceInSector(imperium_self.game.player, pid)) {
-            imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
-	    return;
+	  if (imperium_self.hasPlayerActivatedSector(imperium_self.game.player) && !imperium_self.canPlayerProduceInSector(imperium_self.game.player, pid)) {
+            imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnActivatedSectorsOverlay());
+	  } else {
+            if (!imperium_self.canPlayerProduceInSector(imperium_self.game.player, pid)) {
+              imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
+	      return;
+            }
           }
         }
       } else {
@@ -25139,8 +25167,8 @@ playerDiscardActionCards(num, mycallback=null) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {
@@ -26670,6 +26698,14 @@ playerDiscardActionCards(num, mycallback=null) {
     }
 
     return defender;
+  }
+
+
+  hasPlayerActivatedSector(player) {
+    for (let s in this.game.sectors) {
+      if (this.game.sectors[s].activated[player-1] == 1) { return 1; }
+    }
+    return 0;
   }
 
 
@@ -29069,6 +29105,50 @@ try {
   });
 } catch (err) {}
 }
+
+
+
+returnActivatedSectorsOverlay() {
+  let imperium_self = this;
+  let html = `
+    <div class="activated_sectors_overlay" id="activated_sectors_overlay">
+
+<h2>No Ships Available!</h2>
+
+<p style="margin-bottom:30px"></p>
+
+The only ships that could move into this sector are in activated sectors. 
+
+<p style="margin-bottom:30px"></p>
+
+Once you have "activated" a sector. You cannot move ships into or out of it until next round.
+
+<p style="margin-bottom:30px"></p>
+
+</div>
+<style>
+.activated_sectors_overlay {
+  padding:30px;
+  width: 800px;
+  max-width: 80vw;
+  max-height: 90vh;
+  font-family: 'orbitron-medium', helvetica, arial;
+  line-height: 1.7em;
+  font-size: 1.1em;
+  background-image: url('/imperium/img/starscape-background4.jpg');
+  background-size: cover;
+  color: white;
+  overflow-y: scroll;
+  font-size:1.4em;
+}
+</style>
+`;
+
+  return html;
+}
+
+
+
 
 
 returnFirstTurnOverlay() {

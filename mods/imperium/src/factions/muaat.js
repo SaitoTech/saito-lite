@@ -119,6 +119,8 @@
       name        :       "Magmus Reactor" ,
       faction     :       "faction7",
       type        :       "special" ,
+      color        :       "red" ,
+      prereqs     :       ["red","red"],
       text        :       "Player may move into supernovas. Gain 1 trade good producing with Warsun or adjacent to Supernova" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].magmus_reactor == undefined) {
