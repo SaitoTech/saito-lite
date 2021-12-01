@@ -13,13 +13,20 @@
 }
 */
 
+:root{
+  --p1-color: red;
+  --p2-color: blue;
+  --p3-color: rgb(0,140,0);
+  --p4-color: orange;
+}
+
 .hexIn{
   overflow: unset;
   padding-bottom: 113%;
 }
 .hexLink{
   overflow: unset;
-  height: 102.5%;
+  height: 105%;
 }
 
 .hex_bg{
@@ -64,7 +71,13 @@ body {
 }
 
 #game-hexgrid, #game-hexgrid-container{
+  
+}
+
+#game-hexgrid{
   width: 1000px;
+  padding: 10% 5% 15%; /*Creates space for board overflow*/
+  box-sizing: content-box;
 }
 
 
@@ -122,10 +135,6 @@ body {
   pointer-events: none; 
 }
 
-.ship > .icon{
-  position: relative;
-  top: -20%;
-}
 .notme .player-box-graphic .devcards .tinycard{
   width: 8vh;
 }
@@ -211,7 +220,7 @@ body {
   z-index: 1000;
 }
 
-.chover:hover, .producer.chover:hover {
+.chover:hover, .producer.chover polygon:hover {
   fill: yellow;
   stroke: yellow;
   cursor: crosshair;
@@ -229,6 +238,13 @@ body {
   overflow-x: visible;
   white-space: nowrap;
 }
+
+.ship > .icon{
+  position: relative;
+  top: -20%;
+  width: 85%;
+}
+
 .port{
   width: 100%;
   height: 60%;
@@ -237,58 +253,61 @@ body {
 .port1{
   top: -40%;
   left: 40%;
-  transform: rotate(30deg);
+  transform: rotate(27.5deg);
 }
 .port2{
   top: 20%;
-  left: 80%;
+  left: 85%;
   transform: rotate(90deg);
 }
 
 .port3{
   top: 80%;
   left: 40%;
-  transform: rotate(150deg);
+  transform: rotate(152.5deg);
 }
 
 .port4{
   top: 80%;
   right: 40%;
-  transform: rotate(-150deg);
+  transform: rotate(-152.5deg);
 }
 .port5{
-  right: 80%;
+  right: 85%;
   top: 20%;
   transform: rotate(-90deg);
 }
 .port6{
   top: -40%;
   right: 40%;
-  transform: rotate(-30deg);
+  transform: rotate(-28.5deg);
 }
 .harbor{
   position:  absolute;
   display: block;
-  width: 50px;
-  height: 15px;
+  width: 45px;
+  height: 12px;
   background-color: brown;
-  bottom: 20%;
+  background: linear-gradient(90deg, tan 0%, brown 50%, tan 100%);
+  background-size: 6px 12px;
+  bottom: 15%;
+
 }
 
 .rharbor{
-  transform: rotate(50deg);
-  right: 25%;
+  transform: rotate(55deg);
+  right: 17%;
 }
 
 .lharbor{
-  transform: rotate(-50deg);
-  left: 25%;
+  transform: rotate(-55deg);
+  left: 17%;
 }
 
 .road {
   position: absolute;
   display: block;
-  width: 60%;
+  width: 65%;
   height: 10%;
   background-color: transparent;
 
@@ -297,19 +316,19 @@ body {
 
 .road5{
     transform: rotate(90deg);
-    left: -32%;
+    left: -35%;
     top: 45%;
 }
 .road6{
     transform: rotate(-30deg);
-    top: 6%;
-    left: -6%;
+    top: 9%;
+    left: -9%;
 }
 
 .road1{
   transform: rotate(30deg);
-  right: -6%;
-  top: 6%;
+  right: -8%;
+  top: 8%;
 }
 
 .road2{ /* Overlaps with Road5 */ 
@@ -319,13 +338,13 @@ body {
 }
 .road3{ /* Overlaps with Road6 */
     transform: rotate(-30deg);
-    bottom: 6%;
-    right: -6%;
+    bottom: 9%;
+    right: -9%;
 }
 .road4{ /* Overlaps with Road1 */
     transform:  rotate(30deg);
-    bottom: 6%;
-    left: -6%;
+    bottom: 9%;
+    left: -9%;
 }
 
 .city {
@@ -348,29 +367,29 @@ body {
 
 /* p1-4 is legacy code for ownership of cities/roads, not playerboxes  */
 .p1 {
-  background-color: red;
+  background-color: var(--p1-color);
 }
 .p2 {
-  background-color: blue;
+  background-color: var(--p2-color);
 }
 .p3 {
-  background-color: green;
+  background-color: var(--p3-color);
 }
 .p4 {
-  background-color: orange;
+  background-color: var(--p4-color);
 }
 
 .player-box.c1 {
-  border-color: red;
+  border-color: var(--p1-color);
 }
 .player-box.c2 {
-  border-color: blue;
+  border-color: var(--p2-color);
 }
 .player-box.c3 {
-  border-color: green;
+  border-color: var(--p3-color);
 }
 .player-box.c4 {
-  border-color: orange;
+  border-color: var(--p4-color);
 }
 
 
@@ -431,21 +450,21 @@ body {
 }
 
 .city.p1 {
-  border: 10px solid red;
-  color: red;
+  border: 10px solid var(--p1-color);
+  color: var(--p1-color);
 }
 .city.p2 {
-  border: 10px solid blue;
-  color: blue;
+  border: 10px solid var(--p2-color);
+  color: var(--p2-color);
 }
 .city.p3 {
-  border: 10px solid green;
-  color: green;
+  border: 10px solid var(--p3-color);
+  color: var(--p3-color);
  
 }
 .city.p4 {
-  border: 10px solid orange;
-  color: orange;
+  border: 10px solid var(--p4-color);
+  color: var(--p4-color);
 }
 
 .trade_overlay {
@@ -497,6 +516,10 @@ body {
 
 .noselect .icon{
   filter: grayscale(100%);
+}
+
+.button.noselect:hover{
+  background: rgba(247,31,61,0.2); /* based on saito-red */
 }
 
 .option.noselect{
@@ -569,6 +592,15 @@ body {
   margin-bottom: 0.5em;
 }
 
+.flexline2{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 0.5em; 
+}
+
 .pbtrade ul li{
   width: 100%;
   line-height: 1.5em;
@@ -579,6 +611,14 @@ body {
 .pbtrade ul li:hover{
   color: black;
   background-color: #e7e7e7;
+}
+
+.player-box .trade:hover{
+  color: black;
+  background-color: #a7a7a7;
+}
+.trade{
+  cursor: pointer;
 }
 
 .cardct{
@@ -600,35 +640,35 @@ body {
 }
 
 .token.p1 polygon{
-  fill: red;
+  fill: var(--p1-color);
 }
 
 .token.p2 polygon{
-  fill: blue;
+  fill: var(--p2-color);
 }
 
 .token.p3 polygon{
-  fill: green;
+  fill: var(--p3-color);
 }
 
 .token.p4 polygon{
-  fill: orange;
+  fill: var(--p4-color);
 }
 
 .token.p1 line{
-  stroke: red;
+  stroke: var(--p1-color);
 }
 
 .token.p2 line{
-  stroke: blue;
+  stroke: var(--p2-color);
 }
 
 .token.p3 line{
-  stroke: green;
+  stroke: var(--p3-color);
 }
 
 .token.p4 line{
-  stroke: orange;
+  stroke: var(--p4-color);
 }
 
 .c1 i {
@@ -639,10 +679,10 @@ body {
   color: rgb(100,100,255); /*a slightly lighter blue*/
 }
 .c3 i{
-  color: green;
+  color: rgb(0, 192, 0); /*a slightly lighter green */
 }
 .c4 i{
-  color: orange;
+  color: var(--p4-color);
 }
 
 .player-notice{
@@ -674,7 +714,7 @@ body {
 */
 
 @media (orientation: landscape) {
-    .player-box{
+    .player-box, .opponents{
         top: 40vh;  /*Center in screen:  50vh - 1/2 height */
         margin: auto auto;
         max-width: 20vw;
@@ -692,7 +732,7 @@ body {
 }
 
 @media (orientation: portrait) {
-    .player-box{
+    .player-box, .opponents{
         top: calc(65vw + 26vh);
         max-width: 35vw;
     }
@@ -710,7 +750,7 @@ body {
     Intermediate (roughly square screen size, technically landscape, but keep portrait layout)
 */
 @media (max-aspect-ratio:  8/7) and (min-aspect-ratio: 7/8) {
-    .player-box{
+    .player-box, .opponents{
         top: unset;
         bottom: 0px;
         max-width: 40vw;
@@ -725,7 +765,7 @@ body {
 }
 
 @media (max-width: 500px) and (orientation: portrait) and (max-aspect-ratio: 7/8){
-    .player-box{
+    .player-box, .opponents{
         top: calc(95vw + 15vh);
         max-width: 38vw;
     }
