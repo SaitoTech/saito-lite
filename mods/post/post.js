@@ -680,7 +680,7 @@ class Post extends ModTemplate {
       ishtml: true,
       body: `
         <b>Post #${txmsg.title} was reported.<br/></b>
-        Post ID${txmsg.post_id}<br/><br/>
+        Post ID ${txmsg.post_id}<br/><br/>
         <a href="https://saito.io/post/delete/${base_58_tx}">Delete Post</a><hr/>.
       `
     });
