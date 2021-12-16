@@ -1,7 +1,7 @@
 /***
   this.importStageIPublicObjective('manage-to-breathe', {
       name 	: 	"Deep Breathing" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Just score this for free..." ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	return 1;
@@ -14,7 +14,7 @@
 
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Control four planets of the same planet type" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -41,7 +41,7 @@
   });
   this.importStageIPublicObjective('forge-of-war', {
       name 	: 	"Forge of War" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Research 2 unit upgrade technologies" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	let techlist = imperium_self.game.players_info[player-1].tech;
@@ -60,7 +60,7 @@
   });
   this.importStageIPublicObjective('diversified-research', {
       name 	: 	"Diversified Research" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Research 2 technologies in two different color paths" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -94,7 +94,7 @@
   });
   this.importStageIPublicObjective('mining-conglomerate', {
       name 	: 	"Mining Conglomerate" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Spend eight resources when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	if (imperium_self.returnAvailableResources(player) >= 8) { return 1; }
@@ -113,7 +113,7 @@
   this.importStageIPublicObjective('conquest-of-science', {
       name 	: 	"Conquest of Science" ,
       minPlayers :	4,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Control 3 planets with tech specialities" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -137,7 +137,7 @@
   });
   this.importStageIPublicObjective('colonization', {
       name 	: 	"Colonization" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Control six planets outside your home system" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -167,7 +167,7 @@
 
   this.importStageIPublicObjective('grand-gesture', {
       name 	: 	"A Grand Gesture" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Spend 3 command or strategy tokens when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	if ((imperium_self.game.players_info[player-1].strategy_tokens + imperium_self.game.players_info[player-1].command_tokens) >= 3) { return 1; }
@@ -187,7 +187,7 @@
 
   this.importStageIPublicObjective('establish-trade-outposts', {
       name 	: 	"Establish Trade Outposts" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Spend 5 trade goods when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	if (imperium_self.returnAvailableTradeGoods(player) >= 5) { return 1; }
@@ -201,7 +201,7 @@
   });
   this.importStageIPublicObjective('pecuniary-diplomacy', {
       name 	: 	"Pecuniary Diplomacy" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/victory_point_1.png" ,
       text	:	"Spend 8 influence when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 	if (imperium_self.returnAvailableInfluence(player) >= 8) { return 1; }

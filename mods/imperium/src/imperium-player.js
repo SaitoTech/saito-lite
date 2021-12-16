@@ -3131,6 +3131,14 @@ console.log("Calculated Production Limit: " + calculated_production_limit);
         imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
       }
 
+      //
+      // sanity check on people trying to produce nothing
+      //
+      if (total_cost == 0 && stuff_to_build.length == 0) {
+	let c = confirm("Are you sure you want to produce no units at all? Click cancel to re-pick!");
+	if (!c) { return; }
+      }
+
       imperium_self.unlockInterface();
       imperium_self.playerSelectResources(total_cost, function (success) {
 
@@ -4361,6 +4369,8 @@ playerSelectUnitsToMove(destination) {
 	  let this_ship_ii = obj.stuff_to_move[y].ii;
 	  let this_ship_hazard = obj.ships_and_sectors[this_ship_i].hazards[this_ship_ii];
 
+	  // Nov 24
+          imperium_self.addMove("check_fleet_supply\t" + imperium_self.game.player + "\t" + obj.ships_and_sectors[obj.stuff_to_move[y].i].sector);
           imperium_self.addMove("move\t" + imperium_self.game.player + "\t" + 1 + "\t" + obj.ships_and_sectors[obj.stuff_to_move[y].i].sector + "\t" + destination + "\t" + JSON.stringify(obj.ships_and_sectors[obj.stuff_to_move[y].i].ships[obj.stuff_to_move[y].ii]) + "\t" + this_ship_hazard);
         }
         for (let y = obj.stuff_to_load.length - 1; y >= 0; y--) {
@@ -4812,6 +4822,7 @@ playerInvadePlanet(player, sector) {
   let space_transport_used = 0;
 
   let landing_forces = [];
+  let total_landing_forces = 0;
   let landing_on_planet_idx = [];
   let planets_invaded = [];
 
@@ -4840,12 +4851,10 @@ playerInvadePlanet(player, sector) {
 
     if (planet_idx === "confirm") {
 
-/***
-      if (landing_forces.length == 0) {
+      if (total_landing_forces == 0) {
 	let sanity_check = confirm("Invade without landing forces? Are you sure -- the invasion will fail.");
 	if (!sanity_check) { return; }
       }
-***/
 
       for (let i = 0; i < planets_invaded.length; i++) {
 
@@ -5002,6 +5011,7 @@ playerInvadePlanet(player, sector) {
           imperium_self.addMove("land\t" + imperium_self.game.player + "\t" + 1 + "\t" + landing_forces[y].sector + "\t" + landing_forces[y].source + "\t" + landing_forces[y].source_idx + "\t" + landing_forces[y].planet_idx + "\t" + landing_forces[y].unitjson);
 	  if (!landing_on_planet_idx.includes(landing_forces[y].planet_idx)) { landing_on_planet_idx.push(landing_forces[y].planet_idx); }
         };
+	total_landing_forces += landing_forces.length;
         landing_forces = [];
 	
 
@@ -5056,9 +5066,13 @@ playerActivateSystem() {
 
       if (imperium_self.game.state.round == 1) {
         if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
-          if (!imperium_self.canPlayerProduceInSector(imperium_self.game.player, pid)) {
-            imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
-	    return;
+	  if (imperium_self.hasPlayerActivatedSector(imperium_self.game.player) && !imperium_self.canPlayerProduceInSector(imperium_self.game.player, pid)) {
+            imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnActivatedSectorsOverlay());
+	  } else {
+            if (!imperium_self.canPlayerProduceInSector(imperium_self.game.player, pid)) {
+              imperium_self.overlay.showOverlay(imperium_self.app, imperium_self, imperium_self.returnFirstTurnOverlay());
+	      return;
+            }
           }
         }
       } else {

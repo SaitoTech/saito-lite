@@ -983,6 +983,14 @@
   }
 
 
+  hasPlayerActivatedSector(player) {
+    for (let s in this.game.sectors) {
+      if (this.game.sectors[s].activated[player-1] == 1) { return 1; }
+    }
+    return 0;
+  }
+
+
   hasUnresolvedSpaceCombat(attacker, sector) {
  
     let sys = this.returnSectorAndPlanets(sector);

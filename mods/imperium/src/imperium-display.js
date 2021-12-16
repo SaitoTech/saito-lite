@@ -50,6 +50,50 @@ try {
 }
 
 
+
+returnActivatedSectorsOverlay() {
+  let imperium_self = this;
+  let html = `
+    <div class="activated_sectors_overlay" id="activated_sectors_overlay">
+
+<h2>No Ships Available!</h2>
+
+<p style="margin-bottom:30px"></p>
+
+The only ships that could move into this sector are in activated sectors. 
+
+<p style="margin-bottom:30px"></p>
+
+Once you have "activated" a sector. You cannot move ships into or out of it until next round.
+
+<p style="margin-bottom:30px"></p>
+
+</div>
+<style>
+.activated_sectors_overlay {
+  padding:30px;
+  width: 800px;
+  max-width: 80vw;
+  max-height: 90vh;
+  font-family: 'orbitron-medium', helvetica, arial;
+  line-height: 1.7em;
+  font-size: 1.1em;
+  background-image: url('/imperium/img/starscape-background4.jpg');
+  background-size: cover;
+  color: white;
+  overflow-y: scroll;
+  font-size:1.4em;
+}
+</style>
+`;
+
+  return html;
+}
+
+
+
+
+
 returnFirstTurnOverlay() {
   let imperium_self = this;
   let html = `
