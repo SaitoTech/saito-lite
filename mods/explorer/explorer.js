@@ -41,7 +41,8 @@ class ExplorerCore extends ModTemplate {
     ///////////////////
     expressapp.get('/explorer/block', function (req, res) {
 
-      var hash = sanitizer.sanitize(req.query.hash);
+//      var hash = sanitizer.sanitize(req.query.hash);
+      var hash = req.query.hash;
 
       if (hash == null) {
 
@@ -74,7 +75,8 @@ class ExplorerCore extends ModTemplate {
 
     expressapp.get('/explorer/blocksource', function (req, res) {
 
-      var hash = sanitizer.sanitize(req.query.hash);
+//      var hash = sanitizer.sanitize(req.query.hash);
+      var hash = req.query.hash;
 
       if (hash == null) {
         res.setHeader('Content-type', 'text/html');
