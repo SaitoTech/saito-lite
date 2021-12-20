@@ -159,6 +159,13 @@ function copy_lite_mods_to_bundler_directory {
 
 
 
+
+echo "$1"
+echo "$2"
+echo "$3"
+
+
+
 if [ "$1" == "init" ]; then
 
 
