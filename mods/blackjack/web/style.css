@@ -9,6 +9,34 @@ body {
   height: 100vh;
 }
 
+.player-box{
+  height: 25vh;
+  width: 30vh;
+}
+.poker-seat-1{
+  overflow-y: unset;
+  height: 36vh;
+}
+
+.poker-seat-1 .status{
+  overflow-y: auto;
+}
+.poker-seat-1 .player-box-graphic.hand{
+  display: block;
+  position: absolute;
+}
+
+.poker-seat-1 .player-box-graphic.hand {
+  left: 32vh;
+}
+
+.player-box-graphic .htmlCards{
+  width: 30vh;
+}
+.player-box-graphic .htmlCards .card{
+  width: 6vh;
+  position: relative;
+}
 .main {
   margin-top: unset;
   padding: unset;
@@ -29,6 +57,9 @@ body {
   overflow: hidden;
 }
 
+.player-box.active{
+  border: 3px solid silver;
+}
 
 .player-notice {
   margin-left: auto;
@@ -39,12 +70,27 @@ body {
   padding: 10px;
 }
 
+.splithand{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.plog .htmlCards .card{
+  width: 20px;
+}
 .dealer {
   background-color: #0004;
   border-top: 1px solid #efefef;
   border-bottom: 1px solid #efefef;
 }
 
+.justify{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
 .hand {
   margin-left: auto;
@@ -58,7 +104,6 @@ body {
   float: none;
 }
 
-
 .suit {
   font-size: larger;
 }
@@ -71,10 +116,44 @@ body {
   border-radius: 6px;
 }
 
+.shim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #222b;
+  z-index: 101;
+  cursor: pointer;
+}
+
+.shim-notice {
+  background: #222b;
+  position: absolute;
+  top: 50vh;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  left: 50vw;
+  padding: 5vh;
+}
+
+
+.shim-notice .card {
+  width: 5vw;
+  max-width: 8vh;
+  min-width: 60px;
+}
+
+
+
 .hud {
   display: none;
 }
 
+.status-info{
+  text-align: center;
+  margin: 0.25em; 
+}
 .status-message {
   background-color: transparent;
   box-shadow: none;
@@ -83,6 +162,10 @@ body {
 .status ul li:hover {
   background: #ccc3;
 }
+
+.player-box-info .chips{
+  font-size: 2.5vh;
+} 
 
 .player-info-log {
   font-size: 2vh;
