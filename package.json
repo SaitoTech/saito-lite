@@ -32,7 +32,7 @@
     "crypto": "^1.0.1",
     "elo-rank": "^1.0.4",
     "exports-loader": "^0.7.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fastest-stable-stringify": "^2.0.2",
     "file-saver": "^2.0.2",
     "forever-agent": "^0.6.1",
