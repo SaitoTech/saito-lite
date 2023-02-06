@@ -43,7 +43,7 @@
     "image-resolver": "^0.6.1",
     "json-tree-viewer": "0.0.2",
     "jspdf": "^2.3.1",
-    "jszip": "^3.5.0",
+    "jszip": "^3.10.1",
     "markdown-linkify": "^1.0.3",
     "marked": "^3.0.2",
     "mathjs": "^10.0.0",
