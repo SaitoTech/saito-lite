@@ -74,7 +74,7 @@
     "unzipper": "^0.10.5",
     "url": "^0.11.0",
     "utf-8-validate": "^5.0.2",
-    "ws": "^7.5.3"
+    "ws": "^8.12.1"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
