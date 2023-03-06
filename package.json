@@ -70,7 +70,7 @@
     "tinymce": "^5.3.0",
     "tls": "0.0.1",
     "tunnel-agent": "^0.6.0",
-    "ua-parser-js": "^0.7.22",
+    "ua-parser-js": "^1.0.34",
     "unzipper": "^0.10.5",
     "url": "^0.11.0",
     "utf-8-validate": "^5.0.2",
